@@ -8,27 +8,26 @@
     <div class="card-body">
         <h4 class="card-title"><span class="fa fa-file"></span> Pares Asignados x semana malla</h4> 
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <label>Semana</label>
-                <input type="text" id="Semana" name="Semana" class="form-control form-control-sm" maxlength="2" >
+                <input type="text" id="Semana" name="Semana" class="form-control form-control-sm" maxlength="2" style="height: 65px; font-size: 55px;" >
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <label>Año</label>
-                <input type="text" id="Ano" name="Ano" class="form-control form-control-sm" maxlength="4">
+                <input type="text" id="Ano" name="Ano" class="form-control form-control-sm" maxlength="4"  style="height: 65px; font-size: 55px;" >
             </div>
-            <div class="col-2">
-                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-sm btn-info mt-3 font-weight-bold">
-                    <span class="fa fa-print"></span> Acepta
-                </button>
+            <div class="col-3 text-center mt-4">
+                <h1 class="font-weight-bold font-italic pares_x_semana_malla" style="color:#cc0000;">0 PARES</h1>
             </div> 
-            <div class="col-2">
-                <button type="button" id="btnExporta" name="btnExporta" class="btn btn-sm btn-success mt-3 font-weight-bold">
+            <div class="col-1">
+                <button type="button" id="btnExporta" name="btnExporta" class="btn btn-sm btn-success mt-3 font-weight-bold" 
+                        style="font-size: 35px;">
                     <span class="fa fa-file-excel"></span> Exporta
                 </button>
             </div>
             <div class="col-12 mt-2">
                 <table id="tblDatos" class="table table-hover table-sm table-bordered  compact nowrap" 
-                       style="width: 100% !important; height: 250px !important;">
+                       style="width: 100% !important; height: 250px !important; font-weight: bold !important;">
                     <thead>  
                         <tr>
                             <th  >CONTROL</th>
@@ -36,25 +35,25 @@
                             <th  >COLOR</th>
                             <th  >PARES</th>
                             <th  >-</th>
-                            
+
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
-                            
+
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
-                            
+
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
-                            
+
                             <th  >-</th>
                             <th  >-</th>
                             <th  >-</th>
@@ -65,6 +64,8 @@
                     </thead>
                     <tbody></tbody> 
                 </table>
+            </div>
+            <div class="col-12 mt-2 text-center">
             </div>
         </div>
     </div>
@@ -81,11 +82,22 @@
         handleEnterDiv(pnlPrincipal);
         xSemana.focus();
         xAno.val('<?php print Date('Y'); ?>');
-        getDatos();
-        btnAcepta.click(function () {
-            onOpenOverlay('Buscando...');
-            getDatos();
+        getDatos(); 
+        
+        xSemana.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                onOpenOverlay('Buscando...');
+                getDatos();
+            }
         });
+        
+        xAno.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                onOpenOverlay('Buscando...');
+                getDatos();
+            }
+        });
+
         btnExporta.click(function () {
             onExportarTabla('xlsx', xSemana.val(), xAno.val());
         });
@@ -118,7 +130,7 @@
                 {"data": "C6"}, {"data": "C7"}, {"data": "C8"}, {"data": "C9"}, {"data": "C10"},
                 {"data": "C11"}, {"data": "C12"}, {"data": "C13"}, {"data": "C14"}, {"data": "C15"},
                 {"data": "C16"}, {"data": "C17"}, {"data": "C18"}, {"data": "C19"}, {"data": "C20"},
-                {"data": "C21"},   {"data": "CANTIDAD"}
+                {"data": "C21"}, {"data": "CANTIDAD"}
             ],
             "columnDefs": [
                 {
@@ -136,7 +148,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "300px",
             "scrollX": true,
             "aaSorting": [
                 [5, 'asc']
@@ -156,7 +168,7 @@
                 $.each(api.rows().data(), function (k, v) {
                     prs += parseInt(v.PARES);
                 });
-                $(api.column(5).footer()).html('<span class="font-weight-bold">' + prs + ' PARES</span>');
+                $(".pares_x_semana_malla").text(prs + ' PARES');
             }
         });
     }
@@ -174,7 +186,11 @@
     }
     .btn-success {
         color: #fff;
-        background-color: #8BC34A;
-        border-color: #8BC34A;
+        background-color: #4CAF50;
+        border-color: #4CAF50;
+    }
+    #tblDatos tbody td
+    {
+        font-size: 25px !important;
     }
 </style>

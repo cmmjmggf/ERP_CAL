@@ -22,13 +22,13 @@
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <canvas id="CanvasGraficoDePedidosXMesAno" width="400" height="250"></canvas>
+                <canvas id="CanvasGraficoDePedidosXMesAno" width="400" height="650"></canvas>
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <canvas id="CanvasGraficoDeParesXSemanaAno" width="400" height="250"></canvas>
+                <canvas id="CanvasGraficoDeParesXSemanaAno" width="400" height="650"></canvas>
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <canvas id="CanvasGraficoDeParesXMesAno" width="400" height="250"></canvas>
+                <canvas id="CanvasGraficoDeParesXMesAno" width="400" height="650"></canvas>
             </div> 
         </div>
     </div>
@@ -56,7 +56,7 @@
         });
 
         $('#btnActualizarDatos').on('click', function () {
-            $.getJSON('<?php print base_url('PedidoXMesAno/getDatosPorMesAno'); ?>',
+            $.getJSON('<?php print base_url('PedidoXMesAno/getParesPorMesAno'); ?>',
                     {ANO: Graficos.find("#Anio").val() ? Graficos.find("#Anio").val() : '',
                         MES: Graficos.find("#Mes").val() ? Graficos.find("#Mes").val() : ''}).done(function (a) {
                 labels = [];
@@ -86,7 +86,7 @@
         }, 3500);
     }
     function getDatosPorMesAno() {
-        $.getJSON('<?php print base_url('PedidoXMesAno/getDatosPorMesAno'); ?>', {
+        $.getJSON('<?php print base_url('PedidoXMesAno/getParesPorMesAno'); ?>', {
             ANO: Graficos.find("#Anio").val() ? Graficos.find("#Anio").val() : Ano_actual,
             MES: Graficos.find("#Mes").val() ? Graficos.find("#Mes").val() : ''}).done(function (a) {
             $.each(a, function (k, v) {
@@ -142,3 +142,8 @@
     }
 
 </script>
+<style>
+    #Graficos button, span, input{
+        font-weight: bold !important;
+    }
+</style>

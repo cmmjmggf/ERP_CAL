@@ -38,6 +38,11 @@ class FacturacionProduccion extends CI_Controller {
 
     public function onRevisarControlesFacturados() {
         try {
+            /* TERMINADO */
+            /* REVISA LOS CONTROLES QUE ESTAN PARCIALMENTE FACTURADOS */
+//            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'TERMINADO',  DeptoProduccion = 240");
+
+            /* FACTURADO */
             /* PRIMERO CONTROLES */
             $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control IN(SELECT P.Control FROM pedidox AS P WHERE P.stsavan = 12 AND P.Pares = P.ParesFacturados );");
 
@@ -58,30 +63,36 @@ class FacturacionProduccion extends CI_Controller {
 
     public function getInfoXControl() {
         try {
-//            print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
-//                                    . "P.Precio AS PRECIO, "
-//                                    . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
-//                                    . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
-//                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
-//                                    . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
-//                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
-//                                    . "WHERE P.Control = '{$this->input->get('CONTROL')}' "
-//                                    . " AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270)")->result());
-
-//            
-                        print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
-                                    . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
+            $x = $this->input->get();
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            if (in_array($x['CLIENTE'], $people)) {
+                print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
+                                        . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
 WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
-                                    . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
-                                    . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
-                                    . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
-                                    . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
-                                    . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
-                                    . "WHERE P.Control = '{$this->input->get('CONTROL')}' "
-                                    . " AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270)")->result());
-        
-                                    
-                                    } catch (Exception $exc) {
+                                        . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
+                                        . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
+                                        . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
+                                        . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
+                                        . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
+                                        . "WHERE P.Control = '{$x['CONTROL']}' "
+                                        . " AND P.stsavan NOT IN(13,14) AND P.Estatus NOT IN('C')"
+                                        . " AND P.EstatusProduccion NOT IN('CANCELADO') "
+                                        . "AND P.DeptoProduccion NOT IN(270)")->result());
+            } else {
+                print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
+                                        . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios "
+                                        . "WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo  ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
+                                        . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
+                                        . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
+                                        . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
+                                        . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
+                                        . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
+                                        . "WHERE P.Control = '{$x['CONTROL']}' "
+                                        . " AND P.stsavan NOT IN(13,14) AND P.stsavan IN(12) AND P.Estatus NOT IN('C')"
+                                        . " AND P.EstatusProduccion NOT IN('CANCELADO') "
+                                        . "AND P.DeptoProduccion NOT IN(270)")->result());
+            }
+        } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
@@ -163,7 +174,11 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     ->where("P.Control", $xxx['CONTROL']);
             $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
             if (!in_array($xxx['CLIENTE'], $people)) {
-                $this->db->where_not_in("P.stsavan", array(13, 14));
+                $this->db->where_not_in("P.stsavan", array(13, 14))
+                        ->where_not_in("P.Estatus", array('C'))
+                        ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
+                        ->where_not_in("P.DeptoProduccion", array(270))
+                        ->where_in("P.stsavan", array(12));
             }
             $this->db->limit(1);
             print json_encode($this->db->get()->result());
@@ -177,11 +192,11 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             switch (intval($this->input->get('TP'))) {
                 case 1:
                     print json_encode(
-                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD WHERE FD.tp = {$this->input->get('TP')}  ORDER BY FD.numfac DESC LIMIT 1")->result());
+                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD WHERE FD.tp = {$this->input->get('TP')} AND FD.numfac < 122320 ORDER BY FD.numfac DESC LIMIT 1")->result());
                     break;
                 case 2:
                     print json_encode(
-                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = {$this->input->get('TP')} AND CC.factura <> 4 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = {$this->input->get('TP')} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
                     break;
             }
         } catch (Exception $exc) {
@@ -447,6 +462,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $f["usuario"] = $this->session->USERNAME;
             $f["usuario_id"] = $this->session->ID;
             $this->db->insert('facturacion', $f);
+
 //            print $this->db->last_query();
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
@@ -465,20 +481,132 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             }
             /* FACTURACION DETALLE */
             if (intval($x['TP_DOCTO']) === 1) {
-                $facturacion_detalle = array(
-                    'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
-                    'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
-                    'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
-                    'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
-                    'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
-                    'importe' => $x['SUBTOTAL'], 'fecha' => "$anio-$mes-$dia $hora",
-                    'control' => $x['CONTROL'], 'iva' => $x['IVA'],
-                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
-                    'tcamb' => $tipo_cambio,
-                    'noidentificado' => NULL,
-                    'referencia' => intval($x['REFERENCIA']),
-                    'tienda' => $x['TIENDA']);
-                $this->db->insert('facturadetalle', $facturacion_detalle);
+                if (intval($x['CLIENTE']) === 2332) {
+                    for ($i = 1; $i < 23; $i++) {
+                        $talla = "";
+                        if (floatval($x["CAF$i"]) > 0) {
+                            $SERIE = $this->db->query("SELECT S.Clave, 
+(CASE 
+WHEN length(S.T1)= 2 THEN CONCAT(S.T1,\"0\") WHEN length(S.T1)= 4 THEN REPLACE(S.T1,\".\",\"\")
+END) AS T1, S.T1 AS XT1, 
+(CASE 
+WHEN length(S.T2)= 2 THEN CONCAT(S.T2,\"0\") WHEN length(S.T2)= 4 THEN REPLACE(S.T2,\".\",\"\")
+END) AS T2, S.T2 AS XT2,
+(CASE 
+WHEN length(S.T3)= 2 THEN CONCAT(S.T3,\"0\") WHEN length(S.T3)= 24 THEN REPLACE(S.T3,\".\",\"\")
+END) AS T3,  S.T3 AS XT3,
+(CASE 
+WHEN length(S.T4)= 2 THEN CONCAT(S.T4,\"0\") WHEN length(S.T4)= 4 THEN REPLACE(S.T4,\".\",\"\")
+END) AS T4,  S.T4 AS XT4,
+(CASE 
+WHEN length(S.T5)= 2 THEN CONCAT(S.T5,\"0\") WHEN length(S.T5)= 4 THEN REPLACE(S.T5,\".\",\"\")
+END) AS T5, S.T5 AS XT5, 
+(CASE 
+WHEN length(S.T6)= 2 THEN CONCAT(S.T6,\"0\") WHEN length(S.T6)= 4 THEN REPLACE(S.T6,\".\",\"\")
+END) AS T6, S.T6 AS XT6, 
+(CASE 
+WHEN length(S.T7)= 2 THEN CONCAT(S.T7,\"0\") WHEN length(S.T7)= 4 THEN REPLACE(S.T7,\".\",\"\")
+END) AS T7, S.T7 AS XT7, 
+(CASE 
+WHEN length(S.T8)= 2 THEN CONCAT(S.T8,\"0\") WHEN length(S.T8)= 4 THEN REPLACE(S.T8,\".\",\"\")
+END) AS T8, S.T8 AS XT8, 
+(CASE 
+WHEN length(S.T9)= 2 THEN CONCAT(S.T9,\"0\") WHEN length(S.T9)= 4 THEN REPLACE(S.T9,\".\",\"\")
+END) AS T9, S.T9 AS XT9,  
+(CASE 
+WHEN length(S.T10)= 2 THEN CONCAT(S.T10,\"0\") WHEN length(S.T10)= 4 THEN REPLACE(S.T10,\".\",\"\")
+END) AS T10, S.T10 AS XT10,  
+(CASE 
+WHEN length(S.T11)= 2 THEN CONCAT(S.T11,\"0\") WHEN length(S.T11)= 4 THEN REPLACE(S.T11,\".\",\"\")
+END) AS T11, S.T11 AS XT11,  
+(CASE 
+WHEN length(S.T12)= 2 THEN CONCAT(S.T12,\"0\") WHEN length(S.T12)= 4 THEN REPLACE(S.T12,\".\",\"\")
+END) AS T12,S.T12 AS XT12,  
+(CASE 
+WHEN length(S.T13)= 2 THEN CONCAT(S.T13,\"0\") WHEN length(S.T13)= 4 THEN REPLACE(S.T13,\".\",\"\")
+END) AS T13,S.T13 AS XT13,  
+(CASE 
+WHEN length(S.T14)= 2 THEN CONCAT(S.T14,\"0\") WHEN length(S.T14)= 4 THEN REPLACE(S.T14,\".\",\"\")
+END) AS T14,S.T14 AS XT14, 
+(CASE 
+WHEN length(S.T15)= 2 THEN CONCAT(S.T15,\"0\") WHEN length(S.T15)= 4 THEN REPLACE(S.T15,\".\",\"\")
+END) AS T15,S.T15 AS XT15,  
+(CASE 
+WHEN length(S.T16)= 2 THEN CONCAT(S.T16,\"0\") WHEN length(S.T16)= 4 THEN REPLACE(S.T16,\".\",\"\")
+END) AS T16,S.T16 AS XT16, 
+(CASE 
+WHEN length(S.T17)= 2 THEN CONCAT(S.T17,\"0\") WHEN length(S.T17)= 4 THEN REPLACE(S.T17,\".\",\"\")
+END) AS T17,S.T17 AS XT17, 
+(CASE 
+WHEN length(S.T18)= 2 THEN CONCAT(S.T18,\"0\") WHEN length(S.T18)= 4 THEN REPLACE(S.T18,\".\",\"\")
+END) AS T18,S.T18 AS XT18, 
+(CASE 
+WHEN length(S.T19)= 2 THEN CONCAT(S.T19,\"0\") WHEN length(S.T19)= 4 THEN REPLACE(S.T19,\".\",\"\")
+END) AS T19,S.T19 AS XT19, 
+(CASE 
+WHEN length(S.T20)= 2 THEN CONCAT(S.T20,\"0\") WHEN length(S.T20)= 4 THEN REPLACE(S.T20,\".\",\"\")
+END) AS T20,S.T20 AS XT20, 
+(CASE 
+WHEN length(S.T21)= 2 THEN CONCAT(S.T21,\"0\") WHEN length(S.T21)= 4 THEN REPLACE(S.T21,\".\",\"\")
+END) AS T21,S.T21 AS XT21, 
+(CASE 
+WHEN length(S.T22)= 2 THEN CONCAT(S.T22,\"0\") WHEN length(S.T22)= 4 THEN REPLACE(S.T22,\".\",\"\")
+END) AS T22, S.T22 AS XT22 
+FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$x['CONTROL']} LIMIT 1")->result();
+
+                            $XETIQUETA = NULL;
+                            $XSERIE_TALLA = $SERIE[0]->{"XT$i"};
+                            $ETIQUETA_EXISTE = $this->db->query(
+                                            "SELECT COUNT(*) AS EXISTE  "
+                                            . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
+                                            . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
+                                            . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
+
+                            if (intval($ETIQUETA_EXISTE) > 0) {
+                                $ETIQUETA = $this->db->query(
+                                                "SELECT e.*, e.codbarr  AS CODIGO_DE_BARRAS "
+                                                . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
+                                                . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
+                                                . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
+                                $XETIQUETA = $ETIQUETA[0]->CODIGO_DE_BARRAS;
+                                $XSUBTOTAL = ($x["CAF$i"] * $x['PRECIO']);
+                                $XSUBTOTAL_IVA = ($x["CAF$i"] * $x['PRECIO']) * 0.16;
+                                $facturacion_detalle = array(
+                                    'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
+                                    'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
+                                    'claveunidad' => 'PR', 'cantidad' => $x["CAF$i"],
+                                    'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
+                                    'descripcion' => $x['ESTILO'] . " " . $x['COLOR_TEXT'] . " " . $SERIE[0]->{"T$i"},
+                                    'Precio' => $x['PRECIO'],
+                                    'importe' => $XSUBTOTAL, 'fecha' => "$anio-$mes-$dia $hora",
+                                    'control' => $x['CONTROL'], 'iva' => $XSUBTOTAL_IVA,
+                                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
+                                    'tcamb' => $tipo_cambio,
+                                    'noidentificado' => $XETIQUETA,
+                                    'referencia' => intval($x['REFERENCIA']),
+                                    'tienda' => $x['TIENDA']);
+                                $this->db->insert('facturadetalle', $facturacion_detalle);
+                            }
+                        } else {
+                            /* LA CANTIDAD ES CERO $x["CAF$i"] */
+                        }
+                    }
+                } else {
+                    $facturacion_detalle = array(
+                        'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
+                        'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
+                        'claveunidad' => 'PR', 'cantidad' => $x['PARES_A_FACTURAR'],
+                        'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
+                        'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
+                        'importe' => $x['SUBTOTAL'], 'fecha' => "$anio-$mes-$dia $hora",
+                        'control' => $x['CONTROL'], 'iva' => $x['IVA'],
+                        'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
+                        'tcamb' => $tipo_cambio,
+                        'noidentificado' => NULL,
+                        'referencia' => intval($x['REFERENCIA']),
+                        'tienda' => $x['TIENDA']);
+                    $this->db->insert('facturadetalle', $facturacion_detalle);
+                }
             }
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - ($x['PARES_FACTURADOS'] + intval($x['PARES_A_FACTURAR']));
@@ -539,8 +667,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $PARES_FACTURADOS = $this->db->query("SELECT SUM(F.pareped) AS PARES_FINALES FROM facturacion AS F WHERE F.contped = '{$x['CONTROL']}' AND F.staped NOT IN(3)")->result();
             $PARES_FINALES = 0;
             $PARES_FINALES = $PARES_FACTURADOS[0]->PARES_FINALES;
-            $this->db->query("UPDATE pedidox SET ParesFacturados = $PARES_FINALES "
-                    . "WHERE Control = {$x['CONTROL']}");
+            $this->db->query("UPDATE pedidox SET ParesFacturados = $PARES_FINALES WHERE Control = {$x['CONTROL']}");
 
 
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
@@ -655,10 +782,17 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
     public function getParesFacturadosPedidox() {
         try {
             $x = $this->input->get();
-            $data = $this->db->query("SELECT P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES "
-                            . "FROM pedidox AS P "
-                            . "WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result();
+            $this->db->select("P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES ", false)
+                    ->from("pedidox AS P ")->where("P.Control", $x['CONTROL']);
 
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            if (!in_array($x['CLIENTE'], $people)) {
+                $this->db->where_not_in("P.stsavan", array(13, 14))->where_not_in("P.Estatus", array('C'))
+                        ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
+                        ->where_not_in("P.DeptoProduccion", array(270))
+                        ->where_in("P.stsavan", array(12));
+            }
+            $data = $this->db->limit(1)->get()->result();
             print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

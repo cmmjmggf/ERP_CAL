@@ -11,7 +11,10 @@ class PedidoXMesAno extends CI_Controller {
     }
 
     public function index() {
-        $this->load->view('vEncabezado')->view('vNavGeneral')->view('vPedidoXMesAno')->view('vFooter');
+        $this->load->view('vEncabezado')
+                ->view('vMenuParametros')
+                ->view('vNavGeneral')
+                ->view('vPedidoXMesAno')->view('vFooter');
     }
 
     public function getDatosPorMesAno() {
@@ -36,6 +39,37 @@ COUNT(DISTINCT P.Clave) AS PEDIDOS_ESTE_MES", false)->from("pedidox AS P");
             if ($x['MES'] !== '') {
                 $this->db->where("MONTH(str_to_date(P.FechaPedido,\"%d/%m/%Y\"))", $MES);
             }
+            $data = $this->db->group_by("MONTH(str_to_date(P.FechaPedido,\"%d/%m/%Y\")) ")
+                            ->order_by('MONTH(str_to_date(P.FechaPedido,"%d/%m/%Y")) ASC')->get()->result();
+            print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getParesPorMesAno() {
+        try {
+            $x = $this->input->get();
+            $ANO = Date('Y');
+            $MES = Date('m');
+            if ($x['ANO'] !== '') {
+                $ANO = $x['ANO'];
+            }
+            if ($x['MES'] !== '') {
+                $MES = $x['MES'];
+            }
+            $this->db->select("MONTH(str_to_date(P.FechaPedido,\"%d/%m/%Y\")) AS MES,
+elt(MONTH(str_to_date(P.FechaPedido,\"%d/%m/%Y\")), 
+\"ENERO\",\"FEBRERO\",\"MARZO\",\"ABRIL\",\"MAYO\",\"JUNIO\",
+\"JULIO\",\"AGOSTO\",\"SEPTIEMBRE\",\"OCTUBRE\",\"NOVIEMBRE\",\"DICIEMBRE\") AS NOMBRE, 
+SUM(P.Pares) AS PEDIDOS_ESTE_MES", false)->from("pedidox AS P");
+            if ($x['ANO'] !== '') {
+                $this->db->where("YEAR(str_to_date(P.FechaPedido,\"%d/%m/%Y\"))", $ANO);
+            }
+            if ($x['MES'] !== '') {
+                $this->db->where("MONTH(str_to_date(P.FechaPedido,\"%d/%m/%Y\"))", $MES);
+            }
+            $this->db->where_not_in("P.stsavan", ARRAY(14));
             $data = $this->db->group_by("MONTH(str_to_date(P.FechaPedido,\"%d/%m/%Y\")) ")
                             ->order_by('MONTH(str_to_date(P.FechaPedido,"%d/%m/%Y")) ASC')->get()->result();
             print json_encode($data);
