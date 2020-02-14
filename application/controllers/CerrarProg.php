@@ -204,6 +204,8 @@ class CerrarProg extends CI_Controller {
                             $Control = $Y . $S . $M . $C;
                             $this->db->set('Control', $Control)
                                     ->set('stsavan', 1)
+                                    ->set('EstatusProduccion', 'PROGRAMADO')
+                                    ->set('DeptoProduccion', 1)
                                     ->set('FechaProduccion', Date('Y-m-d 00:00:00'))
                                     ->set('FechaProg', Date('Y-m-d 00:00:00'))
                                     ->where('Estilo', $v->Estilo)

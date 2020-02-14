@@ -299,8 +299,8 @@ class AsignaPFTSACXC extends CI_Controller {
             $xx = $this->input->post();
             $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} "
-                            . "AND P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
-                            . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
+                            . "AND P.stsavan NOT IN(12,13,14) "
+                            . "AND P.Estatus NOT IN('C') LIMIT 1")->result();
             if (intval($CONTROL_EXISTE[0]->EXISTE) === 0) {
                 print "CONTROL  {$x['CONTROL']} CANCELADO";
                 exit(0);
