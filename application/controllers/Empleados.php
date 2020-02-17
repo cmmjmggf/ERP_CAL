@@ -71,7 +71,40 @@ class Empleados extends CI_Controller {
 
     public function getEmpleadoByID() {
         try {
-            print json_encode($this->Empleados_model->getEmpleadoByID($this->input->get('ID')));
+//            print json_encode($this->Empleados_model->getEmpleadoByID($this->input->get('ID')));
+          $dtm =   $this->db->select("E.ID, "
+                                    . "E.Numero, "
+                                    . "E.NumFis, "
+                                    . "E.Egresos, "
+                                    . "E.Activos, "
+                                    . "E.PrimerNombre, "
+                                    . "E.SegundoNombre,"
+                                    . "E.Paterno, "
+                                    . "E.Materno, "
+                                    . "E.Busqueda, "
+                                    . "E.Direccion, "
+                                    . "E.Colonia, "
+                                    . "E.Ciudad, "
+                                    . "E.Estado, "
+                                    . "E.CP, "
+                                    . "E.RFC, "
+                                    . "E.CURP, "
+                                    . "E.NoIMSS, "
+                                    . "E.ISR, "
+                                    . "date_format(str_to_date(E.FechaIngreso,'%Y-%m-%d'),'%d/%m/%Y') as FechaIngreso, "
+                                    . "date_format(str_to_date(E.Nacimiento,'%Y-%m-%d'),'%d/%m/%Y') as Nacimiento, "
+                                    . "date_format(str_to_date(E.FechaIMSS,'%Y-%m-%d'),'%d/%m/%Y') as FechaIMSS, "
+                                    . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, E.DepartamentoFisico, E.DepartamentoCostos, "
+                                    . "E.AltaBaja, E.Puesto, E.Tarjeta, "
+                                    . "DATE_FORMAT(E.Egreso,'%d/%m/%Y') AS Egreso, "
+                                    . "E.Comedor, E.TBanamex, E.TBanbajio, "
+                                    . "E.FijoDestajoAmbos, E.CuentaBB, E.Beneficiario, E.Parentesco, E.Porcentaje, "
+                                    . "E.Sueldo, E.IMSS, E.Fierabono, E.FieraBonoPagos, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
+                                    . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
+                                    . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
+                                    . "E.Foto AS FOTOEMPLEADO, E.Registro, E.Estatus, E.Incapacitado, E.FechaIncapacidad, E.FechaIncapacidadFin, E.MotivoBaja ", false)
+                            ->from('empleados AS E')->where('E.Numero', $this->input->get('ID'))->get()->result();
+            print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
