@@ -50,6 +50,9 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
             if ($x['CLIENTE'] !== '') {
                 $this->db->where('P.Cliente', $x['CLIENTE']);
             }
+            if ($x['DFECHA'] !== '' && $x['AFECHA'] !== '') {
+                $this->db->where("STR_TO_DATE(P.FechaEntrega, '%d/%m/%Y') BETWEEN date_format(STR_TO_DATE('{$x['DFECHA']}', '%d/%m/%Y'), '%Y-%m-%d') AND date_format(STR_TO_DATE('{$x['AFECHA']}', '%d/%m/%Y'), '%Y-%m-%d')", null, false);
+            }
             if ($x['ESTILO'] === '' || $x['COLOR'] === '' || $x['CLIENTE'] === '') {
                 $this->db->order_by('P.FechaPedido', 'DESC')->limit(99);
             } else {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.6988030260068188"/>
-	<property name="ireport.x" value="37"/>
+	<property name="ireport.zoom" value="1.8433187801426258"/>
+	<property name="ireport.x" value="134"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -112,9 +112,11 @@ cast(PE.Pares as decimal(5,2)) as Pares,
 cast(ifnull(PE.ParesFacturados,0) as decimal(5,2)) as ParesFacturados,
 cast(ifnull(PE.Pares,0) as signed) - cast(ifnull(PE.ParesFacturados,0) as signed) as Saldo,
 case
-when E.TipoConstruccion = '1' then '1 OPANCA'
-when E.TipoConstruccion = '2' then '2 PEGADO'
-when E.TipoConstruccion = '3' then '3 OPANCA/PEGADO'
+when E.TipoConstruccion = '1' then '1 OPANKA'
+when E.TipoConstruccion = '2' then '2 MONTADO/PEGADO'
+when E.TipoConstruccion = '3' then '3 OPANKA/PEGADO'
+when E.TipoConstruccion = '4' then '4 CIUCANI/CALZADO'
+when E.TipoConstruccion = '5' then '5 OPANKA/FOOTBED'
 else 'N/E'
 END AS TipoConstruccion,
 ifnull(L.Descripcion,'N/E') as linea,

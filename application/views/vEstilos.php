@@ -217,9 +217,11 @@
                                 <label for="TipoConstruccion">Tipo Construcción</label>
                                 <select class="form-control form-control-sm"  id="TipoConstruccion" name="TipoConstruccion">
                                     <option value=""></option>
-                                    <option value="1">1 OPANCA</option>
-                                    <option value="2">2 PEGADO</option>
-                                    <option value="3">3 OPANCA Y PEGADO</option>
+                                    <option value="1">1 OPANKA</option>
+                                    <option value="2">2 MONTADO/PEGADO</option>
+                                    <option value="3">3 OPANKA/PEGADO</option>
+                                    <option value="4">4 CIUCANI/CALZADO</option>
+                                    <option value="5">5 OPANKA/FOOTBED</option>
                                 </select>
                             </div>
                         </div>
@@ -644,7 +646,7 @@
                     type: 'HEAD',
                     error: function ()
                     {
-
+                        foto = false;
                         VistaPrevia.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
                     },
                     success: function ()
@@ -653,6 +655,7 @@
                             var ext = getExt(dtm.Foto);
 
                             if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                foto = true;
                                 pnlDatos.find("#VistaPrevia").html('<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img id="trtImagen" src="' + base_url + dtm.Foto + '" class ="img-thumbnail img-fluid rounded mx-auto"  onclick="printImg(\' ' + base_url + dtm.Foto + ' \')"  />');
                             }
                             if (ext === "PDF" || ext === "Pdf" || ext === "pdf") {

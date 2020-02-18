@@ -12,11 +12,11 @@
         </div>
         <div class="card-block">
             <div class="row">
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2">
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
                     <label>ESTILO</label>
                     <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm" maxlength="15">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
                     <label>COLOR</label>
                     <div class="row">
                         <div class="col-3">
@@ -27,13 +27,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-3">
                     <label>CLIENTE</label>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-3">
                             <input type="text" id="xCliente" name="xCliente" class="form-control form-control-sm" placeholder="CLAVE">
                         </div>
-                        <div class="col-10">
+                        <div class="col-9">
                             <select id="Cliente" name="Cliente" class="form-control form-control-sm">
                                 <option></option>
                                 <?php
@@ -47,9 +47,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-1 col-xl-2">
+                    <label>DE LA FECHA</label>
+                    <input type="text" id="DelaFecha" name="DelaFecha" class="form-control form-control-sm date">
+                </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-1 col-xl-2">
+                    <label>A LA FECHA</label>
+                    <input type="text" id="AlaFecha" name="AlaFecha" class="form-control form-control-sm date">
+                </div>
                 <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 d-none">
                     <label>ANIO</label>
-                    <input type="text"  id="ANIO" name="ANIO" class="form-control form-control-sm" > 
+                    <input type="text"  id="ANIO" name="ANIO" class="form-control form-control-sm" >
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -77,7 +85,7 @@
                         </thead>
                         <tbody></tbody>
                     </table>
-                </div> 
+                </div>
                 <div class="col-12" align="center">
                     <h4 class="font-weight-bold PARES_TOTALES text-danger">Pares</h4>
                 </div>
@@ -93,30 +101,28 @@
             Cliente = pnlTablero.find("#Cliente"),
             Pedidox, tblPedidox = pnlTablero.find("#tblPedidox"),
             btnImprimirReporte = pnlTablero.find("#btnImprimirReporte"),
-            AAAA = <?php print Date('Y'); ?>, ANIO = pnlTablero.find('#ANIO');
+            AAAA = <?php print Date('Y'); ?>, ANIO = pnlTablero.find('#ANIO'),
+            DelaFecha = pnlTablero.find('#DelaFecha'), AlaFecha = pnlTablero.find('#AlaFecha');
 
     $(document).ready(function () {
 
-        onOpenOverlay('Cargando...');
 
         ANIO.val(AAAA);
 
-        handleEnterDiv(pnlTablero);
 
 
         Color.change(function () {
             if (Color.val()) {
                 xColor.val(Color.val());
                 Pedidox.ajax.reload(function () {
-                    onCloseOverlay();
+
                     onRevisarRegistros();
-                    Cliente[0].selectize.focus();
-                    Cliente[0].selectize.open();
+                    xCliente.focus();
                     Color[0].selectize.disable();
                 });
             } else {
                 Pedidox.ajax.reload(function () {
-                    onCloseOverlay();
+
                     onRevisarRegistros();
                     xColor.val('');
                     Color[0].selectize.enable();
@@ -124,13 +130,13 @@
                 });
             }
         });
-        xColor.on('keydown', function (e) {
+        xColor.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if (xColor.val()) {
                     Color[0].selectize.setValue(xColor.val());
                     if (Color.val()) {
                         Pedidox.ajax.reload(function () {
-                            onCloseOverlay();
+
                             onRevisarRegistros();
                             Color[0].selectize.disable();
                         });
@@ -141,15 +147,16 @@
                     }
                 } else {
                     Pedidox.ajax.reload(function () {
-                        onCloseOverlay();
+
                         onRevisarRegistros();
                         Color[0].selectize.enable();
                         Color[0].selectize.clear(true);
+                        xCliente.focus();
                     });
                 }
             } else {
                 Pedidox.ajax.reload(function () {
-                    onCloseOverlay();
+
                     onRevisarRegistros();
                     Color[0].selectize.enable();
                     Color[0].selectize.clear(true);
@@ -161,7 +168,7 @@
             if (Cliente.val()) {
                 xCliente.val(Cliente.val());
                 Pedidox.ajax.reload(function () {
-                    onCloseOverlay();
+
                     onRevisarRegistros();
                     Cliente[0].selectize.disable();
                 });
@@ -171,12 +178,13 @@
                 Cliente[0].selectize.clear(true);
             }
         });
-        xCliente.on('keydown', function (e) {
+        xCliente.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if (xCliente.val()) {
                     Cliente[0].selectize.setValue(xCliente.val());
                     if (Cliente.val()) {
                         Cliente[0].selectize.disable();
+                        DelaFecha.focus();
                     } else {
                         iMsg('NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', 'w', function () {
                             xCliente.focus().select();
@@ -185,10 +193,33 @@
                 } else {
                     Cliente[0].selectize.enable();
                     Cliente[0].selectize.clear(true);
+                    DelaFecha.focus();
                 }
             } else {
                 Cliente[0].selectize.enable();
                 Cliente[0].selectize.clear(true);
+            }
+        });
+
+        DelaFecha.on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                if (DelaFecha.val()) {
+                    AlaFecha.focus();
+                } else {
+                    AlaFecha.focus();
+                }
+            }
+        });
+        AlaFecha.on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                if (AlaFecha.val() && DelaFecha.val()) {
+                    Pedidox.ajax.reload(function () {
+                        onRevisarRegistros();
+                        btnImprimirReporte.focus();
+                    });
+                } else {
+                    btnImprimirReporte.focus();
+                }
             }
         });
 
@@ -207,15 +238,14 @@
             }).fail(function (x, y, z) {
                 getError(x);
             }).always(function () {
-                onCloseOverlay();
+
             });
         });
 
-        Estilo.on('keydown', function (e) {
+        Estilo.on('keypress', function (e) {
             if (e.keyCode === 13 && Estilo.val()) {
-                onOpenOverlay('Buscando...');
                 Pedidox.ajax.reload(function () {
-                    onCloseOverlay();
+
                 });
                 //OBTENER COLORES POR ESTILO
                 Color[0].selectize.clearOptions();
@@ -227,7 +257,7 @@
                 }).fail(function (x, y, z) {
                     getError(x);
                 }).always(function () {
-                    onCloseOverlay();
+
                     onRevisarRegistros();
                 });
             }
@@ -244,6 +274,8 @@
                     d.CLIENTE = (Cliente.val() ? Cliente.val() : '');
                     d.ESTILO = (Estilo.val() ? Estilo.val() : '');
                     d.COLOR = (Color.val() ? Color.val() : '');
+                    d.DFECHA = (DelaFecha.val() ? DelaFecha.val() : '');
+                    d.AFECHA = (AlaFecha.val() ? AlaFecha.val() : '');
                 }
             },
             "columns": [
@@ -276,7 +308,7 @@
             "scrollY": "450px",
             "scrollX": true,
             initComplete: function () {
-                onCloseOverlay();
+
                 Estilo.focus();
             },
             "drawCallback": function (settings) {

@@ -793,7 +793,7 @@ class PDF_ComparativoInv extends FPDF {
         $nb = 0;
         for ($i = 0; $i < count($data); $i++)
             $nb = max($nb, $this->NbLines($this->widths[$i], $data[$i]));
-        $h = 3 * $nb;
+        $h = 4 * $nb;
         //Issue a page break first if needed
         $this->CheckPageBreak($h);
 
