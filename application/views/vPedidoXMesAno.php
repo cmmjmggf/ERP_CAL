@@ -21,8 +21,8 @@
                 </button>
             </div>
             <div class="w-100"></div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <canvas id="CanvasGraficoDePedidosXMesAno" width="400" height="650"></canvas>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <canvas id="CanvasGraficoDePedidosXMesAno" style="width: 100%;" height="400"></canvas>
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                 <canvas id="CanvasGraficoDeParesXSemanaAno" width="400" height="650"></canvas>
@@ -110,7 +110,7 @@
                                 ticks: {
                                     fontColor: "white",
                                     fontSize: 14,
-                                    stepSize: 25,
+                                    stepSize: 7000,
                                     beginAtZero: true
                                 }
                             }],
