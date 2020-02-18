@@ -576,7 +576,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                                     'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
                                     'claveunidad' => 'PR', 'cantidad' => $x["CAF$i"],
                                     'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
-                                    'descripcion' => $x['ESTILO'] . " " . $x['COLOR_TEXT'] . " " . $SERIE[0]->{"T$i"},
+                                    'descripcion' => $x['COLOR_TEXT'] . " " . $SERIE[0]->{"T$i"},
                                     'Precio' => $x['PRECIO'],
                                     'importe' => $XSUBTOTAL, 'fecha' => "$anio-$mes-$dia $hora",
                                     'control' => $x['CONTROL'], 'iva' => $XSUBTOTAL_IVA,
@@ -792,6 +792,18 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                         ->where_not_in("P.DeptoProduccion", array(270))
                         ->where_in("P.stsavan", array(12));
             }
+            $data = $this->db->limit(1)->get()->result();
+            print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getParesFabricadosFacturadosSaldo() {
+        try {
+            $x = $this->input->get();
+            $this->db->select("P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES ", false)
+                    ->from("pedidox AS P ")->where("P.Control", $x['CONTROL']); 
             $data = $this->db->limit(1)->get()->result();
             print json_encode($data);
         } catch (Exception $exc) {

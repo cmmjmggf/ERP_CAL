@@ -888,7 +888,7 @@ P.Maquila AS MAQUILA
                 if (intval($check_fraccion[0]->EXISTE) === 0) {
                     switch (intval($frac)) {
                         case 300:
-                            $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {}")->result();
+                            $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {$xXx['CONTROL']}")->result();
                             if (intval($check_tejido[0]->EXISTE) === 0) {
                                 $this->db->set('EstatusProduccion', 'ENSUELADO')
                                         ->set('DeptoProduccion', 140)
