@@ -160,11 +160,11 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             switch (intval($this->input->get('TP'))) {
                 case 1:
                     print json_encode(
-                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD ORDER BY FD.numfac DESC LIMIT 1")->result());
+                                    $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD where  FD.tp = {$this->input->get('TP')} AND FD.numfac < 122320 ORDER BY FD.numfac DESC LIMIT 1")->result());
                     break;
                 case 2:
                     print json_encode(
-                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = 2 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = 2 AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
                     break;
             }
         } catch (Exception $exc) {
@@ -454,7 +454,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["modulo"] = "DEVOLUCION";
             $f["usuario"] = $this->session->USERNAME;
             $f["usuario_id"] = $this->session->ID;
-            $f["devid"] = $this->session->ID;
+            $f["devid"] = $x["DEVID"];
             $this->db->insert('facturacion', $f);
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {

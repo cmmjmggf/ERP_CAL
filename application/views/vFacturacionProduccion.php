@@ -1,4 +1,4 @@
-<div class="card m-1 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
+<div class="card" id="pnlTablero" style="background-color:  #fff !important;">
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
@@ -36,7 +36,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">
                 <div class="row">
                     <div class="col-10">
-                        <h4 class="font-weight-bold font-italic text-danger" style="cursor: pointer;" onclick="getHistorial()">F A C T U R A C I Ó N</h4>
+                        <h4 class="font-weight-bold font-italic text-danger text-nowrap" style="cursor: pointer;" onclick="getHistorial()">F A C T U R A C I Ó N</h4>
                     </div>
                     <div class="col-2">
                         <button type="button" id="btnNuevo" name="btnNuevo" 
@@ -59,10 +59,10 @@
                 <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" class="btn btn-info font-weight-bold">
                     <span class="fa fa-file-archive"></span>   ADDENDA COPPEL 
                 </button> 
-                <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
+                <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger d-none" disabled="">
                     <span class="fa fa-file-archive"></span>   CANCELA DOC 
                 </button>
-                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary selectNotEnter">
+                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary selectNotEnter d-none">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
                 <button type="button" id="btnEtiquetasParaCaja" name="btnEtiquetasParaCaja" class="btn btn-primary d-none">
@@ -1141,6 +1141,7 @@
                 $(v)[0].selectize.enable();
             });
             if (ClienteFactura.val()) {
+                nuevo = true;
                 onOpenOverlay('Cerrando...');
                 var p = {
                     FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
@@ -2155,7 +2156,8 @@
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
-        onObtenerCodigoSatXEstilo( );
+        onObtenerCodigoSatXEstilo();
+        getUltimoFolio();
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
@@ -2375,6 +2377,23 @@
         }
     }
 
+    function getUltimoFolio() {
+        if (nuevo) {
+            $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
+                TP: parseInt(TPFactura.val())
+            }).done(function (a) {
+                if (a.length > 0) {
+                    var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
+                    Documento.val(r);
+                } 
+            }).fail(function (xyz) {
+                getError(xyz);
+            }).always(function () {
+                onCloseOverlay();
+            });
+        }
+    }
+
     function getListaDePreciosXCliente() {
         $.post('<?php print base_url('FacturacionProduccion/getListaDePreciosXCliente') ?>', {
             CLIENTE: ClienteFactura.val()
@@ -2532,11 +2551,7 @@
 
 </script>
 
-<style> 
-    .card{ 
-        border: 2px solid #000;
-        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
-    } 
+<style>  
     table tbody tr {
         -webkit-touch-callout: none !important; /* iOS Safari */
         -webkit-user-select: none !important; /* Safari */

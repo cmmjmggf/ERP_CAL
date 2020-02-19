@@ -1,5 +1,5 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
-    <div class="card-body " style="padding: 7px 10px 10px 10px;">
+<div class="card" id="pnlTablero" style="background-color:  #fff !important;">
+    <div class="card-body " style="padding: 7px 10px 10px 10px;" >
         <div class="row">
             <div class="col-sm-4">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
@@ -856,7 +856,7 @@
         });
 
         btnAcepta.click(function () {
-            if (parseInt((PrecioFacturacion.val() ? PrecioFacturacion.val(): 0)) <= 0 ) {
+            if (parseInt((PrecioFacturacion.val() ? PrecioFacturacion.val() : 0)) <= 0) {
                 onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
                     PrecioFacturacion.focus().select();
                 });
@@ -917,7 +917,8 @@
                 $(v)[0].selectize.enable();
             });
             if (ClienteFactura.val()) {
-                onOpenOverlay('Guardando...');
+                onOpenOverlay('Cerrando documento...');
+                nuevo = true;
                 var p = {
                     FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
                     TP_DOCTO: TPFactura.val(), FACTURA: FAPEORCOFactura.val(),
@@ -1029,8 +1030,8 @@
             if (e.keyCode === 13) {
                 onOpenOverlay('Espere un momento por favor...');
                 $.getJSON('<?php print base_url('FacturacionDevolucion/onComprobarFactura'); ?>',
-                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''), 
-                            FACTURA: FAPEORCOFactura.val(), 
+                        {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
+                            FACTURA: FAPEORCOFactura.val(),
                             TP: TPFactura.val()
                         }).done(function (a) {
                     if (a.length > 0) {
@@ -1088,7 +1089,7 @@
                                                 CajasFacturacion.attr('disabled', true);
                                                 onDisableInputs(true);
                                                 onDisable(btnCierraDocto);
-                                                onReadOnly(Documento);
+                                                onReadOnly(FAPEORCOFactura);
                                                 pnlTablero.find("#btnNuevo").removeClass("d-none");
                                                 pnlTablero.find("#btnNuevo").attr("disabled", false);
                                                 Control.attr('disabled', true);
@@ -1862,6 +1863,7 @@
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
         getTotalPares();
+        getUltimoFolio();
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
@@ -1969,7 +1971,7 @@
             CorridaFacturacion.val('');
             PrecioFacturacion.val('');
             SubtotalFacturacion.val('');
-            SubtotalFacturacionIVA.val(''); 
+            SubtotalFacturacionIVA.val('');
             ParesFacturadosFacturacion.val('');
             btnCierraDocto.attr('disabled', false);
             btnFacturaXAnticipoDeProducto.attr('disabled', true);
@@ -2155,13 +2157,26 @@
             onCloseOverlay();
         });
     }
+    
+    function getUltimoFolio() {
+        if (nuevo) {
+            $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
+                TP: parseInt(TPFactura.val())
+            }).done(function (a) {
+                if (a.length > 0) {
+                    var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
+                    FAPEORCOFactura.val(r);
+                } 
+            }).fail(function (xyz) {
+                getError(xyz);
+            }).always(function () {
+                onCloseOverlay();
+            });
+        }
+    }
 </script>
 
-<style> 
-    .card{ 
-        border: 2px solid #000;
-        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
-    }
+<style>  
     input{
         padding-top: 2px !important;
         padding-bottom:  2px !important;
@@ -2184,6 +2199,19 @@
         -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
         animation: myfirst 1.5s linear 0.5s infinite alternate;    
         box-shadow: 0 0px 12px  #03A9F4;
+    }
+    input{
+        padding-top: 2px !important;
+        padding-bottom:  2px !important;
+        border: solid 1px #000 !important;
+    } 
+    input,textarea{
+        padding-top: 2px !important;
+        padding-bottom:  2px !important;
+        border: solid 1px #000 !important;
+    } 
+    .text-danger {
+        color: #b71a0a !important;
     }
 
     /* Safari 4.0 - 8.0 */
