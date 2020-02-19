@@ -45,7 +45,7 @@ when $P{tp} = '2' then fa.tp = 2
 ELSE fa.tp LIKE '%%'
 end
 and fa.fecha between $P{fechaIni} and $P{fechaFin}
-group by fa.factura
+group by fa.factura, fa.staped
 order by fa.factura asc]]>
 	</queryString>
 	<field name="anticipo" class="java.lang.String"/>

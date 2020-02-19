@@ -1,5 +1,5 @@
 <div class="card" id="pnlTablero" style="background-color:  #fff !important;">
-    <div class="card-body " style="padding: 7px 10px 10px 10px;">
+    <div class="card-body" style="padding-top: 0px;">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
@@ -36,7 +36,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">
                 <div class="row">
                     <div class="col-10">
-                        <h4 class="font-weight-bold font-italic text-danger text-nowrap" style="cursor: pointer;" onclick="getHistorial()">F A C T U R A C I Ó N</h4>
+                        <h4 class="font-weight-bold font-italic text-danger text-nowrap" style="cursor: pointer;" onclick="getHistorial()">FACTURACIÓN</h4>
                     </div>
                     <div class="col-2">
                         <button type="button" id="btnNuevo" name="btnNuevo" 
@@ -263,7 +263,7 @@
                 <hr>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">  
-                <button type="button" id="btnRefrescaRegistro" name="btnRefrescaRegistro" class="btn btn-sm btn-info">
+                <button type="button" id="btnRefrescaRegistro" name="btnRefrescaRegistro" class="btn btn-sm btn-info d-none">
                     <span class="fa fa-retweet"></span>
                 </button>
             </div>
@@ -337,17 +337,17 @@
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-1" align="center">
                 <div class="row" align="center">
-                    <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter" id="btnFacturaXAnticipoDeProducto" disabled="">
+                    <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter btn-block" id="btnFacturaXAnticipoDeProducto" disabled="">
                         <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
-                    </button>
+                    </button>  
                     <div class="w-100"></div>
-                    <button type="button" class="btn btn-info notEnter selectNotEnter" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                    <button type="button" class="btn btn-info notEnter selectNotEnter btn-block" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
                         <span class="fa fa-exclamation"></span> CONTROL INCOMPLETO
-                    </button>
+                    </button> 
                     <div class="w-100"></div>
-                    <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnControlCompleto" disabled="">
+                    <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" id="btnControlCompleto" disabled="">
                         <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
-                    </button>
+                    </button>  
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
@@ -2385,7 +2385,7 @@
                 if (a.length > 0) {
                     var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
                     Documento.val(r);
-                } 
+                }
             }).fail(function (xyz) {
                 getError(xyz);
             }).always(function () {

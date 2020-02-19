@@ -1,5 +1,5 @@
 <div class="card" id="pnlTablero" style="background-color:  #fff !important;">
-    <div class="card-body " style="padding: 7px 10px 10px 10px;" >
+   <div class="card-body" style="padding-top: 0px;">
         <div class="row">
             <div class="col-sm-4">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
@@ -55,10 +55,10 @@
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
-                <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger" disabled="">
+                <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger d-none" disabled="">
                     <span class="fa fa-file-archive"></span>   CANCELA DOC 
                 </button>
-                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary  selectNotEnter">
+                <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary  selectNotEnter d-none">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
                 <button type="button" id="btnRastreoDeControlesEnDocumento" name="btnRastreoDeControlesEnDocumento" class="btn btn-primary  selectNotEnter">
@@ -316,20 +316,18 @@
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-1" align="center"> 
                 <div class="row"  align="center">
-                    <div class="col">
-                        <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
+                    <div class="col-12">
+                        <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter btn-block"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
                             <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
                         </button>
                     </div>
-                    <div class="col">
-                        <div class="w-100"></div>
-                        <button type="button" class="btn btn-info notEnter selectNotEnter" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                    <div class="col-12"> 
+                        <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
                             <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
                         </button>
                     </div>
-                    <div class="col">
-                        <div class="w-100"></div>
-                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnControlCompleto"  disabled="" >
+                    <div class="col-12"> 
+                        <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" id="btnControlCompleto"  disabled="" >
                             <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
                         </button> 
                     </div> 

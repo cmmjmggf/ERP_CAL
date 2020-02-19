@@ -259,7 +259,7 @@
                                     <div class="w-100"></div>
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <label for="Egreso" >Egreso*</label>
-                                        <input type="text" id="Egreso" name="Egreso" class="form-control form-control-sm date notEnter" required="">
+                                        <input type="text" id="Egreso" name="Egreso" class="form-control form-control-sm date notEnter">
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                         <label for="Comedor" >Comedor*</label>
