@@ -48,7 +48,12 @@ $vs = array('vExplosionSemanal', 'vExplosionSemanalCliente', 'vExplosionSemanalA
     'vParesProducidosPorDepartamento',
     'vParesAsignadosExportaXLS',
     'vConsumosPielForroCortadores',
-    'vAvanceAnterior', 'vParesProducidosPorTipoConstruccion');
+    'vAvanceAnterior', 
+    'vParesProducidosPorTipoConstruccion',
+    'vMaquinaria',
+    'vRefacciones',
+    'vSolicitudDeMantenimiento'    
+    );
 foreach ($vs as $v) {
     $this->load->view($v);
 }

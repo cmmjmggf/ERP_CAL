@@ -888,16 +888,18 @@ P.Maquila AS MAQUILA
                 if (intval($check_fraccion[0]->EXISTE) === 0) {
                     switch (intval($frac)) {
                         case 300:
-                            $this->db->set('EstatusProduccion', 'ENSUELADO')
-                                    ->set('DeptoProduccion', 140)
-                                    ->where('Control', $xXx['CONTROL'])->update('controles');
-                            $this->db->set('stsavan', 55)
-                                    ->set('EstatusProduccion', 'ENSUELADO')
-                                    ->set('DeptoProduccion', 140)
-                                    ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))
-                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
-
+                            $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {$xXx['CONTROL']}")->result();
+                            if (intval($check_tejido[0]->EXISTE) === 0) {
+                                $this->db->set('EstatusProduccion', 'ENSUELADO')
+                                        ->set('DeptoProduccion', 140)
+                                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                                $this->db->set('stsavan', 55)
+                                        ->set('EstatusProduccion', 'ENSUELADO')
+                                        ->set('DeptoProduccion', 140)
+                                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))
+                                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                            }
                             /* PAGAR FRACCION */
                             // 300 PESPUNTE GENERAL
                             $this->onPagarFraccion($xXx, 300, 140, 'ENSUELADO');
@@ -1251,19 +1253,27 @@ P.Maquila AS MAQUILA
             if (intval($check_fraccion[0]->EXISTE) >= 1) {
                 exit(0);
             }
-            $this->db->insert('avance', array(
-                'Control' => $xXx['CONTROL'],
-                'FechaAProduccion' => Date('d/m/Y'),
-                'Departamento' => $depto_avance,
-                'DepartamentoT' => $depto_avance_txt,
-                'FechaAvance' => Date('d/m/Y'),
-                'Estatus' => 'A',
-                'Usuario' => $_SESSION["ID"],
-                'Fecha' => Date('d/m/Y'),
-                'Hora' => Date('h:i:s a'),
-                'Fraccion' => 0
-            ));
-            $id = $this->db->insert_id();
+            $check_avance = $this->db->select('COUNT(*) AS EXISTE', false)
+                            ->from('avance AS A')
+                            ->where('A.Control', $xXx['CONTROL'])
+                            ->where('A.Departamento', $depto_avance)->get()->result();
+
+            $id = 0;
+            if (intval($check_avance[0]->EXISTE) === 0) {
+                $this->db->insert('avance', array(
+                    'Control' => $xXx['CONTROL'],
+                    'FechaAProduccion' => Date('d/m/Y'),
+                    'Departamento' => $depto_avance,
+                    'DepartamentoT' => $depto_avance_txt,
+                    'FechaAvance' => Date('d/m/Y'),
+                    'Estatus' => 'A',
+                    'Usuario' => $_SESSION["ID"],
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a'),
+                    'Fraccion' => 0
+                ));
+                $id = $this->db->insert_id();
+            }
             $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
             $data = array(
                 "numeroempleado" => $xXx['EMPLEADO'],
@@ -1281,6 +1291,7 @@ P.Maquila AS MAQUILA
             $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
             $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
             $data["preciofrac"] = $PXFC;
+            $data["fecha_registro"] = Date('d/m/Y h:i:s');
             $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
             $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
             $this->db->insert('fracpagnomina', $data);

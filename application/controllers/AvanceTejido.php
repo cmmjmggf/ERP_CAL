@@ -280,7 +280,8 @@ class AvanceTejido extends CI_Controller {
                     'registro' => 0,
                     'anio' => Date('Y'),
                     'avance_id' => $ID,
-                    'fraccion' => $xXx['FRACCION']
+                    'fraccion' => $xXx['FRACCION'],
+                    'fecha_registro' => Date('d/m/Y h:i:s')
                 ));
 
                 /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */

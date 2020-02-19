@@ -1744,7 +1744,7 @@
                     var r = a[0];
                     pnlTablero.find(".produccionfabricados").text(r.PARES);
                     pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
-                    pnlTablero.find(".produccionsaldo").text(r.PARES_FACTURADOS);
+                    pnlTablero.find(".produccionsaldo").text(r.PARES - r.PARES_FACTURADOS);
                     var xrow = pnlTablero.find("#tblTallasF tr#rCantidades:eq(1)").find("td");
                     xrow.eq(1).find("input").val(0);
                     xrow.eq(2).find("input").val(0);
@@ -1946,6 +1946,17 @@
     function getFacturacionDiff() {
         if (Control.val()) {
             onOpenOverlay('Cargando...');
+            $.getJSON('<?php print base_url('FacturacionProduccion/getParesFabricadosFacturadosSaldo'); ?>',
+                    {
+                        CONTROL: Control.val()
+                    }).done(function (a) {
+                if (a.length > 0) {
+                    var r = a[0];
+                    pnlTablero.find(".produccionfabricados").text(r.PARES);
+                    pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
+                    pnlTablero.find(".produccionsaldo").text(r.PARES - r.PARES_FACTURADOS);
+                }
+            });
             $.getJSON('<?php print base_url('FacturacionProduccion/onComprobarControlXCliente'); ?>', {
                 CONTROL: Control.val() ? Control.val() : '',
                 CLIENTE: ClienteClave.val() ? ClienteClave.val() : ''
@@ -2038,8 +2049,8 @@
                                 btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                 btnControlInCompleto.attr('disabled', true);
                                 btnControlCompleto.attr('disabled', true);
-                                onNotifyOldPCE('', 'EL CONTROL AUN NO ESTA TERMINADO', 'info', "bottom", "center");
-                                onCampoInvalido(pnlTablero, ' * EL CONTROL AÚN NO ESTÁ TERMINADO * ', function () {
+                                onNotifyOldPCE('', 'EL CONTROL AUN NO ESTA TERMINADO O YA ESTA FACTURADO COMPLETAMENTE.', 'info', "bottom", "center");
+                                onCampoInvalido(pnlTablero, ' * EL CONTROL AÚN NO ESTÁ TERMINADO O YA ESTA FACTURADO COMPLETAMENTE. * ', function () {
                                     Control.focus().select();
                                     btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                     btnControlInCompleto.attr('disabled', true);
