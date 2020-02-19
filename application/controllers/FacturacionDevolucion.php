@@ -65,7 +65,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
                                         D.par21 AS C21, D.par22 AS C22, "
                                     . "(SELECT E.Descripcion FROM estilos AS E "
-                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID "
+                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID  "
                                     . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
                                     . "WHERE D.control = '{$this->input->get('CONTROL')}' LIMIT 1")->result();
                     break;
@@ -89,7 +89,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
                                         D.par21 AS C21, D.par22 AS C22, "
                                         . "(SELECT E.Descripcion FROM estilos AS E "
-                                        . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
+                                        . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID "
                                         . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
                                         . "WHERE D.control = '{$this->input->get('CONTROL')}' LIMIT 1")->result();
                     } else {
@@ -107,7 +107,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
                                         D.par21 AS C21, D.par22 AS C22, "
                                         . "(SELECT E.Descripcion FROM estilos AS E "
-                                        . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
+                                        . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID  "
                                         . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
                                         . "WHERE D.control = '{$this->input->get('CONTROL')}' "
                                         . "AND D.tp = '{$this->input->get('TP')}' LIMIT 1")->result();
@@ -231,7 +231,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par06 +  D.par07 +  D.par08 +  D.par09 +  D.par10 +  
                 D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
-                D.par21 +  D.par22 ) AS PARES_TOTALES
+                D.par21 +  D.par22 ) AS PARES_TOTALES, D.registro AS REGISTRO_ID, D.ID AS DEVID 
                 FROM devolucionnp AS D 
                 WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 LIMIT 1")->result();
                     break;
@@ -250,7 +250,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par06 +  D.par07 +  D.par08 +  D.par09 +  D.par10 +  
                 D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
-                D.par21 +  D.par22 ) AS PARES_TOTALES
+                D.par21 +  D.par22 ) AS PARES_TOTALES, D.registro AS REGISTRO_ID, D.ID AS DEVID 
                 FROM devolucionnp AS D 
                 WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 LIMIT 1")->result();
                     } else {
@@ -266,7 +266,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par06 +  D.par07 +  D.par08 +  D.par09 +  D.par10 +  
                 D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
-                D.par21 +  D.par22 ) AS PARES_TOTALES
+                D.par21 +  D.par22 ) AS PARES_TOTALES, D.registro AS REGISTRO_ID, D.ID AS DEVID 
                 FROM devolucionnp AS D 
                     WHERE D.control = {$xxx['CONTROL']} AND D.tp = {$xxx['TP']} AND stafac <= 1 LIMIT 1")->result();
                     }
@@ -452,6 +452,9 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["costo"] = NULL;
             $f["obs"] = $x["OBSERVACIONES"];
             $f["modulo"] = "DEVOLUCION";
+            $f["usuario"] = $this->session->USERNAME;
+            $f["usuario_id"] = $this->session->ID;
+            $f["devid"] = $this->session->ID;
             $this->db->insert('facturacion', $f);
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
