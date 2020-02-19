@@ -65,7 +65,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
                                         D.par21 AS C21, D.par22 AS C22, "
                                     . "(SELECT E.Descripcion FROM estilos AS E "
-                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT "
+                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID "
                                     . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
                                     . "WHERE D.control = '{$this->input->get('CONTROL')}' LIMIT 1")->result();
                     break;
@@ -436,7 +436,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["decdias"] = 0;
             $f["agente"] = $x["AGENTE"];
             $f["colsuel"] = $x["COLOR_TEXT"];
-            $f["tpofac"] = 1;
+            $f["tpofac"] = $x["REGISTRO_ID"];
             $f["año"] = date('Y');
             $f["zona"] = $x["ZONA"];
             $f["horas"] = date('h:i:s a');

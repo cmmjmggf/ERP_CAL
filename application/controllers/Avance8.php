@@ -305,7 +305,7 @@ class Avance8 extends CI_Controller {
                 print "CONTROL {$xXx['CONTROL']} CANCELADO O NO EXISTE O ESTA MAL ESCRITO";
                 exit(0);
             }
-            
+
             $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
             $AVANCES = array("AVANZO" => 0, "FRACCIONES" => count($FRACCIONES));
 //            var_dump($FRACCIONES);
@@ -391,6 +391,7 @@ class Avance8 extends CI_Controller {
                                                     ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
                                                     ->update('pedidox');
                                             $this->db->set('fec42', Date('Y-m-d 00:00:00'))
+                                                    ->where('fec42 IS NULL', null, false)
                                                     ->where('contped', $xXx['CONTROL'])
                                                     ->update('avaprd');
                                         }
@@ -427,6 +428,7 @@ class Avance8 extends CI_Controller {
                                                     ->set('DeptoProduccion', 100)->where('Control', $xXx['CONTROL'])
                                                     ->update('pedidox');
                                             $this->db->set('fec42', Date('Y-m-d 00:00:00'))
+                                                    ->where('fec42 IS NULL', null, false)
                                                     ->where('contped', $xXx['CONTROL'])
                                                     ->update('avaprd');
                                         }
@@ -487,6 +489,7 @@ class Avance8 extends CI_Controller {
                                                         ->set('DeptoProduccion', 130)
                                                         ->where('Control', $xXx['CONTROL'])->update('pedidox');
                                                 $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
+                                                        ->where('fec6 IS NULL', null, false)
                                                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
                                             }
                                         }
@@ -502,6 +505,7 @@ class Avance8 extends CI_Controller {
                                                     ->set('DeptoProduccion', 160)
                                                     ->where('Control', $xXx['CONTROL'])->update('pedidox');
                                             $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))
+                                                    ->where('fec8 IS NULL', null, false)
                                                     ->where('contped', $xXx['CONTROL'])->update('avaprd');
                                         }
                                     }
@@ -603,6 +607,7 @@ class Avance8 extends CI_Controller {
                                         ->set('DeptoProduccion', 130)
                                         ->where('Control', $xXx['CONTROL'])->update('pedidox');
                                 $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))
+                                        ->where('fec6 IS NULL', null, false)
                                         ->where('contped', $xXx['CONTROL'])->update('avaprd');
                                 /* REVISAR SI LLEVA TEJIDO FRACCION 401, NO LO REGISTRAN PORQUE LO HACE LA CHUCANI */
                                 $TIENE_TEJIDO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fraccionesxestilo AS F INNER JOIN fracciones AS FF "
@@ -616,6 +621,7 @@ class Avance8 extends CI_Controller {
                                             ->set('DeptoProduccion', 160)
                                             ->where('Control', $xXx['CONTROL'])->update('pedidox');
                                     $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))
+                                            ->where('fec8 IS NULL', null, false)
                                             ->where('contped', $xXx['CONTROL'])->update('avaprd');
                                 }
                             }
@@ -859,6 +865,7 @@ class Avance8 extends CI_Controller {
                     ->set('DeptoProduccion', $DEPTO_PRODUCCION)
                     ->where('Control', $CONTROL)->update('pedidox');
             $this->db->set("fec{$STSAVAN}", Date('Y-m-d 00:00:00'))
+                    ->where("fec{$STSAVAN} IS NULL", null, false)
                     ->where('contped', $CONTROL)->update('avaprd');
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();

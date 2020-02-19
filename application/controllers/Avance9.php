@@ -401,7 +401,7 @@ class Avance9 extends CI_Controller {
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
             $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} AND P.stsavan NOT IN(12,13,14) AND P.DeptoProduccion NOT IN(270) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.Estatus NOT IN('C') LIMIT 1")->result();
-            if(intval($CONTROL_EXISTE[0]->EXISTE)===0){
+            if (intval($CONTROL_EXISTE[0]->EXISTE) === 0) {
                 exit(0);
             }
             $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
@@ -927,6 +927,7 @@ class Avance9 extends CI_Controller {
                     ->set('DeptoProduccion', $DEPTO_PRODUCCION)
                     ->where('Control', $CONTROL)->update('pedidox');
             $this->db->set("fec{$STSAVAN}", Date('Y-m-d 00:00:00'))
+                    ->where("fec{$STSAVAN} IS NULL", null, false)
                     ->where('contped', $CONTROL)->update('avaprd');
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();

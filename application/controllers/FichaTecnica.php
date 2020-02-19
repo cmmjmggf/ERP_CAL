@@ -340,16 +340,16 @@ class FichaTecnica extends CI_Controller {
             $MATERIAL = $this->input->post('MATERIAL');
             $MATERIALNUEVO = $this->input->post('MATERIALNUEVO');
             $CONSUMO = $this->input->post('CONSUMO');
-            if ($CONSUMO !== '' && intval($CONSUMO) > 0) {
+            if ($CONSUMO !== '' && floatval($CONSUMO) > 0) {
                 $this->db->query("UPDATE fichatecnica AS FT
                 INNER JOIN estilos AS E ON FT.Estilo = E.Clave
                 SET FT.Articulo = {$MATERIALNUEVO}, FT.Consumo = {$CONSUMO} "
-                . "WHERE E.Linea = {$LINEA}  AND FT.Articulo = $MATERIAL;");
+                        . "WHERE E.Linea = {$LINEA}  AND FT.Articulo = {$MATERIAL};");
             } else {
-                $this->db->query("UPDATE fichatecnica AS FT
-                INNER JOIN estilos AS E ON FT.Estilo = E.Clave
-                SET FT.Articulo = {$MATERIALNUEVO} , FT.Consumo = {$CONSUMO}
-            WHERE E.Linea = {$LINEA}  AND FT.Articulo = {$MATERIAL};");
+                if (floatval($CONSUMO) <= 0) {
+                    $this->db->query("UPDATE fichatecnica AS FT INNER JOIN estilos AS E ON FT.Estilo = E.Clave
+                SET FT.Articulo = {$MATERIALNUEVO} WHERE E.Linea = {$LINEA}  AND FT.Articulo = {$MATERIAL};");
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

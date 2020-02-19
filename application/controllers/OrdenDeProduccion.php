@@ -335,7 +335,7 @@ class OrdenDeProduccion extends CI_Controller {
                 }
 
                 /* MOVER ESTATUS EN CASO DE MAQUILAS 2,3,4,5...99 */
-                if (intval($v->Maquila) > 1) {
+                if (intval($v->Maquila) > 1 && intval($v->Maquila) !== 98  ) {
                     /*
                      * CUANDO LOS TRAEN DE UNA MAQUILA QUE NO ES LA 1 (UNO): SE DEBEN DE PROCESAR A ENSUELADO
                      * 140 = ENSUELADO

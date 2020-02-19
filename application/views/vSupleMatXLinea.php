@@ -263,7 +263,7 @@
     });
 
     function onComprobarSuplir() {
-        if (LineaDefinidora.val() && MaterialASuplirXLinea.val() && MaterialNuevoXLinea.val() && ConsumoXLinea.val()) {
+        if (LineaDefinidora.val() && MaterialASuplirXLinea.val() && MaterialNuevoXLinea.val()) {
             btnSuplirMaterialXLinea.attr('disabled', false);
         } else {
             btnSuplirMaterialXLinea.attr('disabled', true);

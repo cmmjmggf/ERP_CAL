@@ -350,7 +350,7 @@
             getTotales(true);
         });
 
-        ClienteFactura.click(function () { 
+        ClienteFactura.click(function () {
             ClienteFactura[0].selectize.enable();
         });
 
@@ -616,6 +616,7 @@
             onEnable(FechaFactura);
             console.log(ClienteFactura.val(), TPFactura.val(), TMNDAFactura.val()
                     , Documento.val(), FechaFactura.val());
+            onCalcularSubtotal();
             $.getJSON('<?php print base_url('FacturacionVarios/onComprobarFactura'); ?>',
                     {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
                         FACTURA: Documento.val()
@@ -1298,7 +1299,7 @@
             console.log(a);
             if (a.length > 0) {
                 pnlTablero.find("span.productoSAT").text(a[0].CPS);
-                ProductoSAT.val(a[0].CPS); 
+                ProductoSAT.val(a[0].CPS);
             }
         }).fail(function (x) {
             getError(x);

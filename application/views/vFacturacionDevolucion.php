@@ -175,6 +175,7 @@
                 <label>Control</label>
                 <div class="input-group">               
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly">
+                    <input type="text" id="REGISTRO_ID" name="REGISTRO_ID" class="form-control form-control-sm d-none">
                     <span class="input-group-prepend">
                         <span class="input-group-text text-dark" 
                               style="background-color: #007bff; color: #FFF !important;   
@@ -618,6 +619,7 @@
             EstiloTFacturacion = pnlTablero.find("#EstiloTFacturacion"),
             CodigoSat = pnlTablero.find("#CodigoSat"),
             ObservacionFacturacion = pnlTablero.find("#ObservacionFacturacion"),
+            REGISTRO_ID = pnlTablero.find("#REGISTRO_ID"),
             ColorFacturacion = pnlTablero.find('#ColorFacturacion'),
             ColorClaveFacturacion = pnlTablero.find("#ColorClaveFacturacion"),
             CorridaFacturacion = pnlTablero.find('#CorridaFacturacion'),
@@ -1739,6 +1741,7 @@
                             EstiloTFacturacion.val(xx.ESTILO_TEXT);
                             ColorFacturacion.val(xx.COLORT);
                             PrecioFacturacion.val(xx.PRECIO);
+                            REGISTRO_ID.val(xx.REGISTRO_ID);
                             CajasFacturacion.val(1);
 //                                        CajasFacturacion.focus().select();
                             var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
@@ -1936,6 +1939,7 @@
         p["COLOR_TEXT"] = ColorFacturacion.val();
         p["ZONA"] = ZonaFacturacion.val();
         p["OBSERVACIONES"] = ObservacionFacturacion.val();
+        p["REGISTRO_ID"] = REGISTRO_ID.val();
 //        console.log("\p PARAMETROS ", p);
         $.post('<?php print base_url('FacturacionDevolucion/onGuardarDocto'); ?>', p).done(function (a) {
             nuevo = false;
