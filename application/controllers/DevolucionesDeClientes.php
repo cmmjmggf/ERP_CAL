@@ -34,6 +34,10 @@ class DevolucionesDeClientes extends CI_Controller {
         }
     }
 
+    public function getConsecutivo() {
+        print json_encode($this->db->query("SELECT max(consecutivo)+1 as folio FROM erp_cal.devolucionnp; ")->result()[0]->folio);
+    }
+
     public function getPedidosFacturados() {
         try {
             $x = $this->input->get();
@@ -140,7 +144,7 @@ class DevolucionesDeClientes extends CI_Controller {
                 "conce" => $x["MOTIVO"] . "-" . $x["CONTROL"] . "-" . $x["ESTILO"] . "-" . $x["COLOR"],
                 "tp" => $x["TP"], "tpvta" => 0,
                 "control" => $x["CONTROL"], "controlprd" => 0,
-                "paredev" => $x["PARES_DEVUELTOS"], "parefac" => 0);
+                "paredev" => $x["PARES_DEVUELTOS"], "parefac" => 0, "consecutivo" => $x["FOLIO"]);
 
             for ($index = 1; $index < 23; $index++) {
                 if ($index < 10) {

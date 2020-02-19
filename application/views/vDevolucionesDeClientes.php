@@ -1,11 +1,12 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
+<div class="card m-3 animated fadeIn" id="pnlTablero" >
     <div class="card-body " style="padding: 7px 10px 10px 10px;">
         <div class="row">
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
-                        <h5 class="text-danger font-italic">DEVOLUCIONES PENDIENTES POR APLICAR</h5>
+                        <h5 class="text-danger font-italic">DEVOLUCIONES PENDIENTES POR APLICAR
+                            <span class="text-info font-weight-bold">&nbsp; &nbsp; Folio: </span><span class="text-dark font-weight-bold" id="FolioDev"></span></h5>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
                         <label>Cliente</label>
@@ -268,9 +269,14 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                 <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <button type="button" class="btn btn-success btn-block" id="btnAcepta" name="btnAcepta" disabled="">
-                            <span class="fa fa-check"></span>  Acepta
+                            <span class="fa fa-check"></span>  Aceptar
+                        </button>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <button type="button" class="btn btn-info btn-block" id="btnNuevoFolio" name="btnNuevoFolio" onclick="onReloadPagina()">
+                            <span class="fa fa-file-invoice"></span>  Nuevo Folio
                         </button>
                     </div>
                     <div class="col-12 my-1">
@@ -420,6 +426,7 @@
             DocumentoF = pnlTablero.find("#DocumentoF"),
             btnAcepta = pnlTablero.find("#btnAcepta"),
             btnReportesDev = pnlTablero.find("#btnReportesDev"),
+            FolioDev = pnlTablero.find("#FolioDev"),
             mdlReportesDevoluciones = $("#mdlReportesDevoluciones"),
             DeLaFechaDev = mdlReportesDevoluciones.find("#DeLaFechaDev"),
             ALaFechaDev = mdlReportesDevoluciones.find("#ALaFechaDev"),
@@ -427,6 +434,7 @@
             btnAceptaReporteDevolucionXLS = mdlReportesDevoluciones.find("#btnAceptaReporteDevolucionXLS");
 
     $(document).ready(function () {
+        getConsecutivo();
         handleEnterDiv(pnlTablero);
 
         handleEnterDiv(mdlReportesDevoluciones);
@@ -799,6 +807,7 @@
                     p["PRECIO"] = PRECIO.val();
                     p["MAQUILA"] = Defecto.val();
                     p["PRECIO_DEVOLUCION"] = PRECIO.val();
+                    p["FOLIO"] = Folio;
 
                     $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
                         onOpenOverlay('');
@@ -1043,6 +1052,10 @@
         });
     });
 
+    function onReloadPagina() {
+        javascript:location.reload();
+    }
+
     function getInfoXControl(c, r) {
         var indice_f = 0;
         onOpenOverlay('Cargando...');
@@ -1224,6 +1237,20 @@
             getError(x);
         }).always(function () {
             onCloseOverlay();
+        });
+    }
+    var Folio = 0;
+    function getConsecutivo() {
+        $.getJSON('<?php print base_url('DevolucionesDeClientes/getConsecutivo') ?>').done(function (a) {
+            console.log(a);
+            if (a.length > 0) {
+                FolioDev.html(a);
+                Folio = a;
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
         });
     }
 </script>

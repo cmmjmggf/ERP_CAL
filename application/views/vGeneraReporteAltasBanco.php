@@ -101,8 +101,6 @@
             var fecFin = mdlGeneraReporteAltasBanco.find('#FechaFin').val();
             var get = base_url + "index.php/ReportesNominaJasper/onReporteAltasBanco?FechaIni=" + fecIni + "&FechaFin=" + fecFin + "";
             location.href = get;
-//            var get2 = base_url + "index.php/ReportesNominaJasper/onReporteAltasBancoDos?FechaIni=" + fecIni + "&FechaFin=" + fecFin + "";
-//            location.href = get2;
             HoldOn.close();
         });
     });

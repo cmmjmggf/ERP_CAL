@@ -1220,6 +1220,10 @@ FROM costomanoobratemp CMT
         $fechaI = $x->get('FechaIni');
         $fechaF = $x->get('FechaFin');
         $query = "select
+                    LPAD((select convert(count(esc.Numero), char(10)) from empleados esc where esc.fechaingreso
+                    between str_to_date('$fechaI','%d/%m/%Y')
+                    and str_to_date('$fechaF','%d/%m/%Y')
+                    and esc.altabaja = 1),4,'0') as contador,
                     CONCAT(
                     '95100000000000000000000AHNOM  ' ,
                     concat('0000000000000000R',      RPAD(  concat(E.PrimerNombre,'/',E.Paterno)  ,24,' ')      ),
@@ -1239,15 +1243,14 @@ FROM costomanoobratemp CMT
                     RPAD(E.CP,5,' ') ,
                     '477',
                     case when E.Tel = '0' then '1464646'  ELSE RPAD(E.Tel,7,' ') END ,
-                    E.EstadoCivil
+                    '                              ',
+                    SUBSTRING(E.EstadoCivil, 1, 1)
                     ) AS Col2,
                     CONCAT(
                     RPAD(E.Beneficiario,30,' ') ,
                     RPAD(E.Parentesco,10,' ') ,
-                    E.Porcentaje,
+                    LPAD(E.Porcentaje,3,'0') ,
                     '0'
-                    '                                        0000',
-                    '                                        0000'
                     ) AS Col3
                     from empleados E
                     where E.fechaingreso
@@ -1264,7 +1267,9 @@ FROM costomanoobratemp CMT
 
         $arr1 = str_split($mes);
 
-        $filename = 'A814901' . $arr1[0] . '.' . $arr1[1] . Date('d') . '.txt';
+        $num_registros = $Ingresos[0]->contador;
+
+        $filename = 'A814901' . $arr1[0] . '.' . $arr1[1] . Date('d');
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename=' . $filename);
         header('Expires: 0');
@@ -1279,12 +1284,13 @@ FROM costomanoobratemp CMT
 
 
         if (!empty($Ingresos)) {
+
             $handle = fopen('php://output', "w");
-            $txt = "9500000000064266210201000008149CALZADO LOBO, S.A. DE C.V.                               RIO SANTIAGO 245            SAN MIGUEL                  LEON                        373900024CARRANZ" . "\n";
+            $txt = "9500000000064266210201000008149CALZADO LOBO, S.A. DE C.V.                               RIO SANTIAGO 245            SAN MIGUEL                  LEON                        37390" . $num_registros . "CARRANZ" . "\r\n";
             fwrite($handle, $txt);
             foreach ($Ingresos as $M) {
 
-                $txt = $M->Col1 . $M->Col2 . $M->Col3 . "\n";
+                $txt = $M->Col1 . $M->Col2 . $M->Col3 . "\r\n";
                 $str = strtr($txt, $unwanted_array);
                 fwrite($handle, $str);
             }
