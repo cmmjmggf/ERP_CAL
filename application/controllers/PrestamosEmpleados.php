@@ -131,8 +131,7 @@ class PrestamosEmpleados extends CI_Controller {
             if ($EMPLEADO !== '') {
                 $this->db->where('PP.numemp', $EMPLEADO);
             }
-            $this->db->where('YEAR(PP.fecha)', Date('Y'));
-            $this->db->order_by('PP.fecha', 'DESC');
+            $this->db->where('PP.status', 2)->where('YEAR(PP.fecha)', Date('Y'))->order_by('PP.fecha', 'DESC');
             if ($EMPLEADO === '') {
                 $this->db->limit(20);
             }
@@ -144,13 +143,15 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getUltimoSaldo() {
         try {
+            $ANIO = Date('Y');
             print json_encode($this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
                                             . "P.pagare AS PAGARE,P.sem AS SEM, P.fechapre AS FECHA, "
                                             . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
                                             . "P.pesos,P.fecpag,P.sempag,"
-                                            . "((SELECT SUM(PX.preemp) FROM prestamos AS PX WHERE PX.numemp = P.numemp ) - "
-                                            . "(SELECT SUM(PP.aboemp) FROM prestamospag AS PP WHERE PP.numemp = P.numemp)) AS SALDO", false)->from('prestamos AS P')
+                                            . "((SELECT SUM(PX.preemp) FROM prestamos AS PX WHERE PX.numemp = P.numemp  AND YEAR(PX.fechapre) = {$ANIO}) - "
+                                            . "(SELECT SUM(PP.aboemp) FROM prestamospag AS PP WHERE PP.numemp = P.numemp AND PP.status = 2 AND PP.año = {$ANIO})) AS SALDO", false)->from('prestamos AS P')
                                     ->where('P.numemp', $this->input->get('EMPLEADO'))
+                                    ->where("year(P.fechapre)", Date('Y'))
                                     ->order_by('P.fechapre', 'DESC')->limit(1)
                                     ->get()->result());
         } catch (Exception $exc) {

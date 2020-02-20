@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pagonomina" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="1.8433187801425794"/>
-	<property name="ireport.x" value="42"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -28,8 +28,7 @@ FPN.subtot
 FROM fracpagnomina FPN
 INNER JOIN empleados E ON E.Numero = FPN.numeroempleado
 INNER JOIN fracciones F ON F.Clave = FPN.numfrac
-WHERE FPN.semana =  $P{SEMANA} AND FPN.anio = $P{ANIO} AND (CASE WHEN $P{EMPLEADO} <> '' THEN FPN.numeroempleado = $P{EMPLEADO} ELSE FPN.numeroempleado LIKE '%%' END)
-]]>
+WHERE FPN.semana =  $P{SEMANA} AND FPN.anio = $P{ANIO} AND (CASE WHEN $P{EMPLEADO} <> '' THEN FPN.numeroempleado = $P{EMPLEADO} ELSE FPN.numeroempleado LIKE '%%' END) ORDER BY FPN.fecha ASC, FPN.numfrac ASC]]>
 	</queryString>
 	<field name="numemp" class="java.lang.Integer"/>
 	<field name="nomemp" class="java.lang.String"/>

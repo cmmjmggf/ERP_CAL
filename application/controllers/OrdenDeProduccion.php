@@ -133,8 +133,8 @@ class OrdenDeProduccion extends CI_Controller {
             $MAQUILA_SOL = $x['MAQUILA'];
             $SEM_SOL = $x['SEMANA'];
 
-            $CONTROL_INICIAL_FINAL = $this->db->query("SELECT (SELECT P.Control FROM pedidox AS P WHERE P.Maquila = {$MAQUILA_SOL} AND P.Semana = {$SEM_SOL} ORDER BY abs(P.Control) ASC LIMIT 1 ) AS CONTROL_INICIAL,
-(SELECT P.Control FROM pedidox AS P WHERE P.Maquila = {$MAQUILA_SOL} AND P.Semana = {$SEM_SOL} ORDER BY abs(P.Control) DESC LIMIT 1 ) AS CONTROL_FINAL;")->result();
+            $CONTROL_INICIAL_FINAL = $this->db->query("SELECT (SELECT P.Control FROM pedidox AS P WHERE P.Ano = {$x["ANO"]} AND P.Maquila = {$MAQUILA_SOL} AND P.Semana = {$SEM_SOL} ORDER BY abs(P.Control) ASC LIMIT 1 ) AS CONTROL_INICIAL,
+(SELECT P.Control FROM pedidox AS P WHERE P.Maquila = {$MAQUILA_SOL} AND P.Ano = {$x["ANO"]} AND  P.Semana = {$SEM_SOL} ORDER BY abs(P.Control) DESC LIMIT 1 ) AS CONTROL_FINAL;")->result();
 
             $PEDIDO_DETALLE = $this->db->select("P.Clave AS CLAVE_PEDIDO, P.Cliente CLAVE_CLIENTE, "
                                     . "IFNULL(C.RazonS,\"Z FALTA AGREGAR EL CLIENTE\") AS CLIENTE, "
