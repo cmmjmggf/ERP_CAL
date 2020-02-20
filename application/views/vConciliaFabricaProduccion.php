@@ -67,18 +67,8 @@
                 //Verificamos que nadie ma esté sacando el reporte al mismo tiempo
                 $.get(base_url + 'index.php/ConciliaFabricaProduccion/verificaUsoReporte').done(function (data) {
                     console.log(data);
-                    if (data === '1') {//Si trae 1 es porque esta en uso
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "HAY OTRO USUARIO GENERANDO LA CONCILIA, POR FAVOR INTÉNTALO EN 10 SEGUNDOS",
-                            icon: "error"
-                        }).then((action) => {
-                            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
-                            mdlConciliaFabricaProduccion.find('#btnImprimir').focus();
-                            return;
-                        });
-                    } else {//Si no, esta libre
-//INTENTAR CABIANDO DE METODO SIN FRM SIN AJAX NI CONTENTYPE
+                    if (data === '0') {//Si trae 0 esta libre
+                        //INTENTAR CABIANDO DE METODO SIN FRM SIN AJAX NI CONTENTYPE
                         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
                         $.get(base_url + 'index.php/ConciliaFabricaProduccion/onReporteConciliaFabricaProduccion', {
                             Precio: t_precio,
@@ -94,6 +84,16 @@
                             mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
                             console.log(x, y, z);
                             HoldOn.close();
+                        });
+                    } else {//Si no, esta ocupada por otro usuario
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "HAY OTRO USUARIO GENERANDO LA CONCILIA, POR FAVOR INTÉNTALO EN 10 SEGUNDOS",
+                            icon: "error"
+                        }).then((action) => {
+                            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
+                            mdlConciliaFabricaProduccion.find('#btnImprimir').focus();
+                            return;
                         });
                     }
                 }).fail(function (x, y, z) {

@@ -14,18 +14,19 @@ class ConciliaFabricaProduccion extends CI_Controller {
     }
 
     public function verificaUsoReporte() {
-        $VerificaEnUso = $this->db->query("select concilias from modulos_en_uso ")->result();
+        $VerificaEnUso = $this->db->query("select * from modulos_en_uso ")->result();
         //print $VerificaEnUso[0]->concilias . ' asas';
         if ($VerificaEnUso[0]->concilias === '1') {//Hay alguien haciendo la concilia y detenemos el proceso
-            print 1;
+            print $VerificaEnUso[0]->usuario;
             exit();
         } else {
+            print 0;
             exit();
         }
     }
 
     public function onReporteConciliaFabricaProduccion() {
-        $this->db->query("update modulos_en_uso set concilias = 1 ");
+        $this->db->query("update modulos_en_uso set concilias = 1, usuario = '{$this->session->userdata["USERNAME"]}' ");
         $cm = $this->ReporteConciliaFabricaProduccion_model;
         $T_Precio = $this->input->get('Precio');
         $Maq = $this->input->get('Maq');
@@ -109,6 +110,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 WHERE PE.Maquila in ($MaqSub)
                 AND cast(PE.Semana as signed) = $Sem
                 AND `PE`.`Ano` = '$Ano'
+                AND `PE`.`stsavan` <> 14
                 AND `A`.`Grupo` NOT IN('3', '50', '52') ) as EXPL
                 GROUP BY `EXPL`.`Articulo`
                 ORDER BY `EXPL`.`Grupo` ASC, CAST(`EXPL`.`Articulo` AS SIGNED) ASC
@@ -146,7 +148,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 }
             }
         }
-        $this->db->query("update modulos_en_uso set concilias = 0 ");
+        $this->db->query("update modulos_en_uso set concilias = 0, usuario = ''  ");
         // **************Reporte*************** */
         $Grupos = $cm->getGruposReporte();
         $Articulos = $cm->getDetalleReporte();

@@ -32,6 +32,12 @@
                             <label>A la sem.</label>
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="aSem" name="aSem" >
                         </div>
+                        <div class="col-12 mt-2">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="chParesProdXConstruccionConcentrado">
+                                <label class="custom-control-label text-info labelCheck" for="chParesProdXConstruccionConcentrado">General Por Tipo/Depto</label>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -60,6 +66,11 @@
             mdlParesProducidosPorTipoConstruccion.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlParesProducidosPorTipoConstruccion.find("#frmCaptura")[0]);
+
+            var checkGen = mdlParesProducidosPorTipoConstruccion.find("#chParesProdXConstruccionConcentrado")[0].checked ? '1' : '0';
+
+            frm.append('checkGen', checkGen);
+
             $.ajax({
                 url: base_url + 'index.php/ReportesProduccionJasper/onReporteParesProducidosPorTipoConstruccion',
                 type: "POST",

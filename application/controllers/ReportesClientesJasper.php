@@ -276,6 +276,8 @@ class ReportesClientesJasper extends CI_Controller {
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
 
+        $format = 'pdf';
+
         switch ($tipo) {
             case '1':
                 $jc->setJasperurl('jrxml\clientes\controlesPorFacturarClientes.jasper');
@@ -286,11 +288,15 @@ class ReportesClientesJasper extends CI_Controller {
             case '3':
                 $jc->setJasperurl('jrxml\clientes\controlesPorFacturarMuestrasPrototipos.jasper');
                 break;
+            case '4':
+                $format = 'xls';
+                $jc->setJasperurl('jrxml\clientes\excel\controlesPorFacturarClientes.jasper');
+                break;
         }
 
         $jc->setParametros($parametros);
         $jc->setFilename('REPORTE_CONTROLES_POR_FACTURAR_' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
+        $jc->setDocumentformat($format);
         PRINT $jc->getReport();
     }
 

@@ -1,5 +1,5 @@
 <div class="modal " id="mdlControlesPorFacturarAClientes"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -9,26 +9,34 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body"> 
-                <div class="row" align="center"> 
-                    <div class="col-4">
+            <div class="modal-body">
+                <div class="row" align="center">
+                    <div class="col-3">
                         <button type="button" id="rProduccion" name="rProduccion" style="background-color: #8BC34A !important;
-    border-color: #6b8c0a !important;" class="btn btn-sm btn-info font-weight-bold">
-                            <span class="fa fa-print"></span> DE PRODUCCIÓN
+                                border-color: #6b8c0a !important;" class="btn btn-sm btn-info font-weight-bold">
+                            <span class="fa fa-print"></span> Producción
                         </button>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
+                        <button type="button" id="rProduccionExcel" name="rProduccionExcel" style="background-color: #8BC34A !important;
+                                border-color: #6b8c0a !important;" class="btn btn-sm btn-info font-weight-bold">
+                            <span class="fa fa-file-excel"></span> Producción Excel
+                        </button>
+                    </div>
+                    <div class="w-100 m-2"><hr></div>
+                    <div class="col-3">
                         <button type="button" id="rDevolucion" name="rDevolucion" class="btn btn-sm btn-info font-weight-bold">
-                            <span class="fa fa-print"></span> DE DEVOLUCIÓN
+                            <span class="fa fa-print"></span> Devolución
                         </button>
                     </div>
-                    <div class="col-4">
+                    <div class="w-100 m-2"><hr></div>
+                    <div class="col-3">
                         <button type="button" id="rMuestras" name="rMuestras" class="btn btn-sm btn-info font-weight-bold" style="background-color: #673AB7 !important;
-    border-color: #4527A0 !important;">
-                            <span class="fa fa-print"></span> DE MUESTRAS Y PROTOTIPOS
+                                border-color: #4527A0 !important;">
+                            <span class="fa fa-print"></span> Muestras/Prototipos
                         </button>
                     </div>
-                </div> 
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary font-weight-bold" id="btnSalir" data-dismiss="modal">
@@ -54,6 +62,9 @@
         mdlControlesPorFacturarAClientes.find('#rMuestras').click(function () {
             onReporteControlesPorFacturar(3);
         });
+        mdlControlesPorFacturarAClientes.find('#rProduccionExcel').click(function () {
+            onReporteControlesPorFacturar(4);
+        });
     });
     function onReporteControlesPorFacturar(reporte) {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -69,9 +80,12 @@
         }).done(function (data, x, jq) {
             console.log(data);
             if (data.length > 0) {
-                console.log(data);
-                onImprimirReporteFancyAFC(data, function () {
-                });
+                if (parseInt(reporte) === 4) {
+                    onOpenWindowBlank(data);
+                } else {
+                    onImprimirReporteFancyAFC(data, function () {
+                    });
+                }
                 HoldOn.close();
             }
             HoldOn.close();

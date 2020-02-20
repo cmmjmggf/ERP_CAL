@@ -707,6 +707,9 @@ class ReportesProduccionJasper extends CI_Controller {
     }
 
     public function onReporteParesProducidosPorTipoConstruccion() {
+        $general = $this->input->post('checkGen');
+
+
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
@@ -719,6 +722,9 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros["maq"] = $this->input->post('Maq');
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\produccion\paresProducidosPorTipoConstruccion.jasper');
+        if ($general === '1') {
+            $jc->setJasperurl('jrxml\produccion\paresProducidosPorTipoConstruccionResumenXSemanas.jasper');
+        }
         $jc->setFilename('REPORTE_PARES_POR_TIPO_CONSTRUCCION_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();

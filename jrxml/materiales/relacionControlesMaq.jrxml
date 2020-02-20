@@ -37,7 +37,7 @@ LEFT JOIN departamentos D ON D.Descripcion = C.EstatusProduccion
 LEFT JOIN listapreciosmaquilas LPM ON P.Maquila = LPM.Maq AND C.Estilo = LPM.Estilo AND C.Color =  LPM.Color
 LEFT JOIN fraccionesxestilo FXE ON FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'
 LEFT JOIN controlterm CT ON CT.Control =  C.Control
-WHERE P.Maquila = $P{maq} AND P.Semana = $P{sem} AND P.Ano = $P{ano}
+WHERE P.Maquila = $P{maq} AND P.Semana = $P{sem} AND P.Ano = $P{ano} and P.stsavan <> 14
 order by ClaveDepto ASC, C.Control ASC]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">

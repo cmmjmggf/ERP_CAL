@@ -12,11 +12,11 @@
                     <div class="row">
                         <div class="col-6">
                             <label>Del Estilo</label>
-                            <input id="dEstilo" name="dEstilo" class="form-control form-control-sm required" maxlength="6">
+                            <input id="dEstilo" name="dEstilo" class="form-control form-control-sm required" maxlength="8">
                         </div>
                         <div class="col-6">
                             <label>Al Estilo</label>
-                            <input id="aEstilo" name="aEstilo" class="form-control form-control-sm required" maxlength="6">
+                            <input id="aEstilo" name="aEstilo" class="form-control form-control-sm required" maxlength="8">
                         </div>
                     </div>
                     <div class="row mt-3">
