@@ -96,9 +96,11 @@
             }
         });
         mdlLimpiaCajaAhorroPrestamosEmpleados.find('#btnImprimir').on("click", function () {
+            var txtempl = mdlLimpiaCajaAhorroPrestamosEmpleados.find('#EmpleadoLimpiaCA').val();
+            var mensj = (txtempl) ? txtempl : 'TODOS LOS EMPLEADOS';
             swal({
                 title: "ESTÁS SEGURO?",
-                text: 'Esta acción reiniciará los valores de los préstamos y cajas de ahorro de todos los empleados',
+                text: 'Esta acción reiniciará los valores de los préstamos y cajas de ahorro de ' + mensj,
                 icon: "warning",
                 closeOnClickOutside: false,
                 closeOnEsc: false,

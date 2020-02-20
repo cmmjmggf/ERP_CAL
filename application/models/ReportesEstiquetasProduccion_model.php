@@ -140,7 +140,7 @@ class ReportesEstiquetasProduccion_model extends CI_Model {
         try {
             $this->db->query("set sql_mode=''");
             $this->db
-                    ->select("control,estiped,punto,tpo,combped,recio,concat('*',contped,'*') as cod1,contped as cod2 "
+                    ->select("control,estiped,punto,tpo,combped,recio,concat('*',contped,'*') as cod1,codigobarras as cod2 "
                             , false)
                     ->from('etiqcaja');
 

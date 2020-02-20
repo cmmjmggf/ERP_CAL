@@ -1243,14 +1243,15 @@ FROM costomanoobratemp CMT
                     RPAD(E.CP,5,' ') ,
                     '477',
                     case when E.Tel = '0' then '1464646'  ELSE RPAD(E.Tel,7,' ') END ,
-                    '                              ',
+                   -- '                              ',
                     SUBSTRING(E.EstadoCivil, 1, 1)
                     ) AS Col2,
                     CONCAT(
                     RPAD(E.Beneficiario,30,' ') ,
                     RPAD(E.Parentesco,10,' ') ,
                     LPAD(E.Porcentaje,3,'0') ,
-                    '0'
+                    '0',
+                    '                                        0000                                        0000'
                     ) AS Col3
                     from empleados E
                     where E.fechaingreso

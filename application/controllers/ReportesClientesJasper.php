@@ -14,6 +14,25 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onReporteVentasPorLineaEstiloPorcentaje() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $jc->setJasperurl('jrxml\ventas\paresVendidosXLineaEstiloPorcentaje.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VENTAS_X_LIN_ESTI_CON_PORCEN_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteVentasPorFecha() {
 
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasPorFecha'));

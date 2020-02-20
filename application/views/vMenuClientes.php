@@ -73,7 +73,8 @@ $vs = array(
     'vModificaAClienteDevoluciones',
     'vNotificacionDeLoDocumentado',
     'vComparativoVentasPorAno',
-    'vCartaCobranzaAgente');
+    'vCartaCobranzaAgente',
+    'vVentasPorLineaEstiloPorcentaje');
 
 foreach ($vs as $v) {
     $this->load->view($v);

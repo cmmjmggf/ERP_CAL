@@ -381,13 +381,18 @@ class ReportesEstiquetasProduccion extends CI_Controller {
                         $estilo_cb = str_pad($v->Estilo, 6, '.', STR_PAD_LEFT);
                         $color_cb = str_pad($v->Color, 3, '0', STR_PAD_LEFT);
                         $talla_cb = (strlen($talla) <= 2) ? str_pad($talla, 4, '0', STR_PAD_LEFT) : $talla;
+
+                        $talla_con9 = str_replace(".", "9", $talla_cb); //Cambia el punto en la talla por un 9
+
                         $codigo_barras = $estilo_cb . $color_cb . $talla_cb;
+                        $codigo_barras_texto = $estilo_cb . $color_cb . $talla_con9;
 
                         //Iteramos entre los pares para insertar por cada talla una etiqueta por par
                         $cont = 1;
                         while ($cont <= $pares) {
                             $this->db->insert("etiqcaja", array(
                                 'contped' => $codigo_barras,
+                                'codigobarras' => $codigo_barras_texto,
                                 'estiped' => $v->Estilo,
                                 'combped' => $v->Color,
                                 'punto' => $talla,
