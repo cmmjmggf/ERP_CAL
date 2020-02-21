@@ -393,7 +393,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $this->db->insert('prenomina', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
-                            "numcon" => 5 /* 5 SALARIO DESTAJO */, "tpcon" => 2 /* PERCEPCION */,
+                            "numcon" => 5 /* 5 SALARIO DESTAJO */, "tpcon" => 1 /* PERCEPCION */,
                             "tpcond" => 0 /* DEDUCCION */, "importe" => $SUELDO_FINAL_DESTAJO,
                             "imported" => 0, "fecha" => Date('Y-m-d 00:00:00'),
                             "registro" => 0, "status" => 1, "tpomov" => 0,
@@ -467,12 +467,12 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 ->where('status', 1)->update('prenominal');
                         break;
                     case 20:
-                        $this->db->set('otrper1', $v->imported)->where('numemp', $v->numemp)
+                        $this->db->set('otrper1', $v->importe)->where('numemp', $v->numemp)
                                 ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
                                 ->where('status', 1)->update('prenominal');
                         break;
                     case 100:
-                        $this->db->set('otrde', $v->importe)->where('numemp', $v->numemp)
+                        $this->db->set('otrde', $v->imported)->where('numemp', $v->numemp)
                                 ->where('numsem', $x['SEMANA'])->where('año', $x['ANIO'])
                                 ->where('status', 1)->update('prenominal');
                         break;
@@ -498,6 +498,37 @@ class GeneraNominaDeSemana extends CI_Controller {
 
             $this->db->query("DELETE FROM generando_nomina WHERE SEMANA = {$x['SEMANA']} AND ANIO = {$x['ANIO']}");
             $l = new Logs("GENERA NOMINA DE SEMANA", "GENERO LA NOMINA DE LA SEMANA {$x['SEMANA']} LA CUAL ESTA ABIERTA.", $this->session);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getReportesNomina9998() {
+        try {
+            $reports = array();
+            $this->benchmark->mark('code_start');
+
+            /* OBTENER REPORTES */
+            $x = $this->input->post();
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $p = array();
+            $p["logo"] = base_url() . $this->session->LOGO;
+            $p["empresa"] = $this->session->EMPRESA_RAZON;
+            $p["semana"] = $x['SEMANA'];
+            $p["anio"] = $x['ANIO'];
+            $jc->setParametros($p);
+            /* 1. REPORTE DE PRENOMINA COMPLETO */
+            $jc->setJasperurl('jrxml\prenomina\PreNomVac.jasper');
+            $jc->setFilename('PreNomVac_' . Date('his'));
+            $jc->setDocumentformat('pdf');
+            $reports['1UNO'] = $jc->getReport();
+            $this->benchmark->mark('code_end');
+
+            $reports['8MARK_TIEMPO_TRANSCURRIDO'] = $this->benchmark->elapsed_time('code_start', 'code_end');
+//            echo $this->benchmark->elapsed_time('code_start', 'code_end');
+            print json_encode($reports);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -753,30 +784,32 @@ class GeneraNominaDeSemana extends CI_Controller {
         try {
             if (floatval($v->SaldoPres) > 0) {
                 $SALDO_FINAL_PRESTAMO = 0;
-                $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero}", false)->result();
-                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero}", false)->result();
+                $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}", false)->result();
+                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
                 if (!empty($ACUMULADO_DE_PRESTAMOS) && !empty($ACUMULADO_DE_PRESTAMOS)) {
                     if ($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO)
                         $SALDO_FINAL_PRESTAMO = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
                 }
 //                print "\n {$v->Numero} {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO}, {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}, $SALDO_FINAL_PRESTAMO \n";
-                $this->db->insert('prestamospag', array(
-                    "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d 00:00:00'),
-                    "preemp" => $v->PressAcum, "aboemp" => $v->{"AbonoPres"}, "saldoemp" => $SALDO_FINAL_PRESTAMO,
-                    "interes" => 0, "status" => 2
-                ));
-                $this->db->insert('prenomina', array(
-                    "numsem" => $SEM, "año" => $ANIO,
-                    "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
-                    "numcon" => 65 /* 65 PRESTAMO C-AH */, "tpcon" => 0 /* 1 = PERCECION */,
-                    "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                    "imported" => $v->{"AbonoPres"}, "fecha" => Date('Y-m-d 00:00:00'),
-                    "registro" => 0, "status" => 1, "tpomov" => 0,
-                    "depto" => $v->DepartamentoFisico
-                ));
-                $this->db->set('precaha', $v->{"AbonoPres"})->where('numsem', $SEM)
-                        ->where('año', $ANIO)->where('numemp', $v->Numero)
-                        ->update('prenominal');
+                if (floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) >= floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO)) {
+                    $this->db->insert('prestamospag', array(
+                        "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d 00:00:00'),
+                        "preemp" => $v->PressAcum, "aboemp" => $v->{"AbonoPres"}, "saldoemp" => $SALDO_FINAL_PRESTAMO,
+                        "interes" => 0, "status" => 1
+                    ));
+                    $this->db->insert('prenomina', array(
+                        "numsem" => $SEM, "año" => $ANIO,
+                        "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
+                        "numcon" => 65 /* 65 PRESTAMO C-AH */, "tpcon" => 0 /* 1 = PERCECION */,
+                        "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
+                        "imported" => $v->{"AbonoPres"}, "fecha" => Date('Y-m-d 00:00:00'),
+                        "registro" => 0, "status" => 1, "tpomov" => 0,
+                        "depto" => $v->DepartamentoFisico
+                    ));
+                    $this->db->set('precaha', $v->{"AbonoPres"})->where('numsem', $SEM)
+                            ->where('año', $ANIO)->where('numemp', $v->Numero)
+                            ->update('prenominal');
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -900,13 +933,24 @@ class GeneraNominaDeSemana extends CI_Controller {
                     ->where('status', 1)
                     ->where('registro <>', 999)
                     ->delete('prenominal');
+
             /* 2 OBTENER LOS EMPLEADOS FIJOS */
+//            DESCOMENTAR PARA PROBAR CON UN EMPLEADO EN ESPECIFICO
             $empleados = $this->db->select('E.*')->from('empleados AS E')
                             ->where('E.AltaBaja', 1)
+                            ->where_not_in('E.DepartamentoFisico', array(470))
                             ->order_by('E.DepartamentoFisico', 'ASC')
-                            ->order_by('E.Numero', 'ASC')
-                            ->order_by('E.FijoDestajoAmbos', 'ASC')
+                            ->order_by('E.Numero', 'ASC')->order_by('E.FijoDestajoAmbos', 'ASC')
                             ->get()->result();
+
+//            $empleados = $this->db->select('E.*')->from('empleados AS E')
+//                            ->where('E.AltaBaja', 1)
+//                            ->where('E.Numero', 499)
+//                            ->where_not_in('E.DepartamentoFisico', array(470))
+//                            ->order_by('E.DepartamentoFisico', 'ASC')
+//                            ->order_by('E.Numero', 'ASC')
+//                            ->order_by('E.FijoDestajoAmbos', 'ASC')
+//                            ->get()->result();
             /* 3 ITERAR LOS EMPLEADOS A VALIDAR */
             foreach ($empleados as $k => $v) {
                 $sueldin = $v->Sueldo; /* SUELDO DIARIO */
@@ -919,9 +963,10 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 ->where('E.AltaBaja', 1)
                                 ->get()->result();
                 $dias_trabajados = intval($dias[0]->DIAS);
-
+                print "\n DIAS : $dias_trabajados \n";
                 if ($dias_trabajados >= $anio_completo) {
-                    $anios = intval(substr($dias_trabajados / $anio_completo, 0, 1));
+                    $anios = intval(($dias_trabajados / $anio_completo));
+                    print "\n" . ($dias_trabajados / $anio_completo) . "\n años : $anios \n";
                     if ($anios === 1) {
                         /* 6 DIAS */
                         $dias_trabajados_pagados = 6;
@@ -1021,90 +1066,107 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 ->where("FPN.anio", $x->post('ANIO'))
                                 ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
                                 ->get()->result();
+//                                PRINT "\n {$v->Numero} {$v->FijoDestajoAmbos} SUELDO: {$SUELDO_CUATRO_SEM[0]->SUBTOTAL} \n";
                 if (intval($v->FijoDestajoAmbos) === 1) {
                     /* EMPLEADOS FIJOS */
                 }
-                if (intval($v->FijoDestajoAmbos) === 2) {
+                if (intval($v->FijoDestajoAmbos) === 2 && $dias_trabajados >= 31) {
                     /* EMPLEADOS POR DESTAJO */
                     if (!empty($SUELDO_CUATRO_SEM) && $S1 !== '' && $S4 !== '') {
+                        /* 1 OBTENEMOS LO QUE HIZO EL EMPLEADO DURANTE LAS SEMANAS ESPECIFICADAS */
+                        $SUELDO_CUATRO_SEM = $this->db->query("SELECT SUM(P.importe) AS SUELDIN FROM prenomina AS P WHERE P.numemp = {$v->Numero} AND P.numsem BETWEEN {$S1} AND {$S4} AND P.año= {$xxx['ANIO']} AND P.numcon = 5 AND  P.status = 2;")->result();
                         /* 2 SE DIVIDE ENTRE 4 Y SE SACA EL SALARIO DIARIO POR DIA */
-                        $SUELDO_CUATRO_SEM_FINAL = empty($SUELDO_CUATRO_SEM) ? $SUELDO_CUATRO_SEM[0]->SUBTOTAL / 4 : 0;
-                        $SUELDO_CUATRO_SEM_FINAL_POR_DIA = $SUELDO_CUATRO_SEM_FINAL / 7;
+                        $SUELDO_CUATRO_SEM_FINAL = $SUELDO_CUATRO_SEM[0]->SUELDIN / 4;
+                        print "\n SUELDO : " . $SUELDO_CUATRO_SEM[0]->SUELDIN;
                         /* 3. SE HACE EL CALCULO DE SUELDO DIARIO POR DIASTRABAJADOS */
-                        $total_vacaciones = $SUELDO_CUATRO_SEM_FINAL_POR_DIA * $dias_trabajados_pagados;
-                        /* 4. SE ASIGNA EL RESULTADO AL SUELDO FINAL A PAGAR POR CONCEPTO 25 VACACIONES */
+                        $SUELDO_CUATRO_SEM_FINAL_POR_DIA = $SUELDO_CUATRO_SEM_FINAL / 7;
                         $sueldin = $SUELDO_CUATRO_SEM_FINAL_POR_DIA;
+                        /* 4. SE ASIGNA EL RESULTADO AL SUELDO FINAL A PAGAR POR CONCEPTO 25 VACACIONES */
+                        $total_vacaciones = $SUELDO_CUATRO_SEM_FINAL_POR_DIA * $dias_trabajados_pagados;
                     }
                 }
-                if (intval($v->FijoDestajoAmbos) === 3) {
+                if (intval($v->FijoDestajoAmbos) === 3 && $dias_trabajados >= 31) {
                     /* EMPLEADOS FIJOS Y POR DESTAJO */
                     if (!empty($SUELDO_CUATRO_SEM) && $S1 !== '' && $S4 !== '') {
+                        $SUELDO_FIJO_DESTAJO = 0;
+                        
+                        /* 1 OBTENEMOS LO QUE HIZO EL EMPLEADO DURANTE LAS SEMANAS ESPECIFICADAS */
+                        $SUELDO_CUATRO_SEM = $this->db->query("SELECT SUM(P.importe) AS SUELDIN FROM prenomina AS P WHERE P.numemp = {$v->Numero} AND P.numsem BETWEEN {$S1} AND {$S4} AND P.año= {$xxx['ANIO']} AND P.numcon = 5 AND  P.status = 2;")->result();
                         /* 2 SE DIVIDE ENTRE 4 Y SE SACA EL SALARIO DIARIO POR DIA */
-                        $SUELDO_CUATRO_SEM_FINAL = $SUELDO_CUATRO_SEM[0]->SUBTOTAL / 4;
-                        $SUELDO_CUATRO_SEM_FINAL_POR_DIA = $SUELDO_CUATRO_SEM_FINAL / 7;
+                        $SUELDO_CUATRO_SEM_FINAL = $SUELDO_CUATRO_SEM[0]->SUELDIN / 4;
+                        print "\n SUELDO : " . $SUELDO_CUATRO_SEM[0]->SUELDIN;
                         /* 3. SE HACE EL CALCULO DE SUELDO DIARIO POR DIASTRABAJADOS */
-                        /* LO GANADO POR FIJO + LO GANADO POR DESTAJO */
-                        $total_vacaciones = $total_vacaciones + ($SUELDO_CUATRO_SEM_FINAL_POR_DIA * $dias_trabajados_pagados);
+                        $SUELDO_CUATRO_SEM_FINAL_POR_DIA = $SUELDO_CUATRO_SEM_FINAL / 7;
+                        $SUELDO_FIJO_DESTAJO = $SUELDO_CUATRO_SEM_FINAL_POR_DIA;
+                        
+                        
                         /* 4. SE ASIGNA EL RESULTADO AL SUELDO FINAL A PAGAR POR CONCEPTO 25 VACACIONES */
-                        $sueldin = $sueldin + $SUELDO_CUATRO_SEM_FINAL_POR_DIA;
+                        $total_vacaciones = $SUELDO_CUATRO_SEM_FINAL_POR_DIA * $dias_trabajados_pagados;
+                        $sueldin = $SUELDO_FIJO_DESTAJO;
                     }
                 }
-                // if (intval($v->Numero) === 2805) {/*PARA EFECTO DE PRUEBAS*/
-                $prima = $total_vacaciones * 0.25;
-                /* GRABAR VACACIONES */
-                $vp = array(
-                    "numsem" => $SEMANA_VACACIONES,
-                    "año" => $x->post('ANIO'),
-                    "numemp" => $v->Numero,
-                    "diasemp" => $dias_trabajados_pagados,
-                    "numcon" => 25 /* 25 CONCEPTOS DE NOMINA */,
-                    "tpcon" => 1,
-                    "tpcond" => 0,
-                    "importe" => $total_vacaciones,
-                    "imported" => $sueldin,
-                    "fecha" => Date('Y-m-d 00:00:00'),
-                    "registro" => 0,
-                    "status" => 1,
-                    "tpomov" => 0,
-                    "depto" => $v->DepartamentoFisico
-                );
 
-                $this->db->insert('prenomina', $vp);
-                /* GRABA PRE-NOMINA-L */
-                $pnl = array(
-                    "numsem" => $SEMANA_VACACIONES,
-                    "año" => $x->post('ANIO'),
-                    "numemp" => $v->Numero,
-                    "salario" => $sueldin,
-                    "horext" => $dias_trabajados_pagados,
-                    "pares" => 0,
-                    "otrper" => $prima,
-                    "otrper1" => $total_vacaciones,
-                    "imss" => 0,
-                    "impu" => 0,
-                    "precaha" => 0,
-                    "cajhao" => 0,
-                    "vtazap" => 0,
-                    "zapper" => 0,
-                    "fune" => 0,
-                    "cargo" => 0,
-                    "fonac" => 0,
-                    "otrde" => 0,
-                    "otrde1" => 0,
-                    "registro" => 0,
-                    "status" => 1,
-                    "tpomov" => 0,
-                    "depto" => $v->DepartamentoFisico
-                );
+                if ($dias_trabajados >= 31 && floatval($sueldin) > 0) {
 
-                $this->db->insert('prenominal', $pnl);
+                    // if (intval($v->Numero) === 2805) {/*PARA EFECTO DE PRUEBAS*/
+                    $prima = $total_vacaciones * 0.25;
+                    /* GRABAR VACACIONES */
+                    $vp = array(
+                        "numsem" => $SEMANA_VACACIONES,
+                        "año" => $x->post('ANIO'),
+                        "numemp" => $v->Numero,
+                        "diasemp" => $dias_trabajados_pagados,
+                        "numcon" => 25 /* 25 CONCEPTOS DE NOMINA */,
+                        "tpcon" => 1,
+                        "tpcond" => 0,
+                        "importe" => $total_vacaciones,
+                        "imported" => $sueldin,
+                        "fecha" => Date('Y-m-d 00:00:00'),
+                        "registro" => 0,
+                        "status" => 1,
+                        "tpomov" => 0,
+                        "depto" => $v->DepartamentoFisico
+                    );
 
-                /* GRABA PRIMA-VACACIONAL */
-                $vp["numcon"] = 26;
-                $vp["importe"] = $total_vacaciones * 0.25;
-                $vp["imported"] = 0;
-                $this->db->insert('prenomina', $vp);
-                //}/*PARA EFECTO DE PRUEBAS*/
+                    $this->db->insert('prenomina', $vp);
+                    print $this->db->last_query() . "\n";
+                    /* GRABA PRE-NOMINA-L */
+                    $pnl = array(
+                        "numsem" => $SEMANA_VACACIONES,
+                        "año" => $x->post('ANIO'),
+                        "numemp" => $v->Numero,
+                        "salario" => $sueldin,
+                        "horext" => $dias_trabajados_pagados,
+                        "pares" => 0,
+                        "otrper" => $prima,
+                        "otrper1" => $total_vacaciones,
+                        "imss" => 0,
+                        "impu" => 0,
+                        "precaha" => 0,
+                        "cajhao" => 0,
+                        "vtazap" => 0,
+                        "zapper" => 0,
+                        "fune" => 0,
+                        "cargo" => 0,
+                        "fonac" => 0,
+                        "otrde" => 0,
+                        "otrde1" => 0,
+                        "registro" => 0,
+                        "status" => 1,
+                        "tpomov" => 0,
+                        "depto" => $v->DepartamentoFisico
+                    );
+
+                    $this->db->insert('prenominal', $pnl);
+                    print $this->db->last_query() . "\n";
+
+                    /* GRABA PRIMA-VACACIONAL */
+                    $vp["numcon"] = 26;
+                    $vp["importe"] = $total_vacaciones * 0.25;
+                    $vp["imported"] = 0;
+                    $this->db->insert('prenomina', $vp);
+                    //}/*PARA EFECTO DE PRUEBAS*/
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

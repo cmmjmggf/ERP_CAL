@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><span class="fa fa-coins"></span> Genera Nómina Semanal</h5>
+                <h5 class="modal-title"><span class="fa fa-coins"></span>Genera Nómina Semanal</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -251,6 +251,7 @@
                             swal('ATENCIÓN', 'ES REQUERIDA UNA FECHA DE CORTE', 'warning').then((values) => {
                                 FechaCorteAguinaldoGNS.focus().select();
                             });
+                            busy = false;
                         }
                         break;
                     case 99:
@@ -264,6 +265,7 @@
                         parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
                         $.post('<?php print base_url('GeneraNominaDeSemana/getVacaciones'); ?>', parms).done(function (a) {
                             swal('ATENCIÓN', 'SE HAN GENERADO LAS VACACIONES', 'success');
+                            
                             SVacacionesAguinaldosParaDestajo.addClass("d-none");
                             console.log(a);
                         }).fail(function (x) {
@@ -313,42 +315,99 @@
                             {
                                 SEMANA: SemanaGNS.val(),
                                 ANIO: AnioGNS.val(),
-                                FECHAINI: FechaInicialGNS.val(),
-                                FECHAFIN: FechaFinalGNS.val()
+                                FECHAINI: (SemanaGNS.val() !== 98 && SemanaGNS.val() !== 99 ? FechaInicialGNS.val() : ''),
+                                FECHAFIN: (SemanaGNS.val() !== 98 && SemanaGNS.val() !== 99 ? FechaFinalGNS.val() : '')
                             }).done(function (a) {
                         var r = a[0];
                         switch (parseInt(r.TOTAL)) {
                             case 0:
-                                $.post('<?php print base_url('GeneraNominaDeSemana/onGeneraNomina'); ?>',
-                                        {
-                                            SEMANA: SemanaGNS.val(),
-                                            ANIO: AnioGNS.val(),
-                                            FECHAINI: FechaInicialGNS.val(),
-                                            FECHAFIN: FechaFinalGNS.val(),
-                                            GENERADIEZ: GeneraDiezPorcientoDeptos[0].checked ? 1 : 0
-                                        }).done(function (a) {
-                                    console.log(a);
-                                    if (a.length > 0) {
-                                        onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                switch (parseInt(SemanaGNS.val())) {
+                                    case 98:
+                                        $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998'); ?>',
+                                                {
+                                                    SEMANA: 98,
+                                                    ANIO: AnioGNS.val()
+                                                }).done(function (a) {
+                                            console.log(a);
+                                            if (a.length > 0) {
+                                                onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                                    onEnable(btnGeneraGNS);
+                                                    busy = false;
+                                                });
+                                            } else {
+                                                busy = false;
+                                                swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA DE LA SEMANA 98, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                                            }
+                                        }).fail(function (x) {
+                                            getError(x);
+                                        }).always(function () {
+                                            onEnable(btnGeneraGNS);
+                                            onCloseOverlay();
+                                            busy = false;
+                                        });
+                                        break;
+                                    case 99:
+                                        onOpenOverlay('Generando vacaciones...');
+                                        $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998'); ?>',
+                                                {
+                                                    SEMANA: 99,
+                                                    ANIO: AnioGNS.val()
+                                                }).done(function (a) {
+                                            console.log(a);
+                                            if (a.length > 0) {
+                                                onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                                    onEnable(btnGeneraGNS);
+                                                    SemanaGNS.focus().select();
+                                                    busy = false;
+                                                });
+                                            } else {
+                                                busy = false;
+                                                swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA DE LA SEMANA 99, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                                            }
+                                            onCloseOverlay();
+                                        }).fail(function (x) {
+                                            getError(x);
+                                            onCloseOverlay();
+                                        }).always(function () {
                                             onEnable(btnGeneraGNS);
                                             busy = false;
                                         });
-                                    } else {
-                                        swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
-                                    }
-                                }).fail(function (x) {
-                                    getError(x);
-                                }).always(function () {
-                                    onEnable(btnGeneraGNS);
-                                    onCloseOverlay();
-                                    busy = false;
-                                });
+                                        break;
+                                    default :
+                                        $.post('<?php print base_url('GeneraNominaDeSemana/onGeneraNomina'); ?>',
+                                                {
+                                                    SEMANA: SemanaGNS.val(),
+                                                    ANIO: AnioGNS.val(),
+                                                    FECHAINI: (SemanaGNS.val() !== 98 && SemanaGNS.val() !== 99 ? FechaInicialGNS.val() : ''),
+                                                    FECHAFIN: (SemanaGNS.val() !== 98 && SemanaGNS.val() !== 99 ? FechaFinalGNS.val() : ''),
+                                                    GENERADIEZ: GeneraDiezPorcientoDeptos[0].checked ? 1 : 0
+                                                }).done(function (a) {
+                                            console.log(a);
+                                            if (a.length > 0) {
+                                                onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                                    onEnable(btnGeneraGNS);
+                                                    busy = false;
+                                                });
+                                            } else {
+                                                busy = false;
+                                                swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                                            }
+                                        }).fail(function (x) {
+                                            getError(x);
+                                        }).always(function () {
+                                            onEnable(btnGeneraGNS);
+                                            onCloseOverlay();
+                                            busy = false;
+                                        });
+                                        break;
+                                }
                                 break;
                             case 1:
                                 onCloseOverlay();
                                 iMsg('EL USUARIO ' + r.USUARIO + ' ESTA GENERANDO LA NOMINA DE LA SEMANA ' + SemanaGNS.val() + ' AÑO ' + AnioGNS.val() + ', INTENTE MÁS TARDE.', 'w', function () {
                                     SemanaGNS.focus().select();
                                 });
+                                busy = false;
                                 break;
                         }
                     }).fail(function (x) {
@@ -389,10 +448,24 @@
                     }
                 }
             }
+            if (e.keyCode === 8 && SemanaGNS.val() === '') {
+                onDisable(btnGeneraGNS);
+                onDisable(btnCierraNominaGNS);
+                onDisable(btnEliminaMovGenGNS);
+                SVacacionesAguinaldosParaDestajo.addClass("d-none");
+            }
+        }).keyup(function (e) {
+            if (e.keyCode === 8 && SemanaGNS.val() === '') {
+                onDisable(btnGeneraGNS);
+                onDisable(btnCierraNominaGNS);
+                onDisable(btnEliminaMovGenGNS);
+                SVacacionesAguinaldosParaDestajo.addClass("d-none");
+            }
         });
         FechaCorteAguinaldoGNS.keydown(function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
+                    onEnable(btnGeneraGNS);
                     btnGeneraGNS.focus();
                 }
             }
@@ -405,6 +478,7 @@
             getSemanaNomina();
         });
     });
+
     function onValidarSemanaConsultaAguinaldoVacaciones() {
         if (SemanaGNS.val() && parseInt(SemanaGNS.val()) !== 99 && parseInt(SemanaGNS.val()) !== 98) {
             SVacacionesAguinaldosParaDestajo.addClass("d-none");
@@ -435,119 +509,130 @@
 
     function onComprobarSemanasNominaGeneraNominaConsulta(v, ano) {
         //Valida que esté creada la semana en nominas
-        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {
-            Clave: $(v).val(), Ano: ano
-        }).done(function (dataUno) {
-            if (dataUno.length > 0) {
-                console.log('onComprobarSemanaNomina ok')
-                FechaInicialGNS.val(dataUno[0].FechaIni);
-                FechaFinalGNS.val(dataUno[0].FechaFin);
-                onValidarSemanaConsultaAguinaldoVacaciones();
-            } else {
-                console.log('onComprobarSemanaNomina else')
-                swal({
-                    title: "ATENCIÓN",
-                    text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE",
-                    icon: "warning",
-                    buttons: {
-                        eliminar: {
-                            text: "Aceptar",
-                            value: "aceptar"
+        var semana_no_1_52_99_98 = parseInt($(v).val());
+        if (semana_no_1_52_99_98 >= 1 && semana_no_1_52_99_98 <= 52 || semana_no_1_52_99_98 !== 98 ||
+                semana_no_1_52_99_98 !== 99) {
+            $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {
+                Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
+                if (dataUno.length > 0) {
+                    console.log('onComprobarSemanaNomina ok');
+                    FechaInicialGNS.val(dataUno[0].FechaIni);
+                    FechaFinalGNS.val(dataUno[0].FechaFin);
+                    onValidarSemanaConsultaAguinaldoVacaciones();
+                } else {
+                    console.log('onComprobarSemanaNomina else')
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE",
+                        icon: "warning",
+                        buttons: {
+                            eliminar: {
+                                text: "Aceptar",
+                                value: "aceptar"
+                            }
                         }
-                    }
-                }).then((value) => {
-                    switch (value) {
-                        case "aceptar":
-                            swal.close();
-                            $(v).val('');
-                            $(v).focus();
-                            break;
-                    }
-                });
-            }
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
+                    }).then((value) => {
+                        switch (value) {
+                            case "aceptar":
+                                swal.close();
+                                $(v).val('');
+                                $(v).focus();
+                                break;
+                        }
+                    });
+                }
+            }).fail(function (x, y, z) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
+            });
+        }
     }
 
     function onComprobarSemanasNominaGeneraNomina(v, ano) {
 
         //Valida que este creada la semana en nominas
-        $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
-            if (dataUno.length > 0) {
-                //Valida que no esté cerrada la semana en nomina
-                $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
-                    if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
-                        if (parseInt(data[0].status) === 2) {
-                            swal({
-                                title: "ATENCIÓN",
-                                text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "ESTÁ CERRADA", icon: "warning",
-                                buttons: {
-                                    eliminar: {
-                                        text: "Aceptar",
-                                        value: "aceptar"
+        console.log("SEMANA " + $(v).val())
+        if (parseInt($(v).val()) !== 98 && parseInt($(v).val()) !== 99) {
+            $.getJSON(base_url + 'index.php/Semanas/onComprobarSemanaNomina', {Clave: $(v).val(), Ano: ano}).done(function (dataUno) {
+                if (dataUno.length > 0) {
+                    //Valida que no esté cerrada la semana en nomina
+                    $.getJSON(base_url + 'index.php/ConceptosVariablesNomina/onVerificarSemanaNominaCerrada', {Sem: $(v).val(), Ano: ano}).done(function (data) {
+                        if (data.length > 0) {//Si existe en prenomina validamos que sólo esté en estatus 1
+                            if (parseInt(data[0].status) === 2) {
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "LA NÓMINA DE LA SEMANA " + $(v).val() + " DEL " + ano + " " + "ESTÁ CERRADA", icon: "warning",
+                                    buttons: {
+                                        eliminar: {
+                                            text: "Aceptar",
+                                            value: "aceptar"
+                                        }
                                     }
-                                }
-                            }).then((value) => {
-                                switch (value) {
-                                    case "aceptar":
-                                        swal.close();
-                                        $(v).focus().select();
-                                        onDisable(btnGeneraGNS);
-                                        onDisable(btnCierraNominaGNS);
-                                        onDisable(btnEliminaMovGenGNS);
-                                        break;
-                                }
-                            });
-                        } else {//Sí está pero esta en estatus 1
+                                }).then((value) => {
+                                    switch (value) {
+                                        case "aceptar":
+                                            swal.close();
+                                            $(v).focus().select();
+                                            onDisable(btnGeneraGNS);
+                                            onDisable(btnCierraNominaGNS);
+                                            onDisable(btnEliminaMovGenGNS);
+                                            break;
+                                    }
+                                });
+                            } else {//Sí está pero esta en estatus 1
+                                FechaInicialGNS.val(dataUno[0].FechaIni);
+                                FechaFinalGNS.val(dataUno[0].FechaFin);
+                                onEnable(btnGeneraGNS);
+                                onEnable(btnCierraNominaGNS);
+                                onEnable(btnEliminaMovGenGNS);
+                                onValidarSemanaConsultaAguinaldoVacaciones();
+                            }
+                        } else {//Aún no existe la nomina, podemos continuar
                             FechaInicialGNS.val(dataUno[0].FechaIni);
                             FechaFinalGNS.val(dataUno[0].FechaFin);
-                            onEnable(btnGeneraGNS);
-                            onEnable(btnCierraNominaGNS);
-                            onEnable(btnEliminaMovGenGNS);
                             onValidarSemanaConsultaAguinaldoVacaciones();
                         }
-                    } else {//Aún no existe la nomina, podemos continuar
-                        FechaInicialGNS.val(dataUno[0].FechaIni);
-                        FechaFinalGNS.val(dataUno[0].FechaFin);
-                        onValidarSemanaConsultaAguinaldoVacaciones();
-                    }
-                }).fail(function (x, y, z) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE",
-                    icon: "warning",
-                    buttons: {
-                        eliminar: {
-                            text: "Aceptar",
-                            value: "aceptar"
+                    }).fail(function (x, y, z) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE (2)",
+                        icon: "warning",
+                        buttons: {
+                            eliminar: {
+                                text: "Aceptar",
+                                value: "aceptar"
+                            }
                         }
-                    }
-                }).then((value) => {
-                    switch (value) {
-                        case "aceptar":
-                            swal.close();
-                            $(v).focus().select();
-                            onDisable(btnGeneraGNS);
-                            onDisable(btnCierraNominaGNS);
-                            onDisable(btnEliminaMovGenGNS);
-                            break;
-                    }
-                });
-            }
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-            $(v).focus().select();
-            onDisable(btnGeneraGNS);
-            onDisable(btnCierraNominaGNS);
-            onDisable(btnEliminaMovGenGNS);
-        });
+                    }).then((value) => {
+                        switch (value) {
+                            case "aceptar":
+                                swal.close();
+                                $(v).focus().select();
+                                onDisable(btnGeneraGNS);
+                                onDisable(btnCierraNominaGNS);
+                                onDisable(btnEliminaMovGenGNS);
+                                break;
+                        }
+                    });
+                }
+            }).fail(function (x, y, z) {
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                console.log(x.responseText);
+                $(v).focus().select();
+                onDisable(btnGeneraGNS);
+                onDisable(btnCierraNominaGNS);
+                onDisable(btnEliminaMovGenGNS);
+            });
+        } else {
+            onEnable(btnGeneraGNS);
+            onEnable(btnCierraNominaGNS);
+            onEnable(btnEliminaMovGenGNS);
+            onValidarSemanaConsultaAguinaldoVacaciones();
+        }
     }
 
     //Trae la semana actual
