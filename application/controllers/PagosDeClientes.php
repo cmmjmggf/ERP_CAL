@@ -14,6 +14,7 @@ class PagosDeClientes extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->onRedondeaYActualizaSaldos();
             $this->load->view('vEncabezado')->view('vNavGeneral');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
@@ -24,7 +25,6 @@ class PagosDeClientes extends CI_Controller {
                     break;
             }
             $this->load->view('vFondo')->view('vPagosDeClientes')->view('vFooter');
-            $this->onRedondeaYActualizaSaldos();
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }

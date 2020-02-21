@@ -344,7 +344,10 @@ class NotasCargo_model extends CI_Model {
     public function getDocumentosByTpByProveedor($Tp, $Proveedor) {
         try {
             $this->db->select("CONVERT(C.Doc, UNSIGNED INTEGER) AS DOC_F , C.* "
-                    . "")->from("cartera_proveedores AS C")->where("C.Tp", $Tp)->where_in("C.Estatus", array('SIN PAGAR', 'PENDIENTE'))->where("C.Proveedor", $Proveedor)->order_by('DOC_F', 'ASC');
+                            . "")->from("cartera_proveedores AS C")
+                    ->where("C.Tp", $Tp)
+                    ->where_in("C.Estatus", array('SIN PAGAR', 'PENDIENTE'))
+                    ->where("C.Saldo_Doc > 1 ", null, false)->where("C.Proveedor", $Proveedor)->order_by('DOC_F', 'ASC');
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

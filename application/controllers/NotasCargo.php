@@ -15,6 +15,7 @@ class NotasCargo extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->onRedondeaYActualizaSaldos();
             $this->load->view('vEncabezado');
 
             switch ($this->session->userdata["TipoAcceso"]) {
@@ -34,6 +35,14 @@ class NotasCargo extends CI_Controller {
             $this->load->view('vEncabezado');
             $this->load->view('vSesion');
             $this->load->view('vFooter');
+        }
+    }
+
+    public function onRedondeaYActualizaSaldos() {
+        try {
+            $this->db->query(" UPDATE cartera_proveedores SET Saldo_Doc = 0  where Estatus in ('PENDIENTE') AND Saldo_Doc <= 1 and Saldo_Doc >= 0; ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 

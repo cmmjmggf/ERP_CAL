@@ -15,6 +15,7 @@ class PagosProveedores extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->onRedondeaYActualizaSaldos();
             $this->load->view('vEncabezado');
 
             switch ($this->session->userdata["TipoAcceso"]) {
@@ -58,6 +59,14 @@ class PagosProveedores extends CI_Controller {
         }
     }
 
+    public function onRedondeaYActualizaSaldos() {
+        try {
+            $this->db->query(" UPDATE cartera_proveedores SET Saldo_Doc = 0  where Estatus in ('PENDIENTE') AND Saldo_Doc <= 1 and Saldo_Doc >= 0; ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarBanco() {
         try {
             $Tp = $this->input->get('Tp');
@@ -82,7 +91,7 @@ class PagosProveedores extends CI_Controller {
         try {
 //            print json_encode($this->PagosProveedores_model->getBancos($this->input->get('Tp')));
             print json_encode($this->db->select("G.Clave AS ID, CONCAT(IFNULL(G.Nombre,'')) AS Banco", false)
-                            ->from("bancos AS G")->get()->result());
+                                    ->from("bancos AS G")->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
