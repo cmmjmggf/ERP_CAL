@@ -236,6 +236,7 @@ class PrestamosEmpleados extends CI_Controller {
     public function getPagare() {
         try {
             /* PAGARE */
+            $ANIO = Date('Y');
             $xxx = $this->input->post();
             $this->db->select("P.ID,P.numemp AS EMPLEADO,P.nomemp, "
                             . "P.pagare,P.sem,P.fechapre,P.preemp AS MONTO, "
@@ -243,7 +244,8 @@ class PrestamosEmpleados extends CI_Controller {
                             . "P.pesos AS PRESTAMOLETRAS,"
                             . "P.fecpag AS FECHA_PAGARE,P.sempag", false)
                     ->from('prestamos AS P')
-                    ->where('P.pagare', $xxx['PAGARE']);
+                    ->where('P.pagare', $xxx['PAGARE'])
+                    ->where('YEAR(P.fechapre)', $ANIO);
             if ($xxx['FECHA'] !== '') {
                 $pagare_info = $this->db->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$xxx['FECHA']}\" ", null, false)
                                 ->get()->result();
@@ -301,6 +303,7 @@ class PrestamosEmpleados extends CI_Controller {
     public function getPagares() {
         try {
             $xxx = $this->input->post();
+            $ANIO = Date('Y');
             /* PAGARE X NUMERO */
             if ($xxx['FECHA'] === '' && $xxx['PAGARE'] !== '') {
                 $this->getPagare();
@@ -313,7 +316,8 @@ class PrestamosEmpleados extends CI_Controller {
                                         . "P.pesos AS PRESTAMOLETRAS,"
                                         . "P.fecpag AS FECHA_PAGARE,P.sempag", false)
                                 ->from('prestamos AS P')
-                                ->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$xxx['FECHA']}\" ", null, false)
+                                ->where('YEAR(P.fechapre)', $ANIO)
+                                ->where("DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") =  \"{$xxx['FECHA']}\"  ", null, false)
                                 ->get()->result();
 
                 $empleado_info = $this->db->select("CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRECOMPLETO, "

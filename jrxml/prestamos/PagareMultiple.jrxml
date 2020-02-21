@@ -9,7 +9,7 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT P.ID,P.numemp,P.nomemp,P.pagare AS NUMPAGARE,P.sem,P.fechapre AS FECHAPAGO,P.preemp AS MONTOPRESTAMO,P.aboemp,P.salemp,P.pesos AS NUMLETRAS,P.fecpag AS FECHADEPAGO,P.sempag,
+		<![CDATA[SELECT P.ID,P.numemp,P.nomemp,P.pagare AS NUMPAGARE,P.sem,DATE_FORMAT(P.fechapre,"%d/%m/%Y") AS FECHAPAGO,P.preemp AS MONTOPRESTAMO,P.aboemp,P.salemp,P.pesos AS NUMLETRAS,DATE_FORMAT(P.fecpag,"%d/%m/%Y") AS FECHADEPAGO,P.sempag,
 CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS DEUDORNOMBRE, E.Direccion AS DEUDORDIRECCION, E.Colonia AS DEUDORCOLONIA, E.Ciudad AS DEUDORCIUDAD, E.Tel AS DEUDORTEL
 FROM erp_cal.prestamos AS P INNER JOIN empleados AS E ON P.numemp = E.Numero
 WHERE DATE_FORMAT(P.fechapre,"%d/%m/%Y") = $P{FECHAPAGARES}
@@ -28,16 +28,16 @@ GROUP BY E.Numero, P.nomemp]]>
 	<field name="sem" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FECHAPAGO" class="java.sql.Timestamp"/>
-	<field name="MONTOPRESTAMO" class="java.lang.Float"/>
-	<field name="aboemp" class="java.lang.Float">
+	<field name="FECHAPAGO" class="java.lang.String"/>
+	<field name="MONTOPRESTAMO" class="java.lang.Double"/>
+	<field name="aboemp" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="salemp" class="java.lang.Float">
+	<field name="salemp" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="NUMLETRAS" class="java.lang.String"/>
-	<field name="FECHADEPAGO" class="java.sql.Timestamp"/>
+	<field name="FECHADEPAGO" class="java.lang.String"/>
 	<field name="sempag" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>

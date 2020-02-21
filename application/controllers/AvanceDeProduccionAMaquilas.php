@@ -34,6 +34,10 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
             /* REVISAR EN LOS AVANCES DE PRODUCCION MAQUILA */
             $check = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avanceproduccionmaq AS A "
                             . "WHERE A.Control = {$x["CONTROL"]} AND A.Documento = {$x["DOCUMENTO"]}")->result();
+            $check_control_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]} AND P.stsavan = 55")->result();
+            if (intval($check_control_existe[0]->EXISTE) === 0) {
+                EXIT(0);
+            }
             if (intval($check[0]->EXISTE) === 0) {
                 /* REVISAR EN LOS AVANCES DE LA FABRICA QUE NO EXISTA */
                 $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A "
@@ -42,13 +46,14 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
                     $STSAVAN = 6;
                     $DEPTO = 130;
                     $DEPTO_TEXT = 'ALMACEN PESPUNTE';
-                    var_dump($x);
+                    $control = $this->db->query("SELECT P.Control,P.Estilo, P.stsavan, P.Pares "
+                                    . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND P.stsavan = 55")->result();
                     $this->db->insert("avanceproduccionmaq", array(
                         "Fecha" => $x["FECHA"], "Departamento" => $DEPTO,
                         "DepartamentoT" => $DEPTO_TEXT, "Documento" => $x["DOCUMENTO"],
-                        "Control" => $x["CONTROL"], "Estilo" => $x["ESTILO"],
-                        "Pares" => $x["PARES"], "Avance" => $STSAVAN,
-                        "AvanceT" => $DEPTO_TEXT, "Registro" => Date("d/m/Y h:i:s a"),
+                        "Control" => $x["CONTROL"], "Estilo" => $control[0]->Estilo,
+                        "Pares" => $control[0]->Pares, "Avance" => $STSAVAN,
+                        "AvanceT" => $DEPTO_TEXT,
                         "Consecutivo" => $x['CONSECUTIVO'],
                         "Usuario" => $this->session->ID,
                         "UsuarioT" => $this->session->USERNAME
@@ -58,10 +63,10 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
                         'FechaAProduccion' => Date('d/m/Y'),
                         'Departamento' => $DEPTO,
                         'DepartamentoT' => $DEPTO_TEXT,
-                        'FechaAvance' => Date('d/m/Y'),
+                        'FechaAvance' => $x["FECHA"],
                         'Estatus' => 'A',
                         'Usuario' => $_SESSION["ID"],
-                        'Fecha' => Date('d/m/Y'),
+                        'Fecha' => $x["FECHA"],
                         'Hora' => Date('h:i:s a'),
                         'Fraccion' => 0
                     ));
@@ -69,14 +74,17 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
                             ->set('DeptoProduccion', $DEPTO)
                             ->where('Control', $x['CONTROL'])
                             ->where('DeptoProduccion', 140)->update('controles');
+                    
                     $this->db->set('stsavan', $STSAVAN)
                             ->set('EstatusProduccion', $DEPTO_TEXT)
                             ->set('DeptoProduccion', $DEPTO)
                             ->where('Control', $x['CONTROL'])
-                            ->where('stsavan', 55)->update('pedidox');
+                            ->where('stsavan', 55)->update('pedidox'); 
+                    $date = explode("/", $x["FECHA"]); // 
+                    $datetime = $date[2] . '-' . $date[1] . '-' . $date[0] . ' 00:00:00';
                     $this->db->set("status", $STSAVAN)
                             ->set("almpesp", $x["DOCUMENTO"])
-                            ->set("fec6", Date('Y-m-d 00:00:00'))
+                            ->set("fec6", $datetime)
                             ->where('fec6 IS NULL', null, false)
                             ->where('contped', $x['CONTROL'])->update('avaprd');
                     $l = new Logs("Avance de producción a maquilas", "HA AVANZADO EL CONTROL {$x['CONTROL']} A  - ALMACEN DE PESPUNTE CON EL DOCUMENTO {$x["DOCUMENTO"]}.", $this->session);
@@ -117,9 +125,7 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
             $jc->setFilename('avanceprodmaquilas_' . Date('his'));
             $jc->setDocumentformat('pdf');
             $reports['1UNO'] = $jc->getReport();
-            $this->benchmark->mark('code_end');
 
-            $reports['8MARK_TIEMPO_TRANSCURRIDO'] = $this->benchmark->elapsed_time('code_start', 'code_end');
             print json_encode($reports);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -134,6 +140,7 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
     public function onBuscarDocumentoXControl() {
         try {
             $x = $this->input->get();

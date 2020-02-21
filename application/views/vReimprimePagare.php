@@ -29,7 +29,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-5">
                         <label>Pagare</label>
                         <input type="text" id="NumPagare" name="NumPagare" autofocus="" placeholder="" autocomplete="off" class="form-control form-control-sm numbersOnly">
                     </div>
@@ -37,9 +37,12 @@
                         <label>Fecha</label>
                         <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
                     </div>
-                    <div class="col-3 mt-3">
-                        <button id="btnImprimePagare" class="btn btn-info ">
+                    <div class="col-4 mt-3">
+                        <button id="btnImprimePagare" name="btnImprimePagare" class="btn btn-info ">
                             <span class="fa fa-print"></span> Imprime
+                        </button>
+                        <button id="btnImprimeMultiPagare" name="btnImprimeMultiPagare" class="btn btn-info selectNotEnter notEnter">
+                            <span class="fa fa-print"></span> Imprime x fecha
                         </button>
                     </div>
                     <div class="col-12">
@@ -80,10 +83,36 @@
             xEmpleadoConsulta = mdlReimprimePagare.find("#xEmpleadoConsulta"),
             EmpleadoConsulta = mdlReimprimePagare.find("#EmpleadoConsulta"),
             tblPrestamosConsulta = mdlReimprimePagare.find("#tblPrestamosConsulta"),
-            mdlbtnImprimePagare = mdlReimprimePagare.find("#btnImprimePagare");
+            mdlbtnImprimePagare = mdlReimprimePagare.find("#btnImprimePagare"),
+            btnImprimeMultiPagare = mdlReimprimePagare.find("#btnImprimeMultiPagare");
 
     $(document).ready(function () {
         handleEnterDiv(mdlReimprimePagare);
+
+        btnImprimeMultiPagare.click(function () {
+            var fechin = mdlReimprimePagare.find("#Fecha");
+            if (fechin.val()) {
+                onOpenOverlay('Espere un momento por favor...');
+                console.log('ok pagares'); 
+                $.post('<?php print base_url('PrestamosEmpleados/getPagares'); ?>',
+                        {
+                            PAGARE: '', FECHA: mdlReimprimePagare.find("#Fecha").val()
+                        }).done(function (a) {
+                    console.log('ok imprime');
+                    onImprimirReporteFancyAFC(a, function (a, b) {
+                        mdlReimprimePagare.find("#Fecha").focus().select();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                onCampoInvalido(mdlReimprimePagare, "DEBE DE ESPECIFICAR UNA FECHA VALIDA", function () {
+                    fechin.focus().select();
+                });
+            }
+        });
 
         xEmpleadoConsulta.on('keydown', function (e) {
             if (e.keyCode === 13) {

@@ -27,7 +27,7 @@
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
-                        <button type="button" id="btnBuscarDocumentoXControl" name="btnBuscarDocumentoXControl" class="btn btn-success btn-sm">
+                        <button type="button" id="btnBuscarDocumentoXControl" name="btnBuscarDocumentoXControl" class="btn btn-success btn-sm notEnter selectNotEnter">
                             <span class="fa fa-search"></span>
                         </button>
                     </div>
@@ -37,28 +37,17 @@
                                 <span class="d-none stsavan" des="ENSUELADO">55</span> <span class="d-none" des="ENSUELADO">140</span>55 - ENSUELADO<span class="deptodes d-none">ENSUELADO</span><span class="deptoclave d-none">140</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
 
                             <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                                <span class="d-none stsavan" des="ALMACEN PESPUNTE">6</span> <span class="d-none" des="ALMACEN PESPUNTE">130</span>6 - ALMACEN PESPUNTE<span class="deptodes d-none">ALMACEN PESPUNTE</span><span class="deptoclave d-none">130</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+                                <span class="d-none stsavan" des="ALMACEN PESPUNTE">6</span> <span class="d-none" des="ALMACEN PESPUNTE">130</span>6 - ALM-PESPUNTE<span class="deptodes d-none">ALMACEN PESPUNTE</span><span class="deptoclave d-none">130</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
 
                             <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                 <span class="d-none stsavan" des="TEJIDO">7</span><span class="d-none" des="TEJIDO">150</span>7 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
 
-                            <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                                <span class="d-none stsavan" des="ALMACEN TEJIDO">8</span><span class="d-none" des="ALMACEN TEJIDO">160</span>8 - ALMACEN TEJIDO<span class="deptodes d-none">ALMACEN TEJIDO</span><span class="deptoclave d-none">160</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                            <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                                <span class="d-none stsavan" des="MONTADO">9</span><span class="d-none" des="MONTADO ">180</span>9 - MONTADO "A"<span class="deptodes d-none">MONTADO "A"</span><span class="deptoclave d-none">180</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                            <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                                <span class="d-none stsavan" des="ADORNO ">10</span>10 - ADORNO "A"<span class="deptodes d-none">ADORNO "A"</span><span class="deptoclave d-none">210</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-
-                            <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
-                                <span class="d-none stsavan" des="ALMACEN ADORNO">11</span>11 - ALMACEN ADORNO<span class="deptodes d-none">ALMACEN ADORNO</span><span class="deptoclave d-none">230</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                        </ul>
+                          </ul>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-3">
                         <label>Control</label>
-                        <input type="text" id="ControlADPM" name="ControlADPM" class="form-control" maxlength="12">
+                        <input type="text" id="ControlADPM" name="ControlADPM" class="form-control numbersOnly" maxlength="12">
                     </div>
                     <div class="col-3">
                         <label>Estilo</label>
@@ -194,7 +183,7 @@
                 });
                 return;
             }
-            if (DocumentoADPM.val() === '' ) {
+            if (DocumentoADPM.val() === '') {
                 onCampoInvalido(mdlAvanceDeProduccionAMaquilas, "DEBE DE ESPECIFICAR UN DOCUMENTO", function () {
                     ControlADPM.focus().select();
                 });
@@ -273,6 +262,9 @@
                 EstiloADPM.val(a[0].Estilo);
                 ParesADPM.val(a[0].Pares);
                 AvanceActualADPM.val(a[0].stsavan);
+                onEnable(btnAceptaADPM);
+            } else {
+                onDisable(btnAceptaADPM);
             }
         }).fail(function (x) {
             getError(x);
