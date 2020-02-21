@@ -274,7 +274,7 @@
                                         <input type="text" id="TBanamex" name="TBanamex" class="form-control form-control-sm numbersOnly">
                                     </div>
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                        <label for="TBanbajio" >Tarj.BB*</label>
+                                        <label for="TBanbajio" >Cta-BB*</label>
                                         <input type="text" id="TBanbajio" name="TBanbajio" class="form-control form-control-sm numbersOnly">
                                     </div>
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
@@ -287,7 +287,7 @@
                                     </div>
                                     <div class="w-100"></div>
                                     <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                        <label for="CuentaBB" >Cta-BB*</label>
+                                        <label for="CuentaBB" >Tarj.BB*</label>
                                         <input type="text" id="CuentaBB" name="CuentaBB" class="form-control form-control-sm numbersOnly">
                                     </div>
                                     <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">

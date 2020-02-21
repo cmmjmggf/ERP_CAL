@@ -32,6 +32,27 @@ class NotasCargo_model extends CI_Model {
         }
     }
 
+    public function getRecordsDirecto($nc, $tp, $prov) {
+        try {
+            return $this->db->select("NC.ID, "
+                                    . "NC.Articulo as Clave, "
+                                    . "NC.Concepto as Descripcion, "
+                                    . "NC.Cantidad, "
+                                    . "NC.Precio, "
+                                    . "NC.Subtotal, "
+                                    . 'CONCAT(\'<span class="fa fa-trash fa-lg" onclick="onEliminarDetalleByID(\',NC.ID,\')">\',\'</span>\') AS Eliminar'
+                                    . "", false)
+                            ->from("notascreditoprov NC")
+                            ->where('NC.Proveedor', $prov)
+                            ->where('NC.Folio', $nc)
+                            ->where('NC.Tp', $tp)
+                            ->where('NC.Estatus', '1')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onModificarSaldoCartera($DATA) {
         try {
 
@@ -109,6 +130,27 @@ class NotasCargo_model extends CI_Model {
         }
     }
 
+    public function getRegistrosParaFinalizarDirecto($tp, $nc, $prov) {
+        try {
+            return $this->db->select("NC.ID, "
+                                    . "NC.Proveedor, "
+                                    . "NC.DocCartProv, "
+                                    . "NC.Fecha, "
+                                    . "NC.Cantidad, "
+                                    . "NC.Precio, "
+                                    . "NC.Subtotal "
+                                    . "", false)
+                            ->from("notascreditoprov NC")
+                            ->where('NC.Proveedor', $prov)
+                            ->where('NC.Folio', $nc)
+                            ->where('NC.Tp', $tp)
+                            ->where_in("NC.Estatus", '1')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getNotaCreditoParaReporte($Tp, $Folio, $Proveedor) {
         try {
             return $this->db->select("NC.ID, "
@@ -134,6 +176,35 @@ class NotasCargo_model extends CI_Model {
                             ->where('NC.Tp', $Tp)
                             ->where('NC.Estatus', '2')
                             ->order_by("A.Descripcion", 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getNotaCreditoDirectaParaReporte($Tp, $Folio, $Proveedor) {
+        try {
+            return $this->db->select("NC.ID, "
+                                    . "NC.Proveedor, "
+                                    . "CASE WHEN NC.Tp = '1' THEN P.NombreF ELSE P.NombreI END AS NombreProv, "
+                                    . "NC.DocCartProv, "
+                                    . "NC.Fecha, "
+                                    . "NC.CantidadLetra, "
+                                    . "NC.Concepto, "
+                                    . "'' AS Clave, "
+                                    . "NC.Concepto AS Descripcion, "
+                                    . "NC.Cantidad, "
+                                    . "'DESC' as Unidad,"
+                                    . "NC.Precio, "
+                                    . "NC.Subtotal "
+                                    . "", false)
+                            ->from("notascreditoprov NC")
+                            ->join("proveedores P", 'ON P.Clave = NC.Proveedor')
+                            ->where('NC.Proveedor', $Proveedor)
+                            ->where('NC.Folio', $Folio)
+                            ->where('NC.Tp', $Tp)
+                            ->where('NC.Estatus', '2')
+                            ->order_by("NC.ID", 'DESC')
                             ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

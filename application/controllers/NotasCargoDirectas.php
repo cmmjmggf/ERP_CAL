@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 
-class NotasCargo extends CI_Controller {
+class NotasCargoDirectas extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -28,7 +28,8 @@ class NotasCargo extends CI_Controller {
             }
 
             $this->load->view('vFondo');
-            $this->load->view('vNotasCargo');
+            $this->load->view('vNotasCargoDirectas');
+
             $this->load->view('vFooter');
         } else {
             $this->load->view('vEncabezado');
@@ -46,64 +47,51 @@ class NotasCargo extends CI_Controller {
         }
     }
 
-    public function onVerificarArticulo() {
-        try {
-            $Proveedor = $this->input->get('Proveedor');
-            $Tp = $this->input->get('Tp');
-            $Folio = $this->input->get('Folio');
-            $Articulo = $this->input->get('Articulo');
-            print json_encode($this->db->query("select articulo from compras "
-                                    . " where Proveedor = '$Proveedor ' and Tp = '$Tp' and Doc = '$Folio' and articulo = '$Articulo' ")->result());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function getRecords() {
         try {
-            print json_encode($this->NotasCargo_model->getRecords($this->input->post('NC'), $this->input->post('Tp'), $this->input->post('Proveedor')));
+            print json_encode($this->NotasCargo_model->getRecordsDirecto($this->input->post('NC'), $this->input->post('Tp'), $this->input->post('Proveedor')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
-    public function onCancelarNotaCredito() {
+    public function getFolioByTp() {
         try {
-            $x = $this->input;
-            $Tp = $x->post('Tp');
-            $Folio = $x->post('Folio');
-            $Proveedor = $x->post('Proveedor');
+            $FolioNC = $this->NotasCargo_model->getFolioByTp($this->input->post('Tp'));
 
-            $NotaCredito = $this->NotasCargo_model->getRegistrosParaCancelar($Tp, $Folio, $Proveedor);
-
-            if (!empty($NotaCredito)) {
-
-                $Total = 0;
-                foreach ($NotaCredito as $key => $G) {
-                    $Total += $G->Subtotal;
-                }
-                if ($Tp === '1') {
-                    $Total = $Total * 1.16;
-                }
-
-
-                //ACTUALIZA CARTERA DE PROVEEDORES
-                $datosCartProv = array(
-                    'Proveedor' => $Proveedor,
-                    'Factura' => $NotaCredito[0]->DocCartProv,
-                    'Importe' => $Total,
-                    'Tp' => $Tp,
-                );
-
-                $this->NotasCargo_model->onRegresarSaldoCartera($datosCartProv);
-
-                //ACTUALIZA ESTATUS Y PONE CANTIDADES EN 0
-                $this->NotasCargo_model->onCancelarNotaCredito($Tp, $Folio, $Proveedor);
-                $this->NotasCargo_model->onCancelarPagoProv($Tp, $Folio, $Proveedor);
-                $this->NotasCargo_model->onCancelarMovArt($Tp, $Folio, $Proveedor);
+            if (!empty($FolioNC)) {
+                $NC = intval($FolioNC[0]->Folio) + 1;
             } else {
-                print '0';
+                $NC = 1;
             }
+            print $NC;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAgregarDirecto() {
+        try {
+
+            $x = $this->input;
+            $datosNC = array(
+                'Folio' => $x->post('Folio'),
+                'Proveedor' => $x->post('Proveedor'),
+                'DocCartProv' => $x->post('DocCartProv'),
+                'Tp' => $x->post('Tp'),
+                'Fecha' => Date('d/m/Y H:i:s'),
+                'Articulo' => 'DIRECTO',
+                'Precio' => $x->post('Precio'),
+                'Cantidad' => $x->post('Cantidad'),
+                'Subtotal' => $x->post('Subtotal'),
+                'Concepto' => $x->post('Concepto'),
+                'Estatus' => '1'
+            );
+
+
+
+            //AGREGA EN NOTAS DE CREDITO
+            $this->NotasCargo_model->onAgregarNotaCredito($datosNC);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -120,34 +108,13 @@ class NotasCargo extends CI_Controller {
             $Tipo = $x->post('Tipo');
             $DocCartProv = $x->post('DocCartProv');
 
-            $Registros = $this->NotasCargo_model->getRegistrosParaFinalizar($Tp, $Folio, $Proveedor);
-
+            $Registros = $this->NotasCargo_model->getRegistrosParaFinalizarDirecto($Tp, $Folio, $Proveedor);
             $PagoSinIva = 0;
             foreach ($Registros as $key => $R) {
-                //AGREGA EN MOV ART LA SALIDA SI ES DEVOLUCIÓN
-                $datos = array(
-                    'Articulo' => $R->Clave,
-                    'PrecioMov' => $R->Precio,
-                    'CantidadMov' => $R->Cantidad,
-                    'FechaMov' => Date('d/m/Y'),
-                    'DocMov' => $Folio,
-                    'EntradaSalida' => '2',
-                    'TipoMov' => 'SXO',
-                    'Tp' => $Tp,
-                    'Maq' => '1',
-                    'Ano' => Date('Y'),
-                    'OrdenCompra' => $R->DocCartProv,
-                    'Subtotal' => $R->Subtotal,
-                    'Proveedor' => $Proveedor
-                );
-                if ($Tipo === '5') {//EN ESTE MODULO ES 2 pero como lo convertimos EN LA VISTA al TIPO deL MODULO DE pagos 5 es DEVOLUCION
-                    $this->NotasCargo_model->onAgregarMovArt($datos);
-                }
+                //REGISTRA EN PAGOS PROVEEDORES
                 $PagoSinIva += $R->Subtotal;
             }
 
-            //Registra el pago por el total de la nc
-            //REGISTRA EN PAGOS PROVEEDORES
             $datosPagoProv = array(
                 'Proveedor' => $Proveedor,
                 'Factura' => $DocCartProv,
@@ -162,6 +129,7 @@ class NotasCargo extends CI_Controller {
                 'Usuario' => $this->session->userdata('ID')
             );
             $this->NotasCargo_model->onAgregarPagoProveedor($datosPagoProv);
+
 
             //Si es Tp1 agregamos el pago del iva de esa NC
 
@@ -197,67 +165,9 @@ class NotasCargo extends CI_Controller {
         }
     }
 
-    public function getFolioByTp() {
-        try {
-            $FolioNC = $this->NotasCargo_model->getFolioByTp($this->input->post('Tp'));
-
-            if (!empty($FolioNC)) {
-                $NC = intval($FolioNC[0]->Folio) + 1;
-            } else {
-                $NC = 1;
-            }
-            print $NC;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function onAgregar() {
-        try {
-
-            $x = $this->input;
-            $datosNC = array(
-                'Folio' => $x->post('Folio'),
-                'Proveedor' => $x->post('Proveedor'),
-                'DocCartProv' => $x->post('DocCartProv'),
-                'Tp' => $x->post('Tp'),
-                'Fecha' => Date('d/m/Y H:i:s'),
-                'Articulo' => $x->post('Articulo'),
-                'Precio' => $x->post('Precio'),
-                'Cantidad' => $x->post('Cantidad'),
-                'Subtotal' => $x->post('Subtotal'),
-                'Concepto' => $x->post('Concepto'),
-                'Estatus' => '1'
-            );
-
-
-
-            //AGREGA EN NOTAS DE CREDITO
-            $this->NotasCargo_model->onAgregarNotaCredito($datosNC);
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function onEliminarDetalleByID() {
         try {
             $this->NotasCargo_model->onEliminarDetalleByID($this->input->post('ID'));
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getDatosArticuloCompra() {
-        try {
-            print json_encode($this->NotasCargo_model->getDatosArticuloCompra($this->input->get('Tp'), $this->input->get('Doc'), $this->input->get('Proveedor'), $this->input->get('Articulo')));
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    public function getArticulosDocProvTp() {
-        try {
-            print json_encode($this->NotasCargo_model->getArticulosDocProvTp($this->input->get('Doc'), $this->input->get('Tp'), $this->input->get('Proveedor')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -274,19 +184,6 @@ class NotasCargo extends CI_Controller {
     public function getDocumentosByTpByProveedor() {
         try {
             print json_encode($this->NotasCargo_model->getDocumentosByTpByProveedor($this->input->get('Tp'), $this->input->get('Proveedor')));
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
-    /* Documentos compras por tp-proveedor */
-
-    public function getDocsByTpByProveedor() {
-        try {
-            $tp = $this->input->get('Tp');
-            $prov = $this->input->get('Proveedor');
-            print json_encode($this->db->query("select distinct(Doc) as Doc from compras "
-                                    . " where proveedor = $prov and tp = $tp order by Doc ASC ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -322,7 +219,7 @@ class NotasCargo extends CI_Controller {
         $Proveedor = $this->input->post('Proveedor');
 
         $cm = $this->NotasCargo_model;
-        $Articulos = $cm->getNotaCreditoParaReporte($Tp, $Folio, $Proveedor);
+        $Articulos = $cm->getNotaCreditoDirectaParaReporte($Tp, $Folio, $Proveedor);
 
 
         if (!empty($Articulos)) {
@@ -372,15 +269,6 @@ class NotasCargo extends CI_Controller {
                 $pdf->Row(array('', '', '', 'Total:', '$' . number_format($TP_IMPORTE * 1.16, 2, ".", ","),), 0);
             }
 
-
-
-            $pdf->SetY($pdf->GetY() + 5);
-            $pdf->SetX(5);
-            $pdf->SetFont('Calibri', 'B', 9.5);
-            $pdf->Cell(60, 5, utf8_decode('Observaciones: '), 'B'/* BORDE */, 1, 'L');
-            $pdf->SetFont('Calibri', '', 9.5);
-            $pdf->SetX(5);
-            $pdf->Cell(150, 5, utf8_decode($Articulos[0]->Concepto), 0/* BORDE */, 1, 'L');
 
 
             /* FIN RESUMEN */

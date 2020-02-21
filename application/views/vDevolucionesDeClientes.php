@@ -816,10 +816,12 @@
                         $.each(pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)"), function (k, v) {
                             pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)")[k].selectize.clear(true);
                         });
+                        ClienteDevolucion[0].selectize.disable();
+                        xClienteDevolucion.attr('readonly', true);
                         Pedidos.ajax.reload(function () {
                             Devoluciones.ajax.reload(function () {
                                 onCloseOverlay();
-                                Clasificacion[0].selectize.focus();
+                                xClasificacion.focus();
                             });
                         });
                         onNotifyOld('', 'SE HA GUARDADO LA DEVOLUCION', 'success');
