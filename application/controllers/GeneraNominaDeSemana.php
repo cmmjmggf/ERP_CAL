@@ -945,7 +945,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
 //            $empleados = $this->db->select('E.*')->from('empleados AS E')
 //                            ->where('E.AltaBaja', 1)
-//                            ->where('E.Numero', 499)
+//                            ->where('E.Numero', 2012, 2803, 3062, 49, 11, 23, 58, 1548, 30, 31, 83, 5)
 //                            ->where_not_in('E.DepartamentoFisico', array(470))
 //                            ->order_by('E.DepartamentoFisico', 'ASC')
 //                            ->order_by('E.Numero', 'ASC')
@@ -1089,7 +1089,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     /* EMPLEADOS FIJOS Y POR DESTAJO */
                     if (!empty($SUELDO_CUATRO_SEM) && $S1 !== '' && $S4 !== '') {
                         $SUELDO_FIJO_DESTAJO = 0;
-                        
+
                         /* 1 OBTENEMOS LO QUE HIZO EL EMPLEADO DURANTE LAS SEMANAS ESPECIFICADAS */
                         $SUELDO_CUATRO_SEM = $this->db->query("SELECT SUM(P.importe) AS SUELDIN FROM prenomina AS P WHERE P.numemp = {$v->Numero} AND P.numsem BETWEEN {$S1} AND {$S4} AND P.año= {$xxx['ANIO']} AND P.numcon = 5 AND  P.status = 2;")->result();
                         /* 2 SE DIVIDE ENTRE 4 Y SE SACA EL SALARIO DIARIO POR DIA */
@@ -1098,11 +1098,16 @@ class GeneraNominaDeSemana extends CI_Controller {
                         /* 3. SE HACE EL CALCULO DE SUELDO DIARIO POR DIASTRABAJADOS */
                         $SUELDO_CUATRO_SEM_FINAL_POR_DIA = $SUELDO_CUATRO_SEM_FINAL / 7;
                         $SUELDO_FIJO_DESTAJO = $SUELDO_CUATRO_SEM_FINAL_POR_DIA;
-                        
-                        
+
+
                         /* 4. SE ASIGNA EL RESULTADO AL SUELDO FINAL A PAGAR POR CONCEPTO 25 VACACIONES */
                         $total_vacaciones = $SUELDO_CUATRO_SEM_FINAL_POR_DIA * $dias_trabajados_pagados;
                         $sueldin = $SUELDO_FIJO_DESTAJO;
+
+                        $SUELDO_FIJO = $v->Sueldo;
+                        $sueldin += $SUELDO_FIJO;
+                        $SUELDO_FIJO = $SUELDO_FIJO * $dias_trabajados_pagados;
+                        $total_vacaciones += $SUELDO_FIJO;
                     }
                 }
 
