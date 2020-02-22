@@ -32,13 +32,12 @@ class EntregaSuelaPlantaFabrica_model extends CI_Model {
 
     public function getPedidoByControl($Control) {
         try {
-            $this->db->select("PD.* ,S.* ,C.EstatusProduccion, "
+            $this->db->select("PD.* ,S.* ,PD.EstatusProduccion, "
                             . "CONCAT(ifnull(M.EntregaMat1,''),' - ',ifnull(M.EntregaMat2,''),' - ',ifnull(M.EntregaMat3,'')) AS EntregaMat "
                             . "")
                     ->from("pedidox AS PD")
                     ->join("series AS S", 'ON PD.Serie = S.Clave ')
                     ->join("maquilas AS M", 'ON PD.Maquila = M.Clave ')
-                    ->join("controles AS C", 'ON C.Control = PD.Control ')
                     ->where("PD.Control", $Control);
             $query = $this->db->get();
             /*
