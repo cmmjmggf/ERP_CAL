@@ -47,7 +47,7 @@ class FacturacionProduccion extends CI_Controller {
             $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control IN(SELECT P.Control FROM pedidox AS P WHERE P.stsavan = 12 AND P.Pares = P.ParesFacturados );");
 
             /* SEGUNDO PEDIDOX, SEGUNDO PORQUE CONTROLES OCUPA SABER CUALES SON LOS CONTROLES CON DIFERENCIAS */
-            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260 WHERE stsavan = 12 AND Pares = ParesFacturados;");
+            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F' WHERE stsavan = 12 AND Pares = ParesFacturados;");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -462,6 +462,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $f["usuario"] = $this->session->USERNAME;
             $f["usuario_id"] = $this->session->ID;
             $this->db->insert('facturacion', $f);
+            
 
 //            print $this->db->last_query();
             $tipo_cambio = 0;
@@ -627,10 +628,11 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                     $this->db->set('EstatusProduccion', $EstatusProduccion)
                             ->set('DeptoProduccion', $DeptoProduccion)
                             ->where('Control', $x['CONTROL'])->update('controles');
-                    /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+                    /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */ 
                     $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
                         'EstatusProduccion' => $EstatusProduccion,
-                        'DeptoProduccion' => $DeptoProduccion
+                        'DeptoProduccion' => $DeptoProduccion,
+                        'Estatus' => 'F'
                     ));
                     /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
                     $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
@@ -803,7 +805,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
         try {
             $x = $this->input->get();
             $this->db->select("P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES ", false)
-                    ->from("pedidox AS P ")->where("P.Control", $x['CONTROL']); 
+                    ->from("pedidox AS P ")->where("P.Control", $x['CONTROL']);
             $data = $this->db->limit(1)->get()->result();
             print json_encode($data);
         } catch (Exception $exc) {

@@ -83,7 +83,7 @@
             }
         });
     }
-    function onImprimirReporteFancySetOptions(url,options) {
+    function onImprimirReporteFancySetOptions(url, options) {
         $.fancybox.open({
             closeExisting: true,
             smallBtn: true,
@@ -138,6 +138,24 @@
                 toolbar: false,
                 smallBtn: true,
                 src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#zoom=130',
+                type: 'iframe',
+                opts: {
+                    afterClose: doafterClose,
+                    iframe: iframe_opts
+                }
+            });
+        });
+        $.fancybox.open(files);
+    }
+
+    function onImprimirReporteFancyArrayAFCZ(urls, doafterClose, zoom) {
+        console.log(urls);
+        var files = [];
+        $.each(urls, function (k, v) {
+            files.push({
+                toolbar: false,
+                smallBtn: true,
+                src: '<?php print base_url(); ?>js/pdf.js-gh-pages/web/viewer.php?file=' + v + '#zoom=' + zoom,
                 type: 'iframe',
                 opts: {
                     afterClose: doafterClose,
