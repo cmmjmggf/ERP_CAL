@@ -265,13 +265,12 @@
                         parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
                         $.post('<?php print base_url('GeneraNominaDeSemana/getVacaciones'); ?>', parms).done(function (a) {
                             swal('ATENCIÓN', 'SE HAN GENERADO LAS VACACIONES', 'success');
-                            
+
                             SVacacionesAguinaldosParaDestajo.addClass("d-none");
                             console.log(a);
                         }).fail(function (x) {
                             getError(x);
                         }).always(function () {
-                            HoldOn.close();
                             onEnable(btnGeneraGNS);
                             busy = false;
                         });
@@ -355,11 +354,11 @@
                                                 }).done(function (a) {
                                             console.log(a);
                                             if (a.length > 0) {
-                                                onImprimirReporteFancyArrayAFC(JSON.parse(a), function (a, b) {
+                                                onImprimirReporteFancyArrayAFCZ(JSON.parse(a), function (a, b) {
                                                     onEnable(btnGeneraGNS);
                                                     SemanaGNS.focus().select();
                                                     busy = false;
-                                                });
+                                                }, 140);
                                             } else {
                                                 busy = false;
                                                 swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA DE LA SEMANA 99, INTENTE DE NUEVO O MÁS TARDE', 'warning');
@@ -485,7 +484,7 @@
             onEnable(btnGeneraGNS);
             btnGeneraGNS.focus();
         } else if (SemanaGNS.val() && parseInt(SemanaGNS.val()) === 99) {
-            $.getJSON('<?php print base_url('DiaFestivo/getSemanaNomina'); ?>',
+            $.getJSON('<?php print base_url('GeneraNominaDeSemana/getSemanaNominaX'); ?>',
                     {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
                 if (a.length > 0) {
                     var sm = parseInt(a[0].SEMANA);

@@ -914,7 +914,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $SEMANA_VACACIONES = 99;
             $l = new Logs("GENERA NOMINA DE SEMANA - VACACIONES", "GENERO LAS VACACIONES DE LA SEMANA {$SEMANA_VACACIONES}, {$xxx["ANIO"]}.", $this->session);
             $anio_completo = 365;
-            $treinta_dias = 31;
+            $treinta_dias = 30.41;
             $total_vacaciones = 0;
             $prima = 0;
             $dias_trabajados_pagados = 0;
@@ -1415,6 +1415,17 @@ class GeneraNominaDeSemana extends CI_Controller {
         $jc->setFilename('PRENOMINA_EXCEL_SEM_' . $xxx['SEMANA'] . '_' . Date('h_i_s'));
         $jc->setDocumentformat('xls');
         print $jc->getReport();
+    }
+
+    public function getSemanaNominaX() {
+        try {
+            $ANO = Date('Y');
+            print json_encode($this->db->query("SELECT P.numsem AS SEMANA FROM prenomina AS P "
+                                    . "WHERE P.año = {$ANO} AND P.numsem <= 52 AND P.status = 2 "
+                                    . "ORDER BY P.numsem DESC, P.año DESC LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
     }
 
 }
