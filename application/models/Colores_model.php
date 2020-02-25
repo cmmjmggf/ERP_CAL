@@ -83,7 +83,7 @@ class Colores_model extends CI_Model {
 
     public function getUltimaClave($Estilo) {
         try {
-            $this->db->select('MAX(C.Clave) As Clave ', false)->from('colores AS C')->where('C.Estilo', $Estilo);
+            $this->db->select('MAX(CAST(C.Clave AS SIGNED)) as Clave ', false)->from('colores AS C')->where('C.Estilo', $Estilo);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

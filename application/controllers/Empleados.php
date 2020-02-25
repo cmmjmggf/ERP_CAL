@@ -72,7 +72,7 @@ class Empleados extends CI_Controller {
     public function getEmpleadoByID() {
         try {
 //            print json_encode($this->Empleados_model->getEmpleadoByID($this->input->get('ID')));
-          $dtm =   $this->db->select("E.ID, "
+            $dtm = $this->db->select("E.ID, "
                                     . "E.Numero, "
                                     . "E.NumFis, "
                                     . "E.Egresos, "
