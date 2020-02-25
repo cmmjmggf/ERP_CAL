@@ -65,9 +65,9 @@ class FacturacionDevolucion extends CI_Controller {
                                         D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
                                         D.par21 AS C21, D.par22 AS C22, "
                                     . "(SELECT E.Descripcion FROM estilos AS E "
-                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID  "
+                                    . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.registro AS DEVID  "
                                     . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
-                                    . "WHERE D.control = '{$this->input->get('CONTROL')}' LIMIT 1")->result();
+                                    . "WHERE D.control = '{$this->input->get('CONTROL')}'  and D.paredev > D.parefac LIMIT 1")->result();
                     break;
 
                 default:
@@ -91,7 +91,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         . "(SELECT E.Descripcion FROM estilos AS E "
                                         . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID "
                                         . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
-                                        . "WHERE D.control = '{$this->input->get('CONTROL')}' LIMIT 1")->result();
+                                        . "WHERE D.control = '{$this->input->get('CONTROL')}' and D.paredev > D.parefac   LIMIT 1")->result();
                     } else {
                         $data = $this->db->query("SELECT D.docto AS CLAVE_PEDIDO, "
                                         . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
@@ -110,7 +110,7 @@ class FacturacionDevolucion extends CI_Controller {
                                         . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID  "
                                         . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
                                         . "WHERE D.control = '{$this->input->get('CONTROL')}' "
-                                        . "AND D.tp = '{$this->input->get('TP')}' LIMIT 1")->result();
+                                        . "AND D.tp = '{$this->input->get('TP')}' and D.paredev > D.parefac LIMIT 1")->result();
                     }
                     break;
             }
@@ -133,7 +133,7 @@ D.par06, D.par07, D.par08, D.par09, D.par10,
 D.par11, D.par12, D.par13, D.par14, D.par15, 
 D.par16, D.par17, D.par18, D.par19, D.par20, 
 D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CONTROL')}'  "
-                                        . "AND D.tp ={$this->input->get('TP')} AND D.stafac <= 1 LIMIT 1")->result());
+                                        . "AND D.tp ={$this->input->get('TP')} AND D.stafac <= 1  and paredev > parefac LIMIT 1")->result());
             } else {
                 print json_encode(array("EXISTE" => "NO"));
             }
@@ -207,7 +207,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par11 +  D.par12 +  D.par13 +  D.par14 +  D.par15 +  
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES
-                FROM devolucionnp AS D WHERE D.stafac = 1 ORDER BY D.fechadev DESC")->result();
+                FROM devolucionnp AS D WHERE D.stafac = 1  and paredev > parefac ORDER BY D.fechadev DESC")->result();
             print json_encode($dt);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -219,7 +219,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $xxx = $this->input->get();
             switch (intval($xxx['CLIENTE'])) {
                 case 500:
-                    $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+                    $dt = $this->db->query("SELECT D.registro AS ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
                 D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
                 D.cargoa AS CARGOA, 
                 D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
@@ -238,7 +238,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
 
                 default:
                     if (intval($xxx['TP']) === 2) {
-                        $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+                        $dt = $this->db->query("SELECT D.registro AS ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
                 D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
                 D.cargoa AS CARGOA, 
                 D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
@@ -254,7 +254,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 FROM devolucionnp AS D 
                 WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 LIMIT 1")->result();
                     } else {
-                        $dt = $this->db->query("SELECT D.ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
+                        $dt = $this->db->query("SELECT D.registro AS ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
                 D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
                 D.cargoa AS CARGOA, 
                 D.par01 AS P1, D.par02 AS P2, D.par03 AS P3,  D.par04 AS P4, D.par05 AS P5, 
@@ -492,27 +492,27 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - intval($x['PARES_A_FACTURAR']);
             $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
-            $devolucion = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.ID = {$x['DEVOLUCION']}")->result();
+            $devolucion = $this->db->query("SELECT * FROM devolucionnp AS D WHERE D.registro = {$x['DEVOLUCION']} AND control = {$x['CONTROL']} ")->result();
             if ($saldopares === 0) {
                 $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
                 $this->db->query("UPDATE devolucionnp "
                         . "SET stafac = 2, "
-                        . "parefac = (parefac + {$pares_a_facturar}) WHERE ID = {$x['DEVOLUCION']}");
+                        . "parefac = (parefac + {$pares_a_facturar}) WHERE registro = {$x['DEVOLUCION']} AND control = {$x['CONTROL']} ");
             } else if (intval($x['PARES_A_FACTURAR']) < $saldopares) {
                 $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
                 $this->db->query("UPDATE devolucionnp "
                         . "SET stafac = 1, "
-                        . "parefac = (parefac + {$pares_a_facturar}) WHERE ID = {$x['DEVOLUCION']}");
+                        . "parefac = (parefac + {$pares_a_facturar}) WHERE registro = {$x['DEVOLUCION']} AND control = {$x['CONTROL']} ");
             }
             if (intval($devolucion[0]->fact) === 0) {
                 $this->db->query("UPDATE devolucionnp "
-                        . "SET fact = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");
+                        . "SET fact = {$x['FACTURA']} WHERE registro = {$x['DEVOLUCION']}  AND control = {$x['CONTROL']} ");
             } else if (intval($devolucion[0]->fact1) === 0) {
                 $this->db->query("UPDATE devolucionnp "
-                        . "SET fact1 = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");
+                        . "SET fact1 = {$x['FACTURA']} WHERE registro = {$x['DEVOLUCION']} AND control = {$x['CONTROL']} ");
             } else if (intval($devolucion[0]->fact2) === 0) {
                 $this->db->query("UPDATE devolucionnp "
-                        . "SET fact2 = {$x['FACTURA']} WHERE ID = {$x['DEVOLUCION']}");
+                        . "SET fact2 = {$x['FACTURA']} WHERE registro = {$x['DEVOLUCION']} AND control = {$x['CONTROL']} ");
             }
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
 
@@ -1114,7 +1114,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                                                 D.par16 + D.par17 + D.par18 + D.par19 + D.par20 + 
                                                 D.par21 + D.par22 ) AS PARES_DEVUELTOS
                                                 FROM devolucionnp AS D 
-                                                WHERE D.control  = {$x["CONTROL"]}")->result());
+                                                WHERE D.control  = {$x["CONTROL"]} and paredev > parefac")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

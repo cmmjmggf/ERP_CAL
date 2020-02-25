@@ -264,8 +264,13 @@
                         parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
                         parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
                         $.post('<?php print base_url('GeneraNominaDeSemana/getVacaciones'); ?>', parms).done(function (a) {
-                            swal('ATENCIÓN', 'SE HAN GENERADO LAS VACACIONES', 'success');
-
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "SE HAN GENERADO LAS VACACIONES",
+                                icon: "success",
+                                buttons: false,
+                                timer: 2000
+                            });
                             SVacacionesAguinaldosParaDestajo.addClass("d-none");
                             console.log(a);
                         }).fail(function (x) {
