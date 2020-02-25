@@ -327,14 +327,24 @@ class AsignaPFTSACXC extends CI_Controller {
                         ->update('asignapftsacxc');
 
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
-
-                $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
+                $PRECIO_MAQUILA_UNO = 0;
+                $PRECIO_EXISTE = $this->db->select("count(*) AS EXISTE")
                                 ->from("preciosmaquilas AS PM")
                                 ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
                                 ->where("PM.Maquila", 1)->get()->result();
+                if (intval($PRECIO_EXISTE[0]->EXISTE) === 0) {
+                    $PRECIO_MAQUILA_UNO = 0;
+                } else {
+                    $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
+                                    ->from("preciosmaquilas AS PM")
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
+                                    ->where("PM.Maquila", 1)->get()->result();
+                    $PRECIO_MAQUILA_UNO = $PRECIO[0]->PRECIO_MAQUILA_UNO;
+                }
+
                 $datos = array(
                     'Articulo' => $x['ARTICULO'],
-                    'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
+                    'PrecioMov' => $PRECIO_MAQUILA_UNO,
                     'CantidadMov' => $x['ENTREGA'],
                     'FechaMov' => Date('d/m/Y'),
                     'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
@@ -345,9 +355,33 @@ class AsignaPFTSACXC extends CI_Controller {
                     'Sem' => $x['SEMANA'],
                     'Ano' => $Ano,
                     'OrdenCompra' => NULL,
-                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']
+                    'Subtotal' => $PRECIO_MAQUILA_UNO * $x['ENTREGA']
                 );
                 $this->db->insert("movarticulos_fabrica", $datos);
+
+                /* LOG PIOCHAS */
+                $MAQUILA_CONTROL = 1;
+                $MAQUILA_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Maquila AS MAQUILA_UNO_O_N FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}")->result();
+                if (intval($MAQUILA_EXISTE[0]->EXISTE) === 0) {
+                    $MAQUILA_CONTROL = 1;
+                } else {
+                    $MAQUILA_CONTROL = $MAQUILA_EXISTE[0]->MAQUILA_UNO_O_N;
+                }
+                $this->db->insert("consumo_piocha", array(
+                    "Control" => $x['CONTROL'],
+                    "Semana" => $x['SEMANA'],
+                    "Ano" => Date('Y'),
+                    "Articulo" => $x['ARTICULO'],
+                    "Fraccion" => $x['FRACCION'],
+                    "Maquila" => $MAQUILA_CONTROL,
+                    "CantidadPiocha" => $x['ENTREGA'],
+                    "Fecha" => Date('d/m/Y'),
+                    "Hora" => Date('h:i:s'),
+                    "PrecioMaquila" => $PRECIO_MAQUILA_UNO,
+                    "Subtotal" => $PRECIO_MAQUILA_UNO * $x['ENTREGA'],
+                    "Usuario" => $this->session->ID,
+                    "UsuarioT" => $this->session->USERNAME
+                ));
             } else {
                 /**/
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;

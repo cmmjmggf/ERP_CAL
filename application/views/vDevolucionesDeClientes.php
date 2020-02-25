@@ -3,7 +3,7 @@
         <div class="row">
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
-                <div class="row">
+                <div class="row"> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                         <h5 class="text-danger font-italic">DEVOLUCIONES PENDIENTES POR APLICAR
                             <span class="text-info font-weight-bold">&nbsp; &nbsp; Folio: </span><span class="text-dark font-weight-bold" id="FolioDev"></span></h5>
@@ -163,7 +163,7 @@
 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Control</label>
-                <input type="text" id="Control" name="Control"  class="form-control form-control-sm numbersOnly">
+                <input type="text" id="ControlADevolver" name="ControlADevolver" class="form-control form-control-sm numbersOnly" readonly="">
                 <input type="text" id="TP" name="TP" readonly="" class="d-none form-control form-control-sm numbersOnly">
                 <input type="text" id="DOCUMENTO" name="DOCUMENTO" readonly="" class="d-none form-control form-control-sm numbersOnly">
                 <input type="text" id="PRECIO" name="PRECIO" readonly="" class="d-none form-control form-control-sm numbersOnly">
@@ -284,22 +284,22 @@
                     </div>
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-info btn-block selectNotEnter" id="btnReportesDev" name="btnReportesDev">
+                        <button type="button" class="btn btn-info btn-block selectNotEnter" id="btnReportesDev" name="btnReportesDev" style="background-color: #3F51B5; border-color: #3F51B5;">
                             <span class="fa fa-file"></span>  Reportes
                         </button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDefectos" name="btnDefectos"><span class="fa fa-asterisk"></span>  Defecto</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDefectos" name="btnDefectos" style="background-color: #3F51B5; border-color: #3F51B5;"><span class="fa fa-asterisk"></span>  Defecto</button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDetalle" name="btnDetalle"><span class="fa fa-ban"></span>  Detalle</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnDetalle" name="btnDetalle" style="background-color: #3F51B5; border-color: #3F51B5;"><span class="fa fa-ban"></span>  Detalle</button>
                     </div>
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center">
-                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc"><span class="fa fa-search"></span> Rastreo ctr/doc</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter " id="btnRastreoCtrlDoc" name="btnRastreoCtrlDoc" style="color: #fff; background-color: #4CAF50; border-color: #4CAF50;"><span class="fa fa-search"></span> Rastreo ctr/doc</button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 " align="center">
-                        <button type="button" class="btn btn-info notEnter selectNotEnter" id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente"><span class="fa fa-search"></span> Rastreo est/cte</button>
+                        <button type="button" class="btn btn-info notEnter selectNotEnter " id="btnRastreoEstiloCliente" name="btnRastreoEstiloCliente" style="color: #fff; background-color: #4CAF50; border-color: #4CAF50;"><span class="fa fa-search"></span> Rastreo est/cte</button>
                     </div>
                 </div>
             </div>
@@ -401,7 +401,7 @@
             MAQUILA = pnlTablero.find("#MAQUILA"),
             Pedidos,
             tblPedidos = pnlTablero.find('#tblPedidos'),
-            Control = pnlTablero.find('#Control'),
+            ControlADevolver = pnlTablero.find('#ControlADevolver'),
             DOCUMENTO = pnlTablero.find("#DOCUMENTO"),
             TP = pnlTablero.find("#TP"),
             Color = pnlTablero.find('#Color'),
@@ -438,6 +438,10 @@
         handleEnterDiv(pnlTablero);
 
         handleEnterDiv(mdlReportesDevoluciones);
+
+        ControlADevolver.on('keydown', function () {
+
+        });
 
         xDetalleDefecto.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -622,6 +626,10 @@
             } else {
                 ClienteDevolucion[0].selectize.enable();
                 ClienteDevolucion[0].selectize.clear(true);
+                Pedidos.ajax.reload(function () {
+                    Devoluciones.ajax.reload(function () {
+                    });
+                });
             }
         });
 
@@ -786,7 +794,7 @@
                     var p = {
                         CLIENTE: ClienteDevolucion.val(), FECHA: FechaDevolucion.val(),
                         DOCUMENTO: DOCUMENTO.val(), MOTIVO: Motivo.val(),
-                        CONTROL: Control.val(), ESTILO: Estilo.val(),
+                        CONTROL: ControlADevolver.val(), ESTILO: Estilo.val(),
                         COLOR: ColorClave.val(), TP: TP.val(),
                         PARES_DEVUELTOS: (TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0),
                         PARES_FACTURADOS: (TotalParesEntregaF.val() ? TotalParesEntregaF.val() : 0)
@@ -877,7 +885,7 @@
             if (e.keyCode === 106 || e.keyCode === 107 || e.keyCode === 109 || e.keyCode === 110) {
                 e.preventDefault();
             }
-            if (Control.val()) {
+            if (ControlADevolver.val()) {
                 console.log($(this).attr("id"), $(this).val());
                 if (e.keyCode === 13) {
                     var index = $(this).attr('indice');
@@ -901,7 +909,7 @@
             }
         });
 
-        Control.on('keydown', function (e) {
+        ControlADevolver.on('keydown', function (e) {
             //            if (ClienteDevolucion.val()) {
             //                if (Control.val() && e.keyCode === 13) {
             //                    onOpenOverlay('Buscando...');
@@ -954,6 +962,9 @@
             "initComplete": function (settings, json) {
                 xClienteDevolucion.focus();
                 FechaDevolucion.val(Hoy);
+            },
+            "drawCallback": function () {
+                pnlTablero.find("#tblPedidos_paginate").find("#tblPedidos_previous").before("<li class='font-weight-bold m-2 font-italic' style='color:#8e1b0f ;'>FACTURACIÓN</li>");
             }
         });
 
@@ -985,7 +996,7 @@
             if (cvalidos) {
                 var z = Pedidos.row($(this)).data();
                 console.log("Z = > ", z);
-                Control.val(z.CONTROL);
+                ControlADevolver.val(z.CONTROL);
                 Color.val(z.COLOR);
                 Estilo.val(z.ESTILO);
                 ColorClave.val(z.COLOR);
@@ -1019,7 +1030,7 @@
                 "dataSrc": "",
                 "data": function (d) {
                     d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
-                    d.CONTROL = Control.val() ? Control.val() : '';
+                    d.CONTROL = ControlADevolver.val() ? ControlADevolver.val() : '';
                     d.FECHA = FechaDevolucion.val() ? FechaDevolucion.val() : '';
                 }
             },
@@ -1050,9 +1061,16 @@
             "scrollX": true,
             "order": [[10, "desc"]],
             "initComplete": function (settings, json) {
+            },
+            "drawCallback": function () {
+                pnlTablero.find("#tblDevoluciones_paginate").find("#tblDevoluciones_previous").before("<li class='font-weight-bold m-2 font-italic' style='color:#8e1b0f ;'>DEVOLUCION-NP</li>");
             }
         });
     });
+
+    function getControlEspecifico() {
+
+    }
 
     function onReloadPagina() {
         javascript:location.reload();
@@ -1130,7 +1148,7 @@
                 }
                 pnlTablero.find("#PDF" + indice).focus().select();
             } else {
-                Control.focus().select();
+                ControlADevolver.focus().select();
             }
         }).fail(function (x) {
             getError(x);
@@ -1173,13 +1191,13 @@
             pnlTablero.find("#PDF" + i).val("");
         }
 
-        Control.val('');
+        ControlADevolver.val('');
         Estilo.val('');
         Color.val('');
         Serie.val('');
         Motivo.val('');
 
-        Control.attr('disabled', false);
+        ControlADevolver.attr('disabled', false);
         TotalParesEntrega.val('');
         TotalParesEntregaF.val('');
         TotalParesEntregaAF.val('');

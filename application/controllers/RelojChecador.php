@@ -66,6 +66,8 @@ TIMESTAMPDIFF(HOUR,'{$tiempo_check}',now())  AS DIFERENCIA_TIEMPO_EN_HORAS")->re
                     'año' => Date('Y'),
                     'semana' => $x['Semana'],
                     'reg' => $this->session->ID);
+                $es['Usuario'] = $this->session->ID;
+                $es['UsuarioT'] = $this->session->USERNAME;
                 switch (count($Entrada_Salida)) {
                     case 0:
                         $es['turno'] = 1;

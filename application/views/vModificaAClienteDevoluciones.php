@@ -20,7 +20,7 @@
                                     <option></option>
                                     <?php
                                     /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                                    $dtm = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl = 1 ORDER BY ABS(C.Clave) ASC;")->result();
+                                    $dtm = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl IN(0, 1) ORDER BY ABS(C.Clave) ASC;")->result();
                                     foreach ($dtm as $k => $v) {
                                         print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
                                     }

@@ -42,13 +42,13 @@ class DevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("F.ID, F.contped AS CONTROL, F.factura AS DOCUMENTO, F.tp AS TP, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, F.staped AS ST", false)
-                    ->from("facturacion AS F")->where('F.contped <> 0', null, false);
-            if ($x["CLIENTE"] !== '') {
-                $this->db->where('F.cliente', $x["CLIENTE"])->order_by("F.fecha", "DESC");
-            }
+                    ->from("facturacion AS F")->where('F.contped <> 0 AND F.staped = 2', null, false);
             if ($x["CLIENTE"] === '') {
-                $this->db->order_by("F.fecha", "DESC")->limit(15);
+                $this->db->where("F.cliente", 0);
+            } else {
+                $this->db->where('F.cliente', $x["CLIENTE"]);
             }
+            $this->db->order_by("F.fecha", "DESC");
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -80,7 +80,7 @@ class DevolucionesDeClientes extends CI_Controller {
                                     . "F.par16, F.par17, F.par18, F.par19, F.par20, F.par21, F.par22 "
                                     . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
                                     . "INNER JOIN facturacion AS F ON P.Control = F.contped "
-                                    . "WHERE P.Control = '{$x['CONTROL']}' AND F.ID = {$x['ID']}")->result());
+                                    . "WHERE P.Control = '{$x['CONTROL']}' AND F.ID = {$x['ID']} AND F.staped = 2")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -89,7 +89,7 @@ class DevolucionesDeClientes extends CI_Controller {
     public function getParesFacturadosXControl() {
         try {
             print json_encode($this->db->query("SELECT F.factura, F.tp, F.cliente, F.contped, F.fecha, F.hora, F.corrida, F.pareped, F.estilo, F.combin, F.par01, F.par02, F.par03, F.par04, F.par05, F.par06, F.par07, F.par08, F.par09, F.par10, F.par11, F.par12, F.par13, F.par14, F.par15, F.par16, F.par17, F.par18, F.par19, F.par20, F.par21, F.par22, F.precto, F.subtot, F.iva, F.staped, F.monletra, F.tmnda, F.tcamb, F.cajas, F.origen, F.referen, F.decdias, F.agente, F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom, F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs "
-                                    . "FROM facturacion AS F WHERE F.contped = '{$this->input->get('CONTROL')}'")->result());
+                                    . "FROM facturacion AS F WHERE F.contped = '{$this->input->get('CONTROL')}' AND F.staped = 2")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -106,17 +106,16 @@ class DevolucionesDeClientes extends CI_Controller {
                             . "D.conce AS CONCEPTO, D.preciodev AS PRECIO_DEVOLUCION, "
                             . "D.preciomaq AS PRECIO_CG", false)
                     ->from("devolucionnp AS D")
-                    ->where_in('D.staapl', array(0, 1));
-
-            if ($x['CLIENTE'] !== '') {
-                $this->db->where('D.cliente', $x['CLIENTE'])->order_by("D.fecha", "DESC");
-            }
+                    ->where_in('D.staapl', array(0, 1)); 
             if ($x['CONTROL'] !== '') {
-                $this->db->where('D.control', $x['CONTROL'])->order_by("D.fecha", "DESC");
+                $this->db->where('D.control', $x['CONTROL']);
+            } 
+            if ($x["CLIENTE"] === '') {
+                $this->db->where("D.cliente", 0);
+            } else {
+                $this->db->where('D.cliente', $x["CLIENTE"]);
             }
-            if ($x['CLIENTE'] === '' && $x['CONTROL'] === '') {
-                $this->db->order_by("D.ID", "DESC")->order_by("D.fecha", "DESC")->limit(15);
-            }
+            $this->db->order_by("D.fecha", "DESC");
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

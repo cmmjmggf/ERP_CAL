@@ -203,10 +203,10 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             $this->db->select("F.ID AS ID, F.cliente AS CLIENTE, F.factura AS FACTURA, "
                             . "date_format(F.fecha,'%d/%m/%Y') AS FECHA, F.staped AS ESTATUS", false)
                     ->from("facturacion AS F");
-            if ($x['CLIENTE'] !== '') {
-                $this->db->where('F.cliente', $x['CLIENTE']);
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('F.contped', $x['CONTROL']);
             } else {
-                $this->db->where('F.cliente', 0);
+                $this->db->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -218,11 +218,11 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("D.ID, D.cliente AS CLIENTE, D.docto AS FACTURA, date_format(D.fecha,'%d/%m/%Y') AS FECHA", false)
-                    ->from("devolucionnp AS D");
-            if ($x['CLIENTE'] !== '') {
-                $this->db->where('D.cliente', $x['CLIENTE']);
+                    ->from("devolucionnp AS D"); 
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('D.control', $x['CONTROL']);
             } else {
-                $this->db->where('D.cliente', 0);
+                $this->db->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {

@@ -552,7 +552,14 @@ class Avance8 extends CI_Controller {
                     $data["fraccion"] = $v->NUMERO_FRACCION;
                     $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
                     if (intval($v->NUMERO_FRACCION) === 60) {
-
+                        $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
+                        if (intval($check_corte[0]->EXISTE) === 0) {
+                            exit(0);
+                        }
+                        $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(102)")->result();
+                        if (intval($check_rayado[0]->EXISTE) === 0) {
+                            exit(0);
+                        }
                         $avance = array(
                             'Control' => $xXx['CONTROL'],
                             'FechaAProduccion' => Date('d/m/Y'),

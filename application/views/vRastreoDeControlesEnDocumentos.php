@@ -252,7 +252,8 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-                    d.CLIENTE = (Cliente.val() ? Cliente.val().trim() : '');
+                    d.CONTROL = (Control.val() ? Control.val() : '');
+                    d.CLIENTE = (Cliente.val() ? Cliente.val() : '');
                 }
             },
             "columns": [
@@ -288,6 +289,7 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
+                    d.CONTROL = (Control.val() ? Control.val() : '');
                     d.CLIENTE = (Cliente.val() ? Cliente.val().trim() : '');
                 }
             },
