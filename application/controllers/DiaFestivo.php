@@ -12,7 +12,11 @@ class DiaFestivo extends CI_Controller {
 
     public function getSemanaNomina() {
         try {
-            print json_encode($this->dfm->getSemanaNomina($this->input->get('FECHA')));
+//            print json_encode($this->dfm->getSemanaNomina($this->input->get('FECHA')));
+            print json_encode($this->db->select("S.Sem AS SEMANA, S.FechaIni AS FECHAINI, S.FechaFin AS FECHAFIN", false)
+                            ->from('semanasnomina AS S')
+                            ->where("STR_TO_DATE(\"{$this->input->get('FECHA')}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
+                            ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

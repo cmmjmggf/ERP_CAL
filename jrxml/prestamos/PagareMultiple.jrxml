@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PagareMultiple" language="groovy" pageWidth="671" pageHeight="445" columnWidth="631" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2cf8afc5-021c-4b82-8503-5919bdef0ee3">
-	<property name="ireport.zoom" value="1.6963904734899642"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PagareMultiple" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="12" bottomMargin="20" uuid="2cf8afc5-021c-4b82-8503-5919bdef0ee3">
+	<property name="ireport.zoom" value="1.6500000000000004"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="EMPRESA" class="java.lang.String"/>
@@ -10,7 +10,7 @@
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT P.ID,P.numemp,P.nomemp,P.pagare AS NUMPAGARE,P.sem,DATE_FORMAT(P.fechapre,"%d/%m/%Y") AS FECHAPAGO,P.preemp AS MONTOPRESTAMO,P.aboemp,P.salemp,P.pesos AS NUMLETRAS,DATE_FORMAT(P.fecpag,"%d/%m/%Y") AS FECHADEPAGO,P.sempag,
-CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS DEUDORNOMBRE, E.Direccion AS DEUDORDIRECCION, E.Colonia AS DEUDORCOLONIA, E.Ciudad AS DEUDORCIUDAD, E.Tel AS DEUDORTEL
+replace(CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno),"0","") AS DEUDORNOMBRE, E.Direccion AS DEUDORDIRECCION, E.Colonia AS DEUDORCOLONIA, E.Ciudad AS DEUDORCIUDAD, E.Tel AS DEUDORTEL
 FROM erp_cal.prestamos AS P INNER JOIN empleados AS E ON P.numemp = E.Numero
 WHERE DATE_FORMAT(P.fechapre,"%d/%m/%Y") = $P{FECHAPAGARES}
 GROUP BY E.Numero, P.nomemp]]>
@@ -46,8 +46,11 @@ GROUP BY E.Numero, P.nomemp]]>
 	<field name="DEUDORCOLONIA" class="java.lang.String"/>
 	<field name="DEUDORCIUDAD" class="java.lang.String"/>
 	<field name="DEUDORTEL" class="java.lang.String"/>
+	<group name="PAG" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{NUMPAGARE}]]></groupExpression>
+	</group>
 	<detail>
-		<band height="403" splitType="Stretch">
+		<band height="379" splitType="Stretch">
 			<line>
 				<reportElement x="-1" y="0" width="1" height="40" uuid="ad2eb708-5721-4ae4-ae4b-90b48cd4d776"/>
 			</line>
@@ -63,7 +66,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<text><![CDATA[P A G A R E]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="235" y="0" width="25" height="20" uuid="3061c636-039e-4523-b56e-4e6f54064c10"/>
+				<reportElement x="176" y="0" width="25" height="20" uuid="3061c636-039e-4523-b56e-4e6f54064c10"/>
 				<box>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -74,7 +77,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<text><![CDATA[No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="432" y="0" width="58" height="20" uuid="afbc11ee-24ae-4879-bd37-cf9efaae37d6"/>
+				<reportElement x="373" y="0" width="58" height="20" uuid="afbc11ee-24ae-4879-bd37-cf9efaae37d6"/>
 				<box>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
@@ -90,7 +93,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<text><![CDATA[Lugar y fecha de expedición, León, Gto., Mex.]]></text>
 			</staticText>
 			<line>
-				<reportElement x="-1" y="0" width="631" height="1" uuid="6255a8a2-4017-4858-9a2e-fb882524d66a"/>
+				<reportElement x="-1" y="0" width="573" height="1" uuid="6255a8a2-4017-4858-9a2e-fb882524d66a"/>
 			</line>
 			<staticText>
 				<reportElement x="0" y="40" width="335" height="15" uuid="ec6ff6bb-c2ec-4c16-a591-370ed088ff9f"/>
@@ -100,10 +103,10 @@ GROUP BY E.Numero, P.nomemp]]>
 				<text><![CDATA[Debe(mos) y pagare(mos) incondicionalmente por este Pagare a la orden]]></text>
 			</staticText>
 			<line>
-				<reportElement x="335" y="55" width="255" height="1" uuid="22d51dd0-55d3-484f-a986-7ef3df9ea98c"/>
+				<reportElement x="335" y="55" width="237" height="1" uuid="22d51dd0-55d3-484f-a986-7ef3df9ea98c"/>
 			</line>
 			<textField>
-				<reportElement x="337" y="40" width="248" height="15" uuid="e7938c7d-df4e-4f25-90d5-9e261fa3b305"/>
+				<reportElement x="337" y="40" width="235" height="15" uuid="e7938c7d-df4e-4f25-90d5-9e261fa3b305"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -144,49 +147,49 @@ GROUP BY E.Numero, P.nomemp]]>
 				<reportElement x="95" y="115" width="458" height="1" uuid="be15798c-c139-4e60-8e61-f758928ece88"/>
 			</line>
 			<line>
-				<reportElement x="630" y="0" width="1" height="400" uuid="ee15c3a4-8abf-4ade-8d2d-93de18b81fa2"/>
+				<reportElement x="571" y="0" width="1" height="371" uuid="ee15c3a4-8abf-4ade-8d2d-93de18b81fa2"/>
 			</line>
 			<staticText>
-				<reportElement x="28" y="130" width="503" height="13" uuid="435c0acb-9ce2-4d0b-8244-c3fa7996c5d5"/>
+				<reportElement x="28" y="130" width="428" height="13" uuid="435c0acb-9ce2-4d0b-8244-c3fa7996c5d5"/>
 				<textElement>
-					<font size="10" isBold="true" isUnderline="false"/>
+					<font size="9" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Valor recibido a mi (nuestra) entera satisfacción. Este pagare forma parte de una serie numerada de]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="561" y="130" width="83" height="13" uuid="416f97ba-9361-4ba5-8d4f-382f373ed691"/>
+				<reportElement x="507" y="131" width="83" height="13" uuid="416f97ba-9361-4ba5-8d4f-382f373ed691"/>
 				<textElement>
-					<font size="10" isBold="true" isUnderline="false"/>
+					<font size="9" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Y todos estan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="506" y="130" width="55" height="12" uuid="2f2368c2-ec31-41ed-83e7-a8a2892cadb5"/>
+				<reportElement x="452" y="131" width="55" height="12" uuid="2f2368c2-ec31-41ed-83e7-a8a2892cadb5"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="28" y="142" width="602" height="56" uuid="96385ead-e8f4-40eb-a5dc-4ceb993b7775"/>
+				<reportElement x="28" y="142" width="539" height="48" uuid="96385ead-e8f4-40eb-a5dc-4ceb993b7775"/>
 				<textElement textAlignment="Justified" markup="html">
-					<font size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+					<font size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[<html>sujetos a la condicion de que, al no pagarse cualquiera de ellos a su vencimiento, seran vigentes todos los que le sigan en numero ademas de los ya vencidos, desde la fecha de vencimiento de este documento hasta el dia de su liquidación, causara intereses moratorios al tipo de ______% mensual, pagadero en esta ciudad juntamente con el principal, mas los gastos que por ello se origine</html>]]></text>
 			</staticText>
 			<line>
-				<reportElement x="-1" y="40" width="1" height="359" uuid="1e95ab21-6b30-457e-aab5-4ee0bc6de878"/>
+				<reportElement x="-1" y="38" width="1" height="333" uuid="1e95ab21-6b30-457e-aab5-4ee0bc6de878"/>
 			</line>
 			<staticText>
-				<reportElement x="28" y="198" width="372" height="22" uuid="a3feae57-dbc8-4e41-b5e9-b570536eff5e"/>
+				<reportElement x="28" y="187" width="372" height="12" uuid="a3feae57-dbc8-4e41-b5e9-b570536eff5e"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="9" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Nombre y datos del deudor]]></text>
 			</staticText>
 			<frame>
-				<reportElement x="28" y="220" width="372" height="49" uuid="8e7e4b17-85d3-49a8-9346-28168e527802"/>
+				<reportElement x="28" y="201" width="372" height="49" uuid="8e7e4b17-85d3-49a8-9346-28168e527802"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -197,116 +200,116 @@ GROUP BY E.Numero, P.nomemp]]>
 					<reportElement x="0" y="13" width="372" height="1" uuid="c3d76dad-bb21-4e71-a903-100faa4f80f5"/>
 				</line>
 				<line>
-					<reportElement x="0" y="25" width="372" height="1" uuid="3e1ae810-065b-4d47-8ca2-c6e9e3ec0965"/>
+					<reportElement x="0" y="24" width="372" height="1" uuid="3e1ae810-065b-4d47-8ca2-c6e9e3ec0965"/>
 				</line>
 				<line>
 					<reportElement x="0" y="37" width="207" height="1" uuid="52191ef2-caef-4aae-9e86-a540e3275864"/>
 				</line>
 				<textField>
-					<reportElement x="48" y="0" width="324" height="13" uuid="be8d610f-080e-40b7-ae18-63808b2e2f52"/>
+					<reportElement x="48" y="1" width="323" height="13" uuid="be8d610f-080e-40b7-ae18-63808b2e2f52"/>
 					<textElement>
 						<font size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DEUDORNOMBRE}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="242" y="37" width="130" height="1" uuid="04d339a4-86f2-48d5-a60c-efde8106756f"/>
+					<reportElement x="242" y="36" width="130" height="1" uuid="04d339a4-86f2-48d5-a60c-efde8106756f"/>
 				</line>
 				<textField>
-					<reportElement x="242" y="26" width="130" height="13" uuid="120d6d60-f21f-41e2-8622-d9df0e53be9c"/>
+					<reportElement x="242" y="25" width="130" height="13" uuid="120d6d60-f21f-41e2-8622-d9df0e53be9c"/>
 					<textElement>
 						<font size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DEUDORCIUDAD}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="48" y="36" width="323" height="13" uuid="e616f09e-e524-455d-9438-d4356e244b2a"/>
-					<textElement>
+					<reportElement x="48" y="36" width="323" height="12" uuid="e616f09e-e524-455d-9438-d4356e244b2a"/>
+					<textElement verticalAlignment="Middle">
 						<font size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DEUDORTEL}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<staticText>
-				<reportElement x="31" y="220" width="45" height="13" uuid="460e5d26-1323-4707-aa01-775de8f61ec6"/>
+				<reportElement x="31" y="201" width="45" height="13" uuid="460e5d26-1323-4707-aa01-775de8f61ec6"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="232" width="45" height="13" uuid="27a5a968-2e89-4dca-9f98-8b615c2dcf5e"/>
+				<reportElement x="31" y="213" width="45" height="13" uuid="27a5a968-2e89-4dca-9f98-8b615c2dcf5e"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="244" width="45" height="13" uuid="1efed302-d362-4f14-b57b-d033addd9c90"/>
+				<reportElement x="31" y="225" width="45" height="13" uuid="1efed302-d362-4f14-b57b-d033addd9c90"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Colonia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="256" width="45" height="13" uuid="f77bf02f-4d37-466c-80e9-9cc234d95651"/>
+				<reportElement x="31" y="237" width="45" height="13" uuid="f77bf02f-4d37-466c-80e9-9cc234d95651"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Telefono]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="235" y="246" width="35" height="13" uuid="2e7c42e7-985e-4a96-976e-767a3edbd310"/>
+				<reportElement x="235" y="227" width="35" height="13" uuid="2e7c42e7-985e-4a96-976e-767a3edbd310"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ciudad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="256" width="35" height="13" uuid="676f1e3f-8425-4d3d-b693-094424127815"/>
+				<reportElement x="411" y="237" width="35" height="13" uuid="676f1e3f-8425-4d3d-b693-094424127815"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<line>
-				<reportElement x="446" y="269" width="185" height="1" uuid="7a3cd718-a206-480c-91ac-00587341bd89"/>
+				<reportElement x="443" y="250" width="125" height="1" uuid="7a3cd718-a206-480c-91ac-00587341bd89"/>
 			</line>
 			<staticText>
-				<reportElement x="28" y="269" width="372" height="14" uuid="65b9c772-4305-4943-a54e-7e49f4c491f5"/>
+				<reportElement x="28" y="250" width="372" height="14" uuid="65b9c772-4305-4943-a54e-7e49f4c491f5"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font size="9" isBold="true" isUnderline="false"/>
 				</textElement>
 				<text><![CDATA[Datos personales y firma(s) del(os) aval(es)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="411" y="319" width="35" height="13" uuid="1da29245-5398-49cf-96bd-6ac15bd0bf8a"/>
+				<reportElement x="411" y="300" width="35" height="13" uuid="1da29245-5398-49cf-96bd-6ac15bd0bf8a"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<line>
-				<reportElement x="446" y="332" width="185" height="1" uuid="fc848483-4df9-4d2e-aac6-e8777eb3a2ec"/>
+				<reportElement x="443" y="313" width="125" height="1" uuid="fc848483-4df9-4d2e-aac6-e8777eb3a2ec"/>
 			</line>
 			<staticText>
-				<reportElement x="411" y="370" width="35" height="13" uuid="6516a95a-f662-475d-8c77-4fcd157a3a13"/>
+				<reportElement x="411" y="351" width="35" height="13" uuid="6516a95a-f662-475d-8c77-4fcd157a3a13"/>
 				<textElement textAlignment="Center">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<line>
-				<reportElement x="446" y="383" width="185" height="1" uuid="95a5c4c0-ebf3-4e8c-a212-780e885423b9"/>
+				<reportElement x="443" y="364" width="125" height="1" uuid="95a5c4c0-ebf3-4e8c-a212-780e885423b9"/>
 			</line>
 			<line>
-				<reportElement x="0" y="399" width="630" height="1" uuid="2a32e187-e6c6-42f0-a064-06d39d217798"/>
+				<reportElement x="0" y="370" width="571" height="1" uuid="2a32e187-e6c6-42f0-a064-06d39d217798"/>
 			</line>
 			<line>
 				<reportElement x="262" y="85" width="100" height="1" uuid="ffbee2a2-e2c4-4289-8452-403c3360cba8"/>
 			</line>
 			<frame>
-				<reportElement x="28" y="283" width="372" height="49" uuid="f543f907-2f67-42c1-8114-cce2d0152bba"/>
+				<reportElement x="28" y="264" width="372" height="49" uuid="f543f907-2f67-42c1-8114-cce2d0152bba"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -314,10 +317,10 @@ GROUP BY E.Numero, P.nomemp]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<line>
-					<reportElement x="0" y="13" width="372" height="1" uuid="714928ef-dac6-4018-9e18-f126a10cceb0"/>
+					<reportElement x="0" y="12" width="372" height="1" uuid="714928ef-dac6-4018-9e18-f126a10cceb0"/>
 				</line>
 				<line>
-					<reportElement x="0" y="25" width="372" height="1" uuid="4a4204be-8a4e-43d3-99f1-2f0f37fd2b6e"/>
+					<reportElement x="0" y="24" width="372" height="1" uuid="4a4204be-8a4e-43d3-99f1-2f0f37fd2b6e"/>
 				</line>
 				<line>
 					<reportElement x="0" y="37" width="207" height="1" uuid="db624e00-0a75-4f56-acc2-639dc1bd925d"/>
@@ -327,42 +330,42 @@ GROUP BY E.Numero, P.nomemp]]>
 				</line>
 			</frame>
 			<staticText>
-				<reportElement x="235" y="309" width="35" height="13" uuid="d713425e-a02d-4f1c-9de9-38bb349dcc9a"/>
+				<reportElement x="235" y="290" width="35" height="13" uuid="d713425e-a02d-4f1c-9de9-38bb349dcc9a"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ciudad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="320" width="45" height="13" uuid="81653596-b081-4d25-a6fe-83a118df5c06"/>
+				<reportElement x="31" y="301" width="45" height="13" uuid="81653596-b081-4d25-a6fe-83a118df5c06"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Telefono]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="282" width="45" height="13" uuid="a50e6462-f381-4ebc-ab90-c5bb51f9aa05"/>
+				<reportElement x="31" y="263" width="45" height="13" uuid="a50e6462-f381-4ebc-ab90-c5bb51f9aa05"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="308" width="45" height="13" uuid="2a00b2c5-cffc-4cae-9c13-65d34426239f"/>
+				<reportElement x="30" y="289" width="45" height="13" uuid="2a00b2c5-cffc-4cae-9c13-65d34426239f"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Colonia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="297" width="45" height="13" uuid="df2f205b-8d18-4f3e-bafe-38b270ad8b0c"/>
+				<reportElement x="31" y="278" width="45" height="13" uuid="df2f205b-8d18-4f3e-bafe-38b270ad8b0c"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección]]></text>
 			</staticText>
 			<frame>
-				<reportElement x="28" y="332" width="372" height="49" uuid="ead374f6-3a0e-4fbb-beff-1d2d24f42ae2"/>
+				<reportElement x="28" y="313" width="372" height="49" uuid="ead374f6-3a0e-4fbb-beff-1d2d24f42ae2"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -373,45 +376,45 @@ GROUP BY E.Numero, P.nomemp]]>
 					<reportElement x="0" y="13" width="372" height="1" uuid="f57e5996-23da-4a23-a896-813d2cf38c02"/>
 				</line>
 				<line>
-					<reportElement x="0" y="25" width="372" height="1" uuid="f136a1e2-958e-46d4-a0f5-13002c1af631"/>
+					<reportElement x="0" y="24" width="372" height="1" uuid="f136a1e2-958e-46d4-a0f5-13002c1af631"/>
 				</line>
 				<line>
-					<reportElement x="0" y="37" width="207" height="1" uuid="53942cbc-d720-4f00-8610-e31669ce45bd"/>
+					<reportElement x="0" y="36" width="207" height="1" uuid="53942cbc-d720-4f00-8610-e31669ce45bd"/>
 				</line>
 				<line>
-					<reportElement x="242" y="37" width="130" height="1" uuid="19736561-1090-4525-948c-30d3be03cc48"/>
+					<reportElement x="242" y="36" width="130" height="1" uuid="19736561-1090-4525-948c-30d3be03cc48"/>
 				</line>
 			</frame>
 			<staticText>
-				<reportElement x="31" y="356" width="45" height="13" uuid="bc545e6a-0018-4307-8093-518e5159cbea"/>
+				<reportElement x="31" y="337" width="45" height="13" uuid="bc545e6a-0018-4307-8093-518e5159cbea"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Colonia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="333" width="45" height="13" uuid="ab77ac64-3dfc-44d5-9692-853c61f1cebd"/>
+				<reportElement x="32" y="314" width="45" height="13" uuid="ab77ac64-3dfc-44d5-9692-853c61f1cebd"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="31" y="345" width="45" height="13" uuid="14686f6f-efca-4672-baa1-7c674d9c57d5"/>
+				<reportElement x="31" y="326" width="45" height="13" uuid="14686f6f-efca-4672-baa1-7c674d9c57d5"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Dirección]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="235" y="357" width="35" height="13" uuid="40d8d80c-2f8c-49ba-a3e5-1a3aef84c834"/>
+				<reportElement x="235" y="338" width="35" height="13" uuid="40d8d80c-2f8c-49ba-a3e5-1a3aef84c834"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ciudad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="32" y="368" width="45" height="13" uuid="51bd73c5-a3de-4ffd-8d79-3637b5cf2e0a"/>
+				<reportElement x="32" y="349" width="45" height="13" uuid="51bd73c5-a3de-4ffd-8d79-3637b5cf2e0a"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
@@ -421,7 +424,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<reportElement x="506" y="143" width="55" height="1" uuid="b4d83f59-8e55-4b42-8b0e-fbc40f0b82ba"/>
 			</line>
 			<textField>
-				<reportElement x="490" y="0" width="140" height="20" uuid="5df98f5a-9c8f-47b1-8e71-47e5c32bff5c"/>
+				<reportElement x="431" y="0" width="140" height="20" uuid="5df98f5a-9c8f-47b1-8e71-47e5c32bff5c"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 				</box>
@@ -431,7 +434,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<textFieldExpression><![CDATA[$F{MONTOPRESTAMO}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="259" y="0" width="100" height="20" uuid="c56eb556-5a58-4ae0-886d-01f393264e48"/>
+				<reportElement x="200" y="0" width="100" height="20" uuid="c56eb556-5a58-4ae0-886d-01f393264e48"/>
 				<box>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
@@ -462,7 +465,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<textFieldExpression><![CDATA[$F{FECHADEPAGO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="75" y="233" width="325" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="477aacd7-165b-459c-89ec-ffcb72e4f490"/>
+				<reportElement mode="Transparent" x="75" y="214" width="325" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="477aacd7-165b-459c-89ec-ffcb72e4f490"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -470,7 +473,7 @@ GROUP BY E.Numero, P.nomemp]]>
 				<textFieldExpression><![CDATA[$F{DEUDORDIRECCION}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="77" y="246" width="158" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ff8c0489-63fc-4166-b4f0-1b3f60eeb5c3"/>
+				<reportElement mode="Transparent" x="77" y="227" width="158" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ff8c0489-63fc-4166-b4f0-1b3f60eeb5c3"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

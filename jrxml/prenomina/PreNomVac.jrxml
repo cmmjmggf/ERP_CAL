@@ -477,7 +477,7 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="167" y="0" width="70" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="27ba69fa-c4d7-4dc7-8359-6994d24a5dd7"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>

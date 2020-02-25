@@ -16,7 +16,7 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                             ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                             ->join('asignapftsacxc AS ACXC', 'E.Numero = ACXC.Empleado')
                             ->where('D.Descripcion LIKE \'CORTE\'', null, false)
-                    ->where('E.AltaBaja', 1)->get()->result();
+                            ->where('E.AltaBaja', 1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -111,7 +111,9 @@ class ConsumoPielForroXCortador_model extends CI_Model {
     function getConsumosPielForroXMaquilaSemanaAnioCortadorArticuloFechaInicialFechaFinal($MAQUILA, $SEMANAINICIAL, $SEMANAFINAL, $ANO, $CORTADOR, $ARTICULO, $FECHAINICIAL, $FECHAFINAL, $EMPLEADO, $ESTILO, $TIPO) {
         try {
             $this->db->select("OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT, "
-                            . "A.PrecioActual AS Precio, OP.Pares, (SUM(OPD.Cantidad)/OP.Pares) AS Consumo, SUM(OPD.Cantidad) AS Cantidad, A.Abono, "
+                            . "A.PrecioActual AS Precio, OP.Pares, "
+                            . "((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS Consumo, "
+                            . "SUM(OPD.Cantidad) AS Cantidad, A.Abono, "
                             . "A.Devolucion, A.Basura, "
                             . "(SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0))) AS Diferencia,"
                             . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,"
@@ -147,7 +149,7 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                 $this->db->where("A.Estilo = '$ESTILO'", null, false);
             }
             $this->db->where("A.TipoMov = '$TIPO'", null, false)
-                    ->group_by('A.Articulo')->group_by('OP.ControlT')
+                    ->group_by('OP.ControlT')->group_by('A.Articulo') 
                     ->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
             $str = $this->db->last_query();
 //            print $str."\n"."\n";

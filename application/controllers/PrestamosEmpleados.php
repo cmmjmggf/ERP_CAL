@@ -73,6 +73,7 @@ class PrestamosEmpleados extends CI_Controller {
         try {
 //            print json_encode($this->pem->getPrestamosConsulta($this->input->get('PAGARE'), $this->input->get('FECHA'), $this->input->get('EMPLEADO')));
             $x = $this->input->get();
+            $ANIO = Date('Y');
             $this->db->select("P.ID AS ID,P.numemp AS EMPLEADO, P.nomemp, "
                             . "P.pagare AS PAGARE,P.sem AS SEM, DATE_FORMAT(P.fechapre,\"%d/%m/%Y\") AS FECHA, "
                             . "P.preemp AS PRESTAMO, P.aboemp AS ABONO, P.salemp, "
@@ -87,6 +88,7 @@ class PrestamosEmpleados extends CI_Controller {
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('P.numemp', $x['EMPLEADO']);
             }
+            $this->db->where('YEAR(P.fechapre)', $ANIO);
             if ($x['PAGARE'] === '' && $x['FECHA'] === '') {
                 $this->db->limit(999);
             }
@@ -98,7 +100,7 @@ class PrestamosEmpleados extends CI_Controller {
 
     public function getAbonado() {
         try {
-            $x = $this->input->get();
+            $x = $this->input->get(); 
             $this->db->select("SUM(PP.aboemp) AS ABONADO ", false)->from("prestamospag AS PP");
             if ($x["EMPLEADO"] !== '') {
                 $this->db->where("PP.numemp", $x["EMPLEADO"]);
