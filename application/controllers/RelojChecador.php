@@ -39,7 +39,11 @@ class RelojChecador extends CI_Controller {
                             ->where('A.numemp', $x['Numero'])
                             ->where('A.fecalta  >= \'' . $fecha . '\'')
                             ->order_by('A.ID', 'DESC')->limit(4)->get()->result();
-            $info_empleado = $this->ASM->getInformacionPorEmpleado(intval($x['Numero']));
+            $info_empleado = $this->db->select("E.ID AS ID, "
+                                    . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ',E.Materno) AS Empleado, "
+                                    . "E.Foto AS FOTO, E.DepartamentoFisico AS DEPTO, D.Descripcion AS DEPTOT", false)
+                            ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
+                            ->where('E.Numero', intval($x['Numero']))->limit(1)->get()->result();
             $dtm = json_decode(json_encode($info_empleado), FALSE);
             if (count($dtm) > 0) {
                 $e = $dtm[0];
@@ -63,7 +67,7 @@ TIMESTAMPDIFF(HOUR,'{$tiempo_check}',now())  AS DIFERENCIA_TIEMPO_EN_HORAS")->re
                     'numemp' => $x['Numero'],
                     'fecalta' => Date('Y-m-d 00:00:00'),
                     'hora' => Date('H:i:s'),
-                    'nomemp' => $dtm[0]->Empleado,
+                    'nomemp' => str_replace("0", "", $dtm[0]->Empleado),
                     'numdep' => $dtm[0]->DEPTO,
                     'nomdep' => $dtm[0]->DEPTOT,
                     'ampm' => Date('a'),

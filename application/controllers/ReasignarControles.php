@@ -159,15 +159,27 @@ class ReasignarControles extends CI_Controller {
             $OBSERVACIONES = $x['OBSERVACIONES'];
             $OBSERVACIONES_ADICIONALES = $x['OBSERVACIONES_ADICIONALES'];
 
-            $Y = substr(Date('Y'), 2);/*EL AÑO NO CORRESPONDE AL CONTROL BUSCADO ES 2020 PERO EL AÑO MARCA 2019*/
+            $Y = substr(Date('Y'), 2); /* EL AÑO NO CORRESPONDE AL CONTROL BUSCADO ES 2020 PERO EL AÑO MARCA 2019 */
 
             $this->db->trans_begin();
             $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD
                 INNER JOIN OrdenDeProduccion AS OP
                 ON OPD.OrdenDeProduccion = OP.ID
                 WHERE OPD.ID > 0 AND OP.ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
+
+            $l = new Logs("REASIGNA CONTROLES(ORDENDEPRODUCCIOND)(DETALLE)", "ELIMINO LAS ORDENES DE PRODUCCION(DETALLE) DEL CONTROL {$CONTROL_INICIAL} AL CONTROL {$CONTROL_FINAL}", $this->session);
             $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
-            $this->db->query("DELETE FROM controles WHERE ID > 0 AND Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}");
+            $l = new Logs("REASIGNA CONTROLES(ORDENDEPRODUCCION)(ENCABEZADO)", "ELIMINO LAS ORDENES DE PRODUCCION(ENCABEZADO) DEL CONTROL {$CONTROL_INICIAL} AL CONTROL {$CONTROL_FINAL}", $this->session);
+
+            $this->db->query("INSERT INTO `controles_reasignados` (`Control`, `FechaProgramacion`, `Estilo`,`Color`,`Serie`,`Cliente`,`Pares`,`Pedido`,
+`PedidoDetalle`,`Estatus`,`Departamento`,`Ano`,`Maquila`,`Semana`,`Consecutivo`,`Motivo`, `Cancelacion`,`EstatusProduccion`,`DeptoProduccion`)
+SELECT `Control`, `FechaProgramacion`,`Estilo`,`Color`,`Serie`,`Cliente`,`Pares`,`Pedido`,
+`PedidoDetalle`,`Estatus`,`Departamento`,`Ano`,`Maquila`,`Semana`,`Consecutivo`,`Motivo`,
+`Cancelacion`,`EstatusProduccion`,`DeptoProduccion` FROM controles WHERE Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL} ");
+
+            $this->db->query("DELETE FROM controles WHERE ID > 0 AND Semana = {$SEMANA_ASIGNADA} AND Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL} ");
+
+            $l = new Logs("REASIGNA CONTROLES(CONTROLES)", "ELIMINO LOS CONTROLES {$CONTROL_INICIAL} AL CONTROL {$CONTROL_FINAL}", $this->session);
 
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
@@ -180,7 +192,7 @@ class ReasignarControles extends CI_Controller {
             /* AQUI SE OBTIENEN LOS PEDIDOS CON LA SEMANA ACTUAL, MAQUILA ACTUAL
              * ENTRE EL RANGO DE CONTROLES ESPECIFICADOS */
             $controles = $this->db->select("PD.*", false)->from('pedidox AS PD')
-                             ->where('PD.Maquila', $MAQUILA_ASIGNADA)
+                            ->where('PD.Maquila', $MAQUILA_ASIGNADA)
                             ->where('PD.Semana', $SEMANA_ASIGNADA)
                             ->where("PD.Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}", null, false)
                             ->order_by('PD.Control', 'ASC')->get()->result();
@@ -189,10 +201,11 @@ class ReasignarControles extends CI_Controller {
 //            exit(0);
 
             foreach ($controles as $k => $v) {
-                $M = str_pad($MAQUILA_A_ASIGNAR, 2, '0', STR_PAD_LEFT);
-                $S = str_pad($SEMANA_A_ASIGNAR, 2, '0', STR_PAD_LEFT);
+                $M = str_pad(intval($MAQUILA_A_ASIGNAR), 2, '0', STR_PAD_LEFT);
+                $S = str_pad(intval($SEMANA_A_ASIGNAR), 2, '0', STR_PAD_LEFT);
                 print "\n 2.count(*) AS EXISTE \n";
-                $Y = $v->Ano;
+//                $Y = substr($v->Ano, 2);
+                $Y = substr(Date('Y'), 2);
                 $EXISTEN_REGISTROS = $this->db->select('count(*) AS EXISTE', false)->from('controles AS C')
                                 ->where("C.Semana = ABS({$SEMANA_A_ASIGNAR}) "
                                         . "AND C.Maquila = ABS({$MAQUILA_A_ASIGNAR}) AND C.Ano = ABS({$Y})"
@@ -206,7 +219,7 @@ class ReasignarControles extends CI_Controller {
                                         . "AND C.Semana = ABS({$SEMANA_A_ASIGNAR}) "
                                         . "AND C.Ano = ABS({$Y})", null, false)
                                 ->order_by('C.Consecutivo', 'DESC')->limit(1)->get()->result();
-                print $this->db->last_query() . "\n"; 
+                print $this->db->last_query() . "\n";
                 $C = str_pad(((intval($EXISTEN_REGISTROS[0]->EXISTE) === 0) ? 1 : $MAXIMO_CONSECUTIVO[0]->MAX), 3, '0', STR_PAD_LEFT);
                 $C = ((intval($C) > 0) ? $C : str_pad($C, 3, '0', STR_PAD_LEFT));
                 $Control = $Y . $S . $M . $C;

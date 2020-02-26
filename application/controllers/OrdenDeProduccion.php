@@ -410,9 +410,8 @@ class OrdenDeProduccion extends CI_Controller {
                     ->where('PD.Control <> 0 AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
                     ->where('CT.Estatus', 'A');
             if ($x["ANIO"] !== '') {
-                $this->db->where('PD.Ano', $x["ANIO"]);
                 $ANIO_CT = substr($x["ANIO"], 2, 2);
-                $this->db->where('CT.Ano', $ANIO_CT);
+                $this->db->where('PD.Ano', $x["ANIO"])->where('CT.Ano', $ANIO_CT);
             }
             if ($x["MAQUILA"] !== '') {
                 $this->db->where('PD.Maquila', $x["MAQUILA"]);
