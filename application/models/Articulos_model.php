@@ -13,7 +13,9 @@ class Articulos_model extends CI_Model {
     public function getRecords() {
         try {
             return $this->db->select("A.ID AS ID, A.Clave AS Clave, "
-                                    . "A.Descripcion AS Descripcion "
+                                    . "A.Descripcion AS Descripcion,"
+                                    . "(SELECT Descripcion as Unidad from unidades where clave = A.UnidadMedida ) as Unidad, "
+                                    . "concat('$',(SELECT FORMAT (ifnull(Precio,0),2) as Precio from preciosmaquilas where Maquila = 1 and Articulo = A.Clave limit 1)) as Precio "
                                     . "", false)
                             ->from("articulos AS A")
                             ->where('A.Estatus', 'ACTIVO')->get()->result();

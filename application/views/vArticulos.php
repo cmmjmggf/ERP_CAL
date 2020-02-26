@@ -17,7 +17,8 @@
                             <th>ID</th>
                             <th>Clave</th>
                             <th>Descripción</th>
-
+                            <th>Unidad</th>
+                            <th>Precio</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -708,7 +709,7 @@
             "ajax": {"url": master_url + 'getRecords',
                 "dataSrc": ""
             },
-            "columns": [{"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}
+            "columns": [{"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}, {"data": "Unidad"}, {"data": "Precio"}
             ],
             "columnDefs": [{
                     "targets": [0],

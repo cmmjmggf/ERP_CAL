@@ -206,7 +206,7 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('F.contped', $x['CONTROL']);
             } else {
-                $this->db->limit(1);
+                $this->db->where('F.contped', 99999999);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -218,11 +218,11 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("D.ID, D.cliente AS CLIENTE, D.docto AS FACTURA, date_format(D.fecha,'%d/%m/%Y') AS FECHA", false)
-                    ->from("devolucionnp AS D"); 
+                    ->from("devolucionnp AS D");
             if ($x['CONTROL'] !== '') {
                 $this->db->where('D.control', $x['CONTROL']);
             } else {
-                $this->db->limit(1);
+                $this->db->where('D.control', 99999999);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
