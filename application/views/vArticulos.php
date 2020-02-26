@@ -49,6 +49,9 @@
                     <button type="button" class="btn btn-raised btn-info btn-sm d-none" id="btnGeneraPreciosMaq">
                         <span class="fa fa-cogs"></span> GENERAR PRECIO MAQUILAS = MAQ-1
                     </button>
+                    <button type="button" class="btn btn-primary" id="btnNuevoDos">
+                        <span class="fa fa-plus"></span> NUEVO
+                    </button>
                 </div>
             </div>
             <hr>
@@ -229,7 +232,7 @@
     var master_url = base_url + 'index.php/Articulos/';
     var tblArticulos = $('#tblArticulos');
     var Articulos;
-    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar"),
+    var btnNuevo = $("#btnNuevo"), btnNuevoDos = $("#btnNuevoDos"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar"),
             btnIgualaPrecios = $("#btnIgualaPrecios"), btnGeneraPreciosMaq = $("#btnGeneraPreciosMaq");
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos"), pnlDatosDetalle = $("#pnlDatosDetalle");
     var PrecioVentaParaMaquilas, tblPrecioVentaParaMaquilas = $("#tblPrecioVentaParaMaquilas");
@@ -529,6 +532,24 @@
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass("d-none");
             pnlDatosDetalle.removeClass("d-none");
+            btnEliminar.addClass("d-none");
+            pnlDatos.find("#Departamento")[0].selectize.focus();
+            PrecioVentaParaMaquilas.clear().draw();
+            getID();
+            $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+            btnIgualaPrecios.addClass("d-none");
+            btnGeneraPreciosMaq.addClass("d-none");
+            pnlDatos.find("#UnidadMedida")[0].selectize.enable();
+            pnlDatos.find("#PrecioUno").prop("readonly", false);
+            pnlDatos.find("#PrecioDos").prop("readonly", false);
+            pnlDatos.find("#PrecioTres").prop("readonly", false);
+        });
+        btnNuevoDos.click(function () {
+            nuevo = true;
+            $.each(pnlDatos.find("select"), function (k, v) {
+                pnlDatos.find("select")[k].selectize.clear(true);
+            });
+            pnlDatos.find("input,textarea").val("");
             btnEliminar.addClass("d-none");
             pnlDatos.find("#Departamento")[0].selectize.focus();
             PrecioVentaParaMaquilas.clear().draw();

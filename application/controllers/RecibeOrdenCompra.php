@@ -374,30 +374,30 @@ class RecibeOrdenCompra extends CI_Controller {
                 ));
                 $Subtotal += $F->Subtotal;
             }
-            $pdf->SetY($pdf->GetY() + 5);
-            $pdf->SetFont('Calibri', 'B', 9);
-            $pdf->SetX(125);
-            $pdf->Cell(15, 4, utf8_decode("Subtotal"), 0/* BORDE */, 0, 'L');
-            $pdf->SetX(140);
-            $pdf->SetFont('Calibri', '', 9);
-            $pdf->Cell(20, 4, '$' . number_format($Subtotal, 2, ".", ","), 0/* BORDE */, 1, 'L');
+            $pdf->SetY($pdf->GetY() + 2);
+            $pdf->SetFont('Calibri', 'B', 8);
+            $pdf->SetX(111.5);
+            $pdf->Cell(15, 4, utf8_decode("Subtotal"), 1/* BORDE */, 0, 'R');
+            $pdf->SetX(126.5);
+            $pdf->SetFont('Calibri', '', 8);
+            $pdf->Cell(20, 4, '$' . number_format($Subtotal, 2, ".", ","), 1/* BORDE */, 1, 'R');
 
 
 
             if ($Compra[0]->Tp === '1') {
-                $pdf->SetFont('Calibri', 'B', 9);
-                $pdf->SetX(125);
-                $pdf->Cell(15, 4, utf8_decode("I.V.A. "), 0/* BORDE */, 0, 'L');
-                $pdf->SetX(140);
-                $pdf->SetFont('Calibri', '', 9);
-                $pdf->Cell(20, 4, '$' . number_format($Subtotal * 0.16, 2, ".", ","), 0/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->SetX(111.5);
+                $pdf->Cell(15, 4, utf8_decode("I.V.A. "), 1/* BORDE */, 0, 'R');
+                $pdf->SetX(126.5);
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(20, 4, '$' . number_format($Subtotal * 0.16, 2, ".", ","), 1/* BORDE */, 1, 'R');
 
-                $pdf->SetFont('Calibri', 'B', 9);
-                $pdf->SetX(125);
-                $pdf->Cell(15, 4, utf8_decode("Total"), 0/* BORDE */, 0, 'L');
-                $pdf->SetX(140);
-                $pdf->SetFont('Calibri', '', 9);
-                $pdf->Cell(20, 4, '$' . number_format($Subtotal + ($Subtotal * 0.16), 2, ".", ","), 0/* BORDE */, 1, 'L');
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->SetX(111.5);
+                $pdf->Cell(15, 4, utf8_decode("Total"), 1/* BORDE */, 0, 'R');
+                $pdf->SetX(126.5);
+                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(20, 4, '$' . number_format($Subtotal + ($Subtotal * 0.16), 2, ".", ","), 1/* BORDE */, 1, 'R');
             }
             /* FIN RESUMEN */
             $path = 'uploads/Reportes/EntradasAlmacen';

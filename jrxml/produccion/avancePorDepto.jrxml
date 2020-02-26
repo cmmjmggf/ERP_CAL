@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="776" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.265551661468227"/>
-	<property name="ireport.x" value="655"/>
+	<property name="ireport.zoom" value="4.346449261414213"/>
+	<property name="ireport.x" value="1530"/>
 	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -117,6 +118,7 @@ when E.Herramental = '1' then '1 PATRÓN BASE'
 when E.Herramental = '2' then '2 CARTÓN BASE'
 when E.Herramental = '3' then '3 TESEO'
 when E.Herramental = '4' then '4 SUAJE'
+when E.Herramental = '5' then '5 SUA-ORI'
 else 'N/E'
 END AS Herramental,
 
@@ -315,7 +317,7 @@ order by DEPTO_N, PE.control ASC]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="503" y="45" width="45" height="11" forecolor="#000000" uuid="0cb1d7a8-b8ee-4cc7-bf1e-816469ff347f"/>
+				<reportElement style="Column header" x="507" y="45" width="41" height="11" forecolor="#000000" uuid="0cb1d7a8-b8ee-4cc7-bf1e-816469ff347f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -403,16 +405,17 @@ order by DEPTO_N, PE.control ASC]]>
 				<textFieldExpression><![CDATA[$P{ano}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="403" y="45" width="24" height="11" forecolor="#000000" uuid="c25ad366-8e31-41c4-a4f6-f527ee775656"/>
+				<reportElement style="Column header" x="402" y="45" width="25" height="11" forecolor="#000000" uuid="c25ad366-8e31-41c4-a4f6-f527ee775656"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="428" y="45" width="75" height="11" forecolor="#000000" uuid="1c66abbc-43f0-4ac0-b693-49880f4bf3bc"/>
+				<reportElement style="Column header" x="428" y="45" width="79" height="11" forecolor="#000000" uuid="1c66abbc-43f0-4ac0-b693-49880f4bf3bc"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
+					<paragraph leftIndent="1"/>
 				</textElement>
 				<text><![CDATA[Combinación]]></text>
 			</staticText>
@@ -561,7 +564,7 @@ order by DEPTO_N, PE.control ASC]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="403" y="0" width="24" height="9" uuid="700ced94-6cdf-46fc-8dcb-407eed2ce999"/>
+				<reportElement x="402" y="0" width="25" height="9" uuid="700ced94-6cdf-46fc-8dcb-407eed2ce999"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
@@ -575,9 +578,10 @@ order by DEPTO_N, PE.control ASC]]>
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="428" y="0" width="75" height="9" uuid="7cdcb5c2-06d2-4256-8889-e4b8eebe2d68"/>
+				<reportElement x="428" y="0" width="79" height="9" uuid="7cdcb5c2-06d2-4256-8889-e4b8eebe2d68"/>
 				<textElement verticalAlignment="Middle">
-					<font size="7"/>
+					<font size="6" isBold="true" isStrikeThrough="false"/>
+					<paragraph leftIndent="1" tabStopWidth="40"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ColorT}]]></textFieldExpression>
 			</textField>
@@ -589,7 +593,7 @@ order by DEPTO_N, PE.control ASC]]>
 				<textFieldExpression><![CDATA[$F{Herramental}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="503" y="0" width="21" height="9" uuid="06d9fffa-f2b5-40f3-a4e3-23cbfbf4d7f0"/>
+				<reportElement x="507" y="0" width="18" height="9" uuid="06d9fffa-f2b5-40f3-a4e3-23cbfbf4d7f0"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>

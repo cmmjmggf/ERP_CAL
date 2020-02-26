@@ -148,6 +148,7 @@ class Recibeordencompra_model extends CI_Model {
                     ->where("C.Tp", $Tp)
                     ->where("C.Doc", $Factura)
                     ->where("C.Proveedor", $Proveedor)
+                    ->group_by("C.OrdenCompra")
                     ->group_by("C.Articulo");
             $query = $this->db->get();
             /*

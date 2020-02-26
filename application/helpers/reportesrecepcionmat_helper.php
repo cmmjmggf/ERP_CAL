@@ -250,7 +250,7 @@ class PDF extends FPDF {
 
 
         /* ENCABEZADO DETALLE TITULOS */
-        $anchos = array(0/* 0 */, 85/* 1 */, 13/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 18/* 6 */, 23/* 7 */, 9, 9);
+        $anchos = array(0/* 0 */, 80/* 1 */, 18/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 18/* 6 */, 23/* 7 */, 9, 9);
         $aligns = array('R', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C');
 
         $this->SetY(22);
@@ -259,7 +259,7 @@ class PDF extends FPDF {
         $this->SetAligns($aligns);
         $this->Row(array('', utf8_decode('Artículo'), 'Cant.', 'U.M.', 'Precio', 'Subtotal', utf8_decode('Fecha'), 'O. Compra', 'Maq', 'Sem'));
 
-        $anchos = array(10/* 0 */, 75/* 1 */, 13/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 18/* 6 */, 23/* 7 */, 9, 9);
+        $anchos = array(10/* 0 */, 70/* 1 */, 18/* 2 */, 16/* 3 */, 16/* 4 */, 16/* 5 */, 18/* 6 */, 23/* 7 */, 9, 9);
         $aligns = array('R', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C');
         $this->SetAligns($aligns);
         $this->SetWidths($anchos);
