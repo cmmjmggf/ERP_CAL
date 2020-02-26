@@ -1,41 +1,53 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-body ">
+    <div class="card-body " style="padding-top: 5px; padding-right: 5px; padding-left: 5px; font-weight: bold;">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Rastreo de controles en documentos</legend>
+                <h3>Rastreo de controles en documentos</h3>
             </div>
             <div class="col-sm-6 float-right" align="right"></div>
         </div>
         <hr>
         <div class="card-block">
             <div class="row">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                    <label>Control</label>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1">
+                    <label class="font-italic">CONTROL</label>
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
-                    <label>Estilo</label>
-                    <input type="text" id="Estilo" name="Estilo" class="form-control form-control-sm" readonly="">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
+                    <label class="font-italic">ESTILO</label>
+                    <div class="w-100"></div> 
+                    <span class="clave_estilo selectize-input-lg font-italic b-lobo">-</span>
+                    <input type="text" id="Estilo" name="Estilo" class="form-control d-none form-control-sm" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                    <label>Color</label>
-                    <input type="text" id="Color" name="Color" class="form-control form-control-sm" readonly="">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                    <label class="font-italic">COLOR</label>
+                    <div class="w-100"></div> 
+                    <span class="clave_color selectize-input-lg font-italic b-lobo">-</span>
+                    <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                 </div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
-                    <label>Pares</label>
-                    <input type="text" id="Pares" name="Pares" class="form-control form-control-sm" readonly="">
+                    <label class="font-italic">PARES</label>
+                    <div class="w-100"></div> 
+                    <span class="pares_del_control selectize-input-lg font-italic b-lobo">-</span> 
+                    <input type="text" id="Pares" name="Pares" class="form-control form-control-sm d-none" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3">
-                    <label>Cliente</label>
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                    <label class="font-italic">CLIENTE</label>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-12">
+                            <span class="cliente_control selectize-input-lg font-italic b-lobo">-</span> 
+                        </div>
+                        <div class="col-3 d-none">
                             <input type="text" id="xCliente" name="xCliente" class="form-control form-control-sm numbersOnly notdot" readonly="" maxlength="15">
                         </div>
-                        <div class="col-9">
+                        <div class="col-9 d-none">
                             <input type="text" id="Cliente" name="Cliente" class="form-control form-control-sm" readonly="" maxlength="600">
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="w-100 m-3">
+                <hr>
             </div>
             <div class="row mt-2">
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
@@ -102,22 +114,22 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">CONTROL</th>
-                                <th scope="col">Corte</th>
-                                <th scope="col">Rayado</th>
-                                <th scope="col">Foleado</th>
-                                <th scope="col">Rebajado</th>
-                                <th scope="col">Entretelado</th>
-                                <th scope="col">Maq</th>
-                                <th scope="col">Alm-Corte</th>
-                                <th scope="col">Pespunte</th>
-                                <th scope="col">Ensuelado</th>
-                                <th scope="col">Alm-Pespunte</th>
-                                <th scope="col">Tejido</th>
-                                <th scope="col">Alm-Tejido</th>
-                                <th scope="col">Montado</th>
-                                <th scope="col">Adorno</th>
-                                <th scope="col">Alm-Adorno</th>
-                                <th scope="col">Terminado</th>
+                                <th scope="col">CORTE</th>
+                                <th scope="col">RAYADO</th>
+                                <th scope="col">FOLEADO</th>
+                                <th scope="col">REBAJADO</th>
+                                <th scope="col">ENTRETELADO</th>
+                                <th scope="col">MAQUILA</th>
+                                <th scope="col">ALM-CORTE</th>
+                                <th scope="col">PESPUNTE</th>
+                                <th scope="col">ENSUELADO</th>
+                                <th scope="col">ALM-PESPUNTE</th>
+                                <th scope="col">TEJIDO</th>
+                                <th scope="col">ALM-TEJIDO</th>
+                                <th scope="col">MONTADO</th>
+                                <th scope="col">ADORNO</th>
+                                <th scope="col">ALM-ADORNO</th>
+                                <th scope="col">TERMINADO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -150,8 +162,14 @@
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
                     <div class="row">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <label>Estatus en producción</label>
-                            <input type="text" id="EstatusProduccion" name="EstatusProduccion" class="form-control rojo text-max" readonly="" >
+                            <h6 class="font-weight-bold font-italic">ESTATUS EN PRODUCCIÓN</h6> 
+                        </div>
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 my-2 text-center">  
+                            <span class="font-weight-bold font-italic estatus_de_avance_pfd" 
+                                  style="background-color: #f44336;border-radius: 3px;
+                                  font-weight: 600;    padding:  5px; color:#fff !important; 
+        font-size: 36px;  color: #ffffff !important;  text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;padding-left:  10px;padding-right: 10px; ">-</span>
+                            <input type="text" id="EstatusProduccion" name="EstatusProduccion" class="form-control rojo d-none text-max" readonly="" >
                         </div>
                         <div class="w-100"></div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
@@ -181,6 +199,7 @@
             xCliente = pnlTablero.find("#xCliente"),
             Cliente = pnlTablero.find("#Cliente"),
             EstatusProduccion = pnlTablero.find("#EstatusProduccion"),
+            estatus_de_avance_pfd = pnlTablero.find(".estatus_de_avance_pfd"),
             xEmpleado = pnlTablero.find("#xEmpleado"),
             Empleado = pnlTablero.find("#Empleado"),
             Pares = pnlTablero.find("#Pares"),
@@ -192,16 +211,24 @@
             RastreoDeControlesEnNomina, tblRastreoDeControlesEnNomina = pnlTablero.find("#tblRastreoDeControlesEnNomina");
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+        pnlTablero.find("input").addClass("font-weight-bold");
         Control.focus();
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
                 getInfoXControl(Control.val());
-            } else {
+            }
+            if (e.keyCode === 8 && Control.val() === '' || e.keyCode === 13 && Control.val() === '') {
                 FechasDelPedido.ajax.reload();
                 FechasDeFacturacion.ajax.reload();
                 FechasDevolucion.ajax.reload();
                 RastreoDeControlesEnNomina.ajax.reload();
                 FechasDeAvance.ajax.reload();
+
+                estatus_de_avance_pfd.text('-');
+                pnlTablero.find(".clave_estilo").text('-');
+                pnlTablero.find(".clave_color").text('-');
+                pnlTablero.find(".pares_del_control").text('-');
+                pnlTablero.find(".cliente_control").text('-');
             }
         });
 
@@ -371,7 +398,7 @@
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "150px",
+            "scrollY": "75px",
             "scrollX": true
         });
         RastreoDeControlesEnNomina = tblRastreoDeControlesEnNomina.DataTable({
@@ -436,11 +463,16 @@
                 if (x.length > 0) {
                     var xx = x[0];
                     Estilo.val(xx.Estilo);
+                    pnlTablero.find(".clave_estilo").text(xx.Estilo);
                     Color.val(xx.Color + ' ' + xx.ColorT);
+                    pnlTablero.find(".clave_color").text(xx.Color + ' ' + xx.ColorT);
                     Pares.val(xx.Pares);
+                    pnlTablero.find(".pares_del_control").text(xx.Pares);
+                    pnlTablero.find(".cliente_control").text(xx.Cliente + ' ' + xx.ClienteT);
                     xCliente.val(xx.Cliente);
                     Cliente.val(xx.ClienteT);
                     EstatusProduccion.val(xx.EstatusProduccion);
+                    estatus_de_avance_pfd.text(xx.EstatusProduccion);
                     Control.focus().select();
                     FechasDelPedido.ajax.reload();
                     FechasDeFacturacion.ajax.reload();
@@ -468,5 +500,16 @@
     .rojo {
         background-color: #FFBEAC !important;
 
+    }
+    .b-lobo{
+        font-size: 26px;  color: #ffffff !important; 
+        font-weight: bold; text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;
+        background-color: #3F51B5; 
+        padding-top: 5px; padding-right: 10px;
+        padding-bottom: 5px; padding-left: 10px;
+        border-radius: 10px; margin-top: 5px;
+    }
+    table tbody td {
+        font-size: 18px !important;
     }
 </style>

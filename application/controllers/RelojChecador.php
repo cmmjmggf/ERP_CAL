@@ -46,14 +46,18 @@ class RelojChecador extends CI_Controller {
                 $ANIO = Date('Y');
                 $MES = intval(Date('m'));
                 $DIA = intval(Date('d'));
-                $ultimo_check = $this->db->query("SELECT * FROM relojchecador as R WHERE YEAR(R.fecalta) = {$ANIO} AND MONTH(R.fecalta) = {$MES} AND DAY(R.fecalta) = {$DIA} AND numemp = {$x['Numero']} order by ID DESC LIMIT 1")->result();
-                $tiempo_check = Date('Y-m-d') . " {$ultimo_check[0]->fecalta}";
-                $TIEMPO_EN_SEGUNDOS = $this->db->query("SELECT TIMESTAMPDIFF(second,'{$tiempo_check}',now())/60 AS DIFERENCIA_TIEMPO_EN_SEGUNDOS, 
+
+                $ultimo_check_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM relojchecador as R WHERE YEAR(R.fecalta) = {$ANIO} AND MONTH(R.fecalta) = {$MES} AND DAY(R.fecalta) = {$DIA} AND numemp = {$x['Numero']} order by ID DESC LIMIT 1")->result();
+                if (intval($ultimo_check_existe[0]->EXISTE) > 0) {
+                    $ultimo_check = $this->db->query("SELECT * FROM relojchecador as R WHERE YEAR(R.fecalta) = {$ANIO} AND MONTH(R.fecalta) = {$MES} AND DAY(R.fecalta) = {$DIA} AND numemp = {$x['Numero']} order by ID DESC LIMIT 1")->result();
+                    $tiempo_check = Date('Y-m-d') . " {$ultimo_check[0]->fecalta}";
+                    $TIEMPO_EN_SEGUNDOS = $this->db->query("SELECT TIMESTAMPDIFF(second,'{$tiempo_check}',now())/60 AS DIFERENCIA_TIEMPO_EN_SEGUNDOS, 
 TIMESTAMPDIFF(minute,'{$tiempo_check}',now())  AS DIFERENCIA_TIEMPO_EN_MINUTOS, 
 TIMESTAMPDIFF(HOUR,'{$tiempo_check}',now())  AS DIFERENCIA_TIEMPO_EN_HORAS")->result();
-                if (intval($TIEMPO_EN_SEGUNDOS[0]->DIFERENCIA_TIEMPO_EN_HORAS) <= 1) {
-                    print json_encode($info_empleado);
-                    exit(0);
+                    if (intval($TIEMPO_EN_SEGUNDOS[0]->DIFERENCIA_TIEMPO_EN_HORAS) <= 1) {
+                        print json_encode($info_empleado);
+                        exit(0);
+                    }
                 }
                 $es = array(
                     'numemp' => $x['Numero'],
