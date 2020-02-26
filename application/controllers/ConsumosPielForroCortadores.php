@@ -84,7 +84,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $FECHAFINAL = $this->input->post('FECHA_FINAL');
 
             $pdf->AddPage();
-            $pdf->SetAutoPageBreak(true, 6);
+            $pdf->SetAutoPageBreak(true, 5);
 
             $anchos = array(35, 40, 8, 10, 10, 35, 40, 8, 10, 10);
             $aligns = array('L', 'L', 'L', 'L', 'L');
@@ -151,27 +151,27 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
             $pdf->SetFont('Calibri', 'B', 8);
             $pdf->SetY(18);
-            $pdf->SetX(120);
+            $pdf->SetX(110);
             $pdf->Cell(25, $alto_celda, utf8_decode("Cons ord.prod"), 1/* BORDE */, 0/* SALTO */, 'C');
-            $pdf->SetX(145);
+            $pdf->SetX(135);
             $pdf->Cell(60, $alto_celda, utf8_decode("Consumo"), 1/* BORDE */, 0/* SALTO */, 'C');
-            $pdf->SetX(205);
+            $pdf->SetX(195);
             $pdf->Cell(22, $alto_celda, utf8_decode("Consumo real"), 1/* BORDE */, 0/* SALTO */, 'C');
-            $pdf->SetX(227);
+            $pdf->SetX(217);
             $pdf->Cell(42, $alto_celda, utf8_decode("Pesos $"), 1/* BORDE */, 1/* SALTO */, 'C');
             $bordes = 1;
             $pdf->SetFont('Calibri', 'B', 8);
             $pdf->SetY($pdf->GetY());
-            $base = 10;
+            $base = 5;
             $pdf->SetX($base);
             $pdf->Cell(15, $alto_celda, utf8_decode("Control"), $bordes/* BORDE */, 0/* SALTO */, 'C');
             $base += 15;
             $pdf->SetX($base);
-            $pdf->Cell(15, $alto_celda, utf8_decode("Estilo"), $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $base += 15;
+            $pdf->Cell(12, $alto_celda, utf8_decode("Estilo"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+            $base += 12;
             $pdf->SetX($base);
-            $pdf->Cell(10, $alto_celda, utf8_decode("Color"), $bordes/* BORDE */, 0/* SALTO */, 'C');
-            $base += 10;
+            $pdf->Cell(8, $alto_celda, utf8_decode("Color"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+            $base += 8;
             $pdf->SetX($base);
             $pdf->Cell(50, $alto_celda, utf8_decode("Articulo"), $bordes/* BORDE */, 0/* SALTO */, 'C');
             $base += 50;
@@ -212,7 +212,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pdf->Cell(15, $alto_celda, utf8_decode("Real"), $bordes/* BORDE */, 0/* SALTO */, 'C');
             $base += 15;
             $pdf->SetX($base);
-            $pdf->Cell(15, $alto_celda, utf8_decode("Difere"), $bordes/* BORDE */, 1/* SALTO */, 'C');
+            $pdf->Cell(15, $alto_celda, utf8_decode("Difere"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+            $base += 15;
+            $pdf->SetX($base);
+            $pdf->Cell(15, $alto_celda, utf8_decode("*PIOCHAS*"), $bordes/* BORDE */, 1/* SALTO */, 'C');
 
             $TOTAL_X_ESTILO = 0;
             $TOTAL_X_CONTROL = 0;
@@ -225,6 +228,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $TOTAL_X_SISTEMA_PESOS = 0;
             $TOTAL_X_REAL_PESOS = 0;
             $TOTAL_X_DIFERENCIA_PESOS = 0;
+            $TOTAL_X_PIOCHAS_PESOS = 0;
 
             $TOTAL_X_ESTILO_CORTADOR = 0;
             $TOTAL_X_CONTROL_CORTADOR = 0;
@@ -237,17 +241,18 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $TOTAL_X_SISTEMA_PESOS_CORTADOR = 0;
             $TOTAL_X_REAL_PESOS_CORTADOR = 0;
             $TOTAL_X_DIFERENCIA_PESOS_CORTADOR = 0;
+            $TOTAL_X_PIOCHAS_PESOS_CORTADOR = 0;
             $Y = 0;
             foreach ($CORTADORES as $k => $v) {
                 $bordes = 1;
                 $pdf->SetFont('Calibri', 'B', 8);
-                $base = 10;
+                $base = 5;
                 $pdf->SetFillColor(244, 244, 244);
-                $pdf->Rect(10.2, $pdf->GetY() + .2, 258.7, 3.5, 'F');
+                $pdf->Rect(5.2, $pdf->GetY() + .2, 268.7, 3.5, 'F');
                 $pdf->SetX($base);
                 $pdf->Cell(15, $alto_celda - 1, utf8_decode("Cortador"), $bordes/* BORDE */, 0/* SALTO */, 'C');
-                $pdf->SetX(25);
-                $pdf->Cell(244, $alto_celda - 1, utf8_decode($v->NUMERO . " " . $v->CORTADOR), $bordes/* BORDE */, 1/* SALTO */, 'L');
+                $pdf->SetX(20);
+                $pdf->Cell(254, $alto_celda - 1, utf8_decode($v->NUMERO . " " . $v->CORTADOR), $bordes/* BORDE */, 1/* SALTO */, 'L');
                 $bordes = 0;
                 $pdf->SetFont('Calibri', 'B', 8);
                 $ESTILOS = $this->cpfxc->getEstilosPorCortador($ARTICULO, str_pad($MAQUILA, 2, "0", STR_PAD_LEFT), $SEMANA_INICIAL, $SEMANA_FINAL, $ANIO, $v->NUMERO, $TIPO);
@@ -257,16 +262,16 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     foreach ($RESUMEN as $kkk => $vvv) {
                         $pdf->SetFont('Calibri', '', 8);
                         $alto_celda = 3.5;
-                        $base = 10;
+                        $base = 5;
                         $pdf->SetX($base);
                         $pdf->Cell(15, $alto_celda, utf8_decode($vvv->Control), $bordes/* BORDE */, 0/* SALTO */, 'C');
                         $base += 15;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, utf8_decode($vvv->Estilo), $bordes/* BORDE */, 0/* SALTO */, 'C');
-                        $base += 15;
+                        $pdf->Cell(12, $alto_celda, utf8_decode($vvv->Estilo), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                        $base += 12;
                         $pdf->SetX($base);
-                        $pdf->Cell(10, $alto_celda, utf8_decode($vvv->Color), $bordes/* BORDE */, 0/* SALTO */, 'C');
-                        $base += 10;
+                        $pdf->Cell(8, $alto_celda, utf8_decode($vvv->Color), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                        $base += 8;
                         $pdf->SetX($base);
                         $pdf->Cell(50, $alto_celda, utf8_decode($vvv->Articulo . " - " . $vvv->ArticuloT), $bordes/* BORDE */, 0/* SALTO */, 'L');
                         $base += 50;
@@ -339,10 +344,16 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
                         $base += 15;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, number_format($vvv->Diferencia * $vvv->Precio, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
+                        $pdf->Cell(15, $alto_celda, number_format($vvv->Diferencia * $vvv->Precio, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_DIFERENCIA_PESOS += $vvv->Diferencia * $vvv->Precio;
                         $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $vvv->Diferencia * $vvv->Precio;
-                        $pdf->Line(10, $pdf->GetY(), 269, $pdf->GetY());
+
+                        $base += 15;
+                        $pdf->SetX($base);
+                        $pdf->Cell(15, $alto_celda, ($vvv->Piocha > 0) ? number_format($vvv->Piocha, 2, '.', ',') : '', $bordes/* BORDE */, 1/* SALTO */, 'R');
+                        $TOTAL_X_PIOCHAS_PESOS += $vvv->Piocha;
+                        $TOTAL_X_PIOCHAS_PESOS_CORTADOR += $vvv->Piocha;
+                        $pdf->Line(5, $pdf->GetY(), 274, $pdf->GetY());
                     }
 //                    $cols = array(25/* 1 */, 40/* 2 */, 50/* 3 */, 100/* 4 */, 110/* 5 */,
 //                        120/* 6 */, 130/* 7 */, 145/* 8 */, 160/* 9 */, 175/* 10 */,
@@ -350,14 +361,14 @@ class ConsumosPielForroCortadores extends CI_Controller {
 //                    for ($index = 0; $index < count($cols); $index++) {
 //                        $pdf->Line($cols[$index], $Y, $cols[$index], $pdf->GetY()); /* PRIMER COLUMNA */
 //                    }
-                    $base = 100;
+                    $base = 85;
 //                    $pdf->SetFillColor(255, 255, 255);
                     $pdf->SetFont('Calibri', 'B', 8);
                     $pdf->SetFillColor(244, 244, 244);
-                    $pdf->Rect(10.2, $pdf->GetY() + .2, 258.7, 3.5, 'F');
-                    $pdf->SetX(100);
-                    $pdf->Cell(15, $alto_celda, utf8_decode("Total por estilo"), 0/* BORDE */, 0/* SALTO */, 'C');
-                    $base += 20;
+                    $pdf->Rect(5.2, $pdf->GetY() + .2, 268.7, 3.5, 'F');
+                    $pdf->SetX(85);
+                    $pdf->Cell(25, $alto_celda, utf8_decode("Total por estilo"), 0/* BORDE */, 0/* SALTO */, 'L');
+                    $base += 25;
                     $pdf->SetX($base);
                     $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                     $base += 10;
@@ -389,7 +400,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_REAL_PESOS, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                     $base += 15;
                     $pdf->SetX($base);
-                    $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DIFERENCIA_PESOS, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
+                    $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DIFERENCIA_PESOS, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                    $base += 15;
+                    $pdf->SetX($base);
+                    $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_PIOCHAS_PESOS, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
 
                     $TOTAL_X_ESTILO = 0;
                     $TOTAL_X_CONTROL = 0;
@@ -402,13 +416,14 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $TOTAL_X_SISTEMA_PESOS = 0;
                     $TOTAL_X_REAL_PESOS = 0;
                     $TOTAL_X_DIFERENCIA_PESOS = 0;
+                    $TOTAL_X_PIOCHAS_PESOS = 0;
                 }
-                $base = 100;
+                $base = 85;
                 $pdf->SetFillColor(244, 244, 244);
-                $pdf->Rect(10.2, $pdf->GetY() + .2, 258.7, 3.5, 'F');
-                $pdf->SetX(100);
-                $pdf->Cell(15, $alto_celda, utf8_decode("Total por cortador"), 0/* BORDE */, 0/* SALTO */, 'C');
-                $base += 20;
+                $pdf->Rect(5.2, $pdf->GetY() + .2, 268.7, 3.5, 'F');
+                $pdf->SetX(85);
+                $pdf->Cell(25, $alto_celda, utf8_decode("Total por cortador"), 0/* BORDE */, 0/* SALTO */, 'L');
+                $base += 25;
                 $pdf->SetX($base);
                 $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 10;
@@ -440,7 +455,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_REAL_PESOS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 15;
                 $pdf->SetX($base);
-                $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DIFERENCIA_PESOS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
+                $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DIFERENCIA_PESOS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $base += 15;
+                $pdf->SetX($base);
+                $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_PIOCHAS_PESOS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 1/* SALTO */, 'R');
                 $TOTAL_X_ESTILO_CORTADOR = 0;
                 $TOTAL_X_CONTROL_CORTADOR = 0;
                 $TOTAL_X_ENTREGADO_CORTADOR = 0;
@@ -452,6 +470,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $TOTAL_X_SISTEMA_PESOS_CORTADOR = 0;
                 $TOTAL_X_REAL_PESOS_CORTADOR = 0;
                 $TOTAL_X_DIFERENCIA_PESOS_CORTADOR = 0;
+                $TOTAL_X_PIOCHAS_PESOS_CORTADOR = 0;
                 if (isset($CORTADORES[$k + 1])) {
                     $pdf->AddPage();
                     $pdf->SetAutoPageBreak(true, 6);
@@ -495,27 +514,27 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
                     $pdf->SetFont('Calibri', 'B', 8);
                     $pdf->SetY(18);
-                    $pdf->SetX(120);
+                    $pdf->SetX(110);
                     $pdf->Cell(25, $alto_celda, utf8_decode("Cons ord.prod"), 1/* BORDE */, 0/* SALTO */, 'C');
-                    $pdf->SetX(145);
+                    $pdf->SetX(135);
                     $pdf->Cell(60, $alto_celda, utf8_decode("Consumo"), 1/* BORDE */, 0/* SALTO */, 'C');
-                    $pdf->SetX(205);
+                    $pdf->SetX(195);
                     $pdf->Cell(22, $alto_celda, utf8_decode("Consumo real"), 1/* BORDE */, 0/* SALTO */, 'C');
-                    $pdf->SetX(227);
+                    $pdf->SetX(217);
                     $pdf->Cell(42, $alto_celda, utf8_decode("Pesos $"), 1/* BORDE */, 1/* SALTO */, 'C');
                     $bordes = 1;
                     $pdf->SetFont('Calibri', 'B', 8);
                     $pdf->SetY($pdf->GetY());
-                    $base = 10;
+                    $base = 5;
                     $pdf->SetX($base);
                     $pdf->Cell(15, $alto_celda, utf8_decode("Control"), $bordes/* BORDE */, 0/* SALTO */, 'C');
                     $base += 15;
                     $pdf->SetX($base);
-                    $pdf->Cell(15, $alto_celda, utf8_decode("Estilo"), $bordes/* BORDE */, 0/* SALTO */, 'C');
-                    $base += 15;
+                    $pdf->Cell(12, $alto_celda, utf8_decode("Estilo"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                    $base += 12;
                     $pdf->SetX($base);
-                    $pdf->Cell(10, $alto_celda, utf8_decode("Color"), $bordes/* BORDE */, 0/* SALTO */, 'C');
-                    $base += 10;
+                    $pdf->Cell(8, $alto_celda, utf8_decode("Color"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                    $base += 8;
                     $pdf->SetX($base);
                     $pdf->Cell(50, $alto_celda, utf8_decode("Articulo"), $bordes/* BORDE */, 0/* SALTO */, 'C');
                     $base += 50;
@@ -556,7 +575,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $pdf->Cell(15, $alto_celda, utf8_decode("Real"), $bordes/* BORDE */, 0/* SALTO */, 'C');
                     $base += 15;
                     $pdf->SetX($base);
-                    $pdf->Cell(15, $alto_celda, utf8_decode("Difere"), $bordes/* BORDE */, 1/* SALTO */, 'C');
+                    $pdf->Cell(15, $alto_celda, utf8_decode("Difere"), $bordes/* BORDE */, 0/* SALTO */, 'C');
+                    $base += 15;
+                    $pdf->SetX($base);
+                    $pdf->Cell(15, $alto_celda, utf8_decode("*PIOCHAS*"), $bordes/* BORDE */, 1/* SALTO */, 'C');
                 }
             }
             /* FIN RESUMEN */
@@ -956,4 +978,5 @@ class ConsumosPielForroCortadores extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
 }

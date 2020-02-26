@@ -64,6 +64,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">IMPRIMIR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">A EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -155,7 +156,40 @@
                 onEnable(mdlMaterialAnoSemMaqDesgloseControlEstilo.find('#btnImprimir'));
             });
         });
+        /*EXCEL*/
+        mdlMaterialAnoSemMaqDesgloseControlEstilo.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlMaterialAnoSemMaqDesgloseControlEstilo.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlMaterialAnoSemMaqDesgloseControlEstilo.find("#frmReporte")[0]);
 
+            $.ajax({
+                url: base_url + 'index.php/ReporteMaterialProduccionEstilo/onReporteMaterialSemanaDesgloseProdEstiloExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlMaterialAnoSemMaqDesgloseControlEstilo.find('#Ano').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            }).always(function () {
+                onEnable(mdlMaterialAnoSemMaqDesgloseControlEstilo.find('#btnImprimirExcel'));
+            });
+        });
     });
 
     function onComprobarSemanasProduccion(v, ano) {
