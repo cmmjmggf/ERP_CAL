@@ -940,17 +940,18 @@ class GeneraNominaDeSemana extends CI_Controller {
                             ->where('E.AltaBaja', 1)
                             ->where_not_in('E.DepartamentoFisico', array(470))
                             ->order_by('E.DepartamentoFisico', 'ASC')
-                            ->order_by('E.Numero', 'ASC')->order_by('E.FijoDestajoAmbos', 'ASC')
+                            ->order_by('E.Numero', 'ASC')
+                            ->order_by('E.FijoDestajoAmbos', 'ASC')
                             ->get()->result();
 
 //            $empleados = $this->db->select('E.*')->from('empleados AS E')
 //                            ->where('E.AltaBaja', 1)
-//                            ->where('E.Numero', 2012, 2803, 3062, 49, 11, 23, 58, 1548, 30, 31, 83, 5)
+//                            ->where_in('E.Numero', array(3057, 3004, 3019))
 //                            ->where_not_in('E.DepartamentoFisico', array(470))
 //                            ->order_by('E.DepartamentoFisico', 'ASC')
 //                            ->order_by('E.Numero', 'ASC')
 //                            ->order_by('E.FijoDestajoAmbos', 'ASC')
-//                            ->get()->result();
+//                            ->get()->result(); 
             /* 3 ITERAR LOS EMPLEADOS A VALIDAR */
             foreach ($empleados as $k => $v) {
                 $sueldin = $v->Sueldo; /* SUELDO DIARIO */
@@ -1009,7 +1010,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $dias_trabajados_pagados = 24;
                     }
                 } else if ($dias_trabajados >= 30 && $dias_trabajados < 365) {
-                    $anios = intval(substr($dias_trabajados / $treinta_dias, 0, 1));
+                    $anios = intval($dias_trabajados / $treinta_dias);
+                    print "\n {$v->Numero} MESES: $anios \n";
                     if ($anios === 1) {
                         /* 0.5 DIAS */
                         $total_vacaciones = $sueldin * 0.5;
@@ -1134,7 +1136,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     );
 
                     $this->db->insert('prenomina', $vp);
-                    print $this->db->last_query() . "\n";
+//                    print $this->db->last_query() . "\n";
                     /* GRABA PRE-NOMINA-L */
                     $pnl = array(
                         "numsem" => $SEMANA_VACACIONES,
@@ -1163,7 +1165,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     );
 
                     $this->db->insert('prenominal', $pnl);
-                    print $this->db->last_query() . "\n";
+//                    print $this->db->last_query() . "\n";
 
                     /* GRABA PRIMA-VACACIONAL */
                     $vp["numcon"] = 26;
