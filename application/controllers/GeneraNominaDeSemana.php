@@ -58,11 +58,11 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
             $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
             $this->onNominaPreliminaresPespunte($x['ANIO'], $x['SEMANA']);
-//            $this->onNominaMontadoABAdornoAB($x['ANIO'], $x['SEMANA']);
-//            exit(0);
-//
-//            ->where_in('E.Numero', array(2805/* fijo */, 286/* destajo */, 1114/* celula */, 2227/* AMBOS */))
-            $empleados = $this->db->query('SELECT E.* FROM empleados AS E '
+            
+//            $empleados = $this->db->query('SELECT E.* FROM empleados AS E '
+//                            . 'WHERE E.AltaBaja IN(1) '
+//                            . 'AND E.Incapacitado = 0')->result(); 
+            $empleados = $this->db->query('SELECT E.Numero, E.FijoDestajoAmbos, E.Sueldo, E.DepartamentoFisico, E.CelulaPorcentaje, E.Celula, E.Ahorro, E.Infonavit, E.Comida, E.Funeral, E.IMSS, E.Fierabono, E.FieraBonoPagos, E.Fonacot, E.ZapatosTDA, E.AbonoZap, E.SaldoPres, E.ISR FROM empleados AS E '
                             . 'WHERE E.AltaBaja IN(1) '
                             . 'AND E.Incapacitado = 0')->result();
 
@@ -477,7 +477,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                                 ->where('status', 1)->update('prenominal');
                         break;
                 }
-            }
+            } 
+            $this->onRefrescarSaldoDePrestamos();
             /* ELMINA AL TERMINAR asdasd */
 
 //            $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
@@ -787,8 +788,9 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}", false)->result();
                 $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
                 if (!empty($ACUMULADO_DE_PRESTAMOS) && !empty($ACUMULADO_DE_PRESTAMOS)) {
-                    if ($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO)
+                    if ($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) {
                         $SALDO_FINAL_PRESTAMO = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
+                    }
                 }
 //                print "\n {$v->Numero} {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO}, {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}, $SALDO_FINAL_PRESTAMO \n";
                 if (floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) >= floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO)) {
@@ -810,6 +812,23 @@ class GeneraNominaDeSemana extends CI_Controller {
                             ->where('año', $ANIO)->where('numemp', $v->Numero)
                             ->update('prenominal');
                 }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRefrescarSaldoDePrestamos() {
+        try {
+            $ANIO = Date('Y');
+            $empleados = $this->db->query("SELECT E.Numero FROM empleados AS E WHERE E.AltaBaja = 1")->result();
+            foreach ($empleados as $k => $v) {
+                $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}", false)->result();
+                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
+                $SALDO_PRESTAMOS = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
+                $this->db->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
+                        ->where("Numero", $v->Numero)
+                        ->update("empleados");
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

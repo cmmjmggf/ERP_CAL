@@ -1,8 +1,8 @@
-<div class="modal " id="mdlCajaAhorroPrestamos"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+<div class="modal" id="mdlCajaAhorroPrestamos"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Imprime Caja de Ahorro y Préstamos</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Imprime Caja de Ahorro y Préstamos</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

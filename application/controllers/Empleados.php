@@ -11,6 +11,7 @@ class Empleados extends CI_Controller {
     public function index() {
         $is_valid = false;
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->onRefrescarSaldoDePrestamos();
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
@@ -699,4 +700,20 @@ class Empleados extends CI_Controller {
         }
     }
 
+    public function onRefrescarSaldoDePrestamos() {
+        try {
+            $ANIO = Date('Y');
+            $empleados = $this->db->query("SELECT E.Numero FROM empleados AS E WHERE E.AltaBaja = 1")->result();
+            foreach ($empleados as $k => $v) {
+                $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}", false)->result();
+                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
+                $SALDO_PRESTAMOS = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
+                $this->db->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
+                        ->where("Numero", $v->Numero)
+                        ->update("empleados");
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

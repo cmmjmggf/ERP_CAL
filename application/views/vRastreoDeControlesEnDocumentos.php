@@ -1,37 +1,36 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body " style="padding-top: 5px; padding-right: 5px; padding-left: 5px; font-weight: bold;">
         <div class="row">
-            <div class="col-sm-6 float-left">
+            <div class="col-sm-12 float-left">
                 <h3>Rastreo de controles en documentos</h3>
-            </div>
-            <div class="col-sm-6 float-right" align="right"></div>
+            </div> 
         </div>
         <hr>
         <div class="card-block">
             <div class="row">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                     <label class="font-italic">CONTROL</label>
-                    <input type="text" id="Control" name="Control" class="form-control form-control-sm">
+                    <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly numeric " maxlength="9">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1">
                     <label class="font-italic">ESTILO</label>
                     <div class="w-100"></div> 
-                    <span class="clave_estilo selectize-input-lg font-italic b-lobo">-</span>
+                    <span class="clave_estilo selectize-input-lg font-italic b-lobo text-nowrap">-</span>
                     <input type="text" id="Estilo" name="Estilo" class="form-control d-none form-control-sm" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-9 col-xl-4">
                     <label class="font-italic">COLOR</label>
                     <div class="w-100"></div> 
-                    <span class="clave_color selectize-input-lg font-italic b-lobo">-</span>
+                    <span class="clave_color selectize-input-lg font-italic b-lobo text-nowrap">-</span>
                     <input type="text" id="Color" name="Color" class="form-control form-control-sm d-none" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-1 col-xl-1">
                     <label class="font-italic">PARES</label>
                     <div class="w-100"></div> 
                     <span class="pares_del_control selectize-input-lg font-italic b-lobo">-</span> 
                     <input type="text" id="Pares" name="Pares" class="form-control form-control-sm d-none" readonly="">
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-11 col-xl-5">
                     <label class="font-italic">CLIENTE</label>
                     <div class="row">
                         <div class="col-12">
@@ -50,7 +49,7 @@
                 <hr>
             </div>
             <div class="row mt-2">
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <div class="col text-center">
                         <h6 class="font-weight-bold">FECHAS DEL PEDIDO</h6>
                     </div>
@@ -68,7 +67,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <div class="col text-center">
                         <h6 class="font-weight-bold">FECHAS DE FACTURACIÓN</h6>
                     </div>
@@ -86,7 +85,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <div class="col text-center">
                         <h6 class="font-weight-bold">FECHAS DEVOLUCIÓN</h6>
                     </div>
@@ -137,7 +136,7 @@
                     </table>
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div class="col text-center">
                         <h6 class="font-weight-bold">RASTREO DE CONTROLES EN NOMINA</h6>
                     </div>
@@ -159,7 +158,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
-                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                     <div class="row">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <h6 class="font-weight-bold font-italic">ESTATUS EN PRODUCCIÓN</h6> 
@@ -168,7 +167,7 @@
                             <span class="font-weight-bold font-italic estatus_de_avance_pfd" 
                                   style="background-color: #f44336;border-radius: 3px;
                                   font-weight: 600;    padding:  5px; color:#fff !important; 
-        font-size: 36px;  color: #ffffff !important;  text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;padding-left:  10px;padding-right: 10px; ">-</span>
+                                  font-size: 36px;  color: #ffffff !important;  text-shadow: 3px 3px 3px #000000, 0 0 5px #000000;padding-left:  10px;padding-right: 10px; ">-</span>
                             <input type="text" id="EstatusProduccion" name="EstatusProduccion" class="form-control rojo d-none text-max" readonly="" >
                         </div>
                         <div class="w-100"></div>
@@ -456,7 +455,7 @@
         });
     });
 
-
+    var intento = 1;
     function getInfoXControl(e) {
         if (e) {
             $.getJSON("<?php print base_url('RastreoDeControlesEnDocumentos/getInfoXControl') ?>", {CONTROL: e}).done(function (x, y, z) {
@@ -479,6 +478,18 @@
                     FechasDevolucion.ajax.reload();
                     RastreoDeControlesEnNomina.ajax.reload();
                     FechasDeAvance.ajax.reload();
+                } else {
+                    if (intento < 10) {
+                        onCampoInvalido(pnlTablero, "ESTE CONTROL NO EXISTE(" + intento + " de 10)", function () {
+                            Control.focus().select();
+                            intento += 1;
+                        });
+                    } else {
+                        intento = 1;
+                        onCampoInvalido(pnlTablero, "ESTE CONTROL NO EXISTE(" + intento + " de 10)", function () {
+                            location.reload();
+                        });
+                    }
                 }
             }).fail(function (x, y, z) {
                 getError(x);
