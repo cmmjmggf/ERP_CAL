@@ -19,7 +19,7 @@ ifnull(lpm.PrecioVta,0) * pe.pares as subtotal,
 (select nombre from maquilas where clave = pe.maquila) as nommaqui
 FROM avaprd av
 join pedidox pe on pe.control = av.contped
-join listapreciosmaquilas lpm on lpm.Maq = pe.Maquila and lpm.Estilo = pe.Estilo and lpm.Color = pe.color
+LEFT JOIN listapreciosmaquilas lpm on lpm.Maq = pe.Maquila and lpm.Estilo = pe.Estilo and lpm.Color = pe.color
 where av.almpesp = $P{docto}
 order by av.contped asc]]>
 	</queryString>

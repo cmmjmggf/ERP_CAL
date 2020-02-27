@@ -28,6 +28,17 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
         }
     }
 
+    public function onChecarPrecioXMaquilaXEstiloXColor() {
+        try {
+            /*REVISA SI TIENE PRECIO ASIGNADO EN LA MAQUILA*/
+            $x = $this->input->get();
+            $check_precio = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox pe INNER JOIN listapreciosmaquilas lpm  on lpm.Maq = pe.Maquila and lpm.Estilo = pe.Estilo and lpm.Color = pe.color WHERE  pe.control = {$x['CONTROL']}")->result();
+            print json_encode($check_precio);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onGuardar() {
         try {
             $x = $this->input->post();
@@ -74,12 +85,12 @@ class AvanceDeProduccionAMaquilas extends CI_Controller {
                             ->set('DeptoProduccion', $DEPTO)
                             ->where('Control', $x['CONTROL'])
                             ->where('DeptoProduccion', 140)->update('controles');
-                    
+
                     $this->db->set('stsavan', $STSAVAN)
                             ->set('EstatusProduccion', $DEPTO_TEXT)
                             ->set('DeptoProduccion', $DEPTO)
                             ->where('Control', $x['CONTROL'])
-                            ->where('stsavan', 55)->update('pedidox'); 
+                            ->where('stsavan', 55)->update('pedidox');
                     $date = explode("/", $x["FECHA"]); // 
                     $datetime = $date[2] . '-' . $date[1] . '-' . $date[0] . ' 00:00:00';
                     $this->db->set("status", $STSAVAN)

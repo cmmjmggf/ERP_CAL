@@ -62,7 +62,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 //            $empleados = $this->db->query('SELECT E.* FROM empleados AS E '
 //                            . 'WHERE E.AltaBaja IN(1) '
 //                            . 'AND E.Incapacitado = 0')->result(); 
-            $empleados = $this->db->query('SELECT E.Numero, E.FijoDestajoAmbos, E.Sueldo, E.DepartamentoFisico, E.CelulaPorcentaje, E.Celula, E.Ahorro, E.Infonavit, E.Comida, E.Funeral, E.IMSS, E.Fierabono, E.FieraBonoPagos, E.Fonacot, E.ZapatosTDA, E.AbonoZap, E.SaldoPres, E.ISR FROM empleados AS E '
+            $empleados = $this->db->query('SELECT E.Numero, E.FijoDestajoAmbos, E.Sueldo, E.DepartamentoFisico, E.CelulaPorcentaje, E.Celula, E.Ahorro, E.Infonavit, E.Comida, E.Funeral, E.IMSS, E.Fierabono, E.FieraBonoPagos, E.Fonacot, E.ZapatosTDA, E.AbonoZap, E.SaldoPres, E.ISR, E.PressAcum, E.AbonoPres FROM empleados AS E '
                             . 'WHERE E.AltaBaja IN(1) '
                             . 'AND E.Incapacitado = 0')->result();
 

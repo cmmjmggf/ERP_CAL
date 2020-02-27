@@ -1,6 +1,6 @@
 <div class="modal fade" id="mdlMaquinaria" tabindex="-1" role="dialog" 
      aria-labelledby="mdlMaquinaria" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalCenterTitle">
@@ -167,8 +167,68 @@
 <script>
     var mdlMaquinaria = $("#mdlMaquinaria");
     $(document).ready(function () {
-        mdlMaquinaria.on('shown.bs.modal', function () {
+
+        mdlMaquinaria.on('hidden.bs.modal', function () {
             mdlMaquinaria.find("input").val('');
+            mdlMaquinaria.find("li a").removeClass("active");
+            mdlMaquinaria.find("li a").attr("aria-selected", false);
+            mdlMaquinaria.find("li:eq(0) a").attr("aria-selected", true);
+            mdlMaquinaria.find("li:eq(0) a").addClass("active");
+            mdlMaquinaria.find("#datos_maquina").addClass("show active");
+            mdlMaquinaria.find("#mantenimiento").removeClass("show active");
+        });
+
+        mdlMaquinaria.on('shown.bs.modal', function () {
+            mdlMaquinaria.find("#CodigoMaquina").focus();
+        });
+
+        mdlMaquinaria.find("#datos_maquina-tab").on('shown.bs.tab', function () {
+            mdlMaquinaria.find("#CodigoMaquina").focus();
+        });
+
+        mdlMaquinaria.find("#mantenimiento-tab").on('shown.bs.tab', function () {
+            mdlMaquinaria.find("#UltimoMantenimientoMaquina").focus();
         });
     });
 </script>
+<style>
+
+    #mdlMaquinaria input{
+        border-color: #000 !important;
+    }
+    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+        color: #000;
+        background-color: #fff;
+        border-color: #060606 #161617 #fff;
+    }
+    .nav-tabs {
+        border-bottom: 1px solid #060606;
+    }
+    .nav-tabs .nav-link.active, .nav-tabs .nav-link.active:focus, .nav-tabs .nav-link.active:hover, .nav-tabs .nav-item.open .nav-link, .nav-tabs .nav-item.open .nav-link:focus, .nav-tabs .nav-item.open .nav-link:hover {
+        color: #000;
+        font-weight: bold !important;
+    }
+    .text-infinite {
+        width:100px;
+        height:20px;
+        background:red;
+        animation:myfirst 5s;
+        -moz-animation:myfirst 5s infinite; /* Firefox */
+        -webkit-animation:myfirst 5s infinite; /* Safari and Chrome */
+    }
+
+
+    @-moz-keyframes myfirst /* Firefox */
+    {
+        0%   {background:red;}
+        50%  {background:yellow;}
+        100%   {background:red;}
+    }
+
+    @-webkit-keyframes myfirst /* Firefox */
+    {
+        0%   {background:red;}
+        50%  {background:yellow;}
+        100%   {background:red;}
+    }
+</style>

@@ -1,6 +1,6 @@
 <div class="modal fade" id="mdlRefacciones" tabindex="-1" role="dialog" 
      aria-labelledby="mdlRefacciones" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog  modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalCenterTitle">
@@ -12,7 +12,17 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-
+                    <div class="col-5">
+                        
+                    </div>
+                    <div class="col-7">
+                        <div class="row">
+                            <div class="col-12 font-weight-bold text-center"><h3>Fotos</h3></div>
+                            <div class="col-12">
+                                <img src="<?php print base_url('img/camera.png'); ?>" width="100%">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

@@ -317,6 +317,11 @@ class Avance8 extends CI_Controller {
                                 ->where('F.control', $xXx['CONTROL'])
                                 ->where('F.numfrac', $v->NUMERO_FRACCION)
                                 ->get()->result();
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $v->NUMERO_FRACCION)
+                                ->get()->result(); 
                 $check_fraccion_fxe = $this->db->select('COUNT(*) AS EXISTE', false)
                                 ->from('fraccionesxestilo AS F')
                                 ->where('F.Estilo', $xXx['ESTILO'])
@@ -324,7 +329,7 @@ class Avance8 extends CI_Controller {
                                 ->get()->result();
 //                var_dump($check_fraccion,$check_fraccion_fxe);
 //                print $this->db->last_query();
-                if ($check_fraccion[0]->EXISTE <= 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
+                if ($check_fraccion[0]->EXISTE <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
                     $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT A.Estilo, A.Pares, FXE.CostoMO, (A.Pares * FXE.CostoMO) AS TOTAL FROM pedidox AS A INNER JOIN fraccionesxestilo as FXE ON A.Estilo = FXE.Estilo WHERE  FXE.Fraccion = {$v->NUMERO_FRACCION} AND A.Control = {$xXx['CONTROL']}")->result();
                     $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                     $nueva_fecha = new DateTime();
@@ -582,7 +587,8 @@ class Avance8 extends CI_Controller {
                     }
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
-                    if ($check_fraccion[0]->EXISTE > 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
+                    if ($check_fraccion[0]->EXISTE > 0  && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 
+                            && $check_fraccion_fxe[0]->EXISTE > 0) {
                         if (intval($xXx['DEPARTAMENTO']) === 140) {
                             $REVISAR_AVANCE_POR_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS P "
                                             . "WHERE P.Control = {$xXx['CONTROL']} AND P.Departamento = 140")->result();
@@ -604,7 +610,7 @@ class Avance8 extends CI_Controller {
                             }
 
                             $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
-                                            . "WHERE P.Control = {$xXx['CONTROL']} AND P.stsavan <=55 ")->result();
+                                            . "WHERE P.Control = {$xXx['CONTROL']} AND P.stsavan IN(2,3,33,4,40,42,44,5) AND P.stsavan = 55")->result();
                             if (intval($REVISAR_AVANCE[0]->EXISTE) >= 1 && intval($v->NUMERO_FRACCION) === 397 && intval($xXx['DEPARTAMENTO']) === 140) {
                                 $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
                                         ->set('DeptoProduccion', 130)

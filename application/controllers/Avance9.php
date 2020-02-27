@@ -473,10 +473,16 @@ class Avance9 extends CI_Controller {
                     /* CORTE = > RAYADO */
                     if (intval($check_avance[0]->EXISTE) <= 0) {
                         $id = 0;
-                        if (intval($v->NUMERO_FRACCION) === 100 ||
-                                intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98) {
+                        $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('controlpla AS C')
+                                        ->where('C.Control', $xXx['CONTROL'])
+                                        ->where('C.Fraccion', $v->NUMERO_FRACCION)
+                                        ->get()->result();
+
+                        if (intval($v->NUMERO_FRACCION) === 100 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 ||
+                                intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             $REVISA_AVANCE_RAYADO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = '{$xXx['CONTROL']}' AND Departamento = 20")->result();
-                            if (intval($REVISA_AVANCE_RAYADO[0]->EXISTE) === 0) {
+                            if (intval($REVISA_AVANCE_RAYADO[0]->EXISTE) === 0&& intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                                 $avance = array(
                                     'Control' => $xXx['CONTROL'],
                                     'FechaAProduccion' => Date('d/m/Y'),
@@ -503,7 +509,7 @@ class Avance9 extends CI_Controller {
                                         ->where('F.numfrac', $v->NUMERO_FRACCION)
                                         ->get()->result();
                         $data["fraccion"] = $v->NUMERO_FRACCION;
-                        if (intval($check_fraccion[0]->EXISTE) <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : $v->NUMERO_FRACCION;
 
                             if (intval($v->NUMERO_FRACCION) === 100 && $MAQUILA_MUESTRA !== 98) {
@@ -548,10 +554,15 @@ class Avance9 extends CI_Controller {
                         $FRACCION = 102;
                         $data["fraccion"] = $FRACCION;
                         $data["numfrac"] = $FRACCION;
+                        $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('controlpla AS C')
+                                        ->where('C.Control', $xXx['CONTROL'])
+                                        ->where('C.Fraccion', $FRACCION)
+                                        ->get()->result();
                         /* ACTUALIZA A 40 FOLEADO, stsavan 40 */
                         /* DEBE DE EESTAR EL REGISTRO DE AVANCE EN CORTE Y RAYADO */
                         $revisar_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento IN(10,20) AND A.Control ={$xXx['CONTROL']}")->result();
-                        if (intval($revisar_avance[0]->EXISTE) === 2) {
+                        if (intval($revisar_avance[0]->EXISTE) === 2 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             $this->onAvanzarXControl($xXx['CONTROL'], 'FOLEADO', 40, 4);
                         } else {
                             exit(0);
@@ -572,7 +583,7 @@ class Avance9 extends CI_Controller {
                                         ->where('F.control', $xXx['CONTROL'])
                                         ->where('F.numfrac', $FRACCION)
                                         ->get()->result();
-                        if (intval($check_fraccion[0]->EXISTE) === 0) {
+                        if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             /* 20 RAYADO => 40 FOLEADO */
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
@@ -600,7 +611,13 @@ class Avance9 extends CI_Controller {
                                         ->where('F.control', $xXx['CONTROL'])
                                         ->where('F.numfrac', $FRACCION)
                                         ->get()->result();
-                        if (intval($check_fraccion[0]->EXISTE) <= 0) {
+                        $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('controlpla AS C')
+                                        ->where('C.Control', $xXx['CONTROL'])
+                                        ->where('C.Fraccion', $FRACCION)
+                                        ->get()->result();
+
+                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             $data["fraccion"] = $FRACCION;
                             $data["numfrac"] = $FRACCION;
                             /* FILTRADO POR FRACCION 80 RAYADO */
@@ -626,7 +643,12 @@ class Avance9 extends CI_Controller {
                                         ->where('F.control', $xXx['CONTROL'])
                                         ->where('F.numfrac', $FRACCION)
                                         ->get()->result();
-                        if (intval($check_fraccion[0]->EXISTE) >= 1) {
+                        $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('controlpla AS C')
+                                        ->where('C.Control', $xXx['CONTROL'])
+                                        ->where('C.Fraccion', $FRACCION)
+                                        ->get()->result();
+                        if (intval($check_fraccion[0]->EXISTE) >= 1 || intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
                             print '{"AVANZO":"0","FR":"60","RETORNO":"SI","MESSAGE":"EL CONTROL YA HA SIDO AVANZADO A REBAJADO - SWITCH 40 "}';
                             exit(0);
                         }
@@ -637,7 +659,7 @@ class Avance9 extends CI_Controller {
                         $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
                         $data["preciofrac"] = $PXFC;
                         $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
-                        if (intval($check_fraccion[0]->EXISTE) <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             /* GENERAR UN AVANCE A REBAJADO */
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
@@ -669,13 +691,19 @@ class Avance9 extends CI_Controller {
                         /* 30 REBAJADO => 90 ENTRETELADO */
                         $FRACCION = 103;
 
+                        $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('controlpla AS C')
+                                        ->where('C.Control', $xXx['CONTROL'])
+                                        ->where('C.Fraccion', $FRACCION)
+                                        ->get()->result();
+                        
                         /* REVISAMOS QUE CORTE,RAYADO Y FOLEADO YA HAYAN DADO SU AVANCE, 
                          * DEBE DE ARROJAR 3 POR EL # DE FRACCIONES, DE LO CONTRARIO NO AVANZAREMOS */
                         $check_fraccion_corte_rayado_foleado = $this->db->select('COUNT(*) AS EXISTE', false)
                                         ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
                                         ->where_in('F.numfrac', array(100, 102, 60))
                                         ->get()->result();
-                        if (intval($check_fraccion_corte_rayado_foleado[0]->EXISTE) <= 2) {
+                        if (intval($check_fraccion_corte_rayado_foleado[0]->EXISTE) <= 2  && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
                             print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_REBAJADO" => "NO"));
                             EXIT(0);
                         }
@@ -689,7 +717,7 @@ class Avance9 extends CI_Controller {
                                             ->where('F.numfrac', $FRACCION)
                                             ->get()->result();
 
-                            if (intval($check_fraccion[0]->EXISTE) === 0) {
+                            if (intval($check_fraccion[0]->EXISTE) === 0  && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                                 $data["fraccion"] = $FRACCION;
                                 $data["numfrac"] = $FRACCION;
                                 /* FILTRADO POR FRACCION 102 RAYADO */
@@ -720,7 +748,7 @@ class Avance9 extends CI_Controller {
 
                             /* AVANCE */
                             $revisar_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento IN(10,20,40) AND A.Control ={$xXx['CONTROL']}")->result();
-                            if (intval($revisar_avance[0]->EXISTE) === 3) {
+                            if (intval($revisar_avance[0]->EXISTE) === 3  && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                                 //25101503
                                 /* 28 / 01 / 2020 */
                                 /* REVISAR SI TIENE ENTRETELADO */

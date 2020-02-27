@@ -42,7 +42,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                 <span class="d-none stsavan" des="TEJIDO">7</span><span class="d-none" des="TEJIDO">150</span>7 - TEJIDO<span class="deptodes d-none">TEJIDO</span><span class="deptoclave d-none">150</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
 
-                          </ul>
+                        </ul>
                     </div>
                     <div class="w-100"></div>
                     <div class="col-3">
@@ -195,30 +195,22 @@
                 });
                 return;
             }
-            var p = {
-                FECHA: FechaADPM.val(),
-                DEPTO: DeptoADPM.val(),
-                DOCUMENTO: DocumentoADPM.val(),
-                CONTROL: ControlADPM.val(),
-                ESTILO: EstiloADPM.val(),
-                PARES: ParesADPM.val(),
-                CONSECUTIVO: UC.val()
-            };
-            $.post('<?php print base_url('AvanceDeProduccionAMaquilas/onGuardar') ?>', p).done(function (a) {
-                ControlADPM.val('');
-                ControlADPM.focus().select();
-                onNotifyOldPCF('<span class="fa fa-check"></span>',
-                        'SE HAN GUARDADO LOS CAMBIOS',
-                        'success', {from: "top", align: "center"}, function () {
-                    EstiloADPM.val('');
-                    ParesADPM.val('');
-                    AvanceActualADPM.val('');
-                });
-                onEnable(btnImprimirADPM);
+            $.getJSON('<?php print base_url('AvanceDeProduccionAMaquilas/onChecarPrecioXMaquilaXEstiloXColor') ?>', {
+                CONTROL: ControlADPM.val()
+            }).done(function (a) {
+                console.log(a);
+                switch (parseInt(a[0].EXISTE)) {
+                    case 0:
+                        onCampoInvalido(mdlAvanceDeProduccionAMaquilas, "EL ESTILO/COLOR NO TIENE PRECIO PARA ESTA MAQUILA, ESPECIFIQUE OTRO CONTROL", function () {
+                            ControlADPM.focus().select();
+                        });
+                        break;
+                    case 1:
+                        onAvanzarProduccionAMaquilas();
+                        break;
+                }
             }).fail(function (x) {
                 getError(x);
-            }).always(function () {
-
             });
         });
 
@@ -285,5 +277,33 @@
             }).always(function () {
             });
         }
+    }
+
+    function onAvanzarProduccionAMaquilas() {
+        var p = {
+            FECHA: FechaADPM.val(),
+            DEPTO: DeptoADPM.val(),
+            DOCUMENTO: DocumentoADPM.val(),
+            CONTROL: ControlADPM.val(),
+            ESTILO: EstiloADPM.val(),
+            PARES: ParesADPM.val(),
+            CONSECUTIVO: UC.val()
+        };
+        $.post('<?php print base_url('AvanceDeProduccionAMaquilas/onGuardar') ?>', p).done(function (a) {
+            ControlADPM.val('');
+            ControlADPM.focus().select();
+            onNotifyOldPCF('<span class="fa fa-check"></span>',
+                    'SE HAN GUARDADO LOS CAMBIOS',
+                    'success', {from: "top", align: "center"}, function () {
+                EstiloADPM.val('');
+                ParesADPM.val('');
+                AvanceActualADPM.val('');
+            });
+            onEnable(btnImprimirADPM);
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+
+        });
     }
 </script>

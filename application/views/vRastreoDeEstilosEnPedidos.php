@@ -5,7 +5,7 @@
                 <legend class="float-left">Rastreo de estilos clientes en pedidos</legend>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="right">
-                <button type="button" id="btnImprimirReporte" name="btnImprimirReporte" class="btn btn-info" disabled="">
+                <button type="button" id="btnImprimirReporte" name="btnImprimirReporte" class="btn btn-info selectNotEnter notEnter" disabled="">
                     <span class="fa fa-print"></span> Imprimir
                 </button>
             </div>
@@ -106,23 +106,18 @@
 
     $(document).ready(function () {
 
-
         ANIO.val(AAAA);
-
-
 
         Color.change(function () {
             if (Color.val()) {
                 xColor.val(Color.val());
                 Pedidox.ajax.reload(function () {
-
                     onRevisarRegistros();
                     xCliente.focus();
                     Color[0].selectize.disable();
                 });
             } else {
                 Pedidox.ajax.reload(function () {
-
                     onRevisarRegistros();
                     xColor.val('');
                     Color[0].selectize.enable();
@@ -130,13 +125,13 @@
                 });
             }
         });
+        
         xColor.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if (xColor.val()) {
                     Color[0].selectize.setValue(xColor.val());
                     if (Color.val()) {
                         Pedidox.ajax.reload(function () {
-
                             onRevisarRegistros();
                             Color[0].selectize.disable();
                         });
@@ -147,7 +142,6 @@
                     }
                 } else {
                     Pedidox.ajax.reload(function () {
-
                         onRevisarRegistros();
                         Color[0].selectize.enable();
                         Color[0].selectize.clear(true);
@@ -156,7 +150,6 @@
                 }
             } else {
                 Pedidox.ajax.reload(function () {
-
                     onRevisarRegistros();
                     Color[0].selectize.enable();
                     Color[0].selectize.clear(true);
@@ -238,14 +231,12 @@
             }).fail(function (x, y, z) {
                 getError(x);
             }).always(function () {
-
             });
         });
 
-        Estilo.on('keypress', function (e) {
+        Estilo.on('keydown', function (e) {
             if (e.keyCode === 13 && Estilo.val()) {
                 Pedidox.ajax.reload(function () {
-
                 });
                 //OBTENER COLORES POR ESTILO
                 Color[0].selectize.clearOptions();
@@ -261,6 +252,9 @@
                     onRevisarRegistros();
                 });
             }
+            Pedidox.ajax.reload(function () {
+                onRevisarRegistros(); 
+            });
         });
 
         Pedidox = tblPedidox.DataTable({
@@ -321,7 +315,6 @@
                 pnlTablero.find("h4.PARES_TOTALES").text(prs + ' PARES');
             }
         });
-
     });
 
     function onRevisarRegistros() {
@@ -335,5 +328,4 @@
             btnImprimirReporte.attr('disabled', true);
         }
     }
-
 </script>

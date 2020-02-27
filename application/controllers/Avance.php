@@ -411,10 +411,17 @@ P.Maquila AS MAQUILA
                                 ->where('F.control', $xXx['CONTROL'])
                                 ->where('F.numfrac', $frac)
                                 ->get()->result();
+
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $frac)
+                                ->get()->result();
+
                 /* REBAJADO Y PERFORADO */
                 switch (intval($frac)) {
                     case 102:
-                        if (intval($check_fraccion[0]->EXISTE) === 0) {
+                        if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             $db->insert('avance', array(
                                 'Control' => $x->post('CONTROL'),
                                 'FechaAProduccion' => $x->post('FECHA'),
@@ -460,7 +467,7 @@ P.Maquila AS MAQUILA
                             exit(0);
                         }
                         $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND A.Departamento = 20")->result();
-                        if (intval($REVISAR_AVANCE[0]->EXISTE) >= 1) {
+                        if (intval($REVISAR_AVANCE[0]->EXISTE) >= 1 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             $this->db->set('EstatusProduccion', 'REBAJADO')->set('DeptoProduccion', 30)
                                     ->where('Control', $xXx['CONTROL'])
                                     ->update('controles');
@@ -474,7 +481,9 @@ P.Maquila AS MAQUILA
                         }
                         break;
                     default:
-                        $this->onPagarFraccionSinAvance($xXx, $frac);
+                        if (intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
+                            $this->onPagarFraccionSinAvance($xXx, $frac);
+                        }
                         break;
                 }
                 exit(0);
@@ -556,11 +565,17 @@ P.Maquila AS MAQUILA
                                 ->where('F.control', $xXx['CONTROL'])
                                 ->where('F.numfrac', $frac)
                                 ->get()->result();
+
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $frac)
+                                ->get()->result();
                 switch (intval($frac)) {
                     case 103:
                         /* REBAJADO */
 
-                        if (intval($check_fraccion[0]->EXISTE) === 0) {
+                        if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
 
                             /* PAGAR FRACCION */
                             $this->onPagarFraccion($xXx, 60, 40, 'FOLEADO');
@@ -594,7 +609,7 @@ P.Maquila AS MAQUILA
 
                         $revisa_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
                                         . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 60")->result();
-                        if (intval($revisa_foleado[0]->EXISTE) === 0) {
+                        if (intval($revisa_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             $avance = array(
                                 'Control' => $xXx['CONTROL'],
                                 'FechaAProduccion' => Date('d/m/Y'),
@@ -901,7 +916,14 @@ P.Maquila AS MAQUILA
 //                333	PONER CASCO - C. PESPUNTE +
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                if (intval($check_fraccion[0]->EXISTE) === 0) {
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $frac)
+                                ->get()->result();
+
+
+                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                     switch (intval($frac)) {
                         case 300:
                             $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {$xXx['CONTROL']}")->result();
@@ -936,7 +958,7 @@ P.Maquila AS MAQUILA
                                     . "FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} "
                                     . "AND P.EstatusProduccion LIKE 'ENSUELADO' LIMIT 1")->result();
 
-                    if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300) {
+                    if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                         $this->db->set('EstatusProduccion', 'ENSUELADO')
                                 ->set('DeptoProduccion', 140)
                                 ->where('Control', $xXx['CONTROL'])->update('controles');
@@ -957,7 +979,12 @@ P.Maquila AS MAQUILA
             if (in_array("{$xXx['EMPLEADO']}", $empleados_celulas) &&
                     $depto === 55 && $depto_actual === 5 && $frac === 300) {
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                if (intval($check_fraccion[0]->EXISTE) === 0) {
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $frac)
+                                ->get()->result();
+                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                     $this->onPagarFraccionSinAvance($xXx, $frac);
                 }
                 exit(0);
@@ -969,7 +996,12 @@ P.Maquila AS MAQUILA
                     $depto === 6 && $depto_actual === 55 && $frac === 397 && intval($xXx['EMPLEADO']) === 1003) {
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                if (intval($check_fraccion[0]->EXISTE) === 0) {
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $frac)
+                                ->get()->result();
+                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                     switch (intval($frac)) {
                         case 397:
                             /* PAGAR FRACCION */
@@ -1083,7 +1115,11 @@ P.Maquila AS MAQUILA
 //                    403	TEJIDA MAQUINA 1 
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                ->from('controlpla AS C')
+                                ->where('C.Control', $xXx['CONTROL'])
+                                ->where('C.Fraccion', $frac)
+                                ->get()->result();
 //                var_dump($check_fraccion);
 //                exit(0);
                 switch (intval($frac)) {
@@ -1114,7 +1150,7 @@ P.Maquila AS MAQUILA
                         exit(0);
                         break;
                     default:
-                        if (intval($check_fraccion[0]->EXISTE) === 0) {
+                        if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             $this->onPagarFraccionSinAvance($xXx, $frac);
                         }
                         exit(0);
@@ -1165,9 +1201,13 @@ P.Maquila AS MAQUILA
                     //499	MONTADO MUESTRA
                     //500	MONTADO GENERAL "A" * (GENERA AVANCE) *
                     //503	MONTADO GENERAL "B"
-
+                    $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                    ->from('controlpla AS C')
+                                    ->where('C.Control', $xXx['CONTROL'])
+                                    ->where('C.Fraccion', $frac)
+                                    ->get()->result();
                     $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                    if (intval($check_fraccion[0]->EXISTE) === 0) {
+                    if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                         switch (intval($frac)) {
                             case 500:
                                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ADORNO A.", $this->session);
@@ -1221,9 +1261,13 @@ P.Maquila AS MAQUILA
 //                    600	ADORNO GENERAL * (GENERA AVANCE) *
 //                    602	PLANTILLA DE ADORNO
 //                    607	ARMAR PLANTILLA DE ADORNO
-
+                    $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
+                                    ->from('controlpla AS C')
+                                    ->where('C.Control', $xXx['CONTROL'])
+                                    ->where('C.Fraccion', $frac)
+                                    ->get()->result();
                     $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                    if (intval($check_fraccion[0]->EXISTE) === 0) {
+                    if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                         switch (intval($frac)) {
                             case 600:
 
