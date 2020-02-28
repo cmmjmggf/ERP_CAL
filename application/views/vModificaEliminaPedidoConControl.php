@@ -89,6 +89,9 @@
                             <button type="button" id="btnModificaRegistro" name="btnModificaRegistro" class="btn btn-sm btn-info">
                                 <span class="fa fa-check"></span> Acepta
                             </button>    
+                            <button type="button" id="btnModificaRegistroXFecha" name="btnModificaRegistroXFecha" class="btn btn-sm btn-info" style="background-color: #4CAF50; border-color: #4CAF50; font-weight: bold;">
+                                <span class="fa fa-check"></span> Acepta (Fecha)
+                            </button>    
                         </div>
                     </div>
                 </div>
@@ -162,7 +165,8 @@
             btnImprimePedido = pnlTablero.find("#btnImprimePedido"),
             btnRepAsignado = pnlTablero.find("#btnRepAsignado"),
             btnCtrlCancelados = pnlTablero.find("#btnCtrlCancelados"),
-            btnModificaRegistro = pnlTablero.find("#btnModificaRegistro");
+            btnModificaRegistro = pnlTablero.find("#btnModificaRegistro"),
+            btnModificaRegistroXFecha = pnlTablero.find("#btnModificaRegistroXFecha");
 
     var opciones_detalle = {
         dom: 'rtip',
@@ -220,7 +224,29 @@
     };
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
+        
+        btnModificaRegistroXFecha.click(function () {
+            if (PedidoMEPCC.val() && FechaEntregaModificada.val()) {
+                $.post('<?php print base_url('ModificaEliminaPedidoConControl/onModificarFechaXClave') ?>', {
+                    CLAVE_PEDIDO: PedidoMEPCC.val(),
+                    NUEVA_DE_FECHA_ENTREGA: FechaEntregaModificada.val()
+                }).done(function (a) {
+                    console.log(a);
+                    iMsg("SE HAN GUARDADO LOS CAMBIOS", "s", function () {
+                        ControlMEPCC.focus();
+                        PedidoDetalle.ajax.reload();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
 
+                });
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR LA CLAVE DEL PEDIDO Y LA NUEVA FECHA DE ENTREGA", function () {
+                    PedidoMEPCC.focus();
+                });
+            }
+        });
         btnModificaRegistro.click(function () {
             if (ControlMEPCC.val()) {
                 var p = {

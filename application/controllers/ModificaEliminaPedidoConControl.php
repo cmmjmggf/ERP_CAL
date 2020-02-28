@@ -174,23 +174,36 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
             $x = $this->input->post();
 //            var_dump($x);
 //            exit(0);
+            if ($x['CLAVE_NUEVO'] !== '' && $x['CLIENTE_NUEVO'] !== '' && $x['FECHA_ENTREGA_NUEVO'] !== '' && $x['IDPEDIDO'] !== '' && $x['CONTROL'] !== '') {
+                $this->db->set('Clave', $x['CLAVE_NUEVO'])
+                        ->set('FechaEntrega', $x['FECHA_ENTREGA_NUEVO'])
+                        ->set('Cliente', $x['CLIENTE_NUEVO'])
+                        ->set('C1', $x['CANTIDAD_UNO'])->set('C2', $x['CANTIDAD_DOS'])
+                        ->set('C3', $x['CANTIDAD_TRES'])->set('C4', $x['CANTIDAD_CUATRO'])
+                        ->set('C5', $x['CANTIDAD_CINCO'])->set('C6', $x['CANTIDAD_SEIS'])
+                        ->set('C7', $x['CANTIDAD_SIETE'])->set('C8', $x['CANTIDAD_OCHO'])
+                        ->set('C9', $x['CANTIDAD_NUEVE'])->set('C10', $x['CANTIDAD_DIEZ'])
+                        ->set('C11', $x['CANTIDAD_ONCE'])->set('C12', $x['CANTIDAD_DOCE'])
+                        ->set('C13', $x['CANTIDAD_TRECE'])->set('C14', $x['CANTIDAD_CATORCE'])
+                        ->set('C15', $x['CANTIDAD_QUINCE'])->set('C16', $x['CANTIDAD_DIESCISEIS'])
+                        ->set('C17', $x['CANTIDAD_DIECISIETE'])->set('C18', $x['CANTIDAD_DIECIOCHO'])
+                        ->set('C19', $x['CANTIDAD_DIECINUEVE'])->set('C20', $x['CANTIDAD_VEINTE'])
+                        ->set('C21', $x['CANTIDAD_VEINTIUNO'])->set('C22', $x['CANTIDAD_VEINTIDOS'])
+                        ->where('ID', $x['IDPEDIDO'])
+                        ->where('Control', $x['CONTROL'])->update('pedidox');
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
-            $this->db->set('Clave', $x['CLAVE_NUEVO'])
-                    ->set('FechaEntrega', $x['FECHA_ENTREGA_NUEVO'])
-                    ->set('Cliente', $x['CLIENTE_NUEVO'])
-                    ->set('C1', $x['CANTIDAD_UNO'])->set('C2', $x['CANTIDAD_DOS'])
-                    ->set('C3', $x['CANTIDAD_TRES'])->set('C4', $x['CANTIDAD_CUATRO'])
-                    ->set('C5', $x['CANTIDAD_CINCO'])->set('C6', $x['CANTIDAD_SEIS'])
-                    ->set('C7', $x['CANTIDAD_SIETE'])->set('C8', $x['CANTIDAD_OCHO'])
-                    ->set('C9', $x['CANTIDAD_NUEVE'])->set('C10', $x['CANTIDAD_DIEZ'])
-                    ->set('C11', $x['CANTIDAD_ONCE'])->set('C12', $x['CANTIDAD_DOCE'])
-                    ->set('C13', $x['CANTIDAD_TRECE'])->set('C14', $x['CANTIDAD_CATORCE'])
-                    ->set('C15', $x['CANTIDAD_QUINCE'])->set('C16', $x['CANTIDAD_DIESCISEIS'])
-                    ->set('C17', $x['CANTIDAD_DIECISIETE'])->set('C18', $x['CANTIDAD_DIECIOCHO'])
-                    ->set('C19', $x['CANTIDAD_DIECINUEVE'])->set('C20', $x['CANTIDAD_VEINTE'])
-                    ->set('C21', $x['CANTIDAD_VEINTIUNO'])->set('C22', $x['CANTIDAD_VEINTIDOS'])
-                    ->where('ID', $x['IDPEDIDO'])
-                    ->where('Control', $x['CONTROL'])->update('pedidox');
+    public function onModificarFechaXClave() {
+        try {
+            $x = $this->input->post();
+            if ($x['NUEVA_DE_FECHA_ENTREGA'] !== '' && $x['CLAVE_PEDIDO'] !== '') {
+                $this->db->set('FechaEntrega', $x['NUEVA_DE_FECHA_ENTREGA'])
+                        ->where('Clave', $x['CLAVE_PEDIDO'])->update('pedidox');
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
