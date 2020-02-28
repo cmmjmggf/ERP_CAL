@@ -2,14 +2,15 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-7 float-left">
-                <legend class="float-left">Empleados</legend>
+                <h3 class="font-weight-bold" style="color:#353d3e !important">
+                  <span class="fa fa-users-cog"></span>   Empleados</h3>
             </div>
             <!--            <div class="col-sm-5">
                             <input type="text" id="NumeroEmpleado" name="NumeroEmpleado" class="form-control form-control-sm noBorders notEnter numbersOnly" autofocus="" placeholder="####">
                         </div>-->
             <div class="col-sm-5 float-right" align="right">
                 <button type="button" class="btn btn-primary selectNotEnter" id="btnNuevo"><span class="fa fa-plus"></span> NUEVO</button>
-                <button type="button" class="btn btn-success selectNotEnter" id="btnVerTodos">
+                <button type="button" class="btn btn-success selectNotEnter" id="btnVerTodos" style="background-color: #97c310; border: 2px solid #97c310;">
                     <span class="fa fa-eye"></span> VER TODOS
                 </button>
             </div>
@@ -48,7 +49,8 @@
             <fieldset>
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 float-left">
-                        <legend >Empleado</legend>
+                        <h3 class="font-weight-bold" style="color:#353d3e !important">
+                            <span class="fa fa-user-edit"></span> Empleado</h3>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
                         <div class="card text-white bg-danger mb-2 d-none" id="dMotivoBaja">
@@ -403,7 +405,7 @@
                             <h6 class="text-danger">Los campos con * son obligatorios</h6>
                         </div>
                         <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
-                            <i class="fa fa-save"></i>
+                            <i class="fa fa-save fa-2x"></i>
                         </button>
                     </div>
                 </div>
@@ -426,7 +428,7 @@
     $(document).ready(function () {
         //handleEnterDiv(pnlTablero);
         handleEnterDiv(pnlDatos);
-        getRecords(1);
+        getRecords();
         getEstados();
         getDepartamentos();
 
@@ -441,7 +443,12 @@
         });
 
         btnVerTodos.click(function () {
-            getRecords(2);
+            if (altabaja === 1) {
+                altabaja = 2;
+            } else {
+                altabaja = 1;
+            }
+            getRecords();
         });
 
         btnBajaEmpleado.click(function () {
@@ -701,8 +708,8 @@
         });
     });
 
-
-    function getRecords(altabaja) {
+    var altabaja = 1;
+    function getRecords() {
         temp = 0;
         HoldOn.open({
             theme: 'sk-cube',
@@ -710,7 +717,11 @@
         });
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblEmpleados')) {
-            tblEmpleados.DataTable().destroy();
+            onOpenOverlay('Espere un momento por favor...');
+            Empleados.ajax.reload(function () {
+                onCloseOverlay();
+            });
+            return;
         }
         Empleados = tblEmpleados.DataTable({
             "dom": 'Bfrtip',
@@ -720,7 +731,9 @@
                 "dataSrc": "",
                 "dataType": "json",
                 "type": 'GET',
-                "data": {Estatus: altabaja}
+                "data": function (d) {
+                    d.Estatus = altabaja;
+                }
             },
             "columns": [
                 {"data": "ID"}, {"data": "No"}, {"data": "Nombre"}, {"data": "Dire"}, {"data": "Col"},
@@ -936,7 +949,8 @@
         border-color: #2196F3 #2196F3 #fff;
     }
     .nav-tabs .nav-link.active, .nav-tabs .nav-link.active:focus, .nav-tabs .nav-link.active:hover, .nav-tabs .nav-item.open .nav-link, .nav-tabs .nav-item.open .nav-link:focus, .nav-tabs .nav-item.open .nav-link:hover {
-        color: #2196F3;
+        color: #2196F3;   
+        font-weight: bold;
     }
     .btn-lobo{
         color: #fff;
@@ -945,8 +959,21 @@
     }
     .btn-foto{
         color: #fff;
-        background-color: #99cc00;
-        border: 2px solid #99cc00;
+        background-color: #97c310;
+        border: 2px solid #97c310;
+    }
+    .card {
+        background-color: #efefef; 
+    }
+    .card input{
+        border-color: #000;
+    } 
+    table tbody td:eq(0) {
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .selectize-input {
+        border: 1px solid #000000;
     }
 </style>
 <?php

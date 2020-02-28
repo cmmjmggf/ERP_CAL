@@ -195,7 +195,7 @@ class Avance8 extends CI_Controller {
 
             $DEPTOS_FISICOS = array(20, 30, 40/* PREL-CORTE */, 60, 120, 140, 70, 80/* RAYADO CONTADO */, 90/* ENTRETELADO */, 140/* ENSUELADO */, 300 /* SUPERVISORES */);
             $xXx = $this->input->post();
-            $EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} LIMIT 1")->result();
+            $EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM empleados AS E WHERE E.Numero = {$xXx["EMPLEADO"]} AND E.FijoDestajoAmbos IN(2,3) LIMIT 1")->result();
             if ($EXISTE[0]->EXISTE <= 0) {
                 print json_encode(array("NOEXISTE" => 0, "EMPLEADO" => $xXx["EMPLEADO"]));
                 exit(0);
@@ -209,9 +209,9 @@ class Avance8 extends CI_Controller {
                             . "E.DepartamentoFisico AS DEPTOCTO, D.Avance AS GENERA_AVANCE, D.Descripcion AS DEPTO", false)
                     ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
                     ->where('E.Numero', $this->input->post('EMPLEADO'))
-                    ->where_in('E.AltaBaja', array(1, 2));
+                    ->where_in('E.AltaBaja', array(1));
             if (intval($ES_SUPERVISOR[0]->DEPTO) === 300) {
-                $this->db->where_in('E.FijoDestajoAmbos', array(1, 2, 3));
+                $this->db->where_in('E.FijoDestajoAmbos', array(2, 3));
             } else {
                 $this->db->where_in('E.FijoDestajoAmbos', array(2, 3));
             }
@@ -321,7 +321,7 @@ class Avance8 extends CI_Controller {
                                 ->from('controlpla AS C')
                                 ->where('C.Control', $xXx['CONTROL'])
                                 ->where('C.Fraccion', $v->NUMERO_FRACCION)
-                                ->get()->result(); 
+                                ->get()->result();
                 $check_fraccion_fxe = $this->db->select('COUNT(*) AS EXISTE', false)
                                 ->from('fraccionesxestilo AS F')
                                 ->where('F.Estilo', $xXx['ESTILO'])
@@ -587,8 +587,7 @@ class Avance8 extends CI_Controller {
                     }
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
-                    if ($check_fraccion[0]->EXISTE > 0  && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 
-                            && $check_fraccion_fxe[0]->EXISTE > 0) {
+                    if ($check_fraccion[0]->EXISTE > 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 && $check_fraccion_fxe[0]->EXISTE > 0) {
                         if (intval($xXx['DEPARTAMENTO']) === 140) {
                             $REVISAR_AVANCE_POR_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS P "
                                             . "WHERE P.Control = {$xXx['CONTROL']} AND P.Departamento = 140")->result();

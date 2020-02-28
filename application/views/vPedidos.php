@@ -2,7 +2,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-2 float-left">
-                <legend class="float-left">Pedidos</legend>
+                <h3 class="font-weight-bold" >
+                    <span class="fa fa-file-alt"></span> Pedido</h3>
             </div>
             <div class="col-sm-5">
                 <label>Cliente</label>
@@ -55,7 +56,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 float-left">
-                            <legend >Pedido</legend>
+                            <h3 class="font-weight-bold" > <span class="fa fa-file-alt"></span> Pedido</h3>
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5" align="center">
                             <button type="button" class="btn btn-primary btn-sm" id="btnCapacidad" onclick="onComprobarCapacidades('#Maquila', 2)" data-toggle="tooltip" data-placement="bottom" title="Comprobar capacidad de la maquila">
@@ -1268,7 +1269,7 @@
 
     function getPedidoByID(idx, cliente) {
         $.getJSON('<?php print base_url('pedsid'); ?>', {ID: idx, CLIENTE: cliente}).done(function (data) {
-            pnlDatos.find("input").val("");
+            pnlDatos.find("input:not(#FechaEntrega)").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
@@ -1283,7 +1284,7 @@
             pnlDatos.find("#FechaRecepcion").val(dt.FechaRecepcion);
             pnlDatos.find("#Agente")[0].selectize.setValue(dt.Agente);
 
-            pnlDatos.find("#FechaEntrega").val(dt.FechaEntrega);
+//            pnlDatos.find("#FechaEntrega").val(dt.FechaEntrega);
             pnlDatos.find("#Semana").val(dt.Semana);
             pnlDatos.find("#Recibido")[0].selectize.setValue(dt.Recibido);
 
@@ -1567,6 +1568,12 @@
         color: #000 !important;
     }
     .card {
-        background-color: #efefef;; 
+        background-color: #efefef; 
+    }
+    .card input{
+        border-color: #000;
+    } 
+    .selectize-input {
+        border: 1px solid #000000;
     }
 </style>

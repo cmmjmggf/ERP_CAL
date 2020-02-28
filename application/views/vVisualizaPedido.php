@@ -1,5 +1,5 @@
 <div class="modal " id="mdlReimprimirPedido"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Reimprimir Pedido</h5>
@@ -83,12 +83,17 @@
                     });
                 }
             }
+            if (e.keyCode === 8 && mdlReimprimirPedido.find('#ClienteVisPed').val() === '' ||
+                    e.keyCode === 13 && mdlReimprimirPedido.find('#ClienteVisPed').val() === '') {
+                mdlReimprimirPedido.find('#sClienteVisPed')[0].selectize.clear(true);
+            }
         });
 
         mdlReimprimirPedido.find("#sClienteVisPed").change(function () {
             if ($(this).val()) {
                 mdlReimprimirPedido.find('#Cliente').val($(this).val());
                 mdlReimprimirPedido.find('#Pedido').focus().select();
+                mdlReimprimirPedido.find('#ClienteVisPed').val($(this).val());
             }
         });
         mdlReimprimirPedido.find("#Pedido").keypress(function (e) {
