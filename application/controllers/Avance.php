@@ -958,7 +958,10 @@ P.Maquila AS MAQUILA
                                     . "FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} "
                                     . "AND P.EstatusProduccion LIKE 'ENSUELADO' LIMIT 1")->result();
 
-                    if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
+                    if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300 && intval($xXx['EMPLEADO']) === 903 ||
+                    intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
+                    intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
+                    intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 900 && $frac === 300 ) {
                         $this->db->set('EstatusProduccion', 'ENSUELADO')
                                 ->set('DeptoProduccion', 140)
                                 ->where('Control', $xXx['CONTROL'])->update('controles');
