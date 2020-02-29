@@ -959,9 +959,9 @@ P.Maquila AS MAQUILA
                                     . "AND P.EstatusProduccion LIKE 'ENSUELADO' LIMIT 1")->result();
 
                     if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300 && intval($xXx['EMPLEADO']) === 903 ||
-                    intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
-                    intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
-                    intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 900 && $frac === 300 ) {
+                            intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 900 && $frac === 300) {
                         $this->db->set('EstatusProduccion', 'ENSUELADO')
                                 ->set('DeptoProduccion', 140)
                                 ->where('Control', $xXx['CONTROL'])->update('controles');
@@ -973,6 +973,9 @@ P.Maquila AS MAQUILA
                                 ->set("fec55", Date('Y-m-d 00:00:00'))
                                 ->where('fec55 IS NULL', null, false)
                                 ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                        if (intval($xXx['EMPLEADO']) === 903 || intval($xXx['EMPLEADO']) === 902) {
+                            $this->onPagarFraccion($xXx, 300, 140, 'ENSUELADO');
+                        }
                     }
                     exit(0);
                 }
