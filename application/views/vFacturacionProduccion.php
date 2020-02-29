@@ -137,7 +137,8 @@
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
                 <input type="text" id="TMNDAFactura" name="TMNDAFactura"  class="form-control form-control-sm numbersOnly" maxlength="1"> 
-
+                <span class="font-weight-bold">Tipo de cambio</span> 
+                <span class="font-weight-bold tipo_de_cambio text-danger">0.0</span>
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <div class="form-group"> 
@@ -556,7 +557,7 @@
                 </table>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
-                <h3 style="color: #1976D2 !important;" class="font-weight-bold font-italic pares_totales_facturados">PARES 0</h3>
+                <h3 style="color: #1976D2 !important;" class="font-weight-bold font-italic pares_totales_facturados"> 0 PARES</h3>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
                 <h3 class="font-weight-bold text-danger font-italic">SUBTOTAL</h3>
@@ -820,7 +821,32 @@
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
 
-
+        TMNDAFactura.on('keydown', function (e) {
+            if (e.keyCode === 13 && TMNDAFactura.val()) {
+                $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
+                    if (abcde.length > 0) {
+                        switch (parseInt(TMNDAFactura.val())) {
+                            case 1:
+                                TIPODECAMBIO.val(abcde[0].DOLAR);
+                                pnlTablero.find("span.tipo_de_cambio").text(abcde[0].DOLAR);
+                                break;
+                            case 2:
+                                TIPODECAMBIO.val(abcde[0].DOLAR);
+                                pnlTablero.find("span.tipo_de_cambio").text(abcde[0].DOLAR);
+                                break;
+                            case 3:
+                                TIPODECAMBIO.val(abcde[0].EURO);
+                                pnlTablero.find("span.tipo_de_cambio").text(abcde[0].EURO);
+                                break;
+                        }
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    onCloseOverlay();
+                });
+            }
+        });
 
         btnRefrescaRegistro.click(function () {
             $.getJSON('<?php print base_url('FacturacionProduccion/getRegistrosPreFacturados') ?>', {
@@ -871,6 +897,7 @@
 
         pnlTablero.find("#btnCambiaFolio").click(function () {
             onReadAndWrite(pnlTablero.find("#Documento"));
+            pnlTablero.find("#Documento").focus().select();
         });
 
         ClienteFactura.change(function () {
@@ -1227,12 +1254,14 @@
                     }
                     console.log(parseInt(ClienteFactura.val()) === r.CLIENTE, r);
                     if (parseInt(ClienteFactura.val()) === parseInt(r.CLIENTE)) {
+                        onOpenOverlay('Espere...');
                         $.getJSON('<?php print base_url('FacturacionProduccion/getFacturaXFolio'); ?>',
                                 {
                                     CLIENTE: ClienteFactura.val(),
                                     FACTURA: Documento.val(),
                                     TP: TPFactura.val()
                                 }).done(function (a) {
+                            onCloseOverlay();
                             if (a.length > 0) {
                                 /*DATOS DEL ENCABEZADO*/
                                 FechaFactura.val(a[0].FECHA_FACTURA);
@@ -1304,6 +1333,7 @@
                                 pnlTablero.find("#btnNuevo").attr("disabled", true);
                             }
                         }).fail(function (x) {
+                            onCloseOverlay();
                             getError(x);
                         }).always(function () {
                         });
@@ -1713,7 +1743,7 @@
                     prs = prs + parseInt(v[5]);
                 });
                 //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
-                pnlTablero.find("h3.pares_totales_facturados").text('PARES  ' + prs);
+                pnlTablero.find("h3.pares_totales_facturados").text(prs + ' PARES');
             }
         });
     });
@@ -2028,13 +2058,21 @@
                                 var prs = parseFloat(TotalParesEntregaAF.val() ? TotalParesEntregaAF.val() : 0);
                                 var stt = parseFloat(xx.Precio) * prs;
                                 SubtotalFacturacion.val(stt);
-                                switch (parseInt(TPFactura.val())) {
+                                switch (parseInt(TMNDAFactura.val())) {
                                     case 1:
-                                        SubtotalFacturacionIVA.val(stt * 0.16);
-                                        TotalLetra.find("span").text(NumeroALetras(stt * 0.16));
+                                        switch (parseInt(TPFactura.val())) {
+                                            case 1:
+                                                SubtotalFacturacionIVA.val(stt * 0.16);
+                                                TotalLetra.find("span").text(NumeroALetras(stt * 0.16));
+                                                break;
+                                            case 2:
+                                                SubtotalFacturacionIVA.val(stt);
+                                                TotalLetra.find("span").text(NumeroALetras(stt));
+                                                break;
+                                        }
                                         break;
                                     case 2:
-                                        SubtotalFacturacionIVA.val(stt);
+                                        SubtotalFacturacionIVA.val(0);
                                         TotalLetra.find("span").text(NumeroALetras(stt));
                                         break;
                                 }
@@ -2114,23 +2152,38 @@
         $.each(ParesFacturados.rows().data(), function (k, v) {
             t += $.isNumeric(v[indice]) ? parseFloat(v[indice]) : 0;
         });
-        switch (parseInt(TPFactura.val())) {
+        switch (parseInt(TMNDAFactura.val())) {
             case 1:
-                pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
-                pnlTablero.find(".totalivafacturadopie").text('$' + $.number(parseFloat(t * 0.16), 2, '.', ','));
-                t *= 1.16;
-                pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
-                pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
-                TotalLetra.find("span").text(NumeroALetras(t));
-                pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
-                pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
+                switch (parseInt(TPFactura.val())) {
+                    case 1:
+
+                        pnlTablero.find(".subtotalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                        pnlTablero.find(".totalivafacturadopie").text('$' + $.number(parseFloat(t * 0.16), 2, '.', ','));
+                        t *= 1.16;
+                        pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                        pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                        TotalLetra.find("span").text(NumeroALetras(t));
+                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+                        pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
+                        break;
+                    case 2:
+                        pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                        pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
+                        TotalLetra.find("span").text(NumeroALetras(t));
+                        pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
+                        pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
+                        break;
+                }
                 break;
             case 2:
+                var total_en_letras = NumeroALetras(t);
+                total_en_letras = total_en_letras.replace("PESOS", "DÓLARES");
+                total_en_letras = total_en_letras.replace("MXN", "DLL");
                 pnlTablero.find(".totalfacturadohead").text('$' + $.number(parseFloat(t), 2, '.', ','));
                 pnlTablero.find(".totalfacturadopie").text('$' + $.number(parseFloat(t), 2, '.', ','));
-                TotalLetra.find("span").text(NumeroALetras(t));
-                pnlTablero.find(".totalfacturadoenletrapie").text(NumeroALetras(t));
-                pnlTablero.find(".totalfacturadoenletrapieDLLS").text(NumeroALetras(t));
+                TotalLetra.find("span").text(total_en_letras);
+                pnlTablero.find(".totalfacturadoenletrapie").text(total_en_letras);
+                pnlTablero.find(".totalfacturadoenletrapieDLLS").text(total_en_letras);
                 break;
         }
     }
@@ -2337,6 +2390,7 @@
             $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
                 if (abcde.length > 0) {
                     TIPODECAMBIO.val(abcde[0].DOLAR);
+                    pnlTablero.find("span.tipo_de_cambio").text(abcde[0].DOLAR);
                 }
             }).fail(function (x) {
                 getError(x);

@@ -19,10 +19,16 @@ CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMB
 
 
 ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -
-IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0)) AS SUELDO_NETO, E.SueldoFijo AS SUELDO_FIS,
+IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0)) AS SUELDO_NETO,
+
+E.SueldoFijo AS SUELDO_FIS,
+
+
+
 ( CASE
 WHEN E.SueldoFijo > ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -
 IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0) -  IFNULL(PNL.fierabono,0))  THEN 0 ELSE E.SueldoFijo END ) AS ABONO_FIS,
+
 ( CASE
 WHEN ( IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0) -  IFNULL(PNL.infon,0) -  IFNULL(PNL.imss,0) -  IFNULL(PNL.impu,0) -  IFNULL(PNL.precaha,0) -  IFNULL(PNL.cajhao,0) -  IFNULL(PNL.vtazap,0) -
 IFNULL(PNL.zapper,0) -  IFNULL(PNL.fune,0) -  IFNULL(PNL.cargo,0) -  IFNULL(PNL.fonac,0) -  IFNULL(PNL.otrde,0) -  IFNULL(PNL.otrde1,0)-  IFNULL(PNL.fierabono,0)) > E.SueldoFijo THEN
@@ -34,9 +40,12 @@ END ) AS ABONO_NOMINA
 
 FROM empleados AS E LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave INNER JOIN prenominal AS PNL
 ON E.Numero = PNL.numemp
-WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1 AND (CASE
-WHEN E.SueldoFijo > (PNL.salario+PNL.salariod+PNL.horext+PNL.otrper+PNL.otrper1 - PNL.infon - PNL.imss - PNL.impu - PNL.precaha - PNL.cajhao - PNL.vtazap -
-PNL.zapper - PNL.fune - PNL.cargo - PNL.fonac - PNL.otrde - PNL.otrde1)  THEN 0 ELSE E.SueldoFijo END) <= 0
+WHERE PNL.numsem = $P{SEMANA} AND PNL.año = $P{ANIO} AND E.Tarjeta = 1 AND E.DepartamentoFisico NOT IN (470) and
+( CASE
+WHEN E.SueldoFijo > (IFNULL(PNL.salario,0)+ IFNULL(PNL.salariod,0)+ IFNULL(PNL.horext,0)+ IFNULL(PNL.otrper,0)+ IFNULL(PNL.otrper1,0)) -
+(IFNULL
+(PNL.cajhao,0) + IFNULL(PNL.infon,0) + IFNULL(PNL.imss,0) + IFNULL(PNL.fune,0) +IFNULL(PNL.vtazap,0) + IFNULL(PNL.cargo,0) +IFNULL(PNL.zapper,0)+IFNULL(PNL.precaha,0)+ IFNULL(PNL.impu,0)+
+IFNULL(PNL.otrde1,0) + IFNULL(PNL.otrde,0) +IFNULL(PNL.fonac,0) +IFNULL(PNL.fierabono,0))  THEN 0 ELSE E.SueldoFijo END ) = 0
 ORDER BY ABS(CLAVE) ASC]]>
 	</queryString>
 	<field name="CLAVE" class="java.lang.String">
@@ -78,7 +87,7 @@ ORDER BY ABS(CLAVE) ASC]]>
 	<variable name="ABONO_NOMINA_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{ABONO_NOMINA}]]></variableExpression>
 	</variable>
-	<group name="DEPARTAMENTO">
+	<group name="DEPARTAMENTO" keepTogether="true">
 		<groupExpression><![CDATA[$F{DEPARTAMENTO}]]></groupExpression>
 		<groupHeader>
 			<band height="10">

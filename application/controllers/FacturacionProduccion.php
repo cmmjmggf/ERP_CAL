@@ -327,7 +327,6 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     switch (intval($x['TP_DOCTO'])) {
                         case 1:
                             $TOTAL *= $x['TIPO_DE_CAMBIO'];
-                            $TOTAL *= 0.16;
                             break;
                         case 2:
                             $TOTAL = $IMPORTE_TOTAL_SIN_IVA * $x['TIPO_DE_CAMBIO'];
@@ -431,7 +430,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             }
             $f["precto"] = $x["PRECIO"];
             $f["subtot"] = $x["SUBTOTAL"];
-            $f["iva"] = $x["IVA"];
+            $f["iva"] = intval($x["MONEDA"]) === 1 ? $x["IVA"] : 0;
             $f["staped"] = 1;
             $f["monletra"] = $x["TOTAL_EN_LETRA"];
             $f["tmnda"] = (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1);
@@ -462,7 +461,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $f["usuario"] = $this->session->USERNAME;
             $f["usuario_id"] = $this->session->ID;
             $this->db->insert('facturacion', $f);
-            
+
 
 //            print $this->db->last_query();
             $tipo_cambio = 0;
@@ -628,7 +627,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                     $this->db->set('EstatusProduccion', $EstatusProduccion)
                             ->set('DeptoProduccion', $DeptoProduccion)
                             ->where('Control', $x['CONTROL'])->update('controles');
-                    /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */ 
+                    /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
                     $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
                         'EstatusProduccion' => $EstatusProduccion,
                         'DeptoProduccion' => $DeptoProduccion,
@@ -996,10 +995,10 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["qrCode"] = base_url('qrplus/qr.png');
                             $pr["factura"] = $x['DOCUMENTO_FACTURA'];
                             $pr["certificado"] = $CERTIFICADO_CFD;
-                            $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                            $pr["rfctel"] = "R.F.C.  TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2434.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();

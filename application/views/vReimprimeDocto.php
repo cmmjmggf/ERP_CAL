@@ -139,6 +139,7 @@
                     } else if (!TPReg.val()) {
                         TPReg.focus().select();
                     }
+                    onEnable(btnAceptarReImprime);
                 });
             }
         });
