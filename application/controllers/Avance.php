@@ -54,15 +54,37 @@ class Avance extends CI_Controller {
 
     public function getAvancesNomina() {
         try {
-//            print json_encode($this->avm->getAvancesNomina($this->input->post('CONTROL')));
+
+            $FRACCION_100 = "<span class=\"fracciones_avance\">100</span>";
+            $FRACCION_102 = "<span  class=\"fracciones_avance\">102</span>";
+            $FRACCION_60 = "<span  class=\"fracciones_avance\">60</span>";
+            $FRACCION_103 = "<span  class=\"fracciones_avance\">103</span>";
+            $FRACCION_51 = "<span  class=\"fracciones_avance\">51</span>";
+            $FRACCION_300 = "<span  class=\"fracciones_avance\">300</span>";
+            $FRACCION_397 = "<span  class=\"fracciones_avance\">397</span>";
+            $FRACCION_401 = "<span  class=\"fracciones_avance\">401</span>";
+            $FRACCION_500 = "<span  class=\"fracciones_avance\">500</span>";
+            $FRACCION_600 = "<span  class=\"fracciones_avance\">600</span>";
             $x = $this->input->get();
             $this->db->select("F.ID, F.numeroempleado AS EMPLEADO, F.maquila AS MAQUILA, "
-                            . "F.control AS CONTROL, F.estilo AS ESTILO, F.numfrac AS NUM_FRACCION, "
+                            . "F.control AS CONTROL, F.estilo AS ESTILO, "
+                            . "CONCAT((CASE "
+                            . "WHEN F.numfrac = 100 THEN '{$FRACCION_100}' "
+                            . "WHEN F.numfrac = 102 THEN '{$FRACCION_102}' "
+                            . "WHEN F.numfrac = 60 THEN '{$FRACCION_60}' "
+                            . "WHEN F.numfrac = 103 THEN '{$FRACCION_103}' "
+                            . "WHEN F.numfrac = 51 THEN '{$FRACCION_51}' "
+                            . "WHEN F.numfrac = 300 THEN '{$FRACCION_300}' "
+                            . "WHEN F.numfrac = 397 THEN '{$FRACCION_397}' "
+                            . "WHEN F.numfrac = 401 THEN '{$FRACCION_401}' "
+                            . "WHEN F.numfrac = 500 THEN '{$FRACCION_500}' "
+                            . "WHEN F.numfrac = 600 THEN '{$FRACCION_600}' "
+                            . "ELSE F.numfrac END),"
+                            . "' ',(SELECT FR.Descripcion FROM fracciones AS FR WHERE FR.Clave = F.numfrac limit 1)) AS NUM_FRACCION, "
                             . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
                             . "F.status, DATE_FORMAT(F.fecha,\"%d/%m/%Y\")  AS FECHA, F.semana AS SEMANA, F.depto, "
                             . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
                     ->from("fracpagnomina AS F");
-
             if ($x['CONTROL'] !== '') {
                 $this->db->where('F.control', $x['CONTROL']);
             }
@@ -72,7 +94,7 @@ class Avance extends CI_Controller {
             }
             $this->db->order_by('F.fecha', 'DESC');
             if ($x['CONTROL'] === '' && $x['EMPLEADO'] === '') {
-                $this->db->limit(25);
+                $this->db->where('F.numeroempleado', 999999999999)->limit(25);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -167,7 +189,8 @@ class Avance extends CI_Controller {
                                     . "END) AS EMPLEADO "
                                     . "FROM empleados AS E "
                                     . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
-                                    . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")->result());
+                                    . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")
+                    ->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -232,6 +255,7 @@ class Avance extends CI_Controller {
                                     ->join('fichatecnica AS F', 'F.Estilo = C.Estilo AND F.Color = C.Color')
                                     ->join('estilos AS E', 'E.Clave = F.Estilo')
                                     ->like("A.Control", $this->input->post('CONTROL'))
+                                    ->order_by("A.Departamento", "DESC")
                                     ->order_by("A.ID", "DESC")
                                     ->limit(1)->get()->result());
         } catch (Exception $exc) {
@@ -973,7 +997,10 @@ P.Maquila AS MAQUILA
                                 ->set("fec55", Date('Y-m-d 00:00:00'))
                                 ->where('fec55 IS NULL', null, false)
                                 ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                        if (intval($xXx['EMPLEADO']) === 903 || intval($xXx['EMPLEADO']) === 902) {
+                        if (intval($xXx['EMPLEADO']) === 903 
+                                || intval($xXx['EMPLEADO']) === 900 
+                                || intval($xXx['EMPLEADO']) === 901 
+                                || intval($xXx['EMPLEADO']) === 902) {
                             $this->onPagarFraccion($xXx, 300, 140, 'ENSUELADO');
                         }
                     }

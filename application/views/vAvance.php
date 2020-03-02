@@ -17,9 +17,11 @@
                     <span class="fa fa-paint-brush"></span>
                     Desarrollo de muestras
                 </button>
-                <button type="button" id="btnImprimePagosCelulas" name="btnImprimePagosCelulas" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Imprime por semana o por semana empleado">
+                <button type="button" id="btnImprimePagosCelulas" name="btnImprimePagosCelulas"
+                        class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" 
+                        title="Imprime por semana o por semana empleado" style="background-color: #43A047; border-color: #43A047;">
                     <span class="fa fa-print"></span>
-                    Imprime
+                    Imprime pago celulas
                 </button>
             </div> 
         </div> 
@@ -90,13 +92,9 @@
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <label>Control</label>
-                    <input type="text" id="Control" name="Control" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="11" placeholder="Escriba un control...">
-                    <!--                    <div class="input-group ">
-                                            <input type="text" id="Control" name="Control" autofocus="" class="form-control form-control-sm numbersOnly" maxlength="11" placeholder="Escriba un control...">
-                                            <div class="input-group-append">
-                                                <button type="button" id="btnBuscarControl" name="btnBuscarControl" class="btn btn-info"><span class="fa fa-search"></span></button>
-                                            </div>
-                                        </div>-->
+                    <input type="text" id="Control" name="Control" autofocus="" 
+                           class="form-control form-control-sm numbersOnly text-center" maxlength="11" 
+                           placeholder="Escriba un control..." style="height: 50px; font-size: 35px;">
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -112,14 +110,47 @@
                     <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm" maxlength="6"> 
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
-                    <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm"></select> 
+                    <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm">
+                        <option></option>
+                        <?php
+                        $data = $this->db->query("SELECT E.Numero AS CLAVE, "
+                                        . "(CASE "
+                                        . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
+                                        . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',"
+                                        . "(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',"
+                                        . "(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', "
+                                        . "(CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
+                                        . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                                        . "WHEN E.AltaBaja = 2 AND E.Celula IN(0) AND E.Numero IN(991,992,993,1005,1006) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                                        . "END) AS EMPLEADO "
+                                        . "FROM empleados AS E "
+                                        . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
+                                        . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")
+                                ->result();
+                        foreach ($data as $k => $v) {
+                            print "<option value='{$v->CLAVE}'>{$v->EMPLEADO}</option>";
+                        }
+                        ?>
+                    </select> 
                 </div>  
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Fracción</label>
                     <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="6"> 
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
-                    <select id="FraccionS" name="FraccionS" class="form-control form-control-sm"></select>
+                    <select id="FraccionS" name="FraccionS" class="form-control form-control-sm">
+                        <option></option>
+                        <?php
+                        $fracciones = $this->db->select("F.Clave AS CLAVE, CONCAT(F.Clave,' ',F.Descripcion) AS FRACCION", false)
+                                        ->from('fracciones AS F')
+                                        ->where_not_in('F.Departamento', array(10, 20))
+                                        ->order_by('ABS(F.Clave)', 'ASC')
+                                        ->get()->result();
+                        foreach ($fracciones as $k => $v) {
+                            print "<option value='{$v->CLAVE}'>{$v->FRACCION}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -195,13 +226,13 @@
                         <p class="font-weight-bold total_pares d-none">0</p>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" align="right">
-                        <p class="font-weight-bold total_fracciones" style="color: #cc0033 !important;" >$0.0</p>
+                        <p class="font-weight-bold total_fracciones" style="color: #cc0033 !important;  font-size: 30px;" >$0.0</p>
                     </div>
-                    <div class="w-100 mt-2"></div>
+                    <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                        <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
+                        <span class="font-weight-bold font-italic" style="color : #3F51B5 !important; font-size: 30px;">ESTATUS ACTUAL DEL AVANCE </span>  
                         <div class="w-100"></div>
-                        <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
+                        <span class="font-weight-bold estatus_de_avance font-italic" style="color : #ef1000 !important; font-size: 30px;">-</span>
                     </div>
                 </div>
             </div>
@@ -229,7 +260,14 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Empleado</label>
-                        <select id="EmpleadoRXC" name="EmpleadoRXC" class="form-control"></select>
+                        <select id="EmpleadoRXC" name="EmpleadoRXC" class="form-control">
+                            <option></option>
+                            <?php
+                            foreach ($data as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->EMPLEADO}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Concepto</label>
@@ -284,7 +322,14 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <label>Empleado</label>
-                        <select id="EmpleadoRXCTROL" name="EmpleadoRXCTROL" class="form-control"></select>
+                        <select id="EmpleadoRXCTROL" name="EmpleadoRXCTROL" class="form-control">
+                            <option></option>
+                            <?php
+                            foreach ($data as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->EMPLEADO}</option>";
+                            }
+                            ?>
+                        </select>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
                         <label>Desc.fraccion</label>
@@ -438,7 +483,7 @@
         });
 
         Empleado.on('keydown', function (e) {
-            if (e.keyCode === 13 )
+            if (e.keyCode === 13)
             {
                 Avances.ajax.reload();
             }
@@ -657,24 +702,6 @@
         $.getJSON('<?php print base_url('Avance/getMaquilasPlantillas'); ?>').done(function (d) {
             d.forEach(function (v) {
                 ProcesoMaquilaS[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-
-        $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
-            d.forEach(function (v) {
-                EmpleadoS[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
-                EmpleadoRXC[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
-                EmpleadoRXCTROL[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-
-        $.getJSON('<?php print base_url('Avance/getFracciones'); ?>').done(function (d) {
-            d.forEach(function (v) {
-                FraccionS[0].selectize.addOption({text: v.FRACCION, value: v.CLAVE});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1499,7 +1526,29 @@
     }
 </script>
 <style>
+    #tblAvance tbody tr td{
+        font-size: 14px;
+    }
+    #tblAvance tbody tr td:nth-child(9) { 
+        font-weight: bold;
+        color:#3f51b5;
+    }
+    #tblAvance tbody tr td:nth-child(4) { 
+        font-weight: bold;
+    }
+    #tblAvance tbody tr td:nth-child(9) { 
+        font-weight: bold;
+        color:#3f51b5;
+    }
+    #tblAvance tbody tr td:nth-child(8),#tblAvance tbody tr td:nth-child(10) { 
+        font-weight: bold;
+        color:#008000;
+    }
 
+    .fracciones_avance{
+        color: #ef1000; 
+        font-weight: bold;
+    }
     .card{
         background-color: #f9f9f9;
         border-width: 1px 2px 2px;
