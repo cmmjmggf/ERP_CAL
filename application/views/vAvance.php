@@ -438,13 +438,14 @@
         });
 
         Empleado.on('keydown', function (e) {
-            if (e.keyCode === 13)
+            if (e.keyCode === 13 )
             {
                 Avances.ajax.reload();
             }
-            if (!Empleado.val())
+            if (Empleado.val() === '' && e.keyCode === 13 || Empleado.val() === '' && e.keyCode === 8)
             {
                 Avances.ajax.reload();
+                return;
             }
             if (e.keyCode === 13 && Empleado.val()) {
                 EmpleadoS[0].selectize.setValue(Empleado.val());
