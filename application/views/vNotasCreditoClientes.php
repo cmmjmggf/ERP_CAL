@@ -468,6 +468,7 @@
             }
         });
         btnAceptar.click(function () {
+            onDisable(btnAceptar);
             isValid('pnlTablero');
             if (valido) {
                 var importenc = pnlTablero.find("#ImporteNC").val();
@@ -480,6 +481,7 @@
                         closeOnClickOutside: false,
                         closeOnEsc: false
                     }).then((action) => {
+                        onEnable(btnAceptar);
                         pnlTablero.find("#ImporteNC").val('').focus();
                     });
                 } else {
@@ -502,6 +504,7 @@
                         nuevo: nuevo,
                         folioact: notcred
                     }).done(function (data) {
+                        onEnable(btnAceptar);
                         notcred = data;
                         totalFinal += parseFloat(importenc);
                         if (nuevo === 1) {
@@ -524,9 +527,12 @@
                         onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
 
                     }).fail(function (x, y, z) {
+                        onEnable(btnAceptar);
                         console.log(x, y, z);
                     });
                 }
+            } else {
+                onEnable(btnAceptar);
             }
         });
         btnCerrarNotaCredito.click(function () {

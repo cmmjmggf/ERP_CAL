@@ -140,6 +140,14 @@ class Sesion extends CI_Controller {
                             break;
                     }
                     break;
+                case 'COMEDOR':
+                    switch ($this->session->USERNAME) {
+                        case '666666':
+                            $this->load->view('vEncabezado')->view('vChecadorComedor');
+                            $is_valid = true;
+                            break;
+                    }
+                    break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);
         }
@@ -203,7 +211,7 @@ class Sesion extends CI_Controller {
                     'SEG' => $dt->Seguridad
                 );
                 $this->session->mark_as_temp('LOGGED', 28800);
-                $this->session->set_userdata($newdata); 
+                $this->session->set_userdata($newdata);
                 $this->db->set('UltimoAcceso', date("d-m-Y H:i:s"))->where('ID', $dt->ID)->update("usuarios");
 
                 $l = new Logs("INICIO DE SESIÓN", "INGRESO AL SISTEMA", $this->session);

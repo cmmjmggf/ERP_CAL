@@ -1,15 +1,15 @@
 <style>
     html,
     body {
-        height: 100%; 
-        margin: 0; 
+        height: 100%;
+        margin: 0;
         font-size: 0.875rem;
         font-weight: 400;
         line-height: 1.5;
         color: #76838f;
         text-align: left;
         background-color: #F3F3F9;
-        background-color: #dddce1;   
+        background-color: #dddce1;
     }
 
     body {
@@ -56,14 +56,14 @@
             <button type="button" class="btn btn-default" data-dismiss="modal" >CANCELAR</button>
         </div>
     </div>
-</div>  
+</div>
 
 <div id="pnlAcceso" class="card  div-login">
     <div class="card-body" style="padding: 15px;">
         <div class="row" style="padding: 15px;">
             <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
                 <!--<span class="fa fa-user-lock fa-2x"></span>-->
-                <span class="fa fa-key fa-2x"></span> 
+                <span class="fa fa-key fa-2x"></span>
                 <h4 class="m-3">CONTROL DE ACCESO</h4>
             </div>
             <div class="col-12">
@@ -78,10 +78,10 @@
         </div>
     </div>
     <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
-        <span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span> 
+        <span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span>
     </div>
     <button class="btn btn-info btn-block d-none" id="btnIngresar" type="button"></button>
-</div> 
+</div>
 <script>
     var master_url = base_url + "Sesion/";
     var btnResetear = $("#btnResetear");
@@ -155,7 +155,7 @@
         Usuario.on('keydown keyup', function (e) {
             if ($.isNumeric(Usuario.val())) {
                 var usr = parseInt(Usuario.val());
-                if (usr === 999999 || usr === 888888 || usr === 777777) {
+                if (usr === 999999 || usr === 888888 || usr === 777777 || usr === 666666) {
                     Contrasena.val(Usuario.val());
                     Usuario.attr('readonly', true);
                     Contrasena.attr('readonly', true);
@@ -321,7 +321,7 @@
     .col-xl, .col-xl-auto {
         padding-right: 1px;
         padding-left: 1px;
-    } 
+    }
     .card{
         cursor: pointer !important;
         font-weight: bold;
@@ -375,10 +375,10 @@
         transition: all 0.3s;
     }
 
-    .card:hover{  
+    .card:hover{
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
     }
-    .card{ 
+    .card{
         border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;

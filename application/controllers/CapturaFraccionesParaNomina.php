@@ -117,6 +117,11 @@ class CapturaFraccionesParaNomina extends CI_Controller {
                     if (!empty($ExisteEnFragPagNomina)) {//Ya existe el control cobrado por otro empleado
                         print 3;
                         exit();
+                    }
+                    $ExisteEnControlPla = $this->db->query("select * from controlpla where control = $control and fraccion = $numfrac ")->result();
+                    if (!empty($ExisteEnControlPla)) {//Ya existe el control cobrado en maquilas
+                        print 4;
+                        exit();
                     } else {//si no existe cobrado por alguien mas
                         if (floatval($pcelula)) {
                             $subtot = (floatval($pcelula) * $PrecioFrac) * floatval($pares);

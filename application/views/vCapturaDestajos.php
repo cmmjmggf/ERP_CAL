@@ -263,6 +263,12 @@
                                 pnlTablero.find("#Fraccion").val('').focus();
                                 return;
                             });
+                        } else if (data === 4) {
+                            swal('ERROR', 'ESTE CONTROL YA FUE COBRADO EN MAQUILAS', 'warning').then((value) => {
+                                pnlTablero.find("#sFraccion")[0].selectize.clear(true);
+                                pnlTablero.find("#Fraccion").val('').focus();
+                                return;
+                            });
                         } else {
                             var precio = JSON.parse(data['precio']);
                             pnlTablero.find("#Precio").val(parseFloat(precio).toFixed(2));

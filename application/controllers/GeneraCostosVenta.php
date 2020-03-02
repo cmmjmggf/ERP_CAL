@@ -66,7 +66,7 @@ class GeneraCostosVenta extends CI_Controller {
                             (select Descripcion from colores where estilo = e.clave and precioventa = 1 limit 1) as nomcolor
                             from estilos e
                             join maquilas m on m.Clave = 1
-                            where e.linea = '$linea' and e.clave <> '5418N' and e.Corrida = $corr and e.costos = 0 ")->result();
+                            where e.linea = '$linea' and e.Corrida = $corr and e.costos = 0 ")->result();
 
             $txttolera = 0;
             $txtutili = 0;

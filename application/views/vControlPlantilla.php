@@ -53,7 +53,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Documento</label>
-                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm" readonly="" required="">
+                <input type="text" id="Documento" name="Documento" class="form-control form-control-sm" readonly="" >
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-1">
                 <label>Fecha</label>
@@ -287,8 +287,10 @@
             btnReportePago = pnlTablero.find("#btnReportePago");
 
     var FechaActual = '<?php print Date('d/m/Y'); ?>';
+    var nuevo;
 
     $(document).ready(function () {
+        nuevo = true;
         handleEnterDiv(pnlCaptura);
         handleEnterDiv(mdlReportePago);
         handleEnterDiv(mdlRetorno);
@@ -299,7 +301,7 @@
         getProveedores();
         getMaquilasPlantillas();
         getRecords();
-        getUltimoDocumento();
+
 
         Proveedor.on('keydown', function (e) {
             if (e.keyCode === 13) {
@@ -559,10 +561,10 @@
             isValid('pnlTablero');
             if (valido) {
                 $.post('<?php print base_url('ControlPlantilla/onGuardar'); ?>', {
+                    DOCUMENTO: (nuevo) ? '0' : Documento.val(),
                     PROVEEDOR: Proveedor.val(),
                     PROVEEDORT: sProveedor.find("option:selected").text(),
                     TIPO: TipoMaquila.val(),
-                    DOCUMENTO: Documento.val(),
                     CONTROL: Control.val(),
                     ESTILO: Estilo.val(),
                     COLOR: color,
@@ -572,7 +574,12 @@
                     FRACCIONT: sFraccion.find("option:selected").text(),
                     PRECIO: Precio.val(),
                     FECHA: Fecha.val()
-                }).done(function () {
+                }).done(function (data) {
+
+                    if (nuevo) {
+                        Documento.val(data);
+                        nuevo = false;
+                    }
                     ControlPlantilla.ajax.reload();
                     Fraccion.val('');
                     sFraccion[0].selectize.clear(true);
@@ -589,26 +596,14 @@
                 }).fail(function (x) {
                     getError(x);
                 });
+
+
+
             } else {
                 onNotify('<span class="fa fa-times fa-lg"></span>', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'danger');
             }
         });
 
-        btnAvance.click(function () {
-//            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-//            btnAvance.attr('disabled', true);
-//            $.post('<?php print base_url('ControlPlantilla/onImprimirAvance'); ?>', {
-//                DOCUMENTO: Documento.val()
-//            }).done(function (data) {
-//                if (data.length > 0) {
-//                    onImprimirReporteFancyAFC(data, function (a, b) {
-//                        btnAvance.attr('disabled', true);
-//                    });
-//                }
-//            }).fail(function (x) {
-//                getError(x);
-//            });
-        });
 
         btnImprime.click(function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -618,8 +613,8 @@
             }).done(function (data) {
                 if (data.length > 0) {
                     onImprimirReporteFancyAFC(data, function (a, b) {
+                        nuevo = true;
                         Documento.val('');
-                        getUltimoDocumento();
                         Proveedor.val('');
                         sProveedor[0].selectize.clear(true);
                         TipoMaquila.val('');
@@ -696,7 +691,6 @@
                         if (data === '0') {//No existe fracción en fracciones por estilo
                             swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
                                 sFraccion[0].selectize.clear(true);
-                                sFraccion[0].selectize.clearOptions();
                                 Precio.val('');
                                 btnAcepta.attr('disabled', true);
                                 Fraccion.val('');
@@ -706,7 +700,6 @@
                         } else if (data === '88') {
                             swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
                                 sFraccion[0].selectize.clear(true);
-                                sFraccion[0].selectize.clearOptions();
                                 Precio.val('');
                                 btnAcepta.attr('disabled', true);
                                 Fraccion.val('').focus();
@@ -715,7 +708,6 @@
                         } else if (data === '99') {
                             swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
                                 sFraccion[0].selectize.clear(true);
-                                sFraccion[0].selectize.clearOptions();
                                 Precio.val('');
                                 btnAcepta.attr('disabled', true);
                                 Fraccion.val('').focus();
@@ -1120,27 +1112,6 @@
         });
     }
 
-    function getUltimoDocumento() {
-        HoldOn.open({
-            theme: 'sk-rect'
-        });
-        var documento = "";
-        $.getJSON('<?php print base_url('ControlPlantilla/getUltimoDocumento'); ?>').done(function (a) {
-            console.log(a);
-            /*19(ANO) 03(MES) 07(DIA) 001(CONSECUTIVO) = 190307001*/
-            if (a.length > 0) {
-                var udoc = a[0];
-                documento = udoc.docto;
-                Documento.val(documento);
-            } else {
-                swal('ERROR', 'NO FUE POSIBLE OBTENER EL ULTIMO DOCUMENTO, REVISE LA CONSOLA PARA MAS DETALLE', 'error');
-            }
-        }).fail(function (x) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
-        });
-    }
 
     function sws(m) {
         swal('ATENCIÓN', m, 'success');

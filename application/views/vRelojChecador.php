@@ -1,13 +1,13 @@
-<div class="card border-0" id="pnlTablero" 
+<div class="card border-0" id="pnlTablero"
      style="box-shadow: none !important; background-color: #f5f5f5 !important;">
     <div class="card-body ">
         <div class="row">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4"> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 pt-4"> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 pt-4">
                 <h1 class="float-left">CONTROL DE ASISTENCIA</h1>
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 p-3" align="right"> 
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 p-3" align="right">
                 <span class="fa fa-power-off apagar" style="color: #fff !important; font-size: 75px; cursor: pointer !important; " onclick="onSalirReloj()"></span>
             </div>
         </div>
@@ -23,24 +23,24 @@
                     </div>
 
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="form-group"> 
+                        <div class="form-group">
                             <div class="form-group">
-                                <div class="input-group mb-3"> 
-                                    <input type="text" class="form-control noBorders text-center" placeholder="####" autocomplete="off" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="" style="
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control noBorders text-center numbersOnly" maxlength="4" placeholder="####" autocomplete="off" id="NumeroEmpleado" placeholder="CLAVE DE EMPLEADO" autofocus="" style="
                                            height: 90px !important; font-weight: bold !important; font-size: 90px !important; color: #645625 !important;">
                                     <div class="input-group-append">
-                                        <button type="button" id="btnAcceso" class="btn btn-primary d-none"><span class="fa fa-check"></span></button> 
+                                        <button type="button" id="btnAcceso" class="btn btn-primary d-none"><span class="fa fa-check"></span></button>
                                         <button type="button" id="btnReset" class="btn btn-danger px-5"><span class="fa fa-trash fa-lg"></span></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="Tiempo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"></div> 
+                    <div id="Tiempo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"></div>
 
                     <?php
                     if (intval($vigilancia) === 1) {
-                        ?> 
+                        ?>
                         <div class="col-12">
                             <button id="btnSalir" class="btn btn-danger btn-lg" onclick="onSalirReloj()">
                                 <span class="fa fa-arrow-left"></span> SALIR
@@ -220,8 +220,8 @@
         }
     }
 </script>
-<style> 
-    .card-header{ 
+<style>
+    .card-header{
         background-color: transparent;
         border-bottom: 0px;
     }
@@ -234,9 +234,9 @@
     body{
         background-color: #FFF;
     }
-    .card-body{ 
+    .card-body{
         padding-top: 0px;
-        padding-left: 0px;     
+        padding-left: 0px;
         padding-right: 15px;
     }
     .card-body > .row{
@@ -259,7 +259,7 @@
     .apagar{
         transition: 0.3s;
     }
-    .apagar:hover{ 
+    .apagar:hover{
         -webkit-animation: color-change 1s infinite;
         -moz-animation: color-change 1s infinite;
         -o-animation: color-change 1s infinite;
@@ -292,9 +292,9 @@
         50% { color: #999999; }
         100% { color: #fff; }
     }
-    h1 { 
+    h1 {
         text-shadow: 2px 2px 4px #000000;
-    }  
+    }
     html, body {background-color: #f5f5f5 !important;
-    } 
+    }
 </style>

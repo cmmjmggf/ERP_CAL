@@ -271,6 +271,9 @@ class ControlPlantilla extends CI_Controller {
 
     public function onGuardar() {
         try {
+            $Docto = $this->db->query("SELECT max(ifnull(Documento,0))+1 as docto FROM controlpla  WHERE Documento <> 0; ")->result()[0]->docto;
+
+            print ($Docto);
             /*
              *  ESTATUS
              *  1 = ENTREGADO A MAQUILA / EN PROCESO / EN TRANSITO
@@ -282,7 +285,7 @@ class ControlPlantilla extends CI_Controller {
                 'Proveedor' => $x->post('PROVEEDOR'),
                 'ProveedorT' => str_replace("{$x->post('PROVEEDOR')} ", "", $x->post('PROVEEDORT')),
                 'Tipo' => $x->post('TIPO'),
-                'Documento' => $x->post('DOCUMENTO'),
+                'Documento' => ($x->post('DOCUMENTO') === '0') ? $Docto : $x->post('DOCUMENTO'),
                 'Control' => $x->post('CONTROL'),
                 'Estilo' => $x->post('ESTILO'),
                 'Color' => $x->post('COLOR'),
