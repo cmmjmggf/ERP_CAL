@@ -984,6 +984,7 @@ class AuxReportesClientes extends CI_Controller {
                 '',
                 '',
                 '',
+                '',
                 mb_strimwidth('$' . number_format($TP_IMPORTE_G, 2, ".", ","), 0, 14, ""),
                 mb_strimwidth('$' . number_format($TP_PAGOS_G, 2, ".", ","), 0, 14, ""),
                 mb_strimwidth('$' . number_format($TP_SALDO_G, 2, ".", ","), 0, 14, ""),

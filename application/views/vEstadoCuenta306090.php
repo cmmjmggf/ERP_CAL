@@ -76,18 +76,7 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
-                        if (data.length > 0) {
-                            mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').focus().select();
-                        } else {
-                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
-                                mdlEstadoCuenta306090.find('#dClienteEdoCtaMasDias').focus().val('');
-                            });
-                        }
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                    mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').focus().select();
                 }
             }
         });
@@ -95,18 +84,7 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
-                        if (data.length > 0) {
-                            mdlEstadoCuenta306090.find('#TpEdoCuentaMasDias').focus().select();
-                        } else {
-                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
-                                mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').focus().val('');
-                            });
-                        }
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                    mdlEstadoCuenta306090.find('#TpEdoCuentaMasDias').focus().select();
                 }
             }
         });

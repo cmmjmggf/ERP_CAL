@@ -12,11 +12,11 @@
                     <div class="row">
                         <div class="col-12">
                             <label>Del agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="dAgenteEdoCuentaAgt" name="dAgenteEdoCuentaAgt" >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="dAgenteEdoCuentaAgt" name="dAgenteEdoCuentaAgt" >
                         </div>
                         <div class="col-12">
                             <label>Al agente: </label>
-                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="1" id="aAgenteEdoCuentaAgt" name="aAgenteEdoCuentaAgt" >
+                            <input type="text" class="form-control form-control-sm numbersOnly" maxlength="2" id="aAgenteEdoCuentaAgt" name="aAgenteEdoCuentaAgt" >
                         </div>
                         <div class="col-6 col-sm-6 col-md-6">
                             <label class="mb-1">Tp: <span class="badge badge-danger" style="font-size: 14px;">Nota: Para ver todo, dejar en blanco</span></label>

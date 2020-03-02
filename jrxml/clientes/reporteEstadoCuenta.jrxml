@@ -29,11 +29,10 @@ case when cc.nc = 999 then 'ANTICIPO' end as anticipos,
 date_add(cc.fecha, INTERVAL ct.DiasPlazo DAY) as fechavencimiento,
 datediff(now(), cc.fecha) as dias, cc.tmnda, cc.tcamb
 from cartcliente cc
-left join clientes ct on ct.clave = cc.cliente
+join clientes ct on ct.clave = cc.cliente
 where cc.cliente between $P{dCliente} and $P{aCliente}
 and cc.tipo like concat('%',$P{tp},'%')
-and cc.status < 4
-and cc.saldo > 4
+and cc.status < 3
 order by cc.tipo, cc.cliente, cc.remicion asc]]>
 	</queryString>
 	<field name="cliente" class="java.lang.Integer">
