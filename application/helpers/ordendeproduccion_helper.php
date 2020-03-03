@@ -858,10 +858,10 @@ class PDF extends FPDF {
         $this->AddFont('Calibri', 'I');
         $this->AddFont('Calibri', 'B');
         $this->AddFont('Calibri', 'BI');
-        $this->Image($_SESSION["LOGO"], /* LEFT */ 5, 5/* TOP */, /* ANCHO */ 28, 14);
+        $this->Image($_SESSION["LOGO"], /* LEFT */ 5, 5/* TOP */, /* ANCHO */ 25.2, 12.5);
         $this->SetFont('Calibri', 'B', 9);
 
-        $pos = array(37.5/* 0 */, 107.5/* 1 */, 137.5/* 2 */, 167.5/* 3 */, 40/* 4 */, 200/* 5 */, 215/* 6 */);
+        $pos = array(30/* 0 */, 107.5/* 1 */, 137.5/* 2 */, 167.5/* 3 */, 40/* 4 */, 200/* 5 */, 215/* 6 */);
         $anc = array(15/* 0 */, 65/* 1 */, 40/* 2 */, 120/* 3 */, 55/* 4 */);
 
         $base = 5;
@@ -870,7 +870,7 @@ class PDF extends FPDF {
         /* CLIENTE */
         $this->SetY($base);
         $this->SetX($pos[0]);
-        $this->Cell(70, $alto_celda, (strlen($cliente) > 50) ? substr($cliente, 0, 50) . '' : $cliente, 1/* BORDE */, 0, 'L', 0);
+        $this->Cell(77.5, $alto_celda, (strlen($cliente) > 50) ? substr($cliente, 0, 50) . '' : $cliente, 1/* BORDE */, 0, 'L', 0);
 
         /* FECHA ENTREGA */
         $this->SetFont('Calibri', 'B', 8);
@@ -936,7 +936,7 @@ class PDF extends FPDF {
         $this->SetFont('Calibri', '', 8);
         $this->SetX($pos[2] + 27.5);
         $this->Cell(47.5, $alto_celda, utf8_decode(" " . $this->getTrasp()), 0/* BORDE */, 1, 'L', 0);
-        $this->Line(37.5, $this->GetY(), 210, $this->GetY());
+        $this->Line($pos[0], $this->GetY(), 210, $this->GetY());
 
         $this->SetY($this->getY() + 2.5);
         /* PIEL */
@@ -946,7 +946,7 @@ class PDF extends FPDF {
         $this->Rect(135, $this->GetY(), 61.6/* DER-X */, 13/* DER-Y */);
         $this->SetX(5);
         $this->Cell(6.8, $alto_celda, utf8_decode("Piel"), 0/* BORDE */, 0, 'L', 0);
-
+        $pos[0] = 37.5;
         /* PIEL SECCION UNO */
         $cols = array($pos[0] - 25.7, $pos[0] + 23.3, $pos[0] + 35.9, $pos[0] + 84.9, $pos[0] + 97.5, $pos[0] + 146.5, $pos[0] + 159);
         /* PIEL UNO */
@@ -1243,9 +1243,10 @@ class PDF extends FPDF {
         $this->SetFont('Calibri', 'B', 8);
         $this->SetX(5);
         $this->Cell(10, $alto_celda, utf8_decode("Pares"), 0/* BORDE */, 0, 'L', 0);
+        $this->SetFont('Calibri', 'B', 9);
         $this->SetX(15);
         $this->Cell(10.5, $alto_celda, $this->getPares(), 0/* BORDE */, 0, 'C', 0);
-        $this->SetFont('Calibri', '', 7);
+        $this->SetFont('Calibri', 'B', 9);
         $xplus = 25.5;
         $wc = 7;
         $this->SetX($xplus);

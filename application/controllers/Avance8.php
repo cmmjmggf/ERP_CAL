@@ -274,7 +274,7 @@ class Avance8 extends CI_Controller {
             $x = $this->input->get();
             $ANIO = Date('Y');
             $a = "IFNULL((SELECT FORMAT(SUM(fpn.subtot),2) FROM fracpagnomina AS fpn WHERE dayofweek(fpn.fecha)  ";
-            $b = "AND fpn.numeroempleado = '{$x['EMPLEADO']}' AND fpn.Semana = {$x['SEMANA']} GROUP BY dayofweek(fpn.fecha)),0)";
+            $b = "AND fpn.numeroempleado = '{$x['EMPLEADO']}' AND fpn.Semana = {$x['SEMANA']} AND YEAR(fpn.fecha) = {$ANIO} GROUP BY dayofweek(fpn.fecha)),0)";
             print json_encode($this->db->select("{$a}= 2 {$b} AS LUNES,"
                                             . "{$a} = 3 {$b} AS MARTES,"
                                             . "{$a} = 4 {$b} AS MIERCOLES,"
