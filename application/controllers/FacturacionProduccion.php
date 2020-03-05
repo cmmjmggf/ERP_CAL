@@ -493,7 +493,7 @@ END) AS T1, S.T1 AS XT1,
 WHEN length(S.T2)= 2 THEN CONCAT(S.T2,\"0\") WHEN length(S.T2)= 4 THEN REPLACE(S.T2,\".\",\"\")
 END) AS T2, S.T2 AS XT2,
 (CASE 
-WHEN length(S.T3)= 2 THEN CONCAT(S.T3,\"0\") WHEN length(S.T3)= 24 THEN REPLACE(S.T3,\".\",\"\")
+WHEN length(S.T3)= 2 THEN CONCAT(S.T3,\"0\") WHEN length(S.T3)= 4 THEN REPLACE(S.T3,\".\",\"\")
 END) AS T3,  S.T3 AS XT3,
 (CASE 
 WHEN length(S.T4)= 2 THEN CONCAT(S.T4,\"0\") WHEN length(S.T4)= 4 THEN REPLACE(S.T4,\".\",\"\")
