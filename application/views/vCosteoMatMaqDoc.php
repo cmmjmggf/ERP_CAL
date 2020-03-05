@@ -30,7 +30,15 @@
                             <label>Documento</label>
                             <input type="text" maxlength="" class="form-control form-control-sm numbersOnly" id="DocMov" name="DocMov" >
                         </div>
+                        <div class="col-6">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="chEsSubAlmacen">
+                                <label class="custom-control-label text-info labelCheck" for="chEsSubAlmacen">Es de Sub-Almacen?</label>
+                            </div>
+                        </div>
                     </div>
+
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -76,7 +84,8 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlCosteoMatMaqDoc.find("#frmCaptura")[0]);
 
-
+            var chEsSubAlmacen = mdlCosteoMatMaqDoc.find("#chEsSubAlmacen")[0].checked ? '1' : '0';
+            frm.append('chEsSubAlmacen', chEsSubAlmacen);
             $.ajax({
                 url: base_url + 'index.php/ReportesMaterialesJasper/onReporteCosteoMatMaqDocumento',
                 type: "POST",

@@ -2,6 +2,15 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
+require_once APPPATH . "/third_party/PHPExcel.php";
+
+class Excel extends PHPExcel {
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+}
 
 class CapturaInventarios extends CI_Controller {
 
@@ -1410,6 +1419,329 @@ class CapturaInventarios extends CI_Controller {
                 /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
             }
             $pdf->Output($url);
+            print base_url() . $url;
+        }
+    }
+
+    /* Excel */
+
+    public function onReporteComparativoInvFisInvSisExcel() {
+        $Tipo = $this->input->post('Tipo');
+        $Mes = $this->input->post('Mes');
+        $Maq = $this->input->post('Maq');
+        $Ano = $this->input->post('Ano');
+        $Alm = $this->input->post('Almacen');
+        $Texto_Mes = '';
+        $Texto_Mes_Anterior = '';
+        $Mes_Anterior = intval($Mes - 1);
+
+        switch ($Mes_Anterior) {
+            case 0:
+                $Texto_Mes_Anterior = 'Dic';
+
+                break;
+            case 1:
+                $Texto_Mes_Anterior = 'Ene';
+
+                break;
+            case 2:
+                $Texto_Mes_Anterior = 'Feb';
+
+                break;
+            case 3:
+                $Texto_Mes_Anterior = 'Mar';
+
+                break;
+            case 4:
+                $Texto_Mes_Anterior = 'Abr';
+
+                break;
+            case 5:
+                $Texto_Mes_Anterior = 'May';
+
+                break;
+            case 6:
+                $Texto_Mes_Anterior = 'Jun';
+
+                break;
+            case 7:
+                $Texto_Mes_Anterior = 'Jul';
+
+                break;
+            case 8:
+                $Texto_Mes_Anterior = 'Ago';
+
+                break;
+            case 9:
+                $Texto_Mes_Anterior = 'Sep';
+
+                break;
+            case 10:
+                $Texto_Mes_Anterior = 'Oct';
+
+                break;
+            case 11:
+                $Texto_Mes_Anterior = 'Nov';
+
+                break;
+            case 12:
+                $Texto_Mes_Anterior = 'Dic';
+
+                break;
+        }
+        switch ($Mes) {
+            case '1':
+                $Texto_Mes = 'Ene';
+
+                break;
+            case '2':
+                $Texto_Mes = 'Feb';
+
+                break;
+            case '3':
+                $Texto_Mes = 'Mar';
+
+                break;
+            case '4':
+                $Texto_Mes = 'Abr';
+
+                break;
+            case '5':
+                $Texto_Mes = 'May';
+
+                break;
+            case '6':
+                $Texto_Mes = 'Jun';
+
+                break;
+            case '7':
+                $Texto_Mes = 'Jul';
+
+                break;
+            case '8':
+                $Texto_Mes = 'Ago';
+
+                break;
+            case '9':
+                $Texto_Mes = 'Sep';
+
+                break;
+            case '10':
+                $Texto_Mes = 'Oct';
+
+                break;
+            case '11':
+                $Texto_Mes = 'Nov';
+
+                break;
+            case '12':
+                $Texto_Mes = 'Dic';
+
+                break;
+        }
+
+        $Grupos = $this->ReporteCapturaFisica_model->getGruposReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Texto_Mes_Anterior);
+
+        $Detalle = $this->ReporteCapturaFisica_model->getDetalleReporteComparativo($Tipo, $Mes, $Maq, $Ano, $Texto_Mes, $Texto_Mes_Anterior);
+
+
+        if (!empty($Grupos)) {
+
+            $objPHPExcel = new Excel();
+            $objPHPExcel->setActiveSheetIndex(0);
+
+            // Encabezado
+            $from = "A1";
+            $to = "V4";
+
+            //Hoja activa
+            $edit = $objPHPExcel->getActiveSheet();
+
+            $edit->getStyle("$from:$to")->getFont()->setBold(true);
+            $edit->mergeCells('A1:C1');
+            $edit->setCellValueByColumnAndRow(0, 1, utf8_decode($_SESSION["EMPRESA_RAZON"]));
+            $edit->setCellValueByColumnAndRow(12, 1, 'FECHA:');
+            $edit->setCellValueByColumnAndRow(13, 1, Date('d/m/Y H:i:s'));
+            $edit->mergeCells('A2:C2');
+            $edit->setCellValueByColumnAndRow(0, 2, 'Comparativo Captura Fisica vs Sistema');
+            $edit->setCellValueByColumnAndRow(5, 2, 'Mes del inventario: ' . $Mes . ' ' . $Texto_Mes);
+            $edit->setCellValueByColumnAndRow(10, 2, 'Planta: ' . $Alm);
+
+            //titulos 1
+            $edit->setCellValue('A4', 'Articulo');
+            $edit->setCellValue('B4', '');
+            $edit->setCellValue('C4', 'U.M.');
+            $edit->setCellValue('D4', 'Exist. mes anterior');
+            $edit->setCellValue('E4', 'Entradas');
+            $edit->setCellValue('F4', 'Salidas');
+            $edit->setCellValue('G4', 'Exist. Actual');
+            $edit->setCellValue('H4', '');
+            $edit->setCellValue('I4', 'Exist. Físico');
+            $edit->setCellValue('J4', 'Diferencia');
+            $edit->setCellValue('K4', 'Precio');
+            $edit->setCellValue('L4', '$ Actual Pesos');
+            $edit->setCellValue('M4', '$ Fisico Pesos');
+            $edit->setCellValue('N4', '$ Diferencia');
+
+
+            $GTot_Mes_Ant = 0;
+            $GTot_Entradas = 0;
+            $GTot_Salidas = 0;
+            $GTot_Actual = 0;
+            $GTot_Fisico = 0;
+            $GTot_Diferencia = 0;
+            $GTot_Act_Pre = 0;
+            $GTot_Fis_Pre = 0;
+            $GTot_Dif_Pre = 0;
+
+            $row = 5;
+            foreach ($Grupos as $key => $G) {
+
+                $edit->getStyle('A' . $row)->getFont()->setBold(true);
+                $edit->getStyle('B' . $row)->getFont()->setBold(true);
+                $edit->setCellValue('A' . $row, 'Grupo');
+                $edit->setCellValue('B' . $row, utf8_decode($G->Clave . ' ' . $G->Nombre));
+
+                $row++;
+
+                $Tot_Mes_Ant = 0;
+                $Tot_Entradas = 0;
+                $Tot_Salidas = 0;
+                $Tot_Actual = 0;
+                $Tot_Fisico = 0;
+                $Tot_Diferencia = 0;
+                $Tot_Act_Pre = 0;
+                $Tot_Fis_Pre = 0;
+                $Tot_Dif_Pre = 0;
+
+                foreach ($Detalle as $key => $D) {
+
+                    if ($G->Clave === $D->ClaveGrupo) {
+
+                        $Actual = $D->MesAnterior + $D->Entradas - $D->Salidas;
+                        $Diferencia = $Actual - $D->MesActual;
+                        $Pre_Actual = $Actual * $D->Precio;
+                        $Pre_Fisico = $D->MesActual * $D->Precio;
+                        $Pre_Difer = ($Pre_Actual) - ($Pre_Fisico);
+
+                        $edit->getStyle('D' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $edit->getStyle('E' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $edit->getStyle('F' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $edit->getStyle('G' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $edit->getStyle('I' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $edit->getStyle('J' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                        $edit->getStyle('K' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+                        $edit->getStyle('L' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+                        $edit->getStyle('M' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+                        $edit->getStyle('N' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+
+                        $edit->setCellValue('A' . $row, $D->Codigo);
+                        $edit->setCellValue('B' . $row, $D->Articulo);
+                        $edit->setCellValue('C' . $row, $D->Unidad);
+                        $edit->setCellValue('D' . $row, $D->MesAnterior);
+                        $edit->setCellValue('E' . $row, $D->Entradas);
+                        $edit->setCellValue('F' . $row, $D->Salidas);
+                        $edit->setCellValue('G' . $row, $Actual);
+                        $edit->setCellValue('H' . $row, utf8_decode($D->Codigo));
+                        $edit->setCellValue('I' . $row, $D->MesActual);
+                        $edit->setCellValue('J' . $row, $Diferencia);
+                        $edit->setCellValue('K' . $row, $D->Precio);
+                        $edit->setCellValue('L' . $row, $Pre_Actual);
+                        $edit->setCellValue('M' . $row, $Pre_Fisico);
+                        $edit->setCellValue('N' . $row, $Pre_Difer);
+
+                        $Tot_Mes_Ant += $D->MesAnterior;
+                        $Tot_Entradas += $D->Entradas;
+                        $Tot_Salidas += $D->Salidas;
+                        $Tot_Actual += $Actual;
+                        $Tot_Fisico += $D->MesActual;
+                        $Tot_Diferencia += $Diferencia;
+                        $Tot_Act_Pre += $Pre_Actual;
+                        $Tot_Fis_Pre += $Pre_Fisico;
+                        $Tot_Dif_Pre += $Pre_Difer;
+                        //Gran totales
+                        $GTot_Mes_Ant += $D->MesAnterior;
+                        $GTot_Entradas += $D->Entradas;
+                        $GTot_Salidas += $D->Salidas;
+                        $GTot_Actual += $Actual;
+                        $GTot_Fisico += $D->MesActual;
+                        $GTot_Diferencia += $Diferencia;
+                        $GTot_Act_Pre += $Pre_Actual;
+                        $GTot_Fis_Pre += $Pre_Fisico;
+                        $GTot_Dif_Pre += $Pre_Difer;
+                        $row++;
+                    }
+                }
+                $edit->getStyle('D' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $edit->getStyle('E' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $edit->getStyle('F' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $edit->getStyle('G' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $edit->getStyle('I' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $edit->getStyle('J' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+                $edit->getStyle('K' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+                $edit->getStyle('L' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+                $edit->getStyle('M' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+                $edit->getStyle('N' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+
+                $edit->getStyle("A$row:V$row")->getFont()->setBold(true);
+                $edit->setCellValue('A' . $row, '');
+                $edit->setCellValue('B' . $row, 'Total por Grupo: ' . utf8_decode($G->Clave . ' ' . $G->Nombre));
+                $edit->setCellValue('C' . $row, '');
+                $edit->setCellValue('D' . $row, $Tot_Mes_Ant);
+                $edit->setCellValue('E' . $row, $Tot_Entradas);
+                $edit->setCellValue('F' . $row, $Tot_Salidas);
+                $edit->setCellValue('G' . $row, $Tot_Actual);
+                $edit->setCellValue('H' . $row, '');
+                $edit->setCellValue('I' . $row, $Tot_Fisico);
+                $edit->setCellValue('J' . $row, $Tot_Diferencia);
+                $edit->setCellValue('K' . $row, '');
+                $edit->setCellValue('L' . $row, $Tot_Act_Pre);
+                $edit->setCellValue('M' . $row, $Tot_Fis_Pre);
+                $edit->setCellValue('N' . $row, $Tot_Dif_Pre);
+                $row++;
+            }
+            $edit->getStyle('D' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $edit->getStyle('E' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $edit->getStyle('F' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $edit->getStyle('G' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $edit->getStyle('I' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $edit->getStyle('J' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+            $edit->getStyle('K' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+            $edit->getStyle('L' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+            $edit->getStyle('M' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+            $edit->getStyle('N' . $row)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER_COMMA_SEPARATEDMXN);
+
+            $edit->getStyle("A$row:V$row")->getFont()->setBold(true);
+            $edit->setCellValue('A' . $row, '');
+            $edit->setCellValue('B' . $row, 'Total General:');
+            $edit->setCellValue('C' . $row, '');
+            $edit->setCellValue('D' . $row, $GTot_Mes_Ant);
+            $edit->setCellValue('E' . $row, $GTot_Entradas);
+            $edit->setCellValue('F' . $row, $GTot_Salidas);
+            $edit->setCellValue('G' . $row, $GTot_Actual);
+            $edit->setCellValue('H' . $row, '');
+            $edit->setCellValue('I' . $row, $GTot_Fisico);
+            $edit->setCellValue('J' . $row, $GTot_Diferencia);
+            $edit->setCellValue('K' . $row, '');
+            $edit->setCellValue('L' . $row, $GTot_Act_Pre);
+            $edit->setCellValue('M' . $row, $GTot_Fis_Pre);
+            $edit->setCellValue('N' . $row, $GTot_Dif_Pre);
+
+            /* FIN RESUMEN */
+
+            $path = 'uploads/Reportes/Inventario';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "REPORTE COMPARACION INVENTARIO FIS_SIS" . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.xlsx';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Inventario/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+
+            $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+            $objWriter->save(str_replace(__FILE__, $url, __FILE__));
             print base_url() . $url;
         }
     }

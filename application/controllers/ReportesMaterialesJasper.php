@@ -56,8 +56,10 @@ class ReportesMaterialesJasper extends CI_Controller {
         $parametros["maq"] = $this->input->post('Maq');
         $parametros["sem"] = $this->input->post('Sem');
         $parametros["ano"] = $this->input->post('Ano');
+        $reporte = ($this->input->post('chEsSubAlmacen')) ? 'jrxml\materiales\costoMatMaqSemDocSubAlmacen.jasper' : 'jrxml\materiales\costoMatMaqSemDoc.jasper';
+
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\materiales\costoMatMaqSemDoc.jasper');
+        $jc->setJasperurl($reporte);
         $jc->setFilename('COSTO_MAT_MAQ_DOCUMENTO_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();

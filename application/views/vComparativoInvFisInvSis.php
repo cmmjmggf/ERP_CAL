@@ -59,6 +59,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnAceptar">ACEPTAR</button>
+                <?php
+                if ($_SESSION["USERNAME"] === 'CMEDINA' || $_SESSION["USERNAME"] === 'ALBERTO') {
+                    ?>
+                    <button type="button" class="btn btn-success" id="btnAceptarExcel">EXCEL</button>
+                    <?php
+                }
+                ?>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -81,7 +88,43 @@
             mdlComparativoInvFisInvSis.find('#Tipo')[0].selectize.focus();
         });
 
+        mdlComparativoInvFisInvSis.find('#btnAceptarExcel').on("click", function () {
+            onDisable(mdlComparativoInvFisInvSis.find('#btnAceptarExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlComparativoInvFisInvSis.find("#frmCaptura")[0]);
+            var nombre_alm = mdlComparativoInvFisInvSis.find('#Maq option:selected').text().toUpperCase();
+            frm.append('Almacen', nombre_alm);
+            $.ajax({
+                url: base_url + 'index.php/CapturaInventarios/onReporteComparativoInvFisInvSisExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                onEnable(mdlComparativoInvFisInvSis.find('#btnAceptarExcel'));
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlComparativoInvFisInvSis.find('#Ano').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                onEnable(mdlComparativoInvFisInvSis.find('#btnAceptarExcel'));
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
         mdlComparativoInvFisInvSis.find('#btnAceptar').on("click", function () {
+            onDisable(mdlComparativoInvFisInvSis.find('#btnAceptar'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlComparativoInvFisInvSis.find("#frmCaptura")[0]);
 
@@ -97,6 +140,7 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                onEnable(mdlComparativoInvFisInvSis.find('#btnAceptar'));
                 if (data.length > 0) {
 
                     $.fancybox.open({
@@ -134,6 +178,7 @@
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                onEnable(mdlComparativoInvFisInvSis.find('#btnAceptar'));
                 console.log(x, y, z);
                 HoldOn.close();
             });

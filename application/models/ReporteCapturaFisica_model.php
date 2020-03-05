@@ -122,7 +122,7 @@ class ReporteCapturaFisica_model extends CI_Model {
                     ->from("$Maq A")
                     ->join("unidades U", 'ON U.Clave = A.UnidadMedida', "left")
                     ->join("preciosmaquilas PM", "ON PM.Articulo = A.Clave AND PM.Maquila = '1' ", "left")
-                    ->where("A.$Mes_Anterior > 0 ", null, false);
+                    ->where("A.$Texto_Mes > 0 ", null, false);
             switch ($Tipo) {
                 case '10':
                     $GRUPOS = " AND SA.grupo IN ('1', '2','12','15','16','17','18','34','40') ";
@@ -181,7 +181,7 @@ class ReporteCapturaFisica_model extends CI_Model {
                             . "")
                     ->from("$Maq A")
                     ->join("grupos G", 'ON A.Grupo = G.Clave')
-                    ->where("A.$Texto_Mes_Anterior > 0 ", null, false);
+                    ->where("A.$Texto_Mes > 0 ", null, false);
             switch ($Tipo) {
                 case '10':
                     $GRUPOS = " AND SA.grupo IN ('1', '2','12','15','16','17','18','34','40') ";

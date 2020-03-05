@@ -32,8 +32,8 @@ class PagosDeClientes extends CI_Controller {
 
     public function onRedondeaYActualizaSaldos() {
         try {
-            $this->db->query(" update cartcliente set saldo = 0, status = 3 where saldo <= 1 and saldo >= 0; ");
-            $this->db->query(" update cartcliente set saldo = 0, status = 3 where saldo <= 0 and saldo >= -1 ");
+            $this->db->query(" update cartcliente set saldo = 0, status = 3 where saldo <= 1 and saldo >= 0 and status <> 4 ");
+            $this->db->query(" update cartcliente set saldo = 0, status = 3 where saldo <= 0 and saldo >= -1 and status <> 4 ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
