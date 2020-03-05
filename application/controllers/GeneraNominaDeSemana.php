@@ -117,17 +117,20 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                     /* 1.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
-                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.ID,PNL.numemp FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
 
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
+                                ->set('salariod', 0)
                                 ->where('año', $x['ANIO'])->where('numsem', $x['SEMANA'])
                                 ->where('numemp', $v->Numero)->update('prenominal');
                     } else {
                         $this->db->insert('prenominal', array(
                             "numsem" => $x['SEMANA'], "año" => $x['ANIO'],
                             "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
-                            "salario" => $SUELDO_FINAL, "depto" => $v->DepartamentoFisico,
+                            "salario" => $SUELDO_FINAL,
+                            "salariod" => 0,
+                            "depto" => $v->DepartamentoFisico,
                             "status" => 1, "tpomov" => 0
                         ));
                     }
@@ -270,7 +273,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                     /* 2.5 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
-                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.ID,PNL.numemp FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         if (intval($v->FijoDestajoAmbos) === 1 && floatval($v->CelulaPorcentaje) <= 0) {
                             $this->db->set('pares', $PARES_TRABAJADOS)->set('salario', $SUELDO_FINAL_DESTAJO)
@@ -343,7 +346,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                     /* 3.2 INSERT PARA EL CONCEPTO 1 = SALARIO (FIJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
-                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.ID,PNL.numemp FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
 
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         $this->db->set('pares', 0)->set('salario', $SUELDO_FINAL)
@@ -404,7 +407,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
-                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.* FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
+                    $EXISTE_EN_PRENOMINAL = $this->db->query("SELECT PNL.ID,PNL.numemp FROM prenominal AS PNL WHERE PNL.año = {$x['ANIO']} AND PNL.numsem = {$x['SEMANA']} AND PNL.numemp = {$v->Numero} ")->result();
                     if (!empty($EXISTE_EN_PRENOMINAL)) {
                         /* POR LO REGULAR SALEN LOS QUE ESTAN EN FIJODESTAJOAMBOS EN #3 */
                         $this->db->set('pares', 0)->set('salariod', $SUELDO_FINAL_DESTAJO)
@@ -1198,7 +1201,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     //}/*PARA EFECTO DE PRUEBAS*/
                 }
             }
-         } catch (Exception $exc) {
+        } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
@@ -1441,8 +1444,9 @@ class GeneraNominaDeSemana extends CI_Controller {
         $jc->setDocumentformat('xls');
         print $jc->getReport();
     }
-    
-    public function getReportesNomina9998XLS() {try {
+
+    public function getReportesNomina9998XLS() {
+        try {
             $reports = array();
             $this->benchmark->mark('code_start');
 
