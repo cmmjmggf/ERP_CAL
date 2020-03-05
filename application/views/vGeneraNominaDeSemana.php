@@ -84,7 +84,7 @@
                             <span class="fa fa-print"></span> GENERA</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-success btn-sm btn-block" id="btnPrenominaExcel">
+                        <button type="button" class="btn btn-success btn-sm btn-block" id="btnPrenominaExcel" style="background-color: #4CAF50; border-color: #4CAF50;">
                             <span class="fa fa-file-excel"></span> PRENÓMINA EXCEL</button>
                     </div>
                     <div class="w-100 my-2"></div>
@@ -93,7 +93,8 @@
                             <span class="fa fa-calendar-alt"></span> SEMANAS</button>
                     </div>
                     <div class="col-6">
-                        <button type="button" class="btn btn-danger btn-sm btn-block" id="btnCierraNominaGNS">
+                        <button type="button" class="btn btn-danger btn-sm btn-block" id="btnCierraNominaGNS" style="background-color: #E53935;
+    border-color: #E91E63;">
                             <span class="fa fa-calendar-times"></span> CIERRA NÓMINA</button>
                     </div>
                     <div class="w-100 my-2">
@@ -153,34 +154,81 @@
         });
         btnPrenominaExcel.click(function () {
             btnPrenominaExcel.attr('disabled', true);
-            if (SemanaGNS.val() && AnioGNS.val()) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Por favor espere...'
-                });
-                $.post('<?php print base_url('GeneraNominaDeSemana/getPrenominaExcel'); ?>',
-                        {
-                            SEMANA: SemanaGNS.val(),
-                            ANIO: AnioGNS.val(),
-                            FECHAINI: FechaInicialGNS.val(),
-                            FECHAFIN: FechaFinalGNS.val()
-                        }).done(function (a) {
+            if (parseInt(SemanaGNS.val()) === 99 && AnioGNS.val()) {
+                onOpenOverlay("Generando vacaciones...");
+                var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
+                    FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
+                parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+                parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+                parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+                $.post('<?php print base_url('GeneraNominaDeSemana/getVacaciones'); ?>', parms).done(function (a) {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "SE HAN GENERADO LAS VACACIONES",
+                        icon: "success",
+                        buttons: false,
+                        timer: 2000
+                    });
+//                    SVacacionesAguinaldosParaDestajo.addClass("d-none");
                     console.log(a);
-                    HoldOn.close();
-                    if (a.length > 0) {
-                        window.open(a, '_blank');
-                        btnPrenominaExcel.attr('disabled', false);
-
-                    } else {
-                        //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
-                    }
+                    $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998XLS'); ?>',
+                            {
+                                SEMANA: SemanaGNS.val(),
+                                ANIO: AnioGNS.val()
+                            }).done(function (a) {
+                        HoldOn.close();
+                        if (a.length > 0) {
+                            onCloseOverlay();
+                            var r = JSON.parse(a);
+                            window.open(r["1UNO"], '_blank');
+                        } else {
+                            //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
+                        }
+                        onEnable(btnPrenominaExcel);
+                    }).fail(function (x) {
+                        HoldOn.close();
+                        getError(x);
+                        onEnable(btnPrenominaExcel);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
                 }).fail(function (x) {
-                    HoldOn.close();
                     getError(x);
+                    onCloseOverlay();
+                    onEnable(btnPrenominaExcel);
                 }).always(function () {
-                    btnPrenominaExcel.attr('disabled', false);
-                    HoldOn.close();
+                    busy = false;
                 });
+            } else {
+                if (SemanaGNS.val() && AnioGNS.val()) {
+                    HoldOn.open({
+                        theme: 'sk-rect',
+                        message: 'Por favor espere...'
+                    });
+                    $.post('<?php print base_url('GeneraNominaDeSemana/getPrenominaExcel'); ?>',
+                            {
+                                SEMANA: SemanaGNS.val(),
+                                ANIO: AnioGNS.val(),
+                                FECHAINI: FechaInicialGNS.val(),
+                                FECHAFIN: FechaFinalGNS.val()
+                            }).done(function (a) {
+                        console.log(a);
+                        HoldOn.close();
+                        if (a.length > 0) {
+                            window.open(a, '_blank');
+                            btnPrenominaExcel.attr('disabled', false);
+
+                        } else {
+                            //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
+                        }
+                    }).fail(function (x) {
+                        HoldOn.close();
+                        getError(x);
+                    }).always(function () {
+                        btnPrenominaExcel.attr('disabled', false);
+                        HoldOn.close();
+                    });
+                }
             }
         });
         btnSemanasGNS.click(function () {
@@ -443,6 +491,11 @@
             }
         });
         SemanaGNS.keydown(function (e) {
+            if (parseInt(SemanaGNS.val()) === 99 && e.keyCode === 13) {
+                SVacacionesAguinaldosParaDestajo.removeClass("d-none");
+            } else if (parseInt(SemanaGNS.val()) !== 99 && e.keyCode === 13) {
+                SVacacionesAguinaldosParaDestajo.addClass("d-none");
+            }
             if (e.keyCode === 13) {
                 if ($(this).val()) {
                     if (ConsultaNominaCerrada[0].checked) {//Si sólo es consulta

@@ -831,7 +831,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 if (floatval($SALDO_PRESTAMOS) > 0 && floatval($v->SaldoPres) !== $SALDO_PRESTAMOS) {
                     $this->db->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
                             ->where("Numero", $v->Numero)
-                            ->update("empleados"); 
+                            ->update("empleados");
                 }
             }
         } catch (Exception $exc) {
@@ -934,15 +934,15 @@ class GeneraNominaDeSemana extends CI_Controller {
         try {
             $x = $this->input;
             $xxx = $this->input->post();
+            $S1 = intval($x->post('S1'));
+            $S4 = intval($x->post('S4'));
             $SEMANA_VACACIONES = 99;
-            $l = new Logs("GENERA NOMINA DE SEMANA - VACACIONES", "GENERO LAS VACACIONES DE LA SEMANA {$SEMANA_VACACIONES}, {$xxx["ANIO"]}.", $this->session);
+            $l = new Logs("GENERA NOMINA DE SEMANA - VACACIONES", "GENERO LAS VACACIONES DE LA SEMANA {$SEMANA_VACACIONES} ({$S1} , {$S4}), {$xxx["ANIO"]}.", $this->session);
             $anio_completo = 365;
             $treinta_dias = 30.41;
             $total_vacaciones = 0;
             $prima = 0;
             $dias_trabajados_pagados = 0;
-            $S1 = intval($x->post('S1'));
-            $S4 = intval($x->post('S4'));
             $sueldin = 0;
 
             /* 1 ELIMINAR TODO REGISTRO QUE YA TENGA LA SEMANA, AÑO EN PRENOMINA Y PRENOMINAL */
@@ -1198,7 +1198,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                     //}/*PARA EFECTO DE PRUEBAS*/
                 }
             }
-        } catch (Exception $exc) {
+         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
@@ -1440,6 +1440,36 @@ class GeneraNominaDeSemana extends CI_Controller {
         $jc->setFilename('PRENOMINA_EXCEL_SEM_' . $xxx['SEMANA'] . '_' . Date('h_i_s'));
         $jc->setDocumentformat('xls');
         print $jc->getReport();
+    }
+    
+    public function getReportesNomina9998XLS() {try {
+            $reports = array();
+            $this->benchmark->mark('code_start');
+
+            /* OBTENER REPORTES */
+            $x = $this->input->post();
+
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $p = array();
+            $p["logo"] = base_url() . $this->session->LOGO;
+            $p["empresa"] = $this->session->EMPRESA_RAZON;
+            $p["semana"] = $x['SEMANA'];
+            $p["anio"] = $x['ANIO'];
+            $jc->setParametros($p);
+            /* 1. REPORTE DE PRENOMINA COMPLETO */
+            $jc->setJasperurl('jrxml\prenomina\PreNomVacXLS.jasper');
+            $jc->setFilename('PreNomVacXLS_' . Date('his'));
+            $jc->setDocumentformat('xls');
+            $reports['1UNO'] = $jc->getReport();
+            $this->benchmark->mark('code_end');
+
+            $reports['8MARK_TIEMPO_TRANSCURRIDO'] = $this->benchmark->elapsed_time('code_start', 'code_end');
+//            echo $this->benchmark->elapsed_time('code_start', 'code_end');
+            print json_encode($reports);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
     }
 
     public function getSemanaNominaX() {
