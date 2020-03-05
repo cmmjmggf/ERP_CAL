@@ -186,12 +186,50 @@ class AvanceTejido extends CI_Controller {
 
     public function onVerificarAvance() {
         try {
-//            print json_encode($this->avtm->onVerificarAvance($this->input->get('CONTROL')));
-            print json_encode($this->db->select("COUNT(A.ID) AS EXISTE", false)
-                                    ->from('avance AS A')
-                                    ->where_in('A.Departamento', array(150, 160))
-                                    ->like('A.Control', $this->input->get('CONTROL'))
-                                    ->get()->result());
+            $x = $this->input->get();
+            $check_maquila = $this->db->query("SELECT P.Maquila, P.stsavan FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}")->result();
+            switch (intval($check_maquila[0]->Maquila)) {
+                case 1:
+                    print json_encode($this->db->select("COUNT(A.ID) AS EXISTE, 1 AS MAQUILA", false)
+                                            ->from('avance AS A')
+                                            ->where_in('A.Departamento', array(150, 160))
+                                            ->like('A.Control', $x['CONTROL'])
+                                            ->get()->result());
+                    break;
+                case 2:
+                    $check_docto_existe = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                                    . "FROM avaprd AS A "
+                                    . "WHERE A.contped = {$x['CONTROL']}")->result();
+                    if (intval($check_docto_existe[0]->EXISTE) > 0) {
+                        $check_docto = $this->db->query("SELECT A.almpesp AS DOCUMENTO, A.stsavan "
+                                        . "FROM avaprd AS A "
+                                        . "WHERE A.contped = {$x['CONTROL']}")->result();
+
+                        $check_avanceproduccionmaq = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                                        . "FROM avanceproduccionmaq AS A "
+                                        . "WHERE A.Documento = {$check_docto[0]->DOCUMENTO}")->result();
+                        if (intval($check_avanceproduccionmaq[0]->EXISTE) > 0) {
+                            print json_encode($this->db->select("COUNT(A.ID) AS EXISTE, 1 AS MAQUILA", false)
+                                                    ->from('avance AS A')
+                                                    ->where_in('A.Departamento', array(150, 160))
+                                                    ->like('A.Control', $x['CONTROL'])
+                                                    ->get()->result());
+                        } else {
+                            print json_encode($this->db->select("0 AS EXISTE", false)
+                                                    ->from('avance AS A')
+                                                    ->where_in('A.Departamento', array(150, 160))
+                                                    ->like('A.Control', 99999999999999999999)
+                                                    ->get()->result());
+                        }
+                    } else {
+                        print json_encode($this->db->select("0 AS EXISTE", false)
+                                                ->from('avance AS A')
+                                                ->where_in('A.Departamento', array(150, 160))
+                                                ->like('A.Control', 99999999999999999999)
+                                                ->get()->result());
+                    }
+                    break;
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
