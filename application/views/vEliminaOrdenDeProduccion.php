@@ -18,12 +18,37 @@
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1 mt-4">
                 <button type="button" class="btn btn-danger" id="btnEliminar">Eliminar</button>
             </div>
+            <div class="w-100 my-3">
+                <hr>
+            </div>
+            <div class="col-3">
+                <label>MAQUILA</label>
+                <input type="text" id="MaquilaElimina" name="MaquilaElimina" class="form-control form-control-sm numbersOnly" maxlength="2">
+            </div>
+            <div class="col-2">
+                <label>SEMANA</label>
+                <input type="text" id="SemanaElimina" name="SemanaElimina" class="form-control form-control-sm numbersOnly" maxlength="2">
+            </div>
+            <div class="col-2">
+                <label>AÑO</label>
+                <input type="text" id="AnioElimina" name="AnioElimina" readonly="" class="form-control form-control-sm numbersOnly" maxlength="4">
+                <input type="text" id="Ordenes" name="Ordenes" readonly="" class="form-control form-control-sm numbersOnly d-none" maxlength="4">
+            </div>
+            <div class="col-2 mt-3">
+                <span class="font-weight-bold total_ordenes_a_eliminar" style="color:#CC0000; font-size: 24px;">0 ORDENES</span>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 mt-4">
+                <button type="button" class="btn btn-danger font-weight-bold" id="btnEliminarXMaquilaSemanaAnio" style="color: #ffff00; background-color: #000" disabled="disabled">ELIMINAR X SEMANA AÑO </button>
+            </div>
+            <div class="w-100 my-3">
+                <hr>
+            </div>
             <div class="col-12 m-2"></div>
             <div class="col-12">
-                <p class="text-danger font-weight-bold">Nota: Una vez terminado este paso, imprima las tarjetas de producción en su paso normal.</p>
+                <h2 class="text-danger font-weight-bold" style="color: #cc0000 !important;">NOTA: UNA VEZ TERMINADO ESTE PASO, IMPRIMA LAS TARJETAS DE PRODUCCIÓN EN SU PASO NORMAL.</h2>
             </div>
             <div class="col-12">
-                <p class="text-info font-weight-bold">Nota: Esta rutina no afecta el avance de producción.</p>
+                <h2 class="text-info font-weight-bold" style="color: #2196F3 !important;">NOTA: ESTA RUTINA NO AFECTA EL AVANCE DE PRODUCCIÓN.</h2>
             </div>
             <div id="Controles" class="table-responsive d-none">
                 <table id="tblControles" class="table table-sm display hover" style="width:100%">
@@ -86,7 +111,13 @@
     var Controles;
     var tblControles = $('#tblControles');
     var btnReload = $("#btnReload"), btnEliminar = $("#btnEliminar");
-
+    var pnlTablero = $("#pnlTablero"),
+            MaquilaElimina = pnlTablero.find("#MaquilaElimina"),
+            SemanaElimina = pnlTablero.find("#SemanaElimina"),
+            AnioElimina = pnlTablero.find("#AnioElimina"),
+            Ordenes = pnlTablero.find("#Ordenes"),
+            btnEliminarXMaquilaSemanaAnio = pnlTablero.find("#btnEliminarXMaquilaSemanaAnio"),
+            Aniox = '<?php print Date('Y'); ?>';
     // IIFE - Immediately Invoked Function Expression
     (function (yc) {
         // The global jQuery object is passed as a parameter
@@ -95,7 +126,7 @@
         // The $ is now locally scoped
         // Listen for the jQuery ready event on the document
         $(function () {
-            handleEnter();
+            handleEnterDiv(pnlTablero);
             //getRecords();
             $.fn.dataTable.ext.search.push(
                     function (settings, data, dataIndex) {
@@ -109,14 +140,73 @@
                         return false;
                     }
             );
-
-            $("#ControlInicial, #ControlFinal").keyup(function () {
-                Controles.draw();
+            AnioElimina.val(Aniox);
+            MaquilaElimina.on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    getTotalOrdenesAEliminar();
+                }
             });
-
-            btnReload.click(function () {
-                $("#ControlInicial, #ControlFinal").val('');
-                Controles.ajax.reload();
+            SemanaElimina.on('keydown', function (e) {
+                if (e.keyCode === 13) {
+                    getTotalOrdenesAEliminar();
+                }
+            });
+            btnEliminarXMaquilaSemanaAnio.click(function () {
+                var s = parseInt(SemanaElimina.val());
+                if (MaquilaElimina.val() && s > 0 && s <= 52 && AnioElimina.val()) {
+                    swal({
+                        title: "¿Estas seguro?",
+                        text: "Eliminaras " + Ordenes.val() + " ordenes de producción de la maquila, semana y año seleccionado",
+                        icon: "warning",
+                        buttons: {
+                            cancelar: {
+                                text: "CANCELAR",
+                                value: 0
+                            },
+                            cambiar: {
+                                text: "ELIMINAR ORDENES",
+                                value: 1
+                            }
+                        }
+                    }).then((value) => {
+                        switch (value) {
+                            case 0:
+                                swal.close();
+                                break;
+                            case 1:
+                                onOpenOverlay('');
+                                $.post('<?php print base_url('EliminaOrdenDeProduccion/onEliminarControlesXMaquilaSemanaAno') ?>', {
+                                    MAQUILA: MaquilaElimina.val() ? MaquilaElimina.val() : '',
+                                    SEMANA: SemanaElimina.val() ? SemanaElimina.val() : '',
+                                    ANIO: AnioElimina.val() ? AnioElimina.val() : '',
+                                    ORDENES: Ordenes.val()
+                                }).done(function (a) {
+                                    console.log(a);
+                                    onCloseOverlay();
+                                    iMsg("SE HAN ELIMINADO " + Ordenes.val() + " ORDENES DE PRODUCCIÓN", "s", function () {
+                                        MaquilaElimina.focus().select();
+                                        pnlTablero.find("span.total_ordenes_a_eliminar").text("0 ORDENES");
+                                        pnlTablero.find("#Ordenes").val(0);
+                                    });
+                                }).fail(function (x) {
+                                    getError(x);
+                                    onCloseOverlay();
+                                });
+                                break;
+                        }
+                    });
+                } else {
+                    onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR TODOS LOS DATOS REQUERIDOS \n *MAQUILA \n *SEMANA", function () {
+                        if (!MaquilaElimina.val()) {
+                            MaquilaElimina.focus().select();
+                            return;
+                        }
+                        if (!SemanaElimina.val()) {
+                            SemanaElimina.focus().select();
+                            return;
+                        }
+                    });
+                }
             });
 
             $("#ControlInicial").focus();
@@ -295,4 +385,36 @@
         });
         HoldOn.close();
     }
+
+    function  getTotalOrdenesAEliminar() {
+        if (SemanaElimina.val()) {
+            $.getJSON('<?php print base_url("EliminaOrdenDeProduccion/getTotalOrdenesAEliminar"); ?>', {
+                MAQUILA: MaquilaElimina.val() ? MaquilaElimina.val() : '',
+                SEMANA: SemanaElimina.val() ? SemanaElimina.val() : '',
+                ANIO: AnioElimina.val() ? AnioElimina.val() : ''
+            }).done(function (a) {
+                console.log(a);
+                if (a.length > 0) {
+                    var ordenes = parseInt(a[0].ORDENES);
+                    pnlTablero.find("span.total_ordenes_a_eliminar").text(ordenes + " ORDENES");
+                    pnlTablero.find("#Ordenes").val(ordenes);
+                    if (ordenes > 0) {
+                        onEnable(btnEliminarXMaquilaSemanaAnio);
+                    } else {
+                        onDisable(btnEliminarXMaquilaSemanaAnio);
+                        onCampoInvalido(pnlTablero, "NO HAY ORDENES QUE ELIMINAR EN ESTA MAQUILA, SEMANA, AÑO", function () {
+                            MaquilaElimina.focus().select();
+                        });
+                    }
+                }
+            }).fail(function (x) {
+                getError(x);
+            });
+        }
+    }
 </script>
+<style>
+    .swal-button {
+        background-color: #cc0000;
+    }
+</style>
