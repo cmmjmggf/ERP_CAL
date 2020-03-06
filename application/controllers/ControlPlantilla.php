@@ -191,7 +191,9 @@ class ControlPlantilla extends CI_Controller {
 
     public function getProveedoresMaquilas() {
         try {
-            print json_encode($this->cpm->getProveedoresMaquilas());
+//            print json_encode($this->cpm->getProveedoresMaquilas());
+            print json_encode($this->db->select('PRM.numprv AS ID, PRM.nomprv AS PROVEEDOR', false)
+                                    ->from('provmaqui AS PRM')->order_by('PROVEEDOR', 'ASC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -281,9 +283,15 @@ class ControlPlantilla extends CI_Controller {
              *  3 = PROCESADO COMO PLANTILLA
              */
             $x = $this->input;
+            $xx = $this->input->post();
+
+            $PROVEEDOR = $this->db->select('nomprv AS NOMBRE', false)
+                            ->from('provmaqui')
+                            ->where('numprv', $x->post('PROVEEDOR'))
+                            ->get()->result();
             $this->db->insert('controlpla', array(
                 'Proveedor' => $x->post('PROVEEDOR'),
-                'ProveedorT' => str_replace("{$x->post('PROVEEDOR')} ", "", $x->post('PROVEEDORT')),
+                'ProveedorT' => $PROVEEDOR[0]->NOMBRE,
                 'Tipo' => $x->post('TIPO'),
                 'Documento' => ($x->post('DOCUMENTO') === '0') ? $Docto : $x->post('DOCUMENTO'),
                 'Control' => $x->post('CONTROL'),
@@ -296,7 +304,11 @@ class ControlPlantilla extends CI_Controller {
                 'Precio' => $x->post('PRECIO'),
                 'Fecha' => $x->post('FECHA'),
                 'Registro' => Date('d/m/Y h:i:s a'),
-                'Estatus' => 1));
+                'Estatus' => 1,
+                'Usuario' => $this->session->ID,
+                'UsuarioT' => $this->session->USERNAME
+            ));
+            $l = new Logs("CONTROL PLANTILLA", "CONTROL {$xx['CONTROL']} DE {$xx['PARES']} PARES, MAQUILA {$xx['PROVEEDOR']} PARA MAQUILAR LA FRACCION {$xx['FRACCION']} CON UN PRECIO DE {$xx['PRECIO']}", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
