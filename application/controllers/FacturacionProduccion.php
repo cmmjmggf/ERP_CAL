@@ -195,8 +195,18 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                                     $this->db->query("SELECT ((FD.numfac) + 1)  AS ULFAC FROM facturadetalle AS FD WHERE FD.tp = {$this->input->get('TP')} AND FD.numfac < 122320 ORDER BY FD.numfac DESC LIMIT 1")->result());
                     break;
                 case 2:
-                    print json_encode(
-                                    $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = {$this->input->get('TP')} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                    $TPX = $this->input->get("TP");
+                    $facturacion = $this->db->query("SELECT (F.factura+1) AS ULFACR, F.cliente, F.tp FROM facturacion AS F WHERE F.tp = {$TPX} GROUP BY factura ORDER BY ID DESC LIMIT 1;")->result();
+                    $cartcliente = $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR FROM cartcliente AS CC  WHERE CC.tipo = {$TPX} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result();
+                    if (intval($facturacion[0]->ULFACR) > intval($cartcliente[0]->ULFACR)) {
+                        print json_encode($this->db->query("SELECT (F.factura+1) AS ULFACR, F.cliente, F.tp FROM facturacion AS F WHERE F.tp = {$TPX} GROUP BY factura ORDER BY ID DESC LIMIT 1;")->result());
+                    } else if (intval($facturacion[0]->ULFACR) < intval($cartcliente[0]->ULFACR)) {
+                        print json_encode(
+                                        $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR, \"MENOR\" AS CONDICION FROM cartcliente AS CC  WHERE CC.tipo = {$TPX} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                    }else if (intval($facturacion[0]->ULFACR) === intval($cartcliente[0]->ULFACR)) {
+                        print json_encode(
+                                        $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR, \"IGUAL\" AS CONDICION FROM cartcliente AS CC  WHERE CC.tipo = {$TPX} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
+                    }
                     break;
             }
         } catch (Exception $exc) {
