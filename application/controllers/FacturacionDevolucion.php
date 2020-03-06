@@ -13,6 +13,7 @@ class FacturacionDevolucion extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->onRevisarDevoluciones();
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
@@ -28,6 +29,40 @@ class FacturacionDevolucion extends CI_Controller {
             $this->load->view('vFacturacionDevolucion')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+
+    public function onRevisarDevoluciones() {
+        try {
+            $ANIO = Date('Y');
+            $this->db->set("stafac", 2)->where("paredev = parefac", null, false)->update("devolucionnp");
+
+            $revision = $this->db->query("SELECT ID, control, paredev, parefac, 
+                (SELECT SUM(F.pareped) FROM facturacion AS F 
+                WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) AS PARES_FAC, 
+                stafac AS ESTATUS_FAC  
+                FROM devolucionnp AS D WHERE YEAR(D.fechadev) = {$ANIO} AND paredev > parefac "
+                            . "HAVING (SELECT SUM(F.pareped) FROM facturacion AS F "
+                            . "WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) IS NOT NULL")->result();
+            foreach ($revision as $k => $v) {
+                switch (intval($v->ESTATUS_FAC)) {
+                    default:
+                        $this->db->set("parefac", $v->PARES_FAC)
+                                ->where("control", $v->control)
+                                ->where("paredev", $v->paredev)
+                                ->where_in("stafac", array(0, 1))
+                                ->where("ID", $v->ID)
+                                ->update("devolucionnp");
+                        break;
+                }
+            }
+            /*fijar los controles cuando han tomado 5 de 10 por ejemplo quedan 5 de saldo*/
+            $this->db->set("stafac", 1) 
+                    ->where("YEAR(fechadev) = {$ANIO} AND parefac > 0 AND paredev > parefac ", null,false)
+                    ->where("stafac", 2)  
+                    ->update("devolucionnp");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 
@@ -456,6 +491,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["usuario_id"] = $this->session->ID;
             $f["devid"] = $x["DEVID"];
             $this->db->insert('facturacion', $f);
+
             $tipo_cambio = 0;
             switch (intval($x["TIPO_CAMBIO"])) {
                 case 1:
@@ -513,6 +549,40 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             } else if (intval($devolucion[0]->fact2) === 0) {
                 $this->db->query("UPDATE devolucionnp "
                         . "SET fact2 = {$x['FACTURA']} WHERE registro = {$x['DEVOLUCION']} AND control = {$x['CONTROL']} ");
+            }
+
+
+            /* 05/03/2020 */
+            $pares_facturados_dev_existe = $this->db->query("SELECT COUNT(*) AS EXISTE "
+                            . "FROM facturacion AS F "
+                            . "WHERE F.staped = 2 "
+                            . "AND F.contped = {$x['CONTROL']} AND F.modulo = 'DEVOLUCION';")->result();
+            if (intval($pares_facturados_dev_existe[0]->EXISTE) >= 1) {
+                $pares_facturados_dev = $this->db->query("SELECT SUM(pareped) AS PARES "
+                                . "FROM facturacion AS F "
+                                . "WHERE F.staped = 2 "
+                                . "AND F.contped = {$x['CONTROL']} AND F.modulo = 'DEVOLUCION';")->result();
+                $this->db->set("parefac", $pares_facturados_dev[0]->PARES)
+                        ->where("control", $x['CONTROL'])
+                        ->update("devolucionnp");
+            } else {
+                $this->db->set("parefac", $x['PARES_A_FACTURAR'])
+                        ->where("control", $x['CONTROL'])
+                        ->update("devolucionnp");
+            }
+            $pares_facturados_existe = $this->db->query("SELECT  COUNT(*) AS EXISTE "
+                            . "FROM devolucionnp AS D "
+                            . "WHERE D.stafac = 1 "
+                            . "AND D.control = {$x['CONTROL']}")->result();
+            $pares_facturados = $this->db->query("SELECT D.paredev AS PARES_DEV, D.parefac AS PARES_FAC "
+                            . "FROM devolucionnp AS D "
+                            . "WHERE D.stafac = 1 "
+                            . "AND D.control = {$x['CONTROL']}")->result();
+            if (intval($pares_facturados[0]->PARES_DEV) === intval($pares_facturados[0]->PARES_FAC)) {
+                $this->db->set("stafac", 2)
+                        ->where("paredev = parefac", null, false)
+                        ->where("control", $x['CONTROL'])
+                        ->update("devolucionnp");
             }
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
 

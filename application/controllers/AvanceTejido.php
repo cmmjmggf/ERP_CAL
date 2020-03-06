@@ -45,7 +45,11 @@ class AvanceTejido extends CI_Controller {
 
     public function getChoferes() {
         try {
-            print json_encode($this->avtm->getChoferes());
+//            print json_encode($this->avtm->getChoferes());
+            print json_encode($this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
+                                    ->from('empleados AS E')
+                                    ->where('E.AltaBaja', 1)->where('E.DepartamentoFisico', 170)
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
