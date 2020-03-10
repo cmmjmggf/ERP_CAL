@@ -387,10 +387,10 @@
                         Maq: Maquila.val()
                     }).done(function (data) {
                         if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
-                            if (data[0].Depto === '260') {
+                            if (data[0].Maquila !== Maquila.val()) {//Validamos que pertenezca a la maquila
                                 swal({
-                                    title: "CONTROL YA FACTURADO",
-                                    text: "EL CONTROL YA HA SIDO FACTURADO VERIFIQUE CON VENTAS ",
+                                    title: "ATENCIÓN",
+                                    text: "EL CONTROL ESTÁ ASIGANDO A LA MAQUILA: " + data[0].Maquila,
                                     icon: "warning",
                                     closeOnClickOutside: false,
                                     closeOnEsc: false
@@ -399,24 +399,11 @@
                                         Control.val('').focus();
                                     }
                                 });
-                            } else if (data[0].Depto === '270') {
-                                swal({
-                                    title: "CONTROL CANCELADO POR EL CLIENTE",
-                                    text: "****MOTIVO EXTEMPORANEO****",
-                                    icon: "warning",
-                                    closeOnClickOutside: false,
-                                    closeOnEsc: false
-                                }).then((action) => {
-                                    if (action) {
-                                        Control.val('').focus();
-                                    }
-                                });
-                            } else { //si el control no está cancelado o facturado permite continuar
-                                if (data[0].Terminado !== '') {// si el control ya se recibio y está en controlterm
-
+                            } else {
+                                if (data[0].Depto === '260') {
                                     swal({
-                                        title: "ATENCIÓN",
-                                        text: "EL CONTROL YA FUE RECIBIDO CON ANTERIORIDAD",
+                                        title: "CONTROL YA FACTURADO",
+                                        text: "EL CONTROL YA HA SIDO FACTURADO VERIFIQUE CON VENTAS ",
                                         icon: "warning",
                                         closeOnClickOutside: false,
                                         closeOnEsc: false
@@ -425,54 +412,40 @@
                                             Control.val('').focus();
                                         }
                                     });
-                                } else { //Si el control no está recibido en controlterm
-                                    var currentdate = new Date();
-                                    //Validación sólo para maquilas dif a 98
-                                    if (Maquila.val() !== '98') {
-                                        if (Maquila.val() === '1' && data[0].Depto !== '230') {
-                                            swal({
-                                                title: "ATENCIÓN",
-                                                text: "EL CONTROL NO CONCUERDA CON EL AVANCE REQUERIDO",
-                                                icon: "warning",
-                                                closeOnClickOutside: false,
-                                                closeOnEsc: false
-                                            }).then((action) => {
-                                                if (action) {
-                                                    Control.val('').focus();
-                                                }
-                                            });
-                                        } else {
-                                            //Aquí van las siguientes validaciones
-                                            if (parseFloat(data[0].Precio) > 0) {
-                                                $.each(data[0], function (k, v) {
-                                                    pnlTablero.find("#" + k).val(v);
-                                                });
-                                                //Si es nuevo crea el folio
-                                                if (nuevo) {
-                                                    //getFolio();
-                                                    if (Maquila.val() === '1') {
-                                                        var folio = currentdate.getFullYear().toString().substr(-2)
-                                                                + ('0' + (currentdate.getMonth() + 1)).slice(-2)
-                                                                + ('0' + currentdate.getDate()).slice(-2);
-                                                        pnlTablero.find('#Docto').val(folio).focus();
-                                                    } else {
-                                                        pnlTablero.find('#Docto').val(currentdate.getFullYear().toString().substr(-1)).focus();
-                                                    }
+                                } else if (data[0].Depto === '270') {
+                                    swal({
+                                        title: "CONTROL CANCELADO POR EL CLIENTE",
+                                        text: "****MOTIVO EXTEMPORANEO****",
+                                        icon: "warning",
+                                        closeOnClickOutside: false,
+                                        closeOnEsc: false
+                                    }).then((action) => {
+                                        if (action) {
+                                            Control.val('').focus();
+                                        }
+                                    });
+                                } else { //si el control no está cancelado o facturado permite continuar
+                                    if (data[0].Terminado !== '') {// si el control ya se recibio y está en controlterm
 
-
-                                                } else {
-                                                    pnlTablero.find('#Defecto')[0].selectize.focus();
-                                                }
-
-
-                                                Estilo = data[0].ClaveEstilo;
-                                                Color = data[0].ClaveColor;
-                                                Linea = data[0].Linea;
-
-                                            } else {
+                                        swal({
+                                            title: "ATENCIÓN",
+                                            text: "EL CONTROL YA FUE RECIBIDO CON ANTERIORIDAD",
+                                            icon: "warning",
+                                            closeOnClickOutside: false,
+                                            closeOnEsc: false
+                                        }).then((action) => {
+                                            if (action) {
+                                                Control.val('').focus();
+                                            }
+                                        });
+                                    } else { //Si el control no está recibido en controlterm
+                                        var currentdate = new Date();
+                                        //Validación sólo para maquilas dif a 98
+                                        if (Maquila.val() !== '98') {
+                                            if (Maquila.val() === '1' && data[0].Depto !== '230') {
                                                 swal({
                                                     title: "ATENCIÓN",
-                                                    text: "EL ESTILO NO TIENE PRECIO DE VENTA",
+                                                    text: "EL CONTROL NO CONCUERDA CON EL AVANCE REQUERIDO",
                                                     icon: "warning",
                                                     closeOnClickOutside: false,
                                                     closeOnEsc: false
@@ -481,18 +454,59 @@
                                                         Control.val('').focus();
                                                     }
                                                 });
+                                            } else {
+                                                //Aquí van las siguientes validaciones
+                                                if (parseFloat(data[0].Precio) > 0) {
+                                                    $.each(data[0], function (k, v) {
+                                                        pnlTablero.find("#" + k).val(v);
+                                                    });
+                                                    //Si es nuevo crea el folio
+                                                    if (nuevo) {
+                                                        //getFolio();
+                                                        if (Maquila.val() === '1') {
+                                                            var folio = currentdate.getFullYear().toString().substr(-2)
+                                                                    + ('0' + (currentdate.getMonth() + 1)).slice(-2)
+                                                                    + ('0' + currentdate.getDate()).slice(-2);
+                                                            pnlTablero.find('#Docto').val(folio).focus();
+                                                        } else {
+                                                            pnlTablero.find('#Docto').val(currentdate.getFullYear().toString().substr(-1)).focus();
+                                                        }
+
+
+                                                    } else {
+                                                        pnlTablero.find('#Defecto')[0].selectize.focus();
+                                                    }
+
+
+                                                    Estilo = data[0].ClaveEstilo;
+                                                    Color = data[0].ClaveColor;
+                                                    Linea = data[0].Linea;
+
+                                                } else {
+                                                    swal({
+                                                        title: "ATENCIÓN",
+                                                        text: "EL ESTILO NO TIENE PRECIO DE VENTA",
+                                                        icon: "warning",
+                                                        closeOnClickOutside: false,
+                                                        closeOnEsc: false
+                                                    }).then((action) => {
+                                                        if (action) {
+                                                            Control.val('').focus();
+                                                        }
+                                                    });
+                                                }
                                             }
-                                        }
-                                    } else { //No se valida el precio ni el departamento del que viene
-                                        $.each(data[0], function (k, v) {
-                                            pnlTablero.find("#" + k).val(v);
-                                        });
-                                        //Si es nuevo crea el folio
-                                        if (nuevo) {
-                                            //getFolio();
-                                            pnlTablero.find('#Docto').focus();
-                                        } else {
-                                            pnlTablero.find('#Defecto')[0].selectize.focus();
+                                        } else { //No se valida el precio ni el departamento del que viene
+                                            $.each(data[0], function (k, v) {
+                                                pnlTablero.find("#" + k).val(v);
+                                            });
+                                            //Si es nuevo crea el folio
+                                            if (nuevo) {
+                                                //getFolio();
+                                                pnlTablero.find('#Docto').focus();
+                                            } else {
+                                                pnlTablero.find('#Defecto')[0].selectize.focus();
+                                            }
                                         }
                                     }
                                 }

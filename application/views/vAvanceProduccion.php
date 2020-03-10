@@ -56,6 +56,7 @@
                                 <option value="2">2 CON TEJEDORA</option>
                                 <option value="3">3 CON SUELA</option>
                                 <option value="4">4 ORDENADO POR LINEA/FECHA ENTREGA</option>
+                                <option value="5">5 CON MAQUILADORAS</option>
                             </select>
                         </div>
                     </div>

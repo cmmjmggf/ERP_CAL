@@ -17,27 +17,24 @@
 C.Control,
 C.Estilo,
 C.Color,
-CO.Descripcion,
-CAST(D.Clave AS SIGNED)  AS ClaveDepto,
-D.Descripcion AS NombreDepto,
+C.ColorT AS Descripcion,
+CAST(C.DeptoProduccion AS SIGNED)  AS ClaveDepto,
+C.EstatusProduccion AS NombreDepto,
 C.Pares,
-P.FechaEntrega,
-P.FechaProduccion as FechaProg,
+C.FechaEntrega,
+C.FechaProduccion AS FechaProg,
 LPM.PrecioVta,
-ifnull(LPM.PrecioVta,0) * C.Pares AS Subtotal,
+IFNULL(LPM.PrecioVta,0) * C.Pares AS Subtotal,
 CAST(FXE.CostoMO AS DECIMAL(10,2)) AS CostoTejido,
-ifnull(FXE.CostoMO,0) * C.Pares AS SubtotalTej,
-(ifnull(FXE.CostoMO,0) * C.Pares) + (ifnull(LPM.PrecioVta,0) * C.Pares) AS Neto,
+IFNULL(FXE.CostoMO,0) * C.Pares AS SubtotalTej,
+(IFNULL(FXE.CostoMO,0) * C.Pares) + (IFNULL(LPM.PrecioVta,0) * C.Pares) AS Neto,
 CT.docto AS DoctoTerm,
 CT.fecha AS FechaTerm
-FROM controles C
-INNER JOIN colores CO ON C.Estilo= CO.Estilo AND C.Color = CO.Clave
-INNER JOIN pedidox P ON P.Control = C.Control
-LEFT JOIN departamentos D ON D.Descripcion = C.EstatusProduccion
-LEFT JOIN listapreciosmaquilas LPM ON P.Maquila = LPM.Maq AND C.Estilo = LPM.Estilo AND C.Color =  LPM.Color
+FROM pedidox C
+LEFT JOIN listapreciosmaquilas LPM ON C.Maquila = LPM.Maq AND C.Estilo = LPM.Estilo AND C.Color =  LPM.Color
 LEFT JOIN fraccionesxestilo FXE ON FXE.Estilo = C.Estilo AND FXE.Fraccion = '401'
 LEFT JOIN controlterm CT ON CT.Control =  C.Control
-WHERE P.Maquila = $P{maq} AND P.Semana = $P{sem} AND P.Ano = $P{ano} and P.stsavan <> 14
+WHERE C.Maquila = $P{maq} AND C.Semana = $P{sem} AND C.Ano = $P{ano} and C.stsavan <> 14
 order by ClaveDepto ASC, C.Control ASC]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
@@ -49,9 +46,7 @@ order by ClaveDepto ASC, C.Control ASC]]>
 	<field name="Color" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Descripcion" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="Descripcion" class="java.lang.String"/>
 	<field name="ClaveDepto" class="java.lang.Long"/>
 	<field name="NombreDepto" class="java.lang.String"/>
 	<field name="Pares" class="java.lang.String">

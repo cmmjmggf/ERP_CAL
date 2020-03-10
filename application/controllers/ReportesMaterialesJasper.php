@@ -304,4 +304,20 @@ class ReportesMaterialesJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteRelacionControlesMaqExcel() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["maq"] = $this->input->post('Maq');
+        $parametros["ano"] = $this->input->post('Ano');
+        $parametros["sem"] = $this->input->post('Sem');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\materiales\excel\relacionControlesMaq.jasper');
+        $jc->setFilename('RELACION_CONTROLES_MAQ_SEM_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
+    }
+
 }

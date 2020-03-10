@@ -24,6 +24,7 @@ class ControlesTerminados_model extends CI_Model {
                                 PE.Color AS `ClaveColor`,
                                 (select linea from estilos where clave = PE.Estilo) AS `Linea`,
                                 PE.Semana,
+                                PE.Maquila,
                                 PE.Pares,
                                 CAST(ifnull(LPM.PrecioVta, 0) AS DECIMAL(5, 2)) AS Precio,
                                 `PE`.`DeptoProduccion` AS `Depto`,

@@ -101,7 +101,7 @@ FROM pedidox PE
 left join estilos E on E.Clave = PE.Estilo
 where stsavan not in (0,13,14)
 and cast(PE.maquila as signed) between $P{maq} and $P{amaq}
-and cast(PE.semana as signed) in (7,8,9,10)
+and cast(PE.semana as signed) in ($P{sem},$P{sem}+1,$P{sem}+2,$P{sem}+3)
 and PE.ano = $P{ano}
 group by abs(E.TipoConstruccion), DEPTO_N
 order by abs(E.TipoConstruccion), DEPTO_N ASC]]>

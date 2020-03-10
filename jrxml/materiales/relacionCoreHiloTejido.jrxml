@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.8433187801425601"/>
+	<property name="ireport.zoom" value="2.727272727272727"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -15,14 +15,14 @@
 	<parameter name="Nmaq" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select pe.control as ControlT, pe.Semana, pe.Estilo, pe.Color, pe.ColorT, pe.Pares,
-a.clave as Articulo, a.Descripcion as ArticuloT , ft.Consumo,
+a.clave as Articulo, a.Descripcion as ArticuloT ,ft.Pieza, ft.Consumo,
 ft.Consumo/2 AS CorteMetro, pe.Pares * 2 AS Hembras,
 pe.Pares*ft.Consumo AS ConsumoTotal
 from pedidox pe
-join fichatecnica ft on ft.Estilo = pe.Estilo and ft.Color = pe.Color and ft.Pieza = '1139'
+join fichatecnica ft on ft.Estilo = pe.Estilo and ft.Color = pe.Color and ft.Pieza IN ('1139','1138')
 join articulos a on a.clave = ft.Articulo
 where pe.ano = $P{ano} and pe.semana = $P{sem} and pe.maquila = $P{maq} and pe.stsavan <> 14
-ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
+ORDER BY  ArticuloT ASC, CorteMetro ASC, pe.Estilo ASC, pe.Color ASC]]>
 	</queryString>
 	<field name="ControlT" class="java.lang.String"/>
 	<field name="Semana" class="java.lang.String">
@@ -42,6 +42,9 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 	</field>
 	<field name="Articulo" class="java.lang.String"/>
 	<field name="ArticuloT" class="java.lang.String"/>
+	<field name="Pieza" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="Consumo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -68,6 +71,15 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 	<variable name="GCons" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{ConsumoTotal}]]></variableExpression>
 	</variable>
+	<variable name="Hembras_1" class="java.lang.Double" resetType="Group" resetGroup="consum" calculation="Sum">
+		<variableExpression><![CDATA[$F{Hembras}]]></variableExpression>
+	</variable>
+	<variable name="CPares" class="java.lang.Double" resetType="Group" resetGroup="consum" calculation="Sum">
+		<variableExpression><![CDATA[Double.parseDouble($F{Pares})]]></variableExpression>
+	</variable>
+	<variable name="ConsumoTotal_1" class="java.lang.Double" resetType="Group" resetGroup="consum" calculation="Sum">
+		<variableExpression><![CDATA[$F{ConsumoTotal}]]></variableExpression>
+	</variable>
 	<group name="Articulo">
 		<groupExpression><![CDATA[$F{Articulo}]]></groupExpression>
 		<groupHeader>
@@ -76,14 +88,14 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 		<groupFooter>
 			<band height="10">
 				<staticText>
-					<reportElement style="Column header" x="112" y="0" width="111" height="10" forecolor="#000000" uuid="7a021074-e134-4b04-80d3-79d0e44a594e"/>
+					<reportElement style="Column header" x="112" y="0" width="118" height="10" forecolor="#000000" uuid="7a021074-e134-4b04-80d3-79d0e44a594e"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="7" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Total por Tipo de Hilo:]]></text>
 				</staticText>
 				<textField pattern="#,##0">
-					<reportElement x="230" y="0" width="30" height="10" uuid="55a19f13-1f28-40aa-9fa0-3a3404c230d9"/>
+					<reportElement x="233" y="0" width="30" height="10" uuid="55a19f13-1f28-40aa-9fa0-3a3404c230d9"/>
 					<textElement textAlignment="Center">
 						<font fontName="SansSerif" size="7" isBold="true"/>
 					</textElement>
@@ -106,6 +118,44 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 			</band>
 		</groupFooter>
 	</group>
+	<group name="consum">
+		<groupExpression><![CDATA[$F{CorteMetro}]]></groupExpression>
+		<groupFooter>
+			<band height="10">
+				<staticText>
+					<reportElement style="Column header" x="112" y="0" width="118" height="10" forecolor="#000000" uuid="3f195a72-a223-4e8b-8809-b982b659faad"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="7" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total por tamaño de corte de hilo:]]></text>
+				</staticText>
+				<textField pattern="#,##0" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="332" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="6366a538-8fa2-4044-9de9-83f983e0b0b1"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Hembras_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="233" y="0" width="30" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="63fc1243-50a7-46b5-bddf-4eb1a44fc4ca"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{CPares}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="519" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="c589aba9-1e2f-47f6-a70d-c48719c67af8"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ConsumoTotal_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -121,14 +171,14 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="230" y="42" width="30" height="11" forecolor="#000000" uuid="0cb1d7a8-b8ee-4cc7-bf1e-816469ff347f"/>
+				<reportElement style="Column header" x="233" y="42" width="30" height="11" forecolor="#000000" uuid="0cb1d7a8-b8ee-4cc7-bf1e-816469ff347f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Pares]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="99" y="42" width="124" height="11" forecolor="#000000" uuid="f679f357-ccd9-4615-b3fe-963cc11c08ea"/>
+				<reportElement style="Column header" x="99" y="42" width="131" height="11" forecolor="#000000" uuid="f679f357-ccd9-4615-b3fe-963cc11c08ea"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -282,14 +332,14 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Detail" x="112" y="0" width="111" height="10" uuid="7f5e1ad2-0202-42df-bbd2-796c153c7035"/>
+				<reportElement style="Detail" x="112" y="0" width="118" height="10" uuid="7f5e1ad2-0202-42df-bbd2-796c153c7035"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ColorT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
-				<reportElement style="Detail" x="230" y="0" width="30" height="10" uuid="719b3dba-5a8c-4b3b-b54c-78743e5c880e"/>
+				<reportElement style="Detail" x="233" y="0" width="30" height="10" uuid="719b3dba-5a8c-4b3b-b54c-78743e5c880e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
@@ -342,14 +392,14 @@ ORDER BY ArticuloT ASC, pe.Estilo ASC, pe.Color ASC]]>
 	<summary>
 		<band height="11" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="112" y="1" width="111" height="10" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
+				<reportElement style="Column header" x="112" y="1" width="118" height="10" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Totales generales:]]></text>
 			</staticText>
 			<textField pattern="#,##0">
-				<reportElement x="230" y="1" width="30" height="10" uuid="f905a7db-510f-4ea0-a250-832b2bbc05c7"/>
+				<reportElement x="233" y="1" width="30" height="10" uuid="f905a7db-510f-4ea0-a250-832b2bbc05c7"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>

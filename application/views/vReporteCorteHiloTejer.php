@@ -49,7 +49,7 @@
         });
 
         mdlReporteCorteHiloTejer.find('#btnImprimir').on("click", function () {
-
+            onDisable(mdlReporteCorteHiloTejer.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlReporteCorteHiloTejer.find("#frmCaptura")[0]);
             $.ajax({
@@ -61,6 +61,7 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                onEnable(mdlReporteCorteHiloTejer.find('#btnImprimir'));
                 if (data.length > 0) {
 
                     $.fancybox.open({
@@ -98,6 +99,7 @@
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                onEnable(mdlReporteCorteHiloTejer.find('#btnImprimir'));
                 console.log(x, y, z);
                 HoldOn.close();
             });

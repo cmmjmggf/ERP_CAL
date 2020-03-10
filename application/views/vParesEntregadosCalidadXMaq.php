@@ -24,6 +24,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -48,8 +49,41 @@
             mdlParesEntregadosCalidadXMaq.find('#FechaFin').val(getLastDayMonth());
             mdlParesEntregadosCalidadXMaq.find('#FechaIni').focus();
         });
-        mdlParesEntregadosCalidadXMaq.find('#btnImprimir').on("click", function () {
+        mdlParesEntregadosCalidadXMaq.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlParesEntregadosCalidadXMaq.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlParesEntregadosCalidadXMaq.find("#frmCaptura")[0]);
 
+            $.ajax({
+                url: base_url + 'index.php/ReportesProduccionJasper/onReporteControlesEntXMaquilaExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                onEnable(mdlParesEntregadosCalidadXMaq.find('#btnImprimirExcel'));
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlParesEntregadosCalidadXMaq.find('#Articulo')[0].selectize.focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                onEnable(mdlParesEntregadosCalidadXMaq.find('#btnImprimirExcel'));
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+        mdlParesEntregadosCalidadXMaq.find('#btnImprimir').on("click", function () {
+            onDisable(mdlParesEntregadosCalidadXMaq.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlParesEntregadosCalidadXMaq.find("#frmCaptura")[0]);
 
@@ -62,6 +96,7 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                onEnable(mdlParesEntregadosCalidadXMaq.find('#btnImprimir'));
                 if (data.length > 0) {
 
                     $.fancybox.open({
@@ -101,6 +136,7 @@
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                onEnable(mdlParesEntregadosCalidadXMaq.find('#btnImprimir'));
                 console.log(x, y, z);
                 HoldOn.close();
             });

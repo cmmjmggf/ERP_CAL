@@ -553,6 +553,9 @@ class ReportesProduccionJasper extends CI_Controller {
             case '4':
                 $jc->setJasperurl('jrxml\produccion\avancePorDeptoLineaEntrega.jasper');
                 break;
+            case '5':
+                $jc->setJasperurl('jrxml\produccion\avancePorDeptoConMaquilaPlantilla.jasper');
+                break;
         }
 
         $jc->setParametros($parametros);
@@ -657,6 +660,21 @@ class ReportesProduccionJasper extends CI_Controller {
         $jc->setJasperurl('jrxml\produccion\relacionControlesEntregadosMaq.jasper');
         $jc->setFilename('REPORTE_CONTROLES_ENTREGADOS_X_MAQ_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function onReporteControlesEntXMaquilaExcel() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $this->input->post('FechaIni');
+        $parametros["fechaFin"] = $this->input->post('FechaFin');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\excel\relacionControlesEntregadosMaq.jasper');
+        $jc->setFilename('REPORTE_CONTROLES_ENTREGADOS_X_MAQ_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
         PRINT $jc->getReport();
     }
 

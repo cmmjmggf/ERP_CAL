@@ -31,6 +31,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExcel">EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -48,8 +49,42 @@
             mdlConRelControlesXMaquila.find('#Ano').focus();
         });
 
-        mdlConRelControlesXMaquila.find('#btnImprimir').on("click", function () {
+        mdlConRelControlesXMaquila.find('#btnImprimirExcel').on("click", function () {
+            onDisable(mdlConRelControlesXMaquila.find('#btnImprimirExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlConRelControlesXMaquila.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesMaterialesJasper/onReporteRelacionControlesMaqExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                onEnable(mdlConRelControlesXMaquila.find('#btnImprimirExcel'));
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlConRelControlesXMaquila.find('#Ano').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                onEnable(mdlConRelControlesXMaquila.find('#btnImprimirExcel'));
+                console.log(x, y, z);
+                HoldOn.close();
+            });
 
+        });
+
+        mdlConRelControlesXMaquila.find('#btnImprimir').on("click", function () {
+            onDisable(mdlConRelControlesXMaquila.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlConRelControlesXMaquila.find("#frmCaptura")[0]);
             $.ajax({
@@ -61,6 +96,7 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                onEnable(mdlConRelControlesXMaquila.find('#btnImprimir'));
                 if (data.length > 0) {
 
                     $.fancybox.open({
@@ -98,6 +134,7 @@
                 }
                 HoldOn.close();
             }).fail(function (x, y, z) {
+                onEnable(mdlConRelControlesXMaquila.find('#btnImprimir'));
                 console.log(x, y, z);
                 HoldOn.close();
             });
