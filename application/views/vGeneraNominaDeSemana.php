@@ -52,12 +52,8 @@
                     </div>
                     <!--ESTO SOLO APLICA CUANDO PONEN LA SEM 99 (VACACIONES) Y 98 (AGUINALDO)-->
                     <div class="row d-none m-1 animated fadeIn" id="SeccionVacacionesAguinaldosParaDestajo">
-                        <div class="col-12 mt-2">
-                            <div class="alert alert-dismissible alert-warning">
-                                <strong>
-                                    Semanas a procesar de vacaciones o aguinaldos para destajos
-                                </strong>
-                            </div>
+                        <div class="col-12 mt-2"> 
+                            <p style="color:#E53935; font-weight: bold;">SEMANAS A PROCESAR DE VACACIONES O AGUINALDOS PARA DESTAJOS</p>
                         </div>
                         <div class="col-3">
                             <input type="text" id="SemanaUnoGNS" name="SemanaUnoGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
@@ -71,14 +67,21 @@
                         <div class="col-3">
                             <input type="text" id="SemanaCuatroGNS" name="SemanaCuatroGNS" maxlength="3" class="form-control form-control-sm numeric" autocomplete="off" readonly="">
                         </div>
-                        <div class="w-100"></div>
-                        <div class="col-6"></div>
+                        <div class="w-100 my-2">
+                            <hr>
+                        </div>
                         <div class="col-6">
-                            <label>Fecha de corte para aguinaldo</label>
+                            <label>Fecha de corte</label>
                             <input type="text" id="FechaCorteAguinaldoGNS" name="FechaCorteAguinaldoGNS" maxlength="12" class="form-control date form-control-sm notEnter">
                         </div>
+                        <div class="col-6 mt-3">
+                            <button id="btnGeneraVacaciones" name="btnGeneraVacaciones" class="btn btn-block btn-sm btn-success"  style="background-color: #4CAF50; border-color: #4CAF50;">
+                                <span class="fa fa-file-excel"></span> VACACIONES A EXCEL
+                            </button>
+                        </div>
                     </div>
-                    <div class="w-100 my-2"></div>
+                    <div class="w-100 my-2">
+                        <hr></div>
                     <div class="col-6">
                         <button type="button" class="btn btn-info btn-sm btn-block" id="btnGeneraGNS">
                             <span class="fa fa-print"></span> GENERA</button>
@@ -94,7 +97,7 @@
                     </div>
                     <div class="col-6">
                         <button type="button" class="btn btn-danger btn-sm btn-block" id="btnCierraNominaGNS" style="background-color: #E53935;
-    border-color: #E91E63;">
+                                border-color: #E91E63;">
                             <span class="fa fa-calendar-times"></span> CIERRA NÓMINA</button>
                     </div>
                     <div class="w-100 my-2">
@@ -127,7 +130,9 @@
             SVacacionesAguinaldosParaDestajo = mdlGeneraNominaDeSemana.find("#SeccionVacacionesAguinaldosParaDestajo"),
             btnCierraNominaGNS = mdlGeneraNominaDeSemana.find("#btnCierraNominaGNS"), btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
             btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS"),
-            GeneraDiezPorcientoDeptos = mdlGeneraNominaDeSemana.find("#GeneraDiezPorcientoDeptos");
+            GeneraDiezPorcientoDeptos = mdlGeneraNominaDeSemana.find("#GeneraDiezPorcientoDeptos"),
+            btnGeneraVacaciones = mdlGeneraNominaDeSemana.find("#btnGeneraVacaciones");
+
     $(document).ready(function () {
 
         btnEliminaMovGenGNS.click(function () {
@@ -152,6 +157,71 @@
                 });
             }
         });
+
+        btnGeneraVacaciones.click(function () {
+            onDisable(btnGeneraVacaciones);
+            if (parseInt(SemanaGNS.val()) === 99 && AnioGNS.val() && FechaCorteAguinaldoGNS.val()) {
+                onOpenOverlay("Generando vacaciones...");
+                var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
+                    FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
+                parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+                parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+                parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+                $.post('<?php print base_url('GeneraNominaDeSemana/getVacaciones'); ?>', parms).done(function (a) {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "SE HAN GENERADO LAS VACACIONES",
+                        icon: "success",
+                        buttons: false,
+                        timer: 2000
+                    });
+//                    SVacacionesAguinaldosParaDestajo.addClass("d-none");
+                    console.log(a);
+                    $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998XLS'); ?>',
+                            {
+                                SEMANA: SemanaGNS.val(),
+                                ANIO: AnioGNS.val()
+                            }).done(function (a) {
+                        HoldOn.close();
+                        if (a.length > 0) {
+                            onCloseOverlay();
+                            var r = JSON.parse(a);
+                            window.open(r["1UNO"], '_blank');
+                        } else {
+                            //                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LOS REPORTES SOLICITADOS', 'warning');
+                        }
+                        onEnable(btnPrenominaExcel);
+                        onEnable(btnGeneraVacaciones);
+                    }).fail(function (x) {
+                        HoldOn.close();
+                        getError(x);
+                        onEnable(btnPrenominaExcel);
+                        onEnable(btnGeneraVacaciones);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
+                }).fail(function (x) {
+                    getError(x);
+                    onCloseOverlay();
+                    onEnable(btnPrenominaExcel);
+                    onEnable(btnGeneraVacaciones);
+                }).always(function () {
+                    busy = false;
+                });
+            } else {
+                onCampoInvalido(mdlGeneraNominaDeSemana, "DEBE DE ESPECIFICAR LA SEMANA 99 Y UNA FECHA DE CORTE", function () {
+                    if (!SemanaGNS.val() && SemanaGNS.val() !== 99) {
+                        SemanaGNS.focus().select();
+                        return;
+                    }
+                    if (!FechaCorteAguinaldoGNS.val()) {
+                        FechaCorteAguinaldoGNS.focus().select();
+                        return;
+                    }
+                });
+            }
+        });
+
         btnPrenominaExcel.click(function () {
             btnPrenominaExcel.attr('disabled', true);
             if (parseInt(SemanaGNS.val()) === 99 && AnioGNS.val()) {
@@ -491,9 +561,15 @@
             }
         });
         SemanaGNS.keydown(function (e) {
-            if (parseInt(SemanaGNS.val()) === 99 && e.keyCode === 13) {
+            if (parseInt(SemanaGNS.val()) === 99 && e.keyCode === 13 ||
+                    parseInt(SemanaGNS.val()) === 98 && e.keyCode === 13) {
                 SVacacionesAguinaldosParaDestajo.removeClass("d-none");
-            } else if (parseInt(SemanaGNS.val()) !== 99 && e.keyCode === 13) {
+                onDisable(btnGeneraGNS);
+                onDisable(btnPrenominaExcel);
+            } else if (parseInt(SemanaGNS.val()) !== 99 && e.keyCode === 13 ||
+                    parseInt(SemanaGNS.val()) !== 98 && e.keyCode === 13) {
+                onEnable(btnGeneraGNS);
+                onEnable(btnPrenominaExcel);
                 SVacacionesAguinaldosParaDestajo.addClass("d-none");
             }
             if (e.keyCode === 13) {
@@ -519,14 +595,18 @@
                 SVacacionesAguinaldosParaDestajo.addClass("d-none");
             }
         });
+
         FechaCorteAguinaldoGNS.keydown(function (e) {
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && parseInt(SemanaGNS.val()) === 99 ||
+                    e.keyCode === 13 && parseInt(SemanaGNS.val()) === 98) {
                 if ($(this).val()) {
-                    onEnable(btnGeneraGNS);
+                    onDisable(btnGeneraGNS);
+                    onDisable(btnPrenominaExcel);
                     btnGeneraGNS.focus();
                 }
             }
         });
+
         mdlGeneraNominaDeSemana.on('shown.bs.modal', function () {
             AnioGNS.val('<?php print Date('Y'); ?>').focus().select();
             onDisable(btnGeneraGNS);

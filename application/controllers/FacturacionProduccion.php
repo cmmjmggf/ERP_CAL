@@ -203,7 +203,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     } else if (intval($facturacion[0]->ULFACR) < intval($cartcliente[0]->ULFACR)) {
                         print json_encode(
                                         $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR, \"MENOR\" AS CONDICION FROM cartcliente AS CC  WHERE CC.tipo = {$TPX} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
-                    }else if (intval($facturacion[0]->ULFACR) === intval($cartcliente[0]->ULFACR)) {
+                    } else if (intval($facturacion[0]->ULFACR) === intval($cartcliente[0]->ULFACR)) {
                         print json_encode(
                                         $this->db->query("SELECT ((CC.remicion) + 1) AS ULFACR, \"IGUAL\" AS CONDICION FROM cartcliente AS CC  WHERE CC.tipo = {$TPX} AND CC.factura <> 4 AND CC.factura < 122320 ORDER BY CC.fecha DESC, CC.remicion DESC LIMIT 1")->result());
                     }
@@ -849,6 +849,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
 
+            $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
 //            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
 //                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
 //                            . "F.acuse, F.sellocfd FROM cfdifa AS F WHERE F.Factura LIKE '{$x['DOCUMENTO_FACTURA']}' ")
@@ -960,7 +961,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec1445.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();

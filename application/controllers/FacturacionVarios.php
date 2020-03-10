@@ -45,7 +45,7 @@ class FacturacionVarios extends CI_Controller {
             $Descripcion = "";
             $FECHA_FACTURA = str_replace('/', '-', $this->input->post('FECHA'));
             $FECHIN = date("Y-m-d 00:00:00", strtotime($FECHA_FACTURA));
-            $FECHA_REGISTRO = $this->db->insert('facturacion', array(
+            $this->db->insert('facturacion', array(
                 "factura" => $x["FACTURA"],
                 "tp" => $x["TP"],
                 "cliente" => $x["CLIENTE"],
@@ -151,6 +151,14 @@ class FacturacionVarios extends CI_Controller {
                     ));
                 }
             }
+            /* SOLO PARA COPPEL */
+            if (intval($x["CLIENTE"]) === 2121 && $x['CONTROLV'] !== '') {
+                $pedidox = $this->db->query("SELECT IFNULL(P.ParesFacturados,0) AS ParesFacturados, P.Pares FROM pedidox AS P WHERE P.Control = {$x['CONTROLV']}")->result();
+                $pares_finales = intval($pedidox[0]->ParesFacturados) + intval($x["CANTIDAD"]);
+                if ($pares_finales <= intval($pedidox[0]->Pares)) {
+                    $this->db->set("ParesFacturados", $pares_finales)->where("Control", $x['CONTROLV'])->update("pedidox");
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -233,6 +241,8 @@ class FacturacionVarios extends CI_Controller {
             } else {
                 $this->db->trans_commit();
             }
+            $l = new Logs("FACTURACION VARIOS (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} "
+            . "CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UNA MONEDA EN {$x["TIPO_MONEDA"]} Y CON UN TIPO DE CAMBIO DE {$x['TIPO_CAMBIO']}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -711,6 +721,17 @@ class FacturacionVarios extends CI_Controller {
                     PRINT $jc->getReport();
                     break;
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControlVarios() {
+        try {
+            $x = $this->input->get();
+            $str = "SELECT COUNT(*) AS EXISTE, P.Pares AS PARES, P.ParesFacturados AS PARES_FACTURADOS FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} ";
+
+            print json_encode($this->db->query($str)->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

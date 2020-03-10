@@ -455,8 +455,9 @@ class Avance8 extends CI_Controller {
                                 break;
                             case 397:
                                 /* AVANCE 397 ENSUELADO */
-                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,300) AND control = {$xXx['CONTROL']}")->result();
-                                if (intval($check_fracciones_obligadas[0]->EXISTE) >= 5) {
+//                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,300) AND control = {$xXx['CONTROL']}")->result();
+                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(300) AND control = {$xXx['CONTROL']}")->result();
+                                if (intval($check_fracciones_obligadas[0]->EXISTE) >= 1) {
                                     if (intval($xXx['DEPARTAMENTO']) === 140) {
                                         $REVISAR_AVANCE_POR_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS P "
                                                         . "WHERE P.Control = {$xXx['CONTROL']} AND P.Departamento = 130")->result();
@@ -477,6 +478,7 @@ class Avance8 extends CI_Controller {
                                             $id = $this->db->insert_id();
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                            
                                             $this->db->insert('fracpagnomina', $data);
                                         }
 

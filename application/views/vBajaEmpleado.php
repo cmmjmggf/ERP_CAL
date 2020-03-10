@@ -45,6 +45,7 @@
             if (valido) {
                 var frm = new FormData(mdlBajaEmpleado.find("#frmCaptura")[0]);
                 frm.append('Numero', numeroEmp);
+                frm.append('Egreso', mdlBajaEmpleado.find('#Egreso').val());
                 frm.append('AltaBaja', 2);
                 $.ajax({
                     url: base_url + 'index.php/Empleados/onModificarBajas',

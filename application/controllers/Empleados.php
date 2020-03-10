@@ -204,6 +204,7 @@ class Empleados extends CI_Controller {
             //Formateo de fechas para guardarlas
 
             unset($data['FechaIngreso']);
+            unset( $data['Egreso']);
             unset($data['Nacimiento']);
             unset($data['FechaIMSS']);
 
@@ -342,7 +343,8 @@ class Empleados extends CI_Controller {
                 if ($v !== '') {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
-            }
+            } 
+            unset($data['Egreso']);
             unset($data["Numero"]);
             $this->db->where('Numero', $x->post('Numero'))->update("empleados", $data);
         } catch (Exception $exc) {
@@ -360,9 +362,11 @@ class Empleados extends CI_Controller {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
             }
-            $FECHA_FINAL_EGRE = date("Y-m-d", strtotime(str_replace('/', '-', $x->post('Numero'))));
+                
+            $FECHA_FINAL_EGRE = date("Y-m-d", strtotime(str_replace('/', '-', $x->post('Egreso'))));
             $data['Egreso'] = $FECHA_FINAL_EGRE;
-            unset($data["Numero"]);
+            unset($data["Numero"]); 
+//            exit(0);
             $this->db->where('Numero', $x->post('Numero'))->update("empleados", $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

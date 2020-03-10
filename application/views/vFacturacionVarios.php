@@ -91,6 +91,12 @@
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                 <label>Cantidad</label>
                 <input type="number" id="Cantidad" name="Cantidad" max="9999" min="0" class="form-control form-control-sm">
+                <div id="info_control" class="d-none">
+                    <label>Control</label>
+                    <input type="text" id="ControlV" name="ControlV"  class="form-control form-control-sm" maxlength="12">
+                    <label>Pares restantes</label>
+                    <input type="text" id="ParesDelControlV" readonly="" name="ParesDelControlV" max="36" min="0" class="form-control form-control-sm">
+                </div>  
             </div>  
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3">
                 <label>Estilo</label>
@@ -109,7 +115,13 @@
                         </select> 
                     </div>
                 </div>
-                <!--<input type="text" id="Estilo" name="Estilo" maxlength="40" minlength="0" class="form-control form-control-sm">-->
+                <div id="info_control_pares" class="d-none">
+                    <div class="w-100 mb-4"></div> 
+                    <span class="font-weight-bold pares_controlv mt-2" style="color: #ef1000">0 pares</span>
+                    <div class="w-100 mb-4"></div> 
+                    <span class="font-weight-bold pares_facturados mt-2" style="color: #ef1000">0 pares</span>
+                    <!--<input type="text" id="Estilo" name="Estilo" maxlength="40" minlength="0" class="form-control form-control-sm">-->
+                </div> 
             </div> 
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-2 col-xl-2">
                 <label>Concepto</label>
@@ -337,7 +349,9 @@
             btnDeshacer = pnlTablero.find("#btnDeshacer"), nuevo = true,
             btnCierraDocto = pnlTablero.find("#btnCierraDocto"), PrevisualizarDocto = pnlTablero.find("#PrevisualizarDocto"),
             AddendaCoppel = pnlTablero.find("#AddendaCoppel"),
-            ReferenciaFacturacion = pnlTablero.find("#ReferenciaFacturacion");
+            ReferenciaFacturacion = pnlTablero.find("#ReferenciaFacturacion"),
+            ControlV = pnlTablero.find("#ControlV"),
+            ParesDelControlV = pnlTablero.find("#ParesDelControlV");
 
     $(document).ready(function () {
 
@@ -346,6 +360,13 @@
         FechaFactura.val(Hoy);
 
         handleEnterDiv(pnlTablero);
+
+        ControlV.on('keydown', function (e) {
+            if (ControlV.val() && e.keyCode === 13) {
+                getInfoXControlVarios();
+            }
+        });
+
         cNoIva.change(function () {
             getTotales(true);
         });
@@ -364,6 +385,11 @@
                 ClienteClave.val('');
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
+            }
+            if (parseInt(ClienteFactura.val()) === 2121) {
+                pnlTablero.find("#info_control, #info_control_pares").removeClass("d-none");
+            } else {
+                pnlTablero.find("#info_control, #info_control_pares").addClass("d-none");
             }
         });
 
@@ -443,6 +469,7 @@
                     }).always(function () {
                         onCloseOverlay();
                     });
+                    pnlTablero.find("#info_control, #info_control_pares").addClass("d-none");
                 }).fail(function (x) {
                     getError(x);
                 }).always(function () {
@@ -654,7 +681,9 @@
                                 ORDEN_DE_COMPRA: OrdenCompraClaveIncotem.val(),
                                 MONEDA_LETRA: NumeroALetras(Subtotal.val()),
                                 PRODUCTO_SAT: ProductoSAT.val(),
-                                REFERENCIA: ReferenciaFacturacion.val()
+                                REFERENCIA: ReferenciaFacturacion.val(),
+                                CONTROLV: ControlV.val() ? ControlV.val() : '',
+                                PARES_RESTANTES: ParesDelControlV.val()
                             };
                             if (Cantidad.val() && Estilo.val() && Concepto.val() && Precio.val()) {
                                 onOpenOverlay('Guardando...');
@@ -1350,8 +1379,36 @@
             });
         }
     }
-</script>
 
+    function getInfoXControlVarios() {
+        $.getJSON('<?php print base_url('FacturacionVarios/getInfoXControlVarios'); ?>', {
+            CONTROL: pnlTablero.find("#ControlV").val()
+        }).done(function (a) {
+            console.log("\n DATOS \n");
+            console.log(a);
+            console.log("\n DATOS \n");
+            var pares = parseInt(a[0].PARES), pares_restantes = 0, pares_facturados = parseInt(a[0].PARES_FACTURADOS);
+            pnlTablero.find("span.pares_controlv").text(a[0].PARES + " PARES");
+            pnlTablero.find("span.pares_facturados").text(pares_facturados + " PARES FACTURADOS");
+            var prs = parseInt(a[0].PARES) - parseInt(pares_facturados);
+            prs = prs - Cantidad.val();
+            pares_restantes = pares - pares_facturados;
+            if (prs >= 0) {
+                onEnable(btnAcepta);
+                ParesDelControlV.val(prs);
+            } else {
+                ParesDelControlV.val(pares_restantes);
+                onDisable(btnAcepta);
+                onCampoInvalido(pnlTablero, "HA SUPERADO LA CANTIDAD DE PARES SOLO QUEDAN " + pares_restantes, function () {
+                    Cantidad.focus().select();
+                });
+            }
+        }
+        ).fail(function (x) {
+            getError(x);
+        });
+    }
+</script>
 <style>  
     .card{ 
         border: 2px solid #000;

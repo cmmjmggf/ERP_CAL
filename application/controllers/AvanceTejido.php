@@ -205,7 +205,7 @@ class AvanceTejido extends CI_Controller {
                                     . "FROM avaprd AS A "
                                     . "WHERE A.contped = {$x['CONTROL']}")->result();
                     if (intval($check_docto_existe[0]->EXISTE) > 0) {
-                        $check_docto = $this->db->query("SELECT A.almpesp AS DOCUMENTO, A.stsavan "
+                        $check_docto = $this->db->query("SELECT A.almpesp AS DOCUMENTO  "
                                         . "FROM avaprd AS A "
                                         . "WHERE A.contped = {$x['CONTROL']}")->result();
 
@@ -270,9 +270,9 @@ class AvanceTejido extends CI_Controller {
                 /* avance, avaprd */
                 $this->db->insert('controltej', array(
                     'numcho' => $xXx['NUM_CHOFER'],
-                    'nomcho' => $xXx['CHOFER'],
+                    'nomcho' => str_replace("0", "", $xXx['CHOFER']),
                     'numtej' => $xXx['NUM_TEJEDORA'],
-                    'nomtej' => $xXx['TEJEDORA'],
+                    'nomtej' => str_replace("0", "", $xXx['TEJEDORA']),
                     'fechapre' => $nueva_fecha->format('Y-m-d 00:00:00'),
                     'control' => $xXx['CONTROL'],
                     'estilo' => $xXx['ESTILO'],
@@ -282,7 +282,8 @@ class AvanceTejido extends CI_Controller {
                     'pares' => $xXx['PARES'],
                     'fechalle' => NULL,
                     'tipo' => 0,
-                    'fraccion' => $xXx['FRACCION']
+                    'fraccion' => $xXx['FRACCION'],
+                    'registro' => Date('Y-m-d h:i:s a')
                 ));
 
                 /* fracpagnomina */

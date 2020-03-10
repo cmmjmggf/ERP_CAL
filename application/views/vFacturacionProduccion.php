@@ -2083,13 +2083,16 @@
                                 btnFacturaXAnticipoDeProducto.attr('disabled', false);
                                 btnControlInCompleto.attr('disabled', false);
                                 btnControlCompleto.attr('disabled', false);
+                                onEnable(btnAcepta);
                             } else {
+                                onDisable(btnAcepta);
                                 Control.focus().select();
                                 btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                 btnControlInCompleto.attr('disabled', true);
                                 btnControlCompleto.attr('disabled', true);
                                 onNotifyOldPCE('', 'EL CONTROL AUN NO ESTA TERMINADO O YA ESTA FACTURADO COMPLETAMENTE.', 'info', "bottom", "center");
                                 onCampoInvalido(pnlTablero, ' * EL CONTROL AÚN NO ESTÁ TERMINADO O YA ESTA FACTURADO COMPLETAMENTE. * ', function () {
+                                    
                                     Control.focus().select();
                                     btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                     btnControlInCompleto.attr('disabled', true);
@@ -2209,8 +2212,7 @@
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
-        onObtenerCodigoSatXEstilo();
-        getUltimoFolio();
+        onObtenerCodigoSatXEstilo(); 
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';
