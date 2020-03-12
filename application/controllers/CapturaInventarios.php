@@ -3,6 +3,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once APPPATH . "/third_party/fpdf17/fpdf.php";
 require_once APPPATH . "/third_party/PHPExcel.php";
+require_once APPPATH . "/third_party/JasperPHP/src/JasperPHP/JasperPHP.php";
 
 class Excel extends PHPExcel {
 
@@ -16,7 +17,7 @@ class CapturaInventarios extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('session')->model('ReporteCapturaFisica_model')
+        $this->load->library('session')->model('ReporteCapturaFisica_model')->helper('jaspercommand_helper')
                 ->helper('Reportecapturafisica_helper')->helper('file');
         date_default_timezone_set('America/Mexico_City');
 
@@ -714,6 +715,84 @@ class CapturaInventarios extends CI_Controller {
         }
     }
 
+    public function onReporteCostoInvExcel() {
+        $Maq = $this->input->post('Maq');
+        $Mes = $this->input->post('Mes');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+
+        $Texto = '';
+        $NumMes = '';
+        switch ($Mes) {
+            case 'Ene':
+                $Texto = 'AL 31 DE ENERO';
+                $NumMes = '1';
+                break;
+            case 'Feb':
+                $Texto = 'AL 28 DE FEBRERO';
+                $NumMes = '2';
+                break;
+            case 'Mar':
+                $Texto = 'AL 31 DE MARZO';
+                $NumMes = '3';
+                break;
+            case 'Abr':
+                $Texto = 'AL 30 DE ABRIL';
+                $NumMes = '4';
+                break;
+            case 'May':
+                $Texto = 'AL 31 DE MAYO';
+                $NumMes = '5';
+                break;
+            case 'Jun':
+                $Texto = 'AL 30 DE JUNIO';
+                $NumMes = '6';
+                break;
+            case 'Jul':
+                $Texto = 'AL 31 DE JULIO';
+                $NumMes = '7';
+                break;
+            case 'Ago':
+                $Texto = 'AL 31 DE AGOSTO';
+                $NumMes = '8';
+                break;
+            case 'Sep':
+                $Texto = 'AL 30 DE SEPTIEMBRE';
+                $NumMes = '9';
+                break;
+            case 'Oct':
+                $Texto = 'AL 31 DE OCTUBRE';
+                $NumMes = '10';
+                break;
+            case 'Nov':
+                $Texto = 'AL 30 DE NOVIEMBRE';
+                $NumMes = '11';
+                break;
+            case 'Dic':
+                $Texto = 'AL 31 DE DICIEMBRE';
+                $NumMes = '12';
+                break;
+        }
+        $parametros["mes"] = $NumMes;
+        $parametros["nommes"] = $Texto;
+        $jc->setParametros($parametros);
+
+        $reporte = '';
+        if ($Maq === 'articulos') {
+            $reporte = 'jrxml\materiales\excel\costoInvMatPrimaExcel.jasper';
+        } else {
+            $reporte = 'jrxml\materiales\excel\costoInvMatPrima10Excel.jasper';
+        }
+
+        $jc->setJasperurl($reporte);
+        $jc->setFilename('COSTO_INV_MAT_PRIMA_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteCostoInv() {
         $Maq = $this->input->post('Maq');
         $Mes = $this->input->post('Mes');
@@ -748,7 +827,7 @@ class CapturaInventarios extends CI_Controller {
 
                     if ($D->ClaveGrupo === $G->Clave) {
 
-                        $Total_Costo = $D->Existencia * $D->Costo;
+                        $Total_Costo = $D->Existencia * round($D->Costo, 2);
                         $pdf->Row(array(
                             utf8_decode($D->ClaveArt),
                             mb_strimwidth(utf8_decode($D->Articulo), 0, 50, ""),
@@ -758,11 +837,11 @@ class CapturaInventarios extends CI_Controller {
                             '$' . number_format($Total_Costo, 2, ".", ",")
                                 ), 'B');
 
-                        $T_Existencia += $D->Existencia;
-                        $T_Costo += $D->Existencia * $D->Costo;
+                        $T_Existencia += round($D->Existencia, 2);
+                        $T_Costo += $Total_Costo;
 
-                        $GT_Existencia += $D->Existencia;
-                        $GT_Costo += $D->Existencia * $D->Costo;
+                        $GT_Existencia += round($D->Existencia, 2);
+                        $GT_Costo += $Total_Costo;
                     }
                 }
                 $pdf->SetX(85);

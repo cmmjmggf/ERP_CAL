@@ -264,7 +264,7 @@ class PDF_CostoInv extends FPDF {
         $this->Cell(60, 4, utf8_decode($_SESSION["EMPRESA_RAZON"]), 0/* BORDE */, 1, 'L');
         $this->SetFont('Calibri', 'B', 10);
         $this->SetX(36);
-        $this->Cell(60, 4, utf8_decode("Costeo de inventario del grupo"), 0/* BORDE */, 0, 'L');
+        $this->Cell(60, 4, utf8_decode("Costeo de inventario por grupo"), 0/* BORDE */, 0, 'L');
         $this->SetX(96);
         $this->SetFont('Calibri', '', 10);
         $this->Cell(8, 4, utf8_decode($Texto), 0/* BORDE */, 0, 'C');

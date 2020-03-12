@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-4 float-left">
-                <legend class="float-left">Captura plantillas para maquila</legend>
+                <legend class="float-left">Captura controles para maquilar</legend>
             </div>
             <div class="col-sm-1">
                 <label class="text-danger font-weight-bold">Re-Imprime</label>

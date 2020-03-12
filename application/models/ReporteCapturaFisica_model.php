@@ -349,7 +349,7 @@ class ReporteCapturaFisica_model extends CI_Model {
                             . "A.Descripcion AS Articulo, "
                             . "U.Descripcion AS Unidad, "
                             . "A.P$Mes AS Costo, "
-                            . "A.Existencia "
+                            . "A.Existencia as Existencia "
                             . ""
                             . "")
                     ->from("$Maq A")

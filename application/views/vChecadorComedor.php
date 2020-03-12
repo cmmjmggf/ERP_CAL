@@ -102,13 +102,20 @@
                                         onCloseOverlay();
                                     });
                                 } else {
-                                    //Imprimir Reporte
-                                    onImprimirReporteFancyAFC(data, function (a, b) {
+                                    //Imprimir Reportes
+                                    console.log(JSON.parse(data));
+
+                                    var response = JSON.parse(data);
+
+                                    onImprimirReporteFancyAFC(response.PDF, function (a, b) {
                                         onCloseOverlay();
                                         onNotifyOld('fa fa-check', 'COMIDAS APLICADAS CORRECTAMENTE', 'info');
                                         EmpleadosComidasSemana.ajax.reload();
                                         NumeroEmpleado.focus();
                                     });
+
+
+                                    onOpenWindowBlank(response.XLS);
                                 }
 
                             }).fail(function (x, y, z) {

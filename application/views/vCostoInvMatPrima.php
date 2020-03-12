@@ -46,6 +46,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnAceptar">ACEPTAR</button>
+                <?php
+                if ($_SESSION["USERNAME"] === 'CMEDINA' || $_SESSION["USERNAME"] === 'ARABAR') {
+                    ?>
+                    <button type="button" class="btn btn-success" id="btnAceptarExcel">EXCEL</button>
+                    <?php
+                }
+                ?>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -65,6 +72,40 @@
             });
             mdlCostoInvMatPrima.find('#Maq')[0].selectize.focus();
         });
+
+        mdlCostoInvMatPrima.find('#btnAceptarExcel').on("click", function () {
+            onDisable(mdlCostoInvMatPrima.find('#btnAceptarExcel'));
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlCostoInvMatPrima.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/CapturaInventarios/onReporteCostoInvExcel',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                onEnable(mdlCostoInvMatPrima.find('#btnAceptarExcel'));
+                if (data.length > 0) {
+                    onOpenWindowBlank(data);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA ESTE REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlCostoInvMatPrima.find('#Ano').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                onEnable(mdlCostoInvMatPrima.find('#btnAceptarExcel'));
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
 
         mdlCostoInvMatPrima.find('#btnAceptar').on("click", function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});

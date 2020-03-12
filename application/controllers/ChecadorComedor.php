@@ -57,6 +57,9 @@ class ChecadorComedor extends CI_Controller {
     }
 
     public function onImprimirReporteComedor($año, $sem) {
+
+        $REPORTES = array();
+
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
@@ -68,7 +71,15 @@ class ChecadorComedor extends CI_Controller {
         $jc->setJasperurl('jrxml\comedor\reporteComedorAnoSem.jasper');
         $jc->setFilename('COMIDAS_POR_EMPLEADO_SEM_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
-        PRINT $jc->getReport();
+        $REPORTES['PDF'] = $jc->getReport();
+
+
+        $jc->setJasperurl('jrxml\comedor\reporteComedorAnoSemExcel.jasper');
+        $jc->setFilename('COMIDAS_POR_EMPLEADO_SEM_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        $REPORTES['XLS'] = $jc->getReport();
+
+        print json_encode($REPORTES);
     }
 
     public function getInformacionSemana() {
