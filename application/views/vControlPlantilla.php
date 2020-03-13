@@ -122,7 +122,7 @@
     </div>
 </div>
 <div class="modal" id="mdlRetorno">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content  modal-lg">
             <div class="modal-header">
                 <h5 class="modal-title">Retorno de plantilla</h5>
@@ -132,13 +132,23 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-4">
                         <label>Documento</label>
-                        <input type="text" id="DocumentoRetorno" name="DocumentoRetorno" class="form-control form-control-sm">
+                        <input type="text" id="DocumentoRetorno" name="DocumentoRetorno" maxlength="4" class="form-control form-control-sm numeric">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <label>Fecha vale</label>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-4">
+                        <label>Fecha Entrega</label>
                         <input type="text" id="FechaVale" name="FechaVale" class="form-control form-control-sm" readonly="">
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-4">
+                        <label>Control</label>
+                        <input type="text" id="ControlRetorno" name="ControlRetorno" class="form-control form-control-sm numbersOnly" required="">
+                    </div>
+                    <div class="col-6">
+                    </div>
+                    <div class="col-6 mt-2" align='right'>
+                        <button type="button" class="btn btn-info" id="btnAceptaRetorno"><span class="fa fa-check"></span> Aceptar</button>
+                        <button type="button" class="btn btn-success" id="btnImprimirRetorno"><span class="fa fa-print"></span> Imprimir</button>
                     </div>
                 </div>
                 <br>
@@ -161,9 +171,6 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnAceptaRetorno"><span class="fa fa-print"></span> Acepta</button>
             </div>
         </div>
     </div>
@@ -279,7 +286,9 @@
             FechaVale = mdlRetorno.find("#FechaVale"), RetornaDocumento, tblRetornaDocumento = mdlRetorno.find("#tblRetornaDocumento"),
             btnConceptosPlantilla = pnlTablero.find("#btnConceptosPlantilla"),
             btnAceptaRetorno = mdlRetorno.find("#btnAceptaRetorno"), mdlReportePago = $("#mdlReportePago"),
+            btnImprimirRetorno = mdlRetorno.find("#btnImprimirRetorno"),
             btnCapturaPorcentajes = pnlTablero.find("#btnCapturaPorcentajes"),
+            ControlRetorno = mdlRetorno.find("#ControlRetorno"),
             mdlCapturaPorcentaje = $("#mdlCapturaPorcentaje"),
             btnAceptaPorcentajeFraccion = mdlCapturaPorcentaje.find("#btnAceptaPorcentajeFraccion"),
             Porcentajes, tblPorcentajes = mdlCapturaPorcentaje.find("#tblPorcentajes"),
@@ -293,7 +302,6 @@
         nuevo = true;
         handleEnterDiv(pnlCaptura);
         handleEnterDiv(mdlReportePago);
-        handleEnterDiv(mdlRetorno);
         pnlTablero.find('select').selectize({
             openOnFocus: false
         });
@@ -386,17 +394,81 @@
             mdlReportePago.modal('show');
         });
 
-        DocumentoRetorno.on('keydown', function (e) {
+        DocumentoRetorno.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if ($(this).val()) {
-                    getDocsRetorno();
+                    /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
+                    $.getJSON('<?php print base_url('ControlPlantilla/onComprobarEstatusDocumento'); ?>', {
+                        DOCTO: DocumentoRetorno.val()
+                    }).done(function (a) {
+                        console.log(a);
+                        if (a.length > 0) {
+                            var r = a[0];
+                            if (parseInt(r.VALIDO) > 0) {
+                                getDocsRetorno();
+                                ControlRetorno.val('').focus();
+                            } else {
+                                swwt('ESTE DOCUMENTO NO EXISTE O YA FUE ENTREGADO', function () {
+                                    DocumentoRetorno.val().focus().select();
+                                });
+                            }
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    })
                 }
             }
         });
 
-        btnAceptaRetorno.click(function () {
+        ControlRetorno.on('keypress', function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
+                    $.getJSON('<?php print base_url('ControlPlantilla/onComprobarControlDocumento'); ?>', {
+                        DOCTO: DocumentoRetorno.val(),
+                        Control: ControlRetorno.val()
+                    }).done(function (a) {
+                        console.log(a);
+                        if (a.length > 0) {
+                            btnAceptaRetorno.focus();
+                        } else {
+                            swwt('ESTE CONTROL NO EXISTE EN ESTE DOCUMENTO', function () {
+                                ControlRetorno.val().focus().select();
+                            });
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    })
+                }
+            }
+        });
+
+        btnImprimirRetorno.click(function () {
+            onOpenOverlay('Generando Reporte...');
+            onDisable(btnImprimirRetorno);
             if (DocumentoRetorno.val()) {
-                onOpenOverlay('Por favor, espere');
+                $.post('<?php print base_url('ControlPlantilla/onImprimirRetornoParcial'); ?>', {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val()}).done(function (data) {
+                    console.log(data);
+                    if (data.length > 0) {//Si es de empleado imprime el reporte de su pago
+                        onImprimirReporteFancyAFC(data, function (a, b) {
+                            onCloseOverlay();
+                        });
+                    }
+                }).fail(function (x) {
+                    onEnable(btnAceptaRetorno);
+                    getError(x);
+                });
+            } else {
+                swwt('DEBE DE ESPECIFICAR UN DOCUMENTO', function () {
+                    onEnable(btnImprimirRetorno);
+                    DocumentoRetorno.focus().select();
+                });
+            }
+        });
+
+        btnAceptaRetorno.click(function () {
+            onDisable(btnAceptaRetorno);
+            if (DocumentoRetorno.val()) {
                 /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
                 $.getJSON('<?php print base_url('ControlPlantilla/onComprobarEstatusDocumento'); ?>', {
                     DOCTO: DocumentoRetorno.val()
@@ -405,43 +477,31 @@
                     if (a.length > 0) {
                         var r = a[0];
                         if (parseInt(r.VALIDO) > 0) {
-                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>', {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val()}).done(function (data) {
+                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>', {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val(), Control: ControlRetorno.val()}).done(function (data) {
                                 console.log(data);
-                                onCloseOverlay();
-
-                                if (data.length > 0) {//Si es de empleado imprime el reporte de su pago
-                                    onImprimirReporteFancyAFC(data, function (a, b) {
-                                        swsd('SE HA RETORNADO EL DOCUMENTO', function () {
-                                            DocumentoRetorno.val('').focus().select();
-                                            RetornaDocumento.ajax.reload();
-                                        });
-                                    });
-                                } else {//Si no solo actualiza tabla
-                                    swsd('SE HA RETORNADO EL DOCUMENTO', function () {
-                                        DocumentoRetorno.val('').focus().select();
-                                        RetornaDocumento.ajax.reload();
-                                    });
-                                }
+                                onEnable(btnAceptaRetorno);
+                                ControlRetorno.val('').focus();
+                                RetornaDocumento.ajax.reload();
                             }).fail(function (x) {
+                                onEnable(btnAceptaRetorno);
                                 getError(x);
-                            }).always(function () {
-
                             });
                         } else {
                             swwt('ESTE DOCUMENTO NO ES VÁLIDO O YA FUE ENTREGADO', function () {
+                                onEnable(btnAceptaRetorno);
                                 DocumentoRetorno.focus().select();
                             });
                         }
                     }
                 }).fail(function (x) {
+                    onEnable(btnAceptaRetorno);
                     getError(x);
-                }).always(function () {
-
                 });
                 /*2.- EN CASO DE QUE ESTE ACTIVO CAMBIARLO A ESTATUS DOS(2)*/
 
             } else {
                 swwt('DEBE DE ESPECIFICAR UN DOCUMENTO', function () {
+                    onEnable(btnAceptaRetorno);
                     DocumentoRetorno.focus().select();
                 });
             }
@@ -874,8 +934,20 @@
                 "bSort": true,
                 "scrollY": "300px",
                 "scrollX": true,
+                "createdRow": function (row, data, index) {
+                    $.each($(row).find("td"), function (k, v) {
+                        var c = $(v);
+                        var index = parseInt(k);
+                        switch (index) {
+                            case 4:
+                                /*fecha conf*/
+                                c.addClass('text-danger text-strong');
+                                break;
+                        }
+                    });
+                },
                 "aaSorting": [
-                    [0, 'desc']
+                    [6, 'asc']
                 ]
             };
             RetornaDocumento = tblRetornaDocumento.DataTable(xoptions);

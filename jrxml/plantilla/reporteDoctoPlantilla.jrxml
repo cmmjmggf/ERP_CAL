@@ -1002,42 +1002,42 @@ order by cp.Documento, S.clave, e.linea, cp.control  asc]]>
 				<textFieldExpression><![CDATA[$F{ProveedorT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="77" y="36" width="67" height="20" forecolor="#000000" uuid="ac7cf02f-7cf9-4205-99bb-c7194e6a81c1"/>
+				<reportElement style="Column header" x="77" y="39" width="67" height="20" forecolor="#000000" uuid="ac7cf02f-7cf9-4205-99bb-c7194e6a81c1"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo de maquila:]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Opaque" x="144" y="36" width="201" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="1ac0b06b-d830-4f05-b149-e28beb07eede"/>
+				<reportElement mode="Opaque" x="144" y="39" width="282" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="1ac0b06b-d830-4f05-b149-e28beb07eede"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{maqplan}+'       '+$F{nommaqplan}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="537" y="30" width="52" height="12" uuid="d1b6a010-232a-47d8-8955-df95bef381b2"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="539" y="24" width="52" height="12" uuid="d1b6a010-232a-47d8-8955-df95bef381b2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaRetorna}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="482" y="30" width="55" height="12" forecolor="#000000" uuid="90d2b444-c5a6-4957-a8e0-daf7688b516c"/>
+				<reportElement style="Column header" x="484" y="24" width="55" height="12" forecolor="#000000" uuid="90d2b444-c5a6-4957-a8e0-daf7688b516c"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Recibido]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="424" y="30" width="52" height="12" uuid="775f777e-da50-48ca-a021-bbb49b9ea17b"/>
+				<reportElement x="426" y="24" width="52" height="12" uuid="775f777e-da50-48ca-a021-bbb49b9ea17b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="369" y="30" width="55" height="12" forecolor="#000000" uuid="cfbd5f83-4ff6-4eb2-83ba-f55197dd7b53"/>
+				<reportElement style="Column header" x="371" y="24" width="55" height="12" forecolor="#000000" uuid="cfbd5f83-4ff6-4eb2-83ba-f55197dd7b53"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>

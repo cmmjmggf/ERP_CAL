@@ -78,6 +78,16 @@ class ControlPlantilla extends CI_Controller {
         }
     }
 
+    public function onComprobarControlDocumento() {
+        try {
+            $Control = $this->input->get('Control');
+            $Docto = $this->input->get('DOCTO');
+            print json_encode($this->db->query("select * from controlpla where control = '$Control' and documento = '$Docto' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificarFraccionExiste() {
         try {
             $Fraccion = $this->input->get('Fraccion');
@@ -166,7 +176,8 @@ class ControlPlantilla extends CI_Controller {
                                         CP.`Registro`,
                                         CP.`Estatus` AS ESTATUS,
                                         CONCAT("<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"onEliminarRetornoControlPlantilla(",CP.ID,")\"><span class=\"fa fa-trash\"></span></button>") AS BTN', false)
-                    ->from('controlpla AS CP')->where('CP.Estatus', 1);
+                    ->from('controlpla AS CP');
+            // ->where('CP.Estatus', 1);
             $x = $this->input->get();
             $this->db->where('CP.Documento', $x['DOCUMENTO']);
 //            if ($x['DOCUMENTO'] !== '') {
@@ -326,9 +337,10 @@ class ControlPlantilla extends CI_Controller {
         try {
             $docto = $this->input->post('Docto');
             $fecdoc = $this->input->post('FECHA');
-            $this->db->set('Estatus', 2)->set('FechaRetorna', $fecdoc)->where('Documento', $docto)->update('controlpla');
+            $control = $this->input->post('Control');
+            $this->db->set('Estatus', 2)->set('FechaRetorna', $fecdoc)->where('Documento', $docto)->where('Control', $control)->update('controlpla');
             //Hacemos el movimiento de NÓMINA
-            $Doc = $this->db->query("select * from controlpla where Documento = {$docto} ")->result();
+            $Doc = $this->db->query("select * from controlpla where Documento = {$docto} and control = {$control} and estatus = 2 ")->result();
             if (!empty($Doc)) {
                 $numemp = $Doc[0]->Proveedor;
                 //$fecdoc = $Doc[0]->Fecha; //se usaba cuando capturaban anteriores, pero ahora debe ser al momento de entrega de retorno
@@ -423,23 +435,27 @@ class ControlPlantilla extends CI_Controller {
                             'otrde1' => 0
                         ));
                     }
-                    //Imprimimos el reporte para nómina
-                    $jc = new JasperCommand();
-                    $jc->setFolder('rpt/' . $this->session->USERNAME);
-                    $parametros = array();
-                    $parametros["logo"] = base_url() . $this->session->LOGO;
-                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-                    $parametros["docto"] = $docto;
-                    $jc->setParametros($parametros);
-                    $jc->setJasperurl('jrxml\plantilla\reporteDoctoPlantillaConFraccion.jasper');
-                    $jc->setFilename('IMPRIME_DOCTO_PLANTILLA_MAQUILA_CON_FRACCIONES_' . Date('h_i_s'));
-                    $jc->setDocumentformat('pdf');
-                    PRINT $jc->getReport();
                 }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    //Imprimimos el reporte para nómina
+    public function onImprimirRetornoParcial() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["docto"] = $this->input->post('Docto');
+        $parametros["fecha"] = $this->input->post('FECHA');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\plantilla\reporteDoctoPlantillaConFraccion.jasper');
+        $jc->setFilename('IMPRIME_DOCTO_PLANTILLA_MAQUILA_CON_FRACCIONES_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
     }
 
     public function getSemanaByFecha($fecha) {

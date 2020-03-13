@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="776" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.8906136901500052"/>
-	<property name="ireport.x" value="1979"/>
+	<property name="ireport.zoom" value="3.536921536500005"/>
+	<property name="ireport.x" value="1148"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -113,7 +113,22 @@ cast(PE.Pares as decimal(5,2)) as Pares,
 cast(ifnull(PE.ParesFacturados,0) as decimal(5,2)) as ParesFacturados,
 cast(ifnull(PE.Pares,0) as signed) - cast(ifnull(PE.ParesFacturados,0) as signed) as Saldo,
 
-case when  (PE.stsavan = 55) then
+case
+
+when  (PE.stsavan = 42) then
+ifnull((
+SELECT
+case
+when cp.estatus = '1' then cp.Fraccion
+when cp.estatus = '2' then ''
+else '' END AS Proceso
+FROM controlpla cp
+where cp.control = pe.control
+order by cp.id desc
+limit 1
+ ),'')
+
+when  (PE.stsavan = 55) then
 ifnull((
 SELECT case
 when cp.estatus = '1' then cp.Fraccion
@@ -126,6 +141,18 @@ limit 1
  ),'') end as numfracmaquila,
 
 case
+when  (PE.stsavan = 42) then
+ifnull((
+SELECT
+case
+when cp.estatus = '1' then cp.FraccionT
+when cp.estatus = '2' then '*****TERMINADO*****'
+else '' END AS Proceso
+FROM controlpla cp
+where cp.control = pe.control
+order by cp.id desc
+limit 1
+ ),'')
 
 when  (PE.stsavan = 55) then
 ifnull((
@@ -139,11 +166,24 @@ where cp.control = pe.control and cp.fraccion in (306,502)
 order by cp.id desc
 limit 1
  ),'')
-
 else ''
 end as nomfracmaquila,
 
-case when  (PE.stsavan = 55) then
+case
+when  (PE.stsavan = 42) then
+ifnull((
+SELECT
+case
+when cp.estatus = '1' then cp.Fecha
+when cp.estatus = '2' then cp.FechaRetorna
+else '' END AS Proceso
+FROM controlpla cp
+where cp.control = pe.control
+order by cp.id desc
+limit 1
+ ),'')
+
+when  (PE.stsavan = 55) then
 ifnull((
 SELECT case
 when cp.estatus = '1' then cp.Fecha

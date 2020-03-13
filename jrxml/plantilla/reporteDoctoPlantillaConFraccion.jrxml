@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="592" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" isFloatColumnFooter="true" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="5.259203606311165"/>
-	<property name="ireport.x" value="1959"/>
-	<property name="ireport.y" value="226"/>
+	<property name="ireport.zoom" value="2.4534572963698023"/>
+	<property name="ireport.x" value="27"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -33,6 +33,9 @@
 	<parameter name="docto" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="fecha" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT cp.ProveedorT, cp.Documento, cp.Tipo as maqplan, mp.Descripcion as nommaqplan, cp.Fecha, cp.FechaRetorna,
 cp.Fraccion, cp.Control, cp.Estilo, cp.Color, cp.ColorT, e.Linea, convert(cp.Precio, decimal(5,2)) as Precio,
@@ -46,7 +49,7 @@ join pedidox pe on pe.Control = cp.Control
 join maquilasplantillas mp on cp.Tipo = mp.Clave
 join estilos e on e.clave = cp.estilo
 join series S on S.Clave = e.Serie
-where cp.documento = $P{docto}
+where cp.documento = $P{docto} and cp.FechaRetorna = $P{fecha} AND cp.FechaRetorna IS NOT NULL
 order by cp.Documento, S.clave, e.linea, cp.control  asc]]>
 	</queryString>
 	<field name="ProveedorT" class="java.lang.String">
@@ -1034,42 +1037,42 @@ order by cp.Documento, S.clave, e.linea, cp.control  asc]]>
 				<textFieldExpression><![CDATA[$F{ProveedorT}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="77" y="36" width="67" height="20" forecolor="#000000" uuid="ac7cf02f-7cf9-4205-99bb-c7194e6a81c1"/>
+				<reportElement style="Column header" x="77" y="39" width="67" height="20" forecolor="#000000" uuid="ac7cf02f-7cf9-4205-99bb-c7194e6a81c1"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo de maquila:]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Opaque" x="144" y="36" width="201" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="1ac0b06b-d830-4f05-b149-e28beb07eede"/>
+				<reportElement mode="Opaque" x="144" y="39" width="280" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="1ac0b06b-d830-4f05-b149-e28beb07eede"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{maqplan}+'       '+$F{nommaqplan}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="537" y="30" width="52" height="12" uuid="d1b6a010-232a-47d8-8955-df95bef381b2"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="537" y="24" width="52" height="12" uuid="d1b6a010-232a-47d8-8955-df95bef381b2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaRetorna}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="480" y="30" width="57" height="12" forecolor="#000000" uuid="90d2b444-c5a6-4957-a8e0-daf7688b516c"/>
+				<reportElement style="Column header" x="480" y="24" width="57" height="12" forecolor="#000000" uuid="90d2b444-c5a6-4957-a8e0-daf7688b516c"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Recibido]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="424" y="30" width="52" height="12" uuid="775f777e-da50-48ca-a021-bbb49b9ea17b"/>
+				<reportElement x="424" y="24" width="52" height="12" uuid="775f777e-da50-48ca-a021-bbb49b9ea17b"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="369" y="30" width="55" height="12" forecolor="#000000" uuid="cfbd5f83-4ff6-4eb2-83ba-f55197dd7b53"/>
+				<reportElement style="Column header" x="369" y="24" width="55" height="12" forecolor="#000000" uuid="cfbd5f83-4ff6-4eb2-83ba-f55197dd7b53"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
