@@ -75,14 +75,6 @@ class AvanceTejido extends CI_Controller {
         }
     }
 
-    public function getTejedoras() {
-        try {
-            print json_encode($this->avtm->getTejedoras());
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
     public function getSemanaNomina() {
         try {
             print json_encode($this->avtm->getSemanaNomina($this->input->get('FECHA')));
@@ -255,6 +247,7 @@ class AvanceTejido extends CI_Controller {
 
     public function onAvanzar() {
         try {
+            EXIT(0);
             $x = $this->input;
             $xXx = $this->input->post();
             $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx['CONTROL']} AND F.numfrac = {$xXx['FRACCION']} LIMIT 1")->result();
@@ -352,6 +345,42 @@ class AvanceTejido extends CI_Controller {
                                     ->from('controles AS C')
                                     ->where('C.Control', $this->input->get('CONTROL'))
                                     ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminarAvance() {
+        try {
+            $check_avance = $this->db->query("SELECT count(*) AS EXISTE FROM pedidox AS P WHERE P.stsavan IN(9,10,11,12,13,14) AND P.Control = {$this->input->post("CONTROL")}")->result();
+            $check_stsavan = $this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL FROM pedidox AS P WHERE  P.Control = {$this->input->post("CONTROL")}")->result();
+            if (intval($check_avance[0]->EXISTE) === 0) {
+                $eliminable = array("ELIMINABLE" => 1, "AVANCE_ACTUAL" => $check_stsavan[0]->AVANCE_ACTUAL);
+                print json_encode($eliminable);
+            } else {
+                $eliminable = array("ELIMINABLE" => 0, "AVANCE_ACTUAL" => $check_stsavan[0]->AVANCE_ACTUAL);
+                print json_encode($eliminable);
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onEliminaAvanceXControl() {
+        try {
+            $x = $this->input->post();
+            $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P WHERE P.stsavan = 7 AND P.Control = {$x['CONTROL']}")->result();
+            if (intval($check_avance[0]->EXISTE) === 0) {
+                exit(0);
+            }
+            if (intval($check_avance[0]->EXISTE) >= 1) {
+                $this->db->query("DELETE FROM avance WHERE Control = {$x['CONTROL']} AND Departamento = 150 AND DepartamentoT = 'TEJIDO'");
+                $this->db->query("DELETE FROM fracpagnomina   where Control = {$x['CONTROL']} AND numfrac = 401");
+                $this->db->set("EstatusProduccion", 'ALMACEN PESPUNTE')->set("DeptoProduccion", 130)
+                        ->set("stsavan", 6)->where("Control", $x['CONTROL'])->update("pedidox");
+                $this->db->set("EstatusProduccion", 'ALMACEN PESPUNTE')->set("DeptoProduccion", 130)
+                        ->where("Control", $x['CONTROL'])->update("controles");
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

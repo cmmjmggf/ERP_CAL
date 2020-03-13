@@ -23,14 +23,33 @@
                 <input id="xChofer" name="xChofer" class="form-control form-control-sm  numbersOnly">
             </div>
             <div class="col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-4 mt-4">
-                <select id="Chofer" name="Chofer" class="form-control form-control-sm"></select>
+                <select id="Chofer" name="Chofer" class="form-control form-control-sm">
+                    <option></option>
+                    <?php
+                    foreach ($this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
+                            ->from('empleados AS E')->where('E.AltaBaja', 1)
+                            ->where('E.DepartamentoFisico', 170)->get()->result() as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->Empleado}</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <div class="col-4 col-xs-4 col-sm-4 col-lg-1 col-xl-1">
                 <label>Tejedora</label>
                 <input id="xTejedora" name="xTejedora" class="form-control form-control-sm numbersOnly">
             </div>
             <div class="col-8 col-xs-8 col-sm-8 col-lg-3 col-xl-4 mt-4">
-                <select id="Tejedora" name="Tejedora" class="form-control form-control-sm"></select>
+                <select id="Tejedora" name="Tejedora" class="form-control form-control-sm">
+                    <option></option>
+                    <?php
+                    foreach ($this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
+                            ->from('empleados AS E')
+                            ->where('E.AltaBaja', 1)->where_in('E.Puesto', array('TEJEDOR', 'TEJEDORA'))
+                            ->get()->result() as $k => $v) {
+                        print "<option value='{$v->ID}'>{$v->Empleado}</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <div class="col-6 col-xs-6 col-sm-12 col-lg-2 col-xl-2">
                 <label>Documento</label>
@@ -102,7 +121,9 @@
                         <h4>Controles entregados</h4>
                     </div>
                     <div class="col-4" align="right">
-
+                        <button type="button" id="btnEliminaTejido" name="btnEliminaTejido" class="btn btn-danger btn-sm m-2 selectNotEnter notEnter" style="background-color: #f10000; border-color: #ff1100;">
+                            <span class="fa fa-trash"></span> ELIMINA TEJIDO
+                        </button>
                         <button type="button" id="btnImprimirValeAyuda" name="btnImprimirValeAyuda" class="btn btn-info d-none"  data-toggle="tooltip" data-placement="top" title="Como se usa?">
                             <span class="fa fa-question-circle"></span>
                         </button>
@@ -137,7 +158,9 @@
             xTejedora = pnlTablero.find("#xTejedora"),
             Tejedora = pnlTablero.find("#Tejedora"),
             Estilo = pnlTablero.find("#Estilo"), Control = pnlTablero.find("#Control"),
-            btnNuevoTejido = pnlTablero.find("#btnNuevoTejido");
+            btnNuevoTejido = pnlTablero.find("#btnNuevoTejido"),
+            btnEliminaTejido = pnlTablero.find("#btnEliminaTejido"),
+            r_avance_tejido = {};
 
     var ControlesListosParaTejido, tblControlesListosParaTejido = pnlTablero.find("#tblControlesListosParaTejido"),
             ControlesEntregados, tblControlesEntregados = pnlTablero.find("#tblControlesEntregados"),
@@ -150,6 +173,70 @@
 
     $(document).ready(function () {
         getUltimoDocumento();
+
+        btnEliminaTejido.click(function () {
+            onBeep(2);
+            console.log(r_avance_tejido, r_avance_tejido.length);
+            if (!r_avance_tejido.hasOwnProperty("ID")) {
+                swal({
+                    title: "ATENCIÓN",
+                    text: "SELECCIONE UN REGISTRO.",
+                    icon: "warning",
+                    showCloseButton: true
+                });
+                return;
+            }
+
+            $.post('<?php print base_url('AvanceTejido/onEliminarAvance'); ?>', {
+                CONTROL: r_avance_tejido.CONTROL
+            }).done(function (a) {
+                console.log(JSON.parse(a));
+                var r = JSON.parse(a);
+                switch (parseInt(r.ELIMINABLE)) {
+                    case 0:
+                        iMsg("IMPOSIBLE DE ELIMINAR, EL CONTROL YA ESTA FUERA DE ESTE AVANCE.", "w", function () {
+                            ControlesEntregados.ajax.reload();
+                        });
+                        break;
+                    case 1:
+                        swal({
+                            title: "¿Estas seguro?",
+                            text: "Nota: Esta acción no se puede deshacer",
+                            icon: "warning",
+                            buttons: {
+                                cancelar: {
+                                    text: "CANCELAR",
+                                    value: "cancelar"
+                                },
+                                cambiar: {
+                                    text: "ELIMINAR",
+                                    value: "eliminar"
+                                }
+                            }
+                        }).then((value) => {
+                            switch (value) {
+                                case "cancelar":
+                                    swal.close();
+                                    break;
+                                case "eliminar":
+                                    onBeep(1);
+                                    r_avance_tejido = {};
+                                    ControlesEntregados.ajax.reload();
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "SE HA ELIMINADO DE: \n \n -AVANCE \n -NOMINA \n -VALE \n \n REIMPRIMA EL VALE DE SER NECESARIO.",
+                                        icon: "success",
+                                        showCloseButton: true,
+                                        timer: 35000
+                                    });
+                                    break;
+                            }
+                        });
+                        break;
+                }
+
+            });
+        });
 
         btnNuevoTejido.click(function () {
             btnImprimirVale.attr('disabled', false);
@@ -312,8 +399,7 @@
             }
         });
         Fecha.val('<?php print Date("d/m/Y"); ?>');
-        getChoferes();
-        getTejedoras();
+
         Tejedora.change(function () {
             xTejedora.val(Tejedora.val());
             if (Tejedora.val()) {
@@ -556,36 +642,16 @@
             }
         };
         ControlesEntregados = tblControlesEntregados.DataTable(xoptions);
-    });
-    function getChoferes() {
-        HoldOn.open({
-            theme: 'sk-rect'
-        });
-        $.getJSON('<?php print base_url('AvanceTejido/getChoferes'); ?>').done(function (x, y, z) {
-            x.forEach(function (e) {
-                Chofer[0].selectize.addOption({text: e.Empleado, value: e.ID});
-            });
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
-        });
-    }
 
-    function getTejedoras() {
-        HoldOn.open({
-            theme: 'sk-rect'
-        });
-        $.getJSON('<?php print base_url('AvanceTejido/getTejedoras'); ?>').done(function (x, y, z) {
-            x.forEach(function (e) {
-                Tejedora[0].selectize.addOption({text: e.Empleado, value: e.ID});
-            });
-        }).fail(function (x, y, z) {
-            getError(x);
-        }).always(function () {
-            HoldOn.close();
+        tblControlesEntregados.find("tbody").on('click', 'tr', function () {
+            var dtm = ControlesEntregados.row(this).data();
+            console.log(dtm);
+            r_avance_tejido = dtm;
         });
     }
+    );
+
+
     function getColoresXEstilo(e, rq) {
         $.getJSON("<?php print base_url('AvanceTejido/getColoresXEstilo') ?>", {ESTILO: e}).done(function (x, y, z) {
             x.forEach(function (i) {
