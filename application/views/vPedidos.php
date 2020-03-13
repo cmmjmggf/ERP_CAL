@@ -1269,7 +1269,7 @@
 
     function getPedidoByID(idx, cliente) {
         $.getJSON('<?php print base_url('pedsid'); ?>', {ID: idx, CLIENTE: cliente}).done(function (data) {
-            pnlDatos.find("input:not(#FechaEntrega)").val("");
+            pnlDatos.find("input:not(#FechaEntrega):not(#C1):not(#C2):not(#C3):not(#C4):not(#C5):not(#C6):not(#C7):not(#C8):not(#C9):not(#C10):not(#C11):not(#C12):not(#C13):not(#C14):not(#C15):not(#C16):not(#C17):not(#C18):not(#C19):not(#C20):not(#C21):not(#C22):not(#TPares)").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
