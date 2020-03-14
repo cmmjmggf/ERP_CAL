@@ -41,7 +41,7 @@ class NotasCargoDirectas extends CI_Controller {
 
     public function onRedondeaYActualizaSaldos() {
         try {
-            $this->db->query(" UPDATE cartera_proveedores SET Saldo_Doc = 0  where Estatus in ('PENDIENTE') AND Saldo_Doc <= 1 and Saldo_Doc >= 0; ");
+            $this->db->query(" UPDATE cartera_proveedores SET Saldo_Doc = 0  where Estatus in ('PAGADO') AND Saldo_Doc <= 1 and Saldo_Doc >= 0; ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
