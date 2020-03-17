@@ -178,19 +178,19 @@ class Avance extends CI_Controller {
 //            1005 CELULA  ADORNO "B"
 //            1006 PEGADO
             print json_encode($this->db->query("SELECT E.Numero AS CLAVE, "
-                                    . "(CASE "
-                                    . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
-                                    . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',"
-                                    . "(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',"
-                                    . "(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', "
-                                    . "(CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
-                                    . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) "
-                                    . "WHEN E.AltaBaja = 2 AND E.Celula IN(0) AND E.Numero IN(991,992,993,1005,1006) THEN CONCAT(E.Numero,' ',E.Busqueda) "
-                                    . "END) AS EMPLEADO "
-                                    . "FROM empleados AS E "
-                                    . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
-                                    . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")
-                    ->result());
+                                            . "(CASE "
+                                            . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
+                                            . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',"
+                                            . "(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',"
+                                            . "(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', "
+                                            . "(CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
+                                            . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                                            . "WHEN E.AltaBaja = 2 AND E.Celula IN(0) AND E.Numero IN(991,992,993,1005,1006) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                                            . "END) AS EMPLEADO "
+                                            . "FROM empleados AS E "
+                                            . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
+                                            . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")
+                                    ->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -807,20 +807,20 @@ P.Maquila AS MAQUILA
                         'Hora' => Date('h:i:s a'),
                         'Fraccion' => 0
                     ));
-                }
 
-                $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
-                        ->where('Control', $xXx['CONTROL'])
-                        ->update('controles');
-                $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
-                        ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
-                        ->update('pedidox');
-                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
-                        ->where('fec44 IS NULL', null, false)
-                        ->where('contped', $xXx['CONTROL'])
-                        ->update('avaprd');
-                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE.", $this->session);
-                exit(0);
+                    $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
+                            ->where('Control', $xXx['CONTROL'])
+                            ->update('controles');
+                    $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
+                            ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
+                            ->update('pedidox');
+                    $this->db->set('fec44', Date('Y-m-d 00:00:00'))
+                            ->where('fec44 IS NULL', null, false)
+                            ->where('contped', $xXx['CONTROL'])
+                            ->update('avaprd');
+                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE.", $this->session);
+                    exit(0);
+                }
             }
             /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
              * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
@@ -839,19 +839,19 @@ P.Maquila AS MAQUILA
                         'Hora' => Date('h:i:s a'),
                         'Fraccion' => 0
                     ));
+                    $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
+                            ->where('Control', $xXx['CONTROL'])
+                            ->update('controles');
+                    $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
+                            ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
+                            ->update('pedidox');
+                    $this->db->set('fec44', Date('Y-m-d 00:00:00'))
+                            ->where('fec44 IS NULL', null, false)
+                            ->where('contped', $xXx['CONTROL'])
+                            ->update('avaprd');
+                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE.", $this->session);
+                    exit(0);
                 }
-                $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)
-                        ->where('Control', $xXx['CONTROL'])
-                        ->update('controles');
-                $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')
-                        ->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])
-                        ->update('pedidox');
-                $this->db->set('fec44', Date('Y-m-d 00:00:00'))
-                        ->where('fec44 IS NULL', null, false)
-                        ->where('contped', $xXx['CONTROL'])
-                        ->update('avaprd');
-                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE.", $this->session);
-                exit(0);
             }
 
             if ($depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 997 ||
@@ -882,20 +882,20 @@ P.Maquila AS MAQUILA
                         'Hora' => Date('h:i:s a'),
                         'Fraccion' => 0
                     ));
+                    $this->db->set('EstatusProduccion', 'PESPUNTE')
+                            ->set('DeptoProduccion', 110)
+                            ->where('Control', $xXx['CONTROL'])->update('controles');
+                    $this->db->set('stsavan', 5)
+                            ->set('EstatusProduccion', 'PESPUNTE')
+                            ->set('DeptoProduccion', 110)
+                            ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                    $this->db->set("status", 5)->set("pespunte", $xXx['EMPLEADO'])
+                            ->set("fec5", Date('Y-m-d 00:00:00'))
+                            ->where('fec5 IS NULL', null, false)
+                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - PESPUNTE.", $this->session);
+                    exit(0);
                 }
-                $this->db->set('EstatusProduccion', 'PESPUNTE')
-                        ->set('DeptoProduccion', 110)
-                        ->where('Control', $xXx['CONTROL'])->update('controles');
-                $this->db->set('stsavan', 5)
-                        ->set('EstatusProduccion', 'PESPUNTE')
-                        ->set('DeptoProduccion', 110)
-                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                $this->db->set("status", 5)->set("pespunte", $xXx['EMPLEADO'])
-                        ->set("fec5", Date('Y-m-d 00:00:00'))
-                        ->where('fec5 IS NULL', null, false)
-                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - PESPUNTE.", $this->session);
-                exit(0);
             }
             /* 55 ENSUELADO */
             /* 55 ENSUELADO Y STSAVAN 5 PESPUNTE */
@@ -997,10 +997,7 @@ P.Maquila AS MAQUILA
                                 ->set("fec55", Date('Y-m-d 00:00:00'))
                                 ->where('fec55 IS NULL', null, false)
                                 ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                        if (intval($xXx['EMPLEADO']) === 903 
-                                || intval($xXx['EMPLEADO']) === 900 
-                                || intval($xXx['EMPLEADO']) === 901 
-                                || intval($xXx['EMPLEADO']) === 902) {
+                        if (intval($xXx['EMPLEADO']) === 903 || intval($xXx['EMPLEADO']) === 900 || intval($xXx['EMPLEADO']) === 901 || intval($xXx['EMPLEADO']) === 902) {
                             $this->onPagarFraccion($xXx, 300, 140, 'ENSUELADO');
                         }
                     }
@@ -1106,31 +1103,33 @@ P.Maquila AS MAQUILA
 
             /* 7 TEJIDO */
             if ($depto === 7 && $depto_actual === 6) {
+                $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  AND A.Departamento = 150")->result();
+                if (intval($check_tejido[0]->EXISTE) === 0) {
+                    /* 6 ALMACEN PESPUNTE "A" 7 TEJIDO */
+                    $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
+                            ->where('Control', $xXx['CONTROL'])->update('controles');
+                    $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
+                            ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                    $this->db->set("status", 7)
+                            ->set("fec7", Date('Y-m-d 00:00:00'))
+                            ->where('fec7 IS NULL', null, false)
+                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    $ID = $this->db->insert('avance', array(
+                        'Control' => $xXx['CONTROL'],
+                        'FechaAProduccion' => Date('d/m/Y'),
+                        'Departamento' => 150,
+                        'DepartamentoT' => 'TEJIDO',
+                        'FechaAvance' => Date('d/m/Y')/* FECHA AVANCE */,
+                        'Estatus' => 'A',
+                        'Usuario' => $_SESSION["ID"],
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('h:i:s a'),
+                        'Fraccion' => 401
+                    ));
+                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - TEJIDO.", $this->session);
 
-                /* 6 ALMACEN PESPUNTE "A" 7 TEJIDO */
-                $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
-                        ->where('Control', $xXx['CONTROL'])->update('controles');
-                $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
-                        ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                $this->db->set("status", 7)
-                        ->set("fec7", Date('Y-m-d 00:00:00'))
-                        ->where('fec7 IS NULL', null, false)
-                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                $ID = $this->db->insert('avance', array(
-                    'Control' => $xXx['CONTROL'],
-                    'FechaAProduccion' => Date('d/m/Y'),
-                    'Departamento' => 150,
-                    'DepartamentoT' => 'TEJIDO',
-                    'FechaAvance' => Date('d/m/Y')/* FECHA AVANCE */,
-                    'Estatus' => 'A',
-                    'Usuario' => $_SESSION["ID"],
-                    'Fecha' => Date('d/m/Y'),
-                    'Hora' => Date('h:i:s a'),
-                    'Fraccion' => 401
-                ));
-                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - TEJIDO.", $this->session);
-
-                exit(0);
+                    exit(0);
+                }
             }
             /* AVANCE A ALMACEN DE TEJIDO , PAGA NOMINA DE TEJIDO */
             if ($depto === 8 && $depto_actual === 7 && $frac === 401 ||
@@ -1159,6 +1158,10 @@ P.Maquila AS MAQUILA
                     case 401:
                         /* YA NO SE PAGA FRACCION PORQUE ESTE TIENE UN MODULO DEDICADO DONDE SE PAGA DIRECTO,SOLO MUEVE EL CONTROL A ALMACEN TEJIDO 
                          * VER AVANCE TEJIDO (vAvanceTejido, AvanceTejido) */
+                        $check_almtejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND A.Departamento = 160")->result();
+                        if (intval($check_almtejido[0]->EXISTE) >= 1) {
+                            exit(0);
+                        }
                         $this->db->insert('avance', array(
                             'Control' => $xXx['CONTROL'],
                             'FechaAProduccion' => Date('d/m/Y'),
@@ -1197,6 +1200,10 @@ P.Maquila AS MAQUILA
             /* AVANCE A "MONTADO A" O "MONTADO B" (SOLO LOS MUEVE DE ALMACEN TEJIDO A "MONTADO", NO PAGA NOMINA) */
             if ($depto === 9 && $depto_actual === 8) {
                 /* SACA DE ALMACEN DE TEJIDO Y LOS PONE EN MONTADO (SOLO MUEVE) */
+                $check_montadoa = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control ={$xXx['CONTROL']} AND A.Departamento = 180")->result();
+                if (intval($check_montadoa[0]->EXISTE) >= 1) {
+                    exit(0);
+                }
                 $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
                     'FechaAProduccion' => Date('d/m/Y'),
@@ -1303,7 +1310,7 @@ P.Maquila AS MAQUILA
                     if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                         switch (intval($frac)) {
                             case 600:
-
+                                
                                 $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN ADORNO.", $this->session);
                                 $this->onPagarFraccion($xXx, $frac, 230, 'ALMACEN ADORNO');
 

@@ -246,8 +246,7 @@ class AvanceTejido extends CI_Controller {
     }
 
     public function onAvanzar() {
-        try {
-            EXIT(0);
+        try { 
             $x = $this->input;
             $xXx = $this->input->post();
             $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx['CONTROL']} AND F.numfrac = {$xXx['FRACCION']} LIMIT 1")->result();
