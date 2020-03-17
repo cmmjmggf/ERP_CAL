@@ -613,6 +613,10 @@
             onDisable(btnCierraNominaGNS);
             onDisable(btnEliminaMovGenGNS);
             getSemanaNomina();
+            $.post('<?php print base_url('GeneraNominaDeSemana/onRefrescarSaldoDePrestamos'); ?>').done(function (a) {
+            }).fail(function (x) {
+                console.log(x);
+            });
         });
     });
 
