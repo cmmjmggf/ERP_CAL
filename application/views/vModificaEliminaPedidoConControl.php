@@ -224,7 +224,7 @@
     };
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
-        
+
         btnModificaRegistroXFecha.click(function () {
             if (PedidoMEPCC.val() && FechaEntregaModificada.val()) {
                 $.post('<?php print base_url('ModificaEliminaPedidoConControl/onModificarFechaXClave') ?>', {
@@ -438,18 +438,20 @@
                             .done(function (a) {
                                 onBeep(1);
                                 console.log(a);
-                                if (a.length > 0) {
-                                    var r = a[0];
-                                    switch (parseInt(r.DELETED)) {
-                                        case 0:
-                                            iMsg('NO SE HA ELIMINADO EL CONTROL PORQUE YA HA SIDO PROCESADO POR DEPARTAMENTO DE CORTE', 'w', function () {
-                                                ControlMEPCC.focus().select();
-                                            });
-                                            break;
-                                        case 1:
-                                            onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA ELIMINADO EL CONTROL ' + r.CONTROL, 'success', {from: "bottom", align: "center"});
-                                            break;
-                                    }
+                                var r = a;
+                                switch (parseInt(r.DELETED)) {
+                                    case 0:
+                                        iMsg('NO SE HA ELIMINADO EL CONTROL PORQUE YA HA SIDO PROCESADO POR DEPARTAMENTO DE CORTE', 'w', function () {
+                                            ControlMEPCC.focus().select();
+                                        });
+                                        break;
+                                    case 1:
+                                        iMsg('SE HA ELIMINADO EL CONTROL', 's', function () {
+                                            ControlMEPCC.focus().select();
+                                            PedidoDetalle.ajax.reload();
+                                        });
+                                        onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA ELIMINADO EL CONTROL ' + r.CONTROL, 'success', {from: "bottom", align: "center"});
+                                        break;
                                 }
                             }).fail(function (x) {
                         getError(x);

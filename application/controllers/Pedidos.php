@@ -73,7 +73,7 @@ class Pedidos extends CI_Controller {
         try {
             $x = $this->input->get();
             $ESTILO = $x['Estilo'];
-            print json_encode($this->db->query("SELECT E.Descripcion AS Estilo FROM estilos AS E  WHERE E.Estatus = 'ACTIVO' and E.clave = '$ESTILO' ")->result());
+            print json_encode($this->db->query("SELECT E.Descripcion AS Estilo, E.Liberado AS LIBERADO FROM estilos AS E  WHERE E.Estatus = 'ACTIVO' and E.clave = '$ESTILO'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

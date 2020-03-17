@@ -158,7 +158,9 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                     $orden_prod = $this->db->query("SELECT ID, ControlT FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
                     $this->db->query("DELETE FROM ordendeproducciond WHERE OrdenDeProduccion = {$orden_prod[0]->ID}");
                 }
-                $this->db->query("DELETE FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
+                $this->db->query("DELETE FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'");
+
+                $this->db->query("DELETE FROM avance WHERE Control = '{$xxx['CONTROL']}'");
 
                 $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
                 exit(0);
