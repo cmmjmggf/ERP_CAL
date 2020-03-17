@@ -709,20 +709,20 @@ class Empleados extends CI_Controller {
             $ANIO = Date('Y');
             $empleados = $this->db->query("SELECT E.Numero,E.SaldoPres  FROM empleados AS E WHERE E.AltaBaja = 1 AND E.SaldoPres > 0")->result();
             foreach ($empleados as $k => $v) {
-                $ACUMULADO_DE_PRESTAMOS_Y_PAGOS = $this->db->query("SELECT  
-(SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}) AS PRESTAMOS,   
-(SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}) AS PAGOS", false)->result();
+                $ACUMULADO_DE_PRESTAMOS= $this->db->query("SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE PP.numemp = {$v->Numero} AND YEAR(PP.fechapre) = {$ANIO}", false)->result();
 
-                $SALDO_PRESTAMOS = floatval($ACUMULADO_DE_PRESTAMOS_Y_PAGOS[0]->PRESTAMOS) - floatval($ACUMULADO_DE_PRESTAMOS_Y_PAGOS[0]->PAGOS);
-                if (floatval($SALDO_PRESTAMOS) > 0 && floatval($v->SaldoPres) !== $SALDO_PRESTAMOS) {
+                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT  SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
+
+                $SALDO_PRESTAMOS = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
+//                print "\n\nSALDO {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO} {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}";
+                if (floatval($SALDO_PRESTAMOS) > 0) {
                     $this->db->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
                             ->where("Numero", $v->Numero)
                             ->update("empleados");
-//                    PRINT "\n $v->Numero \n".$this->db->last_query() . "\n";
                 }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-    } 
+    }
 }
