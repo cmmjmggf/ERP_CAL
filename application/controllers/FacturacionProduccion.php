@@ -848,7 +848,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
             $x = $this->input->post();
 
             $rfc_cliente = $this->db->query("SELECT C.RFC AS RFC FROM clientes AS C WHERE C.Clave LIKE '{$x['CLIENTE']}' LIMIT 1")->result();
-
+            $tipo_moneda = $this->db->query("SELECT tmnda AS TIPO FROM facturacion AS F WHERE F.cliente ={$x['CLIENTE']} AND F.factura = {$x['DOCUMENTO_FACTURA']} and tp = {$x['TP']} ")->result();
             $rfc_rec = (!empty($rfc_cliente) ? $rfc_cliente[0]->RFC : "XXXX");
 //            $dtm = $this->db->query("SELECT F.Factura, F.numero, F.FechaFactura, F.CadenaOriginal,"
 //                            . "F.uuid, F.fechatimbrado, F.certificadosat, F.certificadocfd, F.sellosat, "
@@ -1240,18 +1240,34 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             exit(0);
                             break;
                         default :
-                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
-                            $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
-                            $pr["qrCode"] = base_url('qrplus/qr.png');
-                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
-                            $pr["cliente"] = $x['CLIENTE'];
-                            $pr["certificado"] = $CERTIFICADO_CFD;
-                            $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec3.jasper');
-                            $jc->setFilename("f3{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
-                            $jc->setDocumentformat('pdf');
-                            PRINT $jc->getReport();
-                            exit(0);
+                            if (intval($tipo_moneda[0]->TIPO) === 2) {
+                                $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                                $pr["ciudadestadopaiscp"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                                $pr["qrCode"] = base_url('qrplus/qr.png');
+                                $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                                $pr["certificado"] = $CERTIFICADO_CFD;
+                                $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
+                                $pr["CLIENTE"] = $x['CLIENTE'];
+                                $jc->setParametros($pr);
+                                $jc->setJasperurl('jrxml\facturacion\factura_exportacion.jasper');
+                                $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                                $jc->setDocumentformat('pdf');
+                                PRINT $jc->getReport();
+                                exit(0);
+                            } else {
+                                $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                                $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                                $pr["qrCode"] = base_url('qrplus/qr.png');
+                                $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                                $pr["cliente"] = $x['CLIENTE'];
+                                $pr["certificado"] = $CERTIFICADO_CFD;
+                                $jc->setParametros($pr);
+                                $jc->setJasperurl('jrxml\facturacion\facturaelec3.jasper');
+                                $jc->setFilename("f3{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                                $jc->setDocumentformat('pdf');
+                                PRINT $jc->getReport();
+                                exit(0);
+                            }
                             break;
                     }
                     break;
