@@ -53,7 +53,8 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     ->join('estilostiempox AS TXE', 'P.Estilo = TXE.estilo')
                     ->join('programacion AS PR', 'P.Control = PR.Control', 'left')
                     ->where('PR.Control IS NULL', null, false)
-                    ->where_not_in('P.Control', array(0));
+                    ->where_not_in('P.Control', array(0))
+                    ->where_not_in("P.stsavan", array(13, 14));
             if ($x['ANIO'] !== '') {
                 $this->db->where('P.Ano', $x['ANIO']);
             }
@@ -78,7 +79,8 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             $x = $this->input->get();
             $this->db->select("P.*", false)->from("pedidox AS P");
             if ($x['CONTROL'] !== '') {
-                $this->db->where('P.Control', $x['CONTROL'])->limit(1);
+                $this->db->where('P.Control', $x['CONTROL'])
+                        ->where_not_in("P.stsavan", array(13, 14))->limit(1);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -268,7 +270,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                             ->join('fraccionesxestilo AS FXE', 'FXE.Estilo = FT.Estilo')
                             ->join('fracciones AS FR', 'FXE.Fraccion = FR.Clave')
                             ->join('estilostiempox AS TXE', 'PE.Estilo = TXE.estilo');
-                    $this->db->where("FR.Departamento = 10", null, false);
+                    $this->db->where("FR.Departamento = 10", null, false)->where_not_in("PE.stsavan", array(13, 14));
                     if ($CONTROL !== '') {
                         $this->db->where("PE.Control", $CONTROL);
                     }
@@ -293,7 +295,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     if ($CONTROL !== '') {
                         $this->db->where("PE.Control", $CONTROL);
                     }
-                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(1))->group_by('A.Descripcion');
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_not_in("PE.stsavan", array(13, 14))->where_in("A.Grupo", array(1))->group_by('A.Descripcion');
 
                     $DTM = $this->db->get()->result();
                     break;
@@ -390,7 +392,7 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                 $this->db->insert('programacion', $data);
                 $this->db->set('DiaProg', $x['DIA'])
                         ->set('SemProg', $x['SEMANA'])
-                        ->set('AnioProg',$x['ANIO'])
+                        ->set('AnioProg', $x['ANIO'])
                         ->set('FechaProg', Date('Y-m-d 00:00:00'))
                         ->set('HoraProg', Date('h:i:s'))
                         ->where('Control', $x['CONTROL'])
@@ -437,6 +439,7 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                         ->set('FechaProg', Date('Y-m-d 00:00:00'))
                         ->set('HoraProg', Date('h:i:s'))
                         ->where('Control', $x->post('CONTROL'))
+                        ->where_not_in("stsavan", array(13, 14))
                         ->update('pedidox');
             }
         } catch (Exception $exc) {
