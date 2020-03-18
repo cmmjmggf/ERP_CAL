@@ -149,7 +149,8 @@ class CapturaNominaFraccionesSemanal extends CI_Controller {
                         'fecha' => Date('Y-m-d'),
                         'status' => 1,
                         'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
-                        'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL
+                        'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL,
+                        'modulo' => 'CNFS'
                     ));
                 }
 

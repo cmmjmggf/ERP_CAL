@@ -246,7 +246,7 @@ class AvanceTejido extends CI_Controller {
     }
 
     public function onAvanzar() {
-        try { 
+        try {
             $x = $this->input;
             $xXx = $this->input->post();
             $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx['CONTROL']} AND F.numfrac = {$xXx['FRACCION']} LIMIT 1")->result();
@@ -316,7 +316,8 @@ class AvanceTejido extends CI_Controller {
                     'anio' => Date('Y'),
                     'avance_id' => $ID,
                     'fraccion' => $xXx['FRACCION'],
-                    'fecha_registro' => Date('d/m/Y h:i:s')
+                    'fecha_registro' => Date('d/m/Y h:i:s'),
+                    'modulo' => 'TJ'
                 ));
 
                 /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
@@ -343,6 +344,8 @@ class AvanceTejido extends CI_Controller {
                                             . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
                                     ->from('controles AS C')
                                     ->where('C.Control', $this->input->get('CONTROL'))
+                                    ->where('C.DeptoProduccion', 130)
+                                    ->where('C.EstatusProduccion', 'ALMACEN PESPUNTE')
                                     ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -374,6 +377,7 @@ class AvanceTejido extends CI_Controller {
             }
             if (intval($check_avance[0]->EXISTE) >= 1) {
                 $this->db->query("DELETE FROM avance WHERE Control = {$x['CONTROL']} AND Departamento = 150 AND DepartamentoT = 'TEJIDO'");
+                $this->db->query("DELETE FROM controltej WHERE control = {$x['CONTROL']} AND fraccion = 401");
                 $this->db->query("DELETE FROM fracpagnomina   where Control = {$x['CONTROL']} AND numfrac = 401");
                 $this->db->set("EstatusProduccion", 'ALMACEN PESPUNTE')->set("DeptoProduccion", 130)
                         ->set("stsavan", 6)->where("Control", $x['CONTROL'])->update("pedidox");

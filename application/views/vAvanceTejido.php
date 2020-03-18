@@ -511,6 +511,7 @@
                         }).done(function (a, b, c) {
                             console.log(a);
                             if (a.length > 0) {
+                                onEnable(btnAceptar);
                                 var rq = a[0];
                                 onHabilita();
                                 Estilo.val(rq.Estilo);
@@ -527,6 +528,7 @@
                                  * 405	TEJIDO DE FLORETA
                                  */
                             } else {
+                                onDisable(btnAceptar);
                                 swal('ATENCIÓN', 'NO SE TIENE INFORMACIÓN SOBRE ESTE CONTROL, PUEDE QUE NO EXISTA O QUE NO HAYA SIDO AVANZADO AL DEPTO CORRESPONDIENTE', 'warning').then((value) => {
                                     Control.focus().select();
                                 });

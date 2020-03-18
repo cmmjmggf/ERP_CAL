@@ -405,6 +405,7 @@ class Avance8 extends CI_Controller {
                                         if (intval($fraccion_existe[0]->EXISTE) === 0) {
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                            $data["modulo"] = 'A8';
                                             $this->db->insert('fracpagnomina', $data);
                                         }
                                     } else {
@@ -442,6 +443,7 @@ class Avance8 extends CI_Controller {
                                         if (intval($fraccion_existe[0]->EXISTE) === 0) {
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                            $data["modulo"] = 'A8';
                                             $this->db->insert('fracpagnomina', $data);
                                         }
                                     }
@@ -449,6 +451,7 @@ class Avance8 extends CI_Controller {
                                     if (intval($fraccion_existe[0]->EXISTE) === 0) {
                                         $data["fraccion"] = $v->NUMERO_FRACCION;
                                         $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                        $data["modulo"] = 'A8';
                                         $this->db->insert('fracpagnomina', $data);
                                     }
                                 }
@@ -478,7 +481,7 @@ class Avance8 extends CI_Controller {
                                             $id = $this->db->insert_id();
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
-                            
+                                            $data["modulo"] = 'A8';
                                             $this->db->insert('fracpagnomina', $data);
                                         }
 
@@ -521,36 +524,43 @@ class Avance8 extends CI_Controller {
                             case 301:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                             case 24:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                             case 325:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                             case 74:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                             case 75:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                             case 130:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                             default:
                                 $data["fraccion"] = $v->NUMERO_FRACCION;
                                 $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
+                                $data["modulo"] = 'A8';
                                 $this->db->insert('fracpagnomina', $data);
                                 break;
                         }
@@ -582,6 +592,7 @@ class Avance8 extends CI_Controller {
                         $this->db->insert('avance', $avance);
                         $id = $this->db->insert_id();
                         $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                        $data["modulo"] = 'A8';
                         $this->db->insert('fracpagnomina', $data);
                         print json_encode(array("AVANZO" => 2, "STEP" => 1));
                         $this->onAvanzarXControl($xXx['CONTROL'], 'REBAJADO', 30, 33);

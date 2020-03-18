@@ -1418,7 +1418,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                         "depto" => 120/* 120 = PREL-PESPUNTE */,
                         "registro" => 0,
                         "anio" => $v->anio,
-                        "fraccion" => 304
+                        "fraccion" => 304,
+                        "modulo" => 'GNS'
                     ));
                 }
             }

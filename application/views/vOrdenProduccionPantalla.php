@@ -1,15 +1,15 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-7 float-left">
+            <div class="col-sm-7 col-md-5 float-left">
                 <legend class="float-left">Órdenes de producción</legend>
             </div>
 
             <div class="col-12 col-sm-3 col-md-3 animated bounceInUp" align="right" id="Acciones">
-                <input type="text" placeholder="CAPTURA EL CONTROL" class="form-control form-control-sm numbersOnly" maxlength="10" id="Control" name="Control" required="">
+                <input type="text" placeholder="CAPTURA EL CONTROL" class="form-control form-control-sm numbersOnly" maxlength="10" id="Control" name="Control" required="" style="height: 55px; font-size: 36px;">
             </div>
-            <div class="col-12 col-sm-3 col-md-2 animated bounceInLeft" align="right" id="Acciones">
-                <label for="" > <span class="badge badge-warning" style="font-size: 16px;" id="EstatusProduccion"> -- </span></label>
+            <div class="col-12 col-sm-3 col-md-4 animated bounceInLeft" align="right" id="Acciones">
+                <label for="" > <span class="badge badge-warning" style="font-size: 32px !important; background-color: #cc0000; FONT-STYLE: ITALIC;" id="EstatusProduccion"> -- </span></label>
             </div>
         </div>
         <hr>
