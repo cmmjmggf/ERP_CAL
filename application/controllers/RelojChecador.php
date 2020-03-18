@@ -37,13 +37,16 @@ class RelojChecador extends CI_Controller {
                             ->from('relojchecador AS A')
                             ->join('empleados AS E', 'E.Numero = A.numemp', 'left')
                             ->where('A.numemp', $x['Numero'])
+                            ->where('E.AltaBaja', 1)
                             ->where('A.fecalta  >= \'' . $fecha . '\'')
                             ->order_by('A.ID', 'DESC')->limit(4)->get()->result();
             $info_empleado = $this->db->select("E.ID AS ID, "
                                     . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ',E.Materno) AS Empleado, "
                                     . "E.Foto AS FOTO, E.DepartamentoFisico AS DEPTO, D.Descripcion AS DEPTOT", false)
                             ->from('empleados AS E')->join('departamentos AS D', 'E.DepartamentoFisico = D.Clave')
-                            ->where('E.Numero', intval($x['Numero']))->limit(1)->get()->result();
+                            ->where('E.Numero', intval($x['Numero']))
+                            ->where('E.AltaBaja', 1)
+                            ->limit(1)->get()->result();
             $dtm = json_decode(json_encode($info_empleado), FALSE);
             if (count($dtm) > 0) {
                 $e = $dtm[0];
@@ -54,8 +57,8 @@ class RelojChecador extends CI_Controller {
                 $ultimo_check_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM relojchecador as R WHERE YEAR(R.fecalta) = {$ANIO} AND MONTH(R.fecalta) = {$MES} AND DAY(R.fecalta) = {$DIA} AND numemp = {$x['Numero']} order by ID DESC LIMIT 1")->result();
                 if (intval($ultimo_check_existe[0]->EXISTE) > 0) {
                     $ultimo_check = $this->db->query("SELECT * FROM relojchecador as R WHERE YEAR(R.fecalta) = {$ANIO} AND MONTH(R.fecalta) = {$MES} AND DAY(R.fecalta) = {$DIA} AND numemp = {$x['Numero']} order by ID DESC LIMIT 1")->result();
-                    $tiempo_check ="{$ultimo_check[0]->fecalta}";
-                    
+                    $tiempo_check = "{$ultimo_check[0]->fecalta}";
+
                     $TIEMPO_EN_SEGUNDOS = $this->db->query("SELECT TIMESTAMPDIFF(second,'{$tiempo_check}',now())/60 AS DIFERENCIA_TIEMPO_EN_SEGUNDOS, 
 TIMESTAMPDIFF(minute,'{$tiempo_check}',now())  AS DIFERENCIA_TIEMPO_EN_MINUTOS, 
 TIMESTAMPDIFF(HOUR,'{$tiempo_check}',now())  AS DIFERENCIA_TIEMPO_EN_HORAS")->result();

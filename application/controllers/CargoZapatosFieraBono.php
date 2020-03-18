@@ -48,7 +48,7 @@ class CargoZapatosFieraBono extends CI_Controller {
 
     public function onComprobarDeudaXEmpleado() {
         try {
-
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -64,31 +64,33 @@ class CargoZapatosFieraBono extends CI_Controller {
             $VALIDO = true;
             /* COMPROBAR SI YA TIENE VALE O BONO */
             $tiene_vale_o_bono = $this->db->select('E.*', false)
-                            ->from('empleados AS E')->where('E.Numero', $EMPLEADO)
+                            ->from('empleados AS E')
+                            ->where('E.Numero', $EMPLEADO)
+                            ->where('E.AltaBaja', 1)
                             ->get()->result();
             /* EMPLEADO VALIDO PARA VALE O BONO */
             $evb = $tiene_vale_o_bono[0];
             if (intval($evb->Fierabono) <= 0 && $DOCUMENTO === 2) {
                 print "\n FIERA BONO SIN SALDO \n";
                 $this->db->set('FieraBonoPagos', $PAGOS)->set('Fierabono', $IMPORTE)
-                        ->where('Numero', $EMPLEADO)->update('empleados');
+                        ->where('Numero', $EMPLEADO)->where('AltaBaja', 1)->update('empleados');
             } else if (intval($evb->ZapatosTDA) <= 0 && $DOCUMENTO === 1) {
                 print "\n VALE TIENDA  SIN SALDO \n";
                 $this->db->set('AbonoZap', $PAGOS)->set('ZapatosTDA', $IMPORTE)
-                        ->where('Numero', $EMPLEADO)->update('empleados');
+                        ->where('Numero', $EMPLEADO)->where('AltaBaja', 1)->update('empleados');
             } else if ($evb->Fierabono > 0 && $DOCUMENTO === 2) {
                 print "\n FIERA BONO  CON SALDO {$evb->Fierabono} \n";
                 $SALDO_FINAL = $IMPORTE;
                 $SALDO_FINAL += $evb->Fierabono;
                 print "\n FIERA BONO SALDO FINAL {$SALDO_FINAL} \n";
                 $this->db->set('FieraBonoPagos', $PAGOS)->set('Fierabono', $SALDO_FINAL)
-                        ->where('Numero', $EMPLEADO)->update('empleados');
+                        ->where('Numero', $EMPLEADO)->where('AltaBaja', 1)->update('empleados');
             } else if ($evb->ZapatosTDA > 0 && $DOCUMENTO === 1) {
                 print "\n VALE TIENDA  CON SALDO {$evb->ZapatosTDA} \n";
                 $SALDO_FINAL = $IMPORTE;
                 $SALDO_FINAL += $evb->ZapatosTDA;
                 $this->db->set('AbonoZap', $PAGOS)->set('ZapatosTDA', $SALDO_FINAL)
-                        ->where('Numero', $EMPLEADO)->update('empleados');
+                        ->where('Numero', $EMPLEADO)->where('AltaBaja', 1)->update('empleados');
                 print "\n VALE TIENDA SALDO FINAL {$SALDO_FINAL} \n";
             } else {
                 print "\n NO ES POSIBLE DETERMINAR SI ES FIERA BONO O VALE TIENDA \n";
