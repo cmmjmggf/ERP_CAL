@@ -404,10 +404,15 @@ class OrdenDeProduccion extends CI_Controller {
     public function getTotalParesXMaquilaXSemanaXAno() {
         try {
             $x = $this->input->get();
-            $this->db->select("IFNULL(SUM(PD.Pares),0) AS PARES", false)->from('pedidox AS PD')
+            $this->db->select("IFNULL(SUM(PD.Pares),0) AS PARES", false)
+                    ->from('pedidox AS PD')
                     ->join('controles AS CT', 'CT.PedidoDetalle = PD.Clave')
                     ->join('ordendeproduccion AS OP', 'ON OP.ControlT = PD.Control', 'left')
                     ->where('PD.Control <> 0 AND OP.ID IS NULL AND CT.Control = PD.Control', null, false)
+                    ->where_not_in('PD.EstatusProduccion', 'CANCELADO')
+                    ->where_not_in('PD.DeptoProduccion', 270)
+                    ->where_not_in('PD.stsavan', 14)
+                    ->where_not_in('PD.Estatus', 'C') 
                     ->where('CT.Estatus', 'A');
             if ($x["ANIO"] !== '') {
                 $ANIO_CT = substr($x["ANIO"], 2, 2);
@@ -419,8 +424,7 @@ class OrdenDeProduccion extends CI_Controller {
             if ($x["SEMANA"] !== '') {
                 $this->db->where('PD.Semana', $x["SEMANA"]);
             }
-            $sql = $this->db->get();
-            //PRINT $this->db->last_query();
+            $sql = $this->db->get(); 
             print json_encode($sql->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

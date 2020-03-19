@@ -36,7 +36,7 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
     public function getPedidos() {
         try {
             $x = $this->input->get();
-            $this->db->select("P.ID AS ID, P.Cliente AS CLIENTE, P.Estilo AS ESTILO,
+            $this->db->select("P.ID AS ID, (SELECT CONCAT(C.Clave, \" \",C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE, P.Estilo AS ESTILO,
                 P.Color AS COLOR, P.Pares AS PARES, P.Control AS CONTROL, P.Maquila AS MAQUILA,
                 P.Semana AS SEMANA, P.Clave AS PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
                 P.FechaEntrega AS FECHA_VENTA, P.Precio AS PRECIO, P.stsavan AS AVANCE", false)

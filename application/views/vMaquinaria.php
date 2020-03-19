@@ -27,6 +27,7 @@
                                     <div class="col-12">
                                         <label>Código</label>
                                         <span class="font-weight-bold" style="color:#cc0000;">-</span>
+                                        <input type="text" id="Maquinaria_ID" name="Maquinaria_ID" readonly="" class="form-control form-control-sm d-none">
                                         <input type="text" id="CodigoMaquina" name="CodigoMaquina" readonly="" class="form-control form-control-sm">
                                     </div>
                                     <div class="col-12">
@@ -158,6 +159,9 @@
                                         <button type="button" id="btnEscogerImagenUno" name="btnEscogerImagenUno" class="btn btn-success btn-block selectNotEnter" style="background-color: #673AB7; border-color: #673AB7; width: 50px;">
                                             <span class="fa fa-plus"></span>  
                                         </button>
+                                        <button type="button" id="btnEliminaImagenUno" name="btnEliminaImagenUno" class="btn btn-success btn-block selectNotEnter" style="background-color: #cc0000; border-color: #cc0000; width: 50px;">
+                                            <span class="fa fa-trash"></span>  
+                                        </button>
                                     </div>
                                     <div class="col-6 col-xs-4 col-md-4 col-lg-2 col-xl-2 my-2">
                                         <img id="xImagenDos" name="xImagenDos" style="width: 50px; height: 50px; cursor: pointer;">
@@ -165,11 +169,17 @@
                                         <button type="button" id="btnEscogerImagenDos" name="btnEscogerImagenDos" class="btn btn-success btn-block selectNotEnter" style="background-color: #673AB7; border-color: #673AB7; width: 50px;">
                                             <span class="fa fa-plus"></span>  
                                         </button>
+                                        <button type="button" id="btnEliminaImagenDos" name="btnEliminaImagenDos" class="btn btn-success btn-block selectNotEnter" style="background-color: #cc0000; border-color: #cc0000; width: 50px;">
+                                            <span class="fa fa-trash"></span>  
+                                        </button>
                                     </div>
                                     <div class="col-6 col-xs-4 col-md-4 col-lg-2 col-xl-2 my-2">
                                         <img id="xImagenTres" name="xImagenTres" style="width: 50px; height: 50px; cursor: pointer;">
                                         <button type="button" id="btnEscogerImagenTres" name="btnEscogerImagenTres" class="btn btn-success btn-block selectNotEnter" style="background-color: #673AB7; border-color: #673AB7; width: 50px;">
                                             <span class="fa fa-plus"></span>  
+                                        </button>
+                                        <button type="button" id="btnEliminaImagenTres" name="btnEliminaImagenTres" class="btn btn-success btn-block selectNotEnter" style="background-color: #cc0000; border-color: #cc0000; width: 50px;">
+                                            <span class="fa fa-trash"></span>  
                                         </button>
                                     </div>
                                     <div class="col-6 col-xs-4 col-md-4 col-lg-2 col-xl-2 my-2">
@@ -178,12 +188,18 @@
                                         <button type="button" id="btnEscogerImagenCuatro" name="btnEscogerImagenCuatro" class="btn btn-success btn-block selectNotEnter" style="background-color: #673AB7; border-color: #673AB7;width: 50px;">
                                             <span class="fa fa-plus"></span>  
                                         </button>
+                                        <button type="button" id="btnEliminaImagenCuatro" name="btnEliminaImagenCuatro" class="btn btn-success btn-block selectNotEnter" style="background-color: #cc0000; border-color: #cc0000; width: 50px;">
+                                            <span class="fa fa-trash"></span>  
+                                        </button>
                                     </div>
                                     <div class="col-6 col-xs-4 col-md-4 col-lg-2 col-xl-2 my-2">
                                         <img id="xImagenCinco" name="xImagenCinco" style="width: 50px; height: 50px; cursor: pointer;">
 
                                         <button type="button" id="btnEscogerImagenCinco" name="btnEscogerImagenCinco" class="btn btn-success btn-block selectNotEnter" style="background-color: #673AB7; border-color: #673AB7;width: 50px;">
                                             <span class="fa fa-plus"></span>  
+                                        </button>
+                                        <button type="button" id="btnEliminaImagenCinco" name="btnEliminaImagenCinco" class="btn btn-success btn-block selectNotEnter" style="background-color: #cc0000; border-color: #cc0000; width: 50px;">
+                                            <span class="fa fa-trash"></span>  
                                         </button>
                                     </div>
                                     <div class="col-6 col-xs-4 col-md-4 col-lg-2 col-xl-2 my-2">
@@ -192,16 +208,19 @@
                                         <button type="button" id="btnEscogerImagenSeis" name="btnEscogerImagenSeis" class="btn btn-success btn-block selectNotEnter" style="background-color: #673AB7; border-color: #673AB7;width: 50px;">
                                             <span class="fa fa-plus"></span>  
                                         </button>
+                                        <button type="button" id="btnEliminaImagenSeis" name="btnEliminaImagenSeis" class="btn btn-success btn-block selectNotEnter" style="background-color: #cc0000; border-color: #cc0000; width: 50px;">
+                                            <span class="fa fa-trash"></span>  
+                                        </button>
                                     </div>
                                 </div> 
                             </div> 
-                            <div class="col-12"> 
-                                <input type="file" id="xFileMaquinaUno" name="xFileMaquinaUno" class="d-none"> 
-                                <input type="file" id="xFileMaquinaDos" name="xFileMaquinaDos" class="d-none"> 
-                                <input type="file" id="xFileMaquinaTres" name="xFileMaquinaTres" class="d-none"> 
-                                <input type="file" id="xFileMaquinaCuatro" name="xFileMaquinaCuatro" class="d-none"> 
-                                <input type="file" id="xFileMaquinaCinco" name="xFileMaquinaCinco" class="d-none"> 
-                                <input type="file" id="xFileMaquinaSeis" name="xFileMaquinaSeis" class="d-none"> 
+                            <div class="col-12 d-none"> 
+                                <input type="file" id="xFileMaquinaUno" name="xFileMaquinaUno"> 
+                                <input type="file" id="xFileMaquinaDos" name="xFileMaquinaDos" > 
+                                <input type="file" id="xFileMaquinaTres" name="xFileMaquinaTres"> 
+                                <input type="file" id="xFileMaquinaCuatro" name="xFileMaquinaCuatro" > 
+                                <input type="file" id="xFileMaquinaCinco" name="xFileMaquinaCinco"> 
+                                <input type="file" id="xFileMaquinaSeis" name="xFileMaquinaSeis"> 
                             </div> 
                         </div>
                     </div>
@@ -271,6 +290,7 @@
 </div>
 <script>
     var mdlMaquinaria = $("#mdlMaquinaria"),
+            Maquinaria_ID = mdlMaquinaria.find("#Maquinaria_ID"),
             CodigoMaquina = mdlMaquinaria.find("#CodigoMaquina"),
             IdMaquina = mdlMaquinaria.find("#IdMaquina"),
             btnNuevaMaquina = mdlMaquinaria.find("#btnNuevaMaquina"),
@@ -282,6 +302,12 @@
             btnEscogerImagenCuatro = mdlMaquinaria.find("#btnEscogerImagenCuatro"),
             btnEscogerImagenCinco = mdlMaquinaria.find("#btnEscogerImagenCinco"),
             btnEscogerImagenSeis = mdlMaquinaria.find("#btnEscogerImagenSeis"),
+            btnEliminaImagenUno = mdlMaquinaria.find("#btnEliminaImagenUno"),
+            btnEliminaImagenDos = mdlMaquinaria.find("#btnEliminaImagenDos"),
+            btnEliminaImagenTres = mdlMaquinaria.find("#btnEliminaImagenTres"),
+            btnEliminaImagenCuatro = mdlMaquinaria.find("#btnEliminaImagenCuatro"),
+            btnEliminaImagenCinco = mdlMaquinaria.find("#btnEliminaImagenCinco"),
+            btnEliminaImagenSeis = mdlMaquinaria.find("#btnEliminaImagenSeis"),
             xImagenMaquina = mdlMaquinaria.find("#xImagenMaquina"),
             xImagenUno = mdlMaquinaria.find("#xImagenUno"),
             xImagenDos = mdlMaquinaria.find("#xImagenDos"),
@@ -315,15 +341,126 @@
             ClaveEstatusMaquina = mdlMaquinaria.find('#ClaveEstatusMaquina'),
             EstatusMaquina = mdlMaquinaria.find('#EstatusMaquina'),
             FechaBajaMaquina = mdlMaquinaria.find('#FechaBajaMaquina'),
-            MotivoMaquina = mdlMaquinaria.find('#MotivoMaquina');
+            MotivoMaquina = mdlMaquinaria.find('#MotivoMaquina'),
+            indice = 1;
 
     function setValueSelectize(componente, valor) {
         componente[0].selectize.setValue(valor);
     }
 
+    function onEliminarImagenMaquinaria(ID, indice) {
+        swal({
+            title: "¿Estas seguro?",
+            text: "Nota: Esta acción no se puede deshacer",
+            icon: "warning",
+            buttons: {
+                cancelar: {
+                    text: "CANCELAR",
+                    value: "cancelar"
+                },
+                cambiar: {
+                    text: "ELIMINAR",
+                    value: "eliminar"
+                }
+            }
+        }).then((value) => {
+            switch (value) {
+                case "eliminar":
+                    onOpenOverlay('Eliminando...')
+                    $.post("<?php print base_url('Maquinaria/onModificarImagen') ?>", {
+                        IDE: ID,
+                        INDICE: indice
+                    }).done(function (a) {
+                        console.log(a);
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "SE HA ELIMINADO LA IMAGEN",
+                            icon: "success",
+                            buttons: false,
+                            timer: 2000
+                        });
+                    }).fail(function (x) {
+                        onCloseOverlay();
+                        getError(x);
+                    });
+                    break;
+                case "cancelar":
+                    swal.close();
+                    HoldOn.close();
+                    break;
+            }
+        });
+    }
+
     $(document).ready(function () {
         onVolverPrimerPestana();
         handleEnterDiv(mdlMaquinaria);
+
+        btnEliminaImagenSeis.click(function () {
+            if (nuevo) {
+                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenSeis[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xFileMaquinaSeis[0].type = 'text';
+                xFileMaquinaSeis[0].type = 'file';
+            } else {
+                onEliminarImagenMaquinaria(Maquinaria_ID.val(), 6);
+            }
+        });
+
+        btnEliminaImagenCinco.click(function () {
+            if (nuevo) {
+                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenCinco[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xFileMaquinaCinco[0].type = 'text';
+                xFileMaquinaCinco[0].type = 'file';
+            } else {
+                onEliminarImagenMaquinaria(Maquinaria_ID.val(), 5);
+            }
+        });
+
+        btnEliminaImagenCuatro.click(function () {
+            if (nuevo) {
+                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenCuatro[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xFileMaquinaCuatro[0].type = 'text';
+                xFileMaquinaCuatro[0].type = 'file';
+            } else {
+                onEliminarImagenMaquinaria(Maquinaria_ID.val(), 4);
+            }
+        });
+
+        btnEliminaImagenTres.click(function () {
+            if (nuevo) {
+                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenTres[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xFileMaquinaTres[0].type = 'text';
+                xFileMaquinaTres[0].type = 'file';
+            } else {
+                onEliminarImagenMaquinaria(Maquinaria_ID.val(), 3);
+            }
+        });
+
+        btnEliminaImagenDos.click(function () {
+            if (nuevo) {
+                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenDos[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xFileMaquinaDos[0].type = 'text';
+                xFileMaquinaDos[0].type = 'file';
+            } else {
+                onEliminarImagenMaquinaria(Maquinaria_ID.val(), 2);
+            }
+        });
+
+        btnEliminaImagenUno.click(function () {
+            if (nuevo) {
+                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenUno[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xFileMaquinaUno[0].type = 'text';
+                xFileMaquinaUno[0].type = 'file';
+            } else {
+                onEliminarImagenMaquinaria(Maquinaria_ID.val(), 1);
+            }
+        });
 
         DeptoClaveMaquina.on('keydown', function (e) {
             if (e.keyCode === 13 && DeptoClaveMaquina.val()) {
@@ -423,6 +560,7 @@
                 });
             } else {
                 console.log('Modificando...');
+                f.append('ID', Maquinaria_ID.val());
                 $.ajax({
                     url: '<?php print base_url('Maquinaria/onModificar'); ?>',
                     type: "POST",
@@ -628,7 +766,6 @@
 
         xImagenUno.click(function () {
             xImagenMaquina[0].src = xImagenUno[0].src;
-
         });
 
         xFileMaquinaUno.change(function (e) {
@@ -662,6 +799,13 @@
                     IdMaquina.focus();
                 });
                 IdMaquina.focus().select();
+                xImagenUno[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenDos[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenTres[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenCuatro[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenCinco[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenSeis[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+
             });
         });
 
@@ -765,11 +909,13 @@
                 btnNuevaMaquina.addClass("d-none");
                 IdMaquina.focus().select();
             });
+            onVolverPrimerPestana();
             nuevo = false;
             tblMaquinaria.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = xMaquinaria.row(this).data();
             console.log(dtm);
+            Maquinaria_ID.val(dtm.IDE);
             CodigoMaquina.val(dtm.CODIGO);
             IdMaquina.val(dtm.ID);
             MaquilaClaveMaquina.val(dtm.MAQUILA);
@@ -811,7 +957,6 @@
             xImagenCinco[0].src = dtm.FOTO_CINCO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_CINCO : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
             xImagenSeis[0].src = dtm.FOTO_SEIS !== null ? '<?php print base_url(); ?>' + dtm.FOTO_SEIS : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
 
-            onVolverPrimerPestana();
             IdMaquina.focus().select();
             onCloseOverlay();
         });

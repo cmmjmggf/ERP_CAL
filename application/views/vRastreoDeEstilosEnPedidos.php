@@ -61,7 +61,7 @@
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <table id="tblPedidox" class="table table-sm table-hover" style="width:100%">
+                    <table id="tblPedidox" class="table table-sm table-hover nowrap" style="width:100%">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -87,7 +87,7 @@
                     </table>
                 </div>
                 <div class="col-12" align="center">
-                    <h4 class="font-weight-bold PARES_TOTALES text-danger">Pares</h4>
+                    <h3 class="font-weight-bold PARES_TOTALES text-danger" style="color: #cc0000 !important;">Pares</h3>
                 </div>
             </div>
         </div>
@@ -125,7 +125,7 @@
                 });
             }
         });
-        
+
         xColor.on('keypress', function (e) {
             if (e.keyCode === 13) {
                 if (xColor.val()) {
@@ -253,7 +253,7 @@
                 });
             }
             Pedidox.ajax.reload(function () {
-                onRevisarRegistros(); 
+                onRevisarRegistros();
             });
         });
 
@@ -312,7 +312,7 @@
                     prs = prs + parseInt(v.PARES);
                 });
                 //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
-                pnlTablero.find("h4.PARES_TOTALES").text(prs + ' PARES');
+                pnlTablero.find("h3.PARES_TOTALES").text(prs + ' PARES');
             }
         });
     });
@@ -329,3 +329,36 @@
         }
     }
 </script>
+<style>
+    #tblPedidox tbody tr td { 
+        font-size: 16px !important;
+    }
+    #tblPedidox tbody tr td:nth-child(1){
+        font-weight: bold !important;
+    }
+    #tblPedidox tbody tr td:nth-child(2){
+        font-weight: bold !important;
+    }
+    #tblPedidox tbody tr td:nth-child(3){
+        font-weight: bold !important;
+        text-align: center !important;
+    }
+    #tblPedidox tbody tr td:nth-child(4){
+        font-weight: bold !important;
+        color: #cc0000 !important;
+        text-align: center !important;
+    }
+    #tblPedidox tbody tr:hover td:nth-child(4){
+        font-weight: bold !important;
+        color: #ffff00 !important;
+        text-align: center !important;
+    }
+    #tblPedidox tbody tr td:nth-child(9){
+        text-align: center !important;
+        font-weight: bold !important;
+    }
+    #tblPedidox tbody tr td:nth-child(10){
+        text-align: center !important;
+        font-weight: bold !important;
+    }
+</style>
