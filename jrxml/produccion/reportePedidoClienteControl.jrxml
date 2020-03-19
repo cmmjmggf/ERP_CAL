@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="2.453457296369761"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="807"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -25,14 +25,37 @@ P.Estilo,
 P.ColorT,
 ifnull(DEP.Clave,'0') AS ClaveEstatus,
 ifnull(C.EstatusProduccion,'PREPROGRAMADO') AS EstatusProduccion,
+
+DATE_FORMAT(
+(CASE
+WHEN C.DeptoProduccion = 10 THEN AAA.fec2
+WHEN C.DeptoProduccion = 20 THEN AAA.fec3
+WHEN C.DeptoProduccion = 30 THEN AAA.fec33
+WHEN C.DeptoProduccion = 40 THEN AAA.fec4
+WHEN C.DeptoProduccion = 100 THEN AAA.fec42
+
+WHEN C.DeptoProduccion = 105 THEN AAA.fec44
+WHEN C.DeptoProduccion = 110 THEN AAA.fec5
+WHEN C.DeptoProduccion = 140 THEN AAA.fec55
+WHEN C.DeptoProduccion = 130 THEN AAA.fec6
+WHEN C.DeptoProduccion = 150 THEN AAA.fec7
+WHEN C.DeptoProduccion = 160 THEN AAA.fec8
+WHEN C.DeptoProduccion = 180 THEN AAA.fec9
+WHEN C.DeptoProduccion = 210 THEN AAA.fec10
+WHEN C.DeptoProduccion = 230 THEN AAA.fec11
+WHEN C.DeptoProduccion = 240 THEN AAA.fec12
+WHEN C.DeptoProduccion = 260 THEN AAA.fec13
+END ),"%d/%m/%Y") AS FECHA_ENTRADA_DEPTO,
+
 P.FechaPedido,
 P.FechaEntrega,
 DATEDIFF(CURRENT_DATE(), date_format(str_to_date(P.FechaEntrega, '%d/%m/%Y'), '%Y-%m-%d')) AS Dias,
-P.Observacion,
+(case when P.Observacion = "0" then "" else P.Observacion end) as Observacion,
 concat(CTE.Transporte,' - ',TPT.Descripcion) AS Transporte,
 concat(AG.Clave,' - ',AG.Descripcion) AS Agente,
 CTE.DiasPlazo
 FROM pedidox P
+left JOIN avaprd AAA on AAA.contped =  P.Control
 left JOIN controles C on C.Control =  P.Control
 LEFT JOIN clientes CTE on CTE.Clave =  P.Cliente
 LEFT JOIN departamentos DEP ON DEP.Descripcion =  C.EstatusProduccion
@@ -75,6 +98,7 @@ order by P.Control ASC;]]>
 	<field name="EstatusProduccion" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="FECHA_ENTRADA_DEPTO" class="java.lang.String"/>
 	<field name="FechaPedido" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -317,12 +341,19 @@ order by P.Control ASC;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Transporte}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement style="Column header" x="623" y="79" width="90" height="11" forecolor="#000000" uuid="d0ce4be3-5546-4b36-9d6d-491bd32ec8e6"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha entrada a depto]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="11" width="623" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="11" width="713" height="1" uuid="9c27175e-eeaf-4784-a04e-2bdb9e6f6f58"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
@@ -383,6 +414,14 @@ order by P.Control ASC;]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FechaProd}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="623" y="0" width="90" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f4018053-22d3-45e3-b019-aa6e4d4729c4"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FECHA_ENTRADA_DEPTO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

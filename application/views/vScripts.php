@@ -1884,6 +1884,9 @@
                     $(e).val('');
                 }
                 break;
+            case "IMG":
+                $(e)[0].src = ""; 
+                break;
             case "TEXTAREA":
                 $(v).val('');
                 break;
