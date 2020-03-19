@@ -220,14 +220,20 @@
                                     break;
                                 case "eliminar":
                                     onBeep(1);
-                                    r_avance_tejido = {};
-                                    ControlesEntregados.ajax.reload();
-                                    swal({
-                                        title: "ATENCIÓN",
-                                        text: "SE HA ELIMINADO DE: \n \n -AVANCE \n -NOMINA \n -VALE \n \n REIMPRIMA EL VALE DE SER NECESARIO.",
-                                        icon: "success",
-                                        showCloseButton: true,
-                                        timer: 35000
+                                    $.post('<?php print base_url('AvanceTejido/onEliminaAvanceXControl') ?>', {
+                                        CONTROL: r_avance_tejido.CONTROL
+                                    }).done(function (a) {
+                                        r_avance_tejido = {};
+                                        ControlesEntregados.ajax.reload();
+                                        swal({
+                                            title: "ATENCIÓN",
+                                            text: "SE HA ELIMINADO DE: \n \n -AVANCE \n -NOMINA \n -VALE \n \n REIMPRIMA EL VALE DE SER NECESARIO.",
+                                            icon: "success",
+                                            showCloseButton: true,
+                                            timer: 35000
+                                        });
+                                    }).fail(function (x) {
+                                        getError(x);
                                     });
                                     break;
                             }

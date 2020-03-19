@@ -356,6 +356,7 @@ class AvanceTejido extends CI_Controller {
         try {
             $check_avance = $this->db->query("SELECT count(*) AS EXISTE FROM pedidox AS P WHERE P.stsavan IN(9,10,11,12,13,14) AND P.Control = {$this->input->post("CONTROL")}")->result();
             $check_stsavan = $this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL FROM pedidox AS P WHERE  P.Control = {$this->input->post("CONTROL")}")->result();
+            
             if (intval($check_avance[0]->EXISTE) === 0) {
                 $eliminable = array("ELIMINABLE" => 1, "AVANCE_ACTUAL" => $check_stsavan[0]->AVANCE_ACTUAL);
                 print json_encode($eliminable);
@@ -375,7 +376,7 @@ class AvanceTejido extends CI_Controller {
             if (intval($check_avance[0]->EXISTE) === 0) {
                 exit(0);
             }
-            if (intval($check_avance[0]->EXISTE) >= 1) {
+            if (intval($check_avance[0]->EXISTE) > 0) {
                 $this->db->query("DELETE FROM avance WHERE Control = {$x['CONTROL']} AND Departamento = 150 AND DepartamentoT = 'TEJIDO'");
                 $this->db->query("DELETE FROM controltej WHERE control = {$x['CONTROL']} AND fraccion = 401");
                 $this->db->query("DELETE FROM fracpagnomina   where Control = {$x['CONTROL']} AND numfrac = 401");
