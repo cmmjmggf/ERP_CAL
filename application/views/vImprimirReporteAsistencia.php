@@ -97,6 +97,7 @@
             }
         });
         mdlImprimirReporteAsistencia.find('#btnImprimir').on("click", function () {
+            onDisable(mdlImprimirReporteAsistencia.find('#btnImprimir'));
             isValid('pnlCapturaReporteAsis');
             if (valido) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -110,6 +111,7 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     console.log(data);
+                    onEnable(mdlImprimirReporteAsistencia.find('#btnImprimir'));
                     if (data.length !== '0') {
 
                         $.fancybox.open({
@@ -147,10 +149,12 @@
                     }
                     HoldOn.close();
                 }).fail(function (x, y, z) {
+                    onEnable(mdlImprimirReporteAsistencia.find('#btnImprimir'));
                     console.log(x, y, z);
                     HoldOn.close();
                 });
             } else {
+                onEnable(mdlImprimirReporteAsistencia.find('#btnImprimir'));
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
         });

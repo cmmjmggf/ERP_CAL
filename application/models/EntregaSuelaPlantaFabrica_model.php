@@ -38,7 +38,7 @@ class EntregaSuelaPlantaFabrica_model extends CI_Model {
                     ->from("pedidox AS PD")
                     ->join("series AS S", 'ON PD.Serie = S.Clave ')
                     ->join("maquilas AS M", 'ON PD.Maquila = M.Clave ')
-                    ->where("PD.Control", $Control);
+                    ->where("PD.Control", $Control)->where("PD.stsavan <> 14", null, false);
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY

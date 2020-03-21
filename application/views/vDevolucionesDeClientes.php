@@ -3,7 +3,7 @@
         <div class="row">
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5">
-                <div class="row"> 
+                <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                         <h5 class="text-danger font-italic">DEVOLUCIONES PENDIENTES POR APLICAR
                             <span class="text-info font-weight-bold">&nbsp; &nbsp; Folio: </span><span class="text-dark font-weight-bold" id="FolioDev"></span></h5>
@@ -785,6 +785,7 @@
         });
 
         btnAcepta.click(function () {
+            onDisable(btnAcepta);
             if (Motivo.val() && Motivo.val().length > 5) {
                 $.each(pnlTablero.find("select"), function (k, v) {
                     pnlTablero.find("select")[k].selectize.enable();
@@ -818,6 +819,7 @@
                     p["FOLIO"] = Folio;
 
                     $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
+                        onEnable(btnAcepta);
                         onOpenOverlay('');
                         onResetCampos();
                         pnlTablero.find("input:not(#xClienteDevolucion):not(#FechaDevolucion)").val("");
@@ -834,13 +836,13 @@
                         });
                         onNotifyOld('', 'SE HA GUARDADO LA DEVOLUCION', 'success');
                     }).fail(function (x) {
+                        onEnable(btnAcepta);
                         getError(x);
-                    }).always(function () {
-
                     });
                 }
             } else {
                 onCampoInvalido(pnlTablero, "DEBE DE CAPTURAR UN MOTIVO VÁLIDO.", function () {
+                    onEnable(btnAcepta);
                     Motivo.focus().select();
                 });
             }

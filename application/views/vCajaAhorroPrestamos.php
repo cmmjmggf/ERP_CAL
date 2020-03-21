@@ -113,6 +113,7 @@
         });
 
         mdlCajaAhorroPrestamos.find('#btnImprimir').on("click", function () {
+            onDisable(mdlCajaAhorroPrestamos.find('#btnImprimir'));
             isValid('pnlCapturaReporteAhorroPrestamos');
             if (valido) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -126,6 +127,7 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     console.log(data);
+                    onEnable(mdlCajaAhorroPrestamos.find('#btnImprimir'));
                     if (data !== '0') {
 
                         $.fancybox.open({
@@ -163,10 +165,12 @@
                     }
                     HoldOn.close();
                 }).fail(function (x, y, z) {
+                    onEnable(mdlCajaAhorroPrestamos.find('#btnImprimir'));
                     console.log(x, y, z);
                     HoldOn.close();
                 });
             } else {
+                onEnable(mdlCajaAhorroPrestamos.find('#btnImprimir'));
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
         })

@@ -99,6 +99,7 @@
             }
         });
         mdlRecibosNomina.find('#btnImprimir').on("click", function () {
+            onDisable(mdlRecibosNomina.find('#btnImprimir'));
             isValid('pnlCapturaReporteRecibos');
             if (valido) {
                 HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
@@ -112,6 +113,7 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     console.log(data);
+                    onEnable(mdlRecibosNomina.find('#btnImprimir'));
                     if (data.length !== '0') {
 
                         $.fancybox.open({
@@ -149,10 +151,12 @@
                     }
                     HoldOn.close();
                 }).fail(function (x, y, z) {
+                    onEnable(mdlRecibosNomina.find('#btnImprimir'));
                     console.log(x, y, z);
                     HoldOn.close();
                 });
             } else {
+                onEnable(mdlRecibosNomina.find('#btnImprimir'));
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
         })

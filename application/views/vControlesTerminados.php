@@ -442,10 +442,10 @@
                                         var currentdate = new Date();
                                         //Validación sólo para maquilas dif a 98
                                         if (Maquila.val() !== '98') {
-                                            if (Maquila.val() === '1' && data[0].Depto !== '230') {
+                                            if (Maquila.val() === '1' && data[0].Depto !== '230' || Maquila.val() === '2' && data[0].Depto !== '230') {
                                                 swal({
                                                     title: "ATENCIÓN",
-                                                    text: "EL CONTROL NO CONCUERDA CON EL AVANCE REQUERIDO",
+                                                    text: "EL CONTROL NO CONCUERDA CON EL AVANCE REQUERIDO, DEBE DE ESTAR EN ALM-DORNO",
                                                     icon: "warning",
                                                     closeOnClickOutside: false,
                                                     closeOnEsc: false

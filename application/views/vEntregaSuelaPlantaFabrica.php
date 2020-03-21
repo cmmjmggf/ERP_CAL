@@ -470,7 +470,7 @@
                 HoldOn.close();
                 swal({
                     title: "ATENCIÓN",
-                    text: "EL CONTROL " + control + " NO EXISTE ",
+                    text: "EL CONTROL " + control + " NO EXISTE Ó ESTÁ CANCELADO",
                     icon: "warning",
                     closeOnClickOutside: false,
                     closeOnEsc: false
