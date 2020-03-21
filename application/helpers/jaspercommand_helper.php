@@ -7,12 +7,8 @@
  */
 class JasperCommand {
 
-    //put your code here
-    private $dbname = "erp_cal";
-    private $dbuser = "lobo";
-    private $dbpassword = "abcd1234";
-    private $dbtype = "mysql";
-    private $ip = "192.168.0.1";
+    //put your code here  
+    private $dbtype = "mysql"; 
     private $dbport = "3306";
     //SI ES WINDOWS JAVA -JAR
     private $jasperurlsoftware = 'java -jar application\third_party\JasperPHP\src\JasperStarter\lib\jasperstarter.jar';
@@ -130,6 +126,11 @@ class JasperCommand {
 
     public function getReport() {
         try {
+            $CI = & get_instance();
+            $this->setDbname($CI->db->database);
+            $this->setDbuser($CI->db->username);
+            $this->setDbpassword($CI->db->password);
+            $this->setIp($CI->db->hostname);
             $parametros_finales = "";
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 

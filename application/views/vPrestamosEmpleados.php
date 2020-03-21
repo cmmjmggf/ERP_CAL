@@ -111,7 +111,7 @@
                 </div>
                 <!--PRESTAMOS-->
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <p class="font-weight-bold">Prestamos de este empleado</p>
+                    <h3 class="font-weight-bold">Prestamos de este empleado</h3>
                     <div id="Prestamos" class="table-responsive">
                         <table id="tblPrestamos" class="table table-sm display " style="width:100%">
                             <thead>
@@ -131,7 +131,7 @@
                 </div>
                 <!--PAGOS DE LOS PRESTAMOS-->
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <p class="font-weight-bold">Pagos de los prestamos</p>
+                    <h3 class="font-weight-bold">Pagos de los prestamos</h3>
                     <div id="PrestamosPagos" class="table-responsive">
                         <table id="tblPrestamosPagos" class="table table-sm display " style="width:100%">
                             <thead>

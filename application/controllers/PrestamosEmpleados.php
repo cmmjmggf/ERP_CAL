@@ -224,6 +224,11 @@ class PrestamosEmpleados extends CI_Controller {
                 'fecpag' => $fecha_final['FDP'],
                 'sempag' => $semanas
             ));
+            $this->db->set('PressAcum', $xxx['ULTIMOSALDO'])
+                    ->set('AbonoPres', $xxx['ABONO'])
+                    ->set('SaldoPres', $xxx['SALDO'])
+                    ->where('Numero', $xxx['EMPLEADO'])
+                    ->update('empleados');
             $empleado_info = $this->db->select("CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS NOMBRECOMPLETO, "
                                     . "E.Direccion AS DIRECCION,"
                                     . "E.Colonia AS COLONIA,"
@@ -232,11 +237,6 @@ class PrestamosEmpleados extends CI_Controller {
                             ->from('empleados AS E')
                             ->where('E.Numero', $xxx['EMPLEADO'])->get()->result();
 
-            $this->db->set('PressAcum', $xxx['ULTIMOSALDO'])
-                    ->set('AbonoPres', $xxx['ABONO'])
-                    ->set('SaldoPres', $xxx['SALDO'])
-                    ->where('Numero', $xxx['EMPLEADO'])
-                    ->update('empleados');
 
             /* PAGARE */
             $jc = new JasperCommand();

@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-7 float-left">
                 <h3 class="font-weight-bold" style="color:#353d3e !important">
-                  <span class="fa fa-users-cog"></span>   Empleados</h3>
+                    <span class="fa fa-users-cog"></span>   Empleados</h3>
             </div>
             <!--            <div class="col-sm-5">
                             <input type="text" id="NumeroEmpleado" name="NumeroEmpleado" class="form-control form-control-sm noBorders notEnter numbersOnly" autofocus="" placeholder="####">
@@ -48,9 +48,13 @@
         <form id="frmNuevo">
             <fieldset>
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-md-4 float-left">
+                    <div class="col-12 col-sm-6 col-md-3 float-left">
                         <h3 class="font-weight-bold" style="color:#353d3e !important">
                             <span class="fa fa-user-edit"></span> Empleado</h3>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-1 float-left">
+                        <h3 class="font-weight-bold font-italic numero_empleado" style="color:#673AB7 !important">
+                            28053</h3>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
                         <div class="card text-white bg-danger mb-2 d-none" id="dMotivoBaja">
@@ -688,6 +692,7 @@
             });
             pnlTablero.addClass('d-none');
             pnlDatos.removeClass('d-none');
+            pnlDatos.find('h3.numero_empleado').text("");
 
 
             $.getJSON(master_url + 'getUltimo').done(function (data, x, jq) {
@@ -796,6 +801,7 @@
                 //console.log(data);
                 var dtm = data[0];
                 numeroEmp = parseInt(dtm.Numero);
+                pnlDatos.find('h3.numero_empleado').text(dtm.Numero);
                 zaptda = data[0].ZapatosTDA;
                 prestamo = data[0].SaldoPres;
                 pnlDatos.find("input").val("");
@@ -940,6 +946,9 @@
 
 </script>
 <style>
+    #pnlDatos input{
+        font-weight: bold !important;
+    }
     .nav-tabs {
         border-bottom: 1px solid #2196F3;
     }
