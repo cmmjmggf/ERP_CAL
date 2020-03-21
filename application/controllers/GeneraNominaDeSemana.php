@@ -50,10 +50,15 @@ class GeneraNominaDeSemana extends CI_Controller {
     public function onGeneraNomina() {
         try {
             $x = $this->input->post();
+            $checa_nomina_si_esta_cerrada = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']}  AND status = 2")->result();
+            if (intval($checa_nomina_si_esta_cerrada[0]->EXISTE) > 0) {
+                exit(0);
+            }
             $this->db->insert('generando_nomina', array('USUARIO' => $this->session->USERNAME,
                 'FECHA' => Date('d/m/Y'), 'HORA' => Date('h:i:s'),
                 'SEMANA' => $x['SEMANA'], 'ANIO' => $x['ANIO'],
                 'FECHA_INICIAL' => $x['FECHAINI'], 'FECHA_FINAL' => $x['FECHAFIN']));
+            
 
             $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
             $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
@@ -78,7 +83,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $this->db->query("DELETE FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']} AND registro <> 999 AND status = 1");
 
             /* ELIMINAR EN PRESTAMOSPAG */
-            $this->db->query("DELETE FROM prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']}");
+            $this->db->query("DELETE FROM prestamospag WHERE sem = {$x['SEMANA']} AND año = {$x['ANIO']} AND status = 1");
 
             $dias = array(1 => 1, 2 => 2, 3 => 4, 4 => 5, 5 => 6, 6 => 7, 7 => 7);
 
@@ -425,7 +430,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 }
 
                 $this->db->set('horext', 0)->set('otrper', 0)->set('otrper1', 0)->where('numsem', $x['SEMANA'])
-                        ->where('año', $x['ANIO'])->where('numemp', $v->Numero)->update('prenominal');
+                        ->where('año', $x['ANIO'])->where('numemp', $v->Numero)->where('status', 1)->update('prenominal');
 
                 /* CALCULAR SI TIENE O NO CAJA DE AHORRO */
                 $this->onCajaDeAhorro($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
@@ -827,7 +832,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $empleados = $this->db->query("SELECT E.Numero, E.SaldoPres,E.AbonoPres, "
                             . "(SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero) AS ACUMULADO_PRES, "
                             . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.año = {$ANIO}) AS TOTAL_PAGADO,
-(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
+(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.status = 2 AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);

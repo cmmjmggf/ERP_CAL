@@ -580,8 +580,8 @@ class Avance8 extends CI_Controller {
                         $avance = array(
                             'Control' => $xXx['CONTROL'],
                             'FechaAProduccion' => Date('d/m/Y'),
-                            'Departamento' => 70,
-                            'DepartamentoT' => 'PREL-CORTE',
+                            'Departamento' => 40,
+                            'DepartamentoT' => 'FOLEADO',
                             'FechaAvance' => Date('d/m/Y'),
                             'Estatus' => 'A',
                             'Usuario' => $_SESSION["ID"],

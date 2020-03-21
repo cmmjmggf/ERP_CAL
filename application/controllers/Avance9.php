@@ -497,11 +497,9 @@ class Avance9 extends CI_Controller {
                                     'Fraccion' => 102
                                 );
                                 $this->db->insert('avance', $avance);
-                                $id = $this->db->insert_id();
+                                $id = $this->db->insert_id(); 
+                                $this->onAvanzarXControl($xXx['CONTROL'], 'RAYADO', 20, 3);
                             }
-
-                            /* ACTUALIZA A 20 RAYADO, stsavan 3 */
-                            $this->onAvanzarXControl($xXx['CONTROL'], 'RAYADO', 20, 3);
                         }
                         /* PASO 2 : AGREGAR FRACCION PAGADA */
                         $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
