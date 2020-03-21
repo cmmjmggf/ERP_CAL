@@ -66,7 +66,8 @@
         <script src="<?php print base_url(); ?>js/pace.min.js"></script>
         <link href="<?php print base_url(); ?>css/pace.css" rel="stylesheet" />
         <!--Font Awesome Icons-->
-        <script defer src="<?php print base_url(); ?>js/fontawesome-all.js"></script>
+        <!--<script defer src="<?php print base_url(); ?>js/fontawesome-all.js"></script>-->
+         <script defer src="<?php print base_url(); ?>js/all.js"></script>
         <link rel="stylesheet" href="<?php print base_url(); ?>css/animate.min.css">
         <!--HoldOn Stupid Accions-->
         <link href="<?php print base_url(); ?>css/HoldOn.min.css" rel="stylesheet">
