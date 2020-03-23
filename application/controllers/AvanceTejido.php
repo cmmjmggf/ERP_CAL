@@ -288,7 +288,7 @@ class AvanceTejido extends CI_Controller {
 
                 $ID = $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
-                    'FechaAProduccion' => $xXx['FECHA'],
+                    'FechaAProduccion' => Date('d/m/Y'),
                     'Departamento' => 150,
                     'DepartamentoT' => 'TEJIDO',
                     'FechaAvance' => $xXx['FECHA']/* FECHA AVANCE */,
@@ -296,7 +296,7 @@ class AvanceTejido extends CI_Controller {
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),
                     'Hora' => Date('h:i:s a'),
-                    'Fraccion' => $xXx['FRACCION']
+                    'Fraccion' => 401
                 ));
                 $ID = $this->db->insert_id();
                 $this->db->insert('fracpagnomina', array(
@@ -356,7 +356,7 @@ class AvanceTejido extends CI_Controller {
         try {
             $check_avance = $this->db->query("SELECT count(*) AS EXISTE FROM pedidox AS P WHERE P.stsavan IN(9,10,11,12,13,14) AND P.Control = {$this->input->post("CONTROL")}")->result();
             $check_stsavan = $this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL FROM pedidox AS P WHERE  P.Control = {$this->input->post("CONTROL")}")->result();
-            
+
             if (intval($check_avance[0]->EXISTE) === 0) {
                 $eliminable = array("ELIMINABLE" => 1, "AVANCE_ACTUAL" => $check_stsavan[0]->AVANCE_ACTUAL);
                 print json_encode($eliminable);
