@@ -74,9 +74,8 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                                             date_format( str_to_date(p.fechaentrega,'%d/%m/%Y') , '%d/%m/%Y') as fechaentrega,
                                             p.semana, p.pares, p.paresfacturados,
                                             p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
-                                            ifnull(C.EstatusProduccion,'PROGRAMADO') as avance
-                                            FROM pedidox P
-                                            left join controles C on C.control = P.control
+                                            ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
+                                            FROM pedidox P 
                                             WHERE p.stsavan = 13 and p.cliente= $cte  ")->result());
     }
 
@@ -88,9 +87,8 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                                             date_format( str_to_date(p.fechaentrega,'%d/%m/%Y') , '%d/%m/%Y') as fechaentrega,
                                             p.semana, p.pares, p.paresfacturados,
                                             p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
-                                            ifnull(C.EstatusProduccion,'PROGRAMADO') as avance
-                                            FROM pedidox P
-                                            left join controles C on C.control = P.control
+                                            ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
+                                            FROM pedidox P 
                                             WHERE p.stsavan <> 13 and p.stsavan <> 14 and p.cliente= $cte  ")->result());
     }
 

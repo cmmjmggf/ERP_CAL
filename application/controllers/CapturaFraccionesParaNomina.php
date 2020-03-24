@@ -291,27 +291,31 @@ class CapturaFraccionesParaNomina extends CI_Controller {
     public function onAgregarAvanceAnt() {
         try {
             $x = $this->input;
+            $xxx = $this->input->post();
 
 
             $origFecha = $x->post('Fecha');
             $fecha = str_replace('/', '-', $origFecha);
             $nuevaFecha = date("Y-m-d", strtotime($fecha));
-
-            $this->db->insert('avance', array(
-                'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
-                'FechaAvance' => Date('d/m/Y'),
-                'Departamento' => ($x->post('DeptoClave') !== NULL) ? $x->post('DeptoClave') : NULL,
-                'DepartamentoT' => ($x->post('DeptoNombre') !== NULL) ? $x->post('DeptoNombre') : NULL,
-                'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
-                'Docto' => ($x->post('Docto') !== NULL) ? $x->post('Docto') : NULL,
-                'Estatus' => 'A',
-                'Usuario' => $this->session->userdata('ID'),
-                'Fecha' => Date('d/m/Y'),
-                'Hora' => Date('h:i:s a')
-            ));
-            $this->db->set('Departamento', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('controles');
-            $this->db->set('stsavan', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('pedidox');
-            $this->db->set('almpesp', $x->post('Docto'))->set('status', $x->post('stsavaprd'))->set($x->post('Campo'), $nuevaFecha)->where('contped', $x->post('Control'))->update('avaprd');
+            $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xxx['Control']} AND A.Departamento = {$xxx['DeptoClave']}")->result();
+            if (intval($check_avance[0]->EXISTE) === 0) {
+                $this->db->insert('avance', array(
+                    'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
+                    'FechaAProduccion' => Date('d/m/Y'),
+                    'FechaAvance' => Date('d/m/Y'),
+                    'Departamento' => ($x->post('DeptoClave') !== NULL) ? $x->post('DeptoClave') : NULL,
+                    'DepartamentoT' => ($x->post('DeptoNombre') !== NULL) ? $x->post('DeptoNombre') : NULL,
+                    'Control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
+                    'Docto' => ($x->post('Docto') !== NULL) ? $x->post('Docto') : NULL,
+                    'Estatus' => 'A',
+                    'Usuario' => $this->session->userdata('ID'),
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a')
+                ));
+                $this->db->set('Departamento', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('controles');
+                $this->db->set('stsavan', $x->post('stsavaprd'))->set('EstatusProduccion', $x->post('DeptoNombre'))->set('DeptoProduccion', $x->post('DeptoClave'))->where('Control', $x->post('Control'))->update('pedidox');
+                $this->db->set('almpesp', $x->post('Docto'))->set('status', $x->post('stsavaprd'))->set($x->post('Campo'), $nuevaFecha)->where('contped', $x->post('Control'))->update('avaprd');
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

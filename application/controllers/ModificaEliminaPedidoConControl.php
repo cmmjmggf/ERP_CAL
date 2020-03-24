@@ -61,6 +61,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
         try {
             $CONTROL = $this->input->get('CONTROL');
             $CLIENTE = $this->input->get('CLIENTE');
+            $PEDIDO = $this->input->get('PEDIDO');
             $ini = '<div class=\"row\"><div class=\"col-12 text-danger text-nowrap talla\" align=\"center\">';
             $mid = '</div><div class="col-12 cantidad" align="center">';
             $end = '</div></div>';
@@ -104,6 +105,9 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->where("P.Control", $CONTROL);
             } else if ($CLIENTE !== '' && $CLIENTE !== "") {
                 $this->db->where("P.Cliente", $CLIENTE);
+            }
+            if ($PEDIDO !== '' && $PEDIDO !== "") {
+                $this->db->where("P.Clave", $PEDIDO);
             }
             $this->db->order_by("P.Ano", "DESC")->order_by("P.Clave", "DESC");
             if ($CONTROL === '' && $CLIENTE === '') {
@@ -153,6 +157,8 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->set('stsavan', 14)->set('estatus', 'C')->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')->where('ID', $xxx['ID'])->where('Clave', $xxx['CLAVE'])->where('Control', $xxx['CONTROL'])->update('pedidox');
                 $this->db->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')->where('Control', $xxx['CONTROL'])->update('pedidox');
 
+
+
                 $existe_orden = $this->db->query("SELECT COUNT(*) AS EXISTE FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
                 if (intval($existe_orden[0]->EXISTE) > 0) {
                     $orden_prod = $this->db->query("SELECT ID, ControlT FROM ordendeproduccion WHERE ControlT = '{$xxx['CONTROL']}'")->result();
@@ -163,6 +169,10 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->query("DELETE FROM avance WHERE Control = '{$xxx['CONTROL']}'");
 
                 $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
+                
+                $this->db->set('Cancelacion', Date('d/m/Y'))
+                        ->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')
+                        ->where('Control', $xxx['CONTROL'])->update('controles');
                 exit(0);
             }
 //            var_dump($PEDIDOX, $CONTROLES, $AVAPRD, $AVANCE, $ASIGNAPFTSACXC, $CONTROLPES, $CONTROLPLA, $CONTROLTEJ, $CONTROLTERM);

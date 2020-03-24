@@ -86,6 +86,7 @@ class Avance9 extends CI_Controller {
                                     ->where_not_in("P.Estatus", array('C'))
                                     ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
                                     ->where_not_in("P.DeptoProduccion", array(270))
+                                    ->where_not_in("P.stsavan", array(14))
                                     ->limit(1)->get()->result();
                     print json_encode($data);
                 } else {
@@ -115,6 +116,7 @@ class Avance9 extends CI_Controller {
                                 ->where_not_in("P.Estatus", array('C'))
                                 ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
                                 ->where_not_in("P.DeptoProduccion", array(270))
+                                ->where_not_in("P.stsavan", array(14))
                                 ->where("P.Control", $x['CR'])->limit(1);
                         break;
                     default:
@@ -386,14 +388,7 @@ class Avance9 extends CI_Controller {
             $FRACCIONES = json_decode($xXx['FRACCIONES'], false);
             $MAQUILA = ($this->getMaquilaXControl($xXx['CONTROL']));
             $MAQUILA_MUESTRA = intval($MAQUILA->MAQUILA) === 98 ? 98 : intval($MAQUILA->MAQUILA);
-//            print "\n MAQUILA DEL CONTROL {$xXx['CONTROL']} ES: " . intval($MAQUILA->MAQUILA);
-//            exit(0);
-//            var_dump($FRACCIONES);
-//            foreach ($FRACCIONES as $key => $value) {
-//                print $value->NUMERO_FRACCION . "\n";
-//            }
-//            exit(0);
-
+                
             $fecha = $xXx['FECHA'];
             $dia = substr($fecha, 0, 2);
             $mes = substr($fecha, 3, 2);

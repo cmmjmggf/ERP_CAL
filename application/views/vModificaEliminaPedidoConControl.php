@@ -224,7 +224,14 @@
     };
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
-
+        PedidoMEPCC.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                onOpenOverlay('');
+                PedidoDetalle.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+            }
+        });
         btnModificaRegistroXFecha.click(function () {
             if (PedidoMEPCC.val() && FechaEntregaModificada.val()) {
                 $.post('<?php print base_url('ModificaEliminaPedidoConControl/onModificarFechaXClave') ?>', {
@@ -398,8 +405,9 @@
             "url": '<?php print base_url('ModificaEliminaPedidoConControl/getPedidoByID') ?>',
             "dataSrc": "",
             "data": function (d) {
-                d.CONTROL = ControlMEPCC.val();
-                d.CLIENTE = ClienteMEPCC.val();
+                d.CONTROL = ControlMEPCC.val() ? ControlMEPCC.val() : '';
+                d.CLIENTE = ClienteMEPCC.val() ? ClienteMEPCC.val() : '';
+                d.PEDIDO = PedidoMEPCC.val() ? PedidoMEPCC.val() : '';
             }
         };
         $.fn.dataTable.ext.errMode = 'throw';

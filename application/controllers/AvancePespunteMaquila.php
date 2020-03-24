@@ -156,13 +156,14 @@ class AvancePespunteMaquila extends CI_Controller {
     }
 
     public function getInfoControl() {
-        try {$this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
-                                    . "C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, "
-                                    . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
-                                    . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
-                            ->from('controles AS C')
-                            ->where('C.Control', $this->input->get('CONTROL'))
-                            ->get()->result();
+        try {
+            $this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
+                            . "C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, "
+                            . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
+                            . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
+                    ->from('controles AS C')
+                    ->where('C.Control', $this->input->get('CONTROL'))
+                    ->get()->result();
             print json_encode($this->apm->getInfoControl($this->input->get('CONTROL')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -174,20 +175,22 @@ class AvancePespunteMaquila extends CI_Controller {
             $x = $this->input;
             $xXx = $this->input->post();
             /* AVANCE A MAQUILA */
-            $avance = array(
-                'Control' => $xXx['CONTROL'],
-                'FechaAProduccion' => Date('d/m/Y'),
-                'Departamento' => 110,
-                'DepartamentoT' => 'PESPUNTE',
-                'FechaAvance' => Date('d/m/Y'),
-                'Estatus' => 'A',
-                'Usuario' => $_SESSION["ID"],
-                'Fecha' => Date('d/m/Y'),
-                'Hora' => Date('h:i:s a'),
-                'Fraccion' => $xXx['FRACCION'] /* INFORMATIVO */
-            );
-            $this->db->insert('avance', $avance);
-
+            $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND A.Departamento = 110")->result();
+            if (intval($check_avance[0]->EXISTE) === 0) {
+                $avance = array(
+                    'Control' => $xXx['CONTROL'],
+                    'FechaAProduccion' => Date('d/m/Y'),
+                    'Departamento' => 110,
+                    'DepartamentoT' => 'PESPUNTE',
+                    'FechaAvance' => Date('d/m/Y'),
+                    'Estatus' => 'A',
+                    'Usuario' => $_SESSION["ID"],
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a'),
+                    'Fraccion' => $xXx['FRACCION'] /* INFORMATIVO */
+                );
+                $this->db->insert('avance', $avance);
+            }
             /* AVANCE A PESPUNTE */
             $avance["Departamento"] = 110;
             $avance["DepartamentoT"] = 'PESPUNTE';

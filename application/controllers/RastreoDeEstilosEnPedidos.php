@@ -36,7 +36,9 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
     public function getPedidos() {
         try {
             $x = $this->input->get();
-            $this->db->select("P.ID AS ID, (SELECT CONCAT(C.Clave, \" \",C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE, P.Estilo AS ESTILO,
+            $this->db->select("P.ID AS ID, 
+                (SELECT CONCAT(C.Clave, \" \",C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE, 
+                P.Estilo AS ESTILO,
                 P.Color AS COLOR, P.Pares AS PARES, P.Control AS CONTROL, P.Maquila AS MAQUILA,
                 P.Semana AS SEMANA, P.Clave AS PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
                 P.FechaEntrega AS FECHA_VENTA, P.Precio AS PRECIO, P.stsavan AS AVANCE", false)
@@ -56,8 +58,12 @@ class RastreoDeEstilosEnPedidos extends CI_Controller {
             if ($x['ESTILO'] === '' && $x['COLOR'] === '' && $x['CLIENTE'] === '') {
                 $this->db->where('P.Cliente', 0);
             }
-            $this->db->order_by('P.FechaPedido', 'DESC');
-            print json_encode($this->db->get()->result());
+            $this->db->where_not_in('P.Estatus', array('C'))
+                    ->where_not_in('P.stsavan', array(14))
+                    ->order_by('P.FechaPedido', 'DESC');
+            $dtm = $this->db->get()->result(); 
+//            print "\n";
+            print json_encode($dtm);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -249,6 +249,12 @@
                     PrestamosPagos.ajax.reload();
                 });
             }
+            if (e.keyCode === 8 && xEmpleado.val() === '') {
+                Empleado[0].selectize.enable();
+                PrestamoAcumulado.val('');
+                pnlTablero.find("#Abono").val('');
+                pnlTablero.find("#Saldo").val('');
+            }
         });
 
         mdlInteresPrestamos.find("#btnAceptaInteresPrestamo").click(function () {
@@ -324,6 +330,7 @@
                 theme: 'sk-rect',
                 message: 'Por favor espere...'
             });
+            xEmpleado.val(Empleado.val());
             $.getJSON('<?php print base_url('PrestamosEmpleados/getUltimoSaldo'); ?>', {EMPLEADO: Empleado.val()}).done(function (a) {
 //                console.log(a);
                 var nopagare = '<?php print substr(Date('Y'), 3) . "" . Date('md'); ?>';
