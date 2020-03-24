@@ -384,7 +384,8 @@ class Avance8 extends CI_Controller {
                                                 'Usuario' => $_SESSION["ID"],
                                                 'Fecha' => Date('d/m/Y'),
                                                 'Hora' => Date('h:i:s a'),
-                                                'Fraccion' => 0
+                                                'Fraccion' => 0,
+                                                'modulo' => 'A8'
                                             );
                                             $this->db->insert('avance', $avance);
                                             $id = $this->db->insert_id();
@@ -422,7 +423,8 @@ class Avance8 extends CI_Controller {
                                                 'Usuario' => $_SESSION["ID"],
                                                 'Fecha' => Date('d/m/Y'),
                                                 'Hora' => Date('h:i:s a'),
-                                                'Fraccion' => 0
+                                                'Fraccion' => 0,
+                                                'modulo' => 'A8'
                                             );
                                             $this->db->insert('avance', $avance);
                                             $id = $this->db->insert_id();
@@ -475,7 +477,8 @@ class Avance8 extends CI_Controller {
                                                 'Usuario' => $_SESSION["ID"],
                                                 'Fecha' => Date('d/m/Y'),
                                                 'Hora' => Date('h:i:s a'),
-                                                'Fraccion' => $v->NUMERO_FRACCION
+                                                'Fraccion' => $v->NUMERO_FRACCION,
+                                                'modulo' => 'A8'
                                             );
                                             $this->db->insert('avance', $avance);
                                             $id = $this->db->insert_id();
@@ -577,21 +580,25 @@ class Avance8 extends CI_Controller {
                         if (intval($check_rayado[0]->EXISTE) === 0) {
                             exit(0);
                         }
-                        $avance = array(
-                            'Control' => $xXx['CONTROL'],
-                            'FechaAProduccion' => Date('d/m/Y'),
-                            'Departamento' => 40,
-                            'DepartamentoT' => 'FOLEADO',
-                            'FechaAvance' => Date('d/m/Y'),
-                            'Estatus' => 'A',
-                            'Usuario' => $_SESSION["ID"],
-                            'Fecha' => Date('d/m/Y'),
-                            'Hora' => Date('h:i:s a'),
-                            'Fraccion' => $v->NUMERO_FRACCION
-                        );
-                        $this->db->insert('avance', $avance);
-                        $id = $this->db->insert_id();
-                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                        $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();
+                        if (intval($check_foleado[0]->EXISTE) === 0) {
+                            $avance = array(
+                                'Control' => $xXx['CONTROL'],
+                                'FechaAProduccion' => Date('d/m/Y'),
+                                'Departamento' => 40,
+                                'DepartamentoT' => 'FOLEADO',
+                                'FechaAvance' => Date('d/m/Y'),
+                                'Estatus' => 'A',
+                                'Usuario' => $_SESSION["ID"],
+                                'Fecha' => Date('d/m/Y'),
+                                'Hora' => Date('h:i:s a'),
+                                'Fraccion' => $v->NUMERO_FRACCION,
+                                'modulo' => 'A8'
+                            );
+                            $this->db->insert('avance', $avance);
+                            $id = $this->db->insert_id();
+                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                        }
                         $data["modulo"] = 'A8';
                         $this->db->insert('fracpagnomina', $data);
                         print json_encode(array("AVANZO" => 2, "STEP" => 1));
@@ -615,7 +622,8 @@ class Avance8 extends CI_Controller {
                                     'Usuario' => $_SESSION["ID"],
                                     'Fecha' => Date('d/m/Y'),
                                     'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => $v->NUMERO_FRACCION
+                                    'Fraccion' => $v->NUMERO_FRACCION,
+                                    'modulo' => 'A8'
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();

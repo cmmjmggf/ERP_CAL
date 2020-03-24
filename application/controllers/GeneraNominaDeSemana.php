@@ -1164,7 +1164,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         "tpcon" => 1,
                         "tpcond" => 0,
                         "importe" => $total_vacaciones,
-                        "imported" => $sueldin,
+                        "imported" => 0,
                         "fecha" => Date('Y-m-d 00:00:00'),
                         "registro" => 0,
                         "status" => 1,
