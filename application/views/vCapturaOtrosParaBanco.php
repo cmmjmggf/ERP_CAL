@@ -5,6 +5,9 @@
                 <legend class="float-left">Captura Aguinalgos/Vacaciones/Caja Ahorro no calculados por el sistema</legend>
             </div>
             <div class="col-12 col-sm-4 col-md-4 animated bounceInLeft" align="right" id="Acciones">
+                <button type="button" class="btn btn-danger btn-sm " id="btnLimpiarSemana" >
+                    <span class="fa fa-check" ></span> LIMPIA SEMANA ANTERIOR
+                </button>
                 <button type="button" class="btn btn-success btn-sm " id="btnReporteNominaBanco" >
                     <span class="fa fa-cubes" ></span> GENERA ARCHIVO BANCO
                 </button>
@@ -88,6 +91,8 @@
     var DetalleOtrosBanco, tblDetalleOtrosBanco = pnlTablero.find("#tblDetalleOtrosBanco"),
             btnAceptar = pnlTablero.find("#btnAceptar");
     var btnReporteNominaBanco = pnlTablero.find('#btnReporteNominaBanco');
+    var btnLimpiarSemana = pnlTablero.find('#btnLimpiarSemana');
+
     var nuevo = true;
 
     $(document).ready(function () {
@@ -198,6 +203,60 @@
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
         });
+
+        btnLimpiarSemana.click(function () {
+            var ano = pnlTablero.find("#Ano");
+            var sem = pnlTablero.find("#Sem");
+
+            if (ano.val()) {
+                if (sem.val()) {
+
+                    if (sem.val() === '97' || sem.val() === '98' || sem.val() === '99') {
+                        swal({
+                            buttons: ["Cancelar", "Aceptar"],
+                            title: 'Estas Seguro?',
+                            text: "Esta acción no se puede revertir",
+                            icon: "warning",
+                            closeOnEsc: false,
+                            closeOnClickOutside: false
+                        }).then((action) => {
+                            if (action) {
+                                $.ajax({
+                                    url: master_url + 'onLimpiarSemanaAguinaldos',
+                                    type: "POST",
+                                    data: {
+                                        Ano: ano.val(),
+                                        Sem: sem.val()
+                                    }
+                                }).done(function (data, x, jq) {
+                                    console.log(data);
+                                    DetalleOtrosBanco.ajax.reload();
+                                }).fail(function (x, y, z) {
+                                    console.log(x, y, z);
+                                }).always(function () {
+                                    HoldOn.close();
+                                });
+                            }
+                        });
+                    } else {
+                        swal('ERROR', 'SEMANA INCORRECTA, SOLO SE PERMITE 97,98,99', 'warning').then((value) => {
+                            sem.val('').focus();
+                        });
+                    }
+                } else {
+                    swal('ERROR', 'SELECCIONE LA SEMANA A LIMPIAR', 'warning').then((value) => {
+                        sem.focus();
+                    });
+                }
+            } else {
+                swal('ERROR', 'SELECCIONE EL AÑO', 'warning').then((value) => {
+                    ano.focus();
+                });
+            }
+
+        });
+
+
     });
 
     function onAgregar() {

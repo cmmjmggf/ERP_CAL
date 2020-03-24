@@ -30,6 +30,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir"><span class="fa fa-file-alt"></span> EXPORTAR TXT </button>
                 <button type="button" class="btn btn-danger" id="btnImprimirPDF"><span class="fa fa-file-pdf"></span> IMPRIMIR PDF</button>
+                <button type="button" class="btn btn-success" id="btnImprimirXLS"><span class="fa fa-file-excel"></span> EXCEL</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -107,6 +108,39 @@
                 HoldOn.close();
             });
         });
+        mdlGeneraAguinaldos.find('#btnImprimirXLS').on("click", function () {
+            mdlGeneraAguinaldos.find('#btnImprimirXLS').attr('disabled', true);
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlGeneraAguinaldos.find("#frmCaptura")[0]);
+            $.ajax({
+                url: base_url + 'index.php/ReportesNominaJasper/onReporteAguinaldosXLS',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                if (data.length > 0) {
+                    window.open(data, '_blank');
+                    mdlGeneraAguinaldos.find('#btnImprimirXLS').attr('disabled', false);
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DATOS PARA EL REPORTE",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlGeneraAguinaldos.find('#btnImprimirXLS').attr('disabled', false);
+                        mdlGeneraAguinaldos.find('#FechaAplicacionAguinaldos').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                mdlGeneraAguinaldos.find('#btnImprimirXLS').attr('disabled', false);
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
         mdlGeneraAguinaldos.find('#btnImprimir').on("click", function () {
             HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
             var frm = new FormData(mdlGeneraAguinaldos.find("#frmCaptura")[0]);
@@ -118,11 +152,10 @@
                 processData: false,
                 data: frm
             }).done(function (data, x, jq) {
+                mdlGeneraAguinaldos.find('#btnImprimir').attr('disabled', false);
                 console.log(data);
-                onGeneraAguinaldoFiscal();
-                setTimeout(function () {
-                    onGeneraAguinaldoFiscalDos();
-                }, 1000);
+                HoldOn.close();
+                onNotifyOld('', 'SE HAN CREADO LOS ARCHIVOS DE DEPOSITOS PARA ESTA SEMANA', 'success');
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 HoldOn.close();

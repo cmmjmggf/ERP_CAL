@@ -109,4 +109,18 @@ class CapturaOtrosParaBanco extends CI_Controller {
         }
     }
 
+    public function onLimpiarSemanaAguinaldos() {
+        try {
+            $x = $this->input;
+            $sem = $x->post('Sem');
+            $año = $x->post('Ano');
+            /* PRENOMINA L */
+
+            $query = "delete from prenominal where numsem = {$sem} and año = {$año} ";
+            $this->db->query($query);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

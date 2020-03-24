@@ -334,11 +334,11 @@ FROM costomanoobratemp CMT
         $sem = $x->post('SemAguinaldos');
         $this->db->query('truncate table nominabanco');
         $query = "SELECT
-                    (
+                    truncate(
                     (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
                     (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
-                    ) as Neto,
-                    (P.salfis) as SueldoFiscal,
+                    ,0) as Neto,
+                    truncate(P.salfis,0) as SueldoFiscal,
                     '02' as col1,
                     '90' as col3,
                     date_format(now(),'%Y%m%d') as col4,
@@ -357,6 +357,7 @@ FROM costomanoobratemp CMT
                     FROM prenominal P
                     join empleados E on E.Numero = P.numemp
                     where P.año = $ano and P.numsem = $sem
+                    and E.altabaja = 1 and E.Tarjeta = 1
                     order by cast(E.DepartamentoFisico as signed) asc, P.numemp asc
                      ";
         $Registros = $this->db->query($query)->result();
@@ -385,7 +386,7 @@ FROM costomanoobratemp CMT
                             $M->col11 .
                             $M->conceptint .
                             $M->col12 .
-                            "\n";
+                            "\r\n";
                     //Agregamos el registro
                     $this->db->insert("nominabanco", array(
                         'consecutivo' => $cont2,
@@ -412,7 +413,7 @@ FROM costomanoobratemp CMT
                             $M->col11 .
                             $M->concepfis .
                             $M->col12 .
-                            "\n";
+                            "\r\n";
                     //Agregamos el registro
                     $this->db->insert("nominabanco", array(
                         'consecutivo' => $cont1,
@@ -424,6 +425,8 @@ FROM costomanoobratemp CMT
                 }
             }
         }
+        //Creamos el directorio y guardamos el archivo
+        $this->generaArchivoBancoFiscal('A');
     }
 
     public function onReporteAguinaldosPDF() {
@@ -504,6 +507,88 @@ FROM costomanoobratemp CMT
             $jc->setJasperurl('jrxml\nominas\reporteAguinaldoBanco.jasper');
             $jc->setFilename('AGUINALDO_VACACIONES_BANCO_' . Date('h_i_s'));
             $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+        }
+    }
+
+    public function onReporteAguinaldosXLS() {
+        $x = $this->input;
+        $fechaAp = $x->post('FechaAplicacionAguinaldos');
+        $ano = $x->post('AnoAguinaldos');
+        $sem = $x->post('SemAguinaldos');
+        $this->db->query('truncate table nominabanco');
+        $query = "SELECT
+                    (
+                    (P.salario+P.salariod+P.horext+P.otrper+P.otrper1)-
+                    (P.infon+P.imss+P.impu+P.precaha+P.cajhao+P.vtazap+P.zapper+P.fune+P.Cargo+P.fonac+P.otrde+P.otrde1+P.fierabono)
+                    ) as Neto,
+                    (P.salfis) as SueldoFiscal,
+                    E.numero as numemp,
+                    E.busqueda as nomemp,
+                    E.TBanbajio,
+                    ifnull(D.Clave,'999') as numdepto,
+                    ifnull(D.Descripcion,'NO EXISTE DEPTO') as nomdepto
+                    FROM prenominal P
+                    join empleados E on E.Numero = P.numemp
+                    left join departamentos D on D.Clave = E.DepartamentoFisico
+                    where P.año = $ano and P.numsem = $sem
+                    order by cast(E.DepartamentoFisico as signed) asc, P.numemp asc
+                     ";
+        $Registros = $this->db->query($query)->result();
+
+        if (!empty($Registros)) {
+
+            foreach ($Registros as $M) {
+                if (floatval($M->Neto) > 0) {
+                    $this->db->insert("nominabanco", array(
+                        'tipo' => 2,
+                        'importe' => floatval($M->Neto),
+                        'fecha' => Date('d/m/Y'),
+                        'fechaap' => $fechaAp,
+                        'numemp' => $M->numemp,
+                        'nomemp' => $M->nomemp,
+                        'ctaemp' => $M->TBanbajio,
+                        'concepto' => 'DEPÓSITO EN EFECTIVO',
+                        'numdepto' => $M->numdepto,
+                        'nomdepto' => $M->nomdepto
+                    ));
+                }
+                if (floatval($M->SueldoFiscal) > 0) {
+                    $this->db->insert("nominabanco", array(
+                        'tipo' => 1,
+                        'importe' => floatval($M->SueldoFiscal),
+                        'fecha' => Date('d/m/Y'),
+                        'fechaap' => $fechaAp,
+                        'numemp' => $M->numemp,
+                        'nomemp' => $M->nomemp,
+                        'ctaemp' => $M->TBanbajio,
+                        'concepto' => 'ABONO EN NÓMINA',
+                        'numdepto' => $M->numdepto,
+                        'nomdepto' => $M->nomdepto
+                    ));
+                }
+            }
+            //Imprimimos el reporte
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            switch ($sem) {
+                case '97':
+                    $parametros["nombre"] = 'Depositos de caja de ahorro';
+                    break;
+                case '98':
+                    $parametros["nombre"] = 'Depositos de aguinaldos';
+                    break;
+                case '99':
+                    $parametros["nombre"] = 'Depositos de vacaciones';
+                    break;
+            }
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\nominas\reporteAguinaldoBancoXLS.jasper');
+            $jc->setFilename('AGUINALDO_VACACIONES_BANCO_XLS_' . Date('h_i_s'));
+            $jc->setDocumentformat('xls');
             PRINT $jc->getReport();
         }
     }
@@ -807,7 +892,7 @@ FROM costomanoobratemp CMT
         }
     }
 
-    public function generaArchivoBancoFiscal() {
+    public function generaArchivoBancoFiscal($Tipo) {
         $mes = Date('m');
         $arr1 = str_split($mes);
         $filename = 'D814901' . $arr1[0] . '.' . $arr1[1] . Date('d') . '';
@@ -818,7 +903,10 @@ FROM costomanoobratemp CMT
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
         //Creamos el directorio en caso de que no exista
-        $path = 'uploads/Nominas';
+        $path = ($Tipo === 'A') ? 'uploads/Nominas/AguiVaca' : 'uploads/Nominas';
+
+
+
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
@@ -1027,7 +1115,7 @@ FROM costomanoobratemp CMT
                 }
             }
             //Creamos el directorio y guardamos el archivo
-            $this->generaArchivoBancoFiscal();
+            $this->generaArchivoBancoFiscal('N');
         }
     }
 
