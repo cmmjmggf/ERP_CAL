@@ -146,10 +146,24 @@
                     <div class="col-6">
                         <div class="row"> 
                             <div class="col-12 font-weight-bold text-center">
-                                <h3>Fotos</h3>
+                                <div class="row">
+                                    <div class="col-4 mt-1">
+                                        <button type="button" id="span_left_img" class="btn btn-info">
+                                            <span class="fa fa-arrow-left fa-lg " style="cursor: pointer !important;"></span>   
+                                        </button>
+                                    </div>
+                                    <div class="col-4">
+                                        <h3>Fotos</h3>
+                                    </div>
+                                    <div class="col-4 mt-1">
+                                        <button type="button" id="span_right_img" class="btn btn-info">
+                                            <span class="fa fa-arrow-right fa-lg " style="cursor: pointer !important;"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12"> 
-                                <img id="xImagenMaquina" name="xImagenMaquina" src="<?php print base_url('img/camera.png'); ?>" width="100%">
+                                <img id="xImagenMaquina" name="xImagenMaquina" src="<?php print base_url('img/camera.png'); ?>" width="100%" height="366">
                             </div>
                             <div class="col-12 align-items-center my-2"> 
                                 <div class="row">
@@ -342,7 +356,9 @@
             EstatusMaquina = mdlMaquinaria.find('#EstatusMaquina'),
             FechaBajaMaquina = mdlMaquinaria.find('#FechaBajaMaquina'),
             MotivoMaquina = mdlMaquinaria.find('#MotivoMaquina'),
-            indice = 1;
+            indice = 1, indice_imagen = 1,
+            sin_foto = "<?php print base_url('img/sin_foto_sm.jpg'); ?>",
+            imgns = [xImagenUno, xImagenUno, xImagenDos, xImagenTres, xImagenCuatro, xImagenCinco, xImagenSeis];
 
     function setValueSelectize(componente, valor) {
         componente[0].selectize.setValue(valor);
@@ -358,7 +374,7 @@
                     text: "CANCELAR",
                     value: "cancelar"
                 },
-                cambiar: {
+                eliminar: {
                     text: "ELIMINAR",
                     value: "eliminar"
                 }
@@ -366,19 +382,54 @@
         }).then((value) => {
             switch (value) {
                 case "eliminar":
-                    onOpenOverlay('Eliminando...')
-                    $.post("<?php print base_url('Maquinaria/onModificarImagen') ?>", {
+                    onOpenOverlay('Eliminando...');
+                    $.post("<?php print base_url('Maquinaria/onEliminarImagen') ?>", {
                         IDE: ID,
                         INDICE: indice
                     }).done(function (a) {
                         console.log(a);
+                        onCloseOverlay();
                         swal({
                             title: "ATENCIÓN",
                             text: "SE HA ELIMINADO LA IMAGEN",
                             icon: "success",
                             buttons: false,
-                            timer: 2000
+                            timer: 750
                         });
+                        switch (indice) {
+                            case 1:
+                                xImagenUno[0].src = xImagenDos[0].src;
+                                xImagenDos[0].src = xImagenTres[0].src;
+                                xImagenTres[0].src = xImagenCuatro[0].src;
+                                xImagenCuatro[0].src = xImagenCinco[0].src;
+                                xImagenCinco[0].src = xImagenSeis[0].src;
+                                xImagenSeis[0].src = sin_foto;
+                                break;
+                            case 2:
+                                xImagenDos[0].src = xImagenTres[0].src;
+                                xImagenTres[0].src = xImagenCuatro[0].src;
+                                xImagenCuatro[0].src = xImagenCinco[0].src;
+                                xImagenCinco[0].src = xImagenSeis[0].src;
+                                xImagenSeis[0].src = sin_foto;
+                                break;
+                            case 3:
+                                xImagenTres[0].src = xImagenCuatro[0].src;
+                                xImagenCuatro[0].src = xImagenCinco[0].src;
+                                xImagenCinco[0].src = xImagenSeis[0].src;
+                                xImagenSeis[0].src = sin_foto;
+                                break;
+                            case 4:
+                                xImagenCuatro[0].src = xImagenCinco[0].src;
+                                xImagenCinco[0].src = xImagenSeis[0].src;
+                                xImagenSeis[0].src = sin_foto;
+                                break;
+                            case 5:
+                                xImagenCinco[0].src = xImagenSeis[0].src;
+                                xImagenSeis[0].src = sin_foto;
+                                break;
+                        }
+                        xImagenMaquina[0].src = xImagenUno[0].src;
+                        onCheckImagenes();
                     }).fail(function (x) {
                         onCloseOverlay();
                         getError(x);
@@ -395,11 +446,35 @@
     $(document).ready(function () {
         onVolverPrimerPestana();
         handleEnterDiv(mdlMaquinaria);
+        mdlMaquinaria.on('keydown', function (e) {
+            if (e.keyCode === 39) {
+                mdlMaquinaria.find("#span_right_img").trigger('click');
+            }
+            if (e.keyCode === 37) {
+                mdlMaquinaria.find("#span_left_img").trigger('click');
+            }
+        });
+
+        mdlMaquinaria.find("#span_left_img").click(function () {
+            if (indice_imagen >= 2) {
+                indice_imagen -= 1;
+                xImagenMaquina[0].src = imgns[indice_imagen][0].src;
+            }
+            console.log(indice_imagen);
+        });
+
+        mdlMaquinaria.find("#span_right_img").click(function () {
+            if (indice_imagen <= 5) {
+                indice_imagen += 1;
+                xImagenMaquina[0].src = imgns[indice_imagen][0].src;
+            }
+            console.log(indice_imagen);
+        });
 
         btnEliminaImagenSeis.click(function () {
             if (nuevo) {
-                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenSeis[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenMaquina[0].src = sin_foto;
+                xImagenSeis[0].src = sin_foto;
                 xFileMaquinaSeis[0].type = 'text';
                 xFileMaquinaSeis[0].type = 'file';
             } else {
@@ -409,8 +484,8 @@
 
         btnEliminaImagenCinco.click(function () {
             if (nuevo) {
-                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenCinco[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenMaquina[0].src = sin_foto;
+                xImagenCinco[0].src = sin_foto;
                 xFileMaquinaCinco[0].type = 'text';
                 xFileMaquinaCinco[0].type = 'file';
             } else {
@@ -420,8 +495,8 @@
 
         btnEliminaImagenCuatro.click(function () {
             if (nuevo) {
-                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenCuatro[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenMaquina[0].src = sin_foto;
+                xImagenCuatro[0].src = sin_foto;
                 xFileMaquinaCuatro[0].type = 'text';
                 xFileMaquinaCuatro[0].type = 'file';
             } else {
@@ -431,8 +506,8 @@
 
         btnEliminaImagenTres.click(function () {
             if (nuevo) {
-                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenTres[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenMaquina[0].src = sin_foto;
+                xImagenTres[0].src = sin_foto;
                 xFileMaquinaTres[0].type = 'text';
                 xFileMaquinaTres[0].type = 'file';
             } else {
@@ -442,8 +517,8 @@
 
         btnEliminaImagenDos.click(function () {
             if (nuevo) {
-                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenDos[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenMaquina[0].src = sin_foto;
+                xImagenDos[0].src = sin_foto;
                 xFileMaquinaDos[0].type = 'text';
                 xFileMaquinaDos[0].type = 'file';
             } else {
@@ -453,8 +528,8 @@
 
         btnEliminaImagenUno.click(function () {
             if (nuevo) {
-                xImagenMaquina[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenUno[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenMaquina[0].src = sin_foto;
+                xImagenUno[0].src = sin_foto;
                 xFileMaquinaUno[0].type = 'text';
                 xFileMaquinaUno[0].type = 'file';
             } else {
@@ -657,6 +732,9 @@
                     xImagenSeis.parent("a")[0].href = reader.result;
                 };
                 reader.readAsDataURL(xFileMaquinaSeis[0].files[0]);
+                if (!nuevo) {
+                    onModificarImagen(6, xFileMaquinaSeis);
+                }
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
             }
@@ -681,6 +759,9 @@
                     xImagenCinco[0].src = reader.result;
                 };
                 reader.readAsDataURL(xFileMaquinaCinco[0].files[0]);
+                if (!nuevo) {
+                    onModificarImagen(5, xFileMaquinaCinco);
+                }
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
             }
@@ -705,6 +786,9 @@
                     xImagenCuatro[0].src = reader.result;
                 };
                 reader.readAsDataURL(xFileMaquinaCuatro[0].files[0]);
+                if (!nuevo) {
+                    onModificarImagen(4, xFileMaquinaCuatro);
+                }
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
             }
@@ -730,6 +814,9 @@
 //                    xImagenTres.parent("a")[0].href = reader.result;
                 };
                 reader.readAsDataURL(xFileMaquinaTres[0].files[0]);
+                if (!nuevo) {
+                    onModificarImagen(3, xFileMaquinaTres);
+                }
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
             }
@@ -754,6 +841,9 @@
                     xImagenDos[0].src = reader.result;
                 };
                 reader.readAsDataURL(xFileMaquinaDos[0].files[0]);
+                if (!nuevo) {
+                    onModificarImagen(2, xFileMaquinaDos);
+                }
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
             }
@@ -778,6 +868,9 @@
                     xImagenUno[0].src = reader.result;
                 };
                 reader.readAsDataURL(xFileMaquinaUno[0].files[0]);
+                if (!nuevo) {
+                    onModificarImagen(1, xFileMaquinaUno);
+                }
             } else {
                 swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
             }
@@ -789,8 +882,10 @@
         });
 
         btnNuevaMaquina.click(function () {
+            onVolverPrimerPestana();
             mdlMaquinaria.find("#RegistroMaquinaria").find("input").val("");
             onClearPanelInputSelect(mdlMaquinaria.find("#RegistroMaquinaria"), function () {
+                indice_imagen = 1;
                 mdlMaquinaria.find("#RegistroMaquinaria").removeClass("d-none");
                 mdlMaquinaria.find("#Maquinaria").addClass("d-none");
                 btnVerMaquinaria.removeClass("d-none");
@@ -799,12 +894,12 @@
                     IdMaquina.focus();
                 });
                 IdMaquina.focus().select();
-                xImagenUno[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenDos[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenTres[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenCuatro[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenCinco[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-                xImagenSeis[0].src = "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
+                xImagenUno[0].src = sin_foto;
+                xImagenDos[0].src = sin_foto;
+                xImagenTres[0].src = sin_foto;
+                xImagenCuatro[0].src = sin_foto;
+                xImagenCinco[0].src = sin_foto;
+                xImagenSeis[0].src = sin_foto;
 
             });
         });
@@ -913,53 +1008,93 @@
             nuevo = false;
             tblMaquinaria.find("tbody tr").removeClass("success");
             $(this).addClass("success");
+
             var dtm = xMaquinaria.row(this).data();
             console.log(dtm);
-            Maquinaria_ID.val(dtm.IDE);
-            CodigoMaquina.val(dtm.CODIGO);
-            IdMaquina.val(dtm.ID);
-            MaquilaClaveMaquina.val(dtm.MAQUILA);
-            setValueSelectize(MaquilaMaquina, dtm.MAQUILA);
-            DescripcionMaquina.val(dtm.DESCRIPCION);
-            MarcaMaquina.val(dtm.MARCA);
-            ModeloMaquina.val(dtm.MODELO);
-            SerieMaquina.val(dtm.SERIE);
-            DeptoClaveMaquina.val(dtm.DEPTO);
-            setValueSelectize(DeptoMaquina, dtm.DEPTO);
-            FechaAltaMaquina.val(dtm.FECHA_ALTA);
-            FacturaMaquina.val(dtm.FACTURA);
-            CostoMaquina.val(dtm.COSTOSF);
-            UltimoMantenimientoMaquina.val(dtm.FECHA_ULTIMO_MANTENIMIENTO);
-            DiasDeMantenimientoMaquina.val(dtm.DIAS_M);
-            switch (parseInt(dtm.CRITISIDAD)) {
-                case 1:
-                    onUnCheck(ClaveCriticidadMaquina);
-                    break;
-                case 2:
-                    onCheck(ClaveCriticidadMaquina);
-                    break;
-            }
-            switch (parseInt(dtm.ESTATUS_MAQ)) {
-                case 1:
-                    onUnCheck(ClaveEstatusMaquina);
-                    break;
-                case 2:
-                    onCheck(ClaveEstatusMaquina);
-                    break;
-            }
-            FechaBajaMaquina.val(dtm.FECHA_BAJA);
-            MotivoMaquina.val(dtm.MOTIVO_BAJA);
-
-            xImagenUno[0].src = dtm.FOTO_UNO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_UNO : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-            xImagenDos[0].src = dtm.FOTO_DOS !== null ? '<?php print base_url(); ?>' + dtm.FOTO_DOS : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-            xImagenTres[0].src = dtm.FOTO_TRES !== null ? '<?php print base_url(); ?>' + dtm.FOTO_TRES : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-            xImagenCuatro[0].src = dtm.FOTO_CUATRO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_CUATRO : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-            xImagenCinco[0].src = dtm.FOTO_CINCO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_CINCO : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-            xImagenSeis[0].src = dtm.FOTO_SEIS !== null ? '<?php print base_url(); ?>' + dtm.FOTO_SEIS : "<?php print base_url('img/sin_foto_sm.jpg'); ?>";
-
+            getMaquinaByID(dtm);
+            xImagenMaquina[0].src = xImagenUno[0].src;
+            indice_imagen = 1;
             IdMaquina.focus().select();
             onCloseOverlay();
         });
+    }
+
+    function getMaquinaByID(dtm) {
+        Maquinaria_ID.val(dtm.IDE);
+        CodigoMaquina.val(dtm.CODIGO);
+        IdMaquina.val(dtm.ID);
+        MaquilaClaveMaquina.val(dtm.MAQUILA);
+        setValueSelectize(MaquilaMaquina, dtm.MAQUILA);
+        DescripcionMaquina.val(dtm.DESCRIPCION);
+        MarcaMaquina.val(dtm.MARCA);
+        ModeloMaquina.val(dtm.MODELO);
+        SerieMaquina.val(dtm.SERIE);
+        DeptoClaveMaquina.val(dtm.DEPTO);
+        setValueSelectize(DeptoMaquina, dtm.DEPTO);
+        FechaAltaMaquina.val(dtm.FECHA_ALTA);
+        FacturaMaquina.val(dtm.FACTURA);
+        CostoMaquina.val(dtm.COSTOSF);
+        UltimoMantenimientoMaquina.val(dtm.FECHA_ULTIMO_MANTENIMIENTO);
+        DiasDeMantenimientoMaquina.val(dtm.DIAS_M);
+        switch (parseInt(dtm.CRITISIDAD)) {
+            case 1:
+                onUnCheck(ClaveCriticidadMaquina);
+                break;
+            case 2:
+                onCheck(ClaveCriticidadMaquina);
+                break;
+        }
+        switch (parseInt(dtm.ESTATUS_MAQ)) {
+            case 1:
+                onUnCheck(ClaveEstatusMaquina);
+                break;
+            case 2:
+                onCheck(ClaveEstatusMaquina);
+                break;
+        }
+        FechaBajaMaquina.val(dtm.FECHA_BAJA);
+        MotivoMaquina.val(dtm.MOTIVO_BAJA);
+
+        xImagenUno[0].src = dtm.FOTO_UNO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_UNO : sin_foto;
+        xImagenDos[0].src = dtm.FOTO_DOS !== null ? '<?php print base_url(); ?>' + dtm.FOTO_DOS : sin_foto;
+        xImagenTres[0].src = dtm.FOTO_TRES !== null ? '<?php print base_url(); ?>' + dtm.FOTO_TRES : sin_foto;
+        xImagenCuatro[0].src = dtm.FOTO_CUATRO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_CUATRO : sin_foto;
+        xImagenCinco[0].src = dtm.FOTO_CINCO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_CINCO : sin_foto;
+        xImagenSeis[0].src = dtm.FOTO_SEIS !== null ? '<?php print base_url(); ?>' + dtm.FOTO_SEIS : sin_foto;
+        onCheckImagenes();
+    }
+
+    function onCheckImagenes() {
+        if (xImagenUno[0].src !== sin_foto) {
+            onEnable(btnEliminaImagenUno);
+        } else {
+            onDisable(btnEliminaImagenUno);
+        }
+        if (xImagenDos[0].src !== sin_foto) {
+            onEnable(btnEliminaImagenDos);
+        } else {
+            onDisable(btnEliminaImagenDos);
+        }
+        if (xImagenTres[0].src !== sin_foto) {
+            onEnable(btnEliminaImagenTres);
+        } else {
+            onDisable(btnEliminaImagenTres);
+        }
+        if (xImagenCuatro[0].src !== sin_foto) {
+            onEnable(btnEliminaImagenCuatro);
+        } else {
+            onDisable(btnEliminaImagenCuatro);
+        }
+        if (xImagenCinco[0].src !== sin_foto) {
+            onEnable(btnEliminaImagenCinco);
+        } else {
+            onDisable(btnEliminaImagenCinco);
+        }
+        if (xImagenSeis[0].src !== sin_foto) {
+            onEnable(btnEliminaImagenSeis);
+        } else {
+            onDisable(btnEliminaImagenSeis);
+        }
     }
 
     function getUltimaMaquinaria(f) {
@@ -971,6 +1106,7 @@
             getError(x);
         });
     }
+
     function onVolverPrimerPestana() {
         mdlMaquinaria.find("li a").removeClass("active");
         mdlMaquinaria.find("li a").attr("aria-selected", false);
@@ -992,9 +1128,69 @@
         onClear(xImagenSeis);
         xImagenSeis[0].src = '<?php print base_url('img/sin_foto_sm.jpg'); ?>';
 
+        xFileMaquinaUno[0].type = 'text';
+        xFileMaquinaUno[0].type = 'file';
+
+        xFileMaquinaDos[0].type = 'text';
+        xFileMaquinaDos[0].type = 'file';
+
+        xFileMaquinaTres[0].type = 'text';
+        xFileMaquinaTres[0].type = 'file';
+
+        xFileMaquinaCuatro[0].type = 'text';
+        xFileMaquinaCuatro[0].type = 'file';
+
+        xFileMaquinaCinco[0].type = 'text';
+        xFileMaquinaCinco[0].type = 'file';
+
+        xFileMaquinaSeis[0].type = 'text';
+        xFileMaquinaSeis[0].type = 'file';
+    }
+
+    function onModificarImagen(indice, archivo) {
+        onOpenOverlay('Modificando...');
+        var f = new FormData();
+        f.append('INDICE', indice);
+        f.append('CodigoMaquina', CodigoMaquina.val());
+        f.append('IDE', Maquinaria_ID.val());
+        f.append('FotoUno', archivo[0].files[0]);
+        $.ajax({
+            url: '<?php print base_url('Maquinaria/onModificarImagen'); ?>',
+            type: "POST",
+            cache: true,
+            contentType: false,
+            processData: false,
+            data: f
+        }).done(function (a, b, c) {
+            onBeep(1);
+            onCloseOverlay();
+            swal({
+                title: "ATENCIÓN",
+                text: "SE HA GUARDADO LA IMAGEN",
+                icon: "success",
+                buttons: false,
+                timer: 1500
+            });
+            $.getJSON('<?php print base_url('Maquinaria/getMaquinaByID') ?>',
+                    {IDE: Maquinaria_ID.val()}).done(function (a) {
+                getMaquinaByID(a[0]);
+                xImagenMaquina[0].src = xImagenUno[0].src;
+            }).fail(function (x) {
+                getError(x);
+            });
+        }).fail(function (x) {
+            onCloseOverlay();
+            getError(x);
+        });
     }
 </script>
 <style>
+    button.swal-button--cancelar{
+        background-color: #424242 !important;
+    }
+    button.swal-button--eliminar{
+        background-color: #D32F2F !important;
+    }
     #tblMaquinaria tbody tr td{ 
         font-size: 15px !important;
         font-weight: bold !important;
@@ -1008,6 +1204,9 @@
     }
     #mdlMaquinaria input{
         border-color: #000 !important;
+    }
+    #mdlMaquinaria .selectize-input{
+        font-weight: bold !important;
     }
     .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
         color: #000;

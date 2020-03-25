@@ -29,7 +29,7 @@ WHEN C.FormaDePagoElectronico = 99 THEN 99 END) AS FORMA_DE_PAGO,
 
 C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS contped, (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.Estado) AS ESTADO_CLIENTE,
 DATE_FORMAT(F.fecha,"%d/%m/%Y") AS FECHA,
-(CASE WHEN F.tmnda = 2 THEN (F.precto * F.tcamb) ELSE F.precto END) AS PRECIO,
+(CASE WHEN F.tmnda = 2 THEN F.precto ELSE F.precto END) AS PRECIO,
 F.subtot, F.iva,
 (CASE
 WHEN F.tmnda = 2 THEN  F.subtot
@@ -50,7 +50,7 @@ WHEN C.FormaPago = 98 THEN "NA" WHEN C.FormaPago = 99 THEN "99"
 END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO,
 CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID,
   "" AS OBSERVACION,
-F.pareped AS CANTIDAD,  F.hora AS HORA, F.tcamb AS TIPO_CAMBIO,(case when F.tmnda = 1 THEN "MXN" ELSE "DLL" END) AS TIPO_MONEDA
+F.pareped AS CANTIDAD,  F.hora AS HORA, F.tcamb AS TIPO_CAMBIO,(case when F.tmnda = 1 THEN "MXN" ELSE "DLL" END) AS TIPO_MONEDA, F.contped AS CONTROLX
 FROM facturacion AS F
 INNER JOIN clientes AS C ON   C.Clave = $P{CLIENTE}
 LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.factura  AND CFDI.Tipo  ='I'
@@ -129,6 +129,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 	</field>
 	<field name="TIPO_CAMBIO" class="java.lang.Double"/>
 	<field name="TIPO_MONEDA" class="java.lang.String"/>
+	<field name="CONTROLX" class="java.lang.Integer"/>
 	<variable name="SUBTOTAL_1" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{SUBTOTAL}]]></variableExpression>
 	</variable>
@@ -231,14 +232,14 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="125" y="121" width="280" height="13" forecolor="#FFFFFF" uuid="97e93cc9-8ea8-44be-a27c-6ec836bd36df"/>
+				<reportElement x="125" y="121" width="241" height="13" forecolor="#FFFFFF" uuid="97e93cc9-8ea8-44be-a27c-6ec836bd36df"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Color]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="406" y="121" width="60" height="13" forecolor="#FFFFFF" uuid="32640b27-96a8-48f9-b4fd-52176642dd08"/>
+				<reportElement x="423" y="120" width="60" height="13" forecolor="#FFFFFF" uuid="32640b27-96a8-48f9-b4fd-52176642dd08"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -401,7 +402,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				</textElement>
 				<text><![CDATA[Forma pago]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="289" y="94" width="45" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="230a1c5f-bcae-4017-b878-53ae10cfc9c0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -455,7 +456,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<staticText>
 				<reportElement x="44" y="0" width="35" height="10" forecolor="#333333" uuid="d752a75f-01ec-4269-b0d6-4bdfef5f1647"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
@@ -470,7 +471,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				</graphicElement>
 			</line>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="405" y="0" width="60" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
+				<reportElement mode="Transparent" x="423" y="0" width="60" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="6bb9bd49-6955-45a7-b8db-fea99f13664a"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -502,12 +503,20 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				<textFieldExpression><![CDATA[$F{ESTILO}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="125" y="0" width="280" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="71c0db0b-5957-4297-a4fd-0b1154b7cacf"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="125" y="0" width="241" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="71c0db0b-5957-4297-a4fd-0b1154b7cacf"/>
+				<textElement verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{COLOR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="366" y="0" width="57" height="10" forecolor="#333333" backcolor="#FFFFFF" uuid="14fddcb0-b9b1-4fc6-bd22-2ec9c9bcc45a"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CONTROLX}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
