@@ -262,6 +262,7 @@
                             <th scope="col">Concepto</th><!--12--><!--7-->
                             <th scope="col">Pre-dev</th><!--13--><!--8-->
                             <th scope="col">Pre-ceg</th><!--14--><!--9-->
+                            <th scope="col">FOLIO</th><!--15--><!--10-->
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -1033,6 +1034,7 @@
                 "data": function (d) {
                     d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
                     d.CONTROL = ControlADevolver.val() ? ControlADevolver.val() : '';
+                    d.FOLIO = Folio ;
                     d.FECHA = FechaDevolucion.val() ? FechaDevolucion.val() : '';
                 }
             },
@@ -1044,10 +1046,15 @@
                 {"data": "CLASIFICACION"}, {"data": "CARGO"},
                 {"data": "MAQUILA"}, {"data": "FECHA"},
                 {"data": "TP"}, {"data": "CONCEPTO"},
-                {"data": "PRECIO_DEVOLUCION"}, {"data": "PRECIO_CG"}
+                {"data": "PRECIO_DEVOLUCION"}, {"data": "PRECIO_CG"}, 
+                {"data": "CONSECUTIVO"}
             ],
             "columnDefs": [{
                     "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },{
+                    "targets": [15],
                     "visible": false,
                     "searchable": false
                 }],
@@ -1061,7 +1068,7 @@
             "bSort": true,
             "scrollY": 200,
             "scrollX": true,
-            "order": [[10, "desc"]],
+            "order": [[15, "desc"]],
             "initComplete": function (settings, json) {
             },
             "drawCallback": function () {
@@ -1180,11 +1187,11 @@
 
     function onResetCampos() {
 
-        Clasificacion[0].selectize.clear();
-        Cargo[0].selectize.clear();
-        Departamento[0].selectize.clear();
-        Defecto[0].selectize.clear();
-        DetalleDefecto[0].selectize.clear();
+//        Clasificacion[0].selectize.clear();
+//        Cargo[0].selectize.clear();
+//        Departamento[0].selectize.clear();
+//        Defecto[0].selectize.clear();
+//        DetalleDefecto[0].selectize.clear();
 
         for (var i = 1; i < 23; i++) {
             pnlTablero.find("#T" + i).val("");

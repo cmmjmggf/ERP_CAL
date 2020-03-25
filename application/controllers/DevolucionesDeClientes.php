@@ -99,23 +99,26 @@ class DevolucionesDeClientes extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("D.ID, D.cliente AS CLIENTE, D.docto AS DOCUMENTO, "
-                            . "D.control AS CONTROL, D.paredev AS PARES, "
+                            . "concat(D.control,\" \",D.consecutivo) AS CONTROL, D.paredev AS PARES, "
                             . "D.defecto AS DEFECTO, D.detalle AS DETALLE, "
                             . "D.clasif AS CLASIFICACION, D.cargoa AS CARGO, "
                             . "D.maq AS MAQUILA, DATE_FORMAT(D.fecha,\"%d/%m/%Y\") AS FECHA, D.tp AS TP, "
                             . "D.conce AS CONCEPTO, D.preciodev AS PRECIO_DEVOLUCION, "
-                            . "D.preciomaq AS PRECIO_CG", false)
+                            . "D.preciomaq AS PRECIO_CG, D.consecutivo AS CONSECUTIVO", false)
                     ->from("devolucionnp AS D")
                     ->where_in('D.staapl', array(0, 1)); 
             if ($x['CONTROL'] !== '') {
                 $this->db->where('D.control', $x['CONTROL']);
+            } 
+            if ($x['FOLIO'] !== '') {
+                $this->db->where('D.consecutivo', $x['FOLIO']);
             } 
             if ($x["CLIENTE"] === '') {
                 $this->db->where("D.cliente", 0);
             } else {
                 $this->db->where('D.cliente', $x["CLIENTE"]);
             }
-            $this->db->order_by("D.fecha", "DESC");
+            $this->db->order_by("D.consecutivo", "DESC");
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
