@@ -765,18 +765,17 @@ class Avance9 extends CI_Controller {
                                     $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
                                                     . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 90")->result();
                                     if (intval($check_avance[0]->EXISTE) === 0) {
-                                        $this->db->insert('avance', array(
-                                            'Control' => $xXx['CONTROL'], 'FechaAProduccion' => Date('d/m/Y'),
-                                            'Departamento' => 90, 'DepartamentoT' => 'ENTRETELADO',
-                                            'FechaAvance' => Date('d/m/Y'), 'Estatus' => 'A',
-                                            'Usuario' => $_SESSION["ID"], 'Fecha' => Date('d/m/Y'),
-                                            'Hora' => Date('h:i:s a'), 'Fraccion' => 51
-                                        ));
-                                        $id = $this->db->insert_id();
-                                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
-
-                                        $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(51,300,397,401,500,600) AND F.control ={$xXx['CONTROL']}")->result();
-                                        if (intval($check_avance[0]->EXISTE) === 0) {
+                                        $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(51,300,397,401,500,600) AND F.control ={$xXx['CONTROL']}")->result();
+                                        if (intval($check_fraccion[0]->EXISTE) === 0) {
+                                            $this->db->insert('avance', array(
+                                                'Control' => $xXx['CONTROL'], 'FechaAProduccion' => Date('d/m/Y'),
+                                                'Departamento' => 90, 'DepartamentoT' => 'ENTRETELADO',
+                                                'FechaAvance' => Date('d/m/Y'), 'Estatus' => 'A',
+                                                'Usuario' => $_SESSION["ID"], 'Fecha' => Date('d/m/Y'),
+                                                'Hora' => Date('h:i:s a'), 'Fraccion' => 51, 'modulo' => 'A9'
+                                            ));
+                                            $id = $this->db->insert_id();
+                                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
                                             $this->onAvanzarXControl($xXx['CONTROL'], 'ENTRETELADO', 90, 40);
                                         }
                                     }

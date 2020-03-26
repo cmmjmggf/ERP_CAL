@@ -1,8 +1,8 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-6 float-left">
-                <legend class="float-left"><span class="fa fa-coins"></span> Préstamos a empleados </legend>
+            <div class="col-sm-6 float-left font-weight-bold">
+                <legend class="float-left"><span class="fa fa-coins"></span> PRÉSTAMOS A EMPLEADOS </legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
                 <button type="button" class="btn btn-danger notEnter" id="btnInteresPagares"  data-toggle="modal" data-target="#mdlInteresPrestamos"><span class="fa fa-percent"></span> INTERÉS <br></button>
@@ -17,10 +17,10 @@
                 <div class="col-10">
                     <label>No.empleado</label>
                     <div class="row">
-                        <div class="col-1">
+                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                             <input type="text" id="xEmpleado" name="xEmpleado" class="form-control form-control-sm numbersOnly">
                         </div>
-                        <div class="col-11">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
                             <select id="Empleado" name="Empleado" class="form-control form-control-sm">
                                 <option></option>
                                 <?php
@@ -34,84 +34,81 @@
                         </div>
                     </div>
                 </div> 
-                <div class="col-2">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <!--ULTIMO DIGITO DEL AÑO, MES, DIA,NUMERO DE EMPLEADO-->
                     <label>Pagare No.</label>
                     <input type="text" id="PagareNo" name="PagareNo" class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
                 <div class="w-100"></div>
-                <div class="col-1 mt-4"> 
-                    <h6 class="text-danger font-weight-bold">Ultimo Saldo</h6> 
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 mt-4"> 
+                    <h6 class="text-danger font-weight-bold">ÚLTIMO SALDO</h6> 
                 </div>
-                <div class="col-2">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <label>Pres.Acum</label>
                     <input type="text" id="PrestamoAcumulado" name="PrestamoAcumulado" readonly="" class="form-control form-control-sm" autocomplete="off">
                 </div>
-                <div class="col-2">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <label>Abono</label>
                     <input type="text" id="Abono" name="Abono" class="form-control form-control-sm" readonly=""  autocomplete="off">
                 </div>
-                <div class="col-2">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <label>Saldo</label>
                     <input type="text" id="Saldo" name="Saldo" class="form-control form-control-sm" readonly=""  autocomplete="off">
                 </div>
-                <div class="col-1">
+                <div class="col-2 col-sm-2 col-md-1 col-lg-1 col-xl-1">
                     <label>Semana</label>
                     <input type="text" id="Semana" name="Semana" class="form-control form-control-sm" data-toggle="tooltip" data-placement="bottom" title="SEMANA DE CARACTER INFORMATIVO" readonly="" autocomplete="off">
                 </div>
                 <div class="col-3"> 
-                    <h6 class="text-danger font-weight-bold"><strong> % </strong> Interés semanal sobre saldo insolutos.</h6> 
+                    <h6 class="text-danger font-weight-bold"><strong> % </strong> INTERÉS SEMANAL SOBRE SALDO INSOLUTOS.</h6> 
                     <input type="text" id="Interes" name="Interes" value="0" class="form-control form-control-sm font-weight-bold" autocomplete="off" placeholder="0">
                 </div>
                 <div class="w-100 mt-2"></div> 
                 <div class="my-1 w-100">
                     <hr>
                 </div> 
-                <div class="col-1 mt-2"> 
-                    <h6 class="text-danger font-weight-bold">Prestamo nvo</h6>  
+                <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-xl-1"> 
+                    <h6 class="text-danger font-weight-bold">PRESTAMO NUEVO</h6>  
                 </div>
-                <div class="col-2">
-                    <input type="text" id="NuevoPrestamo" name="NuevoPrestamo" placeholder="Total a prestar" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <input type="text" id="NuevoPrestamo" name="NuevoPrestamo" placeholder="Total a prestar" class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8" style="font-size: 18px !important;">
                 </div>
-                <div class="col-2">
-                    <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" placeholder="Número de abonos..." class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <input type="text" id="NuevoPrestamoAbono" name="NuevoPrestamoAbono" placeholder="Abonos de..." class="form-control form-control-sm numbersOnly" autocomplete="off" maxlength="8" style="font-size: 18px !important;">
+                    <p class="font-weight-bold font-italic" style="color:#9C27B0;">
+                        NOTA: LOS ABONOS NO DEBEN DE LLEVAR CENTAVOS.</p>
                 </div>
-                <div class="col-2">
-                    <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-info btn-sm">
-                        <span class="fa fa-check"></span> Acepta
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <button id="btnGuardarNP" name="btnGuardarNP" class="btn btn-info btn-sm font-weight-bold" style="background-color: #43A047; border-color: #43A047;">
+                        <span class="fa fa-check"></span> ACEPTAR
                     </button> 
                 </div>
-                <div class="w-100 my-2"></div>
-                <div class="col-1 mt-1"> 
-                    <h6 class="text-danger font-weight-bold">Saldo actual</h6> 
+                <div id="TotalEnLetra" class="col-5 text-center">
+                    <h4 class="font-weight-bold text-warning"></h4>
+                </div>  
+                <div class="w-100 my-1"></div>
+                <div class="col-2 col-sm-2 col-md-2 col-lg-1 col-xl-1 mt-1"> 
+                    <h6 class="text-danger font-weight-bold">SALDO ACTUAL</h6> 
                 </div>
-                <div class="col-2">
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <input type="text" id="NuevoSaldoPrestamo" name="NuevoSaldoPrestamo" class="form-control form-control-sm" autocomplete="off" readonly="">
-                </div>
-                <div class="col-2">
-                </div>
-                <div class="col-2">
+                </div> 
+                <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <input type="text" id="SaldoFinal" name="SaldoFinal" placeholder="Saldo final..." class="form-control form-control-sm" autocomplete="off" readonly="">
                 </div>
-                <div class="col-2">  
-                    <span class="text-info font-weight-bold">1 = Sin aplicar</span>
-                    <span class="text-info font-weight-bold">2 = Aplicado</span> 
+                <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3">  
+                    <h3 class="text-info font-weight-bold">1 = SIN APLICAR</h3> 
+                </div>
+                <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3">   
+                    <h3 class="text-info font-weight-bold">2 = APLICADO</h3> 
                 </div>
                 <div class="my-1 w-100">
                     <hr>
-                </div> 
-                <div class="w-100"></div>
-                <div id="TotalEnLetra" class="col-12 text-center">
-                    <p class="font-weight-bold text-warning display-4"></p>
-                </div>
-                <div class="col-12">
-                    <p class="font-weight-bold text-danger">
-                        NOTA: LOS ABONOS NO DEBEN DE LLEVAR CENTAVOS
-                    </p>
-                </div>
+                </div>  
+                
                 <!--PRESTAMOS-->
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <h3 class="font-weight-bold">Prestamos de este empleado</h3>
+                    <h5 class="font-weight-bold">PRESTAMOS DE ESTE EMPLEADO</h5>
                     <div id="Prestamos" class="table-responsive">
                         <table id="tblPrestamos" class="table table-sm display " style="width:100%">
                             <thead>
@@ -131,7 +128,7 @@
                 </div>
                 <!--PAGOS DE LOS PRESTAMOS-->
                 <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                    <h3 class="font-weight-bold">Pagos de los prestamos</h3>
+                    <h5 class="font-weight-bold">PAGOS DE LOS PRESTAMOS</h5>
                     <div id="PrestamosPagos" class="table-responsive">
                         <table id="tblPrestamosPagos" class="table table-sm display " style="width:100%">
                             <thead>
@@ -149,21 +146,23 @@
                         </table>
                     </div>
                 </div>
-                <div class="w-100"></div>
+                <div class="w-100">
+                    <hr>
+                </div>
                 <div class="col-4">
-                    <h3 class="font-weight-bold">Total prestamos</h3>
+                    <h3 class="font-weight-bold">TOTAL PRESTAMOS</h3>
                     <input type="text" id="TotalPrestamos" name="TotalPrestamos" class="form-control d-none" readonly="">
                     <p id="TotalPrestamosParrafo" class="font-weight-bold text-danger display-4">$ 0.0</p>
                 </div>
                 <div class="col-4">
-                    <h3 class="font-weight-bold">Total abonos</h3>
+                    <h3 class="font-weight-bold">TOTAL ABONOS</h3>
                     <input type="text" id="TotalAbonos" name="TotalAbonos" class="form-control d-none" readonly="">
-                    <p id="TotalAbonosParrafo" class="font-weight-bold display-4" style="    color: #b9ca17 !important;">$ 0.0</p>
+                    <p id="TotalAbonosParrafo" class="font-weight-bold display-4" style="    color: #4CAF50 !important">$ 0.0</p>
                 </div>
                 <div class="col-4">
-                    <h3 class="font-weight-bold">Saldo movimientos</h3>
+                    <h3 class="font-weight-bold">SALDO MOVIMIENTOS</h3>
                     <input type="text" id="SaldoMovimientos" name="SaldoMovimientos" class="d-none form-control" readonly="">
-                    <p id="SaldoMovimientosParrafo" class="font-weight-bold text-info display-4">$ 0.0</p>
+                    <p id="SaldoMovimientosParrafo" class="font-weight-bold text-info display-4"  style="color: #673AB7 !important">$ 0.0</p>
                 </div>
             </div>
         </div>
@@ -385,13 +384,13 @@
                 text: "Los abonos quedaran de $ " + ($.number(parseFloat(NuevoPrestamoAbono.val()), 2, '.', ',')) + "",
                 icon: "warning",
                 buttons: {
-                    aceptar: {
-                        text: "Aceptar",
-                        value: "aceptar"
-                    },
                     cancelar: {
-                        text: "Cancelar",
+                        text: "CANCELAR",
                         value: "cancelar"
+                    },
+                    aceptar: {
+                        text: "ACEPTAR",
+                        value: "aceptar"
                     }
                 }
             }).then((value) => {
@@ -533,7 +532,7 @@
                 "deferRender": true,
                 "scrollCollapse": false,
                 "bSort": true,
-                "scrollY": "150px",
+                "scrollY": "200px",
                 "scrollX": true,
                 "aaSorting": [
                     [0, 'desc']
@@ -598,7 +597,7 @@
                 "deferRender": true,
                 "scrollCollapse": false,
                 "bSort": true,
-                "scrollY": "150px",
+                "scrollY": "200px",
                 "scrollX": true,
                 "aaSorting": [
                     [0, 'desc']
@@ -634,5 +633,22 @@
         border-style: solid;
         /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
         border-image: linear-gradient(to bottom,  #0099cc, #ccff00, rgb(0,0,0,0)) 1 100% ;
+    }
+    button.swal-button--cancelar{
+        background-color: #424242 !important;
+    } 
+    button.swal-button--aceptar{
+        background-color: #43A047 !important;
+    }
+    #tblPrestamosPagos tbody td, #tblPrestamos tbody td{
+        font-weight: bold !important;
+        font-size: 13px !important;
+    }
+    .text-danger{
+        color: #D32F2F !important; 
+    }
+    .selectize-input{
+        font-weight: bold !important;
+        font-size: 14px;
     }
 </style>

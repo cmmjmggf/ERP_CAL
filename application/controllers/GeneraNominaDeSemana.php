@@ -831,8 +831,8 @@ class GeneraNominaDeSemana extends CI_Controller {
             $ANIO = Date('Y');
             $empleados = $this->db->query("SELECT E.Numero, E.SaldoPres,E.AbonoPres, "
                             . "(SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero) AS ACUMULADO_PRES, "
-                            . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.año = {$ANIO}) AS TOTAL_PAGADO,
-(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.status = 2 AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
+                            . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.status = 2 AND PP.año = {$ANIO}) AS TOTAL_PAGADO,
+(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);

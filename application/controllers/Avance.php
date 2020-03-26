@@ -920,6 +920,11 @@ P.Maquila AS MAQUILA
                 if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                     switch (intval($frac)) {
                         case 397:
+                            /* revisar fracciones 100,102 y 300 */
+                            $revisar_pago_pespunte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.Control IN({$xXx['CONTROL']}) AND numfrac IN(100,102,300) ")->result();
+                            if (intval($revisar_pago_pespunte[0]->EXISTE) === 0) {
+                                exit(0);
+                            }
                             /* PAGAR FRACCION */
                             $revisar_avance_ensuelado = $this->db->query("SELECT  COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND Departamento IN(130,150,160,180,210,230,240)")->result();
                             if (intval($revisar_avance_ensuelado[0]->EXISTE) === 0) {
@@ -980,6 +985,7 @@ P.Maquila AS MAQUILA
             /* 7 TEJIDO */
             if ($depto === 7 && $depto_actual === 6) {
                 $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  AND A.Departamento = 150")->result();
+
                 if (intval($check_tejido[0]->EXISTE) === 0) {
                     /* 6 ALMACEN PESPUNTE "A" 7 TEJIDO */
                     $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
