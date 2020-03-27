@@ -564,24 +564,27 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                                 . "AND F.contped = {$x['CONTROL']} AND F.modulo = 'DEVOLUCION';")->result();
                 $this->db->set("parefac", $pares_facturados_dev[0]->PARES)
                         ->where("control", $x['CONTROL'])
+                        ->where("registro", $x['DEVOLUCION']) 
                         ->update("devolucionnp");
             } else {
                 $this->db->set("parefac", $x['PARES_A_FACTURAR'])
                         ->where("control", $x['CONTROL'])
+                        ->where("registro", $x['DEVOLUCION']) 
                         ->update("devolucionnp");
             }
             $pares_facturados_existe = $this->db->query("SELECT  COUNT(*) AS EXISTE "
                             . "FROM devolucionnp AS D "
                             . "WHERE D.stafac = 1 "
-                            . "AND D.control = {$x['CONTROL']}")->result();
+                            . "AND D.control = {$x['CONTROL']} AND D.registro = {$x['DEVOLUCION']}")->result();
             $pares_facturados = $this->db->query("SELECT D.paredev AS PARES_DEV, D.parefac AS PARES_FAC "
                             . "FROM devolucionnp AS D "
                             . "WHERE D.stafac = 1 "
-                            . "AND D.control = {$x['CONTROL']}")->result();
+                            . "AND D.control = {$x['CONTROL']} AND D.registro = {$x['DEVOLUCION']}")->result();
             if (intval($pares_facturados[0]->PARES_DEV) === intval($pares_facturados[0]->PARES_FAC)) {
                 $this->db->set("stafac", 2)
                         ->where("paredev = parefac", null, false)
                         ->where("control", $x['CONTROL'])
+                        ->where("registro", $x['DEVOLUCION']) 
                         ->update("devolucionnp");
             }
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */

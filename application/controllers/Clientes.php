@@ -36,7 +36,15 @@ class Clientes extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->Clientes_model->getRecords());
+            $this->db->select("C.ID AS ID, C.Clave AS Clave, C.RazonS AS Nombre,(SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.Estado LIMIT 1) AS ESTADO,(SELECT Nombre FROM agentes AS AA WHERE AA.Clave = C.Agente LIMIT 1) AS AGENTE ", false)
+                    ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            $data = $query->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -56,7 +64,9 @@ class Clientes extends CI_Controller {
 
     public function getClienteByID() {
         try {
-            print json_encode($this->Clientes_model->getClienteByID($this->input->get('ID')));
+            print json_encode($this->db->select('U.*', false)->from('clientes AS U')->where('U.Clave', $this->input->get('Clave'))->where_in('U.Estatus', 'ACTIVO')->get()->result());
+
+//            print json_encode($this->Clientes_model->getClienteByID($this->input->get('ID')));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

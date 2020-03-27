@@ -2,7 +2,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Clientes</legend>
+                <h3 class="font-weight-bold" style="color:#353d3e !important">
+                    <span class="fa fa-user"></span>   CLIENTES</h3>
             </div>
             <div class="col-sm-6 float-right" align="right">
                 <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
@@ -16,6 +17,8 @@
                             <th>ID</th>
                             <th>Clave</th>
                             <th>Nombre</th>
+                            <th>Estado</th>
+                            <th>Agente</th> 
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -292,6 +295,11 @@
         setFocusSelectToInputOnChange('#MetodoPago', '#NoCuenta', pnlDatos);
         setFocusSelectToInputOnChange('#Zona', '#Observaciones', pnlDatos);
 
+        pnlTablero.find("#tblClientes_filter").find("input[type='search']").on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                getClienteByID($(this).val());
+            }
+        });
 
         //Valida RFC
         pnlDatos.find("[name='RFC']").focusout(function () {
@@ -422,7 +430,7 @@
                 "dataSrc": ""
             },
             "columns": [
-                {"data": "ID"}, {"data": "Clave"}, {"data": "Nombre"}
+                {"data": "ID"}, {"data": "Clave"}, {"data": "Nombre"}, {"data": "ESTADO"}, {"data": "AGENTE"}
             ],
             "columnDefs": [
                 {
@@ -457,8 +465,14 @@
             tblClientes.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = Clientes.row(this).data();
-            temp = parseInt(dtm.ID);
-            $.getJSON(master_url + 'getClienteByID', {ID: temp}).done(function (data) {
+            temp = parseInt(dtm.Clave);
+            getClienteByID(temp);
+        });
+    }
+
+    function getClienteByID(ID) {
+        $.getJSON(master_url + 'getClienteByID', {Clave: ID}).done(function (data) {
+            if (data.length > 0) {
                 pnlDatos.find("input").val("");
                 $.each(pnlDatos.find("select"), function (k, v) {
                     pnlDatos.find("select")[k].selectize.clear(true);
@@ -481,16 +495,18 @@
                     pnlDatos.find("#Sucursal").focus().select();
                 }
                 pnlDatos.find("#RazonS").focus().select();
-
-            }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                console.log(x.responseText);
-            }).always(function () {
-                HoldOn.close();
-            });
+            } else {
+                onCampoInvalido(pnlTablero, "EL CLIENTE NO EXISTE, ESPECIFIQUE OTRO", function () {
+                    $('#tblClientes_filter input[type=search]').focus();
+                });
+            }
+        }).fail(function (x, y, z) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        }).always(function () {
+            HoldOn.close();
         });
     }
-
     function getOptions(url, comp, key, field) {
         $.getJSON(master_url + url).done(function (data) {
             $.each(data, function (k, v) {
@@ -517,3 +533,16 @@
         });
     }
 </script>
+<style>
+    table tbody td{
+        font-weight: bold;
+        font-size: 15px !important;
+    }
+    table thead th{
+        font-weight: bold;
+        font-size: 15px !important;
+        text-transform: uppercase !important;
+        color: #fff !important;
+        background-color: #000 !important;
+    }
+</style>
