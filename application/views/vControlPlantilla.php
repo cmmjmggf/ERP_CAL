@@ -773,6 +773,14 @@
                                 Fraccion.val('').focus();
                                 return;
                             });
+                        } else if (data === '77') {
+                            swal('ERROR', 'EL CONTROL DEBE DE ESTAR EN ENSUELADO PARA CONTINUAR', 'warning').then((value) => {
+                                sFraccion[0].selectize.clear(true);
+                                Precio.val('');
+                                btnAcepta.attr('disabled', true);
+                                Fraccion.val('').focus();
+                                return;
+                            });
                         } else {
                             Precio.val(data);
                             Fecha.val(FechaActual);
@@ -807,7 +815,7 @@
                             Fraccion.val('').focus();
                             return;
                         });
-                    } else if (data === '1') {
+                    } else if (data === '88') {
                         swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
                             sFraccion[0].selectize.clear(true);
                             Precio.val('');
@@ -815,8 +823,16 @@
                             Fraccion.val('').focus();
                             return;
                         });
-                    } else if (data === '2') {
+                    } else if (data === '99') {
                         swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
+                            sFraccion[0].selectize.clear(true);
+                            Precio.val('');
+                            btnAcepta.attr('disabled', true);
+                            Fraccion.val('').focus();
+                            return;
+                        });
+                    } else if (data === '77') {
+                        swal('ERROR', 'EL CONTROL DEBE DE ESTAR EN ENSUELADO PARA CONTINUAR', 'warning').then((value) => {
                             sFraccion[0].selectize.clear(true);
                             Precio.val('');
                             btnAcepta.attr('disabled', true);

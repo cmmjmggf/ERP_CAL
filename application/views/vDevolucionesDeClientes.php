@@ -821,7 +821,7 @@
 
                     $.post('<?php print base_url('DevolucionesDeClientes/onGuardar') ?>', p).done(function (a) {
                         onEnable(btnAcepta);
-                        onOpenOverlay('');
+                        //onOpenOverlay('');
                         onResetCampos();
                         pnlTablero.find("input:not(#xClienteDevolucion):not(#FechaDevolucion)").val("");
                         $.each(pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)"), function (k, v) {
@@ -1034,7 +1034,7 @@
                 "data": function (d) {
                     d.CLIENTE = ClienteDevolucion.val() ? ClienteDevolucion.val() : '';
                     d.CONTROL = ControlADevolver.val() ? ControlADevolver.val() : '';
-                    d.FOLIO = Folio ;
+                    d.FOLIO = Folio;
                     d.FECHA = FechaDevolucion.val() ? FechaDevolucion.val() : '';
                 }
             },
@@ -1046,14 +1046,14 @@
                 {"data": "CLASIFICACION"}, {"data": "CARGO"},
                 {"data": "MAQUILA"}, {"data": "FECHA"},
                 {"data": "TP"}, {"data": "CONCEPTO"},
-                {"data": "PRECIO_DEVOLUCION"}, {"data": "PRECIO_CG"}, 
+                {"data": "PRECIO_DEVOLUCION"}, {"data": "PRECIO_CG"},
                 {"data": "CONSECUTIVO"}
             ],
             "columnDefs": [{
                     "targets": [0],
                     "visible": false,
                     "searchable": false
-                },{
+                }, {
                     "targets": [15],
                     "visible": false,
                     "searchable": false

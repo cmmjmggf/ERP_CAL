@@ -259,7 +259,17 @@ class ControlPlantilla extends CI_Controller {
                     //Verifica que no hayan cobrado el control con anterioridad en otros módulos
                     $ExisteFracPagNom = $this->db->query("SELECT * from fracpagnomina where control = {$control} and numfrac = {$fracc} ")->result();
                     if (empty($ExisteFracPagNom)) {
-                        print ($Existe[0]->CostoMO);
+                        //Verifica que si son las fracciones de maquila ensuelado el departamento sea 55 (ensuelado)
+                        $Departamento = $this->db->query("SELECT * from pedidox where control = {$control} ")->result();
+                        if ($fracc === '306' || $fracc === '502') {//Solo valida cuando sean estas fracciones **ENSUELADO**
+                            if ($Departamento[0]->stsavan === '55') {//Sí esta en ensuelado seguimos adelante
+                                print ($Existe[0]->CostoMO);
+                            } else {//Si no esta en 55 mandamos mensaje al usuario de que necesita estar en ensuelado
+                                print 77;
+                            }
+                        } else {//Cualquier otra fraccion
+                            print ($Existe[0]->CostoMO);
+                        }
                     } else {
                         print (99);
                     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.3849126823009617"/>
+	<property name="ireport.zoom" value="1.675744345584164"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -53,6 +53,7 @@ edo.Descripcion as edo,
 cte.CodigoPostal,
 cte.RFC,
 cte.TelOficina,
+cte.ObservacionesTransporte,
 tp.Descripcion as numtra
 FROM cartcliente cc
 join clientes cte on cte.clave = cc.cliente
@@ -83,6 +84,9 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 	<field name="TelOficina" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="ObservacionesTransporte" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="numtra" class="java.lang.String"/>
 	<pageHeader>
 		<band height="766" splitType="Stretch">
@@ -105,7 +109,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</graphicElement>
 			</rectangle>
 			<image>
-				<reportElement x="0" y="0" width="222" height="88" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
+				<reportElement x="0" y="0" width="168" height="88" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
@@ -222,7 +226,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement mode="Transparent" x="238" y="94" width="77" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="f3c84602-72f8-436f-8ad2-2de178858f5b"/>
+				<reportElement mode="Transparent" x="475" y="95" width="77" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="f3c84602-72f8-436f-8ad2-2de178858f5b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -230,7 +234,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				<text><![CDATA[No. Cajas]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="315" y="94" width="37" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5b6e0b09-184f-457b-a6ba-057544b1cdee"/>
+				<reportElement mode="Transparent" x="552" y="95" width="37" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="5b6e0b09-184f-457b-a6ba-057544b1cdee"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -260,6 +264,19 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{transporte}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="0" y="95" width="314" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="03010733-8f8f-4413-b59d-1b1168d6fbc8">
+					<printWhenExpression><![CDATA[$F{ObservacionesTransporte} != "0"]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="13" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ObservacionesTransporte}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
