@@ -495,7 +495,9 @@ class AsignaPFTSACXC extends CI_Controller {
                             'Estatus' => 'A',
                             'Usuario' => $_SESSION["ID"],
                             'Fecha' => Date('d/m/Y'),
-                            'Hora' => Date('h:i:s a')
+                            'Hora' => Date('h:i:s a'),
+                            'modulo' => 'ASPFTS',
+                            'Fraccion' => 100
                         );
                         $this->db->insert('avance', $avance);
 

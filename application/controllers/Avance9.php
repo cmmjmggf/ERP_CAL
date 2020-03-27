@@ -489,7 +489,8 @@ class Avance9 extends CI_Controller {
                                     'Usuario' => $_SESSION["ID"],
                                     'Fecha' => Date('d/m/Y'),
                                     'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => 102
+                                    'Fraccion' => 102,
+                                    'modulo' => 'A9'
                                 );
                                 $this->db->insert('avance', $avance);
                                 $id = $this->db->insert_id();
@@ -674,7 +675,8 @@ class Avance9 extends CI_Controller {
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
                                 'Hora' => Date('h:i:s a'),
-                                'Fraccion' => 103
+                                'Fraccion' => 103, 
+                                'modulo' => 'A9'
                             );
                             $this->db->insert('avance', $avance);
                             $id = $this->db->insert_id();
@@ -734,22 +736,25 @@ class Avance9 extends CI_Controller {
                                 $data["preciofrac"] = $PXFC;
                                 $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
 
-
-                                $REVISA_AVANCE_REBAJADO = $avance = array(
-                                    'Control' => $xXx['CONTROL'],
-                                    'FechaAProduccion' => Date('d/m/Y'),
-                                    'Departamento' => 30,
-                                    'DepartamentoT' => 'REBAJADO',
-                                    'FechaAvance' => Date('d/m/Y'),
-                                    'Estatus' => 'A',
-                                    'Usuario' => $_SESSION["ID"],
-                                    'Fecha' => Date('d/m/Y'),
-                                    'Hora' => Date('h:i:s a'),
-                                    'Fraccion' => 103
-                                );
-                                $this->db->insert('avance', $avance);
-                                $id = $this->db->insert_id();
-                                $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                $REVISA_AVANCE_REBAJADO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento = 30 AND A.Control = {$xXx['CONTROL']}")->result();
+                                if (intval($REVISA_AVANCE_REBAJADO[0]->EXISTE) === 0) {
+                                    $avance = array(
+                                        'Control' => $xXx['CONTROL'],
+                                        'FechaAProduccion' => Date('d/m/Y'),
+                                        'Departamento' => 30,
+                                        'DepartamentoT' => 'REBAJADO',
+                                        'FechaAvance' => Date('d/m/Y'),
+                                        'Estatus' => 'A',
+                                        'Usuario' => $_SESSION["ID"],
+                                        'Fecha' => Date('d/m/Y'),
+                                        'Hora' => Date('h:i:s a'),
+                                        'Fraccion' => 103,
+                                        'modulo' => 'A9'
+                                    );
+                                    $this->db->insert('avance', $avance);
+                                    $id = $this->db->insert_id();
+                                    $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                }
                                 $data["modulo"] = 'A9';
                                 $this->db->insert('fracpagnomina', $data);
                             }
@@ -796,7 +801,8 @@ class Avance9 extends CI_Controller {
                                             'Usuario' => $_SESSION["ID"],
                                             'Fecha' => Date('d/m/Y'),
                                             'Hora' => Date('h:i:s a'),
-                                            'Fraccion' => 0
+                                            'Fraccion' => 0,
+                                            'modulo' => 'A9'
                                         );
                                         $this->db->insert('avance', $avance);
                                     }

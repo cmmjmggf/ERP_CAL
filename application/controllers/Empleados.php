@@ -714,17 +714,13 @@ class Empleados extends CI_Controller {
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);
+                $this->db->set("PressAcum", floatval($v->ACUMULADO_PRES));
                 if (floatval($SALDO_PRESTAMOS) > 0) {
-                    $this->db->set("PressAcum", floatval($v->ACUMULADO_PRES))
-                            ->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
-                            ->where("Numero", $v->Numero)
-                            ->update("empleados");
-                    if (floatval($v->AbonoPres) <= 0) {
-                        $this->db->set("AbonoPres", floatval($v->ABONO))
-                                ->where("Numero", $v->Numero)
-                                ->update("empleados");
-                    }
+                    $this->db->set("SaldoPres", $SALDO_PRESTAMOS);
+                } else {
+                    $this->db->set("SaldoPres", 0); 
                 }
+                $this->db->where("Numero", $v->Numero)->update("empleados");
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

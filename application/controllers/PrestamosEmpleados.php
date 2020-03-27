@@ -31,28 +31,23 @@ class PrestamosEmpleados extends CI_Controller {
         }
     }
 
-    
     public function onRefrescarSaldoDePrestamos() {
         try {
             $ANIO = Date('Y');
             $empleados = $this->db->query("SELECT E.Numero, E.SaldoPres,E.AbonoPres, "
                             . "(SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero) AS ACUMULADO_PRES, "
-                            . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.status = 2 AND PP.año = {$ANIO}) AS TOTAL_PAGADO,
+                            . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.año = {$ANIO}  AND PP.status = 2) AS TOTAL_PAGADO,
 (SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);
+                $this->db->set("PressAcum", floatval($v->ACUMULADO_PRES));
                 if (floatval($SALDO_PRESTAMOS) > 0) {
-                    $this->db->set("PressAcum", floatval($v->ACUMULADO_PRES))
-                            ->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
-                            ->where("Numero", $v->Numero)
-                            ->update("empleados");
-                    if (floatval($v->AbonoPres) <= 0) {
-                        $this->db->set("AbonoPres", floatval($v->ABONO))
-                                ->where("Numero", $v->Numero)
-                                ->update("empleados");
-                    }
+                    $this->db->set("SaldoPres", $SALDO_PRESTAMOS);
+                } else {
+                    $this->db->set("SaldoPres", 0);
                 }
+                $this->db->where("Numero", $v->Numero)->update("empleados");
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -164,7 +159,7 @@ class PrestamosEmpleados extends CI_Controller {
             }
             $this->db->where('PP.status', 2)->where('YEAR(PP.fecha)', Date('Y'))->order_by('PP.fecha', 'DESC');
             if ($EMPLEADO === '') {
-                $this->db->limit(20);
+                $this->db->where('PP.numemp', 0);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -294,7 +289,7 @@ class PrestamosEmpleados extends CI_Controller {
                             ->from('empleados AS E')
                             ->where('E.Numero', $pagare_info[0]->EMPLEADO)->get()->result();
 
-
+//            $this->benchmark->mark('code_start');
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $p = array();
@@ -314,7 +309,9 @@ class PrestamosEmpleados extends CI_Controller {
             $jc->setJasperurl('jrxml\prestamos\Pagare.jasper');
             $jc->setFilename('Pagare_' . Date('h_i_s'));
             $jc->setDocumentformat('pdf');
-            PRINT $jc->getReport();
+            PRINT $jc->getReport(); 
+//            $this->benchmark->mark('code_end');
+//            echo $this->benchmark->elapsed_time('code_start', 'code_end');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -52,13 +52,14 @@ class GeneraNominaDeSemana extends CI_Controller {
             $x = $this->input->post();
             $checa_nomina_si_esta_cerrada = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenominal WHERE numsem = {$x['SEMANA']} AND año = {$x['ANIO']}  AND status = 2")->result();
             if (intval($checa_nomina_si_esta_cerrada[0]->EXISTE) > 0) {
+                print "\n NOMINA {$x['SEMANA']} CERRADA \n";
                 exit(0);
             }
             $this->db->insert('generando_nomina', array('USUARIO' => $this->session->USERNAME,
                 'FECHA' => Date('d/m/Y'), 'HORA' => Date('h:i:s'),
                 'SEMANA' => $x['SEMANA'], 'ANIO' => $x['ANIO'],
                 'FECHA_INICIAL' => $x['FECHAINI'], 'FECHA_FINAL' => $x['FECHAFIN']));
-            
+
 
             $this->db->where('semana', $x['SEMANA'])->where('anio', $x['ANIO'])->where('numeroempleado', 0)->delete('fracpagnomina');
             $this->db->where('semana', $x['SEMANA'])->where('año', $x['ANIO'])->where('numemp', 0)->delete('fracpagnominatmp');
@@ -791,7 +792,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
     public function onAbonoPrestamo($ANIO, $SEM, $v, $ASISTENCIAS) {
         try {
-            if (floatval($v->SaldoPres) > 0) {
+            if (floatval($v->SaldoPres) > 0 && floatval($v->AbonoPres) > 0 && floatval($v->PressAcum) > 0) {
                 $SALDO_FINAL_PRESTAMO = 0;
                 $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}", false)->result();
                 $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
@@ -831,22 +832,18 @@ class GeneraNominaDeSemana extends CI_Controller {
             $ANIO = Date('Y');
             $empleados = $this->db->query("SELECT E.Numero, E.SaldoPres,E.AbonoPres, "
                             . "(SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero) AS ACUMULADO_PRES, "
-                            . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.status = 2 AND PP.año = {$ANIO}) AS TOTAL_PAGADO,
+                            . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.año = {$ANIO}  AND PP.status IN(1,2)) AS TOTAL_PAGADO,
 (SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);
+                $this->db->set("PressAcum", floatval($v->ACUMULADO_PRES));
                 if (floatval($SALDO_PRESTAMOS) > 0) {
-                    $this->db->set("PressAcum", floatval($v->ACUMULADO_PRES))
-                            ->set("SaldoPres", (floatval($SALDO_PRESTAMOS) > 0 ? $SALDO_PRESTAMOS : 0))
-                            ->where("Numero", $v->Numero)
-                            ->update("empleados");
-                    if (floatval($v->AbonoPres) <= 0) {
-                        $this->db->set("AbonoPres", floatval($v->ABONO))
-                                ->where("Numero", $v->Numero)
-                                ->update("empleados");
-                    }
+                    $this->db->set("SaldoPres", $SALDO_PRESTAMOS);
+                } else {
+                    $this->db->set("SaldoPres", 0);
                 }
+                $this->db->where("Numero", $v->Numero)->update("empleados");
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
