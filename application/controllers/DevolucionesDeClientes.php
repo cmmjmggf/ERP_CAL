@@ -41,13 +41,14 @@ class DevolucionesDeClientes extends CI_Controller {
     public function getPedidosFacturados() {
         try {
             $x = $this->input->get();
-            $this->db->select("F.ID, F.contped AS CONTROL, F.factura AS DOCUMENTO, F.tp AS TP, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, F.pareped AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, F.staped AS ST", false)
+            $this->db->select("F.ID, F.contped AS CONTROL, group_concat(F.factura) AS DOCUMENTO, F.tp AS TP, DATE_FORMAT(F.fecha,\"%d/%m/%Y\") AS FECHA, SUM(F.pareped) AS PARES, F.estilo AS ESTILO, F.combin AS COLOR, F.precto AS PRECIO, F.staped AS ST", false)
                     ->from("facturacion AS F")->where('F.contped <> 0 AND F.staped = 2', null, false);
             if ($x["CLIENTE"] === '') {
                 $this->db->where("F.cliente", 0);
             } else {
                 $this->db->where('F.cliente', $x["CLIENTE"]);
             }
+            $this->db->group_by("F.contped");
             $this->db->order_by("F.fecha", "DESC");
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -74,13 +75,16 @@ class DevolucionesDeClientes extends CI_Controller {
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                     . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
                                     . "P.EstiloT AS ESTILO_TEXT,"
-                                    . "F.par01, F.par02, F.par03, F.par04, F.par05, "
-                                    . "F.par06, F.par07, F.par08, F.par09, F.par10, "
-                                    . "F.par11, F.par12, F.par13, F.par14, F.par15, "
-                                    . "F.par16, F.par17, F.par18, F.par19, F.par20, F.par21, F.par22 "
+                                    . "SUM(F.par01) AS par01, sum(F.par02) AS par02, SUM(F.par03) AS par03, sum(F.par04) AS par04,"
+                                    . "SUM(F.par05) AS par05, SUM(F.par06) AS par06, sum(F.par07) AS par07, "
+                                    . "SUM(F.par08) AS par08, sum(F.par09) AS par09, SUM(F.par10) AS par10, "
+                                    . "SUM(F.par11) AS par11, SUM(F.par12) AS par12, SUM(F.par13) AS par13, "
+                                    . "SUM(F.par14) AS par14, SUM(F.par15) AS par15, SUM(F.par16) AS par16, "
+                                    . "SUM(F.par17) AS par17, SUM(F.par18) AS par18, SUM(F.par19) AS par19, "
+                                    . "SUM(F.par20) AS par20, SUM(F.par21) AS par21, SUM(F.par22) AS par22 "
                                     . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
                                     . "INNER JOIN facturacion AS F ON P.Control = F.contped "
-                                    . "WHERE P.Control = '{$x['CONTROL']}' AND F.ID = {$x['ID']} AND F.staped = 2")->result());
+                                    . "WHERE P.Control = '{$x['CONTROL']}' AND F.staped = 2 group by Control")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -106,13 +110,13 @@ class DevolucionesDeClientes extends CI_Controller {
                             . "D.conce AS CONCEPTO, D.preciodev AS PRECIO_DEVOLUCION, "
                             . "D.preciomaq AS PRECIO_CG, D.consecutivo AS CONSECUTIVO", false)
                     ->from("devolucionnp AS D")
-                    ->where_in('D.staapl', array(0, 1)); 
+                    ->where_in('D.staapl', array(0, 1));
             if ($x['CONTROL'] !== '') {
                 $this->db->where('D.control', $x['CONTROL']);
-            } 
+            }
             if ($x['FOLIO'] !== '') {
                 $this->db->where('D.consecutivo', $x['FOLIO']);
-            } 
+            }
             if ($x["CLIENTE"] === '') {
                 $this->db->where("D.cliente", 0);
             } else {

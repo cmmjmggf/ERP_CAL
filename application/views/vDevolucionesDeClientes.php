@@ -1308,5 +1308,16 @@
     .pares-ok{
         /*8BC34A*/
         border: 2px solid #99cc00 !important;
+    } 
+    table tbody td{
+        font-weight: bold;
+        font-size: 15px !important;
+    }
+    table thead th{
+        font-weight: bold;
+        font-size: 15px !important;
+        text-transform: uppercase !important;
+        color: #fff !important;
+        background-color: #000 !important;
     }
 </style>

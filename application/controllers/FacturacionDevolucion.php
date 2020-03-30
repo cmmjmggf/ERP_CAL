@@ -56,10 +56,10 @@ class FacturacionDevolucion extends CI_Controller {
                         break;
                 }
             }
-            /*fijar los controles cuando han tomado 5 de 10 por ejemplo quedan 5 de saldo*/
-            $this->db->set("stafac", 1) 
-                    ->where("YEAR(fechadev) = {$ANIO} AND parefac > 0 AND paredev > parefac ", null,false)
-                    ->where("stafac", 2)  
+            /* fijar los controles cuando han tomado 5 de 10 por ejemplo quedan 5 de saldo */
+            $this->db->set("stafac", 1)
+                    ->where("YEAR(fechadev) = {$ANIO} AND parefac > 0 AND paredev > parefac ", null, false)
+                    ->where("stafac", 2)
                     ->update("devolucionnp");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -94,15 +94,15 @@ class FacturacionDevolucion extends CI_Controller {
                                     . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                     . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                     . "S.T21, S.T22, 
-                                        D.par01 AS C1, D.par02 AS C2, D.par03 AS C3, D.par04 AS C4, D.par05 AS C5, 
-                                        D.par06 AS C6, D.par07 AS C7, D.par08 AS C8, D.par09 AS C9, D.par10 AS C10, 
-                                        D.par11 AS C11, D.par12 AS C12, D.par13 AS C13, D.par14 AS C14, D.par15 AS C15, 
-                                        D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
-                                        D.par21 AS C21, D.par22 AS C22, "
+                                       sum(D.par01) AS C1, sum(D.par02) AS C2, sum(D.par03) AS C3, sum(D.par04) AS C4, sum(D.par05) AS C5, 
+                                        sum(D.par06) AS C6, sum(D.par07) AS C7, sum(D.par08) AS C8, sum(D.par09) AS C9, sum(D.par10) AS C10, 
+                                        sum(D.par11) AS C11, sum(D.par12) AS C12, sum(D.par13) AS C13, sum(D.par14) AS C14, sum(D.par15) AS C15, 
+                                        sum(D.par16) AS C16, sum(D.par17) AS C17, sum(D.par18) AS C18, sum(D.par19) AS C19, sum(D.par20) AS C20,
+                                        sum(D.par21) AS C21, sum(D.par22) AS C22, "
                                     . "(SELECT E.Descripcion FROM estilos AS E "
                                     . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.registro AS DEVID  "
                                     . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
-                                    . "WHERE D.control = '{$this->input->get('CONTROL')}'  and D.paredev > D.parefac LIMIT 1")->result();
+                                    . "WHERE D.control = '{$this->input->get('CONTROL')}'  and D.paredev > D.parefac  GROUP BY D.control LIMIT 1")->result();
                     break;
 
                 default:
@@ -118,15 +118,15 @@ class FacturacionDevolucion extends CI_Controller {
                                         . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                         . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                         . "S.T21, S.T22, 
-                                        D.par01 AS C1, D.par02 AS C2, D.par03 AS C3, D.par04 AS C4, D.par05 AS C5, 
-                                        D.par06 AS C6, D.par07 AS C7, D.par08 AS C8, D.par09 AS C9, D.par10 AS C10, 
-                                        D.par11 AS C11, D.par12 AS C12, D.par13 AS C13, D.par14 AS C14, D.par15 AS C15, 
-                                        D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
-                                        D.par21 AS C21, D.par22 AS C22, "
+                                        sum(D.par01) AS C1, sum(D.par02) AS C2, sum(D.par03) AS C3, sum(D.par04) AS C4, sum(D.par05) AS C5, 
+                                        sum(D.par06) AS C6, sum(D.par07) AS C7, sum(D.par08) AS C8, sum(D.par09) AS C9, sum(D.par10) AS C10, 
+                                        sum(D.par11) AS C11, sum(D.par12) AS C12, sum(D.par13) AS C13, sum(D.par14) AS C14, sum(D.par15) AS C15, 
+                                        sum(D.par16) AS C16, sum(D.par17) AS C17, sum(D.par18) AS C18, sum(D.par19) AS C19, sum(D.par20) AS C20,
+                                        sum(D.par21) AS C21, sum(D.par22) AS C22, "
                                         . "(SELECT E.Descripcion FROM estilos AS E "
                                         . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID "
                                         . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
-                                        . "WHERE D.control = '{$this->input->get('CONTROL')}' and D.paredev > D.parefac   LIMIT 1")->result();
+                                        . "WHERE D.control = '{$this->input->get('CONTROL')}' and D.paredev > D.parefac GROUP BY D.control  LIMIT 1")->result();
                     } else {
                         $data = $this->db->query("SELECT D.docto AS CLAVE_PEDIDO, "
                                         . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
@@ -136,16 +136,16 @@ class FacturacionDevolucion extends CI_Controller {
                                         . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                         . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                         . "S.T21, S.T22, 
-                                        D.par01 AS C1, D.par02 AS C2, D.par03 AS C3, D.par04 AS C4, D.par05 AS C5, 
-                                        D.par06 AS C6, D.par07 AS C7, D.par08 AS C8, D.par09 AS C9, D.par10 AS C10, 
-                                        D.par11 AS C11, D.par12 AS C12, D.par13 AS C13, D.par14 AS C14, D.par15 AS C15, 
-                                        D.par16 AS C16, D.par17 AS C17, D.par18 AS C18, D.par19 AS C19, D.par20 AS C20,
-                                        D.par21 AS C21, D.par22 AS C22, "
+                                        sum(D.par01) AS C1, sum(D.par02) AS C2, sum(D.par03) AS C3, sum(D.par04) AS C4, sum(D.par05) AS C5, 
+                                        sum(D.par06) AS C6, sum(D.par07) AS C7, sum(D.par08) AS C8, sum(D.par09) AS C9, sum(D.par10) AS C10, 
+                                        sum(D.par11) AS C11, sum(D.par12) AS C12, sum(D.par13) AS C13, sum(D.par14) AS C14, sum(D.par15) AS C15, 
+                                        sum(D.par16) AS C16, sum(D.par17) AS C17, sum(D.par18) AS C18, sum(D.par19) AS C19, sum(D.par20) AS C20,
+                                        sum(D.par21) AS C21, sum(D.par22) AS C22, "
                                         . "(SELECT E.Descripcion FROM estilos AS E "
                                         . "WHERE E.Clave = D.estilo LIMIT 1) AS ESTILO_TEXT, D.registro AS REGISTRO_ID, D.ID AS DEVID  "
                                         . "FROM devolucionnp AS D INNER JOIN series AS S ON D.seriped = S.Clave "
                                         . "WHERE D.control = '{$this->input->get('CONTROL')}' "
-                                        . "AND D.tp = '{$this->input->get('TP')}' and D.paredev > D.parefac LIMIT 1")->result();
+                                        . "AND D.tp = '{$this->input->get('TP')}' and D.paredev > D.parefac  GROUP BY D.control LIMIT 1")->result();
                     }
                     break;
             }
@@ -444,6 +444,19 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $nueva_fecha = new DateTime();
             $nueva_fecha->setDate($anio, $mes, $dia);
             $hora = Date('h:i:s');
+            $NOMBRE_COLOR = "";
+            if ($x["COLOR_TEXT"] === "") {
+                $COLOR_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM colores AS C "
+                                . "WHERE C.Estilo = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']}")->result();
+                if (intval($COLOR_EXISTE[0]->EXISTE) > 0) {
+                    $COLOR_NOMBRE = $this->db->query("SELECT Descripcion AS COLOR FROM colores AS C "
+                                    . "WHERE C.Estilo = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']}")->result();
+                    $NOMBRE_COLOR = $COLOR_NOMBRE[0]->COLOR;
+                }
+            } else {
+                $NOMBRE_COLOR = $x["COLOR_TEXT"];
+            }
+
             $f = array(
                 'factura' => $x['FACTURA'], 'tp' => $x['TP_DOCTO'],
                 'cliente' => $x['CLIENTE'], 'contped' => $x['CONTROL'],
@@ -466,11 +479,11 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
             $f["tcamb"] = $x["TIPO_CAMBIO"];
             $f["cajas"] = $x["CAJAS"];
             $f["origen"] = 0;
-            $f["referen"] = $x["REFERENCIA"];
+            $f["referen"] = intval($x["REFERENCIA"]);
 
             $f["decdias"] = 0;
             $f["agente"] = $x["AGENTE"];
-            $f["colsuel"] = $x["COLOR_TEXT"];
+            $f["colsuel"] = $NOMBRE_COLOR;
             $f["tpofac"] = $x["REGISTRO_ID"];
             $f["año"] = date('Y');
             $f["zona"] = $x["ZONA"];
@@ -564,12 +577,12 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                                 . "AND F.contped = {$x['CONTROL']} AND F.modulo = 'DEVOLUCION';")->result();
                 $this->db->set("parefac", $pares_facturados_dev[0]->PARES)
                         ->where("control", $x['CONTROL'])
-                        ->where("registro", $x['DEVOLUCION']) 
+                        ->where("registro", $x['DEVOLUCION'])
                         ->update("devolucionnp");
             } else {
                 $this->db->set("parefac", $x['PARES_A_FACTURAR'])
                         ->where("control", $x['CONTROL'])
-                        ->where("registro", $x['DEVOLUCION']) 
+                        ->where("registro", $x['DEVOLUCION'])
                         ->update("devolucionnp");
             }
             $pares_facturados_existe = $this->db->query("SELECT  COUNT(*) AS EXISTE "
@@ -584,7 +597,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 $this->db->set("stafac", 2)
                         ->where("paredev = parefac", null, false)
                         ->where("control", $x['CONTROL'])
-                        ->where("registro", $x['DEVOLUCION']) 
+                        ->where("registro", $x['DEVOLUCION'])
                         ->update("devolucionnp");
             }
             /* SI EXISTE ES PORQUE YA HAY PARES FACTURADOS DE ESTE CONTROL CON ANTERIORIDAD */
