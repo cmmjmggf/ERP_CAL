@@ -227,15 +227,20 @@ class Avance8 extends CI_Controller {
             $url = $this->uri;
             $x = $this->input->get();
 
-            $SPAN_397 = "<span class='font-weight-bold text-success'>397</span>";
+            $SPAN_60 = "<span style='color: #673AB7;'>60</span>";
+            $SPAN_397 = "<span style='color: #cc0033;'>397</span>";
+            $SPAN_103 = "<span style='color: #cc0033;'>103</span>";
+            $SPAN_102 = "<span style='color: #e20303;'>102</span>";
             $this->db->select("F.ID, F.numeroempleado, F.maquila, "
                             . "F.control AS CONTROL, F.estilo AS ESTILO, "
-                            . "(CASE "
+                            . "(CASE " 
+                            . "WHEN F.numfrac = 102 THEN \"$SPAN_102\" "
+                            . "WHEN F.numfrac = 103 THEN \"$SPAN_103\" "
                             . "WHEN F.numfrac = 397 THEN \"$SPAN_397\" "
                             . "ELSE F.numfrac END) AS FRAC, "
                             . "F.preciofrac AS PRECIO, "
                             . "F.pares AS PARES, CONCAT('$',FORMAT(F.subtot,2)) AS SUBTOTAL, "
-                            . "CONCAT('<span class=\"text-black\">$',FORMAT(F.subtot,2),'</span>') AS SUBTOTAL_SPAN, "
+                            . "CONCAT('$',FORMAT(F.subtot,2)) AS SUBTOTAL_SPAN, "
                             . "F.status, DATE_FORMAT(F.fecha, \"%d/%m/%Y\") AS FECHA, "
                             . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
                             . "F.registro, F.anio, F.avance_id", false)
@@ -579,7 +584,7 @@ class Avance8 extends CI_Controller {
                         $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(102)")->result();
                         if (intval($check_rayado[0]->EXISTE) === 0) {
                             exit(0);
-                        }
+                        } 
                         $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();
                         if (intval($check_foleado[0]->EXISTE) === 0) {
                             $avance = array(

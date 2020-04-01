@@ -2,10 +2,10 @@
     <div class="card-body" style="padding-top: 10px;    padding-bottom: 10px;">
         <div class="row">
             <div class="col-6">
-                <legend class="font-weight-bold" style="margin-bottom: 0px;">Avance por empleado y pago de nómina</legend>
+                <legend class="font-weight-bold" style="margin-bottom: 0px;">AVANCE POR EMPLEADO Y PAGO DE NÓMINA</legend>
             </div>
             <div class="col-6" align="right">
-                <a class="btn btn-sm btn-danger mt-1" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
+                <a class="btn btn-sm mt-1" style="background-color: #8c0a00; color: #fff" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
             </div>
         </div>
         <hr>
@@ -17,7 +17,7 @@
                 <input type="text"  style="height: 50px; font-weight: bold; font-size: 45px;"  id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control form-control-sm shadow-lg numeric" maxlength="8" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-10 text-center">
-                <h1 style="color: #c1850c !important;" class="nombre_empleado">-</h1>
+                <h1 style="color: #3F51B5 !important" class="nombre_empleado">-</h1>
                 <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm d-none" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <!--FIN BLOQUE 2 COL 6-->
@@ -26,7 +26,7 @@
                     <div class="col-2">
                     </div>
                     <div class="col-8">
-                        <h6>FRACCIONES DE ESTE EMPLEADO</h6>
+                        <h6 class="font-weight-bold">FRACCIONES DE ESTE EMPLEADO</h6>
                     </div>
                     <div class="col-2">
                     </div>
@@ -61,28 +61,30 @@
                         </tr>
                     </tfoot>
                 </table> 
-                <div class="row" align="center">
-                    <div class="col-2">
-                        <label>Año</label>
-                        <input type="text" id="AnoFiltro" name="AnoFiltro" maxlength="4" class="form-control form-control-sm numbersOnly selectNotEnter noBorders">
-                    </div> 
-                    <div class="col-2">
-                        <label>Semana</label>
-                        <input type="text" id="SemanaFiltro" name="SemanaFiltro" maxlength="2" class="form-control form-control-sm  numbersOnly selectNotEnter noBorders">
-                    </div> 
-                    <div class="col-2">
-                        <label>Fraccion</label>
-                        <input type="text" id="FraccionFiltro" name="FraccionFiltro" maxlength="4" class="form-control numbersOnly form-control-sm selectNotEnter noBorders">
-                    </div>
-                    <div class="col-2">
-                        <button type="button" id="btnRevisarFraccionesXEstilo" name="btnRevisarFraccionesXEstilo" class="btn btn-sm btn-info mt-3">
-                            <span class="fa fa-search"></span> Fracciones X Estilo
-                        </button>
-                    </div>
-                    <div class="col-2">
-                        <button type="button" id="btnRevisarPagoFraccion" name="btnRevisarPagoFraccion" class="btn btn-sm btn-info mt-3">
-                            <span class="fa fa-search"></span> Revisar fracción pagada x control 
-                        </button>
+                <div class="col-12">
+                    <div class="row" align="center">
+                        <div class="col-2">
+                            <label>Año</label>
+                            <input type="text" id="AnoFiltro" name="AnoFiltro" maxlength="4" class="form-control form-control-sm numbersOnly selectNotEnter noBorders">
+                        </div> 
+                        <div class="col-2">
+                            <label>Semana</label>
+                            <input type="text" id="SemanaFiltro" name="SemanaFiltro" maxlength="2" class="form-control form-control-sm  numbersOnly selectNotEnter noBorders">
+
+                        </div> 
+                        <div class="col-2">
+                            <label>Fraccion</label>
+                            <input type="text" id="FraccionFiltro" name="FraccionFiltro" maxlength="4" class="form-control numbersOnly form-control-sm selectNotEnter noBorders">
+                        </div>
+                        <div class="col-3">
+                            <button type="button" id="btnRevisarFraccionesXEstilo" name="btnRevisarFraccionesXEstilo" class="btn btn-sm mt-3" style="background-color: #673AB7; border-color: #673AB7; color: #fff">
+                                <span class="fa fa-search"></span> Fracciones X Estilo
+                            </button>
+                        </div>
+                        <div class="col-3">
+                            <button type="button" id="btnRevisarPagoFraccion" name="btnRevisarPagoFraccion" class="btn btn-sm mt-3"  style="background-color: #673AB7; border-color: #673AB7; color: #fff">
+                                <span class="fa fa-search"></span> Revisar fracciónes</button>
+                        </div>
                     </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
@@ -102,15 +104,21 @@
                                         ->get()->result();
                         ?>
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana" readonly="" class="form-control form-control-sm  numeric" maxlength="2">
+                        <input type="text" id="Semana" name="Semana" readonly="" class="d-none form-control form-control-sm  numeric" maxlength="2">
+                        <div class="w-100"></div>
+                        <span class="font-weight-bold semana_avance8" style="color: #c1850c !important; font-size: 40px; "></span>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm  " readonly="">
+                        <input type="text" id="Fecha" name="Fecha" class="d-none form-control form-control-sm  " readonly="">
+                        <div class="w-100"></div>
+                        <span class="font-weight-bold fecha_avance8" style="color: #c1850c !important; font-size: 40px; "></span>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" name="Departamento" readonly="" class="form-control form-control-sm numeric " maxlength="3">
+                        <input type="text" id="Departamento" name="Departamento" readonly="" class="form-control d-none form-control-sm numeric " maxlength="3">
+                        <div class="w-100"></div>
+                        <span class="font-weight-bold depto_avance8" style="color: #c1850c !important; font-size: 40px; "></span>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Control</label>
@@ -313,69 +321,81 @@
                     </div>
 
                     <div class="col-6">
-                        <label class="text-info">Pago de Nómina</label>
+                        <h5 class="text-info">PAGO DE NÓMINA</h5>
                         <div id="DiasPagoDeNomina" class="row">
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>JUEVES</label>
+                                <h5>JUEVES</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtJUEVES" name="txtJUEVES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                                <input type="text" id="txtJUEVES" name="txtJUEVES" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <span class="txtJUEVES"  style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
+                            <div class="w-100"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>VIERNES</label>
+                                <h5>VIERNES</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtVIERNES" name="txtVIERNES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                                <input type="text" id="txtVIERNES" name="txtVIERNES" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <span class="txtVIERNES"  style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
+                            <div class="w-100"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>SABADO</label>
+                                <h5>SABADO</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtSABADO" name="txtSABADO" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                                <input type="text" id="txtSABADO" name="txtSABADO" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <span class="txtSABADO"  style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
+                            <div class="w-100"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>DOMINGO</label>
+                                <h5>DOMINGO</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtDOMINGO" name="txtDOMINGO" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                                <input type="text" id="txtDOMINGO" name="txtDOMINGO" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <span class="txtDOMINGO"  style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
+                            <div class="w-100"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>LUNES</label>
+                                <h5>LUNES</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtLUNES" name="txtLUNES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                                <input type="text" id="txtLUNES" name="txtLUNES" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <span class="txtLUNES"  style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
+                            <div class="w-100"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>MARTES</label>
+                                <h5>MARTES</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtMARTES" name="txtMARTES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                                <input type="text" id="txtMARTES" name="txtMARTES" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <span class="txtMARTES" style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
+                            <div class="w-100"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
-                                <label>MIERCOLES</label>
+                                <h5>MIERCOLES</h5>
                             </div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtMIERCOLES" name="txtMIERCOLES" readonly="" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;" readonly="">
+                                <input type="text" id="txtMIERCOLES" name="txtMIERCOLES" readonly="" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;" readonly="">
+                                <span class="txtMIERCOLES"style="font-size: 25px; color: #673AB7 !important; font-weight: bold;">0</span>
                             </div>
-                            <div class="col-12">
-                                <hr>
-                            </div>
+                            <div class="col-12"><hr></div>
                             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <label>TOTAL</label>
+                                <h3>TOTAL</h3>
                             </div>
-                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                <input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0" style="font-weight: bold;">
+                            <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
+                                <input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm d-none" placeholder="0" style="font-weight: bold;">
+                                <h3 class="total_cobrado_x_empleado" style="color:#FF0000; font-weight: bold;"></h3>
                             </div>
                         </div>
                         <div class="w-100 my-2"></div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none" align="center">
-                            <h4 class="text-danger">Estatus actual del avance</h4>
+                            <h2 class="text-danger">ESTATUS ACTUAL DEL AVANCE</h2>
                             <input type="text" id="EstatusAvance" name="EstatusAvance" class="form-control form-control-sm ">
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                            <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
+                            <h4 class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </h4>  
                             <div class="w-100"></div>
-                            <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</span>
+                            <h4 class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important">-</h4>
                         </div>
                     </div> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2 d-none">
@@ -396,6 +416,7 @@
                     </div>
                 </div>
             </div><!--FIN BLOQUE 2 COL 6-->
+
             <div class="col-12 text-center">
                 <span class="text-danger font-weight-bold font-italic">8 8 8 8 8 8</span>
             </div>
@@ -517,7 +538,7 @@
             SigAvance = pnlTablero.find("#Avance"),
             EstatusAvance = pnlTablero.find("#EstatusAvance"),
             ManoDeOB = pnlTablero.find("#ManoDeOB"),
-            estatus_de_avance = pnlTablero.find("span.estatus_de_avance"),
+            estatus_de_avance = pnlTablero.find("H4.estatus_de_avance"),
             Anio = pnlTablero.find("#Anio"), btnAceptar = pnlTablero.find("#btnAceptar"),
             btnRevisarFraccionesXEstilo = pnlTablero.find("#btnRevisarFraccionesXEstilo"),
             mdlFraccionesXEstilo = $("#mdlFraccionesXEstilo"), FraccionesXEstilo,
@@ -635,7 +656,9 @@
         });
         console.log(fff);
         Semana.val('<?php print $SP[0]->Semana; ?>');
+        pnlTablero.find("span.semana_avance8").text('<?php print $SP[0]->Semana; ?>');
         Fecha.val('<?php print $F; ?>');
+        pnlTablero.find("span.fecha_avance8").text('<?php print $F ?>');
         handleEnter();
 
         btnAceptar.click(function () {
@@ -703,6 +726,7 @@
                                 NombreEmpleado.val(r.NOMBRE_COMPLETO);
                                 pnlTablero.find(".nombre_empleado").text(dt[0].NOMBRE_COMPLETO);
                                 Departamento.val(r.DEPTOCTO);
+                                pnlTablero.find(".depto_avance8").text(r.DEPTOCTO);
                                 $.getJSON('<?php print base_url('Avance8/getSemanaByFecha'); ?>').done(function (data) {
                                     var rr = data[0];
                                     Semana.val((data.length > 0) ? rr.Sem : '');
@@ -797,6 +821,9 @@
                 $(api.column(7).footer()).html(
                         '<span class="font-weight-bold">$' +
                         $.number(r, 2, '.', ',') + '</span>');
+                $(api.column(4)).find("span").css("color", "yellow");
+                console.log(api.column(4))
+//$("table tbody  tr:eq(3) td:eq(3)").find("span").css( "color", "black" ); 
             }
         };
         xoptions.ajax = {
@@ -811,7 +838,9 @@
             },
             "aaSorting": [
                 [2, 'desc']
-            ]
+            ],
+
+//$("table tbody  tr:eq(3) td:eq(3)").find("span").css( "color", "black" ); 
         };
         $.fn.dataTable.ext.errMode = 'throw';
         Avance = tblAvance.DataTable(xoptions);
@@ -1310,9 +1339,11 @@
                 var tt = 0;
                 ndias.forEach(function (i) {
                     pnlTablero.find("#txt" + i).val(b[i]);
+                    pnlTablero.find("span.txt" + i).text(b[i]);
                     tt += $.isNumeric(b[i]) ? parseFloat(b[i]) : 0;
                 });
                 pnlTablero.find("#txtTotal").val(tt);
+                pnlTablero.find("h3.total_cobrado_x_empleado").text(tt);
             }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
@@ -1439,11 +1470,11 @@
     }
     .text-black{
         color: #000 !important;
-        color: #c1850c  !important;
+        color: #388E3C  !important;
         font-weight: bold !important;
     }
 
-    tr:hover span.text-success,tr:hover span.text-info,tr:hover span.text-black{
+    tr:hover span.text-success,tr:hover span.text-info,tr:hover span.text-black, tr:hover span{
         color: #fff !important;
         font-weight: bold !important;
     }
@@ -1453,7 +1484,41 @@
     }
 
     table tbody tr:hover td{
-        background-color: #0375d8 !important; 
+        background-color: #000 !important; 
         font-weight: bold !important;
+    }
+
+    table thead th{
+        text-transform: uppercase;
+        background-color: #000000 !important;
+        color : #ffffff;
+    }
+
+    table tbody td, button{
+        font-weight: bold !important;
+        font-size: 18px;
+    }
+    table tbody td:nth-child(2){
+        color: #3F51B5;
+    }
+    table tbody td:nth-child(7){ 
+        color: #81BC44;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: #437C2D;
+    }
+    table tbody  tr:hover td:nth-child(2), table tbody tr:hover td:nth-child(4),
+    table tbody tr:hover td:nth-child(7),
+    table tbody tr:hover td:nth-child(4) > span{
+        color: #fff !important
+    } 
+    div.custom-checkbox label,label, button{
+        text-transform: uppercase;
+    }
+
+    .form-control:disabled, .form-control[readonly] {
+        background-color: #ffffff;
+        opacity: 1;
+        font-size: 20px;
+        color: #673AB7 !important;
     }
 </style>

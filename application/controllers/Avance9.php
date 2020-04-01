@@ -675,7 +675,7 @@ class Avance9 extends CI_Controller {
                                 'Usuario' => $_SESSION["ID"],
                                 'Fecha' => Date('d/m/Y'),
                                 'Hora' => Date('h:i:s a'),
-                                'Fraccion' => 103, 
+                                'Fraccion' => 103,
                                 'modulo' => 'A9'
                             );
                             $this->db->insert('avance', $avance);
@@ -709,14 +709,34 @@ class Avance9 extends CI_Controller {
 
                         /* REVISAMOS QUE CORTE,RAYADO Y FOLEADO YA HAYAN DADO SU AVANCE, 
                          * DEBE DE ARROJAR 3 POR EL # DE FRACCIONES, DE LO CONTRARIO NO AVANZAREMOS */
-                        $check_fraccion_corte_rayado_foleado = $this->db->select('COUNT(*) AS EXISTE', false)
+                        $check_corte = $this->db->select('COUNT(*) AS EXISTE', false)
                                         ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
-                                        ->where_in('F.numfrac', array(100, 102, 60))
+                                        ->where_in('F.numfrac', array(100))
                                         ->get()->result();
-                        if (intval($check_fraccion_corte_rayado_foleado[0]->EXISTE) <= 2 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
-                            print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_REBAJADO" => "NO"));
+
+                        if (intval($check_corte[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
+                            print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_CORTE" => "NO"));
                             EXIT(0);
                         }
+                        
+                        $check_rayado = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
+                                        ->where_in('F.numfrac', array(102))
+                                        ->get()->result();
+                        if (intval($check_rayado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
+                            print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_RAYADO" => "NO"));
+                            EXIT(0);
+                        }
+
+                        $check_foleado = $this->db->select('COUNT(*) AS EXISTE', false)
+                                        ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
+                                        ->where_in('F.numfrac', array(60))
+                                        ->get()->result();
+                        if (intval($check_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
+                            print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_FOLEADO" => "NO"));
+                            EXIT(0);
+                        }
+
 
                         if (intval($xXx['NUMERO_EMPLEADO']) === 1894 ||
                                 intval($xXx['NUMERO_EMPLEADO']) === 49) {
