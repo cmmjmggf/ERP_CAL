@@ -35,8 +35,9 @@ C.nomcolo AS COLORT,
 C.pares AS PARES,
 DATE_FORMAT(C.fechapre,"%d/%m/%Y") AS FECHA,
 C.docto AS DOCUMENTO,
-(SELECT S.Sem FROM semanasnomina as S
-WHERE C.fechapre BETWEEN STR_TO_DATE(FechaIni, "%d/%m/%Y") AND STR_TO_DATE(FechaFin, "%d/%m/%Y") ) as SEMANA_NOMINA
+(SELECT S.Sem FROM semanasnomina AS S
+WHERE C.fechapre BETWEEN STR_TO_DATE(S.FechaIni, "%d/%m/%Y") AND STR_TO_DATE(S.FechaFin, "%d/%m/%Y")
+AND S.Sem <> '99' ) AS SEMANA_NOMINA
 FROM controltej AS C
 WHERE C.docto = $P{DOCUMENTO}]]>
 	</queryString>
