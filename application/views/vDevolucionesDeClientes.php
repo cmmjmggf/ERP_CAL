@@ -286,7 +286,7 @@
                     <div class="w-100 my-1"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <button type="button" class="btn btn-info btn-block selectNotEnter" id="btnReportesDev" name="btnReportesDev" style="background-color: #3F51B5; border-color: #3F51B5;">
-                            <span class="fa fa-file"></span>  Reportes
+                            <span class="fa fa-file"></span>  REPORTES
                         </button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
@@ -435,6 +435,9 @@
             btnAceptaReporteDevolucionXLS = mdlReportesDevoluciones.find("#btnAceptaReporteDevolucionXLS");
 
     $(document).ready(function () {
+
+        pnlTablero.find("button").addClass("font-weight-bold").css({"text-transform": "uppercase"});
+
         getConsecutivo();
         handleEnterDiv(pnlTablero);
 
@@ -823,9 +826,12 @@
                         onEnable(btnAcepta);
                         //onOpenOverlay('');
                         onResetCampos();
-                        pnlTablero.find("input:not(#xClienteDevolucion):not(#FechaDevolucion)").val("");
-                        $.each(pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)"), function (k, v) {
-                            pnlTablero.find("select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize)")[k].selectize.clear(true);
+                        pnlTablero.find("input:not(#xClienteDevolucion):not(#FechaDevolucion):not(#Clasificacion):not(#Cargo):not(#Departamento):not(#Defecto):not(#DetalleDefecto):not(#Motivo)").val("");
+
+                        var selects_sin_reiniciar = "select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize),select:not(#xClasificacion):not(#xClasificacion-selectize),select:not(#xCargo):not(#xCargo-selectize),select:not(#xDepartamento):not(#xDepartamento-selectize),select:not(#xDefecto):not(#xDefecto-selectize),select:not(#xDetalleDefecto):not(#xDetalleDefecto-selectize)";
+
+                        $.each(pnlTablero.find(selects_sin_reiniciar), function (k, v) {
+                            pnlTablero.find(selects_sin_reiniciar)[k].selectize.clear(true);
                         });
                         ClienteDevolucion[0].selectize.disable();
                         xClienteDevolucion.attr('readonly', true);
@@ -902,7 +908,7 @@
 //                        onCampoInvalido(pnlTablero, 'LA CANTIDAD A DEVOLVER DEBE DE SER MENOR O IGUAL A LA CANTIDAD FACTURADA', function () {
 //                            pnlTablero.find("#PDF" + index).focus().select();
 //
-//                        });
+                        //                        });
                     }
                 }
             } else {
@@ -1020,7 +1026,7 @@
                     getError(x);
                 }).always(function () {
                     getInfoXControl(z.CONTROL, z);
-//                    getParesFacturadosXControl(z.CONTROL);
+                    //                    getParesFacturadosXControl(z.CONTROL);
                 });
                 btnControlCompleto.attr('disabled', false);
             }
@@ -1143,7 +1149,7 @@
 //                            onEnable(cantidad_facturada);
 //                        } else {
 //                            onDisable(cantidad_facturada);
-//                        }
+                        //                        }
                         /* PDF = Pares Devueltos Facturados*/
                         //                        pnlTablero.find("#PDF" + i).val((parseFloat(xx["C" + i]) > 0 ? parseInt(xx["C" + i]) - cf : 0));
                         pnlTablero.find("#C" + i).attr("title", xx["C" + i]);

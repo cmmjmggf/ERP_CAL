@@ -12,10 +12,52 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-5">
-                        
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="text" id="IDR" name="IDR" class="form-control" readonly="">
+                            </div>
+                            <div class="col-12">
+                                <label>Código</label>
+                                <input type="text" id="CodigoRefaccion" name="CodigoRefaccion" class="form-control" maxlength="15">
+                            </div>
+                            <div class="col-12">
+                                <label>Descripción</label>
+                                <input type="text" id="DescripcionRefaccion" name="DescripcionRefaccion" class="form-control">
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-6">
+                                <label>Fecha alta</label>
+                                <input type="text" id="FechaAltaRefaccion" name="FechaAltaRefaccion" class="form-control">
+                            </div>
+                            <div class="col-6">
+                                <label>Costo</label>
+                                <input type="text" id="CostoRefaccion" name="CostoRefaccion" class="form-control">
+                            </div>
+                            <div class="w-100"></div>
+
+                            <div class="col-12">
+                                <label>Depto</label>
+                                <div class="row">
+                                    <div class="col-4 col-xs-4 col-sm-4">
+                                        <input type="text" id="DeptoClaveMaquina" name="DeptoClaveMaquina" class="form-control" maxlength="3">
+                                    </div>
+                                    <div class="col-8 col-xs-8 col-sm-8"> 
+                                        <select id="DeptoMaquina" name="DeptoMaquina" class="form-control form-control-sm">
+                                            <option></option>                                   
+                                            <?php
+                                            $departamentos = $this->db->query("SELECT Clave, Descripcion FROM departamentos;")->result();
+                                            foreach ($departamentos as $k => $v) {
+                                                print "<option value='{$v->Clave}'>{$v->Descripcion}</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-7">
+                    <div class="col-6">
                         <div class="row">
                             <div class="col-12 font-weight-bold text-center"><h3>Fotos</h3></div>
                             <div class="col-12">
