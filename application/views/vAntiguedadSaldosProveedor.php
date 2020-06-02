@@ -31,6 +31,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnImprimir">IMPRIMIR</button>
+                <button type="button" class="btn btn-success" id="btnImprimirExt">EXTENDIDO</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -99,6 +100,64 @@
                 HoldOn.close();
             }).fail(function (x, y, z) {
                 mdlAntiguedadSaldosProveedores.find('#btnImprimir').attr('disabled', false);
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
+        mdlAntiguedadSaldosProveedores.find('#btnImprimirExt').on("click", function () {
+            mdlAntiguedadSaldosProveedores.find('#btnImprimirExt').attr('disabled', true);
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var frm = new FormData(mdlAntiguedadSaldosProveedores.find("#frmEdoCta")[0]);
+            $.ajax({
+                url: master_url_repantigue + 'onReporteAntiguedadSaldosExt',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                mdlAntiguedadSaldosProveedores.find('#btnImprimirExt').attr('disabled', false);
+                console.log(data);
+                if (data.length > 0) {
+
+                    $.fancybox.open({
+                        src: base_url + 'js/pdf.js-gh-pages/web/viewer.html?file=' + data + '#pagemode=thumbs',
+                        type: 'iframe',
+                        opts: {
+                            afterShow: function (instance, current) {
+                                console.info('done!');
+                            },
+                            iframe: {
+                                // Iframe template
+                                tpl: '<iframe id="fancybox-frame{rnd}" name="fancybox-frame{rnd}" class="fancybox-iframe" frameborder="0" vspace="0" hspace="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen allowtransparency="true" src=""></iframe>',
+                                preload: true,
+                                // Custom CSS styling for iframe wrapping element
+                                // You can use this to set custom iframe dimensions
+                                css: {
+                                    width: "95%",
+                                    height: "95%"
+                                },
+                                // Iframe tag attributes
+                                attr: {
+                                    scrolling: "auto"
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "NO EXISTEN DOCUMENTOS PARA ESTE PROVEEDOR",
+                        icon: "error"
+                    }).then((action) => {
+                        mdlAntiguedadSaldosProveedores.find('#btnImprimirExt').attr('disabled', false);
+                        mdlAntiguedadSaldosProveedores.find('#Tp').focus();
+                    });
+                }
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                mdlAntiguedadSaldosProveedores.find('#btnImprimirExt').attr('disabled', false);
                 console.log(x, y, z);
                 HoldOn.close();
             });

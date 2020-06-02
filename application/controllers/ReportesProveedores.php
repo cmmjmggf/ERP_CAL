@@ -696,4 +696,198 @@ class ReportesProveedores extends CI_Controller {
         }
     }
 
+    public function onReporteAntiguedadSaldosExt() {
+        $Tp = $this->input->post('Tp');
+        $Prov = $this->input->post('Proveedor');
+        $aProv = $this->input->post('aProveedor');
+
+        $cm = $this->ReportesProveedores_model;
+        $Proveedores = $cm->getProveedoresReporteAntiguedad($Prov, $aProv, $Tp);
+        $Doctos = $cm->getDoctosByProveedorTpAntiguedadExt($Prov, $aProv, $Tp);
+
+
+        if (!empty($Proveedores)) {
+
+            $pdf = new PDFAntiguedadProvExt('L', 'mm', array(215.9, 279.4));
+            $pdf->Proveedor = $Prov;
+            $pdf->Aproveedor = $aProv;
+
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(true, 5);
+
+            $TP_IMPORTE_G = 0;
+            $TP_PAGOS_G = 0;
+            $TP_SALDO_G = 0;
+
+            $GTOTAL_1 = 0;
+            $GTOTAL_2 = 0;
+            $GTOTAL_3 = 0;
+            $GTOTAL_4 = 0;
+            $GTOTAL_5 = 0;
+            $GTOTAL_6 = 0;
+            $GTOTAL_7 = 0;
+            $GTOTAL_8 = 0;
+            $GTOTAL_9 = 0;
+
+            foreach ($Proveedores as $key => $G) {
+                $pdf->SetX(5);
+                $pdf->SetFont('Calibri', 'B', 8);
+                $pdf->SetLineWidth(0.5);
+                $pdf->Cell(90, 4, utf8_decode($G->ProveedorF . ' =====> PLAZO: ' . $G->Plazo . ' DÍAS'), 'B'/* BORDE */, 1, 'L');
+                $pdf->SetLineWidth(0.2);
+
+                $TP_IMPORTE = 0;
+                $TP_PAGOS = 0;
+                $TP_SALDO = 0;
+
+                $TOTAL_1 = 0;
+                $TOTAL_2 = 0;
+                $TOTAL_3 = 0;
+                $TOTAL_4 = 0;
+                $TOTAL_5 = 0;
+                $TOTAL_6 = 0;
+                $TOTAL_7 = 0;
+                $TOTAL_8 = 0;
+                $TOTAL_9 = 0;
+                $pdf->SetFont('Calibri', '', 7.5);
+                foreach ($Doctos as $key => $D) {
+
+                    if ($G->ClaveNum === $D->ClaveNum) {
+                        $pdf->SetX(22);
+                        $pdf->Cell(5, 3.5, utf8_decode($D->Tp), 'B'/* BORDE */, 0, 'L');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(12, 3.5, mb_strimwidth(utf8_decode($D->Doc), 0, 8, ""), 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(12, 3.5, utf8_decode($D->FechaDoc), 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, '$' . number_format($D->ImporteDoc, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->Pagos_Doc > 0) ? '$' . number_format($D->Pagos_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->Saldo_Doc > 0) ? '$' . number_format($D->Saldo_Doc, 2, ".", ",") : '', 'B'/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(7, 3.5, utf8_decode($D->Dias), 'B'/* BORDE */, 0, 'C');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->UNO > 0) ? '$' . number_format($D->UNO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->DOS > 0) ? '$' . number_format($D->DOS, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->TRES > 0) ? '$' . number_format($D->TRES, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->CUATRO > 0) ? '$' . number_format($D->CUATRO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->CINCO > 0) ? '$' . number_format($D->CINCO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->SEIS > 0) ? '$' . number_format($D->SEIS, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->SIETE > 0) ? '$' . number_format($D->SIETE, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->OCHO > 0) ? '$' . number_format($D->OCHO, 2, ".", ",") : '', 1/* BORDE */, 0, 'R');
+                        $pdf->SetX($pdf->GetX());
+                        $pdf->Cell(18, 3.5, ($D->NUEVE > 0) ? '$' . number_format($D->NUEVE, 2, ".", ",") : '', 1/* BORDE */, 1, 'R');
+
+
+
+                        $TP_IMPORTE += $D->ImporteDoc;
+                        $TP_PAGOS += $D->Pagos_Doc;
+                        $TP_SALDO += $D->Saldo_Doc;
+                        $TP_IMPORTE_G += $D->ImporteDoc;
+                        $TP_PAGOS_G += $D->Pagos_Doc;
+                        $TP_SALDO_G += $D->Saldo_Doc;
+                        $TOTAL_1 += $D->UNO;
+                        $TOTAL_2 += $D->DOS;
+                        $TOTAL_3 += $D->TRES;
+                        $TOTAL_4 += $D->CUATRO;
+                        $TOTAL_5 += $D->CINCO;
+                        $TOTAL_6 += $D->SEIS;
+                        $TOTAL_7 += $D->SIETE;
+                        $TOTAL_8 += $D->OCHO;
+                        $TOTAL_9 += $D->NUEVE;
+                        $GTOTAL_1 += $D->UNO;
+                        $GTOTAL_2 += $D->DOS;
+                        $GTOTAL_3 += $D->TRES;
+                        $GTOTAL_4 += $D->CUATRO;
+                        $GTOTAL_5 += $D->CINCO;
+                        $GTOTAL_6 += $D->SEIS;
+                        $GTOTAL_7 += $D->SIETE;
+                        $GTOTAL_8 += $D->OCHO;
+                        $GTOTAL_9 += $D->NUEVE;
+                    }
+                }
+                $pdf->SetX(22);
+                $pdf->SetFont('Calibri', 'B', 7.5);
+                $pdf->Cell(29, 3.5, utf8_decode('TOTAL POR PROVEEDOR: '), 0/* BORDE */, 0, 'L');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, mb_strimwidth('$' . number_format($TP_IMPORTE, 2, ".", ","), 0, 14, ""), 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, mb_strimwidth('$' . number_format($TP_PAGOS, 2, ".", ","), 0, 14, ""), 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, mb_strimwidth('$' . number_format($TP_SALDO, 2, ".", ","), 0, 14, ""), 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(7, 3.5, '', 0/* BORDE */, 0, 'C');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_1 > 0) ? mb_strimwidth('$' . number_format($TOTAL_1, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_2 > 0) ? mb_strimwidth('$' . number_format($TOTAL_2, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_3 > 0) ? mb_strimwidth('$' . number_format($TOTAL_3, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_4 > 0) ? mb_strimwidth('$' . number_format($TOTAL_4, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_5 > 0) ? mb_strimwidth('$' . number_format($TOTAL_5, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_6 > 0) ? mb_strimwidth('$' . number_format($TOTAL_6, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_7 > 0) ? mb_strimwidth('$' . number_format($TOTAL_7, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_8 > 0) ? mb_strimwidth('$' . number_format($TOTAL_8, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 0, 'R');
+                $pdf->SetX($pdf->GetX());
+                $pdf->Cell(18, 3.5, ($TOTAL_9 > 0) ? mb_strimwidth('$' . number_format($TOTAL_9, 2, ".", ","), 0, 14, "") : '', 0/* BORDE */, 1, 'R');
+
+
+
+                $pdf->SetLineWidth(0.8);
+                $pdf->Line(25, $pdf->GetY(), 274.9, $pdf->GetY());
+                $pdf->SetLineWidth(0.2);
+            }
+            $pdf->SetX(5);
+            $pdf->SetFont('Calibri', 'B', 7);
+            $pdf->Cell(70, 4, utf8_decode('TOTAL GENERAL: '), 0/* BORDE */, 0, 'L');
+
+            $pdf->RowNoBorder(array(
+                '',
+                '',
+                '',
+                mb_strimwidth('$' . number_format($TP_IMPORTE_G, 2, ".", ","), 0, 12, ""),
+                mb_strimwidth('$' . number_format($TP_PAGOS_G, 2, ".", ","), 0, 12, ""),
+                mb_strimwidth('$' . number_format($TP_SALDO_G, 2, ".", ","), 0, 12, ""),
+                '',
+                ($GTOTAL_1 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_1, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_2 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_2, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_3 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_3, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_4 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_4, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_5 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_5, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_6 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_6, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_7 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_7, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_8 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_8, 2, ".", ","), 0, 12, "") : '',
+                ($GTOTAL_9 > 0) ? mb_strimwidth('$' . number_format($GTOTAL_9, 2, ".", ","), 0, 12, "") : ''
+            ));
+
+
+            /* FIN RESUMEN */
+            $path = 'uploads/Reportes/Proveedores';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "ANTIGUEDAD SALDOS " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.pdf';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Proveedores/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+            $pdf->Output($url);
+            print base_url() . $url;
+        }
+    }
+
 }

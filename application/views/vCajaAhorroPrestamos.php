@@ -157,7 +157,7 @@
                     } else {
                         swal({
                             title: "ATENCIÓN",
-                            text: "NO EXISTEN PRESTAMOS PARA ESTOS EMPLEADOS",
+                            text: "EL EMPLEADO NO ESTÁ EN CAJA DE AHORRO",
                             icon: "error"
                         }).then((action) => {
                             mdlCajaAhorroPrestamos.find('#btnImprimir').focus();

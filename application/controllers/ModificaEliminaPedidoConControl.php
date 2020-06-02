@@ -111,7 +111,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
             }
             $this->db->order_by("P.Ano", "DESC")->order_by("P.Clave", "DESC");
             if ($CONTROL === '' && $CLIENTE === '') {
-                $this->db->limit(10);
+                $this->db->limit(100);
             }
             $dtm = $this->db->get()->result();
 //            print $this->db->last_query();
@@ -169,7 +169,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->query("DELETE FROM avance WHERE Control = '{$xxx['CONTROL']}'");
 
                 $l = new Logs("Modifica y elimina pedido con control", "HA CANCELADO EL CONTROL {$C}.", $this->session);
-                
+
                 $this->db->set('Cancelacion', Date('d/m/Y'))
                         ->set('DeptoProduccion', 270)->set('EstatusProduccion', 'CANCELADO')
                         ->where('Control', $xxx['CONTROL'])->update('controles');

@@ -265,6 +265,72 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
         }
     }
 
+    /* Extendido */
+
+    public function getDoctosByProveedorTpAntiguedadExt($prov, $aprov, $tp) {
+        try {
+            return $this->db->select("CAST(CP.Proveedor AS SIGNED ) AS ClaveNum, "
+                                    . "CP.Tp,"
+                                    . "CP.Doc, "
+                                    . "date_format(str_to_date(CP.FechaDoc,'%d/%m/%Y'),'%d/%m/%y') AS FechaDoc, "
+                                    . "str_to_date(CP.FechaDoc,'%d/%m/%Y') as FechaOrd,"
+                                    . "CP.ImporteDoc, "
+                                    . "CP.Pagos_Doc,"
+                                    . "CP.Saldo_Doc,"
+                                    . 'IFNULL(DATEDIFF(CURDATE(), STR_TO_DATE(CP.FechaDoc , "%d/%m/%Y" )),\'\') AS Dias,'
+                                    . "
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) >= 0
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 60
+	THEN CP.Saldo_Doc END AS 'UNO',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 59
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 68
+	THEN CP.Saldo_Doc END AS 'DOS',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 67
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 76
+	THEN CP.Saldo_Doc END AS 'TRES',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 75
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 84
+	THEN CP.Saldo_Doc END AS 'CUATRO',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 83
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 92
+	THEN CP.Saldo_Doc END AS 'CINCO',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 91
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 100
+	THEN CP.Saldo_Doc END AS 'SEIS',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 99
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 108
+	THEN CP.Saldo_Doc END AS 'SIETE',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 107
+			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 116
+	THEN CP.Saldo_Doc END AS 'OCHO',
+
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 116
+	THEN CP.Saldo_Doc END AS 'NUEVE' "
+                                    . ' '
+                                    . " "
+                                    . "", false)
+                            ->from("cartera_proveedores AS CP")
+                            ->like("CP.Tp", $tp)
+                            ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
+                            ->where("CP.Saldo_Doc > 1 ", null, false)
+                            ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
+                            ->order_by("ClaveNum", 'ASC')
+                            ->order_by("FechaOrd", 'ASC')
+                            ->order_by("abs(Dias)", 'DESC')
+                            ->order_by("CP.Doc", 'ASC')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getProveedoresReporte($prov, $aprov, $tp) {
         try {
             $this->db->query("SET sql_mode = '';");
