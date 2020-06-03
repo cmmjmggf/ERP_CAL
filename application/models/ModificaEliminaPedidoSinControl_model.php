@@ -109,6 +109,8 @@ class ModificaEliminaPedidoSinControl_model extends CI_Model {
                             ->from('pedidox AS P')
                             ->join('series AS S', 'P.Serie = S.Clave')
                             ->order_by('abs(S.Clave)', 'ASC')
+                            ->where_in('P.stsavan', array('0'))
+                            ->where_not_in('P.stsavan', array('14'))
                             ->where('P.Clave', $ID)
                             ->where('P.Cliente', $CLIENTE)
                             ->get()->result();
