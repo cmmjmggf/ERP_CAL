@@ -130,11 +130,11 @@
                                     </div>
                                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                         <label for="Paterno" >Paterno*</label>
-                                        <input type="text" id="Paterno" name="Paterno" class="form-control form-control-sm" placeholder="" required="">
+                                        <input type="text" id="Paterno" name="Paterno" class="form-control form-control-sm" placeholder="">
                                     </div>
                                     <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                         <label for="Materno" >Materno*</label>
-                                        <input type="text" id="Materno" name="Materno" class="form-control form-control-sm" placeholder="" required="">
+                                        <input type="text" id="Materno" name="Materno" class="form-control form-control-sm" placeholder="">
                                     </div>
                                     <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
                                         <label for="Direccion" >Dirección*</label>
