@@ -641,7 +641,7 @@ class Avance9 extends CI_Controller {
                         /* 40 FOLEADO = >  30 REBAJADO */
                         /* RAYADO => FOLEADO */
 
-                        /* REVISAR SI LA FRACCION "103 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO */
+                        /* REVISAR SI LA FRACCION "103 REBAJADO" NO HA SIDO PAGADA A OTRO EMPLEADO */
                         $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                         ->from('fracpagnomina AS F')
                                         ->where('F.control', $xXx['CONTROL'])
@@ -714,16 +714,16 @@ class Avance9 extends CI_Controller {
                                         ->where_in('F.numfrac', array(100))
                                         ->get()->result();
 
-                        if (intval($check_corte[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
+                        if (intval($check_corte[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0 || intval($check_corte[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_CORTE" => "NO"));
                             EXIT(0);
                         }
-                        
+
                         $check_rayado = $this->db->select('COUNT(*) AS EXISTE', false)
                                         ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
                                         ->where_in('F.numfrac', array(102))
                                         ->get()->result();
-                        if (intval($check_rayado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
+                        if (intval($check_rayado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0 || intval($check_rayado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_RAYADO" => "NO"));
                             EXIT(0);
                         }
@@ -732,7 +732,8 @@ class Avance9 extends CI_Controller {
                                         ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
                                         ->where_in('F.numfrac', array(60))
                                         ->get()->result();
-                        if (intval($check_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0) {
+                        if (intval($check_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0 ||
+                                intval($check_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                             print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_FOLEADO" => "NO"));
                             EXIT(0);
                         }
