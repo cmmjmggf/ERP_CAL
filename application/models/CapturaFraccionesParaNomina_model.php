@@ -161,7 +161,7 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
                             C.Color AS Color,
                             C.Pares "
                             . "")
-                    ->from("controles C")
+                    ->from("pedidox C")
                     ->join("departamentos D", '`D`.`Clave` = `C`.`DeptoProduccion`')
                     ->where("C.Control", $Control);
             $query = $this->db->get();

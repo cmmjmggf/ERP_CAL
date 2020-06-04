@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-9 float-left">
-                <legend class="float-left">Cancela Entradas/Salidas por Sem - Maq - Docto</legend>
+                <legend class="float-left">Cancela Entradas/Salidas por Sem - Maq - Docto (Para Sub-Almacen Maq = 97)</legend>
             </div>
             <div class="col-sm-3" align="right">
                 <button type="button" class="btn btn-info btn-sm " id="btnNuevo" >

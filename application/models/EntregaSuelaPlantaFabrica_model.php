@@ -15,6 +15,7 @@ class EntregaSuelaPlantaFabrica_model extends CI_Model {
             $this->db->select("M.* "
                             . "")
                     ->from("movarticulos AS M")
+                    ->where("M.TipoMov <> 'CAN' ", null, false)
                     ->where("M.Control", $Control)
                     ->where("M.TpoSuPlEn", $Tipo);
             $query = $this->db->get();
