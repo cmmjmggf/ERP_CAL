@@ -1,5 +1,5 @@
 <div class="card" id="pnlTablero" style="background-color:  #fff !important;">
-   <div class="card-body" style="padding-top: 0px;">
+    <div class="card-body" style="padding-top: 0px;">
         <div class="row">
             <div class="col-sm-4">
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
@@ -38,25 +38,25 @@
                         <h4 class="font-weight-bold font-italic text-danger">DEVOLUCIONES</h4>
                     </div>
                     <div class="col-2">
-                        <button type="button" id="btnNuevo" name="btnNuevo" 
-                                class="btn btn-default animated flipInX d-none" 
+                        <button type="button" id="btnNuevo" name="btnNuevo"
+                                class="btn btn-default animated flipInX d-none"
                                 disabled="true"
-                                data-toggle="tooltip" data-placement="bottom"  
-                                style="padding: 6px 9px 6px 9px !important; 
-                                background-color: #99cc00; 
-                                box-shadow: none !important; 
+                                data-toggle="tooltip" data-placement="bottom"
+                                style="padding: 6px 9px 6px 9px !important;
+                                background-color: #99cc00;
+                                box-shadow: none !important;
                                 color: #fff !important;">
                             <span class="fa fa-check"></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4" align="right"> 
+            <div class="col-sm-4" align="right">
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
                 <button type="button" id="btnCancelaDoc" name="btnCancelaDoc" class="btn btn-danger d-none" disabled="">
-                    <span class="fa fa-file-archive"></span>   CANCELA DOC 
+                    <span class="fa fa-file-archive"></span>   CANCELA DOC
                 </button>
                 <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary  selectNotEnter d-none">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <div class="row">    
+        <div class="row">
             <div class="col-12 d-none">
                 <input type="text" id="TIPODECAMBIO" name="TIPODECAMBIO" class="form-control form-control-sm" readonly="">
                 <input type="text" id="EstatusControl" name="EstatusControl" class="form-control form-control-sm" readonly="">
@@ -78,15 +78,15 @@
                 <input type="text" id="AgenteCliente" name="AgenteCliente"   readonly="">
 
             </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-2 col-lg-4 col-xl-1"   style="padding-right: 5px;"> 
+            <div class="col-12 col-xs-12 col-sm-6 col-md-2 col-lg-4 col-xl-1"   style="padding-right: 5px;">
                 <label>Fecha</label>
                 <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter">
             </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-1"  style="padding-left: 5px; padding-right: 5px;"> 
+            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label class="control-label">Cliente</label>
                 <input type="text" id="ClienteClave" name="ClienteClave" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
             </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3"  style="padding-left: 5px; padding-right: 5px;"> 
+            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3"  style="padding-left: 5px; padding-right: 5px;">
                 <div class="form-group">
                     <div class="form-group">
                         <div class="input-group mb-3">
@@ -117,7 +117,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
                 <label>TP</label>
-                <input type="text" id="TPFactura" name="TPFactura" class="form-control form-control-sm numbersOnly" maxlength="1">                    
+                <input type="text" id="TPFactura" name="TPFactura" class="form-control form-control-sm numbersOnly" maxlength="1">
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
                 <label>FA-PE.ORCO</label>
@@ -134,14 +134,14 @@
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1"  style="padding-left: 5px; padding-right: 5px;">
                 <label>T-MNDA</label>
                 <input type="text" id="TMNDAFactura" name="TMNDAFactura" maxlength="1" class="form-control form-control-sm numbersOnly"  maxlength="1">
-            </div> 
+            </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1">
-                <div class="form-group">  
+                <div class="form-group">
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                         <input type="checkbox" class="custom-control-input selectNotEnter" id="cNoIva" name="cNoIva" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cNoIva" style="cursor: pointer !important;">NO I.V.A</label>
                     </div>
-                </div>      
+                </div>
             </div>
             <div id="ConsignarATienda" style="z-index: 5 !important;" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none animated fadeIn">
                 <div class="row">
@@ -159,7 +159,7 @@
                                             print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
                                         }
                                         ?>
-                                    </select> 
+                                    </select>
                                 </div>
                                 <div class="col-2">
 
@@ -173,15 +173,15 @@
             <div class="w-100"></div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-8 col-lg-4 col-xl-4">
                 <label>Control</label>
-                <div class="input-group">               
+                <div class="input-group">
                     <input type="text" id="Control" name="Control" class="form-control form-control-sm numbersOnly">
                     <input type="text" id="REGISTRO_ID" name="REGISTRO_ID" class="form-control form-control-sm d-none" readonly="">
                     <input type="text" id="DEVID" name="DEVID" class="form-control form-control-sm d-none " readonly="">
                     <span class="input-group-prepend">
-                        <span class="input-group-text text-dark" 
-                              style="background-color: #007bff; color: #FFF !important;   
-                              cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;" 
-                              id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip" 
+                        <span class="input-group-text text-dark"
+                              style="background-color: #007bff; color: #FFF !important;
+                              cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;"
+                              id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip"
                               data-placement="top" title="ELIJE UN CONTROL">
                             <i class="fa fa-hand-pointer mr-2"></i>  SELECCIONA UN CONTROL
                         </span>
@@ -192,7 +192,7 @@
             <div class="col-6 col-xs-6 col-sm-3 col-md-4 col-lg-2 col-xl-1 d-none" style="padding-left: 5px; padding-right: 5px;">
                 <label>FOLIO</label>
                 <input type="text" id="FolioFactura" name="FolioFactura" readonly="" class="form-control form-control-sm">
-            </div> 
+            </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-n1one">
                 <label>Serie</label>
                 <input type="text" id="Corrida" name="Corrida" class="form-control form-control-sm" readonly="">
@@ -205,18 +205,18 @@
                                 <span class="font-weight-bold">Producción</span>
                             </div>
                             <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
-                                Fabricados 
-                                <span class="font-weight-bold text-danger produccionfabricados"> 0 </span> 
+                                Fabricados
+                                <span class="font-weight-bold text-danger produccionfabricados"> 0 </span>
                                 <input type="text" id="PrsFabricados" name="PrsFabricados" readonly="" class="d-none form-control form-control-sm">
                             </div>
                             <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
-                                Facturados 
-                                <span class="font-weight-bold text-danger produccionfacturados"> 0 </span> 
+                                Facturados
+                                <span class="font-weight-bold text-danger produccionfacturados"> 0 </span>
                                 <input type="text" id="PrsFacturados" name="PrsFacturados" readonly=""  class="d-none form-control form-control-sm">
                             </div>
                             <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
-                                Saldo 
-                                <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>  
+                                Saldo
+                                <span class="font-weight-bold text-danger produccionsaldo"> 0 </span>
                                 <input type="text" id="PrsSaldo" name="PrsSaldo" readonly=""  class="d-none form-control form-control-sm">
                             </div>
                         </div>
@@ -227,18 +227,18 @@
                                 <span class="font-weight-bold">Devoluciones</span>
                             </div>
                             <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
-                                Devueltos 
-                                <span class="font-weight-bold text-danger devueltos"> 0 </span> 
+                                Devueltos
+                                <span class="font-weight-bold text-danger devueltos"> 0 </span>
                                 <input type="text" id="PrsDevueltos" name="PrsDevueltos" readonly="" class="form-control d-none form-control-sm">
                             </div>
                             <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
-                                Facturados 
-                                <span class="font-weight-bold text-danger devueltosfacturados"> 0 </span> 
+                                Facturados
+                                <span class="font-weight-bold text-danger devueltosfacturados"> 0 </span>
                                 <input type="text" id="PrsFacturadosDevueltos" name="PrsFacturadosDevueltos" readonly=""  class="d-none form-control form-control-sm">
                             </div>
                             <div class="col-4" style="padding: 0px 10px 0px 10px !important;">
-                                Saldo 
-                                <span class="font-weight-bold text-danger saldodevuelto"> 0 </span> 
+                                Saldo
+                                <span class="font-weight-bold text-danger saldodevuelto"> 0 </span>
                                 <input type="text" id="PrsSaldoDevuelto" name="PrsSaldoDevuelto" readonly=""  class="d-none form-control form-control-sm">
                             </div>
                         </div>
@@ -248,11 +248,11 @@
 
 
             <div class="w-100 my-1"></div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
                 <hr>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="center">  
-                <!--                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" align="center"> 
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="center">
+                <!--                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1" align="center">
                                     <button type="button" class="btn btn-info"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
                                         <span class="fa fa-exclamation"></span> FACTURA POR ANTICIPO DE PRODUCTO
                                     </button>
@@ -261,9 +261,9 @@
                                     </button>
                                     <button type="button" class="btn btn-info" id="btnControlCompleto"  disabled="" >
                                         <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO DEL CONTROL
-                                    </button> 
+                                    </button>
                                 </div>-->
-                <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;"> 
+                <div class="table-responsive" style="overflow-x:auto; white-space: nowrap;">
                     <table id="tblTallasF" class="Tallas">
                         <thead></thead>
                         <tbody>
@@ -275,9 +275,9 @@
 //                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important; padding-left: 4px; padding-right: 4px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
                                     print "<td align='center'><span class=\"T{$index}\">-</span></td>";
                                 }
-                                ?>                        
-                                <td></td> 
-                            </tr>  
+                                ?>
+                                <td></td>
+                            </tr>
                             <tr class="rCapturaCantidades" id="rPares">
                                 <td class="font-weight-bold">Pares d'control</td>
                                 <?php
@@ -297,7 +297,7 @@
                                 }
                                 ?>
                                 <td class="font-weight-bold">
-                                    <input type="text" style="width: 45px;" id="TotalParesEntregaF" 
+                                    <input type="text" style="width: 45px;" id="TotalParesEntregaF"
                                            class="form-control form-control-sm " readonly="" data-toggle="tooltip" data-placement="right" title="0">
                                 </td>
                             </tr>
@@ -313,27 +313,27 @@
                         </tbody>
                     </table>
                 </div>
-            </div> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-1" align="center"> 
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-1" align="center">
                 <div class="row"  align="center">
                     <div class="col-12">
                         <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter btn-block"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
                             <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
                         </button>
                     </div>
-                    <div class="col-12"> 
+                    <div class="col-12">
                         <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
                             <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
                         </button>
                     </div>
-                    <div class="col-12"> 
+                    <div class="col-12">
                         <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" id="btnControlCompleto"  disabled="" >
                             <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
-                        </button> 
-                    </div> 
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
                 <hr>
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-3 col-lg-3 col-xl-2">
@@ -371,12 +371,12 @@
             </div>
             <div class="w-100"></div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-2">
-                <div class="form-group mt-4">  
+                <div class="form-group mt-4">
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
                         <input type="checkbox" class="custom-control-input selectNotEnter" id="xRefacturacion" name="xRefacturacion" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="xRefacturacion" style="cursor: pointer !important;">X Refacturación</label>
                     </div>
-                </div>      
+                </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-5" style="padding-left: 5px; padding-right: 5px;">
                 <label>Observación</label>
@@ -402,7 +402,7 @@
             </div>
             <div class="w-100 my-2"></div>
             <!--DETALLE DE LA FACTURA-->
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center"> 
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center">
                 <hr>
             </div>
             <div class="col-12 col-lg-12 col-xl-12 d-none">
@@ -449,28 +449,28 @@
                             <th scope="col">T19</th><!--23--><!--19-->
                             <th scope="col">T20</th><!--25--><!--20-->
                             <th scope="col">T21</th><!--26--><!--21-->
-                            <th scope="col">T22</th><!--27--><!--22--> 
+                            <th scope="col">T22</th><!--27--><!--22-->
 
-                            <th scope="col">Precio</th><!--28--> 
+                            <th scope="col">Precio</th><!--28-->
                             <!--OUT-->
-                            <th scope="col">PrecioT</th><!--29--> 
-                            <th scope="col">SubTotal</th><!--30--> 
-                            <th scope="col">SubTotalT</th><!--31--> 
-                            <th scope="col">-</th><!--32--> 
-                            <th scope="col">CAJAS</th><!--34--> 
-                            <th scope="col">OBSER</th><!--35--> 
-                            <th scope="col">DESCUENTO</th><!--36--> 
-                            <th scope="col">PRS-FAC</th><!--37--> 
-                            <th scope="col">FOLIO</th><!--38--> 
-                            <th scope="col">MONDA</th><!--39--> 
-                            <th scope="col">PAG</th><!--40--> 
-                            <th scope="col">STS-CTRL</th><!--41--> 
-                            <th scope="col">NO-IVA</th><!--42--> 
+                            <th scope="col">PrecioT</th><!--29-->
+                            <th scope="col">SubTotal</th><!--30-->
+                            <th scope="col">SubTotalT</th><!--31-->
+                            <th scope="col">-</th><!--32-->
+                            <th scope="col">CAJAS</th><!--34-->
+                            <th scope="col">OBSER</th><!--35-->
+                            <th scope="col">DESCUENTO</th><!--36-->
+                            <th scope="col">PRS-FAC</th><!--37-->
+                            <th scope="col">FOLIO</th><!--38-->
+                            <th scope="col">MONDA</th><!--39-->
+                            <th scope="col">PAG</th><!--40-->
+                            <th scope="col">STS-CTRL</th><!--41-->
+                            <th scope="col">NO-IVA</th><!--42-->
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>    
-            </div> 
+                </table>
+            </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
                 <h3 style="color: #2196F3 !important;" class="font-weight-bold font-italic pares_totales_facturados">PARES 0</h3>
             </div>
@@ -479,14 +479,14 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
                 <h3 class="font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h3>
-            </div> 
+            </div>
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="right">
                 <span class="font-weight-bold text-danger font-italic">I.V.A</span>
-            </div> 
+            </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
                 <h3 class="font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h3>
-            </div> 
+            </div>
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-10 col-xl-10" align="left">
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">-</h3>
@@ -496,16 +496,16 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2" align="right">
                 <h3 class="font-weight-bold text-danger font-italic totalfacturadopie">$ 0.0</h3>
-            </div> 
+            </div>
         </div><!--        END CARD BLOCK-->
     </div>
 </div>
 
-<!--CONTROLES X FACTURAR--> 
+<!--CONTROLES X FACTURAR-->
 <div class="modal" id="mdlControlesXFacturar">
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-body"> 
+            <div class="modal-body">
                 <table id="tblControlesXFacturar"  class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
                         <tr>
@@ -515,38 +515,38 @@
                             <th scope="col">COLOR</th>
                             <th scope="col">PARES</th>
                             <th scope="col">FAC</th>
-                            <th scope="col">REG</th> 
+                            <th scope="col">REG</th>
                             <th scope="col">MAQ</th>
                             <th scope="col">ST</th>
-                            <th scope="col">CARGO</th> 
-                            <th scope="col">T1</th>  
-                            <th scope="col">T2</th>  
-                            <th scope="col">T3</th>  
-                            <th scope="col">T4</th>  
-                            <th scope="col">T5</th>  
-                            <th scope="col">T6</th>  
-                            <th scope="col">T7</th>  
-                            <th scope="col">T8</th>  
-                            <th scope="col">T9</th>  
-                            <th scope="col">T10</th>  
-                            <th scope="col">T11</th>  
-                            <th scope="col">T12</th>  
-                            <th scope="col">T13</th>  
-                            <th scope="col">T14</th>  
-                            <th scope="col">T15</th>  
-                            <th scope="col">T16</th>  
-                            <th scope="col">T17</th>  
-                            <th scope="col">T18</th>  
-                            <th scope="col">T19</th>  
-                            <th scope="col">T20</th>  
-                            <th scope="col">T21</th>  
-                            <th scope="col">T22</th>  
-                            <th scope="col">PARES</th>    
+                            <th scope="col">CARGO</th>
+                            <th scope="col">T1</th>
+                            <th scope="col">T2</th>
+                            <th scope="col">T3</th>
+                            <th scope="col">T4</th>
+                            <th scope="col">T5</th>
+                            <th scope="col">T6</th>
+                            <th scope="col">T7</th>
+                            <th scope="col">T8</th>
+                            <th scope="col">T9</th>
+                            <th scope="col">T10</th>
+                            <th scope="col">T11</th>
+                            <th scope="col">T12</th>
+                            <th scope="col">T13</th>
+                            <th scope="col">T14</th>
+                            <th scope="col">T15</th>
+                            <th scope="col">T16</th>
+                            <th scope="col">T17</th>
+                            <th scope="col">T18</th>
+                            <th scope="col">T19</th>
+                            <th scope="col">T20</th>
+                            <th scope="col">T21</th>
+                            <th scope="col">T22</th>
+                            <th scope="col">PARES</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
-            </div> 
+            </div>
         </div>
     </div>
 </div>
@@ -574,7 +574,7 @@
                                 print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
                             }
                             ?>
-                        </select> 
+                        </select>
                     </div>
                 </div>
             </div>
@@ -854,7 +854,7 @@
         });
 
         btnAcepta.click(function () {
-            if (parseInt((PrecioFacturacion.val() ? PrecioFacturacion.val() : 0)) <= 0) {
+            if (parseFloat((PrecioFacturacion.val() ? PrecioFacturacion.val() : 0)) <= 0) {
                 onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UN PRECIO", function () {
                     PrecioFacturacion.focus().select();
                 });
@@ -2155,7 +2155,7 @@
             onCloseOverlay();
         });
     }
-    
+
     function getUltimoFolio() {
         if (nuevo) {
             $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
@@ -2164,7 +2164,7 @@
                 if (a.length > 0) {
                     var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
                     FAPEORCOFactura.val(r);
-                } 
+                }
             }).fail(function (xyz) {
                 getError(xyz);
             }).always(function () {
@@ -2174,76 +2174,76 @@
     }
 </script>
 
-<style>  
+<style>
     input{
         padding-top: 2px !important;
         padding-bottom:  2px !important;
-    } 
+    }
     #tblParesFacturados tbody td{
         font-weight: bold !important;
     }
     #tblParesFacturados thead th{
         font-size: 12px !important;
     }
-    .hr-vertical{ 
+    .hr-vertical{
         border:         none;
         border-left:    1px solid #ccc;
         height:         10vh;
-        width:          1px;       
+        width:          1px;
     }
-    .blinkb{ 
+    .blinkb{
         border: 2px solid #ffffff;
         border-radius: 5px;
         -webkit-animation: myfirst 1.5s linear 0.5s infinite alternate; /* Safari 4.0 - 8.0 */
-        animation: myfirst 1.5s linear 0.5s infinite alternate;    
+        animation: myfirst 1.5s linear 0.5s infinite alternate;
         box-shadow: 0 0px 12px  #03A9F4;
     }
     input{
         padding-top: 2px !important;
         padding-bottom:  2px !important;
         border: solid 1px #000 !important;
-    } 
+    }
     input,textarea{
         padding-top: 2px !important;
         padding-bottom:  2px !important;
         border: solid 1px #000 !important;
-    } 
+    }
     .text-danger {
         color: #b71a0a !important;
     }
 
     /* Safari 4.0 - 8.0 */
-    @-webkit-keyframes myfirst { 
-        25%  { 
-            border-color:  #007bff; 
+    @-webkit-keyframes myfirst {
+        25%  {
+            border-color:  #007bff;
         }
-        50%  {  
-            border-color:  #ffffff; 
+        50%  {
+            border-color:  #ffffff;
         }
-        75%  {  
-            border-color:  #007bff; 
+        75%  {
+            border-color:  #007bff;
         }
-        100% {  
-            border-color:  #ffffff; 
+        100% {
+            border-color:  #ffffff;
         }
     }
 
     /* Standard syntax */
     @keyframes myfirst {
-        0%   { 
-            border-color:  #007bff; 
+        0%   {
+            border-color:  #007bff;
         }
-        25%  { 
-            border-color:  #ffffff; 
+        25%  {
+            border-color:  #ffffff;
         }
-        50%  { 
-            border-color:  #007bff; 
+        50%  {
+            border-color:  #007bff;
         }
         75%  {
-            border-color:  #ffffff; 
+            border-color:  #ffffff;
         }
         100% {
-            border-color:  #007bff; 
+            border-color:  #007bff;
         }
     }
 </style>
