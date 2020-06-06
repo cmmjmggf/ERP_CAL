@@ -195,6 +195,10 @@ SELECT `Control`, `FechaProgramacion`,`Estilo`,`Color`,`Serie`,`Cliente`,`Pares`
                             ->where('PD.Maquila', $MAQUILA_ASIGNADA)
                             ->where('PD.Semana', $SEMANA_ASIGNADA)
                             ->where("PD.Control BETWEEN {$CONTROL_INICIAL} AND {$CONTROL_FINAL}", null, false)
+                            ->where_not_in("PD.stsavan", array(14))
+                            ->where_not_in('PD.Estatus',  array('I'))
+                            ->where_not_in('PD.EstatusProduccion', array('CANCELADO'))
+                            ->where_not_in('PD.DeptoProduccion', array(270))
                             ->order_by('PD.Control', 'ASC')->get()->result();
             print "\n 1." . $this->db->last_query() . "\n";
 //            var_dump($controles);

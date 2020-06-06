@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AvanceTejido" language="groovy" columnCount="2" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="289" columnSpacing="10" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.7320538214602887"/>
-	<property name="ireport.x" value="90"/>
+	<property name="ireport.zoom" value="2.732053821460289"/>
+	<property name="ireport.x" value="519"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -38,7 +38,7 @@ C.docto AS DOCUMENTO,
 (SELECT S.Sem FROM semanasnomina AS S
 WHERE C.fechapre BETWEEN STR_TO_DATE(S.FechaIni, "%d/%m/%Y") AND STR_TO_DATE(S.FechaFin, "%d/%m/%Y")
 AND S.Sem <> '99' ) AS SEMANA_NOMINA
-FROM controltej AS C
+FROM controltej AS C INNER JOIN fracpagnomina AS F ON C.Control = F.Control AND F.fraccion in(401,402,403,404,405)
 WHERE C.docto = $P{DOCUMENTO}]]>
 	</queryString>
 	<field name="DOCTO" class="java.lang.Integer">
@@ -288,6 +288,13 @@ WHERE C.docto = $P{DOCUMENTO}]]>
 				</textElement>
 				<text><![CDATA[Pares]]></text>
 			</staticText>
+			<textField pattern="h.mm.ss a">
+				<reportElement x="438" y="38" width="150" height="9" uuid="e3dd9cff-f4c2-419e-9f10-d4f3f5dc9989"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>

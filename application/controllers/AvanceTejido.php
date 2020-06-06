@@ -319,6 +319,9 @@ class AvanceTejido extends CI_Controller {
                     'fecha_registro' => Date('d/m/Y h:i:s'),
                     'modulo' => 'TJ'
                 ));
+                $TOTAL = (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO));
+                $l = new Logs("AVANCE TEJIDO(NOMINA)", "PAGO A LA TEJEDORA {$x->post('NUM_TEJEDORA')} $ {$TOTAL} "
+                        . "DEL CONTROL {$xXx['CONTROL']} CON {$x->post('PARES')} PARES, LA FRACCION {$xXx['FRACCION']} CON UN PRECIO DE {$FXE[0]->PRECIO} MAQUILA {$MAQUILA_X_CONTROL[0]->MAQUILA}.", $this->session);
 
                 /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
                 $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
@@ -330,6 +333,38 @@ class AvanceTejido extends CI_Controller {
                 /* ACTUALIZAR FECHA 7 (TEJIDO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
                 $this->db->set('fec7', Date('Y-m-d 00:00:00'))->where('contped', $xXx['CONTROL'])->update('avaprd');
                 $l = new Logs("Avance tejido", "HA AVANZO EL CONTROL {$xXx['CONTROL']} A TEJIDO CON LA FRACCION {$xXx['FRACCION']}.", $this->session);
+
+                /* REVISA EL PAGO */
+                $check_revision = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx['CONTROL']} AND F.numfrac = {$xXx['FRACCION']}")->result();
+                if (intval($check_revision[0]->EXISTE) === 0) {
+                    $nueva_fecha = new DateTime();
+                    $nueva_fecha->setDate($anio, $mes, $dia);
+                    $FXE = $this->db->select('FXE.CostoMO AS PRECIO', false)->from('fraccionesxestilo AS FXE')
+                                    ->where('FXE.Estilo', $xXx['ESTILO'])
+                                    ->where('FXE.Fraccion', 401)
+                                    ->get()->result();
+                    $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
+                    $this->db->insert('fracpagnomina', array(
+                        'numeroempleado' => $x->post('NUM_TEJEDORA'),
+                        'maquila' => intval($MAQUILA_X_CONTROL[0]->MAQUILA),
+                        'control' => $x->post('CONTROL'),
+                        'estilo' => $x->post('ESTILO'),
+                        'numfrac' => $x->post('FRACCION'),
+                        'preciofrac' => $FXE[0]->PRECIO,
+                        'pares' => $x->post('PARES'),
+                        'subtot' => (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO)),
+                        'status' => 0,
+                        'fecha' => $nueva_fecha->format('Y-m-d 00:00:00'),
+                        'semana' => $x->post('SEMANA'),
+                        'depto' => 150,
+                        'registro' => 0,
+                        'anio' => Date('Y'),
+                        'avance_id' => $ID,
+                        'fraccion' => $xXx['FRACCION'],
+                        'fecha_registro' => Date('d/m/Y h:i:s'),
+                        'modulo' => 'TJ'
+                    ));
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

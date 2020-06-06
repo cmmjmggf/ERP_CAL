@@ -238,7 +238,7 @@
                     {SEMANA: semana, MAQUILA: maquila}).done(function (data) {
                 var dt = data[0];
                 if (data.length > 0) {
-                    ControlFinal.val(dt.ULTIMO_CONTROL);
+//                    ControlFinal.val(dt.ULTIMO_CONTROL);
                     onBeep(1);
                 }
             }).fail(function (x, y, z) {
