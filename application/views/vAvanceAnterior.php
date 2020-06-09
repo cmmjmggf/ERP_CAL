@@ -17,8 +17,8 @@
                         <div class="col-5">
                             <label>Avance</label>
                             <select id="DeptoAvance" name="DeptoAvance" class="form-control form-control-sm required">
-                                <option value="33">33-Rebajado</option>
                                 <option value="4">4-Foleado</option>
+                                <option value="33">33-Rebajado</option>
                                 <option value="40">40-Entretelado</option>
                                 <option value="42">42-Proceso Maquila</option>
                                 <option value="44">44-Alm Corte</option>
@@ -66,9 +66,10 @@
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
                             <ul id="deptos" class="list-group my-2">
                                 <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
-                                    <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="FOLEADO">4</span><span class="d-none" des="FOLEADO">40</span>4 - FOLEADO<span class="deptodes d-none">FOLEADO</span><span class="deptoclave d-none">40</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
+
+                                <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
+                                    <span class="d-none stsavan" des="REBAJADO">33</span><span class="d-none" des="REBAJADO">30</span>33 - REBAJADO<span class="deptodes d-none">REBAJADO Y PERFORADO</span><span class="deptoclave d-none">30</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold" >
                                     <span class="d-none stsavan" des="ENTRETELADO">40</span><span class="d-none" des="ENTRETELADO">90</span>40 - ENTRETELADO<span class="deptodes d-none">ENTRETELADO</span><span class="deptoclave d-none">90</span><span class="badge badge-primary badge-pill" style="background-color: #8BC34A;">!</span></li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold"  >
@@ -204,11 +205,11 @@
                                         });
                                     }
                                 } else {//Si es ali, puede dar todo
-                                    if (deptoAvance === 33 && deptoActual === 3) {
+                                    if (deptoAvance === 33 && deptoActual === 4) {
                                         agregarAvance(data, 'fec33', '30', 'REBAJADO Y PERFORADO');
-                                    } else if (deptoAvance === 4 && deptoActual === 33) {
+                                    } else if (deptoAvance === 4 && deptoActual === 3) {
                                         agregarAvance(data, 'fec40', '40', 'FOLEADO');
-                                    } else if (deptoAvance === 40 && deptoActual === 4) {
+                                    } else if (deptoAvance === 40 && deptoActual === 33) {
                                         agregarAvance(data, 'fec40', '90', 'ENTRETELADO');
                                     } else if (deptoAvance === 42 && deptoActual === 40) {
                                         agregarAvance(data, 'fec42', '100', 'MAQUILA');
@@ -403,11 +404,11 @@
                                 });
                             } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
                                 var deptoActual = parseInt(data[0].stsavan);
-                                if (deptoAvance === 33 && deptoActual === 3) {
+                                if (deptoAvance === 33 && deptoActual === 4) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 4 && deptoActual === 33) {
+                                } else if (deptoAvance === 4 && deptoActual === 3) {
                                     concuerdaAvance(data);
-                                } else if (deptoAvance === 40 && deptoActual === 4) {
+                                } else if (deptoAvance === 40 && deptoActual === 33) {
                                     concuerdaAvance(data);
                                 } else if (deptoAvance === 42 && deptoActual === 40) {
                                     concuerdaAvance(data);
