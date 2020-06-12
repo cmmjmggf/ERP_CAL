@@ -491,7 +491,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             }
             /* FACTURACION DETALLE */
             if (intval($x['TP_DOCTO']) === 1) {
-                if (intval($x['CLIENTE']) === 2332) {
+                if (intval($x['CLIENTE']) === 2332 || intval($x['CLIENTE']) === 2121) {
                     for ($i = 1; $i < 23; $i++) {
                         $talla = "";
                         if (floatval($x["CAF$i"]) > 0) {
@@ -566,37 +566,45 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
 
                             $XETIQUETA = NULL;
                             $XSERIE_TALLA = $SERIE[0]->{"XT$i"};
-                            $ETIQUETA_EXISTE = $this->db->query(
-                                            "SELECT COUNT(*) AS EXISTE  "
-                                            . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
-                                            . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
-                                            . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
-
-                            if (intval($ETIQUETA_EXISTE) > 0) {
+                            if (intval($x['CLIENTE']) === 2332) {
+                                $ETIQUETA_EXISTE = $this->db->query(
+                                                "SELECT COUNT(*) AS EXISTE  "
+                                                . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
+                                                . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
+                                                . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
+                            }
+                            if (intval($x['CLIENTE']) === 2121) {
+                                $ETIQUETA_EXISTE = $this->db->query(
+                                                "SELECT COUNT(*) AS EXISTE  "
+                                                . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
+                                                . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = 0 "
+                                                . "AND e.talla = '0' LIMIT 1")->result();
+                            }
+                            if (intval($ETIQUETA_EXISTE[0]->EXISTE) > 0) {
                                 $ETIQUETA = $this->db->query(
                                                 "SELECT e.*, e.codbarr  AS CODIGO_DE_BARRAS "
                                                 . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
                                                 . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
                                                 . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
                                 $XETIQUETA = $ETIQUETA[0]->CODIGO_DE_BARRAS;
-                                $XSUBTOTAL = ($x["CAF$i"] * $x['PRECIO']);
-                                $XSUBTOTAL_IVA = ($x["CAF$i"] * $x['PRECIO']) * 0.16;
-                                $facturacion_detalle = array(
-                                    'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
-                                    'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
-                                    'claveunidad' => 'PR', 'cantidad' => $x["CAF$i"],
-                                    'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
-                                    'descripcion' => $x['COLOR_TEXT'] . " " . $SERIE[0]->{"T$i"},
-                                    'Precio' => $x['PRECIO'],
-                                    'importe' => $XSUBTOTAL, 'fecha' => "$anio-$mes-$dia $hora",
-                                    'control' => $x['CONTROL'], 'iva' => $XSUBTOTAL_IVA,
-                                    'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
-                                    'tcamb' => $tipo_cambio,
-                                    'noidentificado' => $XETIQUETA,
-                                    'referencia' => intval($x['REFERENCIA']),
-                                    'tienda' => $x['TIENDA']);
-                                $this->db->insert('facturadetalle', $facturacion_detalle);
                             }
+                            $XSUBTOTAL = ($x["CAF$i"] * $x['PRECIO']);
+                            $XSUBTOTAL_IVA = ($x["CAF$i"] * $x['PRECIO']) * 0.16;
+                            $facturacion_detalle = array(
+                                'numfac' => $x['FACTURA'], 'numcte' => $x['CLIENTE'],
+                                'tp' => $x['TP_DOCTO'], 'claveproducto' => $x['CODIGO_SAT'],
+                                'claveunidad' => 'PR', 'cantidad' => $x["CAF$i"],
+                                'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
+                                'descripcion' => $x['COLOR_TEXT'] . " " . $SERIE[0]->{"T$i"},
+                                'Precio' => $x['PRECIO'],
+                                'importe' => $XSUBTOTAL, 'fecha' => "$anio-$mes-$dia $hora",
+                                'control' => $x['CONTROL'], 'iva' => $XSUBTOTAL_IVA,
+                                'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
+                                'tcamb' => $tipo_cambio,
+                                'noidentificado' => $XETIQUETA,
+                                'referencia' => intval($x['REFERENCIA']),
+                                'tienda' => $x['TIENDA']);
+                            $this->db->insert('facturadetalle', $facturacion_detalle);
                         } else {
                             /* LA CANTIDAD ES CERO $x["CAF$i"] */
                         }
