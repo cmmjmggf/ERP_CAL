@@ -57,6 +57,7 @@
                                 <option value="3">3 CON SUELA</option>
                                 <option value="4">4 ORDENADO POR LINEA/FECHA ENTREGA</option>
                                 <option value="5">5 CON MAQUILADORAS</option>
+                                <option value="6">6 PRIORIDAD CUARENTENA</option>
                             </select>
                         </div>
                     </div>
@@ -87,7 +88,13 @@
         mdlAvanceProduccion.find('#btnExcel').on("click", function () {
             onDisable(mdlAvanceProduccion.find('#btnExcel'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+
+            var Tipo = mdlAvanceProduccion.find('#Tipo').val();
+            var Prioridad = (Tipo === '6') ? '1' : '0';
+
+
             var frm = new FormData(mdlAvanceProduccion.find("#frmCaptura")[0]);
+            frm.append('Prioridad', Prioridad);
             $.ajax({
                 url: base_url + 'index.php/ReportesProduccionJasper/onReporteAvanceNormalExcel',
                 type: "POST",

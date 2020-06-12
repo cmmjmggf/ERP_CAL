@@ -480,7 +480,16 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros["amaq"] = $this->input->post('aMaq');
         $parametros["maq"] = $this->input->post('Maq');
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\produccion\excel\avancePorDeptoExcel.jasper');
+
+        if ($this->input->post('Prioridad') === '1') {
+            $jc->setJasperurl('jrxml\produccion\excel\avancePorDeptoExcelNuevaPrioridad.jasper');
+        } else {
+            $jc->setJasperurl('jrxml\produccion\excel\avancePorDeptoExcel.jasper');
+        }
+
+
+
+
         $jc->setFilename('REPORTE_AVANCE_DEPTO_' . Date('h_i_s'));
         $jc->setDocumentformat('xls');
         PRINT $jc->getReport();
