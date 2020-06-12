@@ -826,13 +826,14 @@
                         onEnable(btnAcepta);
                         //onOpenOverlay('');
                         onResetCampos();
-                        pnlTablero.find("input:not(#xClienteDevolucion):not(#FechaDevolucion):not(#Clasificacion):not(#Cargo):not(#Departamento):not(#Defecto):not(#DetalleDefecto):not(#Motivo)").val("");
-
-                        var selects_sin_reiniciar = "select:not(#ClienteDevolucion):not(#ClienteDevolucion-selectize),select:not(#xClasificacion):not(#xClasificacion-selectize),select:not(#xCargo):not(#xCargo-selectize),select:not(#xDepartamento):not(#xDepartamento-selectize),select:not(#xDefecto):not(#xDefecto-selectize),select:not(#xDetalleDefecto):not(#xDetalleDefecto-selectize)";
-
-                        $.each(pnlTablero.find(selects_sin_reiniciar), function (k, v) {
-                            pnlTablero.find(selects_sin_reiniciar)[k].selectize.clear(true);
-                        });
+//                        pnlTablero.find("input:not(#xClienteDevolucion)").val("");
+//                        pnlTablero.find("input:not(#xClienteDevolucion),input:not(#FechaDevolucion),input:not(#Clasificacion),input:not(#Cargo),input:not(#Departamento),input:not(#Defecto),input:not(#DetalleDefecto),input:not(#Motivo)").val("");
+//
+//                        var selects_sin_reiniciar = "select:not(#ClienteDevolucion),input:not(#ClienteDevolucion-selectize),select:not(#xClasificacion),input:not(#xClasificacion-selectize),select:not(#xCargo),input:not(#xCargo-selectize),select:not(#xDepartamento),input:not(#xDepartamento-selectize),select:not(#xDefecto),input:not(#xDefecto-selectize),select:not(#xDetalleDefecto),input:not(#xDetalleDefecto-selectize)";
+//
+//                        $.each(pnlTablero.find(selects_sin_reiniciar), function (k, v) {
+//                            pnlTablero.find(selects_sin_reiniciar)[k].selectize.clear(true);
+//                        });
                         ClienteDevolucion[0].selectize.disable();
                         xClienteDevolucion.attr('readonly', true);
                         Pedidos.ajax.reload(function () {
@@ -1210,7 +1211,7 @@
         Estilo.val('');
         Color.val('');
         Serie.val('');
-        Motivo.val('');
+//        Motivo.val('');
 
         ControlADevolver.attr('disabled', false);
         TotalParesEntrega.val('');
