@@ -577,15 +577,25 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                                 $ETIQUETA_EXISTE = $this->db->query(
                                                 "SELECT COUNT(*) AS EXISTE  "
                                                 . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
-                                                . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = 0 "
+                                                . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
                                                 . "AND e.talla = '0' LIMIT 1")->result();
                             }
                             if (intval($ETIQUETA_EXISTE[0]->EXISTE) > 0) {
-                                $ETIQUETA = $this->db->query(
-                                                "SELECT e.*, e.codbarr  AS CODIGO_DE_BARRAS "
-                                                . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
-                                                . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
-                                                . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
+                                if (intval($x['CLIENTE']) === 2332) {
+                                    $ETIQUETA = $this->db->query(
+                                                    "SELECT e.*, e.codbarr  AS CODIGO_DE_BARRAS "
+                                                    . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
+                                                    . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
+                                                    . "AND e.talla = '{$XSERIE_TALLA}' LIMIT 1")->result();
+                                }
+                                if (intval($x['CLIENTE']) === 2121) {
+                                    $ETIQUETA = $this->db->query(
+                                                    "SELECT e.*, e.codbarr  AS CODIGO_DE_BARRAS "
+                                                    . "FROM etiqcodbarr as e where e.cliente = {$x['CLIENTE']} "
+                                                    . "AND e.estilo = '{$x['ESTILO']}' AND e.comb = {$x['COLOR']} "
+                                                    . "AND e.talla = '0' LIMIT 1")->result();
+                                }
+
                                 $XETIQUETA = $ETIQUETA[0]->CODIGO_DE_BARRAS;
                             }
                             $XSUBTOTAL = ($x["CAF$i"] * $x['PRECIO']);
