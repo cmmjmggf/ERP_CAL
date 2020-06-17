@@ -213,8 +213,7 @@
 
             btnEliminar.click(function () {
 
-                if ($("#ControlInicial").val() && $("#ControlFinal").val()) {
-
+                if (pnlTablero.find("#ControlInicial").val() !=='' && pnlTablero.find("#ControlFinal").val() !=='') {
                     swal({
                         title: "Estas seguro?",
                         text: "Serán eliminadas las ordenes de producción seleccionadas, una vez completada la acción",
@@ -228,13 +227,13 @@
 //                            nc += 1;
 //                        });
                             $.post(master_url + 'onEliminarEntreControles', {
-                                INICIO: $("#ControlInicial").val(),
-                                FIN: $("#ControlFinal").val()
+                                INICIO: pnlTablero.find("#ControlInicial").val(),
+                                FIN: pnlTablero.find("#ControlFinal").val()
                             }).done(function (data, x, jq) {
                                 //Controles.ajax.reload();
                                 swal({
                                     title: "ATENCIÓN",
-                                    text: "SE HAN ELIMINADO " + nc + " CONTROLES",
+                                    text: "SE HAN ELIMINADO LOS CONTROLES, VERIFIQUE",
                                     icon: "success",
                                     closeOnClickOutside: false,
                                     closeOnEsc: false,

@@ -53,18 +53,21 @@ class EliminaOrdenDeProduccion extends CI_Controller {
 
     public function onEliminarEntreControles() {
         try {
+
             $CONTROL_INICIAL = $this->input->post('INICIO');
             $CONTROL_FINAL = $this->input->post('FIN');
-            $this->db->trans_begin();
-            $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD
+            if ($CONTROL_INICIAL !== '' && $CONTROL_FINAL !== '') {
+                $this->db->trans_begin();
+                $this->db->query("DELETE OPD.* FROM ordendeproducciond AS OPD
                 INNER JOIN OrdenDeProduccion AS OP
                 ON OPD.OrdenDeProduccion = OP.ID
                 WHERE OPD.ID > 0 AND OP.ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL");
-            $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL");
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-            } else {
-                $this->db->trans_commit();
+                $this->db->query("DELETE FROM ordendeproduccion WHERE ID > 0 AND ControlT BETWEEN $CONTROL_INICIAL AND $CONTROL_FINAL");
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                } else {
+                    $this->db->trans_commit();
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -80,7 +83,7 @@ class EliminaOrdenDeProduccion extends CI_Controller {
             if ($MAQUILA !== '' && $SEMANA !== '' && $ANIO !== '') {
 
                 $this->db->trans_begin();
-                
+
                 $this->db->query("DELETE FROM ordendeproducciond WHERE OrdenDeProduccion IN(SELECT O.ID FROM OrdenDeProduccion AS O WHERE O.Semana = {$SEMANA} AND O.Ano = {$ANIO} AND O.Maquila = {$MAQUILA});");
                 $this->db->query("DELETE FROM OrdenDeProduccion WHERE Semana = {$SEMANA} AND Ano = {$ANIO}  AND Maquila = {$MAQUILA}");
                 $l = new Logs("ELIMINA ORDENES DE PRODUCCION", "HA ELIMINADO {$ORDENES} ORDENES DE PRODUCCIÓN DE LA MAQUILA {$MAQUILA} SEMANA {$SEMANA} AÑO {$ANIO}.", $this->session);
