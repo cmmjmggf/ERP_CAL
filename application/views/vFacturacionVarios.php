@@ -327,7 +327,7 @@
                         class="btn btn-info btn-block my-2">
                     <span class="fa fa-eye"></span>  Previsualiza docto
                 </button>
-                <button type="button" id="AddendaCoppel" name="AddendaCoppel" 
+                <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" 
                         class="btn btn-warning btn-block my-2">
                     <span class="fa fa-file-medical"></span>   Addenda Coppel
                 </button>
@@ -370,7 +370,8 @@
             AddendaCoppel = pnlTablero.find("#AddendaCoppel"),
             ReferenciaFacturacion = pnlTablero.find("#ReferenciaFacturacion"),
             ControlV = pnlTablero.find("#ControlV"),
-            ParesDelControlV = pnlTablero.find("#ParesDelControlV");
+            ParesDelControlV = pnlTablero.find("#ParesDelControlV"),
+            btnAdendaCoppel = pnlTablero.find("#btnAdendaCoppel");
     $(document).ready(function () {
 
         Concepto.val('');
@@ -1482,3 +1483,5 @@
         color: #008000 !important;
     }
 </style>
+<?php
+$this->load->view('vAdendaCoppel');
