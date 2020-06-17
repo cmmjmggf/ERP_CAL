@@ -741,7 +741,7 @@ class FacturacionVarios extends CI_Controller {
     public function getInfoXControlVarios() {
         try {
             $x = $this->input->get();
-            $str = "SELECT COUNT(*) AS EXISTE, P.Clave AS PEDIDO, P.Pares AS PARES, P.ParesFacturados AS PARES_FACTURADOS, P.Estilo AS ESTILO, "
+            $str = "SELECT COUNT(*) AS EXISTE, P.Clave AS PEDIDO, P.Pares AS PARES, IFNULL(P.ParesFacturados,0) AS PARES_FACTURADOS, P.Estilo AS ESTILO, "
                     . "P.Color AS COLOR_CLAVE, (SELECT C.Descripcion FROM erp_cal.colores AS C WHERE C.Estilo = P.Estilo AND C.Clave = P.Color) AS COLOR FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} ";
 
             print json_encode($this->db->query($str)->result());
