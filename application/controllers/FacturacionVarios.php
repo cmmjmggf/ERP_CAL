@@ -45,11 +45,15 @@ class FacturacionVarios extends CI_Controller {
             $Descripcion = "";
             $FECHA_FACTURA = str_replace('/', '-', $this->input->post('FECHA'));
             $FECHIN = date("Y-m-d 00:00:00", strtotime($FECHA_FACTURA));
+            $CONTROLV = 0;
+            if ($x['CONTROLV'] !== '') {
+                $CONTROLV = $x['CONTROLV'];
+            }
             $this->db->insert('facturacion', array(
                 "factura" => $x["FACTURA"],
                 "tp" => $x["TP"],
                 "cliente" => $x["CLIENTE"],
-                "contped" => 0,
+                "contped" => $CONTROLV,
                 "fecha" => $FECHIN,
                 "hora" => Date("d/m/Y"),
                 "corrida" => $x["TALLA"] === '' ? 0 : $x["TALLA"],
@@ -92,7 +96,9 @@ class FacturacionVarios extends CI_Controller {
                 "periodo" => Date('Y'),
                 "costo" => 0,
                 "modulo" => "VARIOS",
-                "obs" => substr($x["OBS"], 0, 199)
+                "obs" => substr($x["OBS"], 0, 199),
+                "usuario" => $this->session->USERNAME,
+                "usuario_id" => $this->session->ID
             ));
 
             if (intval($x["TP"]) === 1) {
@@ -126,7 +132,7 @@ class FacturacionVarios extends CI_Controller {
                         if (!empty($Tetiqcodbarr)) {
                             $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
                         }
-                        $lxe = $this->db->query("SELECT E.Linea AS LINEA FROM estilos AS E WHERE E.Estilo = {$x["ESTILO"]}")->result();
+                        $lxe = $this->db->query("SELECT E.Linea AS LINEA FROM estilos AS E WHERE E.Clave = {$x["ESTILO"]}")->result();
                         if (!empty($lxe)) {
                             $Descripcion = $lxe[0]->LINEA . " " . $x["ESTILO"] . " " . $x["TALLA"];
                         }
@@ -136,6 +142,10 @@ class FacturacionVarios extends CI_Controller {
                         break;
                 }
                 if (intval($x["TP"]) === 1) {
+                    $CONTROLV = 0;
+                    if ($x['CONTROLV'] !== '') {
+                        $CONTROLV = $x['CONTROLV'];
+                    }
                     $this->db->insert('facturadetalle', array(
                         "numfac" => $x["FACTURA"], "numcte" => $x["CLIENTE"],
                         "tp" => $x["TP"], "claveproducto" => $x["PRODUCTO_SAT"],
@@ -143,7 +153,7 @@ class FacturacionVarios extends CI_Controller {
                         "unidad" => "PAR", "codigo" => $x["ESTILO"],
                         "descripcion" => $Descripcion, "Precio" => $x["PRECIO"],
                         "importe" => ($x["CANTIDAD"] * $x["PRECIO"]),
-                        "fecha" => $FECHIN, "control" => 0,
+                        "fecha" => $FECHIN, "control" => $CONTROLV,
                         "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0) ? ($x["SUBTOTAL"] * 0.16) : 0),
                         "tmnda" => intval($x["TIPO_MONEDA"]),
                         "tcamb" => $x["TIPO_CAMBIO"], "noidentificado" => $CodigoBarras,
@@ -242,7 +252,7 @@ class FacturacionVarios extends CI_Controller {
                 $this->db->trans_commit();
             }
             $l = new Logs("FACTURACION VARIOS (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} "
-            . "CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UNA MONEDA EN {$x["TIPO_MONEDA"]} Y CON UN TIPO DE CAMBIO DE {$x['TIPO_CAMBIO']}.", $this->session);
+                    . "CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UNA MONEDA EN {$x["TIPO_MONEDA"]} Y CON UN TIPO DE CAMBIO DE {$x['TIPO_CAMBIO']}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -317,6 +327,7 @@ class FacturacionVarios extends CI_Controller {
             if ($x["CLIENTE"] !== '' && $x["FACTURA"] !== '') {
                 $this->db->where('F.cliente', $x["CLIENTE"])->where('F.factura', $x["FACTURA"]);
             } else {
+                $this->db->where('F.cliente', 999999999);
                 $this->db->order_by('F.fecha', 'DESC')->limit(1);
             }
             print json_encode($this->db->get()->result());
@@ -334,6 +345,7 @@ class FacturacionVarios extends CI_Controller {
             if ($x["CLIENTE"] !== '') {
                 $this->db->where('CC.cliente', $x["CLIENTE"]);
             } else {
+                $this->db->where('CC.cliente', 9999999);
                 $this->db->order_by('CC.fecha', 'DESC')->limit(1);
             }
             print json_encode($this->db->get()->result());
@@ -729,7 +741,8 @@ class FacturacionVarios extends CI_Controller {
     public function getInfoXControlVarios() {
         try {
             $x = $this->input->get();
-            $str = "SELECT COUNT(*) AS EXISTE, P.Pares AS PARES, P.ParesFacturados AS PARES_FACTURADOS FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} ";
+            $str = "SELECT COUNT(*) AS EXISTE, P.Clave AS PEDIDO, P.Pares AS PARES, P.ParesFacturados AS PARES_FACTURADOS, P.Estilo AS ESTILO, "
+                    . "P.Color AS COLOR_CLAVE, (SELECT C.Descripcion FROM erp_cal.colores AS C WHERE C.Estilo = P.Estilo AND C.Clave = P.Color) AS COLOR FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} ";
 
             print json_encode($this->db->query($str)->result());
         } catch (Exception $exc) {

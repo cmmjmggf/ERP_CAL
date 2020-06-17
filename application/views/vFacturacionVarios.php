@@ -86,16 +86,22 @@
             <div class="w-100"></div>
             <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-1 col-xl-1">
                 <label>Fecha</label>
-                <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter">
+                <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter ">
             </div> 
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
-                <label>Cantidad</label>
-                <input type="number" id="Cantidad" name="Cantidad" max="9999" min="0" class="form-control form-control-sm">
-                <div id="info_control" class="d-none">
-                    <label>Control</label>
-                    <input type="text" id="ControlV" name="ControlV"  class="form-control form-control-sm" maxlength="12">
-                    <label>Pares restantes</label>
-                    <input type="text" id="ParesDelControlV" readonly="" name="ParesDelControlV" max="36" min="0" class="form-control form-control-sm">
+                <div class="row">
+                    <div class="col-12 order-2">
+                        <label>Cantidad</label>
+                        <input type="number" id="Cantidad" name="Cantidad" max="9999" min="0" class="form-control form-control-sm ">
+                    </div>
+                    <div class="col-12 order-1">
+                        <div id="info_control" class="d-none">
+                            <label>Control</label>
+                            <input type="text" id="ControlV" name="ControlV" style="color: #0D47A1 !important; font-size: 18px;    padding-top: 0px;    padding-bottom: 0px;    padding-left: 4px;    padding-right: 4px;"  class="form-control form-control-sm" maxlength="12">
+                            <label>Pares restantes</label>
+                            <input type="text" id="ParesDelControlV" readonly="" name="ParesDelControlV" max="36" min="0" class="form-control form-control-sm">
+                        </div>  
+                    </div>  
                 </div>  
             </div>  
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-3 col-xl-3">
@@ -108,11 +114,22 @@
                         <select class="form-control form-control-sm notEnter selectNotEnter" id="Estilo" name="Estilo" required placeholder="">
                             <option></option>
                             <?php
-                            foreach ($this->db->query("SELECT E.Clave AS Clave,IFNULL(E.Descripcion,'')  AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
+                            foreach ($this->db->query("SELECT E.Clave AS Clave, CONCAT(IFNULL(E.Descripcion,''),CONCAT(\" (\",IFNULL(E.Clave,''),\")\"))  AS Estilo FROM estilos AS E  WHERE E.Estatus LIKE 'ACTIVO' GROUP BY E.Clave")->result() as $k => $v) {
                                 print "<option value=\"{$v->Clave}\">{$v->Estilo}</option>";
                             }
                             ?>
-                        </select> 
+                        </select>
+                    </div>
+                    <div class="col-12 text-center">
+                        <label>Color</label>
+                        <div class="row"> 
+                            <div class="col-3"  style="padding-right: 5px; padding-left: 5px;"> 
+                                <input type="text" readonly="" id="ColorClave" name="ColorClave" class="form-control">
+                            </div>
+                            <div class="col-9">
+                                <p class="color_x_control" style="color: #E74C3C !important; font-weight: bold;">-</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="info_control_pares" class="d-none">
@@ -130,7 +147,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1">
                 <label>Precio</label>
-                <input type="text" id="Precio" name="Precio" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="Precio" name="Precio" style="color:#008000 !important; padding-top: 0px; padding-bottom: 0px; font-size: 20px; "  class="form-control form-control-sm numbersOnly">
             </div>  
             <div class="col-6 col-xs-6 col-sm-2 col-md-2 col-lg-1 col-xl-1">
                 <label>Talla</label>
@@ -138,7 +155,7 @@
             </div>
             <div class="col-6 col-xs-6 col-sm-2 col-md-2 col-lg-1 col-xl-1">
                 <label>SubTotal</label>
-                <h5 class="text-danger font-weight-bold subtotaldocvarios">$ 0.0 </h5>
+                <h5 style="color:#008000 !important; " class="font-weight-bold subtotaldocvarios">$ 0.0 </h5>
                 <input type="text" id="Subtotal" name="Subtotal"  class="d-none form-control form-control-sm" readonly="">
             </div> 
             <div class="col-6 col-xs-6 col-sm-2 col-md-2 col-lg-1 col-xl-1" align="center">
@@ -195,8 +212,8 @@
                 <input type="text" id="OrdenCompraClaveIncotem" name="OrdenCompraClaveIncotem" class="form-control form-control-sm">
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1 my-1" align="LEFT">
-                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info mt-2" disabled="">
-                    <span class="fa fa-check"></span> Acepta
+                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info-g mt-2" disabled="">
+                    <span class="fa fa-check"></span> Acepta 
                 </button>
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-2 col-xl-2">
@@ -232,7 +249,7 @@
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                <table id="tblDetalleDocumento" class="table table-hover table-sm"  style="width: 100% !important;">
+                <table id="tblDetalleDocumento" class="table table-hover table-sm table-bordered"  style="width: 100% !important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th><!--0-->
@@ -248,22 +265,27 @@
                     </thead>
                     <tbody></tbody>
                 </table>    
-            </div> 
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" align="right">
+                        <h4 class="font-weight-bold font-italic" style="color: #008000">SUBTOTAL</h4>
+                        <h4 class="font-weight-bold font-italic" style="color: #008000">I.V.A</h4>
+                        <h4 class="font-weight-bold font-italic" style="color: #008000">TOTAL</h4>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" align="right">
+                        <h4 class="font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h4>
+                        <h4 class="font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h4>
+                        <h4 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">$ 0.0</h4>
+                        <input type="text" id="total_letra_en_pesos" name="total_letra_en_pesos" class="form-control d-none" readonly="">
+                        <input type="text" id="total_letra_en_dolares" name="total_letra_en_dolares" class="form-control d-none" readonly="">
+                    </div>
+                </div>
+            </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-5" align="right">
-                <h4 class="font-weight-bold text-danger font-italic cantidad_facturada">CANTIDAD 0</h4>
+                <h4 class="font-weight-bold font-italic cantidad_facturada">CANTIDAD 0</h4>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1" align="right">
-                <h4 class="font-weight-bold text-danger font-italic">SUBTOTAL</h4>
-                <h4 class="font-weight-bold text-danger font-italic">I.V.A</h4>
-                <h4 class="font-weight-bold text-danger font-italic">TOTAL</h4>
-            </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-3 col-xl-3" align="right">
-                <h4 class="font-weight-bold text-danger font-italic subtotalfacturadopie">$ 0.0</h4>
-                <h4 class="font-weight-bold text-danger font-italic totalivafacturadopie">$ 0.0</h4>
-                <h4 class="font-weight-bold text-danger font-italic totalfacturadoenletrapie">$ 0.0</h4>
-                <input type="text" id="total_letra_en_pesos" name="total_letra_en_pesos" class="form-control d-none" readonly="">
-                <input type="text" id="total_letra_en_dolares" name="total_letra_en_dolares" class="form-control d-none" readonly="">
-            </div>
+
             <div class="col-12 col-lg-12 col-xl-12">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" align="center">
@@ -277,7 +299,7 @@
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                <table id="tblDocumentos" class="table table-hover table-sm"  style="width: 100% !important;">
+                <table id="tblDocumentos" class="table table-hover table-sm table-bordered"  style="width: 100% !important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th><!--0-->
@@ -294,8 +316,8 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>    
-            </div>   
+                </table>
+            </div>
             <div class="col-4" align="center">
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" 
                         class="btn btn-danger btn-block my-2">
@@ -308,20 +330,17 @@
                 <button type="button" id="AddendaCoppel" name="AddendaCoppel" 
                         class="btn btn-warning btn-block my-2">
                     <span class="fa fa-file-medical"></span>   Addenda Coppel
-                </button> 
+                </button>
             </div>
         </div><!--        END CARD BLOCK-->
     </div>
 </div>
-
 <script>
     var pnlTablero = $("#pnlTablero"), TIPODECAMBIO = pnlTablero.find('#TIPODECAMBIO'),
-            EstatusControl = pnlTablero.find('#EstatusControl'),
-            ZonaFacturacion = pnlTablero.find('#ZonaFacturacion'),
+            EstatusControl = pnlTablero.find('#EstatusControl'), ZonaFacturacion = pnlTablero.find('#ZonaFacturacion'),
             AgenteCliente = pnlTablero.find('#AgenteCliente'),
             ClienteClave = pnlTablero.find("#ClienteClave"),
-            ClienteFactura = pnlTablero.find('#ClienteFactura'),
-            LPFactura = pnlTablero.find('#LPFactura'),
+            ClienteFactura = pnlTablero.find('#ClienteFactura'), LPFactura = pnlTablero.find('#LPFactura'),
             TPFactura = pnlTablero.find('#TPFactura'),
             TMNDAFactura = pnlTablero.find('#TMNDAFactura'),
             Documento = pnlTablero.find('#Documento'),
@@ -352,7 +371,6 @@
             ReferenciaFacturacion = pnlTablero.find("#ReferenciaFacturacion"),
             ControlV = pnlTablero.find("#ControlV"),
             ParesDelControlV = pnlTablero.find("#ParesDelControlV");
-
     $(document).ready(function () {
 
         Concepto.val('');
@@ -360,6 +378,13 @@
         FechaFactura.val(Hoy);
 
         handleEnterDiv(pnlTablero);
+
+        FechaFactura.keydown(function (e) {
+            if (e.keyCode === 13 && parseInt(ClienteFactura.val()) === 2121) {
+                Cantidad.addClass("selectNotEnter");
+                ControlV.focus();
+            }
+        });
 
         ControlV.on('keydown', function (e) {
             if (ControlV.val() && e.keyCode === 13) {
@@ -387,9 +412,11 @@
                 ClienteFactura[0].selectize.clear(true);
             }
             if (parseInt(ClienteFactura.val()) === 2121) {
-                pnlTablero.find("#info_control, #info_control_pares").removeClass("d-none");
+                pnlTablero.find("#info_control_pares").removeClass("d-none");
+                pnlTablero.find("#info_control").removeClass("d-none");
             } else {
-                pnlTablero.find("#info_control, #info_control_pares").addClass("d-none");
+                pnlTablero.find("#info_control").addClass("d-none");
+                pnlTablero.find("#info_control_pares").addClass("d-none");
             }
         });
 
@@ -434,8 +461,7 @@
             ClienteFactura[0].selectize.enable();
             console.log(DetalleDocumento.rows().count(), ",", DetalleDocumento.data().count());
             onOpenOverlay('Espere un momento por favor...');
-            if (!nuevo && ClienteFactura.val() && TPFactura.val() && Documento.val() &&
-                    FechaFactura.val()) {
+            if (!nuevo && ClienteFactura.val() && TPFactura.val() && Documento.val() && FechaFactura.val()) {
                 /* 
                  * ID, cliente, remicion, fecha, importe, tipo, numpol, numcia, 
                  * status, pagos, saldo, comiesp, tcamb, tmnda, stscont, nc, factura 
@@ -633,7 +659,6 @@
         });
         btnAcepta.click(function () {
             /*validar encabezado*/
-
             ClienteClave.attr("disabled", false);
             onEnable(ClienteFactura);
             onEnable(Estilo);
@@ -656,10 +681,21 @@
                             onCloseOverlay();
                         });
                     } else {
-                        if (ClienteFactura.val() && TPFactura.val() && TMNDAFactura.val()
-                                && Documento.val() && FechaFactura.val()) {
+                        if (ClienteFactura.val() && TPFactura.val() && TMNDAFactura.val() && Documento.val() && FechaFactura.val()) {
 
                             /*validar detalle*/
+
+                            var numero_letra = "";
+
+                            if (parseInt(TPFactura.val()) === 1 && parseInt(TMNDAFactura.val()) === 1) {
+                                numero_letra = NumeroALetras(Subtotal.val() * 1.16);
+                            } else if (parseInt(TPFactura.val()) === 2 && parseInt(TMNDAFactura.val()) === 1) {
+                                numero_letra = NumeroALetras(Subtotal.val());
+                            } else if (parseInt(TPFactura.val()) === 1 && parseInt(TMNDAFactura.val()) === 2 ||
+                                    parseInt(TPFactura.val()) === 2 && parseInt(TMNDAFactura.val()) === 2) {
+                                numero_letra = NumeroALetras(Subtotal.val());
+                            }
+
                             var p = {
                                 FACTURA: Documento.val(),
                                 TP: TPFactura.val(),
@@ -669,23 +705,22 @@
                                 AGENTE: AgenteCliente.val(),
                                 CANTIDAD: Cantidad.val(),
                                 ESTILO: Estilo.val(),
-                                CONCEPTO: Concepto.val(),
-                                PRECIO: Precio.val(),
+                                CONCEPTO: Concepto.val() ? Concepto.val() : '', PRECIO: Precio.val(),
                                 TALLA: Talla.val(),
                                 NO_GENERA_IVA: (pnlTablero.find("#cNoIva")[0].checked ? 1 : 0),
                                 TIPO_CAMBIO: TIPODECAMBIO.val(),
                                 ZONA: ZonaFacturacion.val(),
                                 SUBTOTAL: Subtotal.val(),
-                                OBS: Observaciones.val(),
+                                OBS: Observaciones.val() ? Observaciones.val() : '',
                                 PEDIMENTO: PedimientoXTaxDestinatario.val(),
                                 ORDEN_DE_COMPRA: OrdenCompraClaveIncotem.val(),
-                                MONEDA_LETRA: NumeroALetras(Subtotal.val()),
+                                MONEDA_LETRA: numero_letra,
                                 PRODUCTO_SAT: ProductoSAT.val(),
                                 REFERENCIA: ReferenciaFacturacion.val(),
-                                CONTROLV: ControlV.val() ? ControlV.val() : '',
-                                PARES_RESTANTES: ParesDelControlV.val()
+                                COLOR_CLAVE: ReferenciaFacturacion.val(),
+                                CONTROLV: ControlV.val() ? ControlV.val() : '', PARES_RESTANTES: ParesDelControlV.val()
                             };
-                            if (Cantidad.val() && Estilo.val() && Concepto.val() && Precio.val()) {
+                            if (Cantidad.val() && Estilo.val() && Precio.val()) {
                                 onOpenOverlay('Guardando...');
 //                                if (nuevo) {
                                 $.post('<?php print base_url('FacturacionVarios/onGuardar') ?>', p).done(function (a) {
@@ -706,21 +741,26 @@
                                     Cantidad.focus().select();
                                     getDetalleDocumento();
                                     nuevo = false;
+                                    if (parseInt(ClienteFactura.val()) === 2121) {
+                                        pnlTablero.find("#info_control_pares").removeClass("d-none");
+                                        pnlTablero.find("#info_control").removeClass("d-none");
+                                    }
+                                    onNotifyOldPCE('', 'REGISTRO EXITOSO', 'success', "bottom", "center");
                                 }).fail(function (x) {
                                     getError(x);
                                 }).always(function () {
                                     onCloseOverlay();
                                 });
-//                                } else {
+                                //                                } else {
 //
 //                                }
                             } else {
-                                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
+                                swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN \n Cantidad \n Estilo \n Precio ', 'error').then((value) => {
                                     Cantidad.focus().select();
                                 });
                             }
                         } else {
-                            swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN', 'error').then((value) => {
+                            swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN \n Cliente, TP \n Documento, Fechas \n Cantidad, Estilo \n Precio ', 'error').then((value) => {
                                 ClienteClave.focus().select();
                             });
                         }
@@ -818,16 +858,13 @@
                     "visible": false,
                     "searchable": false
                 }, {
-                    "targets": [6],
-                    "visible": false,
+                    "targets": [6], "visible": false,
                     "searchable": false
                 }, {
-                    "targets": [8],
-                    "visible": false,
+                    "targets": [8], "visible": false,
                     "searchable": false
                 }, {
-                    "targets": [9],
-                    "visible": true,
+                    "targets": [9], "visible": true,
                     "searchable": false
                 }, {
                     "targets": [10],
@@ -836,11 +873,9 @@
                 }],
             language: lang,
             responsive: true,
-            "processing": true,
-            select: true,
+            "processing": true, select: true,
             "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 99,
+            "colReorder": true, "displayLength": 99,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -862,11 +897,9 @@
             responsive: true,
             "serverSide": false,
             "info": true,
-            "processing": true,
-            select: true,
+            "processing": true, select: true,
             "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 9999,
+            "colReorder": true, "displayLength": 9999,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -879,8 +912,7 @@
                 console.log(api.rows().data());
                 $.each(api.rows().data(), function (k, v) {
                     prs = prs + parseInt(v[6]);
-                });
-                //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+                });                 //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
                 pnlTablero.find("h4.cantidad_facturada").text('CANTIDAD  ' + prs);
             }
             , initComplete: function () {
@@ -923,15 +955,12 @@
     }
 
     function getReferenciaX() {
-        var reffac = 0, reffac1 = 0, reffac2 = 0,
-                reffac2 = Documento.val(), txtreferen2 = 0;
+        var reffac = 0, reffac1 = 0, reffac2 = 0, reffac2 = Documento.val(), txtreferen2 = 0;
         var txtreferen1 = padLeft(ClienteFactura.val(), 4) + '' + padLeft(Documento.val(), 4);
 
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
-                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
-                num19 = 313, num20 = 802, txtreferen3 = 0, txtreferen4 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen3 = 0, txtreferen4 = 0,
                 txtreferen9 = 0, txtreferen10 = 0, txtreferen11 = 0;
 
         for (var refe1 = 0; refe1 <= txtreferen1.length; refe1++) {
@@ -1010,9 +1039,7 @@
 
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
-                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
-                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
                 txtreferen9 = 0, txtreferen10 = 0;
 
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
@@ -1088,7 +1115,6 @@
         res1 = res * 100;
         res2 = res1 % 1;
         res3 = res1 - res2;
-
         console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
 
         var ponderador_fijo = 99;
@@ -1101,8 +1127,7 @@
     }
     function onInHabilitarEncabezado() {
         if (ClienteFactura.val() && TPFactura.val()
-                && TMNDAFactura.val() && Documento.val()
-                && FechaFactura.val()) {
+                && TMNDAFactura.val() && Documento.val() && FechaFactura.val()) {
             ClienteClave.attr('disabled', true);
             ClienteFactura[0].selectize.disable();
             TPFactura.attr('disabled', true);
@@ -1214,9 +1239,7 @@
         txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 0, num11 = 0, num12 = 0, num13 = 0,
-                num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
-                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
                 txtreferen9 = 0, txtreferen10 = 0;
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
         for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
@@ -1384,9 +1407,23 @@
         $.getJSON('<?php print base_url('FacturacionVarios/getInfoXControlVarios'); ?>', {
             CONTROL: pnlTablero.find("#ControlV").val()
         }).done(function (a) {
+            if (a[0].length < 0) {
+                console.log(" * * * * * CONTROL INVÁLIDO O NO EXISTE * * * * * ");
+                console.log(a);
+                console.log(" * * * * * CONTROL INVÁLIDO O NO EXISTE * * * * * ");
+                onCampoInvalido(pnlTablero, "CONTROL INVÁLIDO O NO EXISTE, VERIFIQUE.", function () {
+                    ControlV.focus().select();
+                });
+                return;
+            }
             console.log("\n DATOS \n");
             console.log(a);
             console.log("\n DATOS \n");
+            xEstilo.val(a[0].ESTILO);
+            Pedido.val(a[0].PEDIDO);
+            pnlTablero.find(".color_x_control").text(a[0].COLOR);
+            Cantidad.val(a[0].PARES);
+            pnlTablero.find("#ColorClave").val(a[0].COLOR_CLAVE);
             var pares = parseInt(a[0].PARES), pares_restantes = 0, pares_facturados = parseInt(a[0].PARES_FACTURADOS);
             pnlTablero.find("span.pares_controlv").text(a[0].PARES + " PARES");
             pnlTablero.find("span.pares_facturados").text(pares_facturados + " PARES FACTURADOS");
@@ -1419,5 +1456,29 @@
     }
     #tblParesFacturados thead th{
         font-size: 12px !important;
+    }
+    input, .selectize-input {
+        font-weight: bold;
+    }
+    #tblDetalleDocumento tbody td {
+        font-weight: bold !important;
+    }
+    .cantidad_facturada{
+        color: #008000;
+    }
+    .text-danger {
+        color: #263238 !important;
+    }
+    button, label, table thead th{
+        text-transform: uppercase !important;
+        font-weight: bold !important;
+    }
+    .btn-info-g {
+        color: #fff;
+        background-color: #2E7D32 !important;
+        border-color: #2E7D32 !important;
+    }
+    #tblDetalleDocumento tbody td:eq(5){
+        color: #008000 !important;
     }
 </style>
