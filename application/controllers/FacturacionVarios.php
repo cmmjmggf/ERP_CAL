@@ -138,7 +138,7 @@ class FacturacionVarios extends CI_Controller {
                         }
                         $COLORX = $this->db->query("SELECT C.Descripcion AS DESCRIPCION FROM colores AS C WHERE C.Estilo ='{$x['ESTILO']}' AND C.Clave= {$x['COLOR_CLAVE']} ")->result();
                         if (!empty($COLORX)) {
-                            $Descripcion = "{$x["ESTILO"]} {$COLORX[0]->DESCRIPCION} {$x["TALLA"]}";
+                            $Descripcion = "{$COLORX[0]->DESCRIPCION} {$x["TALLA"]}";
                         }
                         break;
                     default :
