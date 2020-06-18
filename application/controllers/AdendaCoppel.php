@@ -26,7 +26,7 @@ class AdendaCoppel extends CI_Controller {
             $EXISTE_FACTURA = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturas AS F WHERE F.numero ={$x['TIENDA']}  and factura = '{$x['FACTURA']}'")->result();
             $factura = $this->db->query("SELECT COUNT(*) AS EXISTE   FROM facturacion AS F WHERE F.factura = {$x['FACTURA']} AND F.tp = 1")->result();
             if (intval($EXISTE_FACTURA[0]->EXISTE) === 0 && intval($factura[0]->EXISTE) > 0) {
-                $factura = $this->db->query("SELECT COUNT(*) AS EXISTE, SUM(subtot) AS SUBTOTAL, F.cliente AS CLIENTE,F.fecha AS FECHA_FACTURA FROM facturacion AS F WHERE F.factura = {$x['FACTURA']} AND F.tp = 1")->result();
+                $factura = $this->db->query("SELECT COUNT(*) AS EXISTE, SUM(subtot) AS SUBTOTAL, F.cliente AS CLIENTE,DATE_FORMAT(F.fecha,'%d/%m/%Y') AS FECHA_FACTURA FROM facturacion AS F WHERE F.factura = {$x['FACTURA']} AND F.tp = 1")->result();
                 $pedidox = $this->db->query("SELECT P.FechaPedido AS FECHA_PEDIDO, P.Clave AS CLAVE_PEDIDO "
                                 . " FROM pedidox AS p WHERE p.Control IN(SELECT F.contped FROM facturacion AS F WHERE F.factura = {$x['FACTURA']} AND F.tp = 1)  ")->result();
                 $SUBTOTAL = floatval($factura[0]->SUBTOTAL);
@@ -127,7 +127,7 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                             "iva" => $x["IVA"],
                             "total" => $x["TOTAL"]
                 ));
-                $facturadetalle = $this->db->query("SELECT SUBSTR(F.descripcion, (length(F.descripcion)-3),3) AS TALLA, F.* FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} and F.numcte = 2121")->result();
+                $facturadetalle = $this->db->query("SELECT SUBSTR(F.descripcion, (length(F.descripcion)-2),3) AS TALLA, F.* FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} and F.numcte = 2121")->result();
                 foreach ($facturadetalle as $k => $v) {
                     $check_existe = $this->db->query("SELECT COUNT(*) AS EXISTE "
                                     . "FROM facturasdetalles AS F "
@@ -139,33 +139,35 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                                 array("Factura" => $x["FACTURA"],
                                     "EstiloCliente" => $v->noidentificado,
                                     "Talla" => $v->TALLA,
-                                    "Estilo4E" => "{$v->codigo} {$v->descripcion}",
+                                    "Estilo4E" => "{$v->descripcion}",
                                     "ParesPorPunto" => $v->cantidad,
+                                    "PrecioPorPunto" => $v->Precio,
                                     "PrecioConDescuento" => $v->Precio,
                                     "CantidadPrepack" => $x["CANTIDAD_PREPACK"],
                                     "PorcentajeDescuento" => 0,
                                     "MontoDelDescuento" => 0,
                                     "TotalItem" => floatval($v->cantidad) * floatval($v->Precio),
+                                    "TotalConDescuentoItem" => floatval($v->cantidad) * floatval($v->Precio),
                                     "numero" => $x["TIENDA"],
-                                    "grupo" => intval($v->control) !== 0 ? 0 : 1
+                                    "grupo" => 1
                         ));
                     } else {
                         $TotalItem = floatval($v->cantidad) * floatval($v->Precio);
                         $TotalConDescuentoItem = floatval($v->cantidad) * floatval($v->Precio);
                         $ParesPorPunto = $v->ParesPorPunto + $v->cantidad;
-                        $this->db->set("ParesPorPunto", $ParesPorPunto)
+                        $this->db
                                 ->set("TotalItem", "TotalItem + {$TotalItem}")
-                                ->set("TotalConDescuentoItem", "TotalConDescuentoItem + {$TotalConDescuentoItem}")
+                                ->set("TotalConDescuentoItem", "{$TotalConDescuentoItem}")
                                 ->where("factura", $x["FACTURA"])
                                 ->where("EstiloCliente", $v->noidentificado)
                                 ->where("Talla", $v->TALLA)
                                 ->update("facturasdetalles");
                     }
-                    $this->db->set("ParesPorPunto", $x['CANTIDAD_LOTES'])
-                            ->where("numero", $x["TIENDA"])
-                            ->where("factura", $x["FACTURA"])
-                            ->where("grupo", 0)
-                            ->update("facturasdetalles");
+//                    $this->db->set("cantidadlotes", $x['CANTIDAD_LOTES'])
+//                            ->where("numero", $x["TIENDA"])
+//                            ->where("factura", $x["FACTURA"])
+//                            ->where("grupo", 0)
+//                            ->update("facturasdetalles");
                 }
                 $l = new Logs("ADDENDA", "GENERO LA ADDENDA PARA LA FACTURA {$x['FACTURA']}, $" . number_format($x["TOTAL"], 2, ".", ","), $this->session);
             }

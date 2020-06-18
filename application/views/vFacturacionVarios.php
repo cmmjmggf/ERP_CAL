@@ -1,5 +1,5 @@
 
-<div class="card m-3 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
+<div class="card mr-2 ml-2 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
             
         </div>-->
@@ -12,15 +12,21 @@
                 <h5 class="font-weight-bold font-italic text-danger">DOCUMENTOS DIRECTOS DE CLIENTES VARIOS</h5>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3" align="right">
+                <button type="button" id="btnCambiaTienda" name="btnCambiaTienda"  
+                        class="btn btn-primary d-none selectNotEnter" 
+                        data-toggle="tooltip" data-placement="bottom" title="Cambia tienda" 
+                        style="padding: 3px 6px 3px 6px !important;     ">
+                    <span class="fa fa-store-alt"></span> TIENDA
+                </button>
                 <button type="button" id="btnNuevo" name="btnNuevo" 
-                        class="btn btn-default d-none" 
+                        class="btn btn-default d-none selectNotEnter" 
                         disabled="true"
                         data-toggle="tooltip" data-placement="bottom" title="Hecho" 
                         style="padding: 3px 6px 3px 6px !important;    background-color: #9e9e9e00; box-shadow: none !important; color: #9E9E9E !important; border-color: ">
                     <span class="fa fa-check"></span>
                 </button>
                 <button type="button" id="btnDeshacer" name="btnDeshacer" 
-                        class="btn btn-default d-none" 
+                        class="btn btn-default d-none selectNotEnter" 
                         disabled="true" style="padding: 3px 6px 3px 6px !important;    background-color: #9e9e9e00; box-shadow: none !important; color: #9E9E9E !important; border-color: ">
                     <span class="fa fa-trash"></span>
                 </button>
@@ -38,7 +44,7 @@
                 <label class="control-label">Cliente</label>
                 <div class="row">
                     <div class="col-2">
-                        <input type="text" id="ClienteClave" name="ClienteClave" class="form-control form-control-sm numbersOnly" maxlength="8">
+                        <input type="text" id="ClienteClave" name="ClienteClave" class="form-control form-control-sm numbersOnly" maxlength="8" autofocus="">
                     </div>
                     <div class="col-10">
                         <div class="form-group"> 
@@ -92,7 +98,7 @@
                 <div class="row">
                     <div class="col-12 order-2">
                         <label>Cantidad</label>
-                        <input type="number" id="Cantidad" name="Cantidad" max="9999" min="0" class="form-control form-control-sm ">
+                        <input type="text" id="Cantidad" name="Cantidad" maxlength="3" class="form-control form-control-sm numbersOnly">
                     </div>
                     <div class="col-12 order-1">
                         <div id="info_control" class="d-none">
@@ -120,7 +126,7 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-12 text-center">
+                    <div class="col-12 text-center d-none" id="Color_panel">
                         <label>Color</label>
                         <div class="row"> 
                             <div class="col-3"  style="padding-right: 5px; padding-left: 5px;"> 
@@ -335,6 +341,42 @@
         </div><!--        END CARD BLOCK-->
     </div>
 </div>
+
+<div id="mdlTiendaCoppel" class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-store-alt"></span> TIENDA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <label>Tienda</label>
+                        <input type="text" id="TiendaCoppelClaveV" name="TiendaCoppelClaveV" autofocus="" class="form-control form-control-sm"  >
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9">
+                        <select id="TiendaCoppelV" name="TiendaCoppelV" class="form-control form-control-sm mt-4">
+                            <option></option>
+                            <?php
+                            foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.Consignatario) AS CONSIGNATARIO", false)
+                                    ->from('consignatarios AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->CONSIGNATARIO}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" id="btnAceptaTiendaV" class="btn btn-primary"> ACEPTA</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     var pnlTablero = $("#pnlTablero"), TIPODECAMBIO = pnlTablero.find('#TIPODECAMBIO'),
             EstatusControl = pnlTablero.find('#EstatusControl'), ZonaFacturacion = pnlTablero.find('#ZonaFacturacion'),
@@ -370,37 +412,83 @@
             AddendaCoppel = pnlTablero.find("#AddendaCoppel"),
             ReferenciaFacturacion = pnlTablero.find("#ReferenciaFacturacion"),
             ControlV = pnlTablero.find("#ControlV"),
+            mdlTiendaCoppel = $("#mdlTiendaCoppel"),
+            ColorClave = pnlTablero.find("#ColorClave"),
+            TiendaCoppelClaveV = mdlTiendaCoppel.find("#TiendaCoppelClaveV"),
+            TiendaCoppelV = mdlTiendaCoppel.find("#TiendaCoppelV"),
+            btnAceptaTiendaV = mdlTiendaCoppel.find("#btnAceptaTiendaV"),
             ParesDelControlV = pnlTablero.find("#ParesDelControlV"),
+            btnCambiaTienda = pnlTablero.find("#btnCambiaTienda"),
             btnAdendaCoppel = pnlTablero.find("#btnAdendaCoppel");
     $(document).ready(function () {
 
         Concepto.val('');
         Observaciones.val('');
         FechaFactura.val(Hoy);
-
         handleEnterDiv(pnlTablero);
-
-        FechaFactura.keydown(function (e) {
+        handleEnterDiv(mdlTiendaCoppel);
+        btnAceptaTiendaV.click(function () {
+            if (TiendaCoppelClaveV.val() !== '' && TiendaCoppelV.val() !== '') {
+                mdlTiendaCoppel.modal('hide');
+            } else {
+                onCampoInvalido(pnlTablero, 'POR FAVOR ESPECIFIQUE UNA TIENDA', function () {
+                    TiendaCoppelClaveV.focus().select();
+                });
+                return;
+            }
+        });
+        btnCambiaTienda.click(function () {
+            mdlTiendaCoppel.modal('show');
+        });
+        TiendaCoppelV.change(function (e) {
+            console.log($(this).val());
+            TiendaCoppelClaveV.val($(this).val());
+        });
+        TiendaCoppelClaveV.on('keydown', function (e) {
+            console.log($(this).val());
+            TiendaCoppelV[0].selectize.setValue(parseInt(TiendaCoppelClaveV.val()));
+        });
+        Documento.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (parseInt(ClienteFactura.val()) === 2121 && TiendaCoppelClaveV.val() === '') {
+                    pnlTablero.off("keydown");
+                    mdlTiendaCoppel.modal('show');
+                    btnCambiaTienda.removeClass("d-none");
+                } else {
+                    btnCambiaTienda.addClass("d-none");
+                }
+            }
+        });
+        mdlTiendaCoppel.on('hidden.bs.modal', function () {
+            TiendaCoppelV[0].selectize.enable();
+            if (parseInt(ClienteFactura.val()) === 2121 && TiendaCoppelClaveV.val() !== '') {
+                ControlV.focus().select();
+            }
+            handleEnterDiv(pnlTablero);
+        });
+        mdlTiendaCoppel.on('show.bs.modal', function () {
+            TiendaCoppelClaveV.focus().select();
+        });
+        mdlTiendaCoppel.on('shown.bs.modal', function () {
+            TiendaCoppelClaveV.focus().select();
+        });
+        FechaFactura.on('keydown', function (e) {
             if (e.keyCode === 13 && parseInt(ClienteFactura.val()) === 2121) {
                 Cantidad.addClass("selectNotEnter");
                 ControlV.focus();
             }
         });
-
         ControlV.on('keydown', function (e) {
             if (ControlV.val() && e.keyCode === 13) {
                 getInfoXControlVarios();
             }
         });
-
         cNoIva.change(function () {
             getTotales(true);
         });
-
         ClienteFactura.click(function () {
             ClienteFactura[0].selectize.enable();
         });
-
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 onBeep(1);
@@ -415,12 +503,43 @@
             if (parseInt(ClienteFactura.val()) === 2121) {
                 pnlTablero.find("#info_control_pares").removeClass("d-none");
                 pnlTablero.find("#info_control").removeClass("d-none");
+                ColorClave.removeClass("d-none");
+                btnCambiaTienda.removeClass("d-none");
+                pnlTablero.find("p.color_x_control").removeClass("d-none");
+                pnlTablero.find("#Color_panel").removeClass("d-none");
+                Cantidad.addClass("selectNotEnter");
             } else {
+                pnlTablero.find("#Color_panel").addClass("d-none");
+                pnlTablero.find("p.color_x_control").addClass("d-none");
+                pnlTablero.find("p.color_x_control").text("");
+                ColorClave.addClass("d-none");
+                Cantidad.removeClass("selectNotEnter");
+                btnCambiaTienda.addClass("d-none");
                 pnlTablero.find("#info_control").addClass("d-none");
                 pnlTablero.find("#info_control_pares").addClass("d-none");
             }
         });
-
+        TiendaCoppelClaveV.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (TiendaCoppelClaveV.val()) {
+                    TiendaCoppelV[0].selectize.setValue(TiendaCoppelClaveV.val());
+                    if (TiendaCoppelV.val()) {
+                        TiendaCoppelV[0].selectize.disable();
+                    } else {
+                        onCampoInvalido(pnlTablero, 'NO EXISTE ESTA TIENDA, ESPECIFIQUE OTRA', function () {
+                            TiendaCoppelClaveV.focus().select();
+                        });
+                        return;
+                    }
+                } else {
+                    TiendaCoppelV[0].selectize.enable();
+                    TiendaCoppelV[0].selectize.clear(true);
+                }
+            } else {
+                TiendaCoppelV[0].selectize.enable();
+                TiendaCoppelV[0].selectize.clear(true);
+            }
+        });
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
@@ -430,11 +549,11 @@
                     } else {
                         btnCierraDocto.attr('disabled', true);
                         PrevisualizarDocto.attr('disabled', true);
-                        AddendaCoppel.attr('disabled', true);
+                        //                        AddendaCoppel.attr('disabled', true);
                         onCampoInvalido(pnlTablero, 'NO EXISTE ESTE CLIENTE, ESPECIFIQUE OTRO', function () {
                             btnCierraDocto.attr('disabled', false);
                             PrevisualizarDocto.attr('disabled', false);
-                            AddendaCoppel.attr('disabled', false);
+                            //                            AddendaCoppel.attr('disabled', false);
                             ClienteClave.focus().select();
                         });
                         return;
@@ -448,9 +567,7 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-
         var busy = false;
-
         btnCierraDocto.click(function () {
             if (busy) {
                 return;
@@ -509,7 +626,6 @@
                 });
             }
         });
-
         PrevisualizarDocto.click(function () {
             if (ClienteFactura.val() && Documento.val()) {
                 onOpenOverlay('');
@@ -528,7 +644,6 @@
                 }).always(function () {
                     onCloseOverlay();
                 });
-
             } else {
                 onCampoInvalido(pnlTablero, 'DEBE DE ESPECIFICAR UN CLIENTE Y UN DOCUMENTO', function () {
                     if (ClienteFactura.val()) {
@@ -539,11 +654,9 @@
                 });
             }
         });
-
         AddendaCoppel.click(function () {
 
         });
-
         Estilo.change(function () {
             if (Estilo.val()) {
                 xEstilo.val(Estilo.val());
@@ -554,9 +667,9 @@
                 Estilo[0].selectize.clear(true);
             }
         });
-
         xEstilo.on('keydown', function (e) {
             if (e.keyCode === 13) {
+                onEnable(ControlV);
                 if (xEstilo.val()) {
                     Estilo[0].selectize.setValue(xEstilo.val());
                     Concepto.focus().select();
@@ -577,18 +690,15 @@
                 Estilo[0].selectize.clear(true);
             }
         });
-
         btnDeshacer.click(function () {
             console.log('ok deshacer');
+            onEnable(ClienteClave);
             ClienteFactura[0].selectize.enable();
             TPFactura.attr('disabled', false);
-
             TMNDAFactura.attr('disabled', false);
             TMNDAFactura.val('');
-
             Documento.attr('disabled', false);
             Documento.val('');
-
             FechaFactura.attr('disabled', false);
             btnAcepta.attr('disabled', true);
             btnDeshacer.addClass("d-none");
@@ -603,17 +713,15 @@
             getDetalleDocumento();
             getTotales(false);
         });
-
-        Precio.keydown(function (e) {
+        Precio.on('keydown', function (e) {
             console.log(e.keyCode);
             if (e.keyCode === 13 && $(this).length > 0) {
                 onCalcularSubtotal();
             }
         });
-
-        Cantidad.keydown(function (e) {
+        Cantidad.on('keydown', function (e) {
             console.log(e.keyCode);
-            if (e.keyCode === 13 && $(this).length > 0) {
+            if (e.keyCode === 13) {
                 onCalcularSubtotal();
                 getReferencia();
                 onInHabilitarEncabezado();
@@ -621,8 +729,13 @@
                     DetalleDocumento.rows().remove().draw();
                 }
             }
+            if (e.keyCode === 13 && parseFloat(Cantidad.val())) {
+                onDisable(ControlV);
+                pnlTablero.find("#xEstilo").focus();
+            }
         });
-        TPFactura.keydown(function (e) {
+
+        TPFactura.on('keydown', function (e) {
             if (ClienteClave.val()) {
                 if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                     getTipoDeCambioYUltimaFactura();
@@ -661,6 +774,7 @@
         btnAcepta.click(function () {
             /*validar encabezado*/
             ClienteClave.attr("disabled", false);
+            onEnable(ControlV);
             onEnable(ClienteFactura);
             onEnable(Estilo);
             onEnable(TPFactura);
@@ -687,7 +801,6 @@
                             /*validar detalle*/
 
                             var numero_letra = "";
-
                             if (parseInt(TPFactura.val()) === 1 && parseInt(TMNDAFactura.val()) === 1) {
                                 numero_letra = NumeroALetras(Subtotal.val() * 1.16);
                             } else if (parseInt(TPFactura.val()) === 2 && parseInt(TMNDAFactura.val()) === 1) {
@@ -718,22 +831,24 @@
                                 MONEDA_LETRA: numero_letra,
                                 PRODUCTO_SAT: ProductoSAT.val(),
                                 REFERENCIA: ReferenciaFacturacion.val(),
-                                COLOR_CLAVE: ReferenciaFacturacion.val(),
+                                TIENDA: TiendaCoppelClaveV.val(),
+                                TIENDA_TEXT: TiendaCoppelV.val(),
+                                TIENDA_CLAVE_TEXT: TiendaCoppelClaveV.val(),
+                                NUMPEDIDO: Pedido.val(),
+                                COLOR_CLAVE: ColorClave.val(),
+                                COLOR_TEXT: pnlTablero.find("p.color_x_control").text(),
                                 CONTROLV: ControlV.val() ? ControlV.val() : '', PARES_RESTANTES: ParesDelControlV.val()
                             };
                             if (Cantidad.val() && Estilo.val() && Precio.val()) {
                                 onOpenOverlay('Guardando...');
-//                                if (nuevo) {
+                                //                                if (nuevo) {
                                 $.post('<?php print base_url('FacturacionVarios/onGuardar') ?>', p).done(function (a) {
                                     Cantidad.val('');
-                                    Estilo[0].selectize.clear();
-                                    Concepto.val('');
                                     Precio.val('');
                                     Talla.val('');
                                     Subtotal.val('');
                                     pnlTablero.find("span.subtotaldocvarios").text("$0.0");
                                     pnlTablero.find(".productoSAT").text('-');
-                                    Pedido.val('');
                                     pnlTablero.find("#cNoIva")[0].checked = false;
                                     pnlTablero.find("#cTimbrar")[0].checked = false;
                                     pnlTablero.find("#cPorAnticipo")[0].checked = false;
@@ -745,6 +860,9 @@
                                     if (parseInt(ClienteFactura.val()) === 2121) {
                                         pnlTablero.find("#info_control_pares").removeClass("d-none");
                                         pnlTablero.find("#info_control").removeClass("d-none");
+                                    } else {
+                                        Concepto.val('');
+                                        Estilo[0].selectize.clear();
                                     }
                                     onNotifyOldPCE('', 'REGISTRO EXITOSO', 'success', "bottom", "center");
                                 }).fail(function (x) {
@@ -754,7 +872,7 @@
                                 });
                                 //                                } else {
 //
-//                                }
+                                //                                }
                             } else {
                                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN \n Cantidad \n Estilo \n Precio ', 'error').then((value) => {
                                     Cantidad.focus().select();
@@ -772,7 +890,6 @@
             }).always(function () {
             });
         });
-
         TPFactura.change(function (e) {
             if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 3 && parseInt(TPFactura.val()) === 0) {
                 onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
@@ -830,7 +947,6 @@
                 return;
             }
         });
-
         ClienteFactura.change(function () {
             if (ClienteFactura.val()) {
                 $.post('<?php print base_url('FacturacionVarios/getListaDePreciosXCliente') ?>', {
@@ -851,7 +967,6 @@
                 });
             }
         });
-
         Documentos = tblDocumentos.DataTable({
             dom: 'ript',
             "columnDefs": [{
@@ -884,9 +999,7 @@
             "scrollY": 200,
             "scrollX": true
         });
-
         ClienteClave.focus().select();
-
         DetalleDocumento = tblDetalleDocumento.DataTable({
             dom: 'rt',
             "columnDefs": [{
@@ -913,7 +1026,7 @@
                 console.log(api.rows().data());
                 $.each(api.rows().data(), function (k, v) {
                     prs = prs + parseInt(v[6]);
-                });                 //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+                }); //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
                 pnlTablero.find("h4.cantidad_facturada").text('CANTIDAD  ' + prs);
             }
             , initComplete: function () {
@@ -923,7 +1036,6 @@
         getDocumentosXCliente();
         getDetalleDocumento();
     });
-
     function onComprobarFactura() {
         $.getJSON('<?php print base_url('FacturacionVarios/onComprobarFactura'); ?>',
                 {CLIENTE: (ClienteFactura.val() ? ClienteFactura.val() : ''),
@@ -952,18 +1064,15 @@
         Subtotal.val(subtotal);
         pnlTablero.find(".subtotaldocvarios").text('$' + $.number(subtotal, '2', '.', ','));
         btnAcepta.attr('disabled', false);
-
     }
 
     function getReferenciaX() {
         var reffac = 0, reffac1 = 0, reffac2 = 0, reffac2 = Documento.val(), txtreferen2 = 0;
         var txtreferen1 = padLeft(ClienteFactura.val(), 4) + '' + padLeft(Documento.val(), 4);
-
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
                 num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen3 = 0, txtreferen4 = 0,
                 txtreferen9 = 0, txtreferen10 = 0, txtreferen11 = 0;
-
         for (var refe1 = 0; refe1 <= txtreferen1.length; refe1++) {
             txtreferen2 = txtreferen1.substr(refe1, 1);
             switch (refe1) {
@@ -1026,25 +1135,20 @@
         txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
                 num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
         txtreferen4 = txtreferen3 / 97;
-
         txtreferen9 = txtreferen3 * 97;
         txtreferen10 = 99 - txtreferen9;
         txtreferen11 = txtreferen10.length;
-
         btnAcepta.attr('disabled', false);
     }
 
     function getReferencia() {
         var txtreferen11 = "000000000000398827";
         txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
-
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
                 num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
                 txtreferen9 = 0, txtreferen10 = 0;
-
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
-
         for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
             txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
             switch (refe1) {
@@ -1117,7 +1221,6 @@
         res2 = res1 % 1;
         res3 = res1 - res2;
         console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
-
         var ponderador_fijo = 99;
         if (res3 > 0) {
             txtreferen10 = ponderador_fijo - res3 + 1;
@@ -1136,9 +1239,9 @@
             Documento.attr('disabled', true);
             FechaFactura.attr('disabled', true);
             btnAcepta.attr('disabled', false);
-            Cantidad.focus().select();
             btnDeshacer.attr('disabled', false);
             btnDeshacer.removeClass("d-none");
+            xEstilo.focus().select();
         } else {
             btnAcepta.attr('disabled', true);
         }
@@ -1481,6 +1584,9 @@
     }
     #tblDetalleDocumento tbody td:eq(5){
         color: #008000 !important;
+    }
+    #pnlTablero input{
+        font-size: 14px; 
     }
 </style>
 <?php

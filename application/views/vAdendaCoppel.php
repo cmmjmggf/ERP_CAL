@@ -234,16 +234,16 @@
             if (xTiendaCoppel.val() || FacturaCoppel.val() || NoBodegaCoppel.val() || CantidadLotes.val() ||
                     CantidadPrepack.val()) {
                 swal({
-                    title: "¿Estas seguro?",
-                    text: "Aún no haz finalizado la adenda, seguro que quieres salir.",
+                    title: "¿ESTAS SEGURO?",
+                    text: "SEGURO QUE DESEAS SALIR.",
                     icon: "warning",
                     buttons: {
                         cancelar: {
-                            text: "Cancelar",
+                            text: "CANCELAR",
                             value: 0
                         },
                         cambiar: {
-                            text: "Salir de todas formas",
+                            text: "SALIR DE TODAS FORMAS",
                             value: 1
                         }
                     }
@@ -274,9 +274,9 @@
                     FECHA_FACTURA: FechaFacturaCoppel.val(),
                     FECHA_PEDIDO: FechaPedidoCoppel.val(),
                     PEDIDO: PedidoCoppel.val(),
-                    NO_BODEGA: PedidoCoppel.val(),
-                    CANTIDAD_LOTES: PedidoCoppel.val(),
-                    CANTIDAD_PREPACK: PedidoCoppel.val(),
+                    NO_BODEGA: NoBodegaCoppel.val(),
+                    CANTIDAD_LOTES: CantidadLotes.val(),
+                    CANTIDAD_PREPACK: CantidadPrepack.val(),
                     IMPORTE: ImporteAddenda.val(),
                     DESCUENTO: DescuentoAddenda.val(),
                     SUBTOTAL: SubtotalAddenda.val(),

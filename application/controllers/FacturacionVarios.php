@@ -49,6 +49,10 @@ class FacturacionVarios extends CI_Controller {
             if ($x['CONTROLV'] !== '') {
                 $CONTROLV = $x['CONTROLV'];
             }
+            $COLOR_COMB = 99;
+            if ($x['COLOR'] !== '' && $x['CLIENTE'] === 2121) {
+                $COLOR_COMB = $x['COLOR'];
+            }
             $this->db->insert('facturacion', array(
                 "factura" => $x["FACTURA"],
                 "tp" => $x["TP"],
@@ -59,7 +63,7 @@ class FacturacionVarios extends CI_Controller {
                 "corrida" => $x["TALLA"] === '' ? 0 : $x["TALLA"],
                 "pareped" => $x["CANTIDAD"],
                 "estilo" => strtoupper(substr($x["ESTILO"] . " " . $x["CONCEPTO"], 0, 199)),
-                "combin" => 99,
+                "combin" => $COLOR_COMB,
                 "par01" => 0, "par02" => 0, "par03" => 0,
                 "par04" => 0, "par05" => 0, "par06" => 0,
                 "par07" => 0, "par08" => 0, "par09" => 0,
@@ -74,7 +78,7 @@ class FacturacionVarios extends CI_Controller {
                 "staped" => 1,
                 "monletra" => $x["MONEDA_LETRA"],
                 "tmnda" => $x["TIPO_MONEDA"],
-                "tcamb" => $x["TIPO_CAMBIO"],
+                "tcamb" => (intval($x["TIPO_MONEDA"]) === 1 ? 0 : $x["TIPO_CAMBIO"]),
                 "cajas" => 0,
                 "origen" => 0,
                 "referen" => "{$x["CLIENTE"]}{$x["FACTURA"]}",
@@ -84,11 +88,11 @@ class FacturacionVarios extends CI_Controller {
                 "tpofac" => 0,
                 "año" => Date('Y'),
                 "zona" => $x["ZONA"],
-                "horas" => Date('h:i:s'),
+                "horas" => Date('h:i:s a'),
                 "numero" => 1,
                 "talla" => 0,
                 "cobarr" => 0,
-                "pedime" => $x["PEDIMENTO"],
+                "pedime" => $x["NUMPEDIDO"],
                 "ordcom" => $x["ORDEN_DE_COMPRA"],
                 "numadu" => 0,
                 "nomadu" => 0,
@@ -132,9 +136,9 @@ class FacturacionVarios extends CI_Controller {
                         if (!empty($Tetiqcodbarr)) {
                             $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
                         }
-                        $lxe = $this->db->query("SELECT E.Linea AS LINEA FROM estilos AS E WHERE E.Clave = {$x["ESTILO"]}")->result();
-                        if (!empty($lxe)) {
-                            $Descripcion = $lxe[0]->LINEA . " " . $x["ESTILO"] . " " . $x["TALLA"];
+                        $COLORX = $this->db->query("SELECT C.Descripcion AS DESCRIPCION FROM colores AS C WHERE C.Estilo ='{$x['ESTILO']}' AND C.Clave= {$x['COLOR_CLAVE']} ")->result();
+                        if (!empty($COLORX)) {
+                            $Descripcion = "{$x["ESTILO"]} {$COLORX[0]->DESCRIPCION} {$x["TALLA"]}";
                         }
                         break;
                     default :
@@ -156,8 +160,8 @@ class FacturacionVarios extends CI_Controller {
                         "fecha" => $FECHIN, "control" => $CONTROLV,
                         "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0) ? ($x["SUBTOTAL"] * 0.16) : 0),
                         "tmnda" => intval($x["TIPO_MONEDA"]),
-                        "tcamb" => $x["TIPO_CAMBIO"], "noidentificado" => $CodigoBarras,
-                        "referencia" => $x["REFERENCIA"], "tienda" => 0
+                        "tcamb" => (intval($x["TIPO_MONEDA"]) === 1 ? 0 : $x["TIPO_CAMBIO"]), "noidentificado" => $CodigoBarras,
+                        "referencia" => $x["REFERENCIA"], "tienda" => $x['TIENDA']
                     ));
                 }
             }
