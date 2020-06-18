@@ -74,7 +74,10 @@
                         <label for="" > <span class="badge badge-info" style="font-size: 14px;">Total Forro X Par</span></label>
                         <input type="text" class="form-control form-control-sm" readonly="" id="TotalForroPorPar" name="TotalForroPorPar" >
                     </div>
-
+                    <div class="col-12 col-sm-5 col-md-3 col-xl-3">
+                        <label for="Suela" >Suela</label>
+                        <input type="text" class="form-control form-control-sm" readonly="" id="Suela" name="Suela" >
+                    </div>
                 </div>
             </form>
         </div>

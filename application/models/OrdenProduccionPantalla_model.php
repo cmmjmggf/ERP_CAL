@@ -27,6 +27,7 @@ class OrdenProduccionPantalla_model extends CI_Model {
                             CONCAT(G.Clave,' - ',G.Nombre) AS GrupoT,
                             C.EstatusProduccion,
                             OP.SerieCorrida,
+                            OP.SuelaT AS Suela,
                             OP.S1,OP.S2,OP.S3,OP.S4,OP.S5,OP.S6,OP.S7,OP.S8,OP.S9,OP.S10,OP.S11,OP.S12,OP.S13,OP.S14,OP.S15,OP.S16,OP.S17,OP.S18,OP.S19,OP.S20,OP.S21,OP.S22,
                             OP.C1,OP.C2,OP.C3,OP.C4,OP.C5,OP.C6,OP.C7,OP.C8,OP.C9,OP.C10,OP.C11,OP.C12,OP.C13,OP.C14,OP.C15,OP.C16,OP.C17,OP.C18,OP.C19,OP.C20,OP.C21,OP.C22,
                             OP.Pares,
