@@ -348,6 +348,7 @@ class ControlPlantilla extends CI_Controller {
             $docto = $this->input->post('Docto');
             $fecdoc = $this->input->post('FECHA');
             $control = $this->input->post('Control');
+            $esNomina = $this->input->post('EsNomina');
             $this->db->set('Estatus', 2)->set('FechaRetorna', $fecdoc)->where('Documento', $docto)->where('Control', $control)->update('controlpla');
             //Hacemos el movimiento de NÓMINA
             $Doc = $this->db->query("select * from controlpla where Documento = {$docto} and control = {$control} and estatus = 2 ")->result();
@@ -355,17 +356,39 @@ class ControlPlantilla extends CI_Controller {
                 $numemp = $Doc[0]->Proveedor;
                 //$fecdoc = $Doc[0]->Fecha; //se usaba cuando capturaban anteriores, pero ahora debe ser al momento de entrega de retorno
                 if (intval($numemp) > 99) {//Si el campo proveedor es mayor a 99 lo capturamos en nomina con concepto 15
-                    $total = 0;
-                    foreach ($Doc as $key => $v) {//Sacamos el total
-                        $subtotal = floatval($v->Pares) * floatval($v->Precio);
-                        $total += $subtotal;
-                    }
                     //Ahora sacamos la semana y año actual de nomina en base a la fecha del documento
                     //Se saca con la fecha actual para que no se pague en nominas con fechas anteriores o cerradas
                     $NomActu = $this->db->query("select Sem, Ano from semanasnomina AS U "
                                     . " where str_to_date('$fecdoc','%d/%m/%Y') BETWEEN str_to_date(FechaIni,'%d/%m/%Y') AND str_to_date(FechaFin,'%d/%m/%Y') ")->result();
                     $Sem = $NomActu[0]->Sem;
                     $Ano = $NomActu[0]->Ano;
+
+                    //Calcula total del vale
+                    $total = 0;
+                    foreach ($Doc as $key => $v) {//Sacamos el total
+                        $subtotal = floatval($v->Pares) * floatval($v->Precio);
+                        $total += $subtotal;
+
+                        //Si es para sueldo normal se graba en fracpagnomina **********************
+                        if ($esNomina === '1') {
+                            $data_nomina = array(
+                                'numeroempleado' => $numemp,
+                                'maquila' => 1,
+                                'control' => $control,
+                                'estilo' => $v->Estilo,
+                                'numfrac' => $v->Fraccion,
+                                'preciofrac' => $v->Precio,
+                                'pares' => $v->Pares,
+                                'subtot' => $subtotal,
+                                'fecha' => Date('Y-m-d'),
+                                'semana' => $Sem,
+                                'anio' => $Ano,
+                                'fraccion' => $v->Fraccion,
+                                'modulo' => 'CPLA'
+                            );
+                            $this->db->insert("fracpagnomina", $data_nomina);
+                        }
+                    }
 
                     //Verificamos si el registro ya existe en prenomina por año- sem - empleado y vemos si inserta o modifica
                     $PN = $this->db->query("select * from prenomina where año = {$Ano} and numsem = {$Sem} and numemp = {$numemp} and numcon = 15 and status = 1 ")->result();
@@ -375,9 +398,13 @@ class ControlPlantilla extends CI_Controller {
                             from empleados e
                             left join asistencia a on e.numero = a.numemp and a.año = {$Ano}  and a.numsem = {$Sem}
                             where e.numero = {$numemp}  ")->result();
+
+                    $concepto = ($esNomina === '1') ? 5 : 15;
+                    $col_name = ($esNomina === '1') ? 'salariod' : 'otrper';
+
                     /* PRENOMINA */
                     if (!empty($PN)) {
-                        $this->db->where('numemp', $numemp)->where('numsem', $Sem)->where('año', $Ano)->where('numcon', 15);
+                        $this->db->where('numemp', $numemp)->where('numsem', $Sem)->where('año', $Ano)->where('numcon', $concepto);
                         $this->db->update("prenomina", array(
                             'registro' => 999,
                             'tpcon' => 1,
@@ -389,7 +416,7 @@ class ControlPlantilla extends CI_Controller {
                         $data = array(
                             'numsem' => $Sem,
                             'numemp' => $numemp,
-                            'numcon' => 15,
+                            'numcon' => $concepto,
                             'año' => $Ano,
                             'tpcon' => 1,
                             'tpcond' => 0,
@@ -414,7 +441,7 @@ class ControlPlantilla extends CI_Controller {
                         $this->db->set('registro', 999);
                         $this->db->set('depto', $Empleado[0]->depto);
                         $this->db->set('año', $Ano);
-                        $this->db->set('otrper', ($total + $PNL[0]->otrper))->update("prenominal");
+                        $this->db->set($col_name, ($total + $PNL[0]->otrper))->update("prenominal");
                     } else {
                         $this->db->insert("prenominal", array(
                             'numsem' => $Sem,
@@ -428,7 +455,7 @@ class ControlPlantilla extends CI_Controller {
                             'salario' => 0,
                             'salariod' => 0,
                             'horext' => 0,
-                            'otrper' => $total,
+                            $col_name => $total,
                             'otrper1' => 0,
                             'infon' => 0,
                             'impu' => 0,

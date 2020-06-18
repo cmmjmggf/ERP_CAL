@@ -132,18 +132,26 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3">
                         <label>Documento</label>
                         <input type="text" id="DocumentoRetorno" name="DocumentoRetorno" maxlength="4" class="form-control form-control-sm numeric">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3">
                         <label>Fecha Entrega</label>
                         <input type="text" id="FechaVale" name="FechaVale" class="form-control form-control-sm" readonly="">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-3">
                         <label>Control</label>
                         <input type="text" id="ControlRetorno" name="ControlRetorno" class="form-control form-control-sm numbersOnly" required="">
                     </div>
+
+                    <div class="col-12 col-sm-3">
+                        <div class="custom-control custom-checkbox  ">
+                            <input type="checkbox" class="custom-control-input" id="chPorNominaRetorno">
+                            <label class="custom-control-label text-info labelCheck" for="chPorNominaRetorno">Es por Nómina?</label>
+                        </div>
+                    </div>
+
                     <div class="col-6">
                     </div>
                     <div class="col-6 mt-2" align='right'>
@@ -468,6 +476,7 @@
 
         btnAceptaRetorno.click(function () {
             onDisable(btnAceptaRetorno);
+            var esNomina = mdlRetorno.find("#chPorNominaRetorno")[0].checked ? '1' : '0';
             if (DocumentoRetorno.val()) {
                 /*1.- COMPROBAR SI EXISTE ESE DOCUMENTO Y ESTA ACTIVO*/
                 $.getJSON('<?php print base_url('ControlPlantilla/onComprobarEstatusDocumento'); ?>', {
@@ -477,7 +486,13 @@
                     if (a.length > 0) {
                         var r = a[0];
                         if (parseInt(r.VALIDO) > 0) {
-                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>', {Docto: DocumentoRetorno.val(), FECHA: FechaVale.val(), Control: ControlRetorno.val()}).done(function (data) {
+                            $.post('<?php print base_url('ControlPlantilla/onRetornaDocumento'); ?>',
+                                    {
+                                        Docto: DocumentoRetorno.val(),
+                                        FECHA: FechaVale.val(),
+                                        Control: ControlRetorno.val(),
+                                        EsNomina: esNomina
+                                    }).done(function (data) {
                                 console.log(data);
                                 onEnable(btnAceptaRetorno);
                                 ControlRetorno.val('').focus();
