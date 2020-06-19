@@ -995,7 +995,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2394.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
@@ -1011,7 +1011,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2432.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
@@ -1057,7 +1057,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2415.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
@@ -1073,7 +1073,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["rfctel"] = "R.F.C. $rfc_rec, TEL. {$this->session->EMPRESA_TELEFONO}";
                             $pr["CLIENTE"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec1810.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec2428.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
