@@ -46,7 +46,7 @@
 (select case when cajas = 0  then 1 else cajas end from facturacion where cliente= cc.cliente and tp = cc.tipo and factura = cc.remicion limit 1) as cajas,
 -- case when cc.tipo = 1 then cc.importe/1.16 when cc.tipo = 2 then cc.importe end as Importe,
 cte.RazonS as nomcliente,
-concat(cte.Direccion,' Ext. ',cte.NoExt,' Int. ',cte.NoInt) as direccion ,
+concat(IFNULL(cte.Direccion,""),' Ext. ',IFNULL(cte.NoExt,""),' Int. ',IFNULL(cte.NoInt,"")) as direccion ,
 cte.Colonia,
 cte.Ciudad,
 edo.Descripcion as edo,
@@ -265,7 +265,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				</textElement>
 				<textFieldExpression><![CDATA[$P{transporte}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="0" y="95" width="314" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="03010733-8f8f-4413-b59d-1b1168d6fbc8">
 					<printWhenExpression><![CDATA[$F{ObservacionesTransporte} != "0"]]></printWhenExpression>
 				</reportElement>
