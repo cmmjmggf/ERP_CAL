@@ -311,7 +311,7 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
 			AND  DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) < 116
 	THEN CP.Saldo_Doc END AS 'OCHO',
 
-CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) > 116
+CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%Y'), '%Y-%m-%d')) >= 116
 	THEN CP.Saldo_Doc END AS 'NUEVE' "
                                     . ' '
                                     . " "

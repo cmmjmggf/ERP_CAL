@@ -624,8 +624,41 @@ FROM costomanoobratemp CMT
             $ImporteInterno = 0;
 
             foreach ($Registros as $M) {
-                if (floatval($M->Neto) > 0) {//Si el importe trae algo hace todas las otras validaciones
-                    if (floatval($M->SueldoFiscal) > floatval($M->Neto)) {//Si el salario fiscal es mas grande que el importe neto (per-ded)se le paga por interna ** inserta interna
+                if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
+                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) >= floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                        $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+                        //Agregamos el registro
+                        $this->db->insert("nominabanco", array(
+                            'tipo' => 1,
+                            'importe' => $ImporteFiscal,
+                            'fecha' => Date('d/m/Y'),
+                            'fechaap' => $fechaAp,
+                            'numemp' => $M->numemp,
+                            'nomemp' => $M->nomemp,
+                            'ctaemp' => $M->TBanbajio,
+                            'concepto' => 'ABONO EN NÓMINA',
+                            'numdepto' => $M->numdepto,
+                            'nomdepto' => $M->nomdepto
+                        ));
+
+                        $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
+                        //Agregamos el registro
+                        //Si hay sobrante guardamos como deposito en efectivo
+                        if (floatval($ImporteInterno) > 1) {
+                            $this->db->insert("nominabanco", array(
+                                'tipo' => 2,
+                                'importe' => $ImporteInterno,
+                                'fecha' => Date('d/m/Y'),
+                                'fechaap' => $fechaAp,
+                                'numemp' => $M->numemp,
+                                'nomemp' => $M->nomemp,
+                                'ctaemp' => $M->TBanbajio,
+                                'concepto' => 'DEPÓSITO EN EFECTIVO',
+                                'numdepto' => $M->numdepto,
+                                'nomdepto' => $M->nomdepto
+                            ));
+                        }
+                    } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
                         $ImporteInterno = floatval($M->Neto);
                         //Agregamos el registro
                         $this->db->insert("nominabanco", array(
@@ -640,72 +673,8 @@ FROM costomanoobratemp CMT
                             'numdepto' => $M->numdepto,
                             'nomdepto' => $M->nomdepto
                         ));
-                    } else {//Si el neto es mayor al sueldo fisca ej. Christian gana 3800 en total pero su sueldo fiscal son 1407
-                        if (floatval($M->SueldoFiscal) > 0) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
-                            $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'tipo' => 1,
-                                'importe' => $ImporteFiscal,
-                                'fecha' => Date('d/m/Y'),
-                                'fechaap' => $fechaAp,
-                                'numemp' => $M->numemp,
-                                'nomemp' => $M->nomemp,
-                                'ctaemp' => $M->TBanbajio,
-                                'concepto' => 'ABONO EN NÓMINA',
-                                'numdepto' => $M->numdepto,
-                                'nomdepto' => $M->nomdepto
-                            ));
-
-                            $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'tipo' => 2,
-                                'importe' => $ImporteInterno,
-                                'fecha' => Date('d/m/Y'),
-                                'fechaap' => $fechaAp,
-                                'numemp' => $M->numemp,
-                                'nomemp' => $M->nomemp,
-                                'ctaemp' => $M->TBanbajio,
-                                'concepto' => 'DEPÓSITO EN EFECTIVO',
-                                'numdepto' => $M->numdepto,
-                                'nomdepto' => $M->nomdepto
-                            ));
-                        } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
-                            $ImporteInterno = floatval($M->Neto);
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'tipo' => 2,
-                                'importe' => $ImporteInterno,
-                                'fecha' => Date('d/m/Y'),
-                                'fechaap' => $fechaAp,
-                                'numemp' => $M->numemp,
-                                'nomemp' => $M->nomemp,
-                                'ctaemp' => $M->TBanbajio,
-                                'concepto' => 'DEPÓSITO EN EFECTIVO',
-                                'numdepto' => $M->numdepto,
-                                'nomdepto' => $M->nomdepto
-                            ));
-                        }
                     }
                 }
-
-//                else if (floatval($M->SueldoFiscal) > 0) {//Si neto viene vacio valida si fiscal viene vacio tambien para no hacer nada
-//                    $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
-//                    //Agregamos el registro
-//                    $this->db->insert("nominabanco", array(
-//                        'tipo' => 1,
-//                        'importe' => $ImporteFiscal,
-//                        'fecha' => Date('d/m/Y'),
-//                        'fechaap' => $fechaAp,
-//                        'numemp' => $M->numemp,
-//                        'nomemp' => $M->nomemp,
-//                        'ctaemp' => $M->TBanbajio,
-//                        'concepto' => 'ABONO EN NÓMINA',
-//                        'numdepto' => $M->numdepto,
-//                        'nomdepto' => $M->nomdepto
-//                    ));
-//                }
             }
             $reports = array();
 
@@ -763,8 +732,41 @@ FROM costomanoobratemp CMT
             $ImporteInterno = 0;
 
             foreach ($Registros as $M) {
-                if (floatval($M->Neto) > 0) {//Si el importe trae algo hace todas las otras validaciones
-                    if (floatval($M->SueldoFiscal) > floatval($M->Neto)) {//Si el salario fiscal es mas grande que el importe neto (per-ded)se le paga por interna ** inserta interna
+                if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
+                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) >= floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                        $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+                        //Agregamos el registro
+                        $this->db->insert("nominabanco", array(
+                            'tipo' => 1,
+                            'importe' => $ImporteFiscal,
+                            'fecha' => Date('d/m/Y'),
+                            'fechaap' => $fechaAp,
+                            'numemp' => $M->numemp,
+                            'nomemp' => $M->nomemp,
+                            'ctaemp' => $M->TBanbajio,
+                            'concepto' => 'ABONO EN NÓMINA',
+                            'numdepto' => $M->numdepto,
+                            'nomdepto' => $M->nomdepto
+                        ));
+
+                        $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
+                        //Agregamos el registro
+                        //Si hay sobrante guardamos como deposito en efectivo
+                        if (floatval($ImporteInterno) > 1) {
+                            $this->db->insert("nominabanco", array(
+                                'tipo' => 2,
+                                'importe' => $ImporteInterno,
+                                'fecha' => Date('d/m/Y'),
+                                'fechaap' => $fechaAp,
+                                'numemp' => $M->numemp,
+                                'nomemp' => $M->nomemp,
+                                'ctaemp' => $M->TBanbajio,
+                                'concepto' => 'DEPÓSITO EN EFECTIVO',
+                                'numdepto' => $M->numdepto,
+                                'nomdepto' => $M->nomdepto
+                            ));
+                        }
+                    } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
                         $ImporteInterno = floatval($M->Neto);
                         //Agregamos el registro
                         $this->db->insert("nominabanco", array(
@@ -779,71 +781,8 @@ FROM costomanoobratemp CMT
                             'numdepto' => $M->numdepto,
                             'nomdepto' => $M->nomdepto
                         ));
-                    } else {//Si el neto es mayor al sueldo fisca ej. Christian gana 3800 en total pero su sueldo fiscal son 1407
-                        if (floatval($M->SueldoFiscal) > 0) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
-                            $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'tipo' => 1,
-                                'importe' => $ImporteFiscal,
-                                'fecha' => Date('d/m/Y'),
-                                'fechaap' => $fechaAp,
-                                'numemp' => $M->numemp,
-                                'nomemp' => $M->nomemp,
-                                'ctaemp' => $M->TBanbajio,
-                                'concepto' => 'ABONO EN NÓMINA',
-                                'numdepto' => $M->numdepto,
-                                'nomdepto' => $M->nomdepto
-                            ));
-
-                            $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'tipo' => 2,
-                                'importe' => $ImporteInterno,
-                                'fecha' => Date('d/m/Y'),
-                                'fechaap' => $fechaAp,
-                                'numemp' => $M->numemp,
-                                'nomemp' => $M->nomemp,
-                                'ctaemp' => $M->TBanbajio,
-                                'concepto' => 'DEPÓSITO EN EFECTIVO',
-                                'numdepto' => $M->numdepto,
-                                'nomdepto' => $M->nomdepto
-                            ));
-                        } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
-                            $ImporteInterno = floatval($M->Neto);
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'tipo' => 2,
-                                'importe' => $ImporteInterno,
-                                'fecha' => Date('d/m/Y'),
-                                'fechaap' => $fechaAp,
-                                'numemp' => $M->numemp,
-                                'nomemp' => $M->nomemp,
-                                'ctaemp' => $M->TBanbajio,
-                                'concepto' => 'DEPÓSITO EN EFECTIVO',
-                                'numdepto' => $M->numdepto,
-                                'nomdepto' => $M->nomdepto
-                            ));
-                        }
                     }
                 }
-//                else if (floatval($M->SueldoFiscal) > 0) {//Si neto viene vacio valida si fiscal viene vacio tambien para no hacer nada
-//                    $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
-//                    //Agregamos el registro
-//                    $this->db->insert("nominabanco", array(
-//                        'tipo' => 1,
-//                        'importe' => $ImporteFiscal,
-//                        'fecha' => Date('d/m/Y'),
-//                        'fechaap' => $fechaAp,
-//                        'numemp' => $M->numemp,
-//                        'nomemp' => $M->nomemp,
-//                        'ctaemp' => $M->TBanbajio,
-//                        'concepto' => 'ABONO EN NÓMINA',
-//                        'numdepto' => $M->numdepto,
-//                        'nomdepto' => $M->nomdepto
-//                    ));
-//                }
             }
 
             $jc = new JasperCommand();
@@ -982,90 +921,37 @@ FROM costomanoobratemp CMT
             $ImporteInterno = 0;
 
             foreach ($Registros as $M) {
-                if (floatval($M->Neto) > 0) {//Si el importe trae algo hace todas las otras validaciones
-                    if (floatval($M->SueldoFiscal) > floatval($M->Neto)) {//Si el salario fiscal es mas grande que el importe neto (per-ded)se le paga por interna ** inserta interna
-                        $ImporteInterno = floatval($M->Neto);
-
+                if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
+                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) >= floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                        $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
                         $txt = $M->col1 .
-                                str_pad($cont2, 7, "0", STR_PAD_LEFT) .
+                                str_pad($cont1, 7, "0", STR_PAD_LEFT) .
                                 $M->col3 .
                                 $M->col4 .
                                 $M->col5 .
-                                str_pad($ImporteInterno, 13, "0", STR_PAD_LEFT) . '00' .
+                                str_pad($ImporteFiscal, 13, "0", STR_PAD_LEFT) . '00' .
                                 $M->col6 .
                                 $M->col7 .
-                                $M->ctaintlobo .
+                                $M->ctafislobo .
                                 $M->col8 .
                                 $M->col9 .
                                 $M->col10 .
                                 $M->col11 .
-                                $M->conceptint .
+                                $M->concepfis .
                                 $M->col12 .
                                 "\r\n";
                         //Agregamos el registro
                         $this->db->insert("nominabanco", array(
-                            'consecutivo' => $cont2,
+                            'consecutivo' => $cont1,
                             'col1' => $txt,
-                            'tipo' => 2,
-                            'importe' => $ImporteInterno
+                            'tipo' => 1,
+                            'importe' => $ImporteFiscal
                         ));
-                        $cont2 ++;
-                    } else {//Si el neto es mayor al sueldo fisca ej. Christian gana 3800 en total pero su sueldo fiscal son 1407
-                        if (floatval($M->SueldoFiscal) > 0) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
-                            $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
+                        $cont1 ++;
 
-                            $txt = $M->col1 .
-                                    str_pad($cont1, 7, "0", STR_PAD_LEFT) .
-                                    $M->col3 .
-                                    $M->col4 .
-                                    $M->col5 .
-                                    str_pad($ImporteFiscal, 13, "0", STR_PAD_LEFT) . '00' .
-                                    $M->col6 .
-                                    $M->col7 .
-                                    $M->ctafislobo .
-                                    $M->col8 .
-                                    $M->col9 .
-                                    $M->col10 .
-                                    $M->col11 .
-                                    $M->concepfis .
-                                    $M->col12 .
-                                    "\r\n";
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'consecutivo' => $cont1,
-                                'col1' => $txt,
-                                'tipo' => 1,
-                                'importe' => $ImporteFiscal
-                            ));
-                            $cont1 ++;
-
-                            $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
-                            $txt = $M->col1 .
-                                    str_pad($cont2, 7, "0", STR_PAD_LEFT) .
-                                    $M->col3 .
-                                    $M->col4 .
-                                    $M->col5 .
-                                    str_pad($ImporteInterno, 13, "0", STR_PAD_LEFT) . '00' .
-                                    $M->col6 .
-                                    $M->col7 .
-                                    $M->ctaintlobo .
-                                    $M->col8 .
-                                    $M->col9 .
-                                    $M->col10 .
-                                    $M->col11 .
-                                    $M->conceptint .
-                                    $M->col12 .
-                                    "\r\n";
-                            //Agregamos el registro
-                            $this->db->insert("nominabanco", array(
-                                'consecutivo' => $cont2,
-                                'col1' => $txt,
-                                'tipo' => 2,
-                                'importe' => $ImporteInterno
-                            ));
-                            $cont2 ++;
-                        } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
-                            $ImporteInterno = floatval($M->Neto);
+                        $ImporteInterno = floatval($M->Neto) - floatval($M->SueldoFiscal); //El importe interno es lo neto menos lo que se le paga por fiscal ** inserta fiscal
+                        //Si hay sobrante guardamos como deposito en efectivo
+                        if (floatval($ImporteInterno) > 1) {
                             $txt = $M->col1 .
                                     str_pad($cont2, 7, "0", STR_PAD_LEFT) .
                                     $M->col3 .
@@ -1091,36 +977,34 @@ FROM costomanoobratemp CMT
                             ));
                             $cont2 ++;
                         }
+                    } else {//Si no se le paga por nomina fiscal se le paga todo el sueldo neto ** inserta interna
+                        $ImporteInterno = floatval($M->Neto);
+                        $txt = $M->col1 .
+                                str_pad($cont2, 7, "0", STR_PAD_LEFT) .
+                                $M->col3 .
+                                $M->col4 .
+                                $M->col5 .
+                                str_pad($ImporteInterno, 13, "0", STR_PAD_LEFT) . '00' .
+                                $M->col6 .
+                                $M->col7 .
+                                $M->ctaintlobo .
+                                $M->col8 .
+                                $M->col9 .
+                                $M->col10 .
+                                $M->col11 .
+                                $M->conceptint .
+                                $M->col12 .
+                                "\r\n";
+                        //Agregamos el registro
+                        $this->db->insert("nominabanco", array(
+                            'consecutivo' => $cont2,
+                            'col1' => $txt,
+                            'tipo' => 2,
+                            'importe' => $ImporteInterno
+                        ));
+                        $cont2 ++;
                     }
                 }
-//                else if (floatval($M->SueldoFiscal) > 0) {//Si neto viene vacio valida si fiscal viene vacio tambien para no hacer nada
-//                    $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
-//
-//                    $txt = $M->col1 .
-//                            str_pad($cont1, 7, "0", STR_PAD_LEFT) .
-//                            $M->col3 .
-//                            $M->col4 .
-//                            $M->col5 .
-//                            str_pad($ImporteFiscal, 13, "0", STR_PAD_LEFT) . '00' .
-//                            $M->col6 .
-//                            $M->col7 .
-//                            $M->ctafislobo .
-//                            $M->col8 .
-//                            $M->col9 .
-//                            $M->col10 .
-//                            $M->col11 .
-//                            $M->concepfis .
-//                            $M->col12 .
-//                            "\r\n";
-//                    //Agregamos el registro
-//                    $this->db->insert("nominabanco", array(
-//                        'consecutivo' => $cont1,
-//                        'col1' => $txt,
-//                        'tipo' => 1,
-//                        'importe' => $ImporteFiscal
-//                    ));
-//                    $cont1 ++;
-//                }
             }
             //Creamos el directorio y guardamos el archivo
             $this->generaArchivoBancoFiscal('N');
