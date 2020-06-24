@@ -136,10 +136,12 @@ class FacturacionVarios extends CI_Controller {
                         if (!empty($Tetiqcodbarr)) {
                             $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
                         }
-                        $COLORX = $this->db->query("SELECT C.Descripcion AS DESCRIPCION FROM colores AS C WHERE C.Estilo ='{$x['ESTILO']}' AND C.Clave= {$x['COLOR_CLAVE']} ")->result();
-                        if (!empty($COLORX)) {
-                            $Descripcion = "{$COLORX[0]->DESCRIPCION} {$x["TALLA"]}";
-                        }
+                        /* comentado el 23/06/2020 6:29PM */
+//                        $COLORX = $this->db->query("SELECT C.Descripcion AS DESCRIPCION FROM colores AS C WHERE C.Estilo ='{$x['ESTILO']}' AND C.Clave= {$x['COLOR_CLAVE']} ")->result();
+//                        if (!empty($COLORX)) {
+//                            $Descripcion = "{$COLORX[0]->DESCRIPCION} {$x["TALLA"]}";
+//                        }
+                        $Descripcion = "{$x["CONCEPTO"]} {$x["TALLA"]}";
                         break;
                     default :
                         $Descripcion = $x["CONCEPTO"];

@@ -1,4 +1,3 @@
-
 <div class="card mr-2 ml-2 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
             
@@ -1573,7 +1572,7 @@
     .text-danger {
         color: #263238 !important;
     }
-    button, label, table thead th{
+    button, label, table thead th,textarea{
         text-transform: uppercase !important;
         font-weight: bold !important;
     }
