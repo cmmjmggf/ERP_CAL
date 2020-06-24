@@ -50,8 +50,8 @@ class FacturacionVarios extends CI_Controller {
                 $CONTROLV = $x['CONTROLV'];
             }
             $COLOR_COMB = 99;
-            if ($x['COLOR'] !== '' && $x['CLIENTE'] === 2121) {
-                $COLOR_COMB = $x['COLOR'];
+            if (intval($x['COLORETQ']) > 0 && intval($x['CLIENTE']) === 2121) {
+                $COLOR_COMB = $x['COLORETQ'];
             }
             $this->db->insert('facturacion', array(
                 "factura" => $x["FACTURA"],
@@ -132,7 +132,7 @@ class FacturacionVarios extends CI_Controller {
                         $Tetiqcodbarr = $this->db->query("SELECT E.codbarr AS CODIGO_DE_BARRA "
                                         . "FROM etiqcodbarr AS E "
                                         . "WHERE E.cliente = {$x["CLIENTE"]} AND "
-                                        . "E.estilo = {$x["ESTILO"]}")->result();
+                                        . "E.estilo = {$x["ESTILO"]} AND E.comb = {$x["COLORETQ"]}")->result();
                         if (!empty($Tetiqcodbarr)) {
                             $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
                         }
@@ -376,6 +376,7 @@ class FacturacionVarios extends CI_Controller {
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $pr = array();
             $CERTIFICADO_CFD = "";
+//            print "1";
             if (intval($x['TP']) === 1 && intval($x['MODO']) === 2) {
                 $dtm = $this->db->query("SELECT  C.Comprobante, C.Tipo, C.Version, C.Serie, "
                                 . "C.Folio, C.StatusUUID, C.Numero, C.FechaCancelacion, "
@@ -400,7 +401,7 @@ class FacturacionVarios extends CI_Controller {
                     $qr = "https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id=$UUID&re=$rfc_emi&rr=$rfc_rec&tt=$TOTAL_FOR&fe=TW9+rA==";
                 } else {
                     $qr = "NO SE OBTUVIERON DATOS DEL CFDI, INTENTE NUEVAMENTE O MAS TARDE (QR ERROR)";
-                    exit(0);
+//                    print $qr;
                 }
                 $qr_url = QRcode::png($qr, 'rpt/qr.png');
                 $pr = array();
@@ -410,7 +411,9 @@ class FacturacionVarios extends CI_Controller {
                         $pr["empresa"] = $this->session->EMPRESA_RAZON;
                         BREAK;
                 }
-                $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
+                if (!empty($dtm)) {
+                    $CERTIFICADO_CFD = $cfdi->CertificadoCFD;
+                }
             }
             switch (intval($x["TP"])) {
                 case 1:
@@ -749,6 +752,30 @@ class FacturacionVarios extends CI_Controller {
             $x = $this->input->get();
             $str = "SELECT COUNT(*) AS EXISTE, P.Clave AS PEDIDO, P.Pares AS PARES, IFNULL(P.ParesFacturados,0) AS PARES_FACTURADOS, P.Estilo AS ESTILO, "
                     . "P.Color AS COLOR_CLAVE, (SELECT C.Descripcion FROM erp_cal.colores AS C WHERE C.Estilo = P.Estilo AND C.Clave = P.Color) AS COLOR FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} ";
+
+            print json_encode($this->db->query($str)->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getColoresXEstiloEtiq() {
+        try {
+            $x = $this->input->get();
+            $str = "SELECT C.comb AS CLAVE_COLOR, C.color AS COLOR, C.codbarr AS CODIGO FROM etiqcodbarr AS C "
+                    . "WHERE C.Estilo = '{$x['ESTILO']}'  AND C.cliente = {$x['CLIENTE']} ";
+
+            print json_encode($this->db->query($str)->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getEtiqColorXEstilo() {
+        try {
+            $x = $this->input->get();
+            $str = "SELECT C.codbarr AS CODIGO,C.color AS COLOR FROM etiqcodbarr AS C "
+                    . "WHERE C.Estilo = '{$x['ESTILO']}' AND C.comb = {$x['COLOR']} AND C.cliente = {$x['CLIENTE']} LIMIT 1 ";
 
             print json_encode($this->db->query($str)->result());
         } catch (Exception $exc) {

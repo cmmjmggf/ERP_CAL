@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec2121" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.2396694214876043"/>
+	<property name="ireport.zoom" value="2.4157650000000035"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -35,7 +35,7 @@ END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOr
 CT.Clave AS CLAVE_TIENDA,CONCAT(CT.Clave," ",CT.Consignatario) AS NOMBRE_TIENDA, CT.Direccion AS DIRECCION_TIENDA, CT.Colonia AS COLONIA_TIENDA, CT.Ciudad AS CIUDAD_TIENDA,
 CT.Estado AS ESTADO_TIENDA, CT.NumeroInterior AS NUMERO_INTERIOR,CT.NumeroExterior AS NUMERO_EXTERIOR, CT.CodigoPostal AS CODIGOPOSTAL_TIENDA, CT.TPProveedor AS TP_TIENDA,
 CT.NumeroDeProveedor AS NUMERODEPROVEEDOR_TIENDA, "" AS OBSERVACION,
-F.cantidad AS CANTIDAD, F.descripcion AS DESCRIPCION, F.claveproducto AS CLAVE_PRODUCTO, F.noidentificado AS NOIDENTIFICADO
+F.cantidad AS CANTIDAD,concat(ifnull(F.codigo,"")," ", F.descripcion) AS DESCRIPCION, CONCAT(F.codigo," ", F.descripcion) AS DESCRIPCION_C, F.claveproducto AS CLAVE_PRODUCTO, F.noidentificado AS NOIDENTIFICADO
 FROM facturadetalle AS F
 INNER JOIN clientes AS C ON   C.Clave = 2121
 LEFT JOIN comprobantes AS CFDI ON CFDI.Folio = F.numfac  AND CFDI.Tipo  ='I'
@@ -120,6 +120,7 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121 AND F.tp = 1
 	<field name="DESCRIPCION" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="DESCRIPCION_C" class="java.lang.String"/>
 	<field name="CLAVE_PRODUCTO" class="java.lang.String"/>
 	<field name="NOIDENTIFICADO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -221,21 +222,14 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121 AND F.tp = 1
 				<text><![CDATA[U-Me]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="78" y="188" width="50" height="13" forecolor="#FFFFFF" uuid="989682a8-3c42-4690-bb56-468681026366"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Control]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="127" y="188" width="45" height="13" forecolor="#FFFFFF" uuid="787adb88-fa27-40ce-ab64-084203394638"/>
+				<reportElement x="79" y="188" width="45" height="13" forecolor="#FFFFFF" uuid="787adb88-fa27-40ce-ab64-084203394638"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="171" y="188" width="42" height="13" forecolor="#FFFFFF" uuid="97e93cc9-8ea8-44be-a27c-6ec836bd36df"/>
+				<reportElement x="124" y="188" width="42" height="13" forecolor="#FFFFFF" uuid="97e93cc9-8ea8-44be-a27c-6ec836bd36df"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -510,7 +504,7 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121 AND F.tp = 1
 				<textFieldExpression><![CDATA[$F{TP_TIENDA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="299" y="188" width="50" height="13" forecolor="#FFFFFF" uuid="3199dc44-9452-4d18-ac6a-461efa4a5d75"/>
+				<reportElement x="166" y="188" width="45" height="13" forecolor="#FFFFFF" uuid="3199dc44-9452-4d18-ac6a-461efa4a5d75"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -597,14 +591,6 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121 AND F.tp = 1
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CANTIDAD}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement mode="Transparent" x="78" y="0" width="221" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="ac4418a1-79e4-464f-9446-97c499aae6af"/>
-				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{DESCRIPCION}]]></textFieldExpression>
-			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="299" y="0" width="50" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="2d67f538-0743-4b31-9e8c-660efc3fc2d0"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle" rotation="None" markup="none">
@@ -620,6 +606,14 @@ WHERE F.numfac = $P{factura} AND F.numcte = 2121 AND C.Clave = 2121 AND F.tp = 1
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NOIDENTIFICADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="89" y="0" width="210" height="12" forecolor="#333333" backcolor="#FFFFFF" uuid="574cdd58-2480-46c0-ba23-26b796088715"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DESCRIPCION_C}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

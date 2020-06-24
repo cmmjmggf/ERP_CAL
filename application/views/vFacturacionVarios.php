@@ -101,10 +101,10 @@
                     </div>
                     <div class="col-12 order-1">
                         <div id="info_control" class="d-none">
-                            <label>Control</label>
-                            <input type="text" id="ControlV" name="ControlV" style="color: #0D47A1 !important; font-size: 18px;    padding-top: 0px;    padding-bottom: 0px;    padding-left: 4px;    padding-right: 4px;"  class="form-control form-control-sm" maxlength="12">
-                            <label>Pares restantes</label>
-                            <input type="text" id="ParesDelControlV" readonly="" name="ParesDelControlV" max="36" min="0" class="form-control form-control-sm">
+                            <label class="d-none">Control</label>
+                            <input type="text" id="ControlV" name="ControlV" readonly="" style="color: #0D47A1 !important; font-size: 18px;    padding-top: 0px;    padding-bottom: 0px;    padding-left: 4px;    padding-right: 4px;"  class="form-control form-control-sm d-none" maxlength="12">
+                            <label class="d-none">Pares restantes</label>
+                            <input type="text" id="ParesDelControlV" readonly="" name="ParesDelControlV" max="36" min="0" class="form-control form-control-sm d-none">
                         </div>  
                     </div>  
                 </div>  
@@ -128,20 +128,28 @@
                     <div class="col-12 text-center d-none" id="Color_panel">
                         <label>Color</label>
                         <div class="row"> 
-                            <div class="col-3"  style="padding-right: 5px; padding-left: 5px;"> 
-                                <input type="text" readonly="" id="ColorClave" name="ColorClave" class="form-control">
+                            <div class="col-12">
+                                <select id="ColorEtiq" name="ColorEtiq" class="form-control">
+
+                                </select>
                             </div>
-                            <div class="col-9">
-                                <p class="color_x_control" style="color: #E74C3C !important; font-weight: bold;">-</p>
+                            <div class="col-12">
+                                <p class="codigo_estilocolor" style="margin-bottom: 0px; color: #E74C3C !important; font-weight: bold; font-size: 25px;    font-style: italic; ">-</p>
+                            </div>
+                            <div class="col-3 d-none"  style="padding-right: 5px; padding-left: 5px;"> 
+                                <input type="text" readonly="" id="ColorClave" name="ColorClave" class="form-control d-none">
+                            </div>
+                            <div class="col-9 d-none">
+                                <p class="color_x_control d-none" style="color: #E74C3C !important; font-weight: bold;">-</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="info_control_pares" class="d-none">
                     <div class="w-100 mb-4"></div> 
-                    <span class="font-weight-bold pares_controlv mt-2" style="color: #ef1000">0 pares</span>
+                    <span class="font-weight-bold pares_controlv mt-2 d-none" style="color: #ef1000">0 pares</span>
                     <div class="w-100 mb-4"></div> 
-                    <span class="font-weight-bold pares_facturados mt-2" style="color: #ef1000">0 pares</span>
+                    <span class="font-weight-bold pares_facturados mt-2 d-none" style="color: #ef1000">0 pares</span>
                     <!--<input type="text" id="Estilo" name="Estilo" maxlength="40" minlength="0" class="form-control form-control-sm">-->
                 </div> 
             </div> 
@@ -389,6 +397,7 @@
             Cantidad = pnlTablero.find('#Cantidad'),
             xEstilo = pnlTablero.find('#xEstilo'),
             Estilo = pnlTablero.find('#Estilo'),
+            ColorEtiq = pnlTablero.find('#ColorEtiq'),
             Concepto = pnlTablero.find('#Concepto'),
             Precio = pnlTablero.find('#Precio'),
             Talla = pnlTablero.find('#Talla'),
@@ -461,7 +470,8 @@
         mdlTiendaCoppel.on('hidden.bs.modal', function () {
             TiendaCoppelV[0].selectize.enable();
             if (parseInt(ClienteFactura.val()) === 2121 && TiendaCoppelClaveV.val() !== '') {
-                ControlV.focus().select();
+//                ControlV.focus().select();
+                Cantidad.focus().select();
             }
             handleEnterDiv(pnlTablero);
         });
@@ -502,9 +512,9 @@
             if (parseInt(ClienteFactura.val()) === 2121) {
                 pnlTablero.find("#info_control_pares").removeClass("d-none");
                 pnlTablero.find("#info_control").removeClass("d-none");
-                ColorClave.removeClass("d-none");
+//                ColorClave.removeClass("d-none");
                 btnCambiaTienda.removeClass("d-none");
-                pnlTablero.find("p.color_x_control").removeClass("d-none");
+//                pnlTablero.find("p.color_x_control").removeClass("d-none");
                 pnlTablero.find("#Color_panel").removeClass("d-none");
                 Cantidad.addClass("selectNotEnter");
             } else {
@@ -583,6 +593,7 @@
                  * ID, cliente, remicion, fecha, importe, tipo, numpol, numcia, 
                  * status, pagos, saldo, comiesp, tcamb, tmnda, stscont, nc, factura 
                  */
+                getVistaPreviaX(ClienteFactura.val(), Documento.val(), TPFactura.val());
                 var p = {
                     CLIENTE: ClienteFactura.val(),
                     FACTURA: Documento.val(),
@@ -599,7 +610,6 @@
                 };
                 $.post('<?php print base_url('FacturacionVarios/onCerrarDocumento'); ?>', p).done(function (a) {
                     console.log(a);
-                    getVistaPrevia();
                     $.getJSON('<?php print base_url('FacturacionVarios/getUltimaFactura') ?>', {
                         TP: TPFactura.val()
                     }).done(function (a) {
@@ -666,6 +676,25 @@
                 Estilo[0].selectize.clear(true);
             }
         });
+        ColorEtiq.change(function () {
+            if (ColorEtiq.val()) {
+                $.getJSON('<?php print base_url('FacturacionVarios/getEtiqColorXEstilo'); ?>',
+                        {ESTILO: xEstilo.val(), CLIENTE: ClienteClave.val(), COLOR: ColorEtiq.val()}).done(function (a) {
+                    if (a.length > 0) {
+                        pnlTablero.find("p.codigo_estilocolor").text(a[0].CODIGO);
+                        Concepto.val(a[0].COLOR);
+                        ColorClave.val(ColorEtiq.val());
+                        Concepto.focus();
+                    } else {
+                        pnlTablero.find("p.codigo_estilocolor").text("");
+                    }
+                }).fail(function (x) {
+                    console.log(x);
+                    getError(x);
+                });
+            }
+        });
+
         xEstilo.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 onEnable(ControlV);
@@ -675,6 +704,22 @@
                     if (Estilo.val()) {
                         onObtenerCodigoSatXEstilo();
                         Concepto.focus().select();
+                        $.getJSON('<?php print base_url('FacturacionVarios/getColoresXEstiloEtiq'); ?>',
+                                {CLIENTE: ClienteClave.val(), ESTILO: xEstilo.val()}).done(function (a) {
+                            if (a.length > 0) {
+                                ColorEtiq[0].selectize.clear(true);
+                                ColorEtiq[0].selectize.clearOptions();
+                                var optionsx = "<option></option>";
+                                $.each(a, function (k, v) {
+                                    ColorEtiq[0].selectize.addOption({text: v.CLAVE_COLOR + " " + v.COLOR, value: v.CLAVE_COLOR});
+                                });
+                            } else {
+                                ColorEtiq.html("<option value=''></option>");
+                            }
+                        }).fail(function (x) {
+                            console.log(x);
+                            getError(x);
+                        });
                     } else {
                         onCampoInvalido(pnlTablero, 'NO EXISTE ESTE ESTILO, ESPECIFIQUE OTRO', function () {
                             xEstilo.focus().select();
@@ -771,6 +816,24 @@
             }
         });
         btnAcepta.click(function () {
+            if (parseInt(ClienteClave.val()) === 2121 && Talla.val() === '') {
+                onCampoInvalido(pnlTablero, "CON EL CLIENTE COPPEL ES NECESARIO ESPECIFICAR UNA TALLA", function () {
+                    Talla.focus().select();
+                });
+                return;
+            }
+            if (parseInt(ClienteClave.val()) === 2121 && xEstilo.val() === '') {
+                onCampoInvalido(pnlTablero, "CON EL CLIENTE COPPEL ES NECESARIO ESPECIFICAR UN ESTILO", function () {
+                    xEstilo.focus();
+                });
+                return;
+            }
+            if (parseInt(ClienteClave.val()) === 2121 && ColorClave.val() === '') {
+                onCampoInvalido(pnlTablero, "CON EL CLIENTE COPPEL ES NECESARIO ESPECIFICAR UN COLOR", function () {
+                    ColorClave[0].selectize.focus();
+                });
+                return;
+            }
             /*validar encabezado*/
             ClienteClave.attr("disabled", false);
             onEnable(ControlV);
@@ -835,6 +898,7 @@
                                 TIENDA_CLAVE_TEXT: TiendaCoppelClaveV.val(),
                                 NUMPEDIDO: Pedido.val(),
                                 COLOR_CLAVE: ColorClave.val(),
+                                COLORETQ: ColorClave.val(),
                                 COLOR_TEXT: pnlTablero.find("p.color_x_control").text(),
                                 CONTROLV: ControlV.val() ? ControlV.val() : '', PARES_RESTANTES: ParesDelControlV.val()
                             };
@@ -846,6 +910,9 @@
                                     Precio.val('');
                                     Talla.val('');
                                     Subtotal.val('');
+                                    onClear(ColorEtiq);
+                                    onClear(ColorClave);
+                                    pnlTablero.find("p.codigo_estilocolor").text("");
                                     pnlTablero.find("span.subtotaldocvarios").text("$0.0");
                                     pnlTablero.find(".productoSAT").text('-');
                                     pnlTablero.find("#cNoIva")[0].checked = false;
@@ -870,7 +937,7 @@
                                     onCloseOverlay();
                                 });
                                 //                                } else {
-//
+                                //
                                 //                                }
                             } else {
                                 swal('ATENCIÓN', 'ES NECESARIO ESPECIFICAR TODA LA INFORMACIÓN \n Cantidad \n Estilo \n Precio ', 'error').then((value) => {
@@ -908,8 +975,7 @@
                 var x = parseInt(TPFactura.val()) === 1 ? 1 : 2;
                 if (x === 1 || x === 2) {
                     onOpenOverlay('');
-                    $.getJSON('<?php print base_url('FacturacionVarios/getUltimaFactura') ?>', {
-                        TP: x
+                    $.getJSON('<?php print base_url('FacturacionVarios/getUltimaFactura') ?>', {TP: x
                     }).done(function (a) {
                         if (a.length > 0) {
                             var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
@@ -1018,8 +1084,7 @@
             "scrollCollapse": false,
             "bSort": true,
             "scrollY": 200,
-            "scrollX": true,
-            "drawCallback": function (settings) {
+            "scrollX": true, "drawCallback": function (settings) {
                 var api = this.api();
                 var prs = 0;
                 console.log(api.rows().data());
@@ -1027,8 +1092,7 @@
                     prs = prs + parseInt(v[6]);
                 }); //                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
                 pnlTablero.find("h4.cantidad_facturada").text('CANTIDAD  ' + prs);
-            }
-            , initComplete: function () {
+            }, initComplete: function () {
                 ClienteClave.focus();
             }
         });
@@ -1070,8 +1134,7 @@
         var txtreferen1 = padLeft(ClienteFactura.val(), 4) + '' + padLeft(Documento.val(), 4);
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen3 = 0, txtreferen4 = 0,
-                txtreferen9 = 0, txtreferen10 = 0, txtreferen11 = 0;
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen3 = 0, txtreferen4 = 0, txtreferen9 = 0, txtreferen10 = 0, txtreferen11 = 0;
         for (var refe1 = 0; refe1 <= txtreferen1.length; refe1++) {
             txtreferen2 = txtreferen1.substr(refe1, 1);
             switch (refe1) {
@@ -1145,8 +1208,7 @@
         txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
-                txtreferen9 = 0, txtreferen10 = 0;
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0, txtreferen9 = 0, txtreferen10 = 0;
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
         for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
             txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
@@ -1207,7 +1269,6 @@
                     break;
             }
         }
-
 
         txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
                 num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
@@ -1251,9 +1312,7 @@
             if (a.length > 0) {
                 var r = [];
                 $.each(a, function (k, v) {
-                    r.push([v.ID, v.CLIENTE, v.DOCTO, v.FECHA, v.TP,
-                        '$' + $.number(v.IMPORTE, 2, '.', ','), v.IMPORTE,
-                        '$' + $.number(v.PAGOS, 2, '.', ','), v.PAGOS,
+                    r.push([v.ID, v.CLIENTE, v.DOCTO, v.FECHA, v.TP, '$' + $.number(v.IMPORTE, 2, '.', ','), v.IMPORTE, '$' + $.number(v.PAGOS, 2, '.', ','), v.PAGOS,
                         (parseFloat(v.SALDO) <= 0) ? '<span style="color: #689F38 !important;">$' + $.number(v.SALDO, 2, '.', ',') + '</span>' : '<span class="text-danger">$' + $.number(v.SALDO, 2, '.', ',') + '</span>', v.SALDO,
                         '<span class="fa fa-lock"></span>',
                         v.CAJAS_FACTURACION, v.OBS, v.DESCUENTO, v.PARES_FACTURADOS, v.FACTURA, v.TIPO_MONEDA, 1,
@@ -1281,9 +1340,7 @@
                 var r = [];
                 DetalleDocumento.rows().remove().draw();
                 $.each(a, function (k, v) {
-                    r.push([v.ID, v.CLIENTE, v.DOCTO, v.FECHA, v.TP, v.CONCEPTO, v.CANTIDAD,
-                        '$' + $.number(v.PRECIO, 2, '.', ','),
-                        '$' + $.number(v.SUBTOTAL, 2, '.', ',')]);
+                    r.push([v.ID, v.CLIENTE, v.DOCTO, v.FECHA, v.TP, v.CONCEPTO, v.CANTIDAD, '$' + $.number(v.PRECIO, 2, '.', ','), '$' + $.number(v.SUBTOTAL, 2, '.', ',')]);
                 });
                 DetalleDocumento.rows.add(r).draw(false);
                 if (ClienteFactura.val() && Documento.val()) {
@@ -1298,7 +1355,6 @@
             onCloseOverlay();
         });
     }
-
 
     function getTotales(tf) {
         if (tf) {
@@ -1342,8 +1398,7 @@
         txtreferen11 = padLeft(ClienteFactura.val(), 14) + '' + padLeft(Documento.val(), 4);
         var num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0,
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
-                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
-                txtreferen9 = 0, txtreferen10 = 0;
+                num10 = 0, num11 = 0, num12 = 0, num13 = 0, num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0, num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0, txtreferen9 = 0, txtreferen10 = 0;
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
         for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
             txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
@@ -1405,7 +1460,6 @@
             }
         }
 
-
         txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
                 num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
         var res = 0, res1 = 0, res2 = 0, res3 = 0;
@@ -1433,6 +1487,25 @@
             CLIENTE: ClienteFactura.val().trim() !== '' ? ClienteFactura.val() : '',
             DOCUMENTO_FACTURA: Documento.val().trim() !== '' ? Documento.val() : '',
             TP: TPFactura.val().trim() !== '' ? TPFactura.val() : '',
+            MODO: modo
+        }).done(function (data, x, jq) {
+            onBeep(1);
+            onCloseOverlay();
+            onImprimirReporteFancyAFC(data, function (a, b) {
+                location.reload();
+            });
+        }).fail(function (x, y, z) {
+            swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
+
+    function  getVistaPreviaX(cliente, doc, tp) {
+        $.post('<?php print base_url('FacturacionVarios/getVistaPrevia'); ?>', {
+            CLIENTE: cliente,
+            DOCUMENTO_FACTURA: doc,
+            TP: tp,
             MODO: modo
         }).done(function (data, x, jq) {
             onBeep(1);
@@ -1478,8 +1551,7 @@
             if (ClienteFactura.val() && TPFactura.val()) {
                 var x = tpx === 1 ? 1 : 2;
                 if (x === 1 || x === 2) {
-                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {
-                        TP: x
+                    $.getJSON('<?php print base_url('FacturacionProduccion/getUltimaFactura') ?>', {TP: x
                     }).done(function (a) {
                         if (a.length > 0) {
                             var r = parseInt(TPFactura.val()) === 1 ? a[0].ULFAC : a[0].ULFACR;
@@ -1543,8 +1615,7 @@
                     Cantidad.focus().select();
                 });
             }
-        }
-        ).fail(function (x) {
+        }).fail(function (x) {
             getError(x);
         });
     }
