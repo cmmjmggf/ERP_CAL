@@ -88,7 +88,7 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                 $this->db->where("FD.Factura", $x['FACTURA']);
             }
             if ($x['FACTURA'] === '') {
-                $this->db->limit(50);
+                $this->db->limit(1);
             }
             $this->db->order_by('FD.Factura', 'DESC');
             $data = $this->db->get()->result();
@@ -127,7 +127,7 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                             "iva" => $x["IVA"],
                             "total" => $x["TOTAL"]
                 ));
-                $facturadetalle = $this->db->query("SELECT SUBSTR(F.descripcion, (length(F.descripcion)-2),3) AS TALLA, F.* FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} and F.numcte = 2121")->result();
+                $facturadetalle = $this->db->query("SELECT  SUBSTRING(F.descripcion, -3) AS TALLA, F.* FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} and F.numcte = 2121")->result();
                 foreach ($facturadetalle as $k => $v) {
                     $check_existe = $this->db->query("SELECT COUNT(*) AS EXISTE "
                                     . "FROM facturasdetalles AS F "
@@ -152,16 +152,16 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                                     "grupo" => 1
                         ));
                     } else {
-                        $TotalItem = floatval($v->cantidad) * floatval($v->Precio);
-                        $TotalConDescuentoItem = floatval($v->cantidad) * floatval($v->Precio);
-                        $ParesPorPunto = $v->ParesPorPunto + $v->cantidad;
-                        $this->db
-                                ->set("TotalItem", "TotalItem + {$TotalItem}")
-                                ->set("TotalConDescuentoItem", "{$TotalConDescuentoItem}")
-                                ->where("factura", $x["FACTURA"])
-                                ->where("EstiloCliente", $v->noidentificado)
-                                ->where("Talla", $v->TALLA)
-                                ->update("facturasdetalles");
+//                        $TotalItem = floatval($v->cantidad) * floatval($v->Precio);
+//                        $TotalConDescuentoItem = floatval($v->cantidad) * floatval($v->Precio);
+//                        $ParesPorPunto = $v->ParesPorPunto + $v->cantidad;
+//                        $this->db
+//                                ->set("TotalItem", "{$TotalItem}")
+//                                ->set("TotalConDescuentoItem", "{$TotalConDescuentoItem}")
+//                                ->where("factura", $x["FACTURA"])
+//                                ->where("EstiloCliente", $v->noidentificado)
+//                                ->where("Talla", $v->TALLA)
+//                                ->update("facturasdetalles");
                     }
 //                    $this->db->set("cantidadlotes", $x['CANTIDAD_LOTES'])
 //                            ->where("numero", $x["TIENDA"])
