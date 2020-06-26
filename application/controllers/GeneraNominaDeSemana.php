@@ -822,6 +822,14 @@ class GeneraNominaDeSemana extends CI_Controller {
                             ->update('prenominal');
                 }
             }
+            /* NO HABIA PASADO PERO ESTA VEZ DEL COVID NO COBRARON ABONO PARA EL PRESTAMO*/
+            if (floatval($v->AbonoPres) <= 0) {
+                $this->db->set('precaha', 0)->where('numsem', $SEM)->where('status', 1)
+                        ->where('año', $ANIO)->where('numemp', $v->Numero)
+                        ->update('prenominal');
+                $this->db->query("DELETE FROM prenomina WHERE numcon = 65 AND año = {$ANIO} AND numsem = {$SEM} AND  numemp = {$v->Numero} AND status = 1");
+                $this->db->query("DELETE FROM prestamospag WHERE  año = {$ANIO} AND sem = {$SEM} AND  numemp = {$v->Numero} and status = 1");
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
