@@ -45,7 +45,8 @@ class Actualizaprecioordencompra_model extends CI_Model {
                     ->join("proveedores AS P", 'ON P.Clave = G.Proveedor')
                     ->where("G.Folio", $Folio)
                     ->where("G.Tp", $Tp)
-                    ->where_in("G.Estatus", array("PENDIENTE", "ACTIVA"));
+                    ->where_in("G.Estatus", array("PENDIENTE", "ACTIVA"))
+                    ->order_by("G.Estatus","DESC");
             $query = $this->db->get();
             /*
              * FOR DEBUG ONLY
