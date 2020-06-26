@@ -268,6 +268,7 @@
                     && CantidadLotes.val() && CantidadPrepack.val()) {
                 onOpenOverlay('Espere...');
                 onEnable(TiendaCoppel);
+                onDisable(btnAceptaAddendaCoppel);
                 var p = {
                     TIENDA: TiendaCoppel.val(),
                     FACTURA: FacturaCoppel.val(),
@@ -291,15 +292,17 @@
                         text: "SE HAN GENERADO LA ADENDA",
                         icon: "success",
                         buttons: false,
-                        timer: 2000
+                        timer: 500
                     }).then((action) => {
+                        onEnable(btnAceptaAddendaCoppel);
                         onResetAdendaCoppel();
+                        FacturaCoppel.focus().select();
                     });
                 }).fail(function (x) {
+                    onEnable(btnAceptaAddendaCoppel);
                     onCloseOverlay();
                     getError(x);
                 }).always(function () {
-
                 });
             } else {
                 onCloseOverlay();

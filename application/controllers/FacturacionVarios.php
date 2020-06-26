@@ -132,7 +132,7 @@ class FacturacionVarios extends CI_Controller {
                         $Tetiqcodbarr = $this->db->query("SELECT E.codbarr AS CODIGO_DE_BARRA "
                                         . "FROM etiqcodbarr AS E "
                                         . "WHERE E.cliente = {$x["CLIENTE"]} AND "
-                                        . "E.estilo = {$x["ESTILO"]} AND E.comb = {$x["COLORETQ"]}")->result();
+                                        . "E.estilo = '{$x["ESTILO"]}' AND E.comb = {$x["COLORETQ"]}")->result();
                         if (!empty($Tetiqcodbarr)) {
                             $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
                         }

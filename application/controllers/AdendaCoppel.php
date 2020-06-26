@@ -127,7 +127,7 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                             "iva" => $x["IVA"],
                             "total" => $x["TOTAL"]
                 ));
-                $facturadetalle = $this->db->query("SELECT  SUBSTRING(F.descripcion, -3) AS TALLA, F.* FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} and F.numcte = 2121")->result();
+                $facturadetalle = $this->db->query("SELECT  SUBSTRING(REPLACE(F.descripcion,\" \",\"\"), -3) AS TALLA, F.* FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} and F.numcte = 2121")->result();
                 foreach ($facturadetalle as $k => $v) {
                     $check_existe = $this->db->query("SELECT COUNT(*) AS EXISTE "
                                     . "FROM facturasdetalles AS F "
