@@ -948,6 +948,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pr["SEMANAINICIO"] = $x['SEMANA_INICIAL'];
             $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
             $pr["ANO"] = $x['ANIO'];
+            $pr["ARTICULO"] = $x['ARTICULO'];
             $jc->setParametros($pr);
             $jc->setJasperurl('jrxml\conspifo\PielGeneral.jasper');
             $jc->setFilename("CONSUMO_PIEL_GENERAL_" . Date('dmYhis'));

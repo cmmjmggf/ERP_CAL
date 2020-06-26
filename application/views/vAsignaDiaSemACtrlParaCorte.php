@@ -316,7 +316,8 @@
                             SEMANA: Semana.val() ? Semana.val() : '',
                             DIA: Dia.val() ? Dia.val() : '',
                             DIAT: DiaT.val() ? DiaT.val() : '',
-                            ANO: Anio.val() ? Anio.val() : ''
+                            ANO: Anio.val() ? Anio.val() : '',
+                            FRACCION: Fraccion.val() ? Fraccion.val() : ''
                         };
                         onOpenOverlay('Espere un momento...');
                         btnImprimeXDia.attr('disabled', true);

@@ -490,13 +490,34 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
             $reports["1UNO"] = $jc->getReport();
 
             /* 2. REPORTE Entrega de material para corte del programa - agrupado empleado  */
-            $jc->setParametros($P);
-            $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmat.jasper');
+
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["SEMANA"] = $x['SEMANA'];
+            $P["DIA"] = $x['DIA'];
+            $P["DIAT"] = $x['DIAT'];
+            $P["ANO"] = $x['ANO'];
+            if (intval($x['FRACCION'] !== '' ? $x['FRACCION'] : 0) > 0) {
+                $P["FRACCION"] = $x['FRACCION'] ;
+                $jc->setParametros($P);
+                $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatfraccion.jasper');
+            } else {
+                $jc->setParametros($P);
+                $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmat.jasper');
+            }
             $jc->setFilename('asidiacontmat_' . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
             $reports['2DOS'] = $jc->getReport();
 
             /* 3. REPORTE Entrega de material para corte del programa - agrupado grupos de articulo */
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["SEMANA"] = $x['SEMANA'];
+            $P["DIA"] = $x['DIA'];
+            $P["DIAT"] = $x['DIAT'];
+            $P["ANO"] = $x['ANO'];
             $jc->setParametros($P);
             $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatg.jasper');
             $jc->setFilename('asidiacontmatg_' . Date('dmYhis'));

@@ -113,9 +113,10 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             $this->db->select("OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT, "
                             . "A.PrecioActual AS Precio, OP.Pares, "
                             . "((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS Consumo, "
-                            . "SUM(OPD.Cantidad) AS Cantidad, A.Abono, "
+                            . "ifnull(OP.CantidadPiel1,0) AS Cantidad, A.Abono, "
                             . "A.Devolucion, A.Basura, A.Piocha,"
-                            . "(SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0))) AS Diferencia,"
+                     
+                            . "(ifnull(OP.CantidadPiel1,0)  - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0))) AS Diferencia,"
                             . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,"
                             . "(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS RealPesos, "
                             . "(A.PrecioActual * (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0)))) AS DifPesos,"
@@ -149,7 +150,7 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                 $this->db->where("A.Estilo = '$ESTILO'", null, false);
             }
             $this->db->where("A.TipoMov = '$TIPO'", null, false)
-                    ->group_by('OP.ControlT')->group_by('A.Articulo')
+                    ->group_by('OP.ControlT')->group_by('OP.ControlT')->group_by('A.Articulo')
                     ->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
             $str = $this->db->last_query();
 //            print $str."\n"."\n";
