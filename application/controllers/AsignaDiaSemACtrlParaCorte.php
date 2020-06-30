@@ -498,15 +498,27 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
             $P["DIA"] = $x['DIA'];
             $P["DIAT"] = $x['DIAT'];
             $P["ANO"] = $x['ANO'];
-            if (intval($x['FRACCION'] !== '' ? $x['FRACCION'] : 0) > 0) {
-                $P["FRACCION"] = $x['FRACCION'] ;
+            if ($x['FRACCION'] !== "" || $x['FRACCION'] === 99 || $x['FRACCION'] === 100 ||
+                    $x['FRACCION'] === "99" || $x['FRACCION'] === "100" || $x['FRACCION'] === "99,100") {
+                switch ($x['FRACCION']) {
+                    case "99":
+                        $P["FRACCION"] = str_replace(",", "", $x['FRACCION']);
+                        break;
+                    case "100":
+                        $P["FRACCION"] = str_replace(",", "", $x['FRACCION']);
+                        break;
+                    default :
+                        $P["FRACCION"] = 0;
+                        break;
+                }
                 $jc->setParametros($P);
                 $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatfraccion.jasper');
+                $jc->setFilename('asidiacontmatfraccion_' . $P["FRACCION"] . '_' . Date('dmYhis'));
             } else {
                 $jc->setParametros($P);
                 $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmat.jasper');
+                $jc->setFilename('asidiacontmat_' . Date('dmYhis'));
             }
-            $jc->setFilename('asidiacontmat_' . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
             $reports['2DOS'] = $jc->getReport();
 
