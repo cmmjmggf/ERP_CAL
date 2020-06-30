@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asidiacont" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
-	<property name="ireport.zoom" value="2.5657905911535597"/>
-	<property name="ireport.x" value="973"/>
+	<property name="ireport.zoom" value="2.565790591153561"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.Integer"/>
 	<parameter name="DIA" class="java.lang.Integer"/>
@@ -55,7 +55,7 @@ FROM
      INNER JOIN `series` series ON pedidox.`Serie` = series.`Clave`
      INNER JOIN `estilos` estilos ON colores.`Estilo` = estilos.`Clave`
      INNER JOIN `lineas` lineas ON estilos.`Linea` = lineas.`Clave`
-WHERE pedidox.`stsavan` NOT IN(13,14) AND   programacion.diaprg = $P{DIA} AND programacion.año = $P{ANO} AND programacion.semana = $P{SEMANA}
+WHERE pedidox.`stsavan` NOT IN(13,14) AND   programacion.diaprg = $P{DIA} AND programacion.año = $P{ANO} AND programacion.semana = $P{SEMANA} AND programacion.frac = 100
 ORDER BY series.`Clave` ASC,empleados.`Numero` ASC;]]>
 	</queryString>
 	<field name="empleados_Numero" class="java.lang.Integer"/>
@@ -349,7 +349,7 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC;]]>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="333" y="13" width="30" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="7d02a61d-582a-461f-b5bc-93328c404f06"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
@@ -566,9 +566,9 @@ ORDER BY series.`Clave` ASC,empleados.`Numero` ASC;]]>
 				<textFieldExpression><![CDATA[$F{empleados_Nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="171" y="0" width="55" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1417c3a8-c078-43e5-b720-cdc267b5a10d"/>
+				<reportElement mode="Transparent" x="172" y="0" width="54" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="1417c3a8-c078-43e5-b720-cdc267b5a10d"/>
 				<textElement verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{programacion_frac_tipo}]]></textFieldExpression>

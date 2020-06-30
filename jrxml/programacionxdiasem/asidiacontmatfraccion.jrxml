@@ -6,7 +6,9 @@
 	<parameter name="SEMANA" class="java.lang.Integer"/>
 	<parameter name="DIA" class="java.lang.Integer"/>
 	<parameter name="empresa" class="java.lang.String"/>
-	<parameter name="ANO" class="java.lang.String"/>
+	<parameter name="ANO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="DIAT" class="java.lang.String"/>
 	<parameter name="FRACCION" class="java.lang.Integer">
@@ -18,11 +20,19 @@ CONCAT(D.`PrimerNombre`," ",(CASE WHEN D.`SegundoNombre` = "0" THEN "" ELSE D.`S
 AA.Articulo, AA.ArticuloT, AA.UnidadMedidaT, SUM(AA.Cantidad) AS CANTIDAD, AA.`Grupo`
  FROM ordendeproduccion AS A INNER JOIN ordendeproducciond AS AA ON A.ID = AA.OrdenDeProduccion
 INNER JOIN programacion AS C ON C.control = A.ControlT INNER JOIN empleados AS D ON C.numemp = D.Numero
-WHERE C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.`frac` < 300 AND C.año = 2020  AND C.semana = $P{SEMANA}
+WHERE C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.año = $P{ANO}  AND C.semana = $P{SEMANA}
 AND
 (CASE
-WHEN $P{FRACCION}  = 100 THEN AA.`Grupo` IN(1,12,15,16,17,18,30,31,34,40,41,50,9)
-WHEN $P{FRACCION}  = 99 THEN AA.`Grupo` IN(12,15,16,17,18,2,30,31,34,40,41,50,9)
+WHEN $P{FRACCION} = 100 THEN AA.`Grupo` IN(1,12,15,16,17,18,30,31,34,40,41,50,9) AND C.frac = 100
+WHEN $P{FRACCION} = 99 THEN AA.`Grupo` IN(2,12,15,16,17,18,30,31,34,40,41,50,9) AND C.frac = 99
+WHEN $P{FRACCION} = 0 THEN
+(CASE WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) > 0 AND
+(SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) > 0 THEN AA.`Grupo` IN(1,2,12,15,16,17,18,30,31,34,40,41,50,9) AND  C.frac IN(99,100)
+WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) > 0 AND
+(SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) = 0 THEN AA.`Grupo` IN(1,12,15,16,17,18,30,31,34,40,41,50,9)  AND  C.frac IN(100)
+WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) = 0 AND
+(SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) > 0 THEN AA.`Grupo` IN(2,12,15,16,17,18,30,31,34,40,41,50,9)  AND  C.frac IN(99)
+END)
 END)
 GROUP BY C.numemp, AA.Articulo
 ORDER BY ABS(C.numemp) ASC, ABS(AA.`Grupo`) ASC, ABS(AA.Articulo) ASC ;]]>
