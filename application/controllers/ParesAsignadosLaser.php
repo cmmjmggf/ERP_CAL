@@ -22,6 +22,9 @@ class ParesAsignadosLaser extends CI_Controller {
                     $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
                     break;
+                case 'VENTAS':
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    break;
             }
             $this->load->view('vFondo')->view('vParesAsignadosLaser')->view('vFooter');
         } else {

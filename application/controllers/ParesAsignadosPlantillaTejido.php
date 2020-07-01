@@ -22,6 +22,9 @@ class ParesAsignadosPlantillaTejido extends CI_Controller {
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral');
                     $this->load->view('vMenuProduccion');
+                case 'VENTAS':
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    break;
             }
 
             $this->load->view('vFondo')->view('vParesAsignadosPlantillaTejido')->view('vFooter');

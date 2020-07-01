@@ -19,8 +19,7 @@ class MenuProduccion extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'VENTAS':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuClientes');
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'DISEÑO Y DESARROLLO':
                     $this->load->view('vNavGeneral');

@@ -21,6 +21,9 @@ class ParesAsignadosXSemanaMalla extends CI_Controller {
                 $this->load->view('vMenuProduccion')
                         ->view('vParesAsignadosXSemanaMalla');
                 break;
+                case 'VENTAS':
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vParesAsignadosXSemanaMalla');
+                    break;
         }
         $this->load->view('vFooter');
     }
