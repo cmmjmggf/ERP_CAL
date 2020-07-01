@@ -52,7 +52,7 @@ class MarcaCompraInservible_model extends CI_Model {
 
     public function onModificar($Tp, $Folio) {
         try {
-            $this->db->set('Estatus', 'INACTIVA')->where('Tp', $Tp)->where('Folio', $Folio)->update("ordencompra");
+            $this->db->set('Estatus', 'INACTIVA')->where('Estatus', 'ACTIVA')->where('Tp', $Tp)->where('Folio', $Folio)->update("ordencompra");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
