@@ -244,7 +244,7 @@ class CapturaFraccionesParaNominaPiochas extends CI_Controller {
                 'status' => 1,
                 'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
                 'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL,
-                'modulo' => 'CFPN',
+                'modulo' => 'CNPIO',
                 "fecha_registro" => Date('d/m/Y h:i:s')
             );
             if ($x->post('Control') !== '0' && $x->post('Control') !== '') {
