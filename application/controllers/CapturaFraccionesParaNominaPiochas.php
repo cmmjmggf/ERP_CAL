@@ -243,7 +243,9 @@ class CapturaFraccionesParaNominaPiochas extends CI_Controller {
                 'fecha' => $nuevaFecha,
                 'status' => 1,
                 'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
-                'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL
+                'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL,
+                'modulo' => 'CFPN',
+                "fecha_registro" => Date('d/m/Y h:i:s')
             );
             if ($x->post('Control') !== '0' && $x->post('Control') !== '') {
                 $stsnom = $this->CapturaFraccionesParaNomina_model->onVerificarSemanaNominaCerrada($this->input->post('Sem'), $this->input->post('Ano'));

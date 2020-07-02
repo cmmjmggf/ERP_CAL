@@ -28,7 +28,7 @@ from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
 join fracciones F on F.Clave = FPN.numfrac
 join pedidox AS P ON P.Control = FPN.control
-where FPN.control = $P{control}  AND P.stsavan NOT IN(14)
+where FPN.control = $P{control}
 order by FPN.depto ASC,FPN.numfrac ASC]]>
 	</queryString>
 	<field name="depto" class="java.lang.Integer">

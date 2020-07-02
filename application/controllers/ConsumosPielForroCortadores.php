@@ -289,7 +289,9 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
                         $base += 10;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, number_format($vvv->Cantidad, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R'); /* X CONTROL */
+                        $CANTIDAD_PARES_X_CONSUMO = 0;
+                        $CANTIDAD_PARES_X_CONSUMO = $vvv->Pares * $vvv->Consumo;
+                        $pdf->Cell(15, $alto_celda, number_format($CANTIDAD_PARES_X_CONSUMO, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R'); /* X CONTROL */
                         $TOTAL_X_CONTROL += $vvv->Cantidad;
                         $TOTAL_X_CONTROL_CORTADOR += $vvv->Cantidad;
 
@@ -311,11 +313,17 @@ class ConsumosPielForroCortadores extends CI_Controller {
                         $TOTAL_X_BASURA += $vvv->Basura;
                         $TOTAL_X_BASURA_CORTADOR += $vvv->Basura;
 
+                        $ABONO_DEV = 0;
+                        $ABONO_DEV = $vvv->Abono - $vvv->Devolucion; /* 364 */
+                        $DIFERENCIA_FINAL = 0;
+                        $DIFERENCIA_FINAL = $CANTIDAD_PARES_X_CONSUMO - $ABONO_DEV;
                         $base += 15;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, number_format($vvv->Diferencia, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
-                        $TOTAL_X_DIFERENCIAS += $vvv->Diferencia;
-                        $TOTAL_X_DIFERENCIAS_CORTADOR += $vvv->Diferencia;
+                        $pdf->Cell(15, $alto_celda, number_format($DIFERENCIA_FINAL, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                        $TOTAL_X_DIFERENCIAS += $DIFERENCIA_FINAL;
+                        $TOTAL_X_DIFERENCIAS_CORTADOR += $DIFERENCIA_FINAL;
+                        $TOTAL_X_DIFERENCIAS += $DIFERENCIA_FINAL;
+                        $TOTAL_X_DIFERENCIAS_CORTADOR += $DIFERENCIA_FINAL;
 
                         $base += 15;
                         $pdf->SetX($base);
@@ -345,8 +353,8 @@ class ConsumosPielForroCortadores extends CI_Controller {
                         $base += 15;
                         $pdf->SetX($base);
                         $pdf->Cell(15, $alto_celda, number_format($vvv->Diferencia * $vvv->Precio, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
-                        $TOTAL_X_DIFERENCIA_PESOS += $vvv->Diferencia * $vvv->Precio;
-                        $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $vvv->Diferencia * $vvv->Precio;
+                        $TOTAL_X_DIFERENCIA_PESOS += $DIFERENCIA_FINAL * $vvv->Precio;
+                        $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $DIFERENCIA_FINAL * $vvv->Precio;
 
                         $base += 15;
                         $pdf->SetX($base);

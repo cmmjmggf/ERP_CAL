@@ -22,7 +22,7 @@ sum(FPN.subtot) as subtot
 from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
 join pedidox AS P ON P.Control = FPN.control
-where FPN.semana = $P{sem} and FPN.anio =  $P{ano}  AND P.stsavan NOT IN(14)
+where FPN.semana = $P{sem} and FPN.anio =  $P{ano}
 group by FPN.depto, FPN.numeroempleado
 order by numdepto ASC,FPN.numeroempleado asc]]>
 	</queryString>

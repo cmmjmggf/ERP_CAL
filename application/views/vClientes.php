@@ -54,11 +54,11 @@
                         </div>
                         <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-2">
                             <label for="RazonS" >Razon Social*</label>
-                            <input type="text" class="form-control form-control-sm" id="RazonS" name="RazonS" maxlength="45"  placeholder=""  required="">
+                            <input type="text" class="form-control form-control-sm" id="RazonS" name="RazonS" maxlength="400"  placeholder=""  required="">
                         </div>
                         <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-2">
                             <label for="NombreP" >Nombre P*</label>
-                            <input type="text" class="form-control form-control-sm" id="NombreP" name="NombreP" maxlength="45"  placeholder=""  required="">
+                            <input type="text" class="form-control form-control-sm" id="NombreP" name="NombreP" maxlength="400"  placeholder=""  required="">
                         </div>
 
                         <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-2">

@@ -29,7 +29,7 @@ from fracpagnomina FPN
 join empleados E on E.Numero = FPN.numeroempleado
 join fracciones F on F.Clave = FPN.numfrac
 join pedidox AS P ON P.Control = FPN.control
-where FPN.semana = $P{sem} and FPN.anio = $P{ano} and FPN.numeroempleado = $P{emp}  AND P.stsavan NOT IN(14)
+where FPN.semana = $P{sem} and FPN.anio = $P{ano} and FPN.numeroempleado = $P{emp}
 order by FPN.numfrac asc,FPN.fecha asc,  FPN.ID asc]]>
 	</queryString>
 	<field name="numemp" class="java.lang.Integer"/>

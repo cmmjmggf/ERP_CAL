@@ -1502,7 +1502,7 @@
     button,input,label{
         font-weight: bold !important;
     }
-    label{
+    .card label{
         color: #fff;
         /* font-weight: bold; */
         font-size: 25px;
