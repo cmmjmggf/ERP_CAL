@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="estadvcli" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
-	<property name="ireport.zoom" value="4.40000000000001"/>
+	<property name="ireport.zoom" value="2.257895720215114"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -46,7 +46,7 @@ FROM devolucionnp as D
 INNER JOIN clientes AS C ON D.cliente = C.Clave
 INNER JOIN pedidox AS P ON D.control = P.Control
 WHERE  D.fecha BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y") AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
-ORDER BY ABS(D.cliente) ASC, D.fecha DESC;]]>
+ORDER BY ABS(D.cliente) ASC, D.consecutivo ASC, D.fecha DESC;]]>
 	</queryString>
 	<field name="PRECIO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

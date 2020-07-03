@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="1.2745232708414322"/>
-	<property name="ireport.x" value="1"/>
+	<property name="ireport.x" value="23"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -28,7 +28,8 @@ OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT,
 ifnull(OP.CantidadPiel1,0)*1 AS X_CONTROL,  IFNULL(A.Abono*1,0)  AS ENTREGADO,
 A.Devolucion *1 AS DEVOLUCION, IFNULL(A.Basura*1,0) AS BASURA, A.Piocha  AS PIOCHAS,
 
-                          (ifnull(OP.CantidadPiel1,0)  - (A.Abono*1))+(IFNULL(A.Basura*1,0)+(IFNULL(A.Devolucion*1,0))) AS DIFERENCIA,
+                          (ifnull(OP.CantidadPiel1,0)  - (A.Abono*1))+(IFNULL(A.Basura*1,0)+(IFNULL(A.Devolucion*1,0))) AS DIFERENCIAX,
+                       (OP.Pares * ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares))  - ((IFNULL(A.Abono,0) - IFNULL(A.Devolucion,0)))   AS DIFERENCIA,
 
                           (A.PrecioActual * SUM(OPD.Cantidad)) AS SISTEMA_PESOS,
                           (A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS REAL_PESOS,
@@ -77,6 +78,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="PIOCHAS" class="java.lang.Integer"/>
+	<field name="DIFERENCIAX" class="java.lang.Double"/>
 	<field name="DIFERENCIA" class="java.lang.Double"/>
 	<field name="SISTEMA_PESOS" class="java.lang.Double"/>
 	<field name="REAL_PESOS" class="java.lang.Double"/>
@@ -234,7 +236,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{PORCENTAJE_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.000" isBlankWhenNull="true">
+				<textField pattern="#,##0.000" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="632" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f5754c32-3368-4ed7-b169-c473caa32d93"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -242,37 +244,13 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0.000" isBlankWhenNull="true">
+				<textField pattern="#,##0.000" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="687" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="823c98e0-c389-416d-8da9-32310248dce5"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REAL_PESOS_1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="###0.000" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="742" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cdd36dac-28d0-4441-ad7d-ab31b7191fc2"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_1}-$V{REAL_PESOS_1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="0" y="0" width="232" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="98bd4bff-c8fb-4d36-b3cd-a5a740a4a406"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{EMPLEADO_NOMBRE}]]></textFieldExpression>
-				</textField>
-				<textField pattern="" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="797" y="0" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3eccf9e6-f37f-4621-8cc4-0b69c815f6ff"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{PIOCHAS_1}]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement x="0" y="13" width="840" height="1" uuid="9a2fa9ff-58f1-4616-b19c-c996d7edff9b"/>
