@@ -7,7 +7,8 @@ class Proveedores extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->model('Proveedores_model');
+        $this->load->library('session')->model('Proveedores_model')
+                ->helper('jaspercommand_helper')->helper('file');
     }
 
     public function index() {
@@ -161,6 +162,22 @@ class Proveedores extends CI_Controller {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
+    }
+
+    public function onImprimirArticulosXProv() {
+
+        $prov = $this->input->post('Prov');
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["proveedor"] = $prov;
+        $jc->setJasperurl('jrxml\materiales\reporteArticulosPorProveedor.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('LISTADO_ARTICULOS_X_PROVEEDOR_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
     }
 
 }

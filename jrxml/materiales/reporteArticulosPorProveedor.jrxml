@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="2.1435888100000433"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="false"/>
+	<property name="net.sf.jasperreports.page.break.no.pagination" value="apply"/>
+	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<property name="net.sf.jasperreports.exports.xls.font.size.fix.enabled" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.auto.fit.row" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.auto.fit.column" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.wrap.text" value="false"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="proveedor" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+(SELECT SUM(SubTotal) FROM compras WHERE proveedor = $P{proveedor} AND Estatus = 'CONCLUIDA' AND YEAR(STR_TO_DATE(FechaDoc,'%d/%m/%Y')) IN ((YEAR(NOW())-1),YEAR(NOW())) )AS totalcompra,
+(SELECT p.nombreF FROM proveedores p WHERE p.clave = $P{proveedor}) AS nomprov,
+A.`Clave` AS numart,
+A.`Descripcion` AS nomart,
+U.`Descripcion` AS unidad,
+CASE
+WHEN a.`ProveedorUno` = $P{proveedor} THEN CAST(a.preciouno AS DECIMAL(10,2))
+WHEN a.`ProveedorDos` = $P{proveedor} THEN CAST(a.preciodos AS DECIMAL(10,2))
+WHEN a.`ProveedorTres` = $P{proveedor} THEN CAST(a.preciotres AS DECIMAL(10,2))
+END AS precio,
+a.`Grupo` AS numgrupo,
+g.`Nombre` AS nomgrupo,
+(SELECT SUM(SubTotal) FROM compras WHERE proveedor = $P{proveedor} AND Estatus = 'CONCLUIDA' AND articulo = A.`Clave` AND YEAR(STR_TO_DATE(FechaDoc,'%d/%m/%Y')) IN ((YEAR(NOW())-1),YEAR(NOW())) ) AS totalcompraxart,
+(SELECT CONCAT(DOC,'     [',FECHADOC,']') FROM compras WHERE articulo = A.`Clave` AND proveedor = $P{proveedor} ORDER BY STR_TO_DATE(FechaDoc,'%d/%m/%Y') DESC LIMIT 1) AS ultcompra
+FROM articulos a
+JOIN unidades U ON A.`UnidadMedida` = U.`Clave`
+JOIN grupos g ON g.`Clave` = a.`Grupo`
+WHERE a.`ProveedorUno` = $P{proveedor}
+OR a.`ProveedorDos` = $P{proveedor}
+OR a.`ProveedorTres` = $P{proveedor}
+ORDER BY ABS(A.`Grupo`), A.`Descripcion` ASC]]>
+	</queryString>
+	<field name="totalcompra" class="java.math.BigDecimal"/>
+	<field name="nomprov" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numart" class="java.lang.String"/>
+	<field name="nomart" class="java.lang.String"/>
+	<field name="unidad" class="java.lang.String"/>
+	<field name="precio" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numgrupo" class="java.lang.String"/>
+	<field name="nomgrupo" class="java.lang.String"/>
+	<field name="totalcompraxart" class="java.math.BigDecimal"/>
+	<field name="ultcompra" class="java.lang.String"/>
+	<variable name="totalcompraxart_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalcompraxart}]]></variableExpression>
+	</variable>
+	<variable name="totalcompraxart_2" class="java.math.BigDecimal" resetType="Group" resetGroup="grupo" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalcompraxart}]]></variableExpression>
+	</variable>
+	<group name="grupo">
+		<groupExpression><![CDATA[$F{numgrupo}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="0" y="0" width="24" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="6472748c-cc9c-48a3-882d-ee4e83eb2033"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{numgrupo}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="24" y="0" width="158" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="9e7a379b-c4bd-4446-9941-ffe89f2dfbb8"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nomgrupo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="335" y="0" width="95" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="ef2300bd-d1da-46a0-8a3b-9366b692ecd3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{totalcompraxart_2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="245" y="0" width="90" height="14" forecolor="#000000" uuid="ab5d2ba8-426e-4481-b20c-ba3e7e164be4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+						<paragraph leftIndent="4"/>
+					</textElement>
+					<text><![CDATA[Total por Grupo:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="56">
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="182" height="14" isPrintInFirstWholeBand="true" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="0" y="14" width="182" height="13" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="9cb74bf5-12bb-48a0-a0e7-cdc3946fe8d9"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Listado de Artículos del Proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="211" y="42" width="34" height="14" forecolor="#000000" uuid="9d8c15a0-1308-4c9d-899f-e59f1f9de3ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="42" width="181" height="14" forecolor="#000000" uuid="80598c1a-5fe4-4834-8aa8-2226c7fea229"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Artículo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="245" y="42" width="90" height="14" forecolor="#000000" uuid="920bf785-7eba-4cd8-a1a8-e674d39e4bc9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<text><![CDATA[Última Compra]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="181" y="42" width="30" height="14" forecolor="#000000" uuid="eaa52ca1-56ac-465d-b196-0c2d3197a775"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="245" y="14" width="185" height="13" uuid="2efeefdd-16a8-4a26-be8f-bba2a0db2bf3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomprov}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="211" y="14" width="34" height="13" isPrintInFirstWholeBand="true" uuid="1ee707a0-5e37-4bfd-9a4b-a67bb2ea1485"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{proveedor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="335" y="42" width="95" height="14" forecolor="#000000" uuid="ca0b37c2-8b88-43a1-879a-b93962bb9d57"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<text><![CDATA[Total Comprado Ult-Año]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField pattern="">
+				<reportElement x="24" y="0" width="158" height="14" isPrintInFirstWholeBand="true" uuid="78863bd9-0cf2-4e72-89f1-2982e5a14609"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomart}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="0" y="0" width="24" height="14" isPrintInFirstWholeBand="true" uuid="c950da47-b662-4439-9bd4-4cdf1a80918a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numart}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="182" y="0" width="29" height="14" isPrintInFirstWholeBand="true" uuid="0e4e732c-c82c-4319-bd48-d896eb11940b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="211" y="0" width="34" height="14" isPrintInFirstWholeBand="true" uuid="831ad701-c227-4b6f-9195-29061d964e33"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="245" y="0" width="90" height="14" isPrintInFirstWholeBand="true" uuid="e2f46d9a-d3df-4a8f-b4af-8141b170525f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ultcompra}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="335" y="0" width="95" height="14" isPrintInFirstWholeBand="true" uuid="8ab04a64-4bee-4a0c-b39b-4ac2135864df"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalcompraxart}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="14">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="335" y="0" width="95" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d3f9d967-773c-4be9-a8bd-04280c0e19b9"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalcompraxart_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="245" y="0" width="90" height="14" forecolor="#000000" uuid="9890ad86-88f3-4f1d-bfd5-ff74c1203374"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+					<paragraph leftIndent="4"/>
+				</textElement>
+				<text><![CDATA[Total general comprado:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

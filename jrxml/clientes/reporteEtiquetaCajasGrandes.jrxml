@@ -206,7 +206,7 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				<textFieldExpression><![CDATA[$F{TelOficina}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="15" y="277" width="349" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="fc62dfb7-d989-4789-96a7-2b7d3f64f199"/>
+				<reportElement mode="Transparent" x="15" y="277" width="299" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="fc62dfb7-d989-4789-96a7-2b7d3f64f199"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -258,22 +258,22 @@ where cc.cliente= $P{cliente} and cc.tipo = $P{tp} and cc.remicion = $P{factura}
 				<text><![CDATA[COL. SAN MIGUEL     LEÓN, GTO.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="364" y="277" width="224" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="17eec637-4765-47ed-a18c-5fb4167c1914"/>
+				<reportElement mode="Transparent" x="0" y="97" width="314" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="17eec637-4765-47ed-a18c-5fb4167c1914"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="15" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{transporte}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="0" y="95" width="314" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="03010733-8f8f-4413-b59d-1b1168d6fbc8">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="314" y="277" width="274" height="19" forecolor="#000000" backcolor="#FFFFFF" uuid="03010733-8f8f-4413-b59d-1b1168d6fbc8">
 					<printWhenExpression><![CDATA[$F{ObservacionesTransporte} != "0"]]></printWhenExpression>
 				</reportElement>
-				<box>
-					<bottomPen lineWidth="1.0" lineColor="#000000"/>
-				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="13" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="15" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ObservacionesTransporte}]]></textFieldExpression>

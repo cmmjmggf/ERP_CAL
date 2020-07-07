@@ -4,6 +4,7 @@
             <div class="col-6 col-sm-6 float-left">
                 <legend class="float-left">Proveedores</legend>
             </div>
+
             <div class="col-6 col-sm-6  float-right" align="right">
                 <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="bottom" title="Nuevo"><span class="fa fa-plus"></span><br></button>
             </div>
@@ -20,6 +21,9 @@
                         <legend >Proveedor</legend>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
+                        <button type="button" class="btn btn-success" id="btnArticulosXProveedor" >
+                            <span class="fa fa-file-pdf" ></span> LISTADO ARTÍCULOS
+                        </button>
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                             <span class="fa fa-arrow-left" ></span> REGRESAR
                         </button>
@@ -189,9 +193,11 @@
     //Boton que guarda los datos del formulario
     var btnGuardar = pnlDatos.find("#btnGuardar");
     var btnCancelar = pnlDatos.find("#btnCancelar");
+    var btnArticulosXProveedor = pnlDatos.find("#btnArticulosXProveedor");
     var btnEliminar = $("#btnEliminar");
     var sEsCliente = pnlDatos.find("#TipoAcceso");
     var nuevo = true;
+    var clave_prov;
     $(document).ready(function () {
 
 
@@ -218,10 +224,26 @@
             pnlDatos.find("[name='RFC']").removeClass('disabledForms');
             nuevo = true;
             getUltimoRegistro();
+            clave_prov = 0;
         });
         btnCancelar.click(function () {
             pnlTablero.removeClass("d-none");
             pnlDatos.addClass('d-none');
+        });
+
+        btnArticulosXProveedor.click(function () {
+            console.log(clave_prov);
+            btnArticulosXProveedor.attr('disabled', true);
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            $.post(master_url + 'onImprimirArticulosXProv', {Prov: clave_prov}).done(function (data) {
+                onOpenWindowBlank(data);
+                HoldOn.close();
+                onEnable(btnArticulosXProveedor);
+            }).fail(function (x, y, z) {
+                HoldOn.close();
+                onEnable(btnArticulosXProveedor);
+                console.log(x, y, z);
+            });
         });
         //Evento clic del boton confirmar borrar
         btnEliminar.click(function () {
@@ -388,6 +410,7 @@
                             $.each(pnlDatos.find("select"), function (k, v) {
                                 pnlDatos.find("select")[k].selectize.clear(true);
                             });
+                            clave_prov = data[0].Clave;
                             $.each(data[0], function (k, v) {
                                 pnlDatos.find("[name='" + k + "']").val(v);
                                 if (pnlDatos.find("[name='" + k + "']").is('select')) {
@@ -435,6 +458,8 @@
                                 $.each(pnlDatos.find("select"), function (k, v) {
                                     pnlDatos.find("select")[k].selectize.clear(true);
                                 });
+
+                                clave_prov = data[0].Clave;
                                 $.each(data[0], function (k, v) {
                                     pnlDatos.find("[name='" + k + "']").val(v);
                                     if (pnlDatos.find("[name='" + k + "']").is('select')) {
