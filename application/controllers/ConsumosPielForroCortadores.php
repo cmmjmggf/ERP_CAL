@@ -242,6 +242,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $TOTAL_X_REAL_PESOS_CORTADOR = 0;
             $TOTAL_X_DIFERENCIA_PESOS_CORTADOR = 0;
             $TOTAL_X_PIOCHAS_PESOS_CORTADOR = 0;
+            $REGISTROS = 0;
             $Y = 0;
             foreach ($CORTADORES as $k => $v) {
                 $bordes = 1;
@@ -292,8 +293,8 @@ class ConsumosPielForroCortadores extends CI_Controller {
                         $CANTIDAD_PARES_X_CONSUMO = 0;
                         $CANTIDAD_PARES_X_CONSUMO = $vvv->Pares * $vvv->Consumo;
                         $pdf->Cell(15, $alto_celda, number_format($CANTIDAD_PARES_X_CONSUMO, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R'); /* X CONTROL */
-                        $TOTAL_X_CONTROL += $vvv->Cantidad;
-                        $TOTAL_X_CONTROL_CORTADOR += $vvv->Cantidad;
+                        $TOTAL_X_CONTROL += $CANTIDAD_PARES_X_CONSUMO;
+                        $TOTAL_X_CONTROL_CORTADOR += $CANTIDAD_PARES_X_CONSUMO;
 
                         $base += 15;
                         $pdf->SetX($base);
@@ -322,27 +323,30 @@ class ConsumosPielForroCortadores extends CI_Controller {
                         $pdf->Cell(15, $alto_celda, number_format($DIFERENCIA_FINAL, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_DIFERENCIAS += $DIFERENCIA_FINAL;
                         $TOTAL_X_DIFERENCIAS_CORTADOR += $DIFERENCIA_FINAL;
-                        $TOTAL_X_DIFERENCIAS += $DIFERENCIA_FINAL;
-                        $TOTAL_X_DIFERENCIAS_CORTADOR += $DIFERENCIA_FINAL;
 
                         $base += 15;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, number_format($vvv->DCM2, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                        $pdf->Cell(15, $alto_celda, number_format($ABONO_DEV / intval($vvv->Pares), 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_DCM2 += $vvv->DCM2;
                         $TOTAL_X_DCM2_CORTADOR += $vvv->DCM2;
 
                         $base += 15;
                         $pdf->SetX($base);
                         $rounded = 0.01 * (int) ($vvv->PORCENTAJE * 100);
+                        $rounded = $vvv->PORCENTAJE;
                         $pdf->Cell(7, $alto_celda, number_format($rounded, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_PORCENTAJE += $rounded;
                         $TOTAL_X_PORCENTAJE_CORTADOR += $rounded;
+                        $REGISTROS += 1;
+                        
+                        $SISTEMA_PESOS = 0;
+                        $SISTEMA_PESOS = $vvv->Precio * $CANTIDAD_PARES_X_CONSUMO;
 
                         $base += 7;
                         $pdf->SetX($base);
-                        $pdf->Cell(12, $alto_celda, number_format($vvv->SistemaPesos, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
-                        $TOTAL_X_SISTEMA_PESOS += $vvv->SistemaPesos;
-                        $TOTAL_X_SISTEMA_PESOS_CORTADOR += $vvv->SistemaPesos;
+                        $pdf->Cell(12, $alto_celda, number_format($SISTEMA_PESOS, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                        $TOTAL_X_SISTEMA_PESOS += $SISTEMA_PESOS;
+                        $TOTAL_X_SISTEMA_PESOS_CORTADOR += $SISTEMA_PESOS;
 
                         $base += 12;
                         $pdf->SetX($base);
@@ -352,7 +356,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
                         $base += 15;
                         $pdf->SetX($base);
-                        $pdf->Cell(15, $alto_celda, number_format($vvv->Diferencia * $vvv->Precio, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                        $pdf->Cell(15, $alto_celda, number_format($SISTEMA_PESOS - $vvv->RealPesos, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_DIFERENCIA_PESOS += $DIFERENCIA_FINAL * $vvv->Precio;
                         $TOTAL_X_DIFERENCIA_PESOS_CORTADOR += $DIFERENCIA_FINAL * $vvv->Precio;
 
@@ -378,7 +382,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $pdf->Cell(25, $alto_celda, utf8_decode("Total por estilo"), 0/* BORDE */, 0/* SALTO */, 'L');
                     $base += 25;
                     $pdf->SetX($base);
-                    $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+//                    $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                     $base += 10;
                     $pdf->SetX($base);
                     $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_CONTROL, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
@@ -396,10 +400,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DIFERENCIAS, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                     $base += 15;
                     $pdf->SetX($base);
-                    $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DCM2, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+//                    $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DCM2, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                     $base += 15;
                     $pdf->SetX($base);
-                    $pdf->Cell(7, $alto_celda, number_format($TOTAL_X_PORCENTAJE, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+//                    $pdf->Cell(7, $alto_celda, number_format($TOTAL_X_PORCENTAJE, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                     $base += 7;
                     $pdf->SetX($base);
                     $pdf->Cell(12, $alto_celda, number_format($TOTAL_X_SISTEMA_PESOS, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
@@ -433,7 +437,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $pdf->Cell(25, $alto_celda, utf8_decode("Total por cortador"), 0/* BORDE */, 0/* SALTO */, 'L');
                 $base += 25;
                 $pdf->SetX($base);
-                $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+//                $pdf->Cell(10, $alto_celda, number_format($TOTAL_X_ESTILO_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 10;
                 $pdf->SetX($base);
                 $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_CONTROL_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
@@ -451,10 +455,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DIFERENCIAS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 15;
                 $pdf->SetX($base);
-                $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DCM2_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+//                $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DCM2_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 15;
                 $pdf->SetX($base);
-                $pdf->Cell(7, $alto_celda, number_format($TOTAL_X_PORCENTAJE_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $pdf->Cell(7, $alto_celda, number_format(($TOTAL_X_PORCENTAJE_CORTADOR/$REGISTROS)*100, 0, '.', ',')."%", $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 7;
                 $pdf->SetX($base);
                 $pdf->Cell(12, $alto_celda, number_format($TOTAL_X_SISTEMA_PESOS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
@@ -978,6 +982,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pr["SEMANAINICIO"] = $x['SEMANA_INICIAL'];
             $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
             $pr["ANO"] = $x['ANIO'];
+            $pr["ARTICULO"] = $x['ARTICULO'];
             $jc->setParametros($pr);
             $jc->setJasperurl('jrxml\conspifo\ForroGeneral.jasper');
             $jc->setFilename("CONSUMO_FORRO_GENERAL_" . Date('dmYhis'));

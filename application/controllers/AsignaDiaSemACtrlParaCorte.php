@@ -274,7 +274,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     if ($CONTROL !== '') {
                         $this->db->where("PE.Control", $CONTROL);
                     }
-                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(2))->group_by('A.Descripcion');
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(2,40))->group_by('A.Descripcion');
                     $DTM = $this->db->get()->result();
                     break;
                 case 100:
@@ -315,7 +315,7 @@ JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = 
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave`
 JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
- WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) )")->result();
+ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2,40) )")->result();
                     break;
                 case 10099:
 //                    print $tipo . "\n";
@@ -333,7 +333,7 @@ JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = 
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave`
 JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
- WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) )")->result();
+ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2,40) )")->result();
                     break;
             }
 //            PRINT $this->db->last_query() . "\n";

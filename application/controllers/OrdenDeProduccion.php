@@ -201,18 +201,20 @@ class OrdenDeProduccion extends CI_Controller {
                 $P_F_S_S = $this->db->select("G.Clave, G.Nombre AS Grupo, A.Descripcion AS PIEL_FORRO_SINTETICO_SUELA ,
                             ((sum(FT.Consumo) * (
                             (CASE
-                            WHEN  E.PiezasCorte BETWEEN 0 AND 10 AND A.Grupo IN(1,2) THEN M.PorExtra3a10
-                            WHEN  E.PiezasCorte BETWEEN 11 AND 14  AND A.Grupo IN(1,2) THEN M.PorExtra11a14
-                            WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18
-                            WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a
+                            WHEN E.PiezasCorte = 1 AND A.Grupo IN(1,2) THEN M.PorExtraXBotaAlta 
+                            WHEN E.PiezasCorte = 2 AND A.Grupo IN(1,2) THEN M.PorExtraXBota 
+                            WHEN  E.PiezasCorte BETWEEN 3 AND 10 AND A.Grupo IN(1,2) THEN M.PorExtra3a10 
+                            WHEN  E.PiezasCorte BETWEEN 11 AND 14  AND A.Grupo IN(1,2) THEN M.PorExtra11a14 
+                            WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18 
+                            WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a 
                             ELSE 0
                             END) + 1)) * {$v->Pares}) AS CONSUMOTOTAL", false)
                                 ->from('fichatecnica AS FT')
                                 ->join('articulos AS A', 'FT.Articulo = A.Clave')
                                 ->join('estilos AS E', 'FT.Estilo = E.Clave')
-                                ->join('maquilas AS M', 'E.Maquila = M.Clave')
+                                ->join('maquilas AS M', "M.Clave = {$x["MAQUILA"]}")
                                 ->join('grupos AS G ', 'A.Grupo = G.Clave')
-                                ->where('FT.Estilo', $v->Estilo)
+                                ->where('FT.Estilo', $v->Estilo) 
                                 ->where('FT.Color', $v->Color)
                                 ->where_in('A.Grupo', array(1, 2, 40, 3))
                                 ->group_by('A.Descripcion')
@@ -288,17 +290,19 @@ class OrdenDeProduccion extends CI_Controller {
                                     D.Clave AS DEPARTAMENTO, D.Descripcion AS DEPARTAMENTOT,
                                     FT.PzXPar AS PZXPAR, U.Clave AS UNIDAD, U.Descripcion AS UNIDADT,
                                     FT.Consumo AS CONSUMO, P.Clasificacion AS CLASIFICACION,
-                                    ((SUM(FT.Consumo) * ((CASE
-                                      WHEN  E.PiezasCorte BETWEEN 0 AND 10 AND A.Grupo IN(1,2) THEN M.PorExtra3a10
-                                      WHEN  E.PiezasCorte BETWEEN 11 AND 14  AND A.Grupo IN(1,2) THEN M.PorExtra11a14
-                                      WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18
-                                      WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a
-                                      ELSE 0 END) +1)) * {$v->Pares}) AS CANTIDAD_CONSUMO, FT.Precio AS PRECIO,
+                                    ((SUM(FT.Consumo) * ((CASE 
+                                    WHEN E.PiezasCorte = 1 AND A.Grupo IN(1,2) THEN M.PorExtraXBotaAlta 
+                            WHEN E.PiezasCorte = 2 AND A.Grupo IN(1,2) THEN M.PorExtraXBota 
+                            WHEN  E.PiezasCorte BETWEEN 3 AND 10 AND A.Grupo IN(1,2) THEN M.PorExtra3a10 
+                            WHEN  E.PiezasCorte BETWEEN 11 AND 14  AND A.Grupo IN(1,2) THEN M.PorExtra11a14 
+                            WHEN  E.PiezasCorte BETWEEN 15 AND 18 AND A.Grupo IN(1,2) THEN M.PorExtra15a18 
+                            WHEN  E.PiezasCorte >=19  AND A.Grupo IN(1,2) THEN M.PorExtra19a 
+                            ELSE 0  END) +1)) * {$v->Pares}) AS CANTIDAD_CONSUMO, FT.Precio AS PRECIO,
                                     FT.AfectaPV AS AFECTAPV, A.Grupo AS GRUPO, A.Departamento AS DEPTOART", false)
                                 ->from('fichatecnica AS FT')
                                 ->join('articulos AS A', 'FT.Articulo = A.Clave')
                                 ->join('estilos AS E', 'FT.Estilo = E.Clave')
-                                ->join('maquilas AS M', 'E.Maquila = M.Clave')
+                                ->join('maquilas AS M', "M.Clave = {$x["MAQUILA"]}")
                                 ->join('piezas AS P', 'FT.Pieza = P.Clave')
                                 ->join('departamentos AS D', 'P.Departamento = D.Clave')
                                 ->join('unidades AS U', 'A.UnidadMedida = U.Clave')
