@@ -102,6 +102,53 @@ class Avance extends CI_Controller {
         }
     }
 
+    public function getAvancesNominaPespunteFail() {
+        try {
+
+            $FRACCION_100 = "<span class=\"fracciones_avance\">100</span>";
+            $FRACCION_102 = "<span  class=\"fracciones_avance\">102</span>";
+            $FRACCION_60 = "<span  class=\"fracciones_avance\">60</span>";
+            $FRACCION_103 = "<span  class=\"fracciones_avance\">103</span>";
+            $FRACCION_51 = "<span  class=\"fracciones_avance\">51</span>";
+            $FRACCION_300 = "<span  class=\"fracciones_avance\">300</span>";
+            $FRACCION_397 = "<span  class=\"fracciones_avance\">397</span>";
+            $FRACCION_401 = "<span  class=\"fracciones_avance\">401</span>";
+            $FRACCION_500 = "<span  class=\"fracciones_avance\">500</span>";
+            $FRACCION_600 = "<span  class=\"fracciones_avance\">600</span>";
+//            modulo
+            $x = $this->input->get();
+            $this->db->select("F.ID, F.numeroempleado AS EMPLEADO, F.maquila AS MAQUILA, "
+                            . "F.control AS CONTROL, F.estilo AS ESTILO, "
+                            . "CONCAT((CASE "
+                            . "WHEN F.numfrac = 100 THEN '{$FRACCION_100}' "
+                            . "WHEN F.numfrac = 102 THEN '{$FRACCION_102}' "
+                            . "WHEN F.numfrac = 60 THEN '{$FRACCION_60}' "
+                            . "WHEN F.numfrac = 103 THEN '{$FRACCION_103}' "
+                            . "WHEN F.numfrac = 51 THEN '{$FRACCION_51}' "
+                            . "WHEN F.numfrac = 300 THEN '{$FRACCION_300}' "
+                            . "WHEN F.numfrac = 397 THEN '{$FRACCION_397}' "
+                            . "WHEN F.numfrac = 401 THEN '{$FRACCION_401}' "
+                            . "WHEN F.numfrac = 500 THEN '{$FRACCION_500}' "
+                            . "WHEN F.numfrac = 600 THEN '{$FRACCION_600}' "
+                            . "ELSE F.numfrac END),"
+                            . "' ',(SELECT FR.Descripcion FROM fracciones AS FR WHERE FR.Clave = F.numfrac limit 1)) AS NUM_FRACCION, "
+                            . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
+                            . "F.status, DATE_FORMAT(F.fecha,\"%d/%m/%Y\")  AS FECHA, F.semana AS SEMANA, F.depto, "
+                            . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
+                    ->from("fracpagnomina AS F");
+            if ($x['CONTROL'] !== '') {
+                $this->db->where('F.control', $x['CONTROL']);
+            }
+            $this->db->order_by('F.fecha', 'DESC');
+            if ($x['CONTROL'] === '' && $x['EMPLEADO'] === '') {
+                $this->db->where('F.numeroempleado', 999999999999)->limit(25);
+            }
+            print json_encode($this->db->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRastreoXConcepto() {
         try {
             $x = $this->input->get();
@@ -392,6 +439,19 @@ P.Maquila AS MAQUILA
         }
     }
 
+    public function getInformacionXControlFC() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT P.DeptoProduccion AS DEPTO, E.Clave AS ESTILO, P.DeptoProduccion AS DEPTOPROD, (CASE WHEN E.MaqPlant1 IS NULL OR E.MaqPlant1 = \"0\" THEN (CASE WHEN E.MaqPlant2 IS NULL OR E.MaqPlant2 = \"0\" THEN 
+(CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant3 = \"0\" THEN (CASE WHEN E.MaqPlant3 IS NULL OR E.MaqPlant4 = \"0\" THEN \"\" ELSE E.MaqPlant4 END) 
+ELSE E.MaqPlant3 END)ELSE E.MaqPlant2 END) ELSE E.MaqPlant1 END) AS MAQUILADO, P.Pares AS PARES, E.Foto AS FOTO, P.stsavan AS ESTATUS_PRODUCCION, P.EstatusProduccion AS ESTATUS_PRODUCCION_TEXT,
+P.Maquila AS MAQUILA 
+ FROM pedidox AS P INNER JOIN estilos AS E ON P.Estilo = E.Clave WHERE P.Control = {$x['CONTROL']} LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAvanzar() {
         try {
             $db = $this->db;
@@ -421,6 +481,17 @@ P.Maquila AS MAQUILA
 //            var_dump($xXx);
 //            exit(0);
 
+            if ($depto === 10 && $depto_actual === 2 && $frac === 100 && intval($xXx['EMPLEADO']) > 0) {
+
+                $this->db->set('EstatusProduccion', 'RAYADO')->set('DeptoProduccion', 20)
+                        ->where('Control', $xXx['CONTROL'])->update('controles');
+                $this->db->set('stsavan', 3)->set('EstatusProduccion', 'RAYADO')
+                        ->set('DeptoProduccion', 3)->where('Control', $xXx['CONTROL'])
+                        ->update('pedidox');
+                $this->db->set('fec2', Date('Y-m-d 00:00:00'))
+                        ->where('fec2 IS NULL', null, false)
+                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+            }
 
             /* DE RAYADO A REBAJADO (YA NO APLICA ESTAN INVERTIDOS, VA PRIMERO FOLEADO Y LUEGO REBAJADO) */
             if ($depto === 33 && $depto_actual === 3 && $frac === 102 ||
@@ -508,7 +579,7 @@ P.Maquila AS MAQUILA
             }
 
             /* DE RAYADO A FOLEADO */
-            if ($depto === 4 && $depto_actual === 3 && $depto_actual === 102) {
+            if ($depto === 4 && $depto_actual === 3 && $frac === 102) {
                 $this->db->set('EstatusProduccion', 'FOLEADO')->set('DeptoProduccion', 40)
                         ->where('Control', $xXx['CONTROL'])->update('controles');
                 $this->db->set('stsavan', 4)->set('EstatusProduccion', 'FOLEADO')
@@ -1306,6 +1377,80 @@ P.Maquila AS MAQUILA
         try {
             $x = $this->input->post();
             print json_encode($this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL, (SELECT F.Descripcion FROM fracciones as F WHERE F.Clave = {$x['FRACCION']} LIMIT 1) AS FRACCION_DES FROM pedidox AS P WHERE P.Control =  {$x['CONTROL']} LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControlPespunte() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT P.Pares AS PARES,P.Estilo AS ESTILO, (SELECT E.Foto FROM estilos AS E WHERE E.Clave = P.Estilo) AS FOTO FROM pedidox AS P WHERE P.Control =  {$x['CONTROL']} AND P.stsavan NOT IN(14) LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getManoDeObraXFraccionEstiloPespunte() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT FF.CostoMO AS MANO_DE_OBRA FROM fraccionesxestilo AS FF "
+                                    . "WHERE FF.Estilo = '{$x['ESTILO']}' AND FF.Fraccion =  {$x['FRACCION']} LIMIT 1")->result());
+//                    print $this->db->last_query();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onRevisarFraccionPagada() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS COBRADA FROM fracpagnomina AS FF "
+                                    . "WHERE FF.Control = '{$x['CONTROL']}' AND FF.numfrac =  {$x['FRACCION']} LIMIT 1")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onPagarFraccionNominaPespunte() {
+        try {
+            $x = $this->input->get();
+            $revisa_fraccion = $this->db->query("SELECT COUNT(*) AS COBRADA FROM fracpagnomina AS FF "
+                            . "WHERE FF.Control = '{$x['CONTROL']}' AND FF.numfrac =  {$x['FRACCION']} LIMIT 1")->result();
+            if (intval($revisa_fraccion[0]->COBRADA) === 0) {
+                $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$x['FRACCION']}  AND P.Control = {$x['CONTROL']} AND P.stsavan NOT IN(14)  LIMIT 1")->result();
+                $_CONTROL_ = $this->db->query("SELECT P.Semana AS SEMANA,P.Maquila AS MAQUILA, P.Pares AS PARES, P.Estilo AS ESTILO FROM pedidox AS P WHERE P.Control =  {$x['CONTROL']} AND P.stsavan NOT IN(14) LIMIT 1")->result();
+
+                $fechin = Date('d/m/Y');
+                $_SEMANA_ = $this->db->select("S.Sem AS SEMANA", false)
+                                ->from('semanasnomina AS S')
+                                ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
+                                ->get()->result();
+                $EMPLEADO = $x['CELULA'];
+                $data = array(
+                    "numeroempleado" => $EMPLEADO,
+                    "maquila" => intval($_CONTROL_[0]->MAQUILA),
+                    "control" => $x['CONTROL'],
+                    "estilo" => $_CONTROL_[0]->ESTILO,
+                    "pares" => $_CONTROL_[0]->PARES,
+                    "fecha" => Date('Y-m-d 00:00:00'),
+                    "fecha_registro" => Date('d/m/Y h:i:s'),
+                    "semana" => $_SEMANA_[0]->SEMANA,
+                    "depto" => 110,
+                    "anio" => Date('Y'));
+                $data["fraccion"] = $x['FRACCION'];
+                $data["numfrac"] = $x['FRACCION'];
+                $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
+                $data["preciofrac"] = $PXFC;
+                $data["subtot"] = (floatval($_CONTROL_[0]->PARES) * floatval($PXFC));
+                $data["avance_id"] = NULL;
+                $data["modulo"] = 'CAPES';
+                $this->db->insert('fracpagnomina', $data);
+                $l = new Logs("Captura de Avance Nomina pespunte", "HA PAGADO LA FRACCION {$x['FRACCION']} PARA EL CONTROL {$x['CONTROL']}.", $this->session);
+                print json_encode(array("PAGADA" => 1));
+            } else {
+                print json_encode(array("PAGADA" => 0));
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

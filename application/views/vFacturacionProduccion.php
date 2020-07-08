@@ -2631,13 +2631,11 @@
     }
     input{
         padding-top: 2px !important;
-        padding-bottom:  2px !important;
-        border: solid 1px #000 !important;
+        padding-bottom:  2px !important; 
     } 
     input,textarea{
         padding-top: 2px !important;
-        padding-bottom:  2px !important;
-        border: solid 1px #000 !important;
+        padding-bottom:  2px !important; 
     } 
     .text-danger {
         color: #b71a0a !important;
