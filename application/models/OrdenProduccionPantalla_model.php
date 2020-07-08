@@ -44,7 +44,7 @@ class OrdenProduccionPantalla_model extends CI_Model {
                             OPD.Articulo,
                             OPD.ArticuloT,
                             OPD.UnidadMedidaT,
-                            OPD.Consumo "
+                            FORMAT(OPD.Consumo * CAST(OP.Pares AS DECIMAL(5,2)),3) as Consumo "
                             . " "
                             . "")
                     ->from("ordendeproduccion OP")
