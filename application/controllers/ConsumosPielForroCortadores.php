@@ -329,16 +329,20 @@ class ConsumosPielForroCortadores extends CI_Controller {
                         $pdf->Cell(15, $alto_celda, number_format($ABONO_DEV / intval($vvv->Pares), 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_DCM2 += $vvv->DCM2;
                         $TOTAL_X_DCM2_CORTADOR += $vvv->DCM2;
+//                        $TOTAL_X_DCM2 += $ABONO_DEV / intval($vvv->Pares);
+//                        $TOTAL_X_DCM2_CORTADOR += $ABONO_DEV / intval($vvv->Pares);
 
+                        $pdf->SetFont('Calibri', 'b', 7);
                         $base += 15;
                         $pdf->SetX($base);
                         $rounded = 0.01 * (int) ($vvv->PORCENTAJE * 100);
                         $rounded = $vvv->PORCENTAJE;
-                        $pdf->Cell(7, $alto_celda, number_format($rounded, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
+                        $pdf->Cell(7, $alto_celda, number_format($rounded*100, 0, '.', ',')."%", $bordes/* BORDE */, 0/* SALTO */, 'R');
                         $TOTAL_X_PORCENTAJE += $rounded;
                         $TOTAL_X_PORCENTAJE_CORTADOR += $rounded;
                         $REGISTROS += 1;
-                        
+                        $pdf->SetFont('Calibri', '', 8);
+
                         $SISTEMA_PESOS = 0;
                         $SISTEMA_PESOS = $vvv->Precio * $CANTIDAD_PARES_X_CONSUMO;
 
@@ -458,7 +462,8 @@ class ConsumosPielForroCortadores extends CI_Controller {
 //                $pdf->Cell(15, $alto_celda, number_format($TOTAL_X_DCM2_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 15;
                 $pdf->SetX($base);
-                $pdf->Cell(7, $alto_celda, number_format(($TOTAL_X_PORCENTAJE_CORTADOR/$REGISTROS)*100, 0, '.', ',')."%", $bordes/* BORDE */, 0/* SALTO */, 'R');
+//                $pdf->Cell(7, $alto_celda, number_format(($TOTAL_X_DCM2_CORTADOR ), 0, '.', ',') . "%", $bordes/* BORDE */, 0/* SALTO */, 'R');
+                $pdf->Cell(7, $alto_celda, number_format(($TOTAL_X_DCM2_CORTADOR/$TOTAL_X_ESTILO_CORTADOR )*100, 0, '.', ',') . "%", $bordes/* BORDE */, 0/* SALTO */, 'R');
                 $base += 7;
                 $pdf->SetX($base);
                 $pdf->Cell(12, $alto_celda, number_format($TOTAL_X_SISTEMA_PESOS_CORTADOR, 2, '.', ','), $bordes/* BORDE */, 0/* SALTO */, 'R');
@@ -483,6 +488,8 @@ class ConsumosPielForroCortadores extends CI_Controller {
                 $TOTAL_X_REAL_PESOS_CORTADOR = 0;
                 $TOTAL_X_DIFERENCIA_PESOS_CORTADOR = 0;
                 $TOTAL_X_PIOCHAS_PESOS_CORTADOR = 0;
+
+                $REGISTROS = 0;
                 if (isset($CORTADORES[$k + 1])) {
                     $pdf->AddPage();
                     $pdf->SetAutoPageBreak(true, 6);
