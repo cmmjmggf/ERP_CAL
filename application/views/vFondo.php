@@ -19,6 +19,13 @@
 </style>
 <div id="watermark">
     <div class="card-body text-center mt-5 fixedWatermark" >
-        <img src="<?php print base_url(); ?>img/lsbck.png"  class="img-fluid">
+        <?php
+        if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO"
+                || is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
+            ?>
+            <img src="<?php print base_url(); ?>img/lsbck.png"  class="img-fluid">
+            <?php
+        }
+        ?>
     </div>
 </div>

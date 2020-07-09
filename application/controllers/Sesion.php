@@ -207,6 +207,7 @@ class Sesion extends CI_Controller {
                     'EMPRESA_CP' => $dt->EMPRESA_CP,
                     'EMPRESA_REPRESENTANTE' => $dt->EMPRESA_REPRESENTANTE,
                     'LOGO' => $dt->LOGO,
+                    'TEMA'=>$dt->Tema,
                     'TIPOMH' => $dt->TIPOMH,
                     'SEG' => $dt->Seguridad
                 );
@@ -239,10 +240,14 @@ class Sesion extends CI_Controller {
     public function onSalir() {
         try {
             $l = new Logs("SALIO DEL SISTEMA", "SALIO DEL SISTEMA", $this->session);
-            $array_items = array('USERNAME', 'PASSWORD', 'LOGGED');
-            $this->session->unset_userdata($array_items);
+            $userdata = array();
+            foreach ($this->session->userdata as $k => $v) {
+                array_push($userdata, $k);
+            }
+            $this->session->unset_userdata($userdata);
             header('Location: ' . base_url());
-        } catch (Exception $exc) {
+        } catch (
+        Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
@@ -276,6 +281,28 @@ class Sesion extends CI_Controller {
             }
         } else {
             print 2;
+        }
+    }
+
+    public function onCambiarTema() {
+        try {
+            $x = $this->input->get();
+            switch ($x['TEMA']) {
+                case 1:
+                    $this->session->TEMA = 'CLÁSICO';
+                    $this->db->set("TEMA", "CLÁSICO")->where("ID", $this->session->ID)->update("usuarios");
+                    break;
+                case 2:
+                    $this->session->TEMA = 'ACTUAL';
+                    $this->db->set("TEMA", "ACTUAL")->where("ID", $this->session->ID)->update("usuarios");
+                    break;
+                default:
+                    $this->session->TEMA = 'CLÁSICO';
+                    $this->db->set("TEMA", "CLÁSICO")->where("ID", $this->session->ID)->update("usuarios");
+                    break;
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 

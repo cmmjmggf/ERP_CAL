@@ -1,4 +1,4 @@
-<div class="card m-3" id="pnlTablero">
+<div class="card mx-3" id="pnlTablero">
     <div class="card-header">
         <div class="row">
             <div class="w-100 my-1"></div> 
@@ -6,7 +6,7 @@
                 <button type="button" class="btn btn-default text-muted" id="btnReload"><span class="fa fa-retweet"></span></button>
             </div> 
             <div class="col-12 col-sm-12 col-md-12 col-lg-8">
-                <h4 class="font-weight-bold pr-2 mr-2">
+                <h4 class="font-weight-bold pr-2 mr-2" style="text-transform: uppercase">
                     Asigna Piel, Forro, Textiles y Sintéticos a corte por control
                 </h4> 
             </div>
@@ -24,7 +24,7 @@
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2" align="left">
                 <strong>Control</strong>
-                <input type="text" class="form-control form-control-sm column_filter numeric" id="Control"  >
+                <input type="text" class="form-control form-control-sm column_filter numeric numbersOnly" id="Control"  >
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2" align="left">
                 <strong>Fracción</strong>
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-1 mt-2" align="left">
-                <button type="button" id="btnEntregar" class="btn btn-success" style="color: #fff; background-color: #8BC34A; border-color: #8BC34A;" data-toggle="tooltip" data-placement="bottom" title="Presiona Enter para aceptar"><span class="fa fa-check"></span> Acepta</button>
+                <button type="button" id="btnEntregar" disabled="" class="btn btn-success" style="color: #fff; background-color: #8BC34A; border-color: #8BC34A;" data-toggle="tooltip" data-placement="bottom" title="Presiona Enter para aceptar"><span class="fa fa-check"></span> Acepta</button>
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="row">
@@ -247,7 +247,7 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Cargo</th>
                             <th scope="col">Abono</th>
-                            <th scope="col">Dev</th>
+                            <th scope="col">Devolución</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -375,19 +375,19 @@
                     </div>
                 </div>
             </div>
-<!--            <div class="modal-footer">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="left">
-                                                        <button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
-                                                            <span class="fa fa-check"></span> Aceptar</button>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="right">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
+            <!--            <div class="modal-footer">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="left">
+                                                                    <button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
+                                                                        <span class="fa fa-check"></span> Aceptar</button>
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="right">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
         </div>
     </div>
 </div>
@@ -572,7 +572,7 @@
             onEnable(Cortador);
             onDisable(btnAceptar);
             if (mdlRetornaMaterial.find("#Entrego").val() !== '' &&
-                    mdlRetornaMaterial.find("#Control").val() !== '' 
+                    mdlRetornaMaterial.find("#Control").val() !== ''
                     || mdlRetornaMaterial.find("#Regreso").val() !== '' &&
                     mdlRetornaMaterial.find("#Control").val() !== '') {
                 onDevolverPielForro();
@@ -689,6 +689,8 @@
                 Pares.val(data.PARES);
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 1);
                 tipo_consumo = 1; /*PIEL*/
+                $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
+
             } else {
                 onUnSelect();
             }
@@ -717,6 +719,8 @@
                 Pares.val(data.PARES);
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 2);
                 tipo_consumo = 2; /*FORRO*/
+                $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
+
             } else {
                 onUnSelect();
             }
@@ -745,6 +749,8 @@
                 Pares.val(data.PARES);
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 34);
                 tipo_consumo = 34; /*TEXTIL*/
+                $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
+
             } else {
                 onUnSelect();
             }
@@ -773,6 +779,8 @@
                 Pares.val(data.PARES);
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 40);
                 tipo_consumo = 40; /*SINTETICOS*/
+                $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
+
             } else {
                 onUnSelect();
             }
@@ -789,13 +797,15 @@
             if (Explosion.val() === '') {
                 switch (parseInt(Fraccion.val())) {
                     case 100:
-                        $(".card div[id='tblPieles_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").find("thead tr th").addClass("highlight-rows");
+                        $(".card div[id='tblForros_wrapper']").removeClass("highlight-wrapper");
+                        $(".card div[id='tblPieles_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").addClass("highlight-wrapper");
                         break;
                     case 99:
-                        $(".card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").find("thead tr th").addClass("highlight-rows");
+                        $(".card div[id='tblPieles_wrapper']").removeClass("highlight-wrapper");
+                        $(".card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").addClass("highlight-wrapper");
                         break;
                     case 96:
-                        $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").find("thead tr th").addClass("highlight-rows");
+                        $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").addClass("highlight-wrapper");
                         break;
                 }
             }
@@ -1144,7 +1154,7 @@
             console.log('Entregar.val() > Explosion.val() ELSE');
         }
 
-        if (seguro) {
+        if (seguro && Entregar.val()) {
             $.post('<?php print base_url('AsignaPFTSACXC/onEntregarPielForroTextilSintetico'); ?>', {
                 TIPO: tipo_consumo,
                 ORDENDEPRODUCCION: OrdenDeProduccion.val(),
@@ -1160,7 +1170,6 @@
             }).done(function (data) {
                 console.log(data);
                 swal('ATENCIÓN', 'SE HA ENTREGADO ' + Entregar.val() + ' DEL MATERIAL SOLICITADO, EN LA SEMANA ' + Semana.val() + ' PARA LA FRACCIÓN "' + Fraccion.val(), 'success').then((value) => {
-
                     Fraccion.val('');
                     ClaveArticulo.val('');
                     Articulo.val('');
@@ -1179,6 +1188,10 @@
                 console.log(x.responseText);
             }).always(function () {
 
+            });
+        } else {
+            onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UNA CANTIDAD", function () {
+                Entregar.focus().select();
             });
         }
     }
@@ -1287,7 +1300,7 @@
                 HoldOn.close();
                 /*14-01-2020 0912am*/
 //                mdlRetornaMaterial.find('input').val('');
-//                mdlRetornaMaterial.find("#Cortador")[0].selectize.clear(true);
+                //                mdlRetornaMaterial.find("#Cortador")[0].selectize.clear(true);
             });
         } else {
             swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CORTADOR, SI ES PIEL O FORRO, UN CONTROL VÁLIDO, UN REGISTRO DE ASIGNACIÓN DE CONTROL, CUANTO REGRESO EL CORTADOR Y SI TIENE MATERIAL MALO O DEFECTUOSO O SI ES MATERIAL EXTRA', 'warning').then((value) => {
@@ -1308,39 +1321,109 @@
     }
     .highlight-rows{
         width:100px;
-        height:20px;
+        height:20px; 
         color: #000;
-        background:#ffcc33;
-        animation: myfirst 3s;
-        -moz-animation:myfirst 3s infinite; /* Firefox */
-        -webkit-animation:myfirst 3s infinite; /* Safari and Chrome */
+        background:#ffcc33;  
+        animation: blinkls 3s;
+        -moz-animation:blinkls 3s infinite; /* Firefox */
+        -webkit-animation:blinkls 3s infinite; /* Safari and Chrome */
         font-weight: bold;
+    } 
+
+    .highlight-wrapper{
+        animation: blinklsw 1s;
+        -moz-animation:blinklsw 1s infinite; /* Firefox */
+        -webkit-animation:blinklsw 1s infinite; /* Safari and Chrome */
     }
 
-    @-moz-keyframes myfirst /* Firefox */
-    {
-        0%   {background:#ffcc33; color:#000;}
-        50%  {background:#ffffff;color:#000;}
-        100%   {background:#ffcc33;color:#000;}
+
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes blinkls {
+        25%  {
+            border-width: 2px;
+            border-color:  #007bff;
+        }
+        50%  {
+            border-width: 2px;
+            border-color:  #ffffff;
+        }
+        75%  {
+            border-width: 2px;
+            border-color:  #007bff;
+        }
+        100% {
+            border-width: 2px;
+            border-color:  #ffffff;
+        }
     }
 
-    @-webkit-keyframes myfirst /* Firefox */
-    {
-        0%   {background:#ffcc33;color:#000;}
-        50%  {background:#ffffff;color:#000;}
-        100%   {background:#ffcc33;color:#000;}
+    /* Standard syntax */
+    @keyframes blinkls {
+        0%   {
+            border-width: 2px;
+            border-color:  #007bff;
+        }
+        25%  {
+            border-width: 2px;
+            border-color:  #ffffff;
+        }
+        50%  {
+            border-width: 2px;
+            border-color:  #007bff;
+        }
+        75%  {
+            border-width: 2px;
+            border-color:  #ffffff;
+        }
+        100% {
+            border-width: 2px;
+            border-color:  #007bff;
+        }
     }
-</style>
-<style>
+
+
+    /* Standard syntax */
+    @keyframes blinklsw {
+        0%   {
+            border: 2px solid #cc0000; 
+        }
+        25%  {
+            border: 2px solid #efefef; 
+        }
+        50%  {
+            border: 2px solid #cc0000; 
+        }
+        75%  {
+            border: 2px solid #efefef; 
+        }
+        100% {
+            border: 2px solid #cc0000; 
+        }
+    }
     .card{
         border-width: 1px 2px 2px;
         border-style: solid;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
-
+    }
+    .card div[id='tblPieles_wrapper'], .card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']{
+        border-radius: 10px;
     }
     .card-header{
         background-color: transparent;
         border-bottom: 0px;
+    }
+
+    #pnlTablero table thead th, label,strong,button{ 
+        text-transform: uppercase !important;
+    }
+
+    #pnlTablero table thead th,  #pnlTablero table tfoot th:nth-child(8){
+        color: #fff !important;
+        background-color: #000;
+    }
+    #pnlTablero h5{
+        font-size: 25px;
+        font-style: italic;
     }
 </style>

@@ -311,6 +311,9 @@
         background-color: #d62c1a !important;
         border-color: #ca2a19 !important;
     }
+    .modal , .modal button{
+        text-transform: uppercase !important;
+    }
     .modal-content {
         border-radius: 1px !important;
         border-image: linear-gradient(to bottom, #0099cc, #ccff00, rgb(0,0,0,0)) 1 99% !important;

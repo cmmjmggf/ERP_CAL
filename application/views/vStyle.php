@@ -13,13 +13,8 @@
         bottom:0;
         left:0;
         z-index:0;
-    }
-    .selectize-input {
-        border: 1px solid #9E9E9E;
-    }
-    .form-control {
-        border: 1px solid #9E9E9E;
-    }
+    } 
+
     /*Hacer disbaled de selectize igual a bootstrap*/
     .selectize-control .selectize-input.disabled {
         background-color: #ecf0f1;
@@ -470,4 +465,52 @@
     table tbody tr  {
         font-size: 0.72rem !important;
     }
+    nav .btn-primary .dropdown-toggle , nav .session-dropdown .dropdown-toggle {
+        padding-top: 3px;
+        padding-bottom: 3px; 
+    } 
 </style>
+<!--STYLE NEGRO-->
+<?php 
+if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") {
+    ?>
+    <style>
+        body{  
+            /* Location of the image */
+            background-image: url(<?php print base_url('media/7.jpg') ?>);
+
+            /* Background image is centered vertically and horizontally at all times */
+            background-position: center center;
+
+            /* Background image doesn't tile */
+            background-repeat: no-repeat;
+
+            /* Background image is fixed in the viewport so that it doesn't move when 
+               the content's height is greater than the image's height */
+            background-attachment: fixed;
+
+            /* This is what makes the background image rescale based
+               on the container's size */
+            background-size: cover;
+
+            /* Set a background color that will be displayed
+               while the background image is loading */
+            background-color: #464646;
+        }   
+        .bg-primary , .dropdown-menu{
+            background-color: rgba(29,29,31,0.72)!important;
+        }
+        nav button.btn-primary,  .nav-item > .btn-primary{
+            background-color: transparent !important;
+            border-color: transparent  !important;
+        }    
+        .dropdown-item {
+            color: #fff !important;
+        }
+        .watermark p {
+            color: #d2daed !important;
+        }
+    </style>
+    <?php
+}
+?>

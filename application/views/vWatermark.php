@@ -15,8 +15,5 @@ switch ($TYPE) {
 <style>
     .fixed-bottom {
         z-index: 1000;
-    }
-    .watermark p{
-        color:#333 !important; 
     } 
 </style>

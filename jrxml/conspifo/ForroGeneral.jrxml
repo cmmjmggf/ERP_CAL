@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ForroGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="1.2396694214876032"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
+	<property name="ireport.zoom" value="2.7320538214602954"/>
+	<property name="ireport.x" value="1115"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -25,7 +25,7 @@ OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT,
                             A.PrecioActual AS Precio, CAST(OP.Pares AS SIGNED) AS PARES,
 
 ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS Consumo,
-ifnull(OP.CantidadPiel1,0)*1 AS X_CONTROL,  IFNULL(A.Abono*1,0)  AS ENTREGADO,
+OP.Pares * ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS X_CONTROL,  IFNULL(A.Abono*1,0)  AS ENTREGADO,
 A.Devolucion *1 AS DEVOLUCION, IFNULL(A.Basura*1,0) AS BASURA, A.Piocha  AS PIOCHAS,
 
                           (ifnull(OP.CantidadPiel1,0)  - (A.Abono*1))+(IFNULL(A.Basura*1,0)+(IFNULL(A.Devolucion*1,0))) AS DIFERENCIAX,
@@ -34,7 +34,8 @@ A.Devolucion *1 AS DEVOLUCION, IFNULL(A.Basura*1,0) AS BASURA, A.Piocha  AS PIOC
                           (A.PrecioActual * SUM(OPD.Cantidad)) AS SISTEMA_PESOS,
                           (A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS REAL_PESOS,
                           (A.PrecioActual * (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0)))) AS DifPesos,
-                          (A.Abono/OP.Pares) AS DCM2, (A.Abono/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE
+                          (A.Abono/OP.Pares) AS DCM2, (A.Abono/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE,
+ ((IFNULL(A.Abono,0)*1) - (IFNULL(A.Devolucion,0) *1) /OP.Pares) AS CONS_PROMXPAR
 
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion
 INNER JOIN asignapftsacxc AS A ON OP.ID = A.OrdenProduccion AND A.Articulo = OPD.Articulo
@@ -87,6 +88,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 	<field name="PORCENTAJE" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="CONS_PROMXPAR" class="java.lang.Double"/>
 	<variable name="PARES_1" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
 	</variable>
@@ -99,16 +101,16 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 	<variable name="X_CONTROL_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
 		<variableExpression><![CDATA[$F{X_CONTROL}]]></variableExpression>
 	</variable>
-	<variable name="ENTREGADO_1" class="java.lang.Integer" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Count">
+	<variable name="ENTREGADO_1" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Count">
 		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
 	</variable>
-	<variable name="ENTREGADO_2" class="java.math.BigDecimal" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+	<variable name="ENTREGADO_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
 		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
 	</variable>
-	<variable name="DEVOLUCION_1" class="java.math.BigDecimal" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+	<variable name="DEVOLUCION_1" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
 		<variableExpression><![CDATA[$F{DEVOLUCION}]]></variableExpression>
 	</variable>
-	<variable name="BASURA_1" class="java.math.BigDecimal" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+	<variable name="BASURA_1" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
 		<variableExpression><![CDATA[$F{BASURA}]]></variableExpression>
 	</variable>
 	<variable name="DIFERENCIA_1" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
@@ -135,10 +137,10 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 	<variable name="ENTREGADO_3" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
 	</variable>
-	<variable name="DEVOLUCION_2" class="java.math.BigDecimal" calculation="Sum">
+	<variable name="DEVOLUCION_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{DEVOLUCION}]]></variableExpression>
 	</variable>
-	<variable name="BASURA_2" class="java.math.BigDecimal" calculation="Sum">
+	<variable name="BASURA_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{BASURA}]]></variableExpression>
 	</variable>
 	<variable name="DIFERENCIA_4" class="java.lang.Double" calculation="Sum">
@@ -165,13 +167,37 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 	<variable name="PIOCHAS_2" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{PIOCHAS}]]></variableExpression>
 	</variable>
+	<variable name="CONS_PROMXPAR_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{CONS_PROMXPAR}]]></variableExpression>
+	</variable>
+	<variable name="CONSUMOPROMXPAR" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[($V{ENTREGADO_2}-$V{DEVOLUCION_1})/($V{PARES_2})]]></variableExpression>
+	</variable>
+	<variable name="ENTREGADO_4" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
+	</variable>
+	<variable name="DEVOLUCION_3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVOLUCION}]]></variableExpression>
+	</variable>
+	<variable name="PARES_3" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$F{PARES}]]></variableExpression>
+	</variable>
+	<variable name="X_CONTROL_3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_CONTROL}]]></variableExpression>
+	</variable>
+	<variable name="ENTREGADO_5" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
+	</variable>
+	<variable name="DEVOLUCION_4" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVOLUCION}]]></variableExpression>
+	</variable>
 	<group name="EMPLEADO_CLAVE" keepTogether="true">
 		<groupExpression><![CDATA[$F{EMPLEADO_CLAVE}]]></groupExpression>
 		<groupHeader>
 			<band/>
 		</groupHeader>
 		<groupFooter>
-			<band height="13">
+			<band height="15">
 				<textField pattern="" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="232" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3cbb3189-b425-4319-85d0-2e0971fbd0f3"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -180,63 +206,63 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{PARES_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="272" y="0" width="53" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="572b7d80-5ffe-47c2-90d6-659e0939501b"/>
+				<textField pattern="###0.000" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="272" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="572b7d80-5ffe-47c2-90d6-659e0939501b"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{X_CONTROL_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="325" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="65c496c9-17ce-4a00-8a3d-dd724cf678e6"/>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="327" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="65c496c9-17ce-4a00-8a3d-dd724cf678e6"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{ENTREGADO_2}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="380" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="bfa544ba-68f5-4196-81c4-54bef17d6ef3"/>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="383" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="bfa544ba-68f5-4196-81c4-54bef17d6ef3"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{DEVOLUCION_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="436" y="0" width="44" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0b29f587-7335-49f9-810f-1dbe2698f14d"/>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="438" y="0" width="44" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0b29f587-7335-49f9-810f-1dbe2698f14d"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{BASURA_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{ENTREGADO_2}-$V{DEVOLUCION_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="481" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ed1fce29-8f70-4dbb-b33a-c323539bbd44"/>
+				<textField pattern="###0.000" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="482" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ed1fce29-8f70-4dbb-b33a-c323539bbd44"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{DIFERENCIA_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<textField pattern="###0.000" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="537" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="e827727d-7f64-4fa6-a630-36f1c21e4a49"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{DCM2_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($V{ENTREGADO_2}-$V{DEVOLUCION_1})/($V{PARES_2})]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<textField pattern="###0.000" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="592" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ac1c09cb-5986-4582-a557-4f4dcd70e4a2"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{PORCENTAJE_1}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[(($V{ENTREGADO_2}-$V{DEVOLUCION_1})/($V{X_CONTROL_2})) *100]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.000" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="632" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f5754c32-3368-4ed7-b169-c473caa32d93"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -244,7 +270,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<textField pattern="#,##0.000" isBlankWhenNull="true">
 					<reportElement mode="Opaque" x="687" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="823c98e0-c389-416d-8da9-32310248dce5"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -252,36 +278,36 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REAL_PESOS_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="742" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cdd36dac-28d0-4441-ad7d-ab31b7191fc2"/>
+				<line>
+					<reportElement x="0" y="14" width="840" height="1" uuid="9a2fa9ff-58f1-4616-b19c-c996d7edff9b"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="-1" y="0" width="233" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="46bb9b7c-86f7-437f-b4a2-f60231b42321"/>
+					<textElement verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{EMPLEADO_NOMBRE}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.000" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="742" y="1" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6a0f6a0a-d2dd-4c0f-b952-8d9e1495698f"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_1}-$V{REAL_PESOS_1}]]></textFieldExpression>
 				</textField>
-				<textField pattern="" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="0" y="0" width="232" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="5294b4fb-4035-426e-b4cf-39c72c28757d"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{EMPLEADO_NOMBRE}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="797" y="0" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="44c55ac1-16ed-4256-960c-1731c009da33"/>
+				<textField pattern="#,##0.000" isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="797" y="0" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="77f6c9ee-3ce4-4d8a-8e4e-19d2e978bfac"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{PIOCHAS_1}]]></textFieldExpression>
 				</textField>
-				<line>
-					<reportElement x="0" y="12" width="840" height="1" uuid="57e29e68-c812-47ff-9b3f-ca9da9bfbbe1"/>
-					<graphicElement>
-						<pen lineWidth="0.5"/>
-					</graphicElement>
-				</line>
 			</band>
 		</groupFooter>
 	</group>
@@ -337,7 +363,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="0" y="42" width="232" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="b71b2d68-4d1e-400d-a406-473adce03610"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="-1" y="42" width="233" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="b71b2d68-4d1e-400d-a406-473adce03610"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -358,7 +384,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<text><![CDATA[X Control]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="55" width="840" height="1" uuid="1bf118f4-d164-4d20-baac-41f6100f479c"/>
+				<reportElement x="-1" y="55" width="841" height="1" uuid="1bf118f4-d164-4d20-baac-41f6100f479c"/>
 			</line>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="219" y="14" width="61" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="23b6c171-8c2c-4cf5-921d-e350677dee1b"/>
@@ -399,21 +425,21 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<text><![CDATA[Entregado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="381" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="2330bd56-9164-4d48-b32b-d472412891e4"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="382" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="2330bd56-9164-4d48-b32b-d472412891e4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Devolucion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="436" y="42" width="45" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="a1727672-f9ed-4940-b959-218845fc2eed"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="437" y="42" width="45" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="a1727672-f9ed-4940-b959-218845fc2eed"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Basura]]></text>
+				<text><![CDATA[Ent-Dev]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="481" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="d4ce4757-28ac-4893-9762-cd3229b4baa9"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="482" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="d4ce4757-28ac-4893-9762-cd3229b4baa9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -422,9 +448,9 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="537" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="faab061b-1ac4-4fd5-98b2-bddc243fda56"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
+					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Dcm2]]></text>
+				<text><![CDATA[Con-PromXPar]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="592" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="d2894647-ccdb-4ebd-ad66-8165a82002d5"/>
@@ -455,7 +481,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<text><![CDATA[Diferencia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="797" y="42" width="43" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="628d8603-7cff-4f6b-a900-5a413105d818"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="797" y="42" width="43" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="927699a8-e60d-4b2f-8215-3f96e273b4d8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -469,14 +495,14 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 	<summary>
 		<band height="15" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="171" y="0" width="61" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#CCCCCC" uuid="4902f5ea-e44a-4684-bb28-ed8c26cc897f"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="168" y="0" width="67" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#CCCCCC" uuid="4902f5ea-e44a-4684-bb28-ed8c26cc897f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Gran Total]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="232" y="0" width="40" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="8a415020-5511-4ae3-82de-2bd3741dd190"/>
+				<reportElement mode="Opaque" x="235" y="0" width="40" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="8a415020-5511-4ae3-82de-2bd3741dd190"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -484,7 +510,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{PARES_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="272" y="0" width="53" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="18ed113b-faf5-4d52-85b1-734c1e84c409"/>
+				<reportElement mode="Opaque" x="275" y="0" width="53" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="18ed113b-faf5-4d52-85b1-734c1e84c409"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -492,7 +518,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{X_CONTROL_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="325" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="ed0356dc-3aff-4605-a039-052f7a2ae18f"/>
+				<reportElement mode="Opaque" x="328" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="ed0356dc-3aff-4605-a039-052f7a2ae18f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -500,7 +526,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{ENTREGADO_3}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="380" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="8e7335bf-f321-4001-b930-d13574a329b8"/>
+				<reportElement mode="Opaque" x="383" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="8e7335bf-f321-4001-b930-d13574a329b8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -508,15 +534,15 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{DEVOLUCION_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="435" y="0" width="45" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="34a9eae3-f3c1-41fb-8854-8508a58a117e"/>
+				<reportElement mode="Opaque" x="438" y="0" width="44" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="34a9eae3-f3c1-41fb-8854-8508a58a117e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{BASURA_2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{ENTREGADO_5}-$V{DEVOLUCION_4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="481" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="6547c677-37b3-4284-bc0d-9d0f7e65175c"/>
+				<reportElement mode="Opaque" x="482" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="6547c677-37b3-4284-bc0d-9d0f7e65175c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -524,20 +550,12 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{DIFERENCIA_4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="537" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="fdf3419b-31ef-44aa-8a77-1b921ea7d499"/>
+				<reportElement mode="Opaque" x="592" y="0" width="40" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="da1a7669-2916-4899-a890-bba479fc595e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{DCM2_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="591" y="0" width="45" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="da1a7669-2916-4899-a890-bba479fc595e"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PORCENTAJE_2}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[(($V{ENTREGADO_4}-$V{DEVOLUCION_3})/($V{X_CONTROL_3})) *100]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="632" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d9654459-7ab5-45e1-9041-5043327ac64a"/>
@@ -564,12 +582,20 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_3}-$V{REAL_PESOS_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="797" y="0" width="43" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="6e92d49d-c0e1-455d-a347-220a1bc24768"/>
+				<reportElement mode="Opaque" x="797" y="0" width="43" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d7defd74-bacb-4ed0-bf99-4499af631918"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PIOCHAS_2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.000" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="537" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="353f93f9-0a3b-49e5-8669-59faae3a112c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{ENTREGADO_4}-$V{DEVOLUCION_3})/($V{PARES_3})]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

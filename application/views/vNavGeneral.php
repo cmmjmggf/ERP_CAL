@@ -94,8 +94,8 @@
 
 
 
-    #sidebar ul li a:hover {
-        color: #2C3E50;
+    #sidebar ul li a:hover { 
+        color: #000000;
         background: #fff;
     }
 

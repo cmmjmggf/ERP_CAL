@@ -462,7 +462,6 @@ class Avance9 extends CI_Controller {
                                     ->where('A.Control', $xXx['CONTROL'])
                                     ->where('A.Departamento', 20)
                                     ->where('A.Fraccion', $v->NUMERO_FRACCION)
-                                    ->where_not_in('A.Emp')
                                     ->get()->result();
 
                     /* SOLO SE GENERA EL AVANCE EN LA FRACCIÓN 100 QUE ES LA PIEL */
@@ -506,8 +505,12 @@ class Avance9 extends CI_Controller {
                                         ->where('F.control', $xXx['CONTROL'])
                                         ->where('F.numfrac', $v->NUMERO_FRACCION)
                                         ->get()->result();
+                        $check_fraccion_bom = $this->db->query("SELECT COUNT(*) AS FORROS FROM asignapftsacxc AS AAA WHERE AAA.Control = {$xXx['CONTROL']} AND AAA.Fraccion = 99 ")->result();
+
                         $data["fraccion"] = $v->NUMERO_FRACCION;
-                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 
+                                || intval($check_fraccion[0]->EXISTE) === 1 && intval($check_fraccion_bom[0]->FORROS) === 2) {
+
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : $v->NUMERO_FRACCION;
 
                             if (intval($v->NUMERO_FRACCION) === 100 && $MAQUILA_MUESTRA !== 98) {
