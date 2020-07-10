@@ -9,11 +9,7 @@ class NotificacionDeLoDocumentado extends CI_Controller {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
         $this->load->library('session');
-    }
-
-    public function index() {
-
-    }
+    } 
 
     public function getCartaFacs() {
         try {
@@ -89,4 +85,19 @@ class NotificacionDeLoDocumentado extends CI_Controller {
         }
     }
 
+    public function getClientesNotifiDoc() {
+        try {
+            print json_encode($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getTransporteNotifiDoc() {
+        try {
+            print json_encode($this->db->query("SELECT T.Clave AS CLAVE, T.Descripcion AS TRANSPORTE  FROM transportes AS T WHERE T.Estatus IN('ACTIVO')  ORDER BY ABS(T.Descripcion) ASC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

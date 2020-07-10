@@ -18,13 +18,6 @@
                             <div class="col-10">
                                 <select id="ClienteMCD" name="ClienteMCD" class="form-control form-control-sm">
                                     <option></option>
-                                    <?php
-                                    /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                                    $dtm = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl IN(0, 1) ORDER BY ABS(C.Clave) ASC;")->result();
-                                    foreach ($dtm as $k => $v) {
-                                        print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                                    }
-                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -77,12 +70,6 @@
                                 <input type="text" id="ClienteViejo" name="ClienteViejo" class="form-control d-none" readonly="">
                                 <select id="ClienteAModificar" name="ClienteAModificar" class="form-control form-control-sm">
                                     <option></option>
-                                    <?php
-                                    /* YA CONTIENE LOS BLOQUEOS DE VENTA */
-                                    foreach ($dtm as $k => $v) {
-                                        print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                                    }
-                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -132,7 +119,7 @@
 
         ClienteAModificar.change(function () {
             if (ClienteAModificar.val()) {
-                xClienteAModificar.val(ClienteAModificar.val()); 
+                xClienteAModificar.val(ClienteAModificar.val());
             } else {
                 xClienteAModificar.val('');
                 ClienteAModificar[0].selectize.clear(true);
@@ -195,11 +182,25 @@
                         var x = JSON.parse(aaa);
                         switch (parseInt(x.MODIFICADO)) {
                             case 0:
-                                onNotifyOld('', 'CLIENTE MODIFICADO', 'warning');
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "SE HA HECHO LA MODIFICACIÓN DE CLIENTE" + CelulaPespunteFail.val(),
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then((action) => {
+                                });
                                 break;
                             case 1:
                                 mdlSeleccionaCliente.modal('hide');
-                                onNotifyOld('', 'CLIENTE MODIFICADO', 'success');
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "SE HA HECHO LA MODIFICACIÓN DE CLIENTE" + CelulaPespunteFail.val(),
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1500
+                                }).then((action) => {
+                                });
                                 ControlesXAplicarDeEsteCliente.ajax.reload(function () {
                                     onCloseOverlay();
                                 });
@@ -224,6 +225,7 @@
             } else {
                 getControlesXAplicarDeEsteCliente();
             }
+            getClientesModDev();
         });
     });
 
@@ -278,6 +280,24 @@
             mdlSeleccionaCliente.find("#IDANTERIOR").val(dtm.ID);
             mdlSeleccionaCliente.find("#ClienteViejo").val(dtm.CLIENTE);
             mdlSeleccionaCliente.modal('show');
+        });
+    }
+
+    function getClientesModDev() {
+        onOpenOverlay('');
+        $.getJSON('<?php print base_url('ModificaAClienteDevoluciones/getClientesModDev'); ?>').done(function (a, b, c) {
+            ClienteMCD[0].selectize.clear(true);
+            ClienteMCD[0].selectize.clearOptions();
+            ClienteAModificar[0].selectize.clear(true);
+            ClienteAModificar[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                ClienteMCD[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+                ClienteAModificar[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
         });
     }
 </script>  

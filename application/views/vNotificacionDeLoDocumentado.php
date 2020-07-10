@@ -17,13 +17,7 @@
                             </div>
                             <div class="col-12 col-xs-12 col-sm-9 col-md-9 col-lg-9 col-xl-9" >
                                 <select id="ClienteFacturaNDOC" name="ClienteFacturaNDOC" class="form-control form-control-sm">
-                                    <option></option>
-                                    <?php
-//                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                    foreach ($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                        print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
-                                    }
-                                    ?>
+                                    <option></option> 
                                 </select>
                             </div>
                         </div>
@@ -54,13 +48,7 @@
                             </div>
                             <div class="col-12 col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" >
                                 <select id="TransporteNDOC" name="TransporteNDOC" class="form-control form-control-sm">
-                                    <option></option>
-                                    <?php
-//                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                    foreach ($this->db->query("SELECT T.Clave AS CLAVE, T.Descripcion AS TRANSPORTE  FROM transportes AS T WHERE T.Estatus IN('ACTIVO')  ORDER BY ABS(T.Descripcion) ASC;")->result() as $k => $v) {
-                                        print "<option value='{$v->CLAVE}' >{$v->TRANSPORTE}</option>";
-                                    }
-                                    ?>
+                                    <option></option> 
                                 </select>
                             </div>
                         </div>
@@ -397,8 +385,39 @@
                 [5, 'desc']/*FECHA*/
             ],
             initComplete: function () {
+                getClientesNotifiDoc();
+                getTransporteNotifiDoc();
                 onCloseOverlay();
             }
+        });
+    }
+    
+    function getClientesNotifiDoc() {
+        onOpenOverlay('');
+        $.getJSON('<?php print base_url('NotificacionDeLoDocumentado/getClientesNotifiDoc'); ?>').done(function (a, b, c) {
+            ClienteFacturaNDOC[0].selectize.clear(true);
+            ClienteFacturaNDOC[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                ClienteFacturaNDOC[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
+    function getTransporteNotifiDoc() {
+        onOpenOverlay('');
+        $.getJSON('<?php print base_url('NotificacionDeLoDocumentado/getTransporteNotifiDoc'); ?>').done(function (a, b, c) {
+            TransporteNDOC[0].selectize.clear(true);
+            TransporteNDOC[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                TransporteNDOC[0].selectize.addOption({text: v.TRANSPORTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
         });
     }
 </script>

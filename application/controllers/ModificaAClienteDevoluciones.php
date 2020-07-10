@@ -44,4 +44,11 @@ class ModificaAClienteDevoluciones extends CI_Controller {
         }
     }
 
+    public function getClientesModDev() {
+        try {
+            print json_encode($this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C INNER JOIN devolucionnp AS D ON C.Clave = D.cliente WHERE C.Estatus IN('ACTIVO') AND D.staapl IN(0, 1) ORDER BY ABS(C.Clave) ASC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

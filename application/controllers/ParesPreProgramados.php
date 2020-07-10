@@ -688,6 +688,14 @@ class ParesPreProgramados extends CI_Controller {
         }
     }
 
+    public function getClientesParesPreProgramados() {
+        try {
+            print json_encode($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus = 'ACTIVO' ORDER BY ABS(C.Clave) ASC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getAgentes() {
         try {
             print json_encode($this->pam->getAgentes());

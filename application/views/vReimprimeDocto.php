@@ -16,13 +16,7 @@
                             </div>
                             <div class="col-9">
                                 <select id="ClienteReg" name="ClienteReg" class="form-control form-control-sm order-2">
-                                    <option></option>
-                                    <?php
-                                    foreach ($this->db->select("C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE, C.ListaPrecios AS LISTADEPRECIO", false)
-                                            ->from('clientes AS C')->where_in('C.Estatus', 'ACTIVO')->order_by('ABS(C.Clave)', 'ASC')->get()->result() as $k => $v) {
-                                        print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}'>{$v->CLIENTE}</option>";
-                                    }
-                                    ?>
+                                    <option></option> 
                                 </select>
                             </div>
                         </div>
@@ -82,6 +76,15 @@
     $(document).ready(function () {
 
         handleEnterDiv(mdlReimprimeDocto);
+
+        FacturaReg.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (xClienteReg.val()) {
+                    onEnable(ClienteReg);
+                }
+            }
+        });
+
         xClienteReg.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (xClienteReg.val()) {
@@ -91,7 +94,7 @@
                     } else {
                         ClienteReg[0].selectize.clear(true);
                         ClienteReg[0].selectize.disable();
-                        onCampoInvalido(mdlReimprimeDocto, 'NUMERO DE EMPLEADO INVÁLIDO, INTENTE CON OTRO', function () {
+                        onCampoInvalido(mdlReimprimeDocto, 'NUMERO DE DOCUMENTO INVÁLIDO, INTENTE CON OTRO', function () {
                             xClienteReg.focus().select();
                             ClienteReg[0].selectize.enable();
                         });
@@ -160,6 +163,7 @@
             onEnable(xClienteReg);
             onEnable(FacturaReg);
             onEnable(TPReg);
+            getClientesReImprimeDocto();
             xClienteReg.focus();
         });
 
@@ -171,4 +175,19 @@
             }, true);
         });
     });
+
+    function getClientesReImprimeDocto() {
+        onOpenOverlay('');
+        $.getJSON('<?php print base_url('ReimprimeDocto/getClientesReImprimeDocto'); ?>').done(function (a, b, c) {
+            ClienteReg[0].selectize.clear(true);
+            ClienteReg[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                ClienteReg[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
 </script>
