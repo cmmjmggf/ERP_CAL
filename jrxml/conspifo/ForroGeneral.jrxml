@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="2.7320538214602954"/>
-	<property name="ireport.x" value="1115"/>
+	<property name="ireport.zoom" value="1.6963904734899473"/>
+	<property name="ireport.x" value="229"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -31,7 +31,8 @@ A.Devolucion *1 AS DEVOLUCION, IFNULL(A.Basura*1,0) AS BASURA, A.Piocha  AS PIOC
                           (ifnull(OP.CantidadPiel1,0)  - (A.Abono*1))+(IFNULL(A.Basura*1,0)+(IFNULL(A.Devolucion*1,0))) AS DIFERENCIAX,
                        (OP.Pares * ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares))  - ((IFNULL(A.Abono,0) - IFNULL(A.Devolucion,0)))   AS DIFERENCIA,
 
-                          (A.PrecioActual * SUM(OPD.Cantidad)) AS SISTEMA_PESOS,
+                          (A.PrecioActual * (OP.Pares * ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares))) AS SISTEMA_PESOS,
+
                           (A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS REAL_PESOS,
                           (A.PrecioActual * (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0)))) AS DifPesos,
                           (A.Abono/OP.Pares) AS DCM2, (A.Abono/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE,
@@ -263,7 +264,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					<textFieldExpression><![CDATA[(($V{ENTREGADO_2}-$V{DEVOLUCION_1})/($V{X_CONTROL_2})) *100]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="632" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f5754c32-3368-4ed7-b169-c473caa32d93"/>
+					<reportElement mode="Opaque" x="675" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="f5754c32-3368-4ed7-b169-c473caa32d93"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -271,7 +272,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="687" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="823c98e0-c389-416d-8da9-32310248dce5"/>
+					<reportElement mode="Opaque" x="730" y="0" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="823c98e0-c389-416d-8da9-32310248dce5"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -293,7 +294,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					<textFieldExpression><![CDATA[$F{EMPLEADO_NOMBRE}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="742" y="1" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6a0f6a0a-d2dd-4c0f-b952-8d9e1495698f"/>
+					<reportElement mode="Opaque" x="785" y="1" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6a0f6a0a-d2dd-4c0f-b952-8d9e1495698f"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -301,7 +302,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 					<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_1}-$V{REAL_PESOS_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.000" isBlankWhenNull="true">
-					<reportElement mode="Opaque" x="797" y="0" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="77f6c9ee-3ce4-4d8a-8e4e-19d2e978bfac"/>
+					<reportElement mode="Opaque" x="632" y="0" width="43" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="77f6c9ee-3ce4-4d8a-8e4e-19d2e978bfac"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -315,7 +316,10 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="56" splitType="Stretch">
+		<band height="57" splitType="Stretch">
+			<rectangle>
+				<reportElement x="675" y="30" width="165" height="25" uuid="49f83a9e-8d0a-4865-a6aa-24be99f181e3"/>
+			</rectangle>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="73" y="14" width="146" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="bd8043fa-27d0-4681-a45d-d1f3f978fa10"/>
 				<textElement verticalAlignment="Middle">
@@ -460,32 +464,39 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<text><![CDATA[%]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="632" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="97bc70f4-95f0-410a-a40d-8326ce385899"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="675" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="97bc70f4-95f0-410a-a40d-8326ce385899"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Sistema]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="687" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="18812d0c-9045-4a30-bc08-a78dc83386bc"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="730" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="18812d0c-9045-4a30-bc08-a78dc83386bc"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Real]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="742" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="b7cd5983-6604-4adc-9397-939e38c2d1e7"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="785" y="42" width="55" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="b7cd5983-6604-4adc-9397-939e38c2d1e7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Diferencia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" x="797" y="42" width="43" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="927699a8-e60d-4b2f-8215-3f96e273b4d8"/>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="632" y="42" width="43" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="927699a8-e60d-4b2f-8215-3f96e273b4d8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Piocha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="675" y="30" width="165" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="708ea498-95d6-458a-b0e2-da861c274cc0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pesos]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -558,7 +569,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[(($V{ENTREGADO_4}-$V{DEVOLUCION_3})/($V{X_CONTROL_3})) *100]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="632" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d9654459-7ab5-45e1-9041-5043327ac64a"/>
+				<reportElement mode="Opaque" x="675" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d9654459-7ab5-45e1-9041-5043327ac64a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -566,7 +577,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="687" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="dd59dd8b-9d07-45d3-837d-7fcfaec9710e"/>
+				<reportElement mode="Opaque" x="730" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="dd59dd8b-9d07-45d3-837d-7fcfaec9710e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -574,7 +585,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{REAL_PESOS_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="742" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="ac31e735-c8bc-4b01-9293-73e840555a5e"/>
+				<reportElement mode="Opaque" x="785" y="0" width="55" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="ac31e735-c8bc-4b01-9293-73e840555a5e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -582,7 +593,7 @@ ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
 				<textFieldExpression><![CDATA[$V{SISTEMA_PESOS_3}-$V{REAL_PESOS_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="797" y="0" width="43" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d7defd74-bacb-4ed0-bf99-4499af631918"/>
+				<reportElement mode="Opaque" x="632" y="0" width="43" height="14" forecolor="#000000" backcolor="#CCCCCC" uuid="d7defd74-bacb-4ed0-bf99-4499af631918"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
