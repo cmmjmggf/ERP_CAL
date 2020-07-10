@@ -19,13 +19,7 @@
                                 </div>
                                 <div class="col-9">
                                     <select id="sCliente" name="sCliente" class="form-control form-control-sm required NotSelectize selectNotEnter" required="" >
-                                        <option value=""></option>
-                                        <?php
-                                        $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus IN('ACTIVO') ORDER BY C.RazonS ASC;")->result();
-                                        foreach ($clientesPnl as $k => $v) {
-                                            print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
-                                        }
-                                        ?>
+                                        <option value=""></option> 
                                     </select>
                                 </div>
                             </div>
@@ -85,9 +79,9 @@
             $.each(mdlEtiCajaXCliente.find("select"), function (k, v) {
                 mdlEtiCajaXCliente.find("select")[k].selectize.clear(true);
             });
+            getClientesEtiXCli();
             mdlEtiCajaXCliente.find('#Ano').val(getYear());
             mdlEtiCajaXCliente.find('#Cliente').focus();
-
         });
 
         mdlEtiCajaXCliente.find('#Cliente').keypress(function (e) {
@@ -315,7 +309,19 @@
         });
     }
 
+    function getClientesEtiXCli() {
+        $.getJSON('<?php print base_url('PrioridadesPorCliente/getClientesEtiXCli'); ?>').done(function (a, b, c) {
+            mdlEtiCajaXCliente.find('#sCliente')[0].selectize.clear(true);
+            mdlEtiCajaXCliente.find('#sCliente')[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                mdlEtiCajaXCliente.find('#sCliente')[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
 
+        });
+    }
 </script>
 
 

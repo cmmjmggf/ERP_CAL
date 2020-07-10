@@ -49,6 +49,14 @@ class ConsumosPielForroCortadores extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+    public function getArticulosCorte() {
+        try {
+            print json_encode($this->db->select("A.Clave AS CLAVE, A.Descripcion AS Articulo, CONCAT(A.Clave, ' ',A.Descripcion) AS ARTICULO", false)
+                                            ->from('articulos AS A')->join('asignapftsacxc AS ACXC', 'A.Clave = ACXC.Articulo')->group_by('A.Clave')->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
     public function onComprobarMaquilas() {
         try {

@@ -16,14 +16,7 @@
                     <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4">
 
                         <select id="ClienteCAV" name="ClienteCAV" class="form-control form-control-sm selectNotEnter">
-                            <option></option>
-                            <?php
-                            //YA CONTIENE LOS BLOQUEOS DE VENTA
-                            $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY C.RazonS ASC;")->result();
-                            foreach ($clientesPnl as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
-                            }
-                            ?>
+                            <option></option> 
                         </select>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
@@ -80,7 +73,7 @@
                 if (txtcliente) {
                     $.getJSON('<?php print base_url('ControlesADiasDevencimientoXCliente/onVerificaCliente'); ?>', {Cliente: txtcliente}).done(function (data) {
                         if (data.length > 0) {
-                            ClienteCAV[0].selectize.setValue(txtcliente); 
+                            ClienteCAV[0].selectize.setValue(txtcliente);
                         } else {
                             swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
                                 ClienteCAV[0].selectize.clear(true);
@@ -93,9 +86,13 @@
                     });
                 }
             }
+            if (e.keyCode === 8 || e.keyCode === 46) {
+                ClienteCAV[0].selectize.clear(true);
+            }
         });
 
         mdlControlesADiasDeVencimientoXCliente.on('shown.bs.modal', function () {
+            getClientesCtrlsDiasVenXCli();
             IDClienteCAV.focus().select();
         });
 
@@ -106,7 +103,7 @@
                 HoldOn.open({
                     theme: 'sk-rect',
                     message: 'Por favor espere...'
-                }); 
+                });
                 var f = new FormData();
                 f.append('CLIENTE', ClienteCAV.val());
                 f.append('MAQUILA_INICIAL', MaqInicialCAV.val());
@@ -138,4 +135,18 @@
         });
 
     });
+    function getClientesCtrlsDiasVenXCli() {
+        onOpenOverlay('');
+        $.getJSON('<?php print base_url('ControlesADiasDevencimientoXCliente/getClientesCtrlsDiasVenXCli'); ?>').done(function (a, b, c) {
+            ClienteCAV[0].selectize.clear(true);
+            ClienteCAV[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                ClienteCAV[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
 </script> 

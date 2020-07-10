@@ -221,4 +221,5 @@
         font-weight: bold !important;
         font-size: 25px !important;
     }
+    
 </style>

@@ -15,7 +15,14 @@ class SolicitudDeMantenimiento extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input->post();
-            
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getMaquinaria() {
+        try {
+            print json_encode($this->db->query("SELECT id,CONCAT(id,\" \",nommaq) AS nommaq FROM maquinaria")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

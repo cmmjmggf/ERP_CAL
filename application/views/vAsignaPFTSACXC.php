@@ -961,6 +961,10 @@
                     Explosion.val(data[0].EXPLOSION);
                     Entregar.prop('readonly', false);
                     Entregar.focus();
+                } else {
+                    onCampoInvalido(pnlTablero, "NO FUE POSIBLE OBTENER LA EXPLOSIÓN, VERIFIQUE SI EXISTE LA ORDEN DE PRODUCCIÓN Y QUE EXISTAN LAS FRACCIONES DE ESE ESTILO 99,100. REVISAR CON INGENIRIA", function () {
+                        Fraccion.focus().select();
+                    });
                 }
             }).fail(function (x, y, z) {
                 console.log(x, y, z);

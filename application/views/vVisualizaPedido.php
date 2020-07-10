@@ -18,13 +18,7 @@
                                 </div>
                                 <div class="col-9">
                                     <select id="sClienteVisPed" name="sClienteVisPed" class="form-control form-control-sm required NotSelectize selectNotEnter" required="" >
-                                        <option value=""></option>
-                                        <?php
-                                        $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus IN('ACTIVO') ORDER BY C.RazonS ASC;")->result();
-                                        foreach ($clientesPnl as $k => $v) {
-                                            print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
-                                        }
-                                        ?>
+                                        <option value=""></option> 
                                     </select>
                                 </div>
                             </div>
@@ -59,7 +53,7 @@
             $.each(mdlReimprimirPedido.find("select"), function (k, v) {
                 mdlReimprimirPedido.find("select")[k].selectize.clear(true);
             });
-
+            getClientesVisPed();
             mdlReimprimirPedido.find('#ClienteVisPed').focus();
         });
 
@@ -150,4 +144,18 @@
 
 
     });
+
+    function getClientesVisPed() {
+        $.getJSON('<?php print base_url('PrioridadesPorCliente/getClientesVisPed'); ?>').done(function (a, b, c) {
+            mdlReimprimirPedido.find('#sClienteVisPed')[0].selectize.clear(true);
+            mdlReimprimirPedido.find('#sClienteVisPed')[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                mdlReimprimirPedido.find('#sClienteVisPed')[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+
+        });
+    }
 </script>

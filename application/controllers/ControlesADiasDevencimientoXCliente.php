@@ -73,4 +73,11 @@ class ControlesADiasDevencimientoXCliente extends CI_Controller {
         }
     }
 
+    public function getClientesCtrlsDiasVenXCli() {
+        try {
+            print json_encode($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY C.RazonS ASC;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

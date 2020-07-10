@@ -680,8 +680,7 @@ class AsignaPFTSACXC extends CI_Controller {
                     break;
             }
             print json_encode($this->db->query("SELECT A.Devolucion AS DEVOLVIO_ANTES, A.Estilo AS ESTILO, A.Color AS COLOR, A.ID AS IDA, A.Articulo AS ARTICULO, A.Descripcion AS ARTICULO_DESCRIPCION, A.Abono AS ENTREGO "
-                                    . "FROM asignapftsacxc AS A WHERE A.Control = '{$x['CONTROL']}' AND A.Fraccion = {$FRACCION} AND A.TipoMov =  {
-$PIFO}")->result());
+                                    . "FROM asignapftsacxc AS A WHERE A.Control = '{$x['CONTROL']}' AND A.Fraccion = {$FRACCION} AND A.TipoMov = {$PIFO}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
