@@ -97,7 +97,14 @@
             </div>
             <div class="w-100"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                <h4>Controles listos para tejido</h4>
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                        <h4>Controles listos para tejido</h4>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center font-italic font-weight-bold">
+                        <h4 class="avance_actual_tejido" style="background-color:#1A237E; color: var(--white); border-radius: 10px;">-</h4>
+                    </div>
+                </div>
                 <table id="tblControlesListosParaTejido" class="table  table-sm table-bordered" style="width:  100%;">
                     <thead>
                         <tr>
@@ -523,6 +530,7 @@
                                 Estilo.val(rq.Estilo);
                                 getColoresXEstilo(rq.Estilo, rq);
                                 Pares.val(rq.Pares);
+                                pnlTablero.find(".avance_actual_tejido").text(rq.AVANCE_ACTUAL);
                                 getSemanaNomina();
                                 Fecha.val('<?php print Date("d/m/Y"); ?>');
                                 Frac.val(401);
@@ -535,8 +543,29 @@
                                  */
                             } else {
                                 onDisable(btnAceptar);
-                                swal('ATENCIÓN', 'NO SE TIENE INFORMACIÓN SOBRE ESTE CONTROL, PUEDE QUE NO EXISTA O QUE NO HAYA SIDO AVANZADO AL DEPTO CORRESPONDIENTE', 'warning').then((value) => {
-                                    Control.focus().select();
+                                $.getJSON("<?php print base_url('AvanceTejido/getInfoControlFueraDeAvance'); ?>", {
+                                    CONTROL: Control.val()
+                                }).done(function (a, b, c) {
+                                    Estilo.val('');
+                                    Fecha.val('');
+                                    Frac.val('');
+                                    Color[0].selectize.clear(true);
+                                    Pares.val(''); 
+                                    if (a.length > 0) {
+                                        var aa = a[0];
+                                        swal('ATENCIÓN', 'CONTROL FUERA DE AVANCE: ' + aa.AVANCE_ACTUAL, 'warning').then((value) => {
+                                            Control.focus().select();
+                                        });
+                                        pnlTablero.find(".avance_actual_tejido").text(aa.AVANCE_ACTUAL);
+                                    } else {
+                                        swal('ATENCIÓN', 'NO SE TIENE INFORMACIÓN SOBRE ESTE CONTROL, PUEDE QUE NO EXISTA O QUE NO HAYA SIDO AVANZADO AL DEPTO CORRESPONDIENTE', 'warning').then((value) => {
+                                            Control.focus().select();
+                                        });
+                                    }
+                                }).fail(function (x, y, z) {
+                                    getError(x);
+                                }).always(function () {
+                                    HoldOn.close();
                                 });
                             }
                         }).fail(function (x, y, z) {
@@ -798,7 +827,7 @@
         border-style: solid;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
         border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
-
+        text-transform: uppercase;
     }
     .card-header{
         background-color: transparent;
