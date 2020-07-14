@@ -258,7 +258,7 @@ left join avaprd A on A.contped = PE.control
 left join estilos E on E.Clave = PE.Estilo
 left join lineas L on L.clave = E.Linea
 left join clientes CT on CT.Clave = PE.Cliente
-left join programacion PR on PR.control = PE.control
+left join programacion PR on PR.control = PE.control AND PR.frac = 100
 where stsavan not in (0,13,14)
 and cast(PE.maquila as signed) between $P{maq} and $P{amaq}
 and cast(PE.semana as signed) between $P{sem} and $P{asem}

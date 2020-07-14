@@ -336,7 +336,7 @@ order by FPN.numfrac asc,FPN.fecha asc,  FPN.ID asc]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numemp}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0">
+			<textField pattern="##0.#########">
 				<reportElement x="507" y="0" width="23" height="11" uuid="c1dbe661-a590-4383-bd3b-98311c120202"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
