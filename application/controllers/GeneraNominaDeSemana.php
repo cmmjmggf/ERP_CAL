@@ -156,113 +156,16 @@ class GeneraNominaDeSemana extends CI_Controller {
                     }
                     /* 2.2 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE */
                     $SUELDO_FINAL_DESTAJO = 0;
-                    if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0) {
-                        $ES_CELULA = 1;
-                        $NUMERO_CELULA = 0;
-//                        0,1,2,3,4,5,6,7,8,9,10,11,101,102,103,104,105,106,107,109,110
-                        switch (intval($v->Celula)) {
-                            case 0:
-                                switch (intval($v->DepartamentoFisico)) {
-                                    case 120:
-                                        $NUMERO_CELULA = 899;
-                                        break;
-                                    case 180:
-                                        $NUMERO_CELULA = 993;
-                                        break;
-                                    case 190:
-                                        $NUMERO_CELULA = 991;
-                                        break;
-                                    case 200:
-                                        $NUMERO_CELULA = 1006;
-                                        break;
-                                    case 210:
-                                        $NUMERO_CELULA = 992;
-                                        break;
-                                    case 220:
-                                        $NUMERO_CELULA = 1005;
-                                        break;
-                                }
-                                break;
-                            case 1:
-                                $NUMERO_CELULA = 1000;
-                                break;
-                            case 2:
-                                $NUMERO_CELULA = 999;
-                                break;
-                            case 3:
-                                $NUMERO_CELULA = 998;
-                                break;
-                            case 4:
-                                $NUMERO_CELULA = 997;
-                                break;
-                            case 5:
-                                $NUMERO_CELULA = 996;
-                                break;
-                            case 5:
-                                $NUMERO_CELULA = 996;
-                                break;
-                            case 6:
-                                $NUMERO_CELULA = 995;
-                                break;
-                            case 7:
-                                $NUMERO_CELULA = 994;
-                                break;
-                            case 8:
-                                $NUMERO_CELULA = 899;
-                                break;
-                            case 9:
-                                $NUMERO_CELULA = 1001;
-                                break;
-                            case 10:
-                                $NUMERO_CELULA = 1002;
-                                break;
-                            case 11:
-                                $NUMERO_CELULA = 1003;
-                                break;
-                            case 101:
-                                $NUMERO_CELULA = 899;
-                                break;
-                            case 107:
-                                $NUMERO_CELULA = 994;
-                                break;
-                        }
-                        if (intval($v->Celula) > 0 && intval($v->Celula) !== 101 && intval($v->Celula) !== 107) {
-                            $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-                            $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                            $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA}  AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-                            $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-                        } else if (intval($v->Celula) === 0 && intval($v->Celula) !== 101 && intval($v->Celula) !== 107) {
-//                            MONTADO A, MONTADO B, ADORNO A, ADORNO B
-                            $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-                            $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                            $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA}  AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-                            $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-                        } else if (intval($v->Celula) > 0 && intval($v->Celula) === 101 && floatval($v->CelulaPorcentaje) > 0) {
-                            $fraccion_pespunte = 304;
-                            $SUELDO_CELULA_PESPUNTE = $this->db->query("SELECT SUM(F.subtot) AS SUBTOTAL FROM fracpagnomina AS F WHERE F.semana = {$x['SEMANA']} AND F.fraccion = {$fraccion_pespunte} AND F.anio = {$x['ANIO']} AND F.depto = {$v->DepartamentoFisico} AND F.maquila = 101 ")->result();
-                            $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE  FPN.fraccion = {$fraccion_pespunte} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}  AND FPN.depto = {$v->DepartamentoFisico}  AND FPN.maquila = 101 ")->result();
-                            if (count($SUELDO_CELULA_PESPUNTE) > 0) {
-                                $SUELDO_FINAL_DESTAJO = $SUELDO_CELULA_PESPUNTE[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                                $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-                            } else {
-                                $SUELDO_FINAL_DESTAJO = 0;
-                            }
-                        } else if (intval($v->Celula) > 0 && intval($v->Celula) === 107 && floatval($v->CelulaPorcentaje) > 0) {
-                            $fraccion_pespunte = 304;
-                            $SUELDO_CELULA_PESPUNTE = $this->db->query("SELECT SUM(F.subtot) AS SUBTOTAL FROM fracpagnomina AS F WHERE F.semana = {$x['SEMANA']} AND F.fraccion = {$fraccion_pespunte} AND F.anio = {$x['ANIO']} AND F.depto = {$v->DepartamentoFisico} AND F.maquila = 107")->result();
-                            $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE  FPN.fraccion = {$fraccion_pespunte} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']} AND FPN.maquila = 107 AND FPN.depto = {$v->DepartamentoFisico}")->result();
-                            if (count($SUELDO_CELULA_PESPUNTE) > 0) {
-                                $SUELDO_FINAL_DESTAJO = $SUELDO_CELULA_PESPUNTE[0]->SUBTOTAL * $v->CelulaPorcentaje;
-                                $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-                            } else {
-                                $SUELDO_FINAL_DESTAJO = 0;
-                            }
-                        }
+                    if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0 && intval($v->DepartamentoFisico) === 120) {
+
+                        $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = 0 AND FPN.maquila = 100 AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
+                        $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA}  AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;  
                     } else {
                         /* 2.3 SI EL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
-                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
-                        $ES_CELULA = 0;
+                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES; 
                     }
                     /* 2.4 VERIFICAR SI ESTA EN PRENOMINA */
                     $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
@@ -822,7 +725,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             ->update('prenominal');
                 }
             }
-            /* NO HABIA PASADO PERO ESTA VEZ DEL COVID NO COBRARON ABONO PARA EL PRESTAMO*/
+            /* NO HABIA PASADO PERO ESTA VEZ DEL COVID NO COBRARON ABONO PARA EL PRESTAMO */
             if (floatval($v->AbonoPres) <= 0) {
                 $this->db->set('precaha', 0)->where('numsem', $SEM)->where('status', 1)
                         ->where('año', $ANIO)->where('numemp', $v->Numero)
@@ -1382,61 +1285,44 @@ class GeneraNominaDeSemana extends CI_Controller {
             $query = "SELECT FPN.* FROM fracpagnomina AS FPN ";
             $query .= "WHERE FPN.anio = {$ANIO} AND FPN.semana = {$SEM} ";
             $query .= "AND FPN.numfrac BETWEEN 299 AND 300 ";
-            $query .= "AND FPN.numeroempleado IN(899,994,995,996,997,998,999,1000,1001,1002)";
             $fraccion = 304; /* 304 = PRELIMINAR DE PESPUNTE, DEPTO: 120 = PREL-PESPUNTE */
             $fracciones = $this->db->query($query)->result();
-            $celulas = array(
-                899 => 101,
-                994 => 107,
-                995 => 101,
-                996 => 101,
-                997 => 101,
-                998 => 101,
-                999 => 101,
-                1000 => 101,
-                1001 => 101,
-                1002 => 101
-            );
+//            $celulas = array(
+//                899 => 101,
+//                994 => 107,
+//                995 => 101,
+//                996 => 101,
+//                997 => 101,
+//                998 => 101,
+//                999 => 101,
+//                1000 => 101,
+//                1001 => 101,
+//                1002 => 101
+//            );
             foreach ($fracciones as $k => $v) {
-                if (array_key_exists(intval($v->numeroempleado), $celulas)) {
-                    $CEL = $celulas[$v->numeroempleado];
-                    $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM fraccionesxestilo AS FXE WHERE FXE.Estilo LIKE '{$v->estilo}' AND FXE.Fraccion = {$fraccion}")->result();
-                    $subtotal = intval($v->pares) * floatval($precio_fraccion[0]->CostoMO);
+//                if (array_key_exists(intval($v->numeroempleado), $celulas)) {
+//                    $CEL = $celulas[$v->numeroempleado];
+                $precio_fraccion = $this->db->query("SELECT  FXE.CostoMO, FXE.CostoVTA  FROM fraccionesxestilo AS FXE WHERE FXE.Estilo = '{$v->estilo}' AND FXE.Fraccion = {$fraccion}")->result();
+                $subtotal = intval($v->pares) * floatval($precio_fraccion[0]->CostoMO);
 
-                    $this->db->insert('fracpagnominatmp', array(
-                        "numemp" => 0,
-                        "nummaq" => $CEL,
-                        "numcont" => $v->control,
-                        "numest" => $v->estilo,
-                        "numfrac" => $fraccion /* 304 */,
-                        "prefrac" => $precio_fraccion[0]->CostoMO,
-                        "pares" => $v->pares,
-                        "subtot" => $subtotal,
-                        "fecha" => $v->fecha,
-                        "semana" => $v->semana,
-                        "depto" => 120/* 120 = PREL-PESPUNTE */,
-                        "registro" => 0,
-                        "año" => $v->anio
-                    ));
-
-                    $this->db->insert('fracpagnomina', array(
-                        "numeroempleado" => 0,
-                        "maquila" => $CEL,
-                        "control" => $v->control,
-                        "estilo" => $v->estilo,
-                        "numfrac" => $fraccion /* 304 */,
-                        "preciofrac" => $precio_fraccion[0]->CostoMO,
-                        "pares" => $v->pares,
-                        "subtot" => $subtotal,
-                        "fecha" => $v->fecha,
-                        "semana" => $v->semana,
-                        "depto" => 120/* 120 = PREL-PESPUNTE */,
-                        "registro" => 0,
-                        "anio" => $v->anio,
-                        "fraccion" => 304,
-                        "modulo" => 'GNS'
-                    ));
-                }
+                $this->db->insert('fracpagnomina', array(
+                    "numeroempleado" => 0,
+                    "maquila" => 100,
+                    "control" => $v->control,
+                    "estilo" => $v->estilo,
+                    "numfrac" => $fraccion /* 304 */,
+                    "preciofrac" => $precio_fraccion[0]->CostoMO,
+                    "pares" => $v->pares,
+                    "subtot" => $subtotal,
+                    "fecha" => $v->fecha,
+                    "semana" => $v->semana,
+                    "depto" => 120/* 120 = PREL-PESPUNTE */,
+                    "registro" => 0,
+                    "anio" => $v->anio,
+                    "fraccion" => 304,
+                    "modulo" => 'GNS'
+                ));
+//                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
