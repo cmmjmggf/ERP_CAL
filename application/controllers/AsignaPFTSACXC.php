@@ -65,10 +65,10 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where("A.Control", $x['CONTROL']);
             }
-            $this->db->order_by('A.Fecha', 'DESC');
             if ($x['SEMANA'] === '' && $x['CONTROL'] === '') {
-                $this->db->limit(10);
+                $this->db->where("A.Control", 1234567890)->limit(1);
             }
+            $this->db->order_by('A.Fecha', 'DESC');
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -167,16 +167,19 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.Pieza')
                     ->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
-            $xdb->order_by('OP.Semana', 'DESC');
+            $xdb->order_by('ABS(OPD.Articulo)', 'ASC');
 
             if ($x['SEMANA'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             if ($x['CONTROL'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($xdb->get()->result());
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -204,13 +207,16 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.UnidadMedidaT');
 
             if ($x['SEMANA'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             if ($x['CONTROL'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -238,13 +244,16 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.UnidadMedidaT');
 
             if ($x['SEMANA'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             if ($x['CONTROL'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -274,13 +283,16 @@ class AsignaPFTSACXC extends CI_Controller {
                     ->group_by('OPD.UnidadMedidaT');
 
             if ($x['SEMANA'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             if ($x['CONTROL'] === '') {
-                $this->db->limit(10); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
+                $this->db->where('OP.ControlT', 123456789);
+                $this->db->limit(1); /* CARGA 10 REGISTROS MERAMENTE PARA VISTA */
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -289,6 +301,7 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             print json_encode($this->apftsacxc->getExplosionXSemanaControlFraccionArticulo($this->input->get('SEMANA'), $this->input->get('CONTROL'), $this->input->get('FRACCION'), $this->input->get('ARTICULO'), $this->input->get('GRUPO')));
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -297,6 +310,10 @@ class AsignaPFTSACXC extends CI_Controller {
         try {
             $x = $this->input->post();
             $xx = $this->input->post();
+            if ($x['ENTREGA'] === '') {
+                print "CANTIDAD EN CEROS";
+                exit(0);
+            }
             $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} "
                             . "AND P.stsavan NOT IN(12,13,14) "
@@ -317,7 +334,7 @@ class AsignaPFTSACXC extends CI_Controller {
             $AGREGADO_CON_ANTERIORIDAD = $this->db->query("SELECT COUNT(*) AS PIOCHERO FROM asignapftsacxc AS A WHERE A.Control = {$x['CONTROL']} AND A.Articulo = '{$xx['ARTICULO']}' AND A.Semana = {$xx['SEMANA']} AND A.Fraccion = {$xx['FRACCION']} LIMIT 1")->result();
 //            print "\n ESTATUS \n";
 //            var_dump($ESTATUS);
-//            exit(0);
+            //            exit(0);
             if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0 &&
                     $x['MATERIAL_EXTRA'] > 0) {
                 $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])
@@ -337,8 +354,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 } else {
                     $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
                                     ->from("preciosmaquilas AS PM")
-                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
-                                    ->where("PM.Maquila", 1)->get()->result();
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)->where("PM.Maquila", 1)->get()->result();
                     $PRECIO_MAQUILA_UNO = $PRECIO[0]->PRECIO_MAQUILA_UNO;
                 }
 
@@ -399,14 +415,13 @@ class AsignaPFTSACXC extends CI_Controller {
 //                exit(0);
                 /* EXISTE LA POSIBILIDAD DE QUE LA FRACCION SEA DIFERENTE Y QUE HAGA UN NUEVO REGISTRO */
                 if (count($DT) > 0) {
-                    $this->db->set('Cargo', ( $DT[0]->Cargo + $x['ENTREGA']))
-                            ->set('Abono', ( $DT[0]->Abono + $x['ENTREGA']))
+                    $this->db->set('Cargo', ($DT[0]->Cargo + $x['ENTREGA']))
+                            ->set('Abono', ($DT[0]->Abono + $x['ENTREGA']))
                             ->where('ID', $DT[0]->ID)->update('asignapftsacxc');
 
                     $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
                                     ->from("preciosmaquilas AS PM")
-                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
-                                    ->where("PM.Maquila", 1)->get()->result();
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)->where("PM.Maquila", 1)->get()->result();
                     $datos = array(
                         'Articulo' => $x['ARTICULO'],
                         'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
@@ -429,8 +444,7 @@ class AsignaPFTSACXC extends CI_Controller {
                     /* MAQUILA UNO FIJO */
                     $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
                                     ->from("preciosmaquilas AS PM")
-                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
-                                    ->where("PM.Maquila", 1)->get()->result();
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)->where("PM.Maquila", 1)->get()->result();
                     $MAQUILA_X_CONTROL = $this->db->select("P.Maquila AS MAQUILA")
                                     ->from("pedidox AS P")->where("P.Control", $x['CONTROL'])
                                     ->get()->result();
@@ -460,7 +474,7 @@ class AsignaPFTSACXC extends CI_Controller {
                         'Devolucion' => 0,
                         'Maquila' => $MAQUILA_CONTROL,
                         'Estatus' => 'A',
-                        'TipoMov' => $x['TIPO']/* 1 = PIEL, 2 = FORRO, 34 = TEXTIL , 40 = SINTETICO */,
+                        'TipoMov' => $x['TIPO']/*  1 = PIEL, 2 = FORRO, 34 = TEXTIL , 40 = SINTETICO */,
                         'Extra' => $x['MATERIAL_EXTRA'],
                         'ExtraT' => ($x['MATERIAL_EXTRA'] > 0 && $x['EXPLOSION'] < $x['ENTREGA']) ? $x['ENTREGA'] - $x['EXPLOSION'] : 0
                     );
@@ -472,15 +486,14 @@ class AsignaPFTSACXC extends CI_Controller {
                     SET A.Estilo = O.Estilo, A.Color = O.Color
                     WHERE A.Control = '" . $x['CONTROL'] . "'
                     AND A.OrdenProduccion = " . $x['ORDENDEPRODUCCION']
-                            . " AND A.Articulo = " . $x['ARTICULO']
-                            . " AND A.Pares = " . $x['PARES']
+                            . " AND A.Articulo = " . $x ['ARTICULO']
+                            . " AND A.Pares = " . $x ['PARES']
                             . " AND A.Semana = " . $x['SEMANA']
                             . " AND A.Fraccion = " . $x['FRACCION']);
                     /* GENERAR AVANCE DE CONTROL A CORTE */
 
                     /* COMPROBAR SI YA EXISTE UN REGISTRO DE ESTE AVANCE PARA NO GENERAR DOS AVANCES AL MISMO DEPTO EN CASO DE QUE LLEGUEN A PEDIR MÁS MATERIAL */
-                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')
-                                    ->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
+                    $check_avance = $this->db->select('COUNT(A.Control) AS EXISTE', false)->from('avance AS A')->where('A.Control', $x['CONTROL'])->where('A.Departamento', 10)->get()->result();
                     print "\n onEntregarPielForroTextilSintetico ESTATUS DE AVANCE: ";
 
                     print "\n *FIN ESTATUS DE AVANCE* \n";
@@ -505,13 +518,11 @@ class AsignaPFTSACXC extends CI_Controller {
                         /* ACTUALIZA A 10 CORTE, stsavan 2 */
                         $this->db->set('EstatusProduccion', 'CORTE')
                                 ->set('DeptoProduccion', 10)
-                                ->where('Control', $x['CONTROL'])
-                                ->update('controles');
+                                ->where('Control', $x['CONTROL'])->update('controles');
                         $this->db->set('stsavan', 2)
                                 ->set('EstatusProduccion', 'CORTE')
                                 ->set('DeptoProduccion', 10)
-                                ->where('Control', $x['CONTROL'])
-                                ->update('pedidox');
+                                ->where('Control', $x['CONTROL'])->update('pedidox');
                         $this->db->set('fec2', Date('Y-m-d 00:00:00'))
                                 ->where('contped', $x['CONTROL'])
                                 ->update('avaprd');
@@ -543,6 +554,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 }
             }
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }
@@ -566,18 +578,17 @@ class AsignaPFTSACXC extends CI_Controller {
                             . "P.stsavan NOT IN(12,13,14) AND P.EstatusProduccion NOT IN('CANCELADO') "
                             . "AND P.Estatus NOT IN('C') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result();
 
-            $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')
-                            ->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
+            $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
 
             if (floatval($x['REGRESO']) === 0) {
                 /* OBTENER ULTIMO REGRESO */
                 $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
-                    $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
+                    $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x ['EMPLEADO'])
                             ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
-                    $this->db->set('Empleado', $x['EMPLEADO'])
+                    $this->db->set('Empleado', $x ['EMPLEADO'])
                             ->set('Devolucion', $x['REGRESO'])
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
@@ -593,7 +604,7 @@ class AsignaPFTSACXC extends CI_Controller {
                     'EntradaSalida' => '1'/* 1= ENTRADA, 2 = SALIDA */,
                     'TipoMov' => 'EPR', /* EXP = ENTRADA POR PRODUCCION */
                     'DocMov' => $x['CONTROL'],
-                    'Tp' => ''/*                     * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN* */,
+                    'Tp' => ''/*                     * PORQUE NO VIENE UN MOVIMIENTO DE ALMACEN*  */,
                     'Maq' => 1,
                     'Sem' => $CONTROL[0]->SEMANA,
                     'Ano' => $Ano,
@@ -605,11 +616,11 @@ class AsignaPFTSACXC extends CI_Controller {
                 /* OBTENER ULTIMO REGRESO */
                 $REGRESO = $this->apftsacxc->onObtenerUltimoRegreso($x['ID']);
                 if (isset($REGRESO[0]->REGRESO)) {
-                    $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x['EMPLEADO'])
+                    $this->db->set('Empleado', $x['EMPLEADO'])->set('Empleado', $x ['EMPLEADO'])
                             ->set('Devolucion', $x['REGRESO'] + $REGRESO[0]->REGRESO)
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 } else {
-                    $this->db->set('Empleado', $x['EMPLEADO'])
+                    $this->db->set('Empleado', $x ['EMPLEADO'])
                             ->set('Devolucion', $x['REGRESO'])
                             ->where('ID', $x['ID'])->update('asignapftsacxc');
                 }
@@ -632,8 +643,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 );
                 $this->db->insert("movarticulos_fabrica", $datos);
                 /**/
-                $this->db->set('Empleado', $x['EMPLEADO'])
-                        ->set('Devolucion', $x['REGRESO'])
+                $this->db->set('Empleado', $x['EMPLEADO'])->set('Devolucion', $x['REGRESO'])
                         ->set('Basura', $x['MATERIALMALO'])
                         ->set('MaterialMalo', 1)
                         ->where('ID', $x['ID'])->update('asignapftsacxc');
@@ -641,6 +651,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 print "LA CANTIDAD DEVUELTA ESTA DEFECTUOSA HA SIDO ZERO 0";
             }
         } catch (Exception $exc) {
+
             echo $exc->getTraceAsString();
         }
     }

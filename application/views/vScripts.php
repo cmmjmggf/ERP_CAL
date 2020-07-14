@@ -1473,6 +1473,18 @@
             opcion += '<a class="dropdown-item text-center justify-content-center" href="#"><img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" width="50%" class="rounded-circle"></a>';
             opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema</a>';
             opcion += '<a class="dropdown-item " href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>';
+            opcion += '<a class="dropdown-item " href="#">';
+<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+                opcion += '<button type="button" class="btn btn-info btn-block  font-weight-bold" onclick="onCambiarTema(1)"><i class="fa fa-paint-brush"></i> VERSIÓN CLÁSICA</button> ';
+    <?php
+}
+if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
+    ?>
+                opcion += '<button type="button" class="btn btn-info ml-1 btn-block font-weight-bold"  onclick="onCambiarTema(2)"  style="background-color: var(--purple); border-color: var(--purple);"><i class="fa fa-paint-brush"></i> VERSIÓN NUEVA</button>';
+    <?php
+}
+?>
+            opcion += '</a>';
             opcion += '<div class="dropdown-divider"></div>';
             opcion += '<a class="dropdown-item " href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>';
             opcion += '</div>';
@@ -1500,7 +1512,28 @@
                 }
                 return false;
             });
-            getAccesosDirectosXModuloXUsuario(m);
+//            getAccesosDirectosXModuloXUsuario(m);
+            $("nav.navbar").find(".btn-primary").css({"color": "white", "font-size": "14px", "text-transform": "uppercase", "font-weight": "bold"});
+            $("ul.dropdown-menu").find("a").css({"color": "white", "font-size": "14px", "text-transform": "uppercase", "font-weight": "bold"});
+            $("input, .selectize-input,textarea").css({"border": "2px solid #000000", "font-weight": "bold"});
+        });
+    }
+
+    function setValueSelectize(componente, valor) {
+        componente[0].selectize.setValue(valor);
+    }
+
+    function onCambiarTema(tema) {
+        onOpenOverlay('Espere...');
+        $.get('<?php print base_url('Sesion/onCambiarTema'); ?>', {
+            TEMA: tema
+        }).done(function (a) {
+            onCloseOverlay();
+        }).fail(function () {
+            onCloseOverlay();
+        }).always(function () {
+            onCloseOverlay();
+            location.reload();
         });
     }
 
@@ -1581,7 +1614,38 @@
                                 modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
                                 modulo += '<div class="card text-center">';
                                 modulo += '<div class="card-body">';
-                                modulo += '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>';
+                                switch (v.Modulo) {
+                                    case "PROVEEDORES":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "MATERIALES":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "CLIENTES":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "FICHAS TÉCNICAS":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "PRODUCCIÓN":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "CONTABILIDAD":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "NÓMINAS":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "PARÁMETROS":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    case "PUNTO DE VENTA":
+                                        modulo += '<img src="<?php print base_url(); ?>' + v.Imagen + '" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                    default:
+                                        modulo += '<img src="<?php print base_url("img/mdls/0.png"); ?>" class="img-fluid" style="width: 192px;">';
+                                        break;
+                                }
                                 modulo += '</div>';
                                 modulo += '<div class="card-footer">';
                                 modulo += '<h5>' + v.Modulo + '</h5>';
@@ -1592,7 +1656,7 @@
                             $("#MnuBlock").html(modulo);
                             modulo = "";
                             $.each(data, function (k, v) {
-                                modulo += '<li class="item">';
+                                modulo += '<li class="item" style="font-weight: bold;font-size: 15px !important;">';
                                 modulo += '<a  href="' + (burl + v.Ref) + '">';
                                 modulo += '<i class="fa fa-' + v.Icon + '" style="width: 45px;"></i> ' + v.Modulo;
                                 modulo += '</a>';
@@ -1603,7 +1667,7 @@
                         case 2:
                             modulo = "";
                             $.each(data, function (k, v) {
-                                modulo += '<li class="item">';
+                                modulo += '<li class="item" style="font-weight: bold;font-size: 15px !important;">';
                                 modulo += '<a  href="' + (burl + v.Ref) + '">';
                                 modulo += '<i class="fa fa-' + v.Icon + '" style="width: 45px;"></i> ' + v.Modulo;
                                 modulo += '</a>';
@@ -1885,7 +1949,7 @@
                 }
                 break;
             case "IMG":
-                $(e)[0].src = ""; 
+                $(e)[0].src = "";
                 break;
             case "TEXTAREA":
                 $(v).val('');

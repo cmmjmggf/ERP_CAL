@@ -120,7 +120,10 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                             . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,"
                             . "(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS RealPesos, "
                             . "(A.PrecioActual * (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0)))) AS DifPesos,"
-                            . "(A.Abono/OP.Pares) AS DCM2, (A.Abono/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE", false)
+                            . "(A.Abono/OP.Pares) AS DCM2," 
+                    . " ((A.Abono - IFNULL(A.Devolucion,0))/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE"
+                    . ",((SUM(OPD.Cantidad)-(A.Abono-IFNULL(A.Devolucion,0)))/OP.Pares) AS PORCENTAJEx"
+                    . "", false)
                     ->from("ordendeproduccion AS OP")
                     ->join("ordendeproducciond AS OPD", "OP.ID = OPD.OrdenDeProduccion")
                     ->join("asignapftsacxc AS A", "OP.ID = A.OrdenProduccion AND A.Articulo = OPD.Articulo");

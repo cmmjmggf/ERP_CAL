@@ -66,6 +66,11 @@
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="#"><i class="fa fa-question-circle"></i> Reportar un problema</a>
                     <a class="dropdown-item" href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>
+                    <a class="dropdown-item " href="#">
+                        <?php
+                        $this->load->view('componente/vTema');
+                        ?>
+                    </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
                 </div>

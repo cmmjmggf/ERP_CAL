@@ -46,13 +46,7 @@
                                     </div>
                                     <div class="col-8 col-xs-8 col-sm-8"> 
                                         <select id="MaquinariaRefaccion" name="MaquinariaRefaccion" class="form-control form-control-sm">
-                                            <option></option>                                   
-                                            <?php
-                                            $maquinaria = $this->db->query("SELECT id, nommaq FROM maquinaria;")->result();
-                                            foreach ($maquinaria as $k => $v) {
-                                                print "<option value='{$v->id}'>{$v->id} {$v->nommaq}</option>";
-                                            }
-                                            ?>
+                                            <option></option>         
                                         </select>
                                     </div>
                                 </div>
@@ -164,13 +158,11 @@
     $(document).ready(function () {
 
         mdlSolicitudDeMantenimiento.find("button").addClass("font-weight-bold").css({"text-transform": "uppercase"});
-        
+
         btnImprimeGuardaSolicitudMto.click(function () {
             if (SolicitudMtoVale.val()) {
                 if (DeptoClaveMaquina.val()) {
-                    var p = {
 
-                    };
                 } else {
                     onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN DEPARTAMENTO", function () {
                         DeptoClaveMaquina.focus().select();
@@ -198,9 +190,23 @@
 
         DeptoMaquina.change(function () {
             DeptoClaveMaquina.val($(this).val());
+            IdMaquinariaRefaccion.focus();
         });
 
     });
+    function getMaquinaria() {
+        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getMaquinaria'); ?>').done(function (a, b, c) {
+            MaquinariaRefaccion[0].selectize.clear(true);
+            MaquinariaRefaccion[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                MaquinariaRefaccion[0].selectize.addOption({text: v.nommaq, value: v.id});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+
+        });
+    }
 </script>
 <style>
     button.swal-button--cancelar{

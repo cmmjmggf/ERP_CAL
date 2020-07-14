@@ -1,5 +1,5 @@
 <div class="modal " id="mdlAvanceProduccion"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
+    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-print"></span> Reporte Avance</h5>

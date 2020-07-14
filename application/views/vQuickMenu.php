@@ -56,8 +56,9 @@
         background: -webkit-linear-gradient(top,  #2b2b2b 0%,#272727 100%); /* Chrome10-25,Safari5.1-6 */
         background: linear-gradient(to bottom,  #2b2b2b 0%,#272727 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b2b2b', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
-
         color: #fff;
+        background: linear-gradient(to bottom, #000000 0%,#272727 100%);
+        
     }
     .card:hover .text-nowrap, .card:hover .figure-caption{
         color: #fff;

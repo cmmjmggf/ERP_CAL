@@ -64,7 +64,7 @@ class FacturacionProduccion extends CI_Controller {
     public function getInfoXControl() {
         try {
             $x = $this->input->get();
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
             if (in_array($x['CLIENTE'], $people)) {
                 print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
                                         . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
@@ -172,7 +172,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $xxx = $this->input->get();
             $this->db->select("P.Cliente AS CLIENTE", false)->from("pedidox AS P")
                     ->where("P.Control", $xxx['CONTROL']);
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14))
                         ->where_not_in("P.Estatus", array('C'))
@@ -238,7 +238,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     ->where_not_in("P.stsavan", array(14))
                     ->where_not_in("P.Estatus", array('C'));
 
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14));
             }
@@ -647,7 +647,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
             );
             if ($saldopares === 0) {
                 //Validar clientes permitidos para facturar por adelantado
-                $people = array(39, 2121, 1810, 2260, 2394, 2343, 2228, 2285, 2428, 1445, 1782);
+                $people = array(39, 2121, 1810, 2260, 2394, 2343, 2228, 2285, 2428, 1445, 1782,995);
                 if (!in_array($x['CLIENTE'], $people)) {
                     $EstatusProduccion = 'FACTURADO';
                     $DeptoProduccion = 260;
@@ -814,7 +814,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
             $this->db->select("P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES ", false)
                     ->from("pedidox AS P ")->where("P.Control", $x['CONTROL']);
 
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
             if (!in_array($x['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14))->where_not_in("P.Estatus", array('C'))
                         ->where_not_in("P.EstatusProduccion", array('CANCELADO'))

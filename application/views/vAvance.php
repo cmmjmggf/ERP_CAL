@@ -1,10 +1,28 @@
-<div class="card m-3 " id="pnlTablero">
+<div class="card mx-2 " id="pnlTablero">
     <div class="card-body" style="padding-top: 5px;">
         <div class="row" >
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                <h3 class="font-weight-bold ">Avance</h3>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                <h3 class="font-weight-bold "><span class="fa fa-arrow-up"></span> AVANCE</h3>
             </div> 
-            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="right">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" align="right">
+                <?php
+                if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
+                        $this->session->Nombre === "MARTIN" && $this->session->TipoAcceso === "PRODUCCION") {
+                    ?>
+                    <button type="button" id="btnAdornoFraccionesNomina" name="btnAdornoFraccionesNomina" class="btn btn-sm btn-info" style="background-color: #85520b; border-color: #85520b;" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
+                        <span class="fa fa-tag"></span>
+                        Adorno
+                    </button>    
+                <?php } ?>
+                <?php
+                if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
+                        $this->session->Nombre === "GUSTAVO" && $this->session->TipoAcceso === "PRODUCCION") {
+                    ?>
+                    <button type="button" id="btnPespunteFraccionesFail" name="btnPespunteFraccionesFail" class="btn btn-sm btn-info" style="background-color: #940d0d; border-color: #940d0d" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
+                        <span class="fa fa-tag"></span>
+                        Pespunte
+                    </button>    
+                <?php } ?>
                 <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
                     <span class="fa fa-bullseye"></span>
                     Rastreo X Concepto
@@ -29,9 +47,9 @@
             <!--SECCION UNO-->
             <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                    <h4 style="color: #c1850c !important;" class="usuario_logued font-weight-bold">
+                    <h3 style="color: #c1850c !important;" class="usuario_logued font-weight-bold">
                         <?php print $_SESSION['USERNAME']; ?>
-                    </h4>
+                    </h3>
                     <input type="text" id="usuario" name="usuario" class="form-control form-control-sm d-none">
                 </div>
                 <div class="w-100"></div>
@@ -230,9 +248,9 @@
                     </div>
                     <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                        <span class="font-weight-bold font-italic" style="color : #3F51B5 !important; font-size: 30px;">ESTATUS ACTUAL DEL AVANCE </span>  
+                        <span class="font-weight-bold font-italic" style="color : #3F51B5 !important; font-size: 25px;" style="color: #006699;">ESTATUS ACTUAL DEL AVANCE </span>  
                         <div class="w-100"></div>
-                        <span class="font-weight-bold estatus_de_avance font-italic" style="color : #ef1000 !important; font-size: 30px;">-</span>
+                        <span class="font-weight-bold estatus_de_avance font-italic">-</span>
                     </div>
                 </div>
             </div>
@@ -370,6 +388,214 @@
     </div>
 </div>
 
+<!--PESPUNTE FRACCIONES 324,322,309,308-->
+<div class="modal" id="mdlPespunteFraccionesFail" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-draw-polygon"></span> PESPUNTE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row"> 
+                    <div class="col-2">
+                        <a href="<?php print base_url('img/sin_foto_sm.png'); ?>" data-fancybox="images">
+                            <img id="FotoEstiloNominaPespunte" src="<?php print base_url('img/sin_foto_sm.png'); ?>" class="img-fluid">
+                        </a>
+                    </div>
+                    <div class="col-10">
+                        <div class="row">
+                            <div class="col-2">
+                                <label>CONTROL</label>
+                                <input id="ControlPespunteFail" name="ControlPespunteFail" class="form-control numbersOnly" maxlength="10"> 
+                            </div>
+                            <div class="col-5">
+                                <label>FRACCION</label>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <input type="text" id="ClaveFraccionPespunteFail" name="ClaveFraccionPespunteFail" maxlength="4" class="form-control">
+                                    </div>
+                                    <div class="col-9">
+                                        <select id="FraccionPespunteFail" name="FraccionPespunteFail" class="form-control">
+                                            <?php
+                                            foreach ($this->db->query("SELECT F.Clave,F.Descripcion FROM fracciones AS F WHERE F.Clave IN(308,309,322,324,405,315) ORDER BY ABS(F.Clave) ASC")->result() as $k => $v) {
+                                                print "<option value='{$v->Clave}'>{$v->Clave} {$v->Descripcion}</option>";
+                                            }
+                                            ?> 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <label>CELULA</label>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <input type="text" id="ClaveCelulaPespunteFail" name="ClaveCelulaPespunteFail" maxlength="4" class="form-control">
+                                    </div>
+                                    <div class="col-8">
+                                        <select id="CelulaPespunteFail" name="CelulaPespunteFail" class="form-control selectNotEnter notEnter">
+                                            <?php
+                                            foreach ($this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE E.Numero IN(1000, 1001, 1002, 994, 995, 996, 997, 998, 999)")->result() as $k => $v) {
+                                                print "<option value='{$v->Numero}'>{$v->Numero} {$v->CELULA}</option>";
+                                            }
+                                            ?> 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-3">
+                                <label>Mano de obra</label>
+                                <input id="FraccionPrecioMOPespunteFail" style="font-weight: bold;" name="FraccionPrecioMOPespunteFail" class="form-control" readonly=""> 
+                            </div>
+                            <div class="col-3">
+                                <label>Estilo</label>
+                                <input id="EstiloControlPespunteFail" style="font-weight: bold;" name="EstiloControlPespunteFail" class="form-control" readonly=""> 
+                            </div>
+
+                            <div class="col-2">
+                                <label>Pares</label>
+                                <input id="ParesControlPespunteFail" style="font-weight: bold;" name="ParesControlPespunteFail" class="form-control" readonly=""> 
+                            </div> 
+                            <div class="col-4 text-center">
+                                <p class="mb-0">TOTAL</p>
+                                <p class="total_x_control_pares_x_mo" style="color: #008000; font-weight: bold; font-size: 22px;">$ 0.0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-100"></div>
+                    <div class="col-12">
+                        <table id="tblFraccionesPagadasFail" class="table table-striped table-hover table-sm table-bordered  compact nowrap" style="width:100% !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Emp</th>
+                                    <th scope="col">Semana</th>
+
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Control</th>
+                                    <th scope="col">Maq</th>
+
+                                    <th scope="col">Estilo</th>
+                                    <th scope="col">Frac</th>
+                                    <th scope="col">Precio</th>
+
+                                    <th scope="col">Pares</th>
+                                    <th scope="col">SubTotal</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 " align="center">
+                        <p class="font-weight-bold total_fracciones_pes_fail" style="color: #cc0033 !important;  font-size: 30px;" >$0.0</p>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-primary" id="btnAceptaPespunteFail" style="background-color: #43A047; "><span class="fa fa-check"></span> ACEPTA</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--ADORNO FRACCIONES 324,322,309,308-->
+<div class="modal" id="mdlAdornoFraccionesNomina" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><span class="fa fa-palette"></span> Adorno</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-2">
+                        <label>CONTROL</label>
+                        <input id="ControlAdornoNomina" name="ControlAdornoNomina" class="form-control numbersOnly" maxlength="10"> 
+                    </div>
+                    <div class="col-4">
+                        <label>FRACCION</label>
+                        <select id="FraccionAdornoNomina" name="FraccionAdornoNomina" class="form-control">
+                            <?php
+                            $fraccionesp = $this->db->query("SELECT F.Clave,F.Descripcion FROM fracciones AS F WHERE F.Clave IN(308,309,322,324,405)")->result();
+                            foreach ($fraccionesp as $k => $v) {
+                                print "<option value='{$v->Clave}'>{$v->Clave} {$v->Descripcion}</option>";
+                            }
+                            ?> 
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label>CELULA</label>
+                        <select id="CelulaAdornoNomina" name="CelulaAdornoNomina" class="form-control">
+                            <?php
+                            $empleadosp = $this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE E.Numero IN(1000, 1001, 1002, 994, 995, 996, 997, 998, 999)")->result();
+                            foreach ($empleadosp as $k => $v) {
+                                print "<option value='{$v->Numero}'>{$v->Numero} {$v->CELULA}</option>";
+                            }
+                            ?> 
+                        </select>
+                    </div> 
+                    <DIV class="w-100"></DIV>
+                    <div class="col-3">
+                        <label>Mano de obra</label>
+                        <input id="FraccionPrecioMOAdornoNomina" style="font-weight: bold;" name="FraccionPrecioMOAdornoNomina" class="form-control" readonly=""> 
+                    </div>
+                    <div class="col-3">
+                        <label>Estilo</label>
+                        <input id="EstiloControlAdornoNomina" style="font-weight: bold;" name="EstiloControlAdornoNomina" class="form-control" readonly=""> 
+                    </div>
+
+                    <div class="col-2">
+                        <label>Pares</label>
+                        <input id="ParesControlAdornoNomina" style="font-weight: bold;" name="ParesControlAdornoNomina" class="form-control" readonly=""> 
+                    </div> 
+                    <div class="col-4">
+                        <p>TOTAL</p>
+                        <p class="total_x_control_pares_x_mo" style="color: #008000; font-weight: bold; font-size: 20px;">$ 0.0</p>
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="col-12">
+                        <table id="tblFraccionesPagadasNomina" class="table table-striped table-hover table-sm table-bordered  compact nowrap" style="width:100% !important;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Emp</th>
+                                    <th scope="col">Semana</th>
+
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Control</th>
+                                    <th scope="col">Maq</th>
+
+                                    <th scope="col">Estilo</th>
+                                    <th scope="col">Frac</th>
+                                    <th scope="col">Precio</th>
+
+                                    <th scope="col">Pares</th>
+                                    <th scope="col">SubTotal</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 " align="center">
+                        <p class="font-weight-bold total_fracciones_ador_nom" style="color: #cc0033 !important;  font-size: 30px;" >$0.0</p>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-primary" id="btnAceptaAdornoNomina" style="background-color: #43A047; "><span class="fa fa-check"></span> ACEPTA</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var master_url = '<?php base_url('Avance/') ?>', pnlTablero = $("#pnlTablero");
     var Fecha = pnlTablero.find("#Fecha"), Departamento = pnlTablero.find("#Departamento"),
@@ -404,13 +630,329 @@
             btnDesarrolloDeMuestras = pnlTablero.find("#btnDesarrolloDeMuestras"),
             btnImprimePagosCelulas = pnlTablero.find("#btnImprimePagosCelulas"),
             FotoEstilo = pnlTablero.find("#FotoEstilo"),
-            mono = '<?php print $_SESSION['USERNAME']; ?>';
+            mono = '<?php print $_SESSION['USERNAME']; ?>',
+            btnPespunteFraccionesFail = pnlTablero.find("#btnPespunteFraccionesFail"),
+            mdlPespunteFraccionesFail = $("#mdlPespunteFraccionesFail"),
+            ControlPespunteFail = mdlPespunteFraccionesFail.find("#ControlPespunteFail"),
+            ClaveFraccionPespunteFail = mdlPespunteFraccionesFail.find("#ClaveFraccionPespunteFail"),
+            FraccionPespunteFail = mdlPespunteFraccionesFail.find("#FraccionPespunteFail"),
+            EstiloControlPespunteFail = mdlPespunteFraccionesFail.find("#EstiloControlPespunteFail"),
+            FraccionPrecioMOPespunteFail = mdlPespunteFraccionesFail.find("#FraccionPrecioMOPespunteFail"),
+            ClaveCelulaPespunteFail = mdlPespunteFraccionesFail.find("#ClaveCelulaPespunteFail"),
+            CelulaPespunteFail = mdlPespunteFraccionesFail.find("#CelulaPespunteFail"),
+            btnAceptaPespunteFail = mdlPespunteFraccionesFail.find("#btnAceptaPespunteFail"),
+            tblFraccionesPagadasFail = mdlPespunteFraccionesFail.find("#tblFraccionesPagadasFail"),
+            FraccionesPagadasFail,
+            ParesControlPespunteFail = mdlPespunteFraccionesFail.find("#ParesControlPespunteFail"),
+            btnAdornoFraccionesNomina = pnlTablero.find("#btnAdornoFraccionesNomina"),
+            mdlAdornoFraccionesNomina = $("#mdlAdornoFraccionesNomina"),
+            ControlAdornoNomina = mdlAdornoFraccionesNomina.find("#ControlAdornoNomina");
+
+    function getFraccionesPespunteFail() {
+        var cols = [
+            {"data": "ID"}/*0*/,
+            {"data": "EMPLEADO"}/*1*/,
+            {"data": "SEMANA"}/*2*/,
+            {"data": "FECHA"}/*3*/,
+            {"data": "CONTROL"}/*4*/,
+            {"data": "MAQUILA"}/*5*/,
+            {"data": "ESTILO"}/*6*/,
+            {"data": "NUM_FRACCION"}/*7*/,
+            {"data": "PRECIO_FRACCION"}/*8*/,
+            {"data": "PARES"}/*9*/,
+            {"data": "SUBTOTAL"}/*10*/
+        ];
+        var coldefs = [
+            {
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            }
+        ];
+        var xoptions = {
+            "dom": 'rt',
+            "ajax": {
+                "url": '<?php print base_url('Avance/getAvancesNominaPespunteFail'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = ControlPespunteFail.val() ? ControlPespunteFail.val() : '';
+                    d.EMPLEADO = CelulaPespunteFail.val() ? CelulaPespunteFail.val() : '';
+                }
+            },
+            buttons: buttons,
+            "columns": cols,
+            "columnDefs": coldefs,
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 1000,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "175px",
+            "scrollX": true,
+            "aaSorting": [
+                [0, 'desc']
+            ],
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var r = 0, prs = 0;
+                $.each(api.rows().data(), function (k, v) {
+                    prs += parseInt(v.PARES);
+                    r += parseFloat(v.SUBTOTAL);
+                });
+                mdlPespunteFraccionesFail.find(".total_fracciones_pes_fail").text("$ " + r.toFixed(3));
+            }
+        };
+        if ($.fn.DataTable.isDataTable('#tblFraccionesPagadasFail')) {
+            FraccionesPagadasFail.ajax.reload();
+            return;
+        } else {
+            FraccionesPagadasFail = tblFraccionesPagadasFail.DataTable(xoptions);
+        }
+    }
 
     $(document).ready(function () {
         pnlTablero.find("input").addClass("font-weight-bold");
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
         handleEnterDiv(mdlRastreoXControl);
+        handleEnterDiv(mdlPespunteFraccionesFail);
+        /*ADORNO*/
+
+        btnAdornoFraccionesNomina.click(function () {
+            mdlAdornoFraccionesNomina.modal('show');
+        });
+
+        mdlAdornoFraccionesNomina.on('hidden.bs.modal', function () {
+            onClearPanelInputSelectEnableDisable(mdlAdornoFraccionesNomina);
+        });
+        mdlAdornoFraccionesNomina.on('shown.bs.modal', function () {
+//            Control
+        });
+
+        mdlPespunteFraccionesFail.find(".modal-dialog").css("min-width", "950px");
+
+        btnAceptaPespunteFail.click(function () {
+            /*REVISA SI YA SE PAGO ESA FRACCION*/
+            $.getJSON('<?php print base_url('Avance/onRevisarFraccionPagada') ?>',
+                    {
+                        CONTROL: ControlPespunteFail.val(),
+                        FRACCION: FraccionPespunteFail.val()
+                    })
+                    .done(function (a) {
+                        console.log(a);
+                        /*202401043 prueba esta en tejido*/
+                        if (parseInt(a[0].COBRADA) === 0) {
+                            if (parseInt(a[0].COBRADA) >= 1) {
+                                onCampoInvalido(mdlPespunteFraccionesFail, "ESTA FRACCIÓN YA FUE COBRADA", function () {
+                                    FraccionPespunteFail[0].selectize.focus();
+                                    onClear(FraccionPrecioMOPespunteFail);
+                                    onClear(FraccionPespunteFail);
+                                    mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(0, 4, '.', ','));
+                                });
+                            } else {
+                                if (ControlPespunteFail.val() === '') {
+                                    onCampoInvalido(mdlPespunteFraccionesFail, "DEBE DE ESPECIFICAR UN CONTROL", function () {
+                                        ControlPespunteFail.focus().select();
+                                    });
+                                    return;
+                                }
+                                if (FraccionPespunteFail.val() === '') {
+                                    onCampoInvalido(mdlPespunteFraccionesFail, "DEBE DE ESPECIFICAR UNA FRACCIÓN", function () {
+                                        ClaveFraccionPespunteFail.focus().select();
+                                    });
+                                    return;
+                                }
+                                if (CelulaPespunteFail.val() === '') {
+                                    onCampoInvalido(mdlPespunteFraccionesFail, "DEBE DE ESPECIFICAR UN EMPLEADO", function () {
+                                        ClaveCelulaPespunteFail.focus().select();
+                                    });
+                                    return;
+                                }
+                                onDisable(btnAceptaPespunteFail);
+                                $.getJSON('<?php print base_url('Avance/onPagarFraccionNominaPespunte') ?>', {
+                                    CONTROL: ControlPespunteFail.val(),
+                                    FRACCION: FraccionPespunteFail.val(),
+                                    CELULA: CelulaPespunteFail.val(),
+                                    PARES: ParesControlPespunteFail.val()
+                                }).done(function (a) {
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "SE HA HECHO EL PAGO DE LA FRACCIÓN " + FraccionPespunteFail.val() + " AL EMPLEADO " + CelulaPespunteFail.val(),
+                                        icon: "success",
+                                        buttons: false,
+                                        timer: 750
+                                    }).then((action) => {
+                                        onClear(ControlPespunteFail);
+                                        onClear(ClaveFraccionPespunteFail);
+                                        onClear(FraccionPespunteFail);
+                                        onClear(ClaveCelulaPespunteFail);
+                                        onClear(CelulaPespunteFail);
+                                        onDisable(btnAceptaPespunteFail);
+                                        ControlPespunteFail.focus().select();
+                                    });
+                                }).fail(function (x) {
+                                    console.log(x);
+                                    getError(x);
+                                });
+                            }
+                        } else {
+                            onCampoInvalido(mdlPespunteFraccionesFail, "ESTA FRACCIÓN NO EXISTE O YA FUE COBRADA", function () {
+                                FraccionPespunteFail[0].selectize.focus();
+                                onClear(FraccionPrecioMOPespunteFail);
+                                onClear(FraccionPespunteFail);
+                                mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(0, 4, '.', ','));
+                            });
+                        }
+                    }).fail(function (x) {
+                console.log(x);
+                console.log(x);
+                getError(x);
+            });
+        });
+
+        ClaveCelulaPespunteFail.keydown(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                setValueSelectize(CelulaPespunteFail, $(this).val());
+                if (CelulaPespunteFail.val()) {
+                    onEnable(btnAceptaPespunteFail);
+                    btnAceptaPespunteFail.focus();
+                } else {
+                    onCampoInvalido(mdlPespunteFraccionesFail, "FRACCION INVÁLIDA O NO EXISTE PARA EL ESTILO", function () {
+                        ClaveCelulaPespunteFail.focus().select();
+                        onClear(CelulaPespunteFail);
+                    });
+                }
+            }
+        });
+
+        ClaveFraccionPespunteFail.keydown(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                setValueSelectize(FraccionPespunteFail, $(this).val());
+                if (FraccionPespunteFail.val()) {
+                } else {
+                    onCampoInvalido(mdlPespunteFraccionesFail, "FRACCION INVÁLIDA O NO EXISTE PARA EL ESTILO", function () {
+                        ClaveFraccionPespunteFail.focus().select();
+                        onClear(FraccionPespunteFail);
+                    });
+                }
+            }
+        });
+
+        FraccionPespunteFail.change(function () {
+            if (FraccionPespunteFail.val()) {
+                $.getJSON('<?php print base_url('Avance/getManoDeObraXFraccionEstiloPespunte') ?>',
+                        {
+                            ESTILO: EstiloControlPespunteFail.val(),
+                            FRACCION: FraccionPespunteFail.val()
+                        })
+                        .done(function (a) {
+                            console.log(a);
+                            if (a.length > 0) {
+                                var r = a[0];
+                                if (parseFloat(r.MANO_DE_OBRA) > 0 || parseInt(r.MANO_DE_OBRA) > 0) {
+                                    FraccionPrecioMOPespunteFail.val(r.MANO_DE_OBRA);
+                                    ClaveCelulaPespunteFail.focus();
+                                    var tt = parseFloat(FraccionPrecioMOPespunteFail.val() ? FraccionPrecioMOPespunteFail.val() : 0) * parseInt(ParesControlPespunteFail.val() ? ParesControlPespunteFail.val() : 0);
+                                    mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(tt, 4, '.', ','));
+                                } else {
+                                    onCampoInvalido(mdlPespunteFraccionesFail, "ESTE ESTILO NO TIENE MANO DE OBRA VÁLIDA PARA ESTA FRACCIÓN, VERIFIQUE CON INGENIERIA", function () {
+                                        ClaveFraccionPespunteFail.focus().select();
+                                        onClear(FraccionPrecioMOPespunteFail);
+                                        onClear(FraccionPespunteFail);
+                                        mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(0, 4, '.', ','));
+                                    });
+                                }
+                            } else {
+                                onCampoInvalido(mdlPespunteFraccionesFail, "ESTE ESTILO NO TIENE ESTA FRACCIÓN", function () {
+                                    ClaveFraccionPespunteFail.focus().select();
+                                    onClear(FraccionPrecioMOPespunteFail);
+                                    onClear(FraccionPespunteFail);
+                                    mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(0, 4, '.', ','));
+                                });
+                            }
+                        }).fail(function (x) {
+                    console.log(x);
+                    getError(x);
+                });
+            }
+        }).keydown(function () {
+
+        });
+
+        ControlPespunteFail.on('keydown', function (e) {
+            if (e.keyCode === 13) {
+                if (ControlPespunteFail.val()) {
+                    onOpenOverlay('Cargando...');
+                    FraccionesPagadasFail.ajax.reload();
+                    $.getJSON('<?php print base_url('Avance/getInfoXControlPespunte') ?>', {CONTROL: ControlPespunteFail.val()})
+                            .done(function (a) {
+                                console.log(a);
+                                var r = a[0];
+                                EstiloControlPespunteFail.val(r.ESTILO);
+                                ParesControlPespunteFail.val(r.PARES);
+                                mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte")[0].src = '<?php print base_url(); ?>/' + r.FOTO;
+                                mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte").parent("a")[0].href = '<?php print base_url(); ?>/' + r.FOTO;
+                            }).fail(function (x) {
+                        onCloseOverlay();
+                        console.log(x);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                } else {
+                    onClear(ParesControlPespunteFail);
+                    onClear(EstiloControlPespunteFail);
+                    onClear(ClaveFraccionPespunteFail);
+                    onClear(FraccionPespunteFail);
+                    onClear(ClaveCelulaPespunteFail);
+                    onClear(FraccionPrecioMOPespunteFail);
+                    onClear(CelulaPespunteFail);
+                    onDisable(btnAceptaPespunteFail);
+                    mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(0, 4, '.', ','));
+                    mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte")[0].src = '<?php print base_url('img/sin_foto_sm.png'); ?>';
+                    mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte").parent("a")[0].href = '<?php print base_url('img/sin_foto_sm.png'); ?>';
+                    FraccionesPagadasFail.ajax.reload();
+                }
+            }
+            if (e.keyCode === 8) {
+                onClear(ControlPespunteFail);
+                onClear(ParesControlPespunteFail);
+                onClear(EstiloControlPespunteFail);
+                onClear(ClaveFraccionPespunteFail);
+                onClear(FraccionPespunteFail);
+                onClear(ClaveCelulaPespunteFail);
+                onClear(FraccionPrecioMOPespunteFail);
+                onClear(CelulaPespunteFail);
+                onDisable(btnAceptaPespunteFail);
+                mdlPespunteFraccionesFail.find("p.total_x_control_pares_x_mo").text("$ " + $.number(0, 4, '.', ','));
+                mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte")[0].src = '<?php print base_url('img/sin_foto_sm.png'); ?>';
+                mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte").parent("a")[0].href = '<?php print base_url('img/sin_foto_sm.png'); ?>';
+                FraccionesPagadasFail.ajax.reload();
+            }
+        }).keypress(function (e) {
+            console.log('KP: ');
+            console.log(e.keyCode);
+            console.log('KP: ');
+        });
+
+        mdlPespunteFraccionesFail.on('shown.bs.modal', function () {
+            onBeep(1);
+            mdlPespunteFraccionesFail.find("input").val('');
+            onClear(mdlPespunteFraccionesFail.find("#FraccionPespunteFail"));
+            onClear(mdlPespunteFraccionesFail.find("#CelulaPespunteFail"));
+            mdlPespunteFraccionesFail.find("#ControlPespunteFail").focus();
+            getFraccionesPespunteFail();
+            onDisable(btnAceptaPespunteFail);
+            mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte")[0].src = '<?php print base_url('img/sin_foto_sm.png'); ?>';
+            mdlPespunteFraccionesFail.find("#FotoEstiloNominaPespunte").parent("a")[0].href = '<?php print base_url('img/sin_foto_sm.png'); ?>';
+        });
+
+        btnPespunteFraccionesFail.click(function () {
+            mdlPespunteFraccionesFail.modal('show');
+        });
 
         btnImprimePagosCelulas.click(function () {
             onOpenOverlay('');
@@ -692,7 +1234,7 @@
 //                getDeptosXControl($(this).parent().find("#Control"));
 //            } else {
 //                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UNA FECHA', 'warning');
-//            }
+        //            }
 //        });
 
         getDepartamentos();
@@ -718,8 +1260,8 @@
                 EmpleadoS[0].selectize.disable();
                 btnAceptar.attr('disabled', true);
 
-//                getDeptosXControl($(this));
-//                getDeptoActualXControl();
+                //                getDeptosXControl($(this));
+                //                getDeptoActualXControl();
                 $.getJSON('<?php print base_url('Avance/getInformacionXControl') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {
                     console.log("CONTROL", a);
                     onCloseOverlay();
@@ -823,8 +1365,8 @@
                             }
 //                            if (xDepartamento === 5 && stsavan === 42) {
 //                                Empleado.focus().select();
-//                                onEnable(btnAceptar);
-//                            }
+                            //                                onEnable(btnAceptar);
+                            //                            }
                             if (xDepartamento === 55 && stsavan === 5) {
                                 Empleado.focus().select();
                                 if (parseInt(rr.MAQUILA) === 98) {
@@ -865,6 +1407,16 @@
                             if (xDepartamento === 11 && stsavan === 10) {
                                 Empleado.focus().select();
                             }
+                        } else if (parseInt(rr.ESTATUS_PRODUCCION) === 13) {
+                            onCampoInvalido(pnlTablero, "ESTE CONTROL YA HA SIDO FACTURADO", 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                            });
+                        } else if (parseInt(rr.ESTATUS_PRODUCCION) === 14) {
+                            onCampoInvalido(pnlTablero, "ESTE CONTROL HA SIDO CANCELADO", 'w', function () {
+                                Control.focus().select();
+                                btnAceptar.attr('disabled', true);
+                            });
                         }
 
                         if (parseInt(rr.ESTATUS_PRODUCCION) === 11) {
@@ -893,6 +1445,30 @@
                                 return;
                             });
                         }
+                    } else {
+                        $.getJSON('<?php print base_url('Avance/getInformacionXControlFC') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {
+                            if (a.length > 0) {
+                                var rr = a[0];
+                                switch (parseInt(rr.ESTATUS_PRODUCCION)) {
+                                    case 13:
+                                        onCampoInvalido(pnlTablero, "CONTROL FACTURADO", 'w', function () {
+                                            Control.focus().select();
+                                            onDisable(btnAceptar);
+                                        });
+                                        break;
+                                    case 14:
+                                        onCampoInvalido(pnlTablero, "CONTROL CANCELADO", 'w', function () {
+                                            Control.focus().select();
+                                            onDisable(btnAceptar);
+                                        });
+                                        break;
+                                }
+                            }
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+
+                        });
                     }
                 }).fail(function (x, y, z) {
                     onCloseOverlay();
@@ -1098,10 +1674,10 @@
                 } else {
 //                    onBeep(5);
 //                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA LA FRACCION SELECCIONADA', 'warning').then((value) => {
-//                        PrecioFraccion.val('');
-//                        Fraccion[0].selectize.open();
+                    //                        PrecioFraccion.val('');
+                    //                        Fraccion[0].selectize.open();
                     btnAceptar.attr('disabled', false);
-//                    });
+                    //                    });
                 }
             }).fail(function (x, y, z) {
                 getError(x);
@@ -1188,7 +1764,7 @@
 
     function getConceptosNomina() {
         $.getJSON('<?php print base_url('Avance/getConceptosNomina'); ?>').done(function (a) {
-//            console.log(a);
+            //            console.log(a);
             a.forEach(function (e) {
                 ConceptoRXC[0].selectize.addOption({text: e.CLAVE + ' ' + e.CONCEPTO, value: e.CLAVE});
             });
@@ -1208,10 +1784,10 @@
             if (depto >= 180 || depto === 30 || depto === 40 ||
                     depto === 90 || depto === 100 || depto === 105 ||
                     depto === 110 || depto === 140 || depto === 150) {
-//                if (Control.val()) {
+                //                if (Control.val()) {
                 li.addClass('li-selected');
                 Departamento.val(parseInt(li.find("span").first().text()));
-//                    Departamento[0].selectize.setValue(parseInt(li.find("span").first().text()));
+                //                    Departamento[0].selectize.setValue(parseInt(li.find("span").first().text()));
                 Control.focus().select();
                 getDeptoActualXControl();
                 DeptoDes.val(deptodes);
@@ -1220,8 +1796,8 @@
 //                } else {
 //                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
 //                        Control.focus().select();
-//                    });
-//                }
+                //                    });
+                //                }
             } else {
                 swal('ATENCIÓN', 'DEPARTAMENTO ' + clave + ' INVÁLIDO, SELECCIONE UNO DENTRO DEL RANGO DEPARTAMENTOS DE 180,190,210 o 220', 'warning').then((value) => {
                     ul.find("li").removeClass('li-selected');
@@ -1244,9 +1820,7 @@
     function onValidarDepto() {
         var fraccion_x_depto = {
             "33": 102, "4": 103, "40": 60,
-            "42": 51, "44": 51, "5": "", "55": 300,
-            "6": 397, "7": "", "8": 401/*ALM-TEJIDO*/,
-            "9": "", "10": 500, "11": 600
+            "42": 51, "44": 51, "5": "", "55": 300, "6": 397, "7": "", "8": 401/*ALM-TEJIDO*/, "9": "", "10": 500, "11": 600
         };
         switch (mono) {
             case "X":
@@ -1498,7 +2072,7 @@
         var dptos = pnlTablero.find("ul#deptos li"), depto = 0, clve = 0, deptodes = "";
         pnlTablero.find("ul#deptos li").removeClass("li-selected");
         $.each(dptos, function (k, v) {
-//                    console.log(k, v);
+            //                    console.log(k, v);
             var spn = $(v).find("span.stsavan").text();
             clve = $.isNumeric(spn) ? parseInt(spn) : 0;
             var cu_clve = parseInt(Departamento.val());
@@ -1512,7 +2086,7 @@
         if (depto >= 180 || depto === 30 || depto === 40 ||
                 depto === 90 || depto === 100 || depto === 105 ||
                 depto === 110 || depto === 130 || depto === 140 || depto === 150 || depto === 160) {
-//                    Departamento.val(parseInt(li.find("span").first().text())); 
+            //                    Departamento.val(parseInt(li.find("span").first().text())); 
             Control.focus().select();
             DeptoDes.val(deptodes);
             DeptoAva.val(clve);
@@ -1526,6 +2100,19 @@
     }
 </script>
 <style>
+
+    #tblFraccionesPagadasFail tbody tr td:nth-child(8),#tblFraccionesPagadasFail tbody tr td:nth-child(10) { 
+        color:#008000;
+    }
+    #tblFraccionesPagadasFail tbody tr td:nth-child(9) { 
+        color:#3f51b5;
+    }
+
+    #tblFraccionesPagadasFail tbody tr td{ 
+        font-size: 14px;
+        font-weight: bold;
+    }
+
     #tblAvance tbody tr td{
         font-size: 14px;
     }
@@ -1617,6 +2204,19 @@
     ul li{
         font-size: 13px !important;
     }
+
+    .estatus_de_avance{
+        font-size: 50px !important; 
+        color: #006699;
+        color: #cc0033;
+    }
+    input#Control{
+        color: #003366 !important;
+    }
+    table thead th, label, button,h4{
+        text-transform:  uppercase !important;   
+    } 
+
     @-moz-keyframes myfirst /* Firefox */
     {
         0%   {    border: 1px solid #2196F3}
@@ -1643,5 +2243,22 @@
         0%   {    border: 1px solid #3F51B5}
         50%  {    border: 1px solid #2196f3;}
         100%   {border: 1px solid #3F51B5}
+    }
+
+
+    @-moz-keyframes avance_high /* Firefox */
+    {
+        0%   {    color: #003366;}
+        25%   {    color: #006699;}
+        50%  {    color: #003366;}
+        100%   {color: #006699;}
+    }
+
+    @-webkit-keyframes avance_high /* Firefox */
+    {
+        0%   {    color: #003366;}
+        25%   {    color: #006699;}
+        50%  {    color: #003366;}
+        100%   {color: #006699;}
     }
 </style>

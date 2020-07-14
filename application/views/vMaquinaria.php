@@ -359,11 +359,7 @@
             indice = 1, indice_imagen = 1,
             sin_foto = "<?php print base_url('img/sin_foto_sm.jpg'); ?>",
             imgns = [xImagenUno, xImagenUno, xImagenDos, xImagenTres, xImagenCuatro, xImagenCinco, xImagenSeis];
-
-    function setValueSelectize(componente, valor) {
-        componente[0].selectize.setValue(valor);
-    }
-
+    
     function onEliminarImagenMaquinaria(ID, indice) {
         swal({
             title: "¿Estas seguro?",

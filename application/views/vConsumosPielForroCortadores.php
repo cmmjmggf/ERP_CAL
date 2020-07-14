@@ -46,14 +46,7 @@
                     <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <label>Articulo</label>
                         <select id="ArticuloCorte" name="ArticuloCorte" class="form-control">
-                            <option></option>
-                            <?php
-                            $articulos = $this->db->select("A.Clave AS CLAVE, A.Descripcion AS Articulo, CONCAT(A.Clave, ' ',A.Descripcion) AS ARTICULO", false)
-                                            ->from('articulos AS A')->join('asignapftsacxc AS ACXC', 'A.Clave = ACXC.Articulo')->group_by('A.Clave')->get()->result();
-                            foreach ($articulos as $k => $v) {
-                                print "<option value='{$v->CLAVE}'>{$v->ARTICULO}</option>";
-                            }
-                            ?>
+                            <option></option> 
                         </select>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
@@ -116,8 +109,8 @@
 
         /*MODAL REDISEÑADO*/
         mdlConsPifo.on('shown.bs.modal', function () {
+            getArticulosCorte();
             mdlConsPifo.find("input").val('');
-            mdlConsPifo.find("#ArticuloCorte")[0].selectize.clear(true);
             mdlConsPifo.find("#EmpleadoCorte")[0].selectize.clear(true);
             mdlConsPifo.find("#AnioCorte").val(new Date().getFullYear());
             mdlConsPifo.find("#MaquilaCorte").focus();
@@ -249,7 +242,7 @@
 
         handleEnterDiv(mdlConsPifo);
 
-        /*FIN MODAL REDISEÑADO*/ 
+        /*FIN MODAL REDISEÑADO*/
         SemanaIniciaCorte.on('keydown', function (e) {
             onVerificarSemana(e, $(this));
         });
@@ -263,6 +256,19 @@
         });
     });
 
+    function getArticulosCorte() {
+        $.getJSON('<?php print base_url('ConsumosPielForroCortadores/getArticulosCorte'); ?>').done(function (a, b, c) {
+            ArticuloCorte[0].selectize.clear(true);
+            ArticuloCorte[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                ArticuloCorte[0].selectize.addOption({text: v.ARTICULO, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+
+        });
+    }
 
     function onComprobarMaquilas(e, input) {
         if (e.keyCode === 13 && input.val() !== '') {
@@ -310,6 +316,9 @@
         color: #fff !important;
         background-color: #d62c1a !important;
         border-color: #ca2a19 !important;
+    }
+    .modal , .modal button{
+        text-transform: uppercase !important;
     }
     .modal-content {
         border-radius: 1px !important;

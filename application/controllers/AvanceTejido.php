@@ -67,7 +67,7 @@ class AvanceTejido extends CI_Controller {
             $this->db->where('C.Estatus', 'ACTIVO')
                     ->order_by('ID', 'ASC');
             if ($x['ESTILO'] === '') {
-                $this->db->limit(99);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -162,7 +162,7 @@ class AvanceTejido extends CI_Controller {
             }
             $this->db->order_by('C.fechapre', 'DESC');
             if ($x['CHOFER'] === '') {
-                $this->db->limit(99);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -376,11 +376,24 @@ class AvanceTejido extends CI_Controller {
             print json_encode($this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
                                             . "C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, "
                                             . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
-                                            . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo", false)
+                                            . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo, (SELECT P.EstatusProduccion FROM pedidox AS P WHERE P.Control = C.Control LIMIT 1) AS AVANCE_ACTUAL", false)
                                     ->from('controles AS C')
                                     ->where('C.Control', $this->input->get('CONTROL'))
                                     ->where('C.DeptoProduccion', 130)
                                     ->where('C.EstatusProduccion', 'ALMACEN PESPUNTE')
+                                    ->get()->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    public function getInfoControlFueraDeAvance() {
+        try {
+            print json_encode($this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
+                                            . "C.Color, C.Serie, C.Cliente, C.Pares, C.Pedido, "
+                                            . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
+                                            . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo, (SELECT P.EstatusProduccion FROM pedidox AS P WHERE P.Control = C.Control LIMIT 1) AS AVANCE_ACTUAL", false)
+                                    ->from('controles AS C')
+                                    ->where('C.Control', $this->input->get('CONTROL'))  
                                     ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

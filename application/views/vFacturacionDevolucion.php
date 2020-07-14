@@ -270,7 +270,9 @@
                             <tr id="rTallasBuscaManual">
                                 <td class="font-weight-bold">Tallas</td>
                                 <?php
-                                $style_input = "width: 40px; font-weight: bold !important;height: 22px;text-align: center;padding-left: 4px;padding-right: 4px;";
+                                $style_input = "width: 35px; border: 1px solid #000 !important; font-weight: bold !important;text-align: center;padding-left: 4px;padding-right: 4px;";
+                               
+//                                $style_input = "width: 40px; font-weight: bold !important;height: 22px;text-align: center;padding-left: 4px;padding-right: 4px;";
                                 for ($index = 1; $index < 23; $index++) {
 //                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important; padding-left: 4px; padding-right: 4px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
                                     print "<td align='center'><span class=\"T{$index}\">-</span></td>";
@@ -2200,13 +2202,11 @@
     }
     input{
         padding-top: 2px !important;
-        padding-bottom:  2px !important;
-        border: solid 1px #000 !important;
+        padding-bottom:  2px !important; 
     }
     input,textarea{
         padding-top: 2px !important;
-        padding-bottom:  2px !important;
-        border: solid 1px #000 !important;
+        padding-bottom:  2px !important; 
     }
     .text-danger {
         color: #b71a0a !important;

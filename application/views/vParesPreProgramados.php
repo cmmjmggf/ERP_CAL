@@ -12,13 +12,7 @@
                     </div>
                     <div class="col-9">
                         <select id="PaPreProCliente" name="PaPreProCliente" class="form-control form-control-sm">
-                            <option></option>
-                            <?php
-                            $dtm = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus = 'ACTIVO' ORDER BY ABS(C.Clave) ASC")->result();
-                            foreach ($dtm as $k => $v) {
-                                print "<option value='{$v->CLAVE}'>{$v->CLIENTE}</option>";
-                            }
-                            ?>
+                            <option></option> 
                         </select>
                     </div>
                 </div>
@@ -281,6 +275,7 @@
         });
 
         mdlParesPreProgramados.on('shown.bs.modal', function () {
+            getClientesParesPreProgramados();
             HoldOn.close();
         });
 
@@ -359,5 +354,20 @@
     function PaPreProInit() {
         mdlParesPreProgramados.find("#PaPreProFecha").val(getToday());
         mdlParesPreProgramados.find("#PaPreProFechaF").val(getToday());
+    }
+    
+    function getClientesParesPreProgramados() { 
+        onOpenOverlay('');
+        $.getJSON('<?php print base_url('ParesPreProgramados/getClientesParesPreProgramados'); ?>').done(function (a, b, c) {
+            PaPreProCliente[0].selectize.clear(true);
+            PaPreProCliente[0].selectize.clearOptions();
+            $.each(a, function (k, v) {
+                PaPreProCliente[0].selectize.addOption({text: v.CLIENTE, value: v.CLAVE});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
+        });
     }
 </script>
