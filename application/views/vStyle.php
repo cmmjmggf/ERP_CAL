@@ -469,9 +469,22 @@
         padding-top: 3px;
         padding-bottom: 3px; 
     } 
+
+    nav.navbar .btn-primary , ul.dropdown-menu a {
+        color: white; 
+        font-size: 13px;
+        text-transform: uppercase;
+        font-weight: bold !important;
+    } 
+
+    input, .selectize-input, textarea, select {
+        border: 2px solid #000 !important;
+        font-weight: bold !important;
+    }
+
 </style>
 <!--STYLE NEGRO-->
-<?php 
+<?php
 if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") {
     ?>
     <style>

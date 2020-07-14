@@ -1513,9 +1513,6 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                 return false;
             });
 //            getAccesosDirectosXModuloXUsuario(m);
-            $("nav.navbar").find(".btn-primary").css({"color": "white", "font-size": "14px", "text-transform": "uppercase", "font-weight": "bold"});
-            $("ul.dropdown-menu").find("a").css({"color": "white", "font-size": "14px", "text-transform": "uppercase", "font-weight": "bold"});
-            $("input, .selectize-input,textarea").css({"border": "2px solid #000000", "font-weight": "bold"});
         });
     }
 
