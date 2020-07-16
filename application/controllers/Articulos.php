@@ -237,6 +237,7 @@ class Articulos extends CI_Controller {
                 'Temporada' => $x->post('Temporada'),
                 'Min' => $x->post('Min'),
                 'Max' => $x->post('Max'),
+                'Estatus' => $x->post('Estatus'),
                 'ProveedorUno' => $x->post('ProveedorUno'),
                 'ProveedorDos' => $x->post('ProveedorDos'),
                 'ProveedorTres' => $x->post('ProveedorTres'),
