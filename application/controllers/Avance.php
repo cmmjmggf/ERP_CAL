@@ -937,23 +937,18 @@ P.Maquila AS MAQUILA
                     $EXISTE_AVANCE = $this->db->query(
                                     "SELECT COUNT(*) AS EXISTE, P.stsavan AS AVANCE "
                                     . "FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} "
-                                    . "AND P.EstatusProduccion LIKE 'ENSUELADO' LIMIT 1")->result();
+                                    . "AND P.EstatusProduccion = 'PESPUNTE' LIMIT 1")->result();
 
-                    if (intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $frac === 300 && intval($xXx['EMPLEADO']) === 903 ||
-                            intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
-                            intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
-                            intval($EXISTE_AVANCE[0]->EXISTE) <= 0 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 900 && $frac === 300) {
-                        $this->db->set('EstatusProduccion', 'ENSUELADO')
-                                ->set('DeptoProduccion', 140)
-                                ->where('Control', $xXx['CONTROL'])->update('controles');
-                        $this->db->set('stsavan', 55)
-                                ->set('EstatusProduccion', 'ENSUELADO')
-                                ->set('DeptoProduccion', 140)
-                                ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                        $this->db->set("status", 55)
-                                ->set("fec55", Date('Y-m-d 00:00:00'))
-                                ->where('fec55 IS NULL', null, false)
-                                ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    if (intval($EXISTE_AVANCE[0]->EXISTE) === 1 && $depto === 55 && $depto_actual === 5 && $frac === 300 && intval($xXx['EMPLEADO']) === 903 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) === 1 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 902 && $frac === 300 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) === 1 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 901 && $frac === 300 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) === 1 && $depto === 55 && $depto_actual === 5 && intval($xXx['EMPLEADO']) === 900 && $frac === 300 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) === 1 && $depto === 55 && $depto_actual === 5 && $frac === 300 ||
+                            intval($EXISTE_AVANCE[0]->EXISTE) === 1 && $depto === 55 && $depto_actual === 5 && $frac === 300) {
+                        $this->db->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('controles');
+                        $this->db->set('stsavan', 55)->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('pedidox');
+
+                        $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))->where('fec55 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                         if (intval($xXx['EMPLEADO']) === 903 || intval($xXx['EMPLEADO']) === 900 || intval($xXx['EMPLEADO']) === 901 || intval($xXx['EMPLEADO']) === 902) {
                             $this->onPagarFraccion($xXx, 300, 140, 'ENSUELADO');
                         }
@@ -963,14 +958,10 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
-            if (in_array("{$xXx['EMPLEADO']}", $empleados_celulas) &&
+            if (in_array("{$xXx['EMPLEADO']} ", $empleados_celulas) &&
                     $depto === 55 && $depto_actual === 5 && $frac === 300) {
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
-                                ->from('controlpla AS C')
-                                ->where('C.Control', $xXx['CONTROL'])
-                                ->where('C.Fraccion', $frac)
-                                ->get()->result();
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)->from('controlpla AS C')->where('C.Control', $xXx['CONTROL'])->where('C.Fraccion', $frac)->get()->result();
                 if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                     $this->onPagarFraccionSinAvance($xXx, $frac);
                 }
@@ -983,11 +974,7 @@ P.Maquila AS MAQUILA
                     $depto === 6 && $depto_actual === 55 && $frac === 397 && intval($xXx['EMPLEADO']) === 1003) {
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
-                                ->from('controlpla AS C')
-                                ->where('C.Control', $xXx['CONTROL'])
-                                ->where('C.Fraccion', $frac)
-                                ->get()->result();
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)->from('controlpla AS C')->where('C.Control', $xXx['CONTROL'])->where('C.Fraccion', $frac)->get()->result();
                 if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                     switch (intval($frac)) {
                         case 397:
@@ -1000,17 +987,9 @@ P.Maquila AS MAQUILA
                             $revisar_avance_ensuelado = $this->db->query("SELECT  COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND Departamento IN(130,150,160,180,210,230,240)")->result();
                             if (intval($revisar_avance_ensuelado[0]->EXISTE) === 0) {
                                 $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', NULL);
-                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')
-                                        ->set('DeptoProduccion', 130)
-                                        ->where('Control', $xXx['CONTROL'])->update('controles');
-                                $this->db->set('stsavan', 6)
-                                        ->set('EstatusProduccion', 'ALMACEN PESPUNTE')
-                                        ->set('DeptoProduccion', 130)
-                                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                $this->db->set("status", 6)
-                                        ->set("fec6", Date('Y-m-d 00:00:00'))
-                                        ->where('fec6 IS NULL', null, false)
-                                        ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
+                                $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                             }
                             $id = NULL;
                             $revisar_avance_existe_ensuelado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND Departamento IN(130,150,160,180,210,230,240) LIMIT 1")->result();
@@ -1044,7 +1023,7 @@ P.Maquila AS MAQUILA
                                 $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
                                 $data["modulo"] = 'CA';
                                 $this->db->insert('fracpagnomina', $data);
-                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE PESPUNTE.", $this->session);
+                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE PESPUNTE. ", $this->session);
                             }
 //                            $this->onPagarFraccionSinAvance($xXx, $frac);
                             break;
@@ -1059,16 +1038,11 @@ P.Maquila AS MAQUILA
 
                 if (intval($check_tejido[0]->EXISTE) === 0) {
                     /* 6 ALMACEN PESPUNTE "A" 7 TEJIDO */
-                    $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)
-                            ->where('Control', $xXx['CONTROL'])->update('controles');
-                    $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')
-                            ->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                    $this->db->set("status", 7)
-                            ->set("fec7", Date('Y-m-d 00:00:00'))
-                            ->where('fec7 IS NULL', null, false)
-                            ->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    $this->db->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('controles');
+                    $this->db->set('stsavan', 7)->set('EstatusProduccion', 'TEJIDO')->set('DeptoProduccion', 150)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                    $this->db->set("status", 7)->set("fec7", Date('Y-m-d 00:00:00'))->where('fec7 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                     $this->onAvance($xXx['CONTROL'], 150, 'TEJIDO', 401);
-                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - TEJIDO.", $this->session);
+                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - TEJIDO. ", $this->session);
 
                     exit(0);
                 }
@@ -1089,11 +1063,7 @@ P.Maquila AS MAQUILA
 //                    403	TEJIDA MAQUINA 1 
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
-                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
-                                ->from('controlpla AS C')
-                                ->where('C.Control', $xXx['CONTROL'])
-                                ->where('C.Fraccion', $frac)
-                                ->get()->result();
+                $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)->from('controlpla AS C')->where('C.Control', $xXx['CONTROL'])->where('C.Fraccion', $frac)->get()->result();
 //                var_dump($check_fraccion);
 //                exit(0);
                 switch (intval($frac)) {
@@ -1105,15 +1075,10 @@ P.Maquila AS MAQUILA
                             exit(0);
                         }
                         $this->onAvance($xXx['CONTROL'], 160, 'ALMACEN TEJIDO', NULL);
-                        $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)
-                                ->where('Control', $xXx['CONTROL'])->update('controles');
-                        $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')
-                                ->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                        $this->db->set("status", 8)
-                                ->set("fec8", Date('Y-m-d 00:00:00'))
-                                ->where('fec8 IS NULL', null, false)
-                                ->where('contped', $xXx['CONTROL'])->update('avaprd');
-                        $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE TEJIDO.", $this->session);
+                        $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('controles');
+                        $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                        $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))->where('fec8 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+                        $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE TEJIDO. ", $this->session);
                         exit(0);
                         break;
                     default:
@@ -1136,17 +1101,10 @@ P.Maquila AS MAQUILA
                     exit(0);
                 }
                 $this->onAvance($xXx['CONTROL'], 180, 'MONTADO A', 500);
-                $this->db->set('EstatusProduccion', 'MONTADO A')->set('DeptoProduccion', 180)
-                        ->where('Control', $xXx['CONTROL'])
-                        ->update('controles');
-                $this->db->set('stsavan', 9)->set('EstatusProduccion', 'MONTADO A')
-                        ->set('DeptoProduccion', 180)->where('Control', $xXx['CONTROL'])
-                        ->update('pedidox');
-                $this->db->set('fec9', Date('Y-m-d 00:00:00'))
-                        ->where('fec9 IS NULL', null, false)
-                        ->where('contped', $xXx['CONTROL'])
-                        ->update('avaprd');
-                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - MONTADO A.", $this->session);
+                $this->db->set('EstatusProduccion', 'MONTADO A')->set('DeptoProduccion', 180)->where('Control', $xXx['CONTROL'])->update('controles');
+                $this->db->set('stsavan', 9)->set('EstatusProduccion', 'MONTADO A')->set('DeptoProduccion', 180)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                $this->db->set('fec9', Date('Y-m-d 00:00:00'))->where('fec9 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - MONTADO A. ", $this->session);
                 exit(0);
             }
             /* 10 ADORNO */
@@ -1161,27 +1119,16 @@ P.Maquila AS MAQUILA
                     //499	MONTADO MUESTRA
                     //500	MONTADO GENERAL "A" * (GENERA AVANCE) *
                     //503	MONTADO GENERAL "B"
-                    $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
-                                    ->from('controlpla AS C')
-                                    ->where('C.Control', $xXx['CONTROL'])
-                                    ->where('C.Fraccion', $frac)
-                                    ->get()->result();
+                    $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)->from('controlpla AS C')->where('C.Control', $xXx['CONTROL'])->where('C.Fraccion', $frac)->get()->result();
                     $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
                     if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                         switch (intval($frac)) {
                             case 500:
-                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ADORNO A.", $this->session);
+                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ADORNO A. ", $this->session);
                                 $this->onPagarFraccion($xXx, $frac, 210, 'ADORNO A');
-                                $this->db->set('EstatusProduccion', 'ADORNO A')->set('DeptoProduccion', 210)
-                                        ->where('Control', $xXx['CONTROL'])
-                                        ->update('controles');
-                                $this->db->set('stsavan', 10)->set('EstatusProduccion', 'ADORNO A')
-                                        ->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])
-                                        ->update('pedidox');
-                                $this->db->set('fec10', Date('Y-m-d 00:00:00'))
-                                        ->where('fec10 IS NULL', null, false)
-                                        ->where('contped', $xXx['CONTROL'])
-                                        ->update('avaprd');
+                                $this->db->set('EstatusProduccion', 'ADORNO A')->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])->update('controles');
+                                $this->db->set('stsavan', 10)->set('EstatusProduccion', 'ADORNO A')->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                $this->db->set('fec10', Date('Y-m-d 00:00:00'))->where('fec10 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                                 /* EN ONPAGARFRACCION YA REVISO EL AVANCE, PERO DE TODOS MODOS RECTIFICO QUE EXISTA */
                                 $revisar_avance_adorno_a = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = '{$xXx['CONTROL']}' AND Departamento = 210 LIMIT 1")->result();
                                 if (intval($revisar_avance_adorno_a[0]->EXISTE) === 0) {
@@ -1210,29 +1157,18 @@ P.Maquila AS MAQUILA
 //                    600	ADORNO GENERAL * (GENERA AVANCE) *
 //                    602	PLANTILLA DE ADORNO
 //                    607	ARMAR PLANTILLA DE ADORNO
-                    $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)
-                                    ->from('controlpla AS C')
-                                    ->where('C.Control', $xXx['CONTROL'])
-                                    ->where('C.Fraccion', $frac)
-                                    ->get()->result();
+                    $check_fraccion_plantilla = $this->db->select('COUNT(*) AS EXISTE', false)->from('controlpla AS C')->where('C.Control', $xXx['CONTROL'])->where('C.Fraccion', $frac)->get()->result();
                     $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
                     if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
                         switch (intval($frac)) {
                             case 600:
 
-                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN ADORNO.", $this->session);
+                                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN ADORNO. ", $this->session);
                                 $this->onPagarFraccion($xXx, $frac, 230, 'ALMACEN ADORNO');
 
-                                $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')->set('DeptoProduccion', 230)
-                                        ->where('Control', $xXx['CONTROL'])
-                                        ->update('controles');
-                                $this->db->set('stsavan', 11)->set('EstatusProduccion', 'ALMACEN ADORNO')
-                                        ->set('DeptoProduccion', 230)->where('Control', $xXx['CONTROL'])
-                                        ->update('pedidox');
-                                $this->db->set('fec11', Date('Y-m-d 00:00:00'))
-                                        ->where('fec11 IS NULL', null, false)
-                                        ->where('contped', $xXx['CONTROL'])
-                                        ->update('avaprd');
+                                $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')->set('DeptoProduccion', 230)->where('Control', $xXx['CONTROL'])->update('controles');
+                                $this->db->set('stsavan', 11)->set('EstatusProduccion', 'ALMACEN ADORNO')->set('DeptoProduccion', 230)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                $this->db->set('fec11', Date('Y-m-d 00:00:00'))->where('fec11 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                                 $revisar_avance_alm_adorno = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = '{$xXx['CONTROL']}' AND Departamento = 230 LIMIT 1")->result();
                                 if (intval($revisar_avance_alm_adorno[0]->EXISTE) === 0) {
                                     $this->onAvance($xXx['CONTROL'], 230, 'ALMACEN ADORNO', NULL);
@@ -1256,18 +1192,11 @@ P.Maquila AS MAQUILA
         try {
             $xfraccion = $fraccion;
             $id = 0;
-            $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
-                            ->from('fracpagnomina AS F')
-                            ->where('F.control', $xXx['CONTROL'])
-                            ->where('F.numfrac', $xfraccion)
-                            ->get()->result();
+            $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])->where('F.numfrac', $xfraccion)->get()->result();
             if (intval($check_fraccion[0]->EXISTE) >= 1) {
                 exit(0);
             }
-            $check_avance = $this->db->select('COUNT(*) AS EXISTE', false)
-                            ->from('avance AS A')
-                            ->where('A.Control', $xXx['CONTROL'])
-                            ->where('A.Departamento', $depto_avance)->get()->result();
+            $check_avance = $this->db->select('COUNT(*) AS EXISTE', false)->from('avance AS A')->where('A.Control', $xXx['CONTROL'])->where('A.Departamento', $depto_avance)->get()->result();
 
             $id = 0;
             if (intval($check_avance[0]->EXISTE) === 0) {
@@ -1316,11 +1245,7 @@ P.Maquila AS MAQUILA
         try {
             $xfraccion = $fraccion;
             $id = 0;
-            $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
-                            ->from('fracpagnomina AS F')
-                            ->where('F.control', $xXx['CONTROL'])
-                            ->where('F.numfrac', $xfraccion)
-                            ->get()->result();
+            $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])->where('F.numfrac', $xfraccion)->get()->result();
             if (intval($check_fraccion[0]->EXISTE) >= 1) {
                 exit(0);
             }
@@ -1345,7 +1270,7 @@ P.Maquila AS MAQUILA
             $data["avance_id"] = NULL;
             $data["modulo"] = 'CA';
             $this->db->insert('fracpagnomina', $data);
-            $l = new Logs("Captura de Avance de produccion", "HA COBRADO O PAGADO LA FRACCION {$xfraccion} PARA EL CONTROL {$xXx['CONTROL']}.", $this->session);
+            $l = new Logs("Captura de Avance de produccion", "HA COBRADO O PAGADO LA FRACCION {$xfraccion} PARA EL CONTROL {$xXx['CONTROL']}. ", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1422,10 +1347,7 @@ P.Maquila AS MAQUILA
                 $_CONTROL_ = $this->db->query("SELECT P.Semana AS SEMANA,P.Maquila AS MAQUILA, P.Pares AS PARES, P.Estilo AS ESTILO FROM pedidox AS P WHERE P.Control =  {$x['CONTROL']} AND P.stsavan NOT IN(14) LIMIT 1")->result();
 
                 $fechin = Date('d/m/Y');
-                $_SEMANA_ = $this->db->select("S.Sem AS SEMANA", false)
-                                ->from('semanasnomina AS S')
-                                ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
-                                ->get()->result();
+                $_SEMANA_ = $this->db->select("S.Sem AS SEMANA", false)->from('semanasnomina AS S')->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") ", null, false)->get()->result();
                 $EMPLEADO = $x['CELULA'];
                 $data = array(
                     "numeroempleado" => $EMPLEADO,
@@ -1446,7 +1368,7 @@ P.Maquila AS MAQUILA
                 $data["avance_id"] = NULL;
                 $data["modulo"] = 'CAPES';
                 $this->db->insert('fracpagnomina', $data);
-                $l = new Logs("Captura de Avance Nomina pespunte", "HA PAGADO LA FRACCION {$x['FRACCION']} PARA EL CONTROL {$x['CONTROL']}.", $this->session);
+                $l = new Logs("Captura de Avance Nomina pespunte", "HA PAGADO LA FRACCION {$x['FRACCION']} PARA EL CONTROL {$x['CONTROL']}. ", $this->session);
                 print json_encode(array("PAGADA" => 1));
             } else {
                 print json_encode(array("PAGADA" => 0));
@@ -1459,16 +1381,9 @@ P.Maquila AS MAQUILA
     public function onAvanzarXControl($CONTROL, $ESTATUS_PRODUCCION, $DEPTO_PRODUCCION, $STSAVAN) {
         try {
             $this->db->trans_begin();
-            $this->db->set('EstatusProduccion', $ESTATUS_PRODUCCION)
-                    ->set('DeptoProduccion', $DEPTO_PRODUCCION)
-                    ->where('Control', $CONTROL)->update('controles');
-            $this->db->set('stsavan', $STSAVAN)
-                    ->set('EstatusProduccion', $ESTATUS_PRODUCCION)
-                    ->set('DeptoProduccion', $DEPTO_PRODUCCION)
-                    ->where('Control', $CONTROL)->update('pedidox');
-            $this->db->set("fec{$STSAVAN}", Date('Y-m-d 00:00:00'))
-                    ->where("fec{$STSAVAN} IS NULL", null, false)
-                    ->where('contped', $CONTROL)->update('avaprd');
+            $this->db->set('EstatusProduccion', $ESTATUS_PRODUCCION)->set('DeptoProduccion', $DEPTO_PRODUCCION)->where('Control', $CONTROL)->update('controles');
+            $this->db->set('stsavan', $STSAVAN)->set('EstatusProduccion', $ESTATUS_PRODUCCION)->set('DeptoProduccion', $DEPTO_PRODUCCION)->where('Control', $CONTROL)->update('pedidox');
+            $this->db->set("fec{$STSAVAN} ", Date('Y-m-d 00:00:00'))->where("fec{$STSAVAN} IS NULL ", null, false)->where('contped', $CONTROL)->update('avaprd');
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
             } else {
