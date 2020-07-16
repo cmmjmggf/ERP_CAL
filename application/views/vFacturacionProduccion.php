@@ -23,8 +23,11 @@
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info" disabled="">
                     <span class="fa fa-eye-slash"></span> VISTA PREVIA
                 </button>
-                <button type="button" id="btnCambiaFolio" name="btnCambiaFolio" class="btn btn-info">
-                    <span class="fa fa-pen"></span>
+                <button type="button" id="btnCambiaFolio" name="btnCambiaFolio" class="btn btn-info" style="background-color: #5D4037; border-color: #5D4037;">
+                    <span class="fa fa-pen"></span> FOLIO 
+                </button>
+                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info d-none" style="background-color: #689F38; border-color: #689F38;">
+                    <span class="fa fa-eye"></span> TIENDA 
                 </button>
                 <button type="button" id="btnClientes" name="btnClientes" class="btn btn-primary d-none">
                     <span class="fa fa-users"></span>  CLIENTES
@@ -79,39 +82,27 @@
                 <input type="text" id="AgenteCliente" name="AgenteCliente"   readonly="">
 
             </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-2 col-lg-4 col-xl-1"   style="padding-right: 5px;"> 
+            <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-4 col-xl-1"   style="padding-right: 5px;"> 
                 <label>Fecha</label>
                 <input type="text" id="FechaFactura" name="FechaFactura" class="form-control form-control-sm date notEnter">
             </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-1"  style="padding-left: 5px; padding-right: 5px;"> 
+            <div class="col-12 col-xs-12 col-sm-10 col-md-4 col-lg-4 col-xl-4"  style="padding-left: 5px; padding-right: 5px;"> 
                 <label class="control-label">Cliente</label>
-                <input type="text" id="ClienteClave" name="ClienteClave" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
-            </div>
-            <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-3"  style="padding-left: 5px; padding-right: 5px;"> 
-                <div class="form-group">
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <select id="ClienteFactura" name="ClienteFactura" class="form-control form-control-sm mt-4">
-                                <option></option>
-                                <?php
-//                                YA CONTIENE LOS BLOQUEOS DE VENTA
-                                foreach ($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
-                                    print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
-                                }
-                                ?>
-                            </select>
-                            <div class="input-group-append">
-                                <button type="button" id="btnVerTiendax" name="btnVerTiendax" style="padding: 8px 15px 8px 15px !important; " class="btn btn-info btn-sm mx-1 grouped d-none animated fadeIn">
-                                    <span class="fa fa-exclamation"></span>
-                                </button>
-
-                                <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info btn-sm d-none" style="padding: 8px 15px 8px 15px !important; ">
-                                    <span class="fa fa-eye"></span>
-                                </button>
-
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 mb-1">
+                        <input type="text" id="ClienteClave" name="ClienteClave" autofocus="" class="form-control form-control-sm" placeholder="CLAVE">
                     </div>
+                    <div class="col-12 col-xs-12 col-sm-6 col-md-8 col-lg-9 col-xl-9">
+                        <select id="ClienteFactura" name="ClienteFactura" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+//                                YA CONTIENE LOS BLOQUEOS DE VENTA
+                            foreach ($this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE, C.Zona AS ZONA, C.ListaPrecios AS LISTADEPRECIO FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result() as $k => $v) {
+                                print "<option value='{$v->CLAVE}' lista='{$v->LISTADEPRECIO}' zona='{$v->ZONA}'>{$v->CLIENTE}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div> 
                 </div>
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 " style="padding-left: 5px; padding-right: 5px;">
@@ -646,7 +637,7 @@
         <div class="modal-content blinkb">
             <div class="modal-header">
                 <h5 class="modal-title"><span class = "fa fa-store-alt"></span> Consignar a</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
                     <span aria-hidden="true">&times;
                     </span>
                 </button>
@@ -954,6 +945,7 @@
         TiendaClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ConsignarATienda[0].selectize.setValue(TiendaClave.val());
+                onDisable(ConsignarATienda);
             }
         });
         PrecioFacturacion.on('keydown keypress keyup focusout', function () {
@@ -971,7 +963,12 @@
             if (e.keyCode === 13) {
                 mdlConsignarA.modal('hide');
                 btnVerTienda.removeClass("d-none");
-                TPFactura.focus().select();
+                if (TPFactura.val()) {
+                    PAGFactura.focus().select();
+                } else {
+                    TPFactura.focus().select();
+                }
+                onEnable(ConsignarATienda);
                 handleEnterDiv(pnlTablero);
             }
         }).click(function () {
@@ -1822,9 +1819,7 @@
         //        onoffhandle = !onoffhandle;
         //        Tienda[0].selectize.focus();
 
-        mdlConsignarA.modal({
-            backdrop: false
-        });
+        mdlConsignarA.modal('show');
     }
 
     function onDesactivarEnter() {
@@ -2092,7 +2087,7 @@
                                 btnControlCompleto.attr('disabled', true);
                                 onNotifyOldPCE('', 'EL CONTROL AUN NO ESTA TERMINADO O YA ESTA FACTURADO COMPLETAMENTE.', 'info', "bottom", "center");
                                 onCampoInvalido(pnlTablero, ' * EL CONTROL AÚN NO ESTÁ TERMINADO O YA ESTA FACTURADO COMPLETAMENTE. * ', function () {
-                                    
+
                                     Control.focus().select();
                                     btnFacturaXAnticipoDeProducto.attr('disabled', true);
                                     btnControlInCompleto.attr('disabled', true);
@@ -2212,7 +2207,7 @@
         onBeep(1);
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
-        onObtenerCodigoSatXEstilo(); 
+        onObtenerCodigoSatXEstilo();
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';

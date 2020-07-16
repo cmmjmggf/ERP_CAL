@@ -23,15 +23,15 @@
                             <th>ID</th>
                             <th>No</th>
                             <th>Nombre</th>
-                            <th>Dire</th>
-                            <th>Col</th>
-                            <th>Ciu</th>
-                            <th>RFC</th>
+                            <th>Dirección</th>
+                            <th>Colonia</th>
+                            <th>Ciudad</th>
+                            <th>R.F.C.</th>
                             <th># de seg. social</th>
                             <th>St  </th>
                             <th>Ingreso</th>
                             <th>T-S</th>
-                            <th>Depto</th>
+                            <th>Departamento</th>
                             <th>Salario</th>
                             <th>Cel</th>
                             <th>%</th>
@@ -977,12 +977,16 @@
     .card input{
         border-color: #000;
     } 
-    table tbody td:eq(0) {
-        font-size: 15px;
+    table tbody td:eq(0), table tbody tr{
+        font-size: 25px !important;
         font-weight: bold;
     }
     .selectize-input {
         border: 1px solid #000000;
+    }
+    table thead th  {
+        background-color: #000; 
+        color: #fff;
     }
 </style>
 <?php

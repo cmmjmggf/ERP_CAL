@@ -63,9 +63,37 @@ class Empleados extends CI_Controller {
     }
 
     public function getRecords() {
-        try {
-            print json_encode($this->Empleados_model->getRecords($this->input->get('Estatus')));
-        } catch (Exception $exc) {
+        try { 
+            $this->db->select("E.ID, "
+                            . "E.Numero AS No, "
+                            . "E.NumFis, E.Egresos, E.Activos, "
+                            . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                            . "E.Busqueda, "
+                            . "E.Direccion AS Dire, "
+                            . "E.Colonia AS Col, "
+                            . "E.Ciudad AS Ciu, "
+                            . "E.Estado, "
+                            . "E.CP, "
+                            . "E.RFC, E.CURP, (CASE WHEN E.NoIMSS <> 0 AND E.NoIMSS <> \"0\" THEN E.NoIMSS ELSE \" \" END)  AS Seg, "
+                            . "date_format(str_to_date(E.FechaIngreso,'%Y-%m-%d'),'%d/%m/%Y') as FechaIngreso, "
+                            . "E.Nacimiento, "
+                            . "E.FechaIMSS, "
+                            . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, (SELECT CONCAT(D.Clave,\" \",D.Descripcion)  FROM departamentos AS D WHERE D.Clave = E.DepartamentoFisico limit 1) AS DepartamentoFisico, E.DepartamentoCostos, "
+                            . "E.AltaBaja, E.Puesto, E.Tarjeta, E.Egreso, E.Comedor, E.TBanamex, E.TBanbajio, "
+                            . "E.FijoDestajoAmbos, E.CuentaBB, E.Beneficiario, E.Parentesco, E.Porcentaje, "
+                            . "E.Sueldo, (CASE WHEN E.IMSS <>0 THEN E.IMSS ELSE \" \" END) AS IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
+                            . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
+                            . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
+                            . "E.Foto, E.Registro, E.Estatus ", false)
+                    ->from('empleados AS E');
+            if ($this->input->get('Estatus') === '1') {
+                $this->db->where('E.altabaja', '1');
+            } else {
+                $this->db->where_in('E.altabaja', array('1', '2'));
+            } 
+            print json_encode($this->db->get()->result());
+       
+            } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
