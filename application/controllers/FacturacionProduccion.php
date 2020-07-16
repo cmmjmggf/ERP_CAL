@@ -1161,7 +1161,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $pr["certificado"] = $CERTIFICADO_CFD;
                             $pr["cliente"] = $x['CLIENTE'];
                             $jc->setParametros($pr);
-                            $jc->setJasperurl('jrxml\facturacion\facturaelec39.jasper');
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec100.jasper');
                             $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
