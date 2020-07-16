@@ -39,8 +39,8 @@ A.Devolucion *1 AS DEVOLUCION, IFNULL(A.Basura*1,0) AS BASURA, A.Piocha  AS PIOC
  ((IFNULL(A.Abono,0)*1) - (IFNULL(A.Devolucion,0) *1) /OP.Pares) AS CONS_PROMXPAR
 
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion
-INNER JOIN asignapftsacxc AS A ON OP.ID = A.OrdenProduccion AND A.Articulo = OPD.Articulo
-WHERE OP.Maquila = $P{MAQUILA} AND OP.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 2 AND
+INNER JOIN asignapftsacxc AS A ON OP.ControlT = A.Control AND A.Articulo = OPD.Articulo
+WHERE OP.Maquila = $P{MAQUILA} AND OP.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 2 AND A.Fraccion = 99 AND
 (CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
 GROUP BY  OP.ControlT,  A.Articulo
 ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>

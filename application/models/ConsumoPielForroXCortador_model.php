@@ -71,6 +71,15 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             if ($ANO !== '') {
                 $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANO'", null, false);
             }
+
+            switch (intval($TIPO)) {
+                case 1:
+                    $this->db->where("A.Fraccion = 100", null, false);
+                    break;
+                case 2:
+                    $this->db->where("A.Fraccion = 99", null, false);
+                    break;
+            }
             $this->db->where("A.TipoMov = '$TIPO'", null, false)->where('E.AltaBaja', 1);
             return $this->db->get()->result();
         } catch (Exception $exc) {
@@ -98,6 +107,15 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             if ($ANO !== '') {
                 $this->db->where("YEAR(str_to_date(A.Fecha, '%d/%m/%Y')) = '$ANO'", null, false);
             }
+
+            switch (intval($TIPO)) {
+                case 1:
+                    $this->db->where("A.Fraccion = 100", null, false);
+                    break;
+                case 2:
+                    $this->db->where("A.Fraccion = 99", null, false);
+                    break;
+            }
             $this->db->where("A.TipoMov = '$TIPO'", null, false)->where('E.AltaBaja', 1);
             $this->db->group_by('A.Estilo');
             $data = $this->db->get()->result();
@@ -115,18 +133,17 @@ class ConsumoPielForroXCortador_model extends CI_Model {
                             . "((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS Consumo, "
                             . "ifnull(OP.CantidadPiel1,0) AS Cantidad, A.Abono, "
                             . "A.Devolucion, A.Basura, A.Piocha,"
-                     
                             . "(ifnull(OP.CantidadPiel1,0)  - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0))) AS Diferencia,"
                             . "(A.PrecioActual * SUM(OPD.Cantidad)) AS SistemaPesos,"
                             . "(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS RealPesos, "
                             . "(A.PrecioActual * (SUM(OPD.Cantidad) - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0)))) AS DifPesos,"
-                            . "(A.Abono/OP.Pares) AS DCM2," 
-                    . " ((A.Abono - IFNULL(A.Devolucion,0))/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE"
-                    . ",((SUM(OPD.Cantidad)-(A.Abono-IFNULL(A.Devolucion,0)))/OP.Pares) AS PORCENTAJEx"
-                    . "", false)
+                            . "(A.Abono/OP.Pares) AS DCM2,"
+                            . " ((A.Abono - IFNULL(A.Devolucion,0))/OP.Pares)/(SUM(OPD.Cantidad)/OP.Pares) AS PORCENTAJE"
+                            . ",((SUM(OPD.Cantidad)-(A.Abono-IFNULL(A.Devolucion,0)))/OP.Pares) AS PORCENTAJEx"
+                            . "", false)
                     ->from("ordendeproduccion AS OP")
                     ->join("ordendeproducciond AS OPD", "OP.ID = OPD.OrdenDeProduccion")
-                    ->join("asignapftsacxc AS A", "OP.ID = A.OrdenProduccion AND A.Articulo = OPD.Articulo");
+                    ->join("asignapftsacxc AS A", "OP.ControlT = A.Control AND A.Articulo = OPD.Articulo");
 
             if ($FECHAINICIAL !== '' && $FECHAFINAL !== '') {
                 $this->db->where("STR_TO_DATE(A.Fecha, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$FECHAFINAL', \"%d/%m/%Y\") AND STR_TO_DATE('$FECHAINICIAL', \"%d/%m/%Y\")");
@@ -152,9 +169,17 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             if ($ESTILO !== '') {
                 $this->db->where("A.Estilo = '$ESTILO'", null, false);
             }
-            $this->db->where("A.TipoMov = '$TIPO'", null, false)
-                    ->group_by('OP.ControlT')->group_by('OP.ControlT')->group_by('A.Articulo')
-                    ->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
+
+            switch (intval($TIPO)) {
+                case 1:
+                    $this->db->where("A.Fraccion = 100", null, false);
+                    break;
+                case 2:
+                    $this->db->where("A.Fraccion = 99", null, false);
+                    break;
+            }
+
+            $this->db->where("A.TipoMov = '$TIPO' ", null, false)->group_by('OP.ControlT')->group_by('OP.ControlT')->group_by('A.Articulo')->order_by('OPD.Articulo', 'ASC')->order_by('OP.ControlT', 'ASC');
             $str = $this->db->last_query();
 //            print $str."\n"."\n";
             return $this->db->get()->result();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.7320538214602954"/>
-	<property name="ireport.x" value="1159"/>
+	<property name="ireport.x" value="566"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -39,8 +39,8 @@ A.Devolucion *1 AS DEVOLUCION, IFNULL(A.Basura*1,0) AS BASURA, A.Piocha  AS PIOC
  ((IFNULL(A.Abono,0)*1) - (IFNULL(A.Devolucion,0) *1) /OP.Pares) AS CONS_PROMXPAR
 
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion
-INNER JOIN asignapftsacxc AS A ON OP.ID = A.OrdenProduccion AND A.Articulo = OPD.Articulo
-WHERE OP.Maquila = $P{MAQUILA} AND OP.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND
+INNER JOIN asignapftsacxc AS A ON OP.ControlT = A.Control AND A.Articulo = OPD.Articulo
+WHERE OP.Maquila = $P{MAQUILA} AND OP.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND A.Fraccion = 100 AND
 (CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
 GROUP BY  OP.ControlT,  A.Articulo
 ORDER BY ABS(A.Empleado) ASC,  ABS(OP.ControlT) ASC]]>
