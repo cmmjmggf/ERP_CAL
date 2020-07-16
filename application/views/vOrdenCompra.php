@@ -412,7 +412,7 @@
                             getPrecioCompraByArticuloByProveedor(txtart, prov);
                             pnlDatosDetalle.find('#Cantidad').focus().select();
                         } else {
-                            swal('ERROR', 'EL ARTÍCULO NO EXISTE O NO COINCIDE CON EL PROVEEDOR', 'warning').then((value) => {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE, ESTÁ DADO DE BAJA Ó NO COINCIDE CON EL PROVEEDOR', 'warning').then((value) => {
                                 pnlDatosDetalle.find("#sArticulo")[0].selectize.clear(true);
                                 pnlDatosDetalle.find('#Articulo').focus().val('');
                             });

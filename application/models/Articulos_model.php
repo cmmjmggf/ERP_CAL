@@ -15,10 +15,15 @@ class Articulos_model extends CI_Model {
             return $this->db->select("A.ID AS ID, A.Clave AS Clave, "
                                     . "A.Descripcion AS Descripcion,"
                                     . "(SELECT Descripcion as Unidad from unidades where clave = A.UnidadMedida ) as Unidad, "
-                                    . "concat('$',(SELECT FORMAT (ifnull(Precio,0),2) as Precio from preciosmaquilas where Maquila = 1 and Articulo = A.Clave limit 1)) as Precio "
+                                    . "concat('$',(SELECT FORMAT (ifnull(Precio,0),2) as Precio from preciosmaquilas where Maquila = 1 and Articulo = A.Clave limit 1)) as Precio,"
+                                    . "(CASE "
+                                    . "WHEN A.Estatus ='ACTIVO' THEN CONCAT('<span class=\'badge badge-success \'>','ACTIVO','</span>') "
+                                    . "WHEN A.Estatus ='INACTIVO' THEN CONCAT('<span class=\'badge badge-danger \'>','INACTIVO','</span>')"
+                                    . " END) AS Estatus "
                                     . "", false)
                             ->from("articulos AS A")
-                            ->where('A.Estatus', 'ACTIVO')->get()->result();
+                            //->where('A.Estatus', 'ACTIVO')
+                            ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -46,7 +51,9 @@ class Articulos_model extends CI_Model {
             if ($Grupo !== '') {
                 $this->db->where('A.Grupo', $Grupo);
             }
-            return $this->db->where('A.Estatus', 'ACTIVO')->get()->result();
+            return $this->db
+                            //->where('A.Estatus', 'ACTIVO')
+                            ->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

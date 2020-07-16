@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Etiquetas para Zapica</h5>
+                <h5 class="modal-title">Etiquetas para Sapica</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -45,8 +45,8 @@
             $.each(mdlEtiZapica.find("select"), function (k, v) {
                 mdlEtiZapica.find("select")[k].selectize.clear(true);
             });
-            getLineas();
-            getTemporadas();
+            getLineasEtiZapica();
+            getTemporadasEtiZapica();
             mdlEtiZapica.find('#Ano').focus();
         });
 
@@ -123,7 +123,7 @@
         });
     });
 
-    function getLineas() {
+    function getLineasEtiZapica() {
         $.getJSON(base_url + 'index.php/Lineas/' + 'getLineasSelect').done(function (data, x, jq) {
             $.each(data, function (k, v) {
                 mdlEtiZapica.find("#Linea")[0].selectize.addOption({text: v.Linea, value: v.Clave});
@@ -135,7 +135,7 @@
         });
     }
 
-    function getTemporadas() {
+    function getTemporadasEtiZapica() {
         $.getJSON(base_url + 'index.php/Lineas/' + 'getTemporadas').done(function (data, x, jq) {
             $.each(data, function (k, v) {
                 mdlEtiZapica.find("#Temporada")[0].selectize.addOption({text: v.Temporada, value: v.Clave});

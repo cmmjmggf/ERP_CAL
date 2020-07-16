@@ -19,6 +19,7 @@
                             <th>Descripción</th>
                             <th>Unidad</th>
                             <th>Precio</th>
+                            <th>Estatus</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -90,6 +91,14 @@
                             <option value=""></option>
                             <option value="0">0-PRODUCCIÓN</option>
                             <option value="222">222-PROTOTIPO</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-2">
+                        <label for="" >Estatus*</label>
+                        <select id="Estatus" name="Estatus" class="form-control form-control-sm required"  required="">
+                            <option value=""></option>
+                            <option value="ACTIVO">ACTIVO</option>
+                            <option value="INACTIVO">INACTIVO</option>
                         </select>
                     </div>
                     <div class="w-100"></div>
@@ -730,7 +739,7 @@
             "ajax": {"url": master_url + 'getRecords',
                 "dataSrc": ""
             },
-            "columns": [{"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}, {"data": "Unidad"}, {"data": "Precio"}
+            "columns": [{"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}, {"data": "Unidad"}, {"data": "Precio"}, {"data": "Estatus"}
             ],
             "columnDefs": [{
                     "targets": [0],
@@ -947,5 +956,8 @@
     }
     .form-control {
         border: 1px solid #9E9E9E;
+    }
+    .badge {
+        font-size: 12px;
     }
 </style>
