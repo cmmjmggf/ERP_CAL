@@ -441,7 +441,7 @@
             placement: placement_config,
             animate: {
                 enter: 'animated bounceIn',
-                exit: 'animated fadeOutUp'
+                exit: 'animated bounceOut'
             },
             onClose: function () {
                 funcion();

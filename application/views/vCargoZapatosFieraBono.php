@@ -273,12 +273,4 @@
             });
         }
     }
-</script>
-<style>
-    table tbody tr {
-        font-size: 0.75rem !important;
-    }
-    .text-strong {
-        font-weight: bolder;
-    }
-</style>
+</script> 

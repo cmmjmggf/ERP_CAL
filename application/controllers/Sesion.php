@@ -73,6 +73,22 @@ class Sesion extends CI_Controller {
                     break;
                 case 'DESTAJOS':
                     switch ($this->session->USERNAME) {
+                        case '333333':
+                            /*
+                             *
+                             * 60 FOLEAR CORTE CALIDAD
+                             * 70 TROQUELAR PLANTILLA
+                             * 71 TROQUELAR MUESTRA
+                             * 72 TROQUELAR NORMA
+                             * 75 TROQUELAR CORTE
+                             * 204 EMPALMAR P'LASER
+                             * 337 RECORTAR FORRO LASER
+                             *
+                             * */
+                            $dt["TYPE"] = 3;
+                            $this->load->view('vAvance3');
+                            $is_valid = true;
+                            break;
                         case '777777':
                             /*
                              *
@@ -241,7 +257,9 @@ class Sesion extends CI_Controller {
         try {
             $l = new Logs("SALIO DEL SISTEMA", "SALIO DEL SISTEMA", $this->session);
             $userdata = array();
-            foreach ($this->session->userdata as $k => $v) {
+            $sesion_data = $this->session->userdata;
+            unset($sesion_data['TEMA']);
+            foreach ($sesion_data as $k => $v) {
                 array_push($userdata, $k);
             }
             $this->session->unset_userdata($userdata);

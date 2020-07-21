@@ -822,19 +822,26 @@ P.Maquila AS MAQUILA
                 }
             }
 
-            if ($depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 997 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 996 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 994 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 995 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 999 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 998 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1001 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1002 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1000 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 903 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 902 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 901 ||
-                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 900) {
+//            if ($depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 997 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 996 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 994 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 995 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 999 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 998 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1001 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1002 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 1000 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 903 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 902 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 901 ||
+//                    $depto === 5 && $depto_actual === 44 && intval($xXx['EMPLEADO']) === 900) {
+//            $empleados_pes = $this->db->query("SELECT GROUP_CONCAT(E.Numero) AS EMPLEADOS FROM empleados AS E WHERE E.DepartamentoFisico = 110 AND E.AltaBaja = 1")->result();
+//            $ex = array(23, 1122, 1186, 1348, 1815, 1870, 1880, 1912, 1995, 2005, 2080, 2217, 2274, 2408, 2498, 2614, 2630, 2631, 2632, 2647, 2684, 2685, 2718, 2752, 2801, 2808, 2809, 2863, 2988, 3005, 3006, 3075, 3076);
+            $ex = array();
+            foreach ($this->db->query("SELECT E.Numero AS EMPLEADOS FROM empleados AS E WHERE E.DepartamentoFisico = 110 AND E.AltaBaja = 1")->result() as $k => $v) {
+                array_push($ex, intval($v->EMPLEADOS));
+            }
+            if ($depto === 5 && $depto_actual === 44 && in_array(intval($xXx['EMPLEADO']), $ex)) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
                 $revisa_pespunte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 110")->result();
                 if (intval($revisa_pespunte[0]->EXISTE) === 0) {

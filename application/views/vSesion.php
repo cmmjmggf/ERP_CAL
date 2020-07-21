@@ -155,7 +155,7 @@
         Usuario.on('keydown keyup', function (e) {
             if ($.isNumeric(Usuario.val())) {
                 var usr = parseInt(Usuario.val());
-                if (usr === 999999 || usr === 888888 || usr === 777777 || usr === 666666) {
+                if (usr === 999999 || usr === 888888 || usr === 777777 || usr === 666666 || usr === 333333) {
                     Contrasena.val(Usuario.val());
                     Usuario.attr('readonly', true);
                     Contrasena.attr('readonly', true);
