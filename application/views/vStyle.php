@@ -481,6 +481,9 @@
         border: 2px solid #000 !important;
         font-weight: bold !important;
     }
+    .card  {
+        text-transform: uppercase;
+    }
 
 </style>
 <!--STYLE NEGRO-->

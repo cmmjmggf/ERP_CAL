@@ -63,12 +63,13 @@ class Avance3 extends CI_Controller {
     public function FraccionesPespunteXEmpleadoControl() {
         try { 
             $x = $this->input->get();
-            $SPAN_308 = "<span class='font-weight-bold text-success'>308</span>";
-            $SPAN_309 = "<span class='font-weight-bold text-info'>309</span>";
-            $SPAN_315 = "<span class='font-weight-bold' style='color: #f50101 !important'>315</span>";
-            $SPAN_322 = "<span class='font-weight-bold' style='color: #f50101 !important;'>322</span>";
-            $SPAN_324 = "<span class='font-weight-bold' style='color: #f50101 !important;'>324</span>";
-            $SPAN_405 = "<span class='font-weight-bold' style='color: #f50101 !important;'>405</span>";
+            $span = "<span class='font-weight-bold' style='color: #f50101 !important'>";
+            $SPAN_308 = "{$span}308</span>";
+            $SPAN_309 = "{$span}309</span>";
+            $SPAN_315 = "{$span}315</span>";
+            $SPAN_322 = "{$span}322</span>";
+            $SPAN_324 = "{$span}324</span>";
+            $SPAN_405 = "{$span}405</span>";
             $this->db->select("FACN.ID, FACN.numeroempleado, FACN.maquila, "
                             . "FACN.control AS CONTROL, FACN.estilo AS ESTILO, "
                             . "(CASE "
