@@ -1,16 +1,29 @@
-<div class="card mr-2 ml-2 animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
+<div class="card animated fadeIn" id="pnlTablero" style="background-color:  #fff !important;">
     <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
             
         </div>-->
-    <div class="card-body " style="padding: 7px 10px 10px 10px !important;">
+    <div class="card-body " >
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
-
+                <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" 
+                        class="btn btn-danger" style="background-color: #005efb !important; border-color: #005efb;">
+                    <span class="fa fa-file"></span> ADDENDA COPPEL
+                </button>
+                <button type="button" id="PrevisualizarDocto" name="PrevisualizarDocto" 
+                        class="btn btn-success" style="background-color: #13af19 !important;">
+                    <span class="fa fa-eye"></span>   Previsualiza docto 
+                </button>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-6 text-center">
-                <h5 class="font-weight-bold font-italic text-danger">DOCUMENTOS DIRECTOS DE CLIENTES VARIOS</h5>
+                <h5 class="font-weight-bold font-italic" style="color: #ff0000 !important;">DOCUMENTOS DIRECTOS DE CLIENTES VARIOS</h5>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3" align="right">
+                
+                <button type="button" id="btnCierraDocto" name="btnCierraDocto" 
+                        class="btn btn-danger" style="background-color: #fb1700 !important;">
+                    <span class="fa fa-lock"></span> CIERRA DOCUMENTO
+                </button>
+                
                 <button type="button" id="btnCambiaTienda" name="btnCambiaTienda"  
                         class="btn btn-primary d-none selectNotEnter" 
                         data-toggle="tooltip" data-placement="bottom" title="Cambia tienda" 
@@ -330,20 +343,6 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-            </div>
-            <div class="col-4" align="center">
-                <button type="button" id="btnCierraDocto" name="btnCierraDocto" 
-                        class="btn btn-danger btn-block my-2">
-                    <span class="fa fa-lock"></span>   Cierra docto
-                </button>
-                <button type="button" id="PrevisualizarDocto" name="PrevisualizarDocto" 
-                        class="btn btn-info btn-block my-2">
-                    <span class="fa fa-eye"></span>  Previsualiza docto
-                </button>
-                <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" 
-                        class="btn btn-warning btn-block my-2">
-                    <span class="fa fa-file-medical"></span>   Addenda Coppel
-                </button>
             </div>
         </div><!--        END CARD BLOCK-->
     </div>

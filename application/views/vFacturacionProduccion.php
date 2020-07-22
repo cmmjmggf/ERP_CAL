@@ -2638,6 +2638,10 @@
     button {
         font-weight: bold !important;
     }
+    table thead tr{
+        background-color: #000 !important;
+        color: #fff !important;
+    }
 </style>
 <?php
 $this->load->view('vAdendaCoppel');
