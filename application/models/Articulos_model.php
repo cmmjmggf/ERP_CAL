@@ -119,7 +119,7 @@ class Articulos_model extends CI_Model {
 
     public function getID() {
         try {
-            return $this->db->select("CONVERT(A.Clave, UNSIGNED INTEGER) AS CLAVE")->from("articulos AS A")->where("A.Estatus", "ACTIVO")->order_by("CLAVE", "DESC")->limit(1)->get()->result();
+            return $this->db->select("CONVERT(A.Clave, UNSIGNED INTEGER) AS CLAVE")->from("articulos AS A")->order_by("CLAVE", "DESC")->limit(1)->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
