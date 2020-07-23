@@ -1,4 +1,4 @@
-<div class="card m-3 animated fadeIn d-none" id="pnlTablero">
+<div class="card mx-3 animated fadeIn d-none" id="pnlTablero">
     <div class="card-body">
         <div class="row">
             <div class="col-sm-2 float-left">
@@ -11,7 +11,7 @@
                     <option></option>
                     <?php
                     //YA CONTIENE LOS BLOQUEOS DE VENTA
-                    $clientes = $this->db->query("SELECT C.Clave AS CLAVE, CONCAT(C.Clave, \" - \",C.RazonS) AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY ABS(C.Clave) ASC;")->result();
+                    $clientes = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus IN('ACTIVO') ORDER BY C.RazonS ASC;")->result();
                     foreach ($clientes as $k => $v) {
                         print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
                     }
@@ -52,7 +52,7 @@
     <form id="frmNuevo">
         <fieldset>
             <!--PRIMER CONTENEDOR-->
-            <div class="card  m-3 ">
+            <div class="card  mx-3 ">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 float-left">
@@ -90,13 +90,13 @@
                             <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="iPedidoxCliente" name="iPedidoxCliente" required="" placeholder="">
                         </div>
                         <div class="col-12 col-sm-5 col-md-3 col-lg-2 col-xl-3">
-                            <label for="Cliente" >--</label>
+                            <label for="Cliente" ></label>
                             <select class="form-control form-control-sm NotSelectize selectNotEnter" id="PedidoxCliente" name="PedidoxCliente" required="" placeholder="">
                                 <option></option>
                                 <?php
                                 //YA CONTIENE LOS BLOQUEOS DE VENTA
-                                $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C LEFT JOIN bloqueovta AS B ON C.Clave = B.cliente WHERE C.Estatus IN('ACTIVO') AND B.cliente IS NULL  OR C.Estatus IN('ACTIVO') AND B.`status` = 2 ORDER BY C.RazonS ASC;")->result();
-                                foreach ($clientesPnl as $k => $v) {
+//                                $clientesPnl = $this->db->query("SELECT C.Clave AS CLAVE, C.RazonS AS CLIENTE FROM clientes AS C WHERE C.Estatus IN('ACTIVO') ORDER BY C.RazonS ASC;")->result();
+                                foreach ($clientes as $k => $v) {
                                     print "<option value=\"{$v->CLAVE}\">{$v->CLIENTE}</option>";
                                 }
                                 ?>
@@ -1032,37 +1032,63 @@
             if ($(this).val() !== '' && nuevo) {
                 //OBTENER AGENTE POR CLIENTE
                 Cliente = pnlDatos.find("#PedidoxCliente").val();
-                $.getJSON(master_url + 'getAgenteXCliente', {Cliente: Cliente}).done(function (data) {
-                    if (data.length > 0) {
-                        pnlDatos.find('#iPedidoxCliente').val(Cliente);
-                        pnlDatos.find("#Agente")[0].selectize.clear(true);
-                        pnlDatos.find("#Agente")[0].selectize.setValue(data[0].Agente);
-                        pnlDatos.find("#Agente")[0].selectize.focus();
+
+                $.getJSON('<?php print base_url('Pedidos/onRevisarBloqueo'); ?>', {CLIENTE: Cliente}).done(function (a) {
+                    if (parseInt(a[0].BLOQUEADO) === 1) {
+                        onCampoInvalido(pnlDatos, "ESTE CLIENTE ESTA BLOQUEADO, INTENTE CON OTRO.", function () {
+                            pnlDatos.find('#iPedidoxCliente').focus().select();
+                            onClear(pnlDatos.find("#PedidoxCliente"));
+                            onClear(pnlDatos.find("#Agente"));
+                            onDisable(btnAcepta);
+                        });
+                    } else {
+                        $.getJSON('<?php print base_url('Pedidos/getAgenteXCliente'); ?>', {Cliente: Cliente}).done(function (data) {
+                            if (data.length > 0) {
+                                pnlDatos.find('#iPedidoxCliente').val(Cliente);
+                                pnlDatos.find("#Agente")[0].selectize.clear(true);
+                                pnlDatos.find("#Agente")[0].selectize.setValue(data[0].Agente);
+                                pnlDatos.find("#Agente")[0].selectize.focus();
+                            }
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        });
+                        onEnable(btnAcepta);
                     }
-                }).fail(function (x, y, z) {
+                }).fail(function (x) {
                     getError(x);
+                }).always(function () {
+
                 });
             } else {
                 pnlDatos.find("#Agente")[0].selectize.clear(true);
             }
         });
+
         pnlDatos.find('#iPedidoxCliente').keydown(function (e) {
             if (e.keyCode === 13) {
                 var txtcliente = $(this).val();
                 if (txtcliente) {
+                    onOpenOverlay('');
                     $.getJSON(master_url + 'onVerificaCliente', {Cliente: txtcliente}).done(function (data) {
                         if (data.length > 0) {
                             pnlDatos.find("#PedidoxCliente")[0].selectize.addItem(txtcliente, false);
+                            onEnable(btnAcepta);
+                            onDisable(btnAcepta);
                         } else {
-                            swal('ERROR', 'EL CLIENTE NO EXISTE', 'warning').then((value) => {
+                            onCampoInvalido(pnlDatos, "EL CLIENTE NO EXISTE", function () {
                                 pnlDatos.find("#Agente")[0].selectize.clear(true);
                                 pnlDatos.find("#PedidoxCliente")[0].selectize.clear(true);
                                 pnlDatos.find('#iPedidoxCliente').focus().val('');
+                                onDisable(btnAcepta);
+                                pnlDatos.find('#iPedidoxCliente').focus().select();
                             });
                         }
                     }).fail(function (x) {
+                        onCloseOverlay();
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                         console.log(x.responseText);
+                    }).always(function () {
+                        onCloseOverlay();
                     });
                 }
             }
@@ -1092,7 +1118,7 @@
                 "dom": 'Bfrtip',
                 buttons: buttons,
                 "ajax": {
-                    "url": '<?php print base_url('peds'); ?>',
+                    "url": '<?php print base_url('Pedidos/getRecords'); ?>',
                     "dataSrc": ""
                 },
                 "columns": [
@@ -1128,6 +1154,7 @@
                     }
                 }
             });
+            
             tblPedidos.find('tbody').on('click', 'tr', function () {
                 HoldOn.open({
                     theme: 'sk-cube',

@@ -214,6 +214,9 @@
         Control.focus();
         Control.on('keydown', function (e) {
             if (e.keyCode === 13 && Control.val()) {
+                onClear(xEmpleado);
+                onClear(Empleado);
+                onClear(Fraccion);
                 getInfoXControl(Control.val());
             }
             if (e.keyCode === 8 && Control.val() === '' || e.keyCode === 13 && Control.val() === '') {
@@ -228,6 +231,12 @@
                 pnlTablero.find(".clave_color").text('-');
                 pnlTablero.find(".pares_del_control").text('-');
                 pnlTablero.find(".cliente_control").text('-');
+            }
+            if (e.keyCode === 8 && Control.val() === '' || e.keyCode === 46 && Control.val() === '' ||
+                    e.keyCode === 13 && Control.val() === '') {
+                onClear(xEmpleado);
+                onClear(Empleado);
+                onClear(xEmpleado);
             }
         });
 

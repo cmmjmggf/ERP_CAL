@@ -79,6 +79,15 @@ class Pedidos extends CI_Controller {
         }
     }
 
+    public function onRevisarBloqueo() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS BLOQUEADO fROM bloqueovta AS B WHERE B.cliente = {$x['CLIENTE']}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onVerificaCliente() {
         try {
             $x = $this->input->get();
@@ -130,7 +139,9 @@ class Pedidos extends CI_Controller {
 
     public function getRecords() {
         try {
-            print json_encode($this->pem->getRecords());
+            print json_encode($this->db->select("P.ID, P.Clave, P.Cliente AS Cliente, P.Agente Agente,P.FechaPedido,SUM(P.Pares) AS Pares", false)
+                            ->from('pedidox AS P')->group_by('P.Clave')->group_by('P.Cliente')
+                            ->order_by('P.FechaPedido', 'DESC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -191,7 +202,7 @@ class Pedidos extends CI_Controller {
                             ->where_not_in('P.stsavan', 14)
                             ->order_by('abs(S.Clave)', 'ASC')->get()->result();
 //            print $this->db->last_query();
-             print json_encode( $data);
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
