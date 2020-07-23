@@ -67,7 +67,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 
 //            $empleados = $this->db->query('SELECT E.* FROM empleados AS E '
 //                            . 'WHERE E.AltaBaja IN(1) '
-//                            . 'AND E.Incapacitado = 0')->result(); 
+//                            . 'AND E.Incapacitado = 0')->result();
             $empleados = $this->db->query('SELECT E.Numero, E.FijoDestajoAmbos, E.Sueldo, E.DepartamentoFisico, E.CelulaPorcentaje, E.Celula, E.Ahorro, E.Infonavit, E.Comida, E.Funeral, E.IMSS, E.Fierabono, E.FieraBonoPagos, E.Fonacot, E.ZapatosTDA, E.AbonoZap, E.SaldoPres, E.ISR, E.PressAcum, E.AbonoPres FROM empleados AS E '
                             . 'WHERE E.AltaBaja IN(1) '
                             . 'AND E.Incapacitado = 0')->result();
@@ -154,18 +154,48 @@ class GeneraNominaDeSemana extends CI_Controller {
                     } else {
                         $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = '{$v->Numero}' AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
                     }
+
+
+
                     /* 2.2 VERIFICAR QUE EL SUELDO_DESTAJO SEA IGUAL A CERO Y REVISAR SI LA CELULA TIENE ALGUN PORCENTAJE */
                     $SUELDO_FINAL_DESTAJO = 0;
-                    if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0 && intval($v->DepartamentoFisico) === 120) {
-
+                    if (floatval($v->CelulaPorcentaje) > 0 && intval($v->DepartamentoFisico) === 120) {
                         $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = 0 AND FPN.maquila = 100 AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
                         $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = 0  AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
-                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;  
+                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
+                    } else if (intval($SUELDO_DESTAJO[0]->SUBTOTAL) === 0 && floatval($v->CelulaPorcentaje) > 0 && intval($v->Celula) === 0) {//Para las demás celulas
+                        //  /* DECLARACION DE CELULAS */
+                        switch (intval($v->Celula)) {
+                            case 0:
+                                switch (intval($v->DepartamentoFisico)) {
+                                    case 180:
+                                        $NUMERO_CELULA = 993;
+                                        break;
+                                    case 190:
+                                        $NUMERO_CELULA = 991;
+                                        break;
+                                    case 200:
+                                        $NUMERO_CELULA = 1006;
+                                        break;
+                                    case 210:
+                                        $NUMERO_CELULA = 992;
+                                        break;
+                                    case 220:
+                                        $NUMERO_CELULA = 1005;
+                                        break;
+                                }
+                                break;
+                        }
+                        //MONTADO A, MONTADO B, ADORNO A, ADORNO B
+                        $SUELDO_DESTAJO = $this->db->query("SELECT CASE WHEN SUM(IFNULL(subtot,0)) IS NULL THEN 0 ELSE SUM(IFNULL(subtot,0)) END AS SUBTOTAL FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA} AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                        $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL * $v->CelulaPorcentaje;
+                        $PARES_TRABAJADOS_PAGADOS = $this->db->query("SELECT CASE WHEN SUM(pares) IS NULL THEN 0 ELSE SUM(pares) END AS PARES FROM fracpagnomina AS FPN WHERE FPN.numeroempleado = {$NUMERO_CELULA}  AND FPN.anio = {$x['ANIO']} AND FPN.semana = {$x['SEMANA']}")->result();
+                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
                     } else {
                         /* 2.3 SI EL EMPLEADO */
                         $SUELDO_FINAL_DESTAJO = $SUELDO_DESTAJO[0]->SUBTOTAL;
-                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES; 
+                        $PARES_TRABAJADOS = $PARES_TRABAJADOS_PAGADOS[0]->PARES;
                     }
                     /* 2.4 VERIFICAR SI ESTA EN PRENOMINA */
                     $EXISTE_EN_PRENOMINA = $this->onExisteEnPrenomina($x['ANIO'], $x['SEMANA'], $v->Numero, 1);
@@ -312,7 +342,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "depto" => $v->DepartamentoFisico
                         ));
                     } else {
-                        
+
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
@@ -358,7 +388,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $this->onISR($x['ANIO'], $x['SEMANA'], $v, $ASISTENCIAS);
             }
             /* 06/02/2020
-             * 
+             *
              * 10 GRATIFICACION
              * 15 OTRAS PERCEPCIONES
              * 20 DIA FESTIVO
@@ -744,7 +774,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $empleados = $this->db->query("SELECT E.Numero, E.SaldoPres,E.AbonoPres, "
                             . "(SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero) AS ACUMULADO_PRES, "
                             . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.año = {$ANIO}  AND PP.status IN(1,2)) AS TOTAL_PAGADO,
-(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
+(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);
@@ -896,7 +926,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                            ->order_by('E.DepartamentoFisico', 'ASC')
 //                            ->order_by('E.Numero', 'ASC')
 //                            ->order_by('E.FijoDestajoAmbos', 'ASC')
-//                            ->get()->result(); 
+//                            ->get()->result();
             /* 3 ITERAR LOS EMPLEADOS A VALIDAR */
             foreach ($empleados as $k => $v) {
                 $sueldin = $v->Sueldo; /* SUELDO DIARIO */
