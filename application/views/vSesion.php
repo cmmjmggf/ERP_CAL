@@ -7,9 +7,8 @@
         font-weight: 400;
         line-height: 1.5;
         color: #76838f;
-        text-align: left;
-        background-color: #F3F3F9;
-        background-color: #dddce1;
+        text-align: left; 
+        background-color: #fff;
     }
 
     body {
@@ -18,21 +17,33 @@
         -ms-flex-align: center;
         align-items: center;
         padding-top: 40px;
-        padding-bottom: 40px;
-        background: none !important;
+        padding-bottom: 40px; 
     }
     .div-login {
         width: 100%;
         max-width: 330px;
         padding: 0px;
         margin: auto;
-    }
-    .card {
-        background-color: #fff;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
-    }
+    } 
     .btn{
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
+    }
+    body, html {
+        height: 100%; 
+        /* The image used */ 
+        <?php if ($this->session->TEMA === "ACTUAL") { ?>
+            background-image: url("<?php print base_url('media/x7.jpg'); ?>");
+            <?php
+        }
+        ?>
+
+        /* Full height */
+        height: 100%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 </style>
 <div id="mdlOlvideContrasena" class="modal fade" tabindex="-1" role="dialog">
@@ -57,31 +68,67 @@
         </div>
     </div>
 </div>
-
-<div id="pnlAcceso" class="card  div-login">
-    <div class="card-body" style="padding: 15px;">
-        <div class="row" style="padding: 15px;">
-            <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
-                <!--<span class="fa fa-user-lock fa-2x"></span>-->
-                <span class="fa fa-key fa-2x"></span>
-                <h4 class="m-3">CONTROL DE ACCESO</h4>
-            </div>
-            <div class="col-12">
-                <input type="email" id="Usuario" name="Usuario" class="form-control not-form-small" placeholder="Usuario" required autofocus="">
-            </div >
-            <div class="col-12">
-                <input type="password" id="Contrasena" name="Contrasena" class="form-control not-form-small mt-3" placeholder="Contraseña" required>
-            </div >
-            <div id="iplocal" class="text-center d-none col-12">
-                <span class="font-weight-bold font-italic" style="font-size: 16px"><?php print ($_SERVER['HTTP_HOST']); ?></span>
+<?php if ($this->session->TEMA === "ACTUAL") { ?>
+    <div id="pnlAcceso" class="card  div-login animated fadeIn" style="  background-color: rgba(255, 255, 255, 0) !important; 
+         box-shadow:none !important; border: none;">
+        <div class="card-body" style="padding: 15px;">
+            <div class="row" style="padding: 15px;">
+                <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
+                    <!--<span class="fa fa-user-lock fa-2x"></span>-->
+                    <span class="fa fa-user fa-2x animated slideInDown"></span>
+                    <h4 class="m-3 animated slideInDown">CONTROL DE ACCESO</h4>
+                </div>
+                <div class="col-12">
+                    <input type="email" id="Usuario" name="Usuario" class="form-control not-form-small animated slideInRight" placeholder="Usuario" required autofocus="">
+                </div >
+                <div class="col-12">
+                    <input type="password" id="Contrasena" name="Contrasena" class="form-control not-form-small mt-3  animated slideInLeft" placeholder="Contraseña" required>
+                </div >
+                <div id="iplocal" class="text-center d-none col-12">
+                    <span class="font-weight-bold font-italic" style="font-size: 16px"><?php print ($_SERVER['HTTP_HOST']); ?></span>
+                </div>
             </div>
         </div>
+        <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
+            <!--<span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span>-->
+
+            <button class="btn btn-info btn-block font-weight-bold  animated slideInUp" id="btnIngresarr" type="button"
+                    style="background-color: rgb(251 17 0 / 74%) !important; border-color: rgba(0, 0, 0, 1)   !important; font-size: 15px;">
+                INGRESAR 
+            </button>
+        </div>
+        <button class="btn btn-block d-none" id="btnIngresar" type="button" style="background-color: rgba(255, 255, 255, 0.3) !important;"></button>
     </div>
-    <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
-        <span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span>
+    <?php
+} else {
+    ?>
+    <div id="pnlAcceso" class="card  div-login">
+        <div class="card-body" style="padding: 15px;">
+            <div class="row" style="padding: 15px;">
+                <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
+                    <!--<span class="fa fa-user-lock fa-2x"></span>-->
+                    <span class="fa fa-key fa-2x"></span>
+                    <h4 class="m-3">CONTROL DE ACCESO</h4>
+                </div>
+                <div class="col-12">
+                    <input type="email" id="Usuario" name="Usuario" class="form-control not-form-small" placeholder="Usuario" required autofocus="">
+                </div >
+                <div class="col-12">
+                    <input type="password" id="Contrasena" name="Contrasena" class="form-control not-form-small mt-3" placeholder="Contraseña" required>
+                </div >
+                <div id="iplocal" class="text-center d-none col-12">
+                    <span class="font-weight-bold font-italic" style="font-size: 16px"><?php print ($_SERVER['HTTP_HOST']); ?></span>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center" onclick="btnIngresar.trigger('click');">
+            <span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span>
+        </div>
+        <button class="btn btn-info btn-block d-none" id="btnIngresar" type="button"></button>
     </div>
-    <button class="btn btn-info btn-block d-none" id="btnIngresar" type="button"></button>
-</div>
+    <?php
+}
+?>
 <script>
     var master_url = base_url + "Sesion/";
     var btnResetear = $("#btnResetear");
@@ -199,106 +246,16 @@
         Usuario.focus().select();
     });
 </script>
-<style>
-    body  {
-        background-color: #222222;
-        background-image: url("paper.gif");
-    }
-    .form-control:focus {
-        -webkit-box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
-        box-shadow: 0 0 0 0.2rem #3F51B5;
-    }
-    .card-transparent{
-        background-color: transparent !important;
+<style>  
+    .card-transparent{ 
         color: #fff !important;
         border: none !important;
         box-shadow:none !important;
-    }
-
-    .text-shadow{
-        text-shadow: 3px 4px 5px #000000;
-    }
-
+    } 
     .text-muted{
         color:#fff !important;
         text-shadow: 3px 4px 5px #000000;
-    }
-    #overlay {
-        position: fixed;
-        display: none;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #222222;
-        z-index: 2;
-        cursor: pointer;
-    }
-    #overlay > img{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        font-size: 50px;
-        color: white;
-        transform: translate(-50%,-50%);
-        -ms-transform: translate(-50%,-50%);
-    }
-    * {
-        margin: 0;
-        padding: 0;
-    }
-    .w-s {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background-color: #645625;
-        overflow: hidden;
-    }
-    .w-s .content-wrap {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate3d(-50%, -50%, 0);
-    }
-    .w-s .content-wrap .fly-in-text {
-        list-style: none;
-    }
-    .w-s .content-wrap .fly-in-text li {
-        display: inline-block;
-        margin-right: 30px;
-        font-size: 5em;
-        color: #fff;
-        opacity: 1;
-        transition: all 2s ease;
-    }
-    .w-s .content-wrap .fly-in-text li:last-child {
-        margin-right: 0;
-    }
-    .w-s .content-wrap .enter-button {
-        display: block;
-        text-align: center;
-        font-size: 1em;
-        text-decoration: none;
-        text-transform: uppercase;
-        color: #ffffff;
-        opacity: 1;
-        transition: all 1s ease .75s;
-    }
-
-    .w-s.content-hidden .content-wrap .fly-in-text li { opacity: 0; }
-    .w-s.content-hidden .content-wrap .fly-in-text li:nth-child(1) { transform: translate3d(-100px, 0, 0); }
-    .w-s.content-hidden .content-wrap .fly-in-text li:nth-child(2) { transform: translate3d(100px, 0, 0); }
-    .w-s.content-hidden .content-wrap .enter-button { opacity: 0; transform: translate3d(0, -30px, 0); }
-
-    @media (min-width: 800px) {
-        .w-s .content-wrap .fly-in-text li { font-size: 10em; }
-        .w-s .content-wrap .enter-button { font-size: 1.5em; }
-    }
-
+    } 
 
     .col-1, .col-2, .col-3, .col-4, .col-5,
     .col-6, .col-7, .col-8, .col-9, .col-10,
@@ -324,35 +281,34 @@
     }
     .card{
         cursor: pointer !important;
-        font-weight: bold;
-        background: #2b2b2b !important;
-        color: #fff;
+        font-weight: bold; 
     }
     .card  .card-body{
         cursor: pointer !important;
-        font-weight: bold;
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
-        background: #ffffff; /* Old browsers */
-        background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
-        color: #333333;
-    }
-    .card .card-footer{
-        cursor: pointer !important;
-        font-weight: bold;
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#2b2b2b+0,272727+100 */
-        background: #2b2b2b; /* Old browsers */
-        background: -moz-linear-gradient(top,  #2b2b2b 0%, #272727 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #2b2b2b 0%,#272727 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #2b2b2b 0%,#272727 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b2b2b', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
+        font-weight: bold; 
 
-        color: #fff;
+        <?php if ($this->session->TEMA !== "ACTUAL") { ?>
+            color: #000;
+            background: #ffffff; /* Old browsers */
+            background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+        <?php } ?>
     }
-    .card:hover .text-nowrap, .card:hover .figure-caption{
+    .card .card-footer{ 
+        border-top: none !important;
+        cursor: pointer !important; 
         color: #fff;
+
+        <?php if ($this->session->TEMA !== "ACTUAL") { ?>
+            /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#2b2b2b+0,272727+100 */
+            background: #2b2b2b; /* Old browsers */
+            background: -moz-linear-gradient(top,  #2b2b2b 0%, #272727 100%); /* FF3.6-15 */
+            background: -webkit-linear-gradient(top,  #2b2b2b 0%,#272727 100%); /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom,  #2b2b2b 0%,#272727 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b2b2b', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
+        <?php } ?>
     }
     .fa-2x {
         font-size: 7.5em;
@@ -373,14 +329,20 @@
     }
     .card{
         transition: all 0.3s;
+        /* The image used */
+
+        /* Full height */ 
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #fff;  
+        font-style: italic;
+        <?php if ($this->session->TEMA === "ACTUAL") { ?>
+        border-radius: 10px; 
+        text-shadow: 0 0 3px #000, 0 0 5px #0000FF !important;
+        <?php } ?>
     }
 
-    .card:hover{
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
-    }
-    .card{
-        border-style: solid;
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
-    }
 </style>
