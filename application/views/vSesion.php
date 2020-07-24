@@ -93,7 +93,7 @@
             <!--<span class="fa fa-angle-double-left"></span> INGRESAR  <span class="fa fa-angle-double-right"></span>-->
 
             <button class="btn btn-info btn-block font-weight-bold  animated slideInUp" id="btnIngresarr" type="button"
-                    style="background-color: rgb(251 17 0 / 74%) !important; border-color: rgba(0, 0, 0, 1)   !important; font-size: 15px;">
+                    style="background: rgb(161,218,242); background: linear-gradient(90deg, rgba(161,218,242,1) 0%, rgba(0,144,179,1) 50%, rgba(0,22,27,1) 100%); border: none !important; font-size: 15px;">
                 INGRESAR 
             </button>
         </div>

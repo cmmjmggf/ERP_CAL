@@ -1543,7 +1543,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                 var burl = '<?php print base_url(); ?>';
                 $.each(a, function (k, v) {
                     accesos_directos += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated bounceIn" onclick="location.href =\'' + (burl + v.Ref) + '\'">' +
-                            '<div class="card text-center">' +
+                            '<div class="card text-center" >' +
                             '<div class="card-body">' +
                             '<span class="fa fa-' + v.Icon + ' fa-2x mt-5"></span>' +
                             '</div>' +
@@ -1609,7 +1609,11 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                         case 1:
                             $.each(data, function (k, v) {
                                 modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
-                                modulo += '<div class="card text-center">';
+<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+                                    modulo += '<div class="card text-center" style="background-color: #0000008a;">';
+<?php } else { ?>
+                                    modulo += '<div class="card text-center">';
+<?php } ?>
                                 modulo += '<div class="card-body">';
                                 switch (v.Modulo) {
                                     case "PROVEEDORES":

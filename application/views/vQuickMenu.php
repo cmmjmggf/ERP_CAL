@@ -32,19 +32,20 @@
     }
     .card{
         cursor: pointer !important;
-        font-weight: bold;
-        background: #2b2b2b !important;
+        font-weight: bold; 
         color: #fff;
+    }
+    .card  .card-body img{ 
+        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+            filter: drop-shadow(0 0 0.75rem #cccccc);
+        <?php } ?>
     }
     .card  .card-body{
         cursor: pointer !important;
         font-weight: bold;
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,f6f6f6+47,ededed+100;White+3D+%231 */
-        background: #ffffff; /* Old browsers */
-        background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
-        background: -webkit-linear-gradient(top,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10-25,Safari5.1-6 */
-        background: linear-gradient(to bottom,  #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+            background-color: #0000008a !important;
+        <?php } ?>
         color: #333333;
     }
     .card .card-footer{
@@ -58,7 +59,7 @@
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b2b2b', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
         color: #fff;
         background: linear-gradient(to bottom, #000000 0%,#272727 100%);
-        
+
     }
     .card:hover .text-nowrap, .card:hover .figure-caption{
         color: #fff;
@@ -89,13 +90,7 @@
         transform: scale(1.065);
         cursor: pointer !important;
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22) !important;
-    }
-    .card{
-        border-width: 1px 2px 2px;
-        border-style: solid;
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
-    }
+    } 
 
     /* effect-shine */
     @-webkit-keyframes bounce {
