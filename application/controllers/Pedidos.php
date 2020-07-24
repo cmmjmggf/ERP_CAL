@@ -82,7 +82,7 @@ class Pedidos extends CI_Controller {
     public function onRevisarBloqueo() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT COUNT(*) AS BLOQUEADO fROM bloqueovta AS B WHERE B.cliente = {$x['CLIENTE']}")->result());
+            print json_encode($this->db->query("SELECT COUNT(*) AS BLOQUEADO fROM bloqueovta AS B WHERE B.cliente = {$x['CLIENTE']} AND B.statusped = 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

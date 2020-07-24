@@ -13,38 +13,26 @@
 	<parameter name="logo" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
-FPNT.numemp, FPNT.nummaq, FPNT.numcont, FPNT.numest, FPNT.numfrac, FPNT.prefrac, FPNT.pares, FPNT.subtot, FPNT.subtot1, FPNT.status, FPNT.fecha, FPNT.semana, FPNT.depto, FPNT.registro, FPNT.año
-FROM fracpagnominatmp AS FPNT
-WHERE FPNT.año = $P{ANO} AND FPNT.semana = $P{SEMANA}
-order by abs(FPNT.nummaq) asc]]>
+FPNT.numeroempleado AS numemp, FPNT.maquila AS nummaq, FPNT.control AS numcont, FPNT.estilo AS numest, FPNT.numfrac, FPNT.preciofrac as prefrac, FPNT.pares, FPNT.subtot, FPNT.subtot AS subtot1, FPNT.status, FPNT.fecha, FPNT.semana, FPNT.depto, FPNT.registro, FPNT.anio AS año
+FROM fracpagnomina AS FPNT
+WHERE FPNT.anio = $P{ANO} AND FPNT.semana = $P{SEMANA} and FPNT.maquila = 100
+order by abs(FPNT.maquila) asc]]>
 	</queryString>
-	<field name="numemp" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="nummaq" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="numcont" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="numest" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="numemp" class="java.lang.Integer"/>
+	<field name="nummaq" class="java.lang.Integer"/>
+	<field name="numcont" class="java.lang.Integer"/>
+	<field name="numest" class="java.lang.String"/>
 	<field name="numfrac" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="prefrac" class="java.lang.Float">
+	<field name="prefrac" class="java.lang.Double"/>
+	<field name="pares" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="pares" class="java.lang.Float">
+	<field name="subtot" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="subtot" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="subtot1" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="subtot1" class="java.lang.Double"/>
 	<field name="status" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -60,9 +48,7 @@ order by abs(FPNT.nummaq) asc]]>
 	<field name="registro" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="año" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="año" class="java.lang.Integer"/>
 	<variable name="pares_1" class="java.lang.Float" resetType="Group" resetGroup="CELULA" calculation="Sum">
 		<variableExpression><![CDATA[$F{pares}]]></variableExpression>
 	</variable>
