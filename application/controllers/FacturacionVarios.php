@@ -62,7 +62,7 @@ class FacturacionVarios extends CI_Controller {
                 "hora" => Date("d/m/Y"),
                 "corrida" => $x["TALLA"] === '' ? 0 : $x["TALLA"],
                 "pareped" => $x["CANTIDAD"],
-                "estilo" => strtoupper(substr($x["ESTILO"] . " " . $x["CONCEPTO"], 0, 199)),
+                "estilo" => (intval($x["CLIENTE"]) === 1234) ? strtoupper(substr($x["CONCEPTO"], 0, 199)) : strtoupper(substr($x["ESTILO"] . " " . $x["CONCEPTO"], 0, 199)),
                 "combin" => $COLOR_COMB,
                 "par01" => 0, "par02" => 0, "par03" => 0,
                 "par04" => 0, "par05" => 0, "par06" => 0,
@@ -128,6 +128,16 @@ class FacturacionVarios extends CI_Controller {
                     case 2343:
                         $Descripcion = $x["ESTILO"] . " " . $x["CONCEPTO"];
                         break;
+                    case 1234:
+                        $Tetiqcodbarr = $this->db->query("SELECT E.codbarr AS CODIGO_DE_BARRA "
+                                        . "FROM etiqcodbarr AS E "
+                                        . "WHERE E.cliente = {$x["CLIENTE"]} AND "
+                                        . "E.estilo = '{$x["ESTILO"]}'")->result();
+                        if (!empty($Tetiqcodbarr)) {
+                            $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
+                        }
+                        $Descripcion = "{$x["CONCEPTO"]}";
+                        break;
                     case 2121:
                         $Tetiqcodbarr = $this->db->query("SELECT E.codbarr AS CODIGO_DE_BARRA "
                                         . "FROM etiqcodbarr AS E "
@@ -136,11 +146,6 @@ class FacturacionVarios extends CI_Controller {
                         if (!empty($Tetiqcodbarr)) {
                             $CodigoBarras = $Tetiqcodbarr[0]->CODIGO_DE_BARRA;
                         }
-                        /* comentado el 23/06/2020 6:29PM */
-//                        $COLORX = $this->db->query("SELECT C.Descripcion AS DESCRIPCION FROM colores AS C WHERE C.Estilo ='{$x['ESTILO']}' AND C.Clave= {$x['COLOR_CLAVE']} ")->result();
-//                        if (!empty($COLORX)) {
-//                            $Descripcion = "{$COLORX[0]->DESCRIPCION} {$x["TALLA"]}";
-//                        }
                         $Descripcion = "{$x["CONCEPTO"]} {$x["TALLA"]}";
                         break;
                     default :
