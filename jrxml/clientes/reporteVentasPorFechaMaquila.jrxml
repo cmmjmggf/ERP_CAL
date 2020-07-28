@@ -32,10 +32,11 @@ fa.estilo,
 fa.fecha,
 fa.precto,
 case when fa.staped = 3 then 0 else fa.pareped end as pares,
+(CASE WHEN fa.zero = 1 THEN 0 ELSE
 case when fa.staped = 3 then 0
 else
 	case when fa.tmnda <> 1 then fa.subtot*fa.tcamb else fa.subtot end
-end as subtotal,
+end END) as subtotal,
 case when fa.tmnda <> 1 then 0 else fa.subtot/0.16 end as iva,
 case when fa.staped = 3 then 'CANCELADA' end as cancelada,
 fa.tmnda,
@@ -47,7 +48,9 @@ and fa.tp < 3
 and fa.fecha between $P{fechaIni} and $P{fechaFin}
 order by maq,fa.factura, fa.contped asc]]>
 	</queryString>
-	<field name="nommaq" class="java.lang.String"/>
+	<field name="nommaq" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="maq" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>

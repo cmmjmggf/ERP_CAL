@@ -29,10 +29,11 @@ fa.estilo,
 fa.fecha,
 fa.precto,
 sum(case when fa.staped = 3 then 0 else fa.pareped end) as pares,
+(CASE WHEN fa.zero = 1 THEN 0 ELSE
 sum(case when fa.staped = 3 then 0
 else
 	case when fa.tmnda <> 1 then fa.subtot*fa.tcamb else fa.subtot end
-end) as subtotal,
+end) END) as subtotal,
 case when fa.staped = 3 then 'CANCELADA' end as cancelada,
 fa.tmnda,
 fa.tcamb
