@@ -30,12 +30,12 @@ WHEN C.FormaDePagoElectronico = 99 THEN 99 END) AS FORMA_DE_PAGO,
 C.CodigoPostal AS CP, C.NoExt AS NOEXT, C.NoInt AS NOINT, C.RFC AS RFC, F.factura AS FACTURA, F.tp, F.contped AS contped, (SELECT E.Descripcion FROM estados AS E WHERE E.Clave = C.Estado) AS ESTADO_CLIENTE,
 DATE_FORMAT(F.fecha,"%d/%m/%Y") AS FECHA,
 (CASE WHEN F.tmnda = 2 THEN (F.precto * F.tcamb) ELSE F.precto END) AS PRECIO,
-F.subtot, F.iva,
+F.subtot, F.iva,  F.subtot  AS SUBTOTAL,
 (CASE
-WHEN F.tmnda = 2 THEN  F.subtot
-ELSE F.subtot
-END) AS SUBTOTAL,
-
+WHEN F.zero = 0 THEN  F.subtot
+WHEN F.zero = 1 THEN  0
+END) AS SUBTOTAL_VALIDO,
+F.zero AS FACTURA_EN_CEROS,
 UPPER(F.monletra)  AS FACTURA_MONEDA_LETRA,
 
 F.referen AS REFERENCIA,
@@ -106,9 +106,9 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 	<field name="iva" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="SUBTOTAL" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="SUBTOTAL" class="java.lang.Double"/>
+	<field name="SUBTOTAL_VALIDO" class="java.lang.Double"/>
+	<field name="FACTURA_EN_CEROS" class="java.lang.Integer"/>
 	<field name="FACTURA_MONEDA_LETRA" class="java.lang.String"/>
 	<field name="REFERENCIA" class="java.lang.String"/>
 	<field name="METODO_DE_PAGO" class="java.lang.String"/>
@@ -145,6 +145,9 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 	</variable>
 	<variable name="SUBTOTAL_4" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{SUBTOTAL}]]></variableExpression>
+	</variable>
+	<variable name="SUBTOTAL_VALIDO_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUBTOTAL_VALIDO}]]></variableExpression>
 	</variable>
 	<pageHeader>
 		<band height="135">
@@ -731,7 +734,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				<text><![CDATA[Obs.]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="91" y="0" width="337" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="8c9995f7-b88e-48f3-80c5-1a521354020d"/>
+				<reportElement mode="Transparent" x="91" y="0" width="240" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="8c9995f7-b88e-48f3-80c5-1a521354020d"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -772,7 +775,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUBTOTAL_4}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUBTOTAL_VALIDO_1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

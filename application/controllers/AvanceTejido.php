@@ -285,6 +285,10 @@ class AvanceTejido extends CI_Controller {
                                 ->get()->result();
 
                 $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
+                
+                $TOTAL = (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO));
+                $l = new Logs("AVANCE TEJIDO(VALE)", "VALE PARA LA TEJEDORA {$xXx['NUM_TEJEDORA']} DE $ {$TOTAL} "
+                        . "DEL CONTROL {$xXx['CONTROL']} CON {$xXx['PARES']} PARES, LA FRACCION {$xXx['FRACCION']} CON UN PRECIO DE {$FXE[0]->PRECIO} MAQUILA {$MAQUILA_X_CONTROL[0]->MAQUILA}.", $this->session);
 
                 $ID = $this->db->insert('avance', array(
                     'Control' => $xXx['CONTROL'],
@@ -386,6 +390,7 @@ class AvanceTejido extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+
     public function getInfoControlFueraDeAvance() {
         try {
             print json_encode($this->db->select("C.ID, C.Control, C.FechaProgramacion, C.Estilo, "
@@ -393,7 +398,7 @@ class AvanceTejido extends CI_Controller {
                                             . "C.PedidoDetalle, C.Estatus, C.Departamento, C.Ano, "
                                             . "C.Maquila, C.Semana, C.Consecutivo, C.Motivo, (SELECT P.EstatusProduccion FROM pedidox AS P WHERE P.Control = C.Control LIMIT 1) AS AVANCE_ACTUAL", false)
                                     ->from('controles AS C')
-                                    ->where('C.Control', $this->input->get('CONTROL'))  
+                                    ->where('C.Control', $this->input->get('CONTROL'))
                                     ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

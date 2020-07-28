@@ -1607,11 +1607,14 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                     modulos_counter = data.length;
                     switch (type) {
                         case 1:
+                            var effects = ["zoomIn", "flipInX", "flipInY", "zoomIn", "bounceIn", "slideInUp"];
+                            var effect = Math.floor(Math.random() * 5) + 1;
                             $.each(data, function (k, v) {
-                                modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
 <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
-                                    modulo += '<div class="card text-center" style="background-color: #0000008a;">';
+                                    modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated ' + effects[parseInt(effect)] + '" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
+                                    modulo += '<div class="card text-center " style="background-color: #0000008a;">';
 <?php } else { ?>
+                                    modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
                                     modulo += '<div class="card text-center">';
 <?php } ?>
                                 modulo += '<div class="card-body">';

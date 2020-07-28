@@ -41,7 +41,7 @@ C.docto AS DOCUMENTO,
 (SELECT S.Sem FROM semanasnomina AS S
 WHERE C.fechapre BETWEEN STR_TO_DATE(S.FechaIni, "%d/%m/%Y") AND STR_TO_DATE(S.FechaFin, "%d/%m/%Y")
 AND S.Sem <> '99' ) AS SEMANA_NOMINA
-FROM controltej AS C INNER JOIN fracpagnomina AS F ON C.Control = F.Control AND F.fraccion in(401,402,403,404,405)
+FROM controltej AS C INNER JOIN fracpagnomina AS F ON C.numtej = F.numeroempleado AND C.Control = F.Control AND F.fraccion in(401,402,403,404,405)
 WHERE C.docto = $P{DOCUMENTO}]]>
 	</queryString>
 	<field name="DOCTO" class="java.lang.Integer">
