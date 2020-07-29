@@ -249,6 +249,7 @@ class FacturacionVarios extends CI_Controller {
                 "comiesp" => NULL, "tcamb" => $x["TIPO_CAMBIO"],
                 "tmnda" => (intval($x["TIPO_MONEDA"]) === 1) ? 1 : $x["TIPO_MONEDA"],
                 "stscont" => NULL, "nc" => (intval($x["POR_ANTICIPO"]) === 1) ? 999 : 0,
+                "anticipo" => intval($x["POR_ANTICIPO"]) === 1 ? 1 : 0,
                 "factura" => (intval($x["TIPO"]) === 1) ? 0 : 1
             ));
             $this->db->where('factura', $x["FACTURA"])->where('cliente', $x["CLIENTE"])
@@ -783,6 +784,15 @@ class FacturacionVarios extends CI_Controller {
                     . "WHERE C.Estilo = '{$x['ESTILO']}' AND C.comb = {$x['COLOR']} AND C.cliente = {$x['CLIENTE']} LIMIT 1 ";
 
             print json_encode($this->db->query($str)->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onFacturarXAnticipo() {
+        try {
+
+            exit(0);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

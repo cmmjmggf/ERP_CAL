@@ -490,6 +490,8 @@
 <?php
 if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") {
     ?>
+<link rel="stylesheet" href="<?php print base_url('js/vegas/vegas.min.css'); ?>">
+<script src="<?php print base_url('js/vegas/vegas.min.js'); ?>"></script>
     <style>
         body{  
             /* Location of the image */

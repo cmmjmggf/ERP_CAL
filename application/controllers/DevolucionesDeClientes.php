@@ -173,7 +173,9 @@ class DevolucionesDeClientes extends CI_Controller {
                 "stafac" => 0, "staapl" => 0,
                 "maq" => $x["MAQUILA"], "preciodev" => $x["PRECIO_DEVOLUCION"],
                 "preciomaq" => $x["PRECIO_DEVOLUCION"] * 0.1, "obs1" => 0,
-                "ctenvo" => $x["DEPARTAMENTO"]
+                "ctenvo" => $x["DEPARTAMENTO"],
+                "usuario" => $this->session->ID,
+                "usuario_nombre" => $this->session->USERNAME
             ));
             $this->db->insert('devolucionnp', $pp);
             $l = new Logs("DEVOLUCIONES PENDIENTES POR APLICAR", "HA CREADO UNA DEVOLUCION DEL CLIENTE {$x["CLIENTE"]} CON EL CONTROL {$x['CONTROL']} DE {$x["PARES_DEVUELTOS"]} PAR(ES) POR $ {$subtotal}.", $this->session);

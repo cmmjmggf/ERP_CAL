@@ -665,7 +665,7 @@
         AddendaCoppel.click(function () {
 
         });
-        Estilo.change(function () {
+        Estilo.change(function () { 
             if (Estilo.val()) {
                 xEstilo.val(Estilo.val());
                 onObtenerCodigoSatXEstilo();
@@ -915,8 +915,7 @@
                                     pnlTablero.find("span.subtotaldocvarios").text("$0.0");
                                     pnlTablero.find(".productoSAT").text('-');
                                     pnlTablero.find("#cNoIva")[0].checked = false;
-                                    pnlTablero.find("#cTimbrar")[0].checked = false;
-                                    pnlTablero.find("#cPorAnticipo")[0].checked = false;
+                                    pnlTablero.find("#cTimbrar")[0].checked = false; 
                                     PedimientoXTaxDestinatario.val('');
                                     OrdenCompraClaveIncotem.val('');
                                     Cantidad.focus().select();
