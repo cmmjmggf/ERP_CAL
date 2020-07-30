@@ -83,7 +83,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnImprimirSemMaqAno">DESGLOSADO X CONTROL</button>
+                <button type="button" class="btn btn-info" id="btnImprimirSemMaqAno">POR CONTROL</button>
+                <button type="button" class="btn btn-warning" id="btnImprimirSemMaqAnoSuela">POR CONTROL SUELA</button>
                 <button type="button" class="btn btn-primary" id="btnImprimirSemMaqAnoSinControl">IMPRIME SOLO 90</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
@@ -103,6 +104,7 @@
     var n = 1;
     var mdlMaterialParaEntregaMaqSemAno = $('#mdlMaterialParaEntregaMaqSemAno');
     var btnImprimirSemMaqAno = mdlMaterialParaEntregaMaqSemAno.find('#btnImprimirSemMaqAno');
+    var btnImprimirSemMaqAnoSuela = mdlMaterialParaEntregaMaqSemAno.find('#btnImprimirSemMaqAnoSuela');
     var btnImprimirSemMaqAnoSinControl = mdlMaterialParaEntregaMaqSemAno.find('#btnImprimirSemMaqAnoSinControl');
     var valida = false;
     $(document).ready(function () {
@@ -332,6 +334,27 @@
             }).done(function (data) {
                 console.log(data);
                 onImprimirReporteFancyArray(data);
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        });
+
+        btnImprimirSemMaqAnoSuela.click(function () {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            var ano = mdlMaterialParaEntregaMaqSemAno.find('#Ano').val();
+            var sem = mdlMaterialParaEntregaMaqSemAno.find('#Sem').val();
+            var maq = mdlMaterialParaEntregaMaqSemAno.find('#Maq').val();
+
+            //Imprimir
+            $.getJSON(master_url + 'onReporteMaterialXControlTipo80', {
+                Ano: ano,
+                Sem: sem,
+                Maq: maq
+            }).done(function (data) {
+                console.log(data);
+                onImprimirReporteFancy(data);
                 HoldOn.close();
             }).fail(function (x, y, z) {
                 console.log(x, y, z);

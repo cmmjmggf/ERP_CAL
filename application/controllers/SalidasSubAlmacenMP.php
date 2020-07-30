@@ -41,7 +41,7 @@ class SalidasSubAlmacenMP extends CI_Controller {
     public function onVerificarArticulo() {
         try {
             $Articulo = $this->input->get('Articulo');
-            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo ' and estatus = 'ACTIVO'  ")->result());
+            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo '  ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

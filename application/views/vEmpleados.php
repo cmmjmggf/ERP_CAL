@@ -456,7 +456,7 @@
         });
 
         btnBajaEmpleado.click(function () {
-            if (zaptda > 0 && prestamo > 0) {
+            if (zaptda > 0 || prestamo > 0) {
                 swal('ATENCIÓN', 'USUARIO CON PRÉSTAMO O CARGO DE ZAPATOS, IMPOSIBLE DAR DE BAJA', 'error');
             } else {
                 swal({
@@ -958,7 +958,7 @@
         border-color: #2196F3 #2196F3 #fff;
     }
     .nav-tabs .nav-link.active, .nav-tabs .nav-link.active:focus, .nav-tabs .nav-link.active:hover, .nav-tabs .nav-item.open .nav-link, .nav-tabs .nav-item.open .nav-link:focus, .nav-tabs .nav-item.open .nav-link:hover {
-        color: #2196F3;   
+        color: #2196F3;
         font-weight: bold;
     }
     .btn-lobo{
@@ -972,11 +972,11 @@
         border: 2px solid #97c310;
     }
     .card {
-        background-color: #efefef; 
+        background-color: #efefef;
     }
     .card input{
         border-color: #000;
-    } 
+    }
     table tbody td:eq(0), table tbody tr{
         font-size: 25px !important;
         font-weight: bold;
@@ -985,7 +985,7 @@
         border: 1px solid #000000;
     }
     table thead th  {
-        background-color: #000; 
+        background-color: #000;
         color: #fff;
     }
 </style>

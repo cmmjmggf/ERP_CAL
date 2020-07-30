@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.771561000000032"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.7974983358324823"/>
+	<property name="ireport.x" value="915"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -133,6 +133,15 @@ order by numprov, numgrupo, oc.Maq, oc.Ano, abs(oc.Sem), oc.Folio, nomarticulo a
 	<variable name="SubTotal_3" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$F{SubTotal}]]></variableExpression>
 	</variable>
+	<variable name="saldo_1" class="java.lang.Double" resetType="Group" resetGroup="Grupo" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldo}]]></variableExpression>
+	</variable>
+	<variable name="saldo_2" class="java.lang.Double" resetType="Group" resetGroup="Proveedor" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldo}]]></variableExpression>
+	</variable>
+	<variable name="saldo_3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{saldo}]]></variableExpression>
+	</variable>
 	<group name="Proveedor" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{numprov}]]></groupExpression>
 		<groupHeader>
@@ -198,6 +207,14 @@ order by numprov, numgrupo, oc.Maq, oc.Ano, abs(oc.Sem), oc.Folio, nomarticulo a
 				<line>
 					<reportElement x="257" y="0" width="250" height="1" uuid="54730d86-2619-44eb-b614-79d93bc477e4"/>
 				</line>
+				<textField pattern="###0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="414" y="0" width="33" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="9e6cfd53-bfee-4728-bc6e-846b5c51a01c"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{saldo_2}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -265,6 +282,14 @@ order by numprov, numgrupo, oc.Maq, oc.Ano, abs(oc.Sem), oc.Folio, nomarticulo a
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{SubTotal_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="414" y="1" width="33" height="8" forecolor="#000000" backcolor="#FFFFFF" uuid="3a0a3884-8ada-4447-97af-2da619aacb13"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{saldo_1}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -672,6 +697,14 @@ order by numprov, numgrupo, oc.Maq, oc.Ano, abs(oc.Sem), oc.Folio, nomarticulo a
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{SubTotal_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="414" y="1" width="33" height="9" forecolor="#000000" backcolor="#FFFFFF" uuid="f1557d81-880a-4d07-a5a1-4f0e7c1f5162"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{saldo_3}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

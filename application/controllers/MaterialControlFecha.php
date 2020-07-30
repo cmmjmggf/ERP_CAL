@@ -475,4 +475,20 @@ class MaterialControlFecha extends CI_Controller {
         return $jc->getReport();
     }
 
+    public function onReporteMaterialXControlTipo80() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["Ano"] = $this->input->get('Ano');
+        $parametros["Maq"] = $this->input->get('Maq');
+        $parametros["Sem"] = $this->input->get('Sem');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\materiales\matxControlTipo80.jasper');
+        $jc->setFilename('MATERIAL_X_CONTROL_TIPO_80_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        print json_encode($jc->getReport());
+    }
+
 }
