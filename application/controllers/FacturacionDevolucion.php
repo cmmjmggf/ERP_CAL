@@ -37,9 +37,9 @@ class FacturacionDevolucion extends CI_Controller {
             $ANIO = Date('Y');
             $this->db->set("stafac", 2)->where("paredev = parefac", null, false)->update("devolucionnp");
 
-            $revision = $this->db->query("SELECT ID, control, paredev, parefac, 
-                (SELECT SUM(F.pareped) FROM facturacion AS F 
-                WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) AS PARES_FAC, 
+            $revision = $this->db->query("SELECT ID, control, paredev, parefac,  
+                ifnull((SELECT SUM(F.pareped) FROM facturacion AS F 
+                WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' AND F.devid = D.ID),0) AS PARES_FAC, 
                 stafac AS ESTATUS_FAC  
                 FROM devolucionnp AS D WHERE YEAR(D.fechadev) = {$ANIO} AND paredev > parefac "
                             . "HAVING (SELECT SUM(F.pareped) FROM facturacion AS F "
@@ -50,6 +50,7 @@ class FacturacionDevolucion extends CI_Controller {
                         $this->db->set("parefac", $v->PARES_FAC)
                                 ->where("control", $v->control)
                                 ->where("paredev", $v->paredev)
+                                ->where("parefac <= 0", null, false)
                                 ->where_in("stafac", array(0, 1))
                                 ->where("ID", $v->ID)
                                 ->update("devolucionnp");
@@ -109,7 +110,8 @@ class FacturacionDevolucion extends CI_Controller {
                     $OBTENER_TP = $this->db->query("SELECT tp AS TIPO FROM devolucionnp WHERE control = '{$this->input->get('CONTROL')}' AND stafac <= 1 LIMIT 1")->result();
                     if (intval($this->input->get('TP')) === 1 && intval($OBTENER_TP[0]->TIPO) === 1 ||
                             intval($this->input->get('TP')) === 2 && intval($OBTENER_TP[0]->TIPO) === 2 ||
-                            intval($this->input->get('TP')) === 2 && intval($OBTENER_TP[0]->TIPO) === 1) {
+                            intval($this->input->get('TP')) === 2 && intval($OBTENER_TP[0]->TIPO) === 1 ||
+                            intval($this->input->get('TP')) === 1 && intval($OBTENER_TP[0]->TIPO) === 2) {
                         $data = $this->db->query("SELECT D.docto AS CLAVE_PEDIDO, "
                                         . "CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,"
                                         . "(SELECT C.Descripcion FROM colores AS C "
@@ -162,13 +164,21 @@ class FacturacionDevolucion extends CI_Controller {
 
             if ($devolucionnp_existe[0]->EXISTE > 0) {
 
+//                print json_encode($this->db->query(
+//                                        "SELECT  1 AS EXISTE, D.control, D.paredev, D.par01, D.par02, D.par03, D.par04, D.par05, 
+//D.par06, D.par07, D.par08, D.par09, D.par10, 
+//D.par11, D.par12, D.par13, D.par14, D.par15, 
+//D.par16, D.par17, D.par18, D.par19, D.par20, 
+//D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CONTROL')}'  "
+//                                        . "AND  D.stafac <= 1  and paredev > parefac LIMIT 1")->result());
                 print json_encode($this->db->query(
-                                        "SELECT  1 AS EXISTE, D.control, D.paredev, D.par01, D.par02, D.par03, D.par04, D.par05, 
-D.par06, D.par07, D.par08, D.par09, D.par10, 
-D.par11, D.par12, D.par13, D.par14, D.par15, 
-D.par16, D.par17, D.par18, D.par19, D.par20, 
-D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CONTROL')}'  "
-                                        . "AND D.tp ={$this->input->get('TP')} AND D.stafac <= 1  and paredev > parefac LIMIT 1")->result());
+                                        "SELECT  1 AS EXISTE, D.contped, D.pareped, 
+                                            SUM(D.par01) as par01, SUM(D.par02) as par02, SUM(D.par03) as par03, SUM(D.par04) as par04, SUM(D.par05) as par05, 
+SUM(D.par06) as par06, SUM(D.par07) as par07, SUM(D.par08) as par08, SUM(D.par09) as par09, SUM(D.par10) as par10, 
+SUM(D.par11) as par11, SUM(D.par12) as par12, SUM(D.par13) as par13, SUM(D.par14) as par14, SUM(D.par15) as par15, 
+SUM(D.par16) as par16, SUM(D.par17) as par17, SUM(D.par18) as par18, SUM(D.par19) as par19, SUM(D.par20) as par20, 
+SUM(D.par21) as par21, SUM(D.par22) as par22 FROM facturacion AS D WHERE D.contped ='{$this->input->get('CONTROL')}'  "
+                                        . "AND  D.staped = 2  AND D.devid IS NOT NULL  LIMIT 1")->result());
             } else {
                 print json_encode(array("EXISTE" => "NO"));
             }
@@ -268,7 +278,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES, D.registro AS REGISTRO_ID, D.ID AS DEVID 
                 FROM devolucionnp AS D 
-                WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 LIMIT 1")->result();
+                WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1  AND paredev > parefac LIMIT 1")->result();
                     break;
 
                 default:
@@ -287,7 +297,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES, D.registro AS REGISTRO_ID, D.ID AS DEVID 
                 FROM devolucionnp AS D 
-                WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 LIMIT 1")->result();
+                WHERE D.control = {$xxx['CONTROL']}  AND stafac <= 1 AND paredev > parefac LIMIT 1")->result();
                     } else {
                         $dt = $this->db->query("SELECT D.registro AS ID, D.control AS CONTROL, D.estilo AS ESTILO, D.comb AS COLOR, 
                 D.paredev AS PARES, D.parefac AS FACTURADOS, D.ID AS REG, D.maq AS MAQUILA, D.staapl AS ST, 
@@ -303,7 +313,7 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
                 D.par16 +  D.par17 +  D.par18 +  D.par19 +  D.par20 +  
                 D.par21 +  D.par22 ) AS PARES_TOTALES, D.registro AS REGISTRO_ID, D.ID AS DEVID 
                 FROM devolucionnp AS D 
-                    WHERE D.control = {$xxx['CONTROL']} AND D.tp = {$xxx['TP']} AND stafac <= 1 LIMIT 1")->result();
+                    WHERE D.control = {$xxx['CONTROL']} AND stafac <= 1 AND paredev > parefac LIMIT 1")->result();
                     }
                     break;
             }
@@ -1193,14 +1203,14 @@ D.par21, D.par22 FROM devolucionnp AS D WHERE D.control ='{$this->input->get('CO
     public function getDevolucionesXControl() {
         try {
             $x = $this->input->post();
-            print json_encode($this->db->query("SELECT 
-                                                (D.par01 + D.par02 + D.par03 + D.par04 + D.par05 + 
-                                                D.par06 + D.par07 + D.par08 + D.par09 + D.par10 + 
-                                                D.par11 + D.par12 + D.par13 + D.par14 + D.par15 + 
-                                                D.par16 + D.par17 + D.par18 + D.par19 + D.par20 + 
-                                                D.par21 + D.par22 ) AS PARES_DEVUELTOS
-                                                FROM devolucionnp AS D 
-                                                WHERE D.control  = {$x["CONTROL"]} and paredev > parefac")->result());
+            print json_encode($this->db->query("SELECT  
+                (SELECT P.Pares FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]} LIMIT 1) AS PARES_FABRICADOS,
+                (SELECT SUM(P.Pares) FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]} AND P.stsavan = 13 LIMIT 1) AS PARES_FACTURADOS,
+                                               
+SUM(D.paredev) AS PARES_DEVUELTOS,                                                   
+SUM(D.parefac) AS PARES_FACTURADOS_DEVUELTOS 
+                                                 FROM devolucionnp AS D 
+                                                WHERE D.control  = {$x["CONTROL"]}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -117,5 +117,11 @@
     $(document).ready(function () {
         Z2V0UXVpY2tNZW51(1);
         b25Db21wcm9iYXJNb2R1bG9z(1);
-    });
+        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+        $("body").vegas({
+            overlay: '<?php print base_url('js/vegas/overlays/02.png'); ?>'
+        });
+        <?php } ?>
+    }
+    );
 </script>

@@ -271,7 +271,7 @@
                                 <td class="font-weight-bold">Tallas</td>
                                 <?php
                                 $style_input = "width: 35px; border: 1px solid #000 !important; font-weight: bold !important;text-align: center;padding-left: 4px;padding-right: 4px;";
-                               
+
 //                                $style_input = "width: 40px; font-weight: bold !important;height: 22px;text-align: center;padding-left: 4px;padding-right: 4px;";
                                 for ($index = 1; $index < 23; $index++) {
 //                                    print '<td><input type="text" style="width: 40px;font-weight: 300 !important; padding-left: 4px; padding-right: 4px;" id="T' . $index . '" name="T' . $index . '"   readonly="" data-toggle="tooltip" data-placement="top" title="XXX" class="form-control form-control-sm"></td>';
@@ -1642,17 +1642,26 @@
         TotalParesEntrega.val(ttp);
         TotalParesEntregaF.val(ttpf);
         TotalParesEntregaAF.val(ttpaf);
-        pnlTablero.find(".produccionfabricados").text(ttp);
-        pnlTablero.find(".produccionfacturados").text(ttpf);
-        pnlTablero.find(".produccionsaldo").text((ttpf > 0) ? ttpaf : ttp);
         /*OBTENER LOS PARES DEVUELTOS*/
         $.post('<?php print base_url('FacturacionDevolucion/getDevolucionesXControl'); ?>', {CONTROL: Control.val()}).done(function (a) {
             var prs = JSON.parse(a);
-//            console.log("PARES", prs);
             if (prs.length > 0) {
+                pnlTablero.find(".produccionfabricados").text(prs[0].PARES_FABRICADOS);
+                pnlTablero.find(".produccionfacturados").text(prs[0].PARES_FACTURADOS);
+                var saldo = parseFloat(prs[0].PARES_FABRICADOS) - parseFloat(prs[0].PARES_FACTURADOS);
+                pnlTablero.find(".produccionsaldo").text(parseInt(saldo));
+
                 pnlTablero.find(".devueltos").text(prs[0].PARES_DEVUELTOS);
+                pnlTablero.find(".devueltosfacturados").text(prs[0].PARES_FACTURADOS_DEVUELTOS);
+                var saldo = parseFloat(prs[0].PARES_DEVUELTOS) - parseFloat(prs[0].PARES_FACTURADOS_DEVUELTOS);
+                pnlTablero.find(".saldodevuelto").text(parseInt(saldo));
             } else {
+                pnlTablero.find(".produccionfabricados").text(0);
+                pnlTablero.find(".produccionfacturados").text(0);
+                pnlTablero.find(".produccionsaldo").text(0);
                 pnlTablero.find(".devueltos").text(0);
+                pnlTablero.find(".devueltosfacturados").text(0);
+                pnlTablero.find(".saldodevuelto").text(0);
             }
         }).fail(function (x) {
             getError(x);
@@ -1726,9 +1735,13 @@
                                     t += parseInt(xx["C" + i]);
                                     TotalParesEntrega.val(t);
                                     TotalParesEntregaAF.val(t);
-                                    var pares = pnlTablero.find(`#C${i}`),
+                                    var pares = pnlTablero.find(`#C${i}`), paresfac = pnlTablero.find(`#CF${i}`),
                                             pares_a_facturar = pnlTablero.find(`#CAF${i}`);
-                                    if (parseFloat(pares.val()) > 0) {
+                                    var saldo_pars = parseInt(pares.val() ? pares.val() : 0) - parseInt(paresfac.val() ? paresfac.val() : 0);
+                                    console.log('SALDO PARES C' + i + '(' + pares.val() + '), CF' + i + '(' + paresfac.val() + ') :' + saldo_pars);
+
+                                    onDisable(pares_a_facturar);
+                                    if (saldo_pars > 0) {
                                         onEnable(pares_a_facturar);
                                     } else {
                                         onDisable(pares_a_facturar);
@@ -1766,13 +1779,13 @@
                             btnControlInCompleto.attr('disabled', true);
                             btnControlCompleto.attr('disabled', true);
                         }
-                        for (var i = 1; i < 23; i++) {
-                            if (parseInt(pnlTablero.find("#C" + i).val()) <= 0 || pnlTablero.find("#C" + i).val() === '') {
-                                onDisable(pnlTablero.find("#CAF" + i));
-                            } else {
-                                onEnable(pnlTablero.find("#CAF" + i));
-                            }
-                        }
+//                        for (var i = 1; i < 23; i++) {
+//                            if (parseInt(pnlTablero.find("#C" + i).val()) <= 0 || pnlTablero.find("#C" + i).val() === '') {
+//                                onDisable(pnlTablero.find("#CAF" + i));
+//                            } else {
+//                                onEnable(pnlTablero.find("#CAF" + i));
+//                            }
+//                        }
                     }).fail(function (x) {
                         getError(x);
                     }).always(function () {
