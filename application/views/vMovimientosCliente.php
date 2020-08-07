@@ -496,7 +496,6 @@
             "drawCallback": function (settings) {
                 var api = this.api();
                 var stt = 0.0;
-                console.log(api.rows().data());
                 $.each(api.rows().data(), function (k, v) {
                     stt += parseFloat(v.importeP);
                 });

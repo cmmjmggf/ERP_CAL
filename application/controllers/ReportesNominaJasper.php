@@ -625,7 +625,7 @@ FROM costomanoobratemp CMT
 
             foreach ($Registros as $M) {
                 if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
-                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) >= floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) > floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
                         $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
                         //Agregamos el registro
                         $this->db->insert("nominabanco", array(
@@ -733,7 +733,7 @@ FROM costomanoobratemp CMT
 
             foreach ($Registros as $M) {
                 if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
-                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) >= floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) > floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
                         $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
                         //Agregamos el registro
                         $this->db->insert("nominabanco", array(
@@ -922,7 +922,7 @@ FROM costomanoobratemp CMT
 
             foreach ($Registros as $M) {
                 if (floatval($M->Neto) > 1) {//Si el importe trae algo hace todas las otras validaciones
-                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) >= floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
+                    if (floatval($M->SueldoFiscal) > 0 && floatval($M->Neto) > floatval($M->SueldoFiscal)) {//Si el importe fiscal es mayor a 0 ** inserta en fisca y en interna
                         $ImporteFiscal = floatval($M->SueldoFiscal); // el importe fiscal se inserta intacto
                         $txt = $M->col1 .
                                 str_pad($cont1, 7, "0", STR_PAD_LEFT) .

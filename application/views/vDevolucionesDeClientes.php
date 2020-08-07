@@ -1022,6 +1022,7 @@
                         pnlTablero.find(".color_t").text(a[0].COLOR_T);
                         pnlTablero.find(".estilo_t").text(z.ESTILO);
                         pnlTablero.find(".color_clave").text(z.COLOR);
+                        onMostrarFoto(a[0].Foto);
                     }
                 }).fail(function (x) {
                     getError(x);
@@ -1083,6 +1084,58 @@
             }
         });
     });
+    var _animate_ = {enter: 'animated fadeInLeft', exit: 'animated fadeOutDown'}, _placement_ = {from: "bottom", align: "left"};
+    function onMostrarFoto(path) {
+        console.log(base_url + path);
+        //MOSTRAR FOTO
+        if (path !== null && path !== undefined && path !== '') {
+            var ext = getExt(path);
+            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                $.notify({
+                    // options
+                    icon: base_url + path
+                }, {
+                    // settings
+                    placement: _placement_,
+                    animate: _animate_,
+                    icon_type: 'img',
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                            '</div>'
+                });
+            }
+            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                $.notify({
+                    // options
+                    icon: base_url + path
+                }, {
+                    // settings
+                    placement: _placement_,
+                    animate: _animate_,
+                    icon_type: 'img',
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                            '</div>'
+                });
+            }
+        } else {
+            $.notify({
+                // options
+                icon: base_url + path
+            }, {
+                // settings
+                placement: _placement_,
+                animate: _animate_,
+                icon_type: 'img',
+                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                        '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                        '</div>'
+            });
+        }
+    }
 
     function getControlEspecifico() {
 
@@ -1315,7 +1368,7 @@
     .pares-ok{
         /*8BC34A*/
         border: 2px solid #99cc00 !important;
-    } 
+    }
     table tbody td{
         font-weight: bold;
         font-size: 15px !important;

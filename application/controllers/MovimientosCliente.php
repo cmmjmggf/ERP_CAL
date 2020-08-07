@@ -54,9 +54,9 @@ class MovimientosCliente extends CI_Controller {
                             CC.cliente,
                             CC.remicion,
                             date_format(CC.fecha,'%Y/%m/%d') as fechadoc,
-                            CC.importe,
-                            CC.pagos,
-                            CC.saldo,
+                            ifnull(CC.importe,0) as importe,
+                            ifnull(CC.pagos,0) as pagos,
+                            ifnull(CC.saldo,0) as saldo,
                             CC.tipo,
                             CC.status ", false)
                     ->from("cartcliente AS CC");

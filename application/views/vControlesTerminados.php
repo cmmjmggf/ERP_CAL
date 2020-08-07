@@ -744,9 +744,36 @@
                 }).done(function (data) {
                     /*Valida para maq 98 y seguridad*/
                     if (seg === 1 && Maquila.val() === '98') { //Control de muestras
+                        console.log('entra aqui');
                         depto_destino = '260';
                         deptoT_destino = 'FACTURADO';
                         stsavan = 13;
+
+                        //Seguimos con el proceso una ves sabiendo si esta fact o termi
+                        $.post(master_url + 'onAgregarAvanceControl', {
+                            Control: Control.val(),
+                            Departamento: depto_destino,
+                            DepartamentoT: deptoT_destino,
+                            stsavan: stsavan
+                        }).done(function (data) {
+                            if (nuevo) {
+                                getControlesTerminados(Docto.val(), Maquila.val());
+                                getControlesRechazados(Docto.val(), Maquila.val());
+                                nuevo = false;
+                            } else {
+                                ControlesTerminados.ajax.reload();
+                                ControlesRechazados.ajax.reload();
+                            }
+                            pnlTablero.find('#Docto').attr('readonly', true);
+                            pnlTablero.find("input:not(#Docto):not(#Maquila)").val('');
+                            pnlTablero.find("#Defecto")[0].selectize.clear(true);
+                            pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
+                            pnlTablero.find('#Control').focus();
+                            btnAceptar.attr('disabled', false);
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        });
+
                     } else { //Aquí es cuando es un control normal
                         var pares_fac = 0;
                         $.getJSON(master_url + 'onVerificarExisteenFacturacion', {Control: Control.val()}).done(function (data) {
