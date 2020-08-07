@@ -81,7 +81,7 @@
                                 <hr>
                             </div>
                             <?php
-                            foreach ($this->db->query("SELECT F.Clave,F.Descripcion,F.Departamento FROM fracciones AS F WHERE F.Clave IN(308,309,322,324,405,315) ORDER BY ABS(F.Clave) ASC")->result() as $k => $v) {
+                            foreach ($this->db->query("SELECT F.Clave,F.Descripcion,F.Departamento FROM fracciones AS F WHERE F.Clave IN(308,309,322,324,405,315,332) ORDER BY ABS(F.Clave) ASC")->result() as $k => $v) {
                                 $check = ' <div class="col-6" style="border: 2px solid #b9b9b9; border-radius: 5px;">';
                                 $check .= '<div class="custom-control custom-checkbox">';
                                 $check .= '<input type="checkbox" class="custom-control-input" id="Fraccion' . $v->Clave . '"  description="' . $v->Descripcion . '" fraccion="' . $v->Clave . '">';
