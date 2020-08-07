@@ -1471,7 +1471,7 @@
             opcion += '</a>';
             opcion += '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">';
             opcion += '<a class="dropdown-item text-center justify-content-center" href="#"><img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" width="50%" class="rounded-circle"></a>';
-            opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema</a>';
+            opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema x</a>';
             opcion += '<a class="dropdown-item " href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>';
             opcion += '<a class="dropdown-item " href="#">';
 <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
@@ -1607,8 +1607,8 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                     modulos_counter = data.length;
                     switch (type) {
                         case 1:
-                            var effects = ["zoomIn", "flipInX", "flipInY", "zoomIn", "bounceIn", "slideInUp"];
-                            var effect = Math.floor(Math.random() * 5) + 1;
+                            var effects = ["zoomIn", "flipInX", "flipInY", "zoomIn", "bounceIn", "jello","tada"];
+                            var effect = Math.floor(Math.random() * 6) + 1;
                             $.each(data, function (k, v) {
 <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
                                     modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated ' + effects[parseInt(effect)] + '" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
@@ -1798,6 +1798,36 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
         });
     }
 
+    function onDesabilitarPanel(pnl) {
+        $.each(pnl.find("select[multiple='multiple']:enabled"), function (k, v) {
+            $(v).addClass('campo_no_valido');
+            onDisable($(v));
+        });
+        $.each(pnl.find("select.selectized:enabled"), function (k, v) {
+            $(v).addClass('campo_no_valido');
+            onDisable($(v));
+        });
+        $.each(pnl.find("button:enabled"), function (k, v) {
+            $(v).addClass('disabledForms');
+            $(v).addClass('boton_no_valido');
+            onDisable($(v));
+        });
+        pnl.find("input:enabled,textarea:enabled").addClass('campo_no_valido').attr('disabled', true);
+    }
+
+    function onHabilitarPanel(pnl) {
+        $.each($("body").find("select.campo_no_valido:disabled"), function (k, v) {
+            $(v).removeClass('campo_no_valido');
+            onEnable($(v));
+        });
+        $.each($("body").find("button.boton_no_valido:disabled"), function (k, v) {
+            $(v).removeClass('disabledForms');
+            $(v).removeClass('boton_no_valido');
+            onEnable($(v));
+        });
+        $("body").find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").removeClass('campo_no_valido').attr('disabled', false);
+
+    }
     function onReadAndWrite(e) {
         switch (e[0].tagName) {
             case "INPUT":

@@ -58,8 +58,41 @@
         background: linear-gradient(to bottom,  #2b2b2b 0%,#272727 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b2b2b', endColorstr='#272727',GradientType=0 ); /* IE6-9 */
         color: #fff;
-        background: linear-gradient(to bottom, #000000 0%,#272727 100%);
+        background: linear-gradient(to bottom, #000000 0%,#272727 100%); 
 
+        border-top: 2px solid;
+        border-bottom: 1px solid;
+        <?php
+        $border = rand(4, 4);
+        switch ($border) {
+            case 1:
+                ?> 
+                border-image: conic-gradient(#FF9800, #FFEB3B,#FF9800) 1;
+                border-image-source: linear-gradient(to left, #FF9800, #FFEB3B,#FF9800);
+                <?php
+                break;
+            case 2:
+                ?> 
+                background: linear-gradient(to bottom, #000000 0%,#272727 100%);
+                border-image: conic-gradient(#2E7D32, #8BC34A,#2E7D32) 1;
+                border-image-source: linear-gradient(to left, #2E7D32, #CDDC39,#2E7D32);
+                <?php
+                break;
+            case 3:
+                ?>
+                background: linear-gradient(to bottom, #000000 0%,#272727 100%);
+                border-image: conic-gradient(#0D47A1, #2196F3,#0D47A1) 1;
+                border-image-source: linear-gradient(to left, #0D47A1, #b2e7ff,#0D47A1);
+                <?php
+                break;
+            case 4:
+                ?> 
+                border-image: conic-gradient(#6b6b6b, #ffffff,#696969) 1;
+                border-image-source: linear-gradient(to left, #424242, #ffffff,#212121);
+                <?php
+                break;
+        }
+        ?>
     }
     .card:hover .text-nowrap, .card:hover .figure-caption{
         color: #fff;
@@ -117,11 +150,11 @@
     $(document).ready(function () {
         Z2V0UXVpY2tNZW51(1);
         b25Db21wcm9iYXJNb2R1bG9z(1);
-        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
-        $("body").vegas({
-            overlay: '<?php print base_url('js/vegas/overlays/02.png'); ?>'
-        });
-        <?php } ?>
+<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+            $("body").vegas({
+                overlay: '<?php print base_url('js/vegas/overlays/02.png'); ?>'
+            });
+<?php } ?>
     }
     );
 </script>
