@@ -131,7 +131,10 @@ class DevolucionesDeClientes extends CI_Controller {
 
     public function getColorXControl() {
         try {
-            print json_encode($this->db->query("SELECT (CASE WHEN p.ColorT IS NULL THEN \"SIN COLOR\" ELSE p.ColorT END) AS COLOR_T FROM pedidox as p where p.Control = {$this->input->get('CONTROL')} LIMIT 1")->result());
+            print json_encode($this->db->query("SELECT (CASE WHEN p.ColorT IS NULL THEN \"SIN COLOR\" ELSE p.ColorT END) AS COLOR_T, E.Foto "
+                                    . " FROM pedidox as p "
+                                    . " LEFT JOIN Estilos E on E.Clave = P.Estilo "
+                                    . " where p.Control = {$this->input->get('CONTROL')} LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
