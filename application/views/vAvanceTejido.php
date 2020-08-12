@@ -429,66 +429,72 @@
         });
 
         btnAceptar.click(function () {
-            if (Control.val()) {
-                if (Chofer.val() && Tejedora.val() && Documento.val() &&
-                        Control.val() && Frac.val() && Estilo.val() &&
-                        Color.val() && Pares.val() && Semana.val()
-                        && Fecha.val()) {
+            if (Documento.val().length >= 9) {
+                if (Control.val()) {
+                    if (Chofer.val() && Tejedora.val() && Documento.val() &&
+                            Control.val() && Frac.val() && Estilo.val() &&
+                            Color.val() && Pares.val() && Semana.val()
+                            && Fecha.val()) {
 
-                    /*1.- REVISAR SI YA TIENE UN AVANCE, DE LO CONTRARIO ARROJAR UN MENSAJE SOBRE ELLO*/
-                    $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
-                            {CONTROL: Control.val()}).done(function (a) {
+                        /*1.- REVISAR SI YA TIENE UN AVANCE, DE LO CONTRARIO ARROJAR UN MENSAJE SOBRE ELLO*/
+                        $.getJSON('<?php print base_url('AvanceTejido/onVerificarAvance') ?>',
+                                {CONTROL: Control.val()}).done(function (a) {
 //                        console.log(a);
-                        if (parseInt(a[0].EXISTE) > 0) {
-                            swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
-                                Control.focus().select();
-                            });
-                        } else {
+                            if (parseInt(a[0].EXISTE) > 0) {
+                                swal('ATENCIÓN', 'ESTE CONTROL YA TIENE UN AVANCE DENTRO DE ESTE MODULO, ESPECIFIQUE OTRO CONTROL').then((value) => {
+                                    Control.focus().select();
+                                });
+                            } else {
 //                            getUltimoDocumento();
-                            /*2.-  */
-                            var nomchofer = Chofer.find("option:selected").text(), nomteje = Tejedora.find("option:selected").text();
-                            $.post('<?php print base_url('AvanceTejido/onAvanzar') ?>', {
-                                NUM_CHOFER: Chofer.val(),
-                                CHOFER: getNombre(nomchofer),
-                                NUM_TEJEDORA: Tejedora.val(),
-                                TEJEDORA: getNombre(nomteje),
-                                FECHA: Fecha.val(),
-                                CONTROL: Control.val(),
-                                ESTILO: Estilo.val(),
-                                COLOR: Color.val(),
-                                COLORT: Color.find("option:selected").text(),
-                                DOCUMENTO: Documento.val(),
-                                PARES: Pares.val(),
-                                FRACCION: Frac.val(),
-                                SEMANA: Semana.val()
-                            }).done(function (a) {
-                                console.log(a);
-                                onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA GENERADO UN AVANCE', 'success', {from: "bottom", align: "center"});
-                                Control.val('');
-                                Estilo.val('');
-                                Color[0].selectize.clear(true);
-                                Pares.val('');
-                                pnlTablero.find("#Ava").val('');
-                                Control.focus().select();
-                                ControlesEntregados.ajax.reload();
-                            }).fail(function (x) {
-                                getError(x);
-                            }).always(function () {
-                                HoldOn.close();
-                            });
-                        }
-                    }).fail(function (x) {
-                        getError(x);
-                    }).always(function () {
-                        HoldOn.close();
-                    });
+                                /*2.-  */
+                                var nomchofer = Chofer.find("option:selected").text(), nomteje = Tejedora.find("option:selected").text();
+                                $.post('<?php print base_url('AvanceTejido/onAvanzar') ?>', {
+                                    NUM_CHOFER: Chofer.val(),
+                                    CHOFER: getNombre(nomchofer),
+                                    NUM_TEJEDORA: Tejedora.val(),
+                                    TEJEDORA: getNombre(nomteje),
+                                    FECHA: Fecha.val(),
+                                    CONTROL: Control.val(),
+                                    ESTILO: Estilo.val(),
+                                    COLOR: Color.val(),
+                                    COLORT: Color.find("option:selected").text(),
+                                    DOCUMENTO: Documento.val(),
+                                    PARES: Pares.val(),
+                                    FRACCION: Frac.val(),
+                                    SEMANA: Semana.val()
+                                }).done(function (a) {
+                                    console.log(a);
+                                    onNotifyOldPC('<span class="fa fa-check"></span>', 'SE HA GENERADO UN AVANCE', 'success', {from: "bottom", align: "center"});
+                                    Control.val('');
+                                    Estilo.val('');
+                                    Color[0].selectize.clear(true);
+                                    Pares.val('');
+                                    pnlTablero.find("#Ava").val('');
+                                    Control.focus().select();
+                                    ControlesEntregados.ajax.reload();
+                                }).fail(function (x) {
+                                    getError(x);
+                                }).always(function () {
+                                    HoldOn.close();
+                                });
+                            }
+                        }).fail(function (x) {
+                            getError(x);
+                        }).always(function () {
+                            HoldOn.close();
+                        });
+                    } else {
+                        swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning');
+                    }
                 } else {
-                    swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning');
+                    onBeep(2);
+                    swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
+                        Control.focus().select();
+                    });
                 }
             } else {
-                onBeep(2);
-                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN CONTROL', 'warning').then((value) => {
-                    Control.focus().select();
+                onCampoInvalido(pnlTablero, "ESTE DOCUMENTO NO ES VÁLIDO.", function () {
+                    Documento.focus();
                 });
             }
         });
@@ -550,7 +556,7 @@
                                     Fecha.val('');
                                     Frac.val('');
                                     Color[0].selectize.clear(true);
-                                    Pares.val(''); 
+                                    Pares.val('');
                                     if (a.length > 0) {
                                         var aa = a[0];
                                         swal('ATENCIÓN', 'CONTROL FUERA DE AVANCE: ' + aa.AVANCE_ACTUAL, 'warning').then((value) => {

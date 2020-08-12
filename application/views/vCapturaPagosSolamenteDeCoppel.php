@@ -5,6 +5,9 @@
                 <h4 class="card-title">Captura pagos solamente de Coppel</h4>  
             </div> 
             <div class="col-12 col-sm-12 col-xs-12 col-lg-8 col-xl-8" align="right"> 
+                <button type="button" class="btn btn-primary  btn-sm  font-weight-bold" onclick="location.reload();" style="background-color: #4CAF50; border-color: #4CAF50;">
+                    <span class="fa fa-retweet"></span>     NUEVO
+                </button>
                 <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-success btn-sm">
                     Movimientos
                 </button>
@@ -146,8 +149,8 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2">
                 <br>
-                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-primary mt-1 btn-sm btn-block">
-                    Acepta
+                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-primary mt-1 btn-sm btn-block font-weight-bold" style="background-color: #4CAF50; border-color: #4CAF50;">
+                    <span class="fa fa-check"></span>     ACEPTA
                 </button>
             </div> 
             <div class="w-100"></div> 
@@ -226,7 +229,7 @@
             tblPagosDeEsteDocumento = pnlTablero.find("#tblPagosDeEsteDocumento"), DocumentosConSaldoXClientes,
             tblDocumentosConSaldoXClientes = pnlTablero.find("#tblDocumentosConSaldoXClientes"),
             btnAceptaPagos = pnlTablero.find("#btnAceptaPagos"), DocumentoBancario = pnlTablero.find("#DocumentoBancario"),
-            btnMovimientos = pnlTablero.find("#btnMovimientos");
+            btnMovimientos = pnlTablero.find("#btnMovimientos"), folio_nc = true;
 
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
@@ -248,7 +251,7 @@
                         DOCUMENTO: DoctoPDC.val(),
                         BANCO: Banco.val(),
                         IMPORTE_DOS: DosPorcientoPDC.val(),
-                        IMPORTE_TRES: DosPorcientoPDC.val(),
+                        IMPORTE_TRES: TresPorcientoPDC.val(),
                         IVADOSTRES: IVATotalPorcientoPDC.val(),
                         DEPOSITO_REAL: SaldoDelDeposito.val(),
                         SALDO: SaldoDocumentoPDC.val(),
@@ -339,20 +342,25 @@
                             getError(x);
                         }).always(function () {
                         });
-                        $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getUltimaNC'); ?>').done(function (aaa) {
-                            //console.log(aa);
-                            if (aaa.length > 0) {
-                                NotaDeCredito.val(aaa[0].NCM);
-                            }
-                        }).fail(function (x) {
-                            getError(x);
-                        }).always(function () {
-                        });
+                        if (folio_nc) {
+                            $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getUltimaNC'); ?>').done(function (aaa) {
+                                //console.log(aa);
+                                if (aaa.length > 0) {
+                                    NotaDeCredito.val(aaa[0].NCM);
+                                }
+                            }).fail(function (x) {
+                                getError(x);
+                            }).always(function () {
+                            });
+                            folio_nc = false;
+                        }
                         PagosDeEsteDocumento.ajax.reload();
                         DocumentosConSaldoXClientes.ajax.reload();
                     } else {
-                        swal('ATENCIÓN', 'ESTA FACTURA NO EXISTE CON ESTE CLIENTE', 'warning').then((value) => {
+                        onDesabilitarPanel(pnlTablero);
+                        onCampoInvalido(pnlTablero, 'ESTA FACTURA NO EXISTE CON ESTE CLIENTE', function () {
                             DoctoPDC.focus().select();
+                            onHabilitarPanel(pnlTablero);
                         });
                     }
                 }).fail(function (x) {
@@ -365,11 +373,22 @@
 
         Documento.change(function () {
             var model = $(this).val().split("-");
-            ImporteDocumentoPDC.val(model[1]);
-            AplicadoPDC.val(model[2]);
-            SaldoDocumentoPDC.val(model[3]);
-            Deposito.val(model[4]);
-            console.log(model);
+            onOpenOverlay('');
+            var peticion = $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getDocumentoInfo'); ?>', {
+                DOCTO: model[5]
+            });
+            peticion.done(function (a) {
+                if (a.length > 0) {
+                    var b = a[0];
+                    Documento.val(b.DOCTO);
+                    ImporteDocumentoPDC.val(b.IMPORTE);
+                    AplicadoPDC.val(b.PAGOS);
+                    SaldoDocumentoPDC.val(b.SALDO);
+                    Deposito.val(b.FECHA);
+                    AplicadoPDC.focus().select();
+                }
+                onCloseOverlay();
+            });
         });
 
         Banco.change(function () {

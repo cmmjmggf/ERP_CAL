@@ -72,7 +72,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
 
     public function getCartCliente() {
         try {
-            print json_encode($this->db->query("SELECT CC.ID, CC.cliente, CC.remicion, date_format(CC.fecha,'%d/%m/%Y') AS fecha, CC.importe, CC.tipo, CC.numpol, CC.numcia, CC.status, CC.pagos, CC.saldo, CC.comiesp, CC.tcamb, CC.tmnda, CC.stscont, CC.nc, CC.factura FROM cartcliente AS CC WHERE cliente = 2121 AND status < 2 AND remicion LIKE '{$this->input->get("FACTURA")}'")->result());
+            print json_encode($this->db->query("SELECT CC.ID, CC.cliente, CC.remicion, date_format(CC.fecha,'%d/%m/%Y') AS fecha, CC.importe, CC.tipo, CC.numpol, CC.numcia, CC.status, CC.pagos, CC.saldo, CC.comiesp, CC.tcamb, CC.tmnda, CC.stscont, CC.nc, CC.factura FROM cartcliente AS CC WHERE cliente = 2121 AND status < 2 AND remicion = {$this->input->get("FACTURA")}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -99,7 +99,16 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
 
     public function getUltimaNC() {
         try {
-            print json_encode($this->db->query("SELECT (max(nc)+1) AS NCM FROM notcred AS N WHERE N.nc < 10000 AND   N.tp = 1 ORDER BY N.nc ")->result());
+            $ANIO = Date('Y');
+            print json_encode($this->db->query("SELECT (max(nc)+1) AS NCM FROM notcred AS N WHERE YEAR(N.fecha) = {$ANIO} AND  N.tp = 1 ORDER BY N.nc DESC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    public function getDocumentoInfo() {
+        try { 
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT D.docto AS DOCTO, D.banco AS BANCO, D.cuenta AS CUENTA, D.importe AS IMPORTE, D.pagos AS PAGOS, (D.importe - D.pagos) AS SALDO, date_format(D.fecha,'%d/%m/%Y') AS FECHA FROM depoctes AS D WHERE D.status < 3 AND D.docto = {$x['DOCTO']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -109,23 +118,32 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
         try {
             $x = $this->input->post();
             /* DOS PORCIENTO */
+			
+            $fecha = $x['FECHA_DEPOSITO'];
+            $dia = substr($fecha, 0, 2);
+            $mes = substr($fecha, 3, 2);
+            $anio = substr($fecha, 6, 4);
+
+            $nueva_fecha = new DateTime();
+            $nueva_fecha->setDate($anio, $mes, $dia);
+			
             $this->db->insert('cartctepagos', array(
                 'cliente' => 2121,
-                'remicion', $x['DOCUMENTO'],
+                'remicion'=> $x['DOCUMENTO'],
                 'fecha' => Date('Y-m-d'),
                 'importe' => $x['IMPORTE_DOS'],
                 'tipo' => $x['TP'],
                 'gcom' => 0,
                 'agente' => 1/* DIRECTO */,
                 'mov' => 5,
-                'doctopa' => "Dc2%",
+                'doctopa' => "Dc2% {$x['FOLIO_NC']}",
                 'numpol' => 0,
                 'numfol' => 0/* DIAS */,
                 'status' => 1,
                 'posfe' => 0,
-                'fechadep' => $x['FECHA_DEPOSITO'],
+                'fechadep' => "$anio-$mes-$dia 00:00:00",
                 'pagada' => 0,
-                'fechacap' => $x['FECHA_DEPOSITO'],
+                'fechacap' => "$anio-$mes-$dia 00:00:00",
                 'nc' => $x['FOLIO_NC'],
                 'control' => $x['BANCO']/* BANCO */,
                 'stscont' => 0,
@@ -135,21 +153,21 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             /* TRES PORCIENTO */
             $this->db->insert('cartctepagos', array(
                 'cliente' => 2121,
-                'remicion', $x['DOCUMENTO'],
+                'remicion'=> $x['DOCUMENTO'],
                 'fecha' => Date('Y-m-d'),
                 'importe' => $x['IMPORTE_TRES'],
                 'tipo' => $x['TP'],
                 'gcom' => 0,
                 'agente' => 1/* DIRECTO */,
                 'mov' => 5,
-                'doctopa' => "Dc3%",
+                'doctopa' => "Dc3% {$x['FOLIO_NC']}",
                 'numpol' => 0,
                 'numfol' => 0/* DIAS */,
                 'status' => 1,
                 'posfe' => 0,
-                'fechadep' => $x['FECHA_DEPOSITO'],
+                'fechadep' => "$anio-$mes-$dia 00:00:00",
                 'pagada' => 0,
-                'fechacap' => $x['FECHA_DEPOSITO'],
+                'fechacap' => "$anio-$mes-$dia 00:00:00",
                 'nc' => $x['FOLIO_NC'],
                 'control' => $x['BANCO']/* BANCO */,
                 'stscont' => 0,
@@ -159,21 +177,21 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             /* IVA DEL 2 Y 3 PORCIENTO */
             $this->db->insert('cartctepagos', array(
                 'cliente' => 2121,
-                'remicion', $x['DOCUMENTO'],
+                'remicion'=> $x['DOCUMENTO'],
                 'fecha' => Date('Y-m-d'),
                 'importe' => $x['IVADOSTRES'],
                 'tipo' => $x['TP'],
                 'gcom' => 0,
                 'agente' => 1/* DIRECTO */,
                 'mov' => 5,
-                'doctopa' => "IVA  N-C {$x['DOCUMENTO']}",
+                'doctopa' => "IVA  N-C {$x['FOLIO_NC']}",
                 'numpol' => 0,
                 'numfol' => 0/* DIAS */,
                 'status' => 1,
                 'posfe' => 0,
-                'fechadep' => $x['FECHA_DEPOSITO'],
+                'fechadep' => "$anio-$mes-$dia 00:00:00",
                 'pagada' => 0,
-                'fechacap' => $x['FECHA_DEPOSITO'],
+                'fechacap' => "$anio-$mes-$dia 00:00:00",
                 'nc' => $x['FOLIO_NC'],
                 'control' => $x['BANCO']/* BANCO */,
                 'stscont' => 0,
@@ -183,7 +201,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             /* RESTANTE */
             $this->db->insert('cartctepagos', array(
                 'cliente' => 2121,
-                'remicion', $x['DOCUMENTO'],
+                'remicion'=> $x['DOCUMENTO'],
                 'fecha' => Date('Y-m-d'),
                 'importe' => $x['DEPOSITO_REAL'],
                 'tipo' => $x['TP'],
@@ -195,9 +213,9 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
                 'numfol' => 0/* DIAS */,
                 'status' => 1,
                 'posfe' => 0,
-                'fechadep' => $x['FECHA_DEPOSITO'],
+                'fechadep' => "$anio-$mes-$dia 00:00:00",
                 'pagada' => 0,
-                'fechacap' => $x['FECHA_DEPOSITO'],
+                'fechacap' => "$anio-$mes-$dia 00:00:00",
                 'nc' => $x['FOLIO_NC'],
                 'control' => $x['BANCO']/* BANCO */,
                 'stscont' => 0,
@@ -209,11 +227,10 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             $this->db->insert('notcred', array(
                 'nc' => $x['FOLIO_NC'],
                 'cliente' => 2121,
-                'numfac', $x['DOCUMENTO'],
+                'numfac'=> $x['DOCUMENTO'],
                 'tp' => $x['TP'],
-                'orden' => 5,
-                'tipo' => $x['TP'],
-                'fecha' => 0,
+                'orden' => 5, 
+                'fecha' => "$anio-$mes-$dia 00:00:00",
                 'hora' => Date('h:i:s a'),
                 'cant' => 1,
                 'descripcion' => "Desc.2% Nc-{$x['FOLIO_NC']}",
@@ -228,7 +245,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             $this->db->insert('notcred', array(
                 'nc' => $x['FOLIO_NC'],
                 'cliente' => 2121,
-                'numfac', $x['DOCUMENTO'],
+                'numfac'=> $x['DOCUMENTO'],
                 'tp' => $x['TP'],
                 'orden' => 5,
                 'fecha' => 0,
@@ -269,18 +286,15 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             /* VALIDAR LOS DEPOSITOS */
             if (floatval($x['SALDO']) > floatval($x['DEPOSITO_REAL'])) {
                 $this->db->query("UPDATE depoctes SET status = 2, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
-                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
-                        ->result();
+                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'");
             }
             if (floatval($x['SALDO']) == floatval($x['DEPOSITO_REAL'])) {
                 $this->db->query("UPDATE depoctes SET status = 3, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
-                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
-                        ->result();
+                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'");
             }
             if (floatval($x['SALDO']) < floatval($x['DEPOSITO_REAL'])) {
                 $this->db->query("UPDATE depoctes SET status = 2, pagos = ifnull(pagos,0) + ifnull({$x['DEPOSITO_REAL']},0) "
-                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'")
-                        ->result();
+                                . "WHERE docto LIKE '{$x['DOCUMENTO_BANCO']}' AND banco LIKE  '{$x['BANCO']}'");
             }
             /* SALDAR IMPORTES MENORES A 2 PESOS */
             $this->db->set('status', 3)->where('status <', 3)->where('(importe - pagos) < 2', null, false)->update('depoctes');

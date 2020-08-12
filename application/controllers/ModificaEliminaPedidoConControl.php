@@ -190,6 +190,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                 $this->db->set('Clave', $x['CLAVE_NUEVO'])
                         ->set('FechaEntrega', $x['FECHA_ENTREGA_NUEVO'])
                         ->set('Cliente', $x['CLIENTE_NUEVO'])
+                        ->set('Pares', $x['TOTAL_PARES'])
                         ->set('C1', $x['CANTIDAD_UNO'])->set('C2', $x['CANTIDAD_DOS'])
                         ->set('C3', $x['CANTIDAD_TRES'])->set('C4', $x['CANTIDAD_CUATRO'])
                         ->set('C5', $x['CANTIDAD_CINCO'])->set('C6', $x['CANTIDAD_SEIS'])
@@ -203,6 +204,7 @@ class ModificaEliminaPedidoConControl extends CI_Controller {
                         ->set('C21', $x['CANTIDAD_VEINTIUNO'])->set('C22', $x['CANTIDAD_VEINTIDOS'])
                         ->where('ID', $x['IDPEDIDO'])
                         ->where('Control', $x['CONTROL'])->update('pedidox');
+                $this->db->set('Pares', $x['TOTAL_PARES'])->where('Control', $x['CONTROL'])->update('controles');
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

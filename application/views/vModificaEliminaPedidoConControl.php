@@ -261,7 +261,8 @@
                     CLAVE_NUEVO: PedidoMEPCC.val(),
                     FECHA_ENTREGA_NUEVO: FechaEntregaModificada.val(),
                     CLIENTE_NUEVO: ClienteMEPCC.val(),
-                    CONTROL: ControlMEPCC.val()
+                    CONTROL: ControlMEPCC.val(),
+                    TOTAL_PARES: TPares.val()
                 };
                 p["CANTIDAD_UNO"] = pnlTablero.find("#xC1").val();
                 p["CANTIDAD_DOS"] = pnlTablero.find("#xC2").val();
