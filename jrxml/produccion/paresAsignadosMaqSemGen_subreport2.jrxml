@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="paresAsignadosMaqSemGen_subreport2" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="1008" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="24179857-d34e-4428-a765-3660f4500c71">
-	<property name="ireport.zoom" value="2.143588810000009"/>
-	<property name="ireport.x" value="717"/>
+	<property name="ireport.zoom" value="1.6105100000000079"/>
+	<property name="ireport.x" value="302"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ano" class="java.lang.String"/>
 	<parameter name="sem" class="java.lang.String"/>
 	<parameter name="asem" class="java.lang.String"/>
+	<parameter name="semact" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[select
 cast(PE.semana as SIGNED) as sem,
@@ -365,6 +366,14 @@ order by sem asc;]]>
 	</columnHeader>
 	<detail>
 		<band height="10" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="984" height="9" backcolor="#FF9999" uuid="6af0ffde-7e7c-4e5e-873b-536094cc8992">
+					<printWhenExpression><![CDATA[($P{semact}==$F{sem})]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<line>
 				<reportElement x="107" y="0" width="1" height="10" uuid="f0a80d8f-98fc-46b2-8465-ad44ca3b4ae8"/>
 			</line>

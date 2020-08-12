@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="984" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" isSummaryNewPage="true" isSummaryWithPageHeaderAndFooter="true" isFloatColumnFooter="true" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.2539444027047555"/>
+	<property name="ireport.zoom" value="0.8689931392100743"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -36,6 +36,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String">
 		<defaultValueExpression><![CDATA["C:\\wamp64\\www\\ERP_CAL\\jrxml\\produccion\\"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="semact" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[select
 cast(PE.semana as SIGNED) as sem,
@@ -513,6 +514,14 @@ order by sem asc;]]>
 	</columnHeader>
 	<detail>
 		<band height="10" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="984" height="9" backcolor="#FF9999" uuid="674666c3-79ba-4119-b26b-352742d3305e">
+					<printWhenExpression><![CDATA[($P{semact}==$F{sem})]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<textField>
 				<reportElement x="0" y="0" width="23" height="10" uuid="cb3e10d4-be6d-4b98-80f3-760ec3ba286f"/>
 				<textElement verticalAlignment="Top">
@@ -933,6 +942,9 @@ order by sem asc;]]>
 		<band height="24">
 			<subreport>
 				<reportElement x="0" y="11" width="984" height="11" uuid="d05bf011-ee64-4d0e-a5f3-79c49a03d077"/>
+				<subreportParameter name="semact">
+					<subreportParameterExpression><![CDATA[$P{semact}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="asem">
 					<subreportParameterExpression><![CDATA[$P{asem}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -947,6 +959,9 @@ order by sem asc;]]>
 			</subreport>
 			<subreport>
 				<reportElement x="0" y="0" width="984" height="11" uuid="a9cf6be1-5b25-496f-aa28-46743e7a2e24"/>
+				<subreportParameter name="semact">
+					<subreportParameterExpression><![CDATA[$P{semact}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="asem">
 					<subreportParameterExpression><![CDATA[$P{asem}]]></subreportParameterExpression>
 				</subreportParameter>

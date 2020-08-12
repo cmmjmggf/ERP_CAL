@@ -436,12 +436,18 @@ class ReportesProduccionJasper extends CI_Controller {
     }
 
     public function ReporteParesAsignadosMaqSemGen() {
+
+        $sem = $this->db->query("SELECT S.Sem AS SEMANA FROM semanasproduccion AS S
+                            WHERE NOW() BETWEEN STR_TO_DATE(S.FechaIni, '%d/%m/%Y') AND STR_TO_DATE(S.FechaFin, '%d/%m/%Y') ")->result()[0]->SEMANA;
+
+
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $x = $this->input;
+        $parametros["semact"] = intval($sem);
         $parametros["sem"] = intval($x->post('Sem'));
         $parametros["asem"] = intval($x->post('aSem'));
         $parametros["ano"] = intval($x->post('Ano'));
