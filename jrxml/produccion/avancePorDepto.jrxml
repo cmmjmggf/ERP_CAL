@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="776" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.8150000000000004"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
@@ -147,21 +147,23 @@ order by cp.id desc
 limit 1
  ),'')
 
-when  (PE.stsavan = 55) then
-ifnull((
+WHEN  (PE.stsavan = 55) THEN
+IFNULL((
 SELECT
-case
-when cp.estatus = '1' then cp.FraccionT
-when cp.estatus = '2' then 'CIUCANI'
-else '' END AS Pegado
+CASE
+WHEN cp.estatus = '1' THEN cp.FraccionT
+WHEN cp.estatus = '2' THEN 'PARA CIUCANI'
+ELSE ''
+END AS Pegado
 FROM controlpla cp
-where cp.control = pe.control and cp.Fraccion = 502
-order by cp.id desc
-limit 1
- ),'')
-
-else ''
-end as Empleado,
+WHERE cp.control = pe.control AND cp.Fraccion = 502
+ORDER BY cp.id DESC
+LIMIT 1
+ ),
+ (SELECT 'PARA CIUCANI' AS texto FROM fracpagnomina
+WHERE numfrac = 502 AND control = pe.control LIMIT 1))
+ELSE ''
+END AS Empleado,
 
 ifnull(L.Descripcion,'N/E') as linea,
 PE.Estilo,
@@ -735,8 +737,8 @@ order by DEPTO_N, PE.control ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{GdoDif}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="633" y="0" width="57" height="9" uuid="9f01d57a-c079-48eb-afc7-ff29b299e4da"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="633" y="0" width="57" height="9" forecolor="#CC0000" uuid="9f01d57a-c079-48eb-afc7-ff29b299e4da"/>
 				<textElement verticalAlignment="Middle">
 					<font size="6" isBold="true"/>
 				</textElement>

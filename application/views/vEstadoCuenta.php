@@ -10,13 +10,26 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-3">
                             <label>Del Cliente</label>
                             <input type="text" class="form-control form-control-sm  numbersOnly " id="dClienteEdoCta" name="dClienteEdoCta" maxlength="5" required="">
                         </div>
-                        <div class="col-5">
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="sdClienteEdoCta" name="sdClienteEdoCta" class="form-control form-control-sm required NotSelectize" required="" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-3">
                             <label>Al Cliente</label>
                             <input type="text" class="form-control form-control-sm  numbersOnly " id="aClienteEdoCta" name="aClienteEdoCta" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="saClienteEdoCta" name="saClienteEdoCta" class="form-control form-control-sm required NotSelectize" required="" >
+                                <option value=""></option>
+                            </select>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-4">
@@ -37,8 +50,12 @@
 <script>
     var mdlEstadoCuenta = $('#mdlEstadoCuenta');
     $(document).ready(function () {
-
+        mdlEstadoCuenta.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlEstadoCuenta.on('shown.bs.modal', function () {
+            getClientesEdoCuentaUno();
             mdlEstadoCuenta.find("input").val("");
             mdlEstadoCuenta.find('#dClienteEdoCta').focus();
         });
@@ -46,16 +63,50 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    mdlEstadoCuenta.find('#aClienteEdoCta').focus().select();
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.addItem(txtcte, true);
+                            mdlEstadoCuenta.find('#aClienteEdoCta').focus().select();
+                        } else {
+                            mdlEstadoCuenta.find('#aClienteEdoCta').focus().select();
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
                 }
+            }
+        });
+        mdlEstadoCuenta.find("#sdClienteEdoCta").change(function () {
+            console.log($(this).val());
+            if ($(this).val()) {
+
+                mdlEstadoCuenta.find("#dClienteEdoCta").val($(this).val());
+                mdlEstadoCuenta.find("#aClienteEdoCta").focus();
             }
         });
         mdlEstadoCuenta.find('#aClienteEdoCta').keypress(function (e) {
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    mdlEstadoCuenta.find('#TpEdoCuenta').focus().select();
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.addItem(txtcte, true);
+                            mdlEstadoCuenta.find('#TpEdoCuenta').focus().select();
+                        } else {
+                            mdlEstadoCuenta.find('#TpEdoCuenta').focus().select();
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
                 }
+            }
+        });
+        mdlEstadoCuenta.find("#saClienteEdoCta").change(function () {
+            if ($(this).val()) {
+                mdlEstadoCuenta.find("#aClienteEdoCta").val($(this).val());
+                mdlEstadoCuenta.find("#TpEdoCuenta").focus();
             }
         });
         mdlEstadoCuenta.find("#TpEdoCuenta").keypress(function (e) {
@@ -153,4 +204,21 @@
             });
         }
     }
+    function getClientesEdoCuentaMasDias() {
+        mdlEstadoCuenta306090.find("#sdClienteEdoCtaMasDias")[0].selectize.clear(true);
+        mdlEstadoCuenta306090.find("#sdClienteEdoCtaMasDias")[0].selectize.clearOptions();
+        mdlEstadoCuenta306090.find("#saClienteEdoCtaMasDias")[0].selectize.clear(true);
+        mdlEstadoCuenta306090.find("#saClienteEdoCtaMasDias")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/AuxReportesClientes/getClientes').done(function (data) {
+            $.each(data, function (k, v) {
+                mdlEstadoCuenta306090.find("#sdClienteEdoCtaMasDias")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlEstadoCuenta306090.find("#saClienteEdoCtaMasDias")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
+
+
 </script>

@@ -169,10 +169,7 @@
                             mdlEstadoCuentaProveedor.find("#sdProveedorEdoCta")[0].selectize.addItem(txtprov, true);
                             mdlEstadoCuentaProveedor.find('#aProveedorEdoCta').focus().select();
                         } else {
-                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
-                                mdlEstadoCuentaProveedor.find("#sdProveedorEdoCta")[0].selectize.clear(true);
-                                mdlEstadoCuentaProveedor.find('#dProveedorEdoCta').focus().val('');
-                            });
+                            mdlEstadoCuentaProveedor.find('#aProveedorEdoCta').focus().select();
                         }
                     }).fail(function (x) {
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -196,10 +193,7 @@
                             mdlEstadoCuentaProveedor.find("#saProveedorEdoCta")[0].selectize.addItem(txtprov, true);
                             mdlEstadoCuentaProveedor.find('#btnImprimir').focus().select();
                         } else {
-                            swal('ERROR', 'EL PROVEEDOR NO EXISTE', 'warning').then((value) => {
-                                mdlEstadoCuentaProveedor.find("#saProveedorEdoCta")[0].selectize.clear(true);
-                                mdlEstadoCuentaProveedor.find('#aProveedorEdoCta').focus().val('');
-                            });
+                            mdlEstadoCuentaProveedor.find('#btnImprimir').focus().select();
                         }
                     }).fail(function (x) {
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

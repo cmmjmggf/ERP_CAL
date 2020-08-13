@@ -10,13 +10,25 @@
             <div class="modal-body">
                 <form id="frmCaptura">
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-3">
                             <label>Del Cliente</label>
                             <input type="text" class="form-control form-control-sm  numbersOnly " id="dClienteEdoCtaMasDias" name="dClienteEdoCtaMasDias" maxlength="5" required="">
                         </div>
-                        <div class="col-5">
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="sdClienteEdoCtaMasDias" name="sdClienteEdoCtaMasDias" class="form-control form-control-sm required NotSelectize" required="" >
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="col-3">
                             <label>Al Cliente</label>
                             <input type="text" class="form-control form-control-sm  numbersOnly " id="aClienteEdoCtaMasDias" name="aClienteEdoCtaMasDias" maxlength="5" required="">
+                        </div>
+                        <div class="col-9">
+                            <label for="" >-</label>
+                            <select id="saClienteEdoCtaMasDias" name="saClienteEdoCtaMasDias" class="form-control form-control-sm required NotSelectize" required="" >
+                                <option value=""></option>
+                            </select>
                         </div>
                         <div class="col-3">
                             <label class="mb-1">Tp: <span class="badge badge-info" style="font-size: 14px;">Nota: Para ver todo, dejar en blanco</span></label>
@@ -54,7 +66,12 @@
     var mdlEstadoCuenta306090 = $('#mdlEstadoCuenta306090');
     var dias = 0;
     $(document).ready(function () {
+        mdlEstadoCuenta306090.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlEstadoCuenta306090.on('shown.bs.modal', function () {
+            getClientesEdoCuentaMasDias();
             dias = 0;
             mdlEstadoCuenta306090.find("input").val("");
             mdlEstadoCuenta306090.find('#rGen').prop("checked", true);
@@ -76,16 +93,48 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').focus().select();
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta306090.find("#sdClienteEdoCtaMasDias")[0].selectize.addItem(txtcte, true);
+                            mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').focus().select();
+                        } else {
+                            mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').focus().select();
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
                 }
+            }
+        });
+        mdlEstadoCuenta306090.find("#sdClienteEdoCtaMasDias").change(function () {
+            if ($(this).val()) {
+                mdlEstadoCuenta306090.find("#dClienteEdoCtaMasDias").val($(this).val());
+                mdlEstadoCuenta306090.find("#aClienteEdoCtaMasDias").focus();
             }
         });
         mdlEstadoCuenta306090.find('#aClienteEdoCtaMasDias').keypress(function (e) {
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-                    mdlEstadoCuenta306090.find('#TpEdoCuentaMasDias').focus().select();
+                    $.getJSON(base_url + 'AuxReportesClientesTres/onVerificarCliente', {Cliente: txtcte}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlEstadoCuenta306090.find("#saClienteEdoCtaMasDias")[0].selectize.addItem(txtcte, true);
+                            mdlEstadoCuenta306090.find('#TpEdoCuentaMasDias').focus().select();
+                        } else {
+                            mdlEstadoCuenta306090.find('#TpEdoCuentaMasDias').focus().select();
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
                 }
+            }
+        });
+        mdlEstadoCuenta306090.find("#saClienteEdoCtaMasDias").change(function () {
+            if ($(this).val()) {
+                mdlEstadoCuenta306090.find("#aClienteEdoCtaMasDias").val($(this).val());
+                mdlEstadoCuenta306090.find("#TpEdoCuentaMasDias").focus();
             }
         });
         mdlEstadoCuenta306090.find("#TpEdoCuentaMasDias").keypress(function (e) {
@@ -169,5 +218,22 @@
                 $(v).val('').focus();
             });
         }
+    }
+
+
+    function getClientesEdoCuentaUno() {
+        mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.clear(true);
+        mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.clearOptions();
+        mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.clear(true);
+        mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/AuxReportesClientes/getClientes').done(function (data) {
+            $.each(data, function (k, v) {
+                mdlEstadoCuenta.find("#sdClienteEdoCta")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+                mdlEstadoCuenta.find("#saClienteEdoCta")[0].selectize.addOption({text: v.Cliente, value: v.Clave});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
     }
 </script>
