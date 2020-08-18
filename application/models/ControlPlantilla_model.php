@@ -82,10 +82,24 @@ class ControlPlantilla_model extends CI_Model {
 
     public function getInfoXControl($CONTROL) {
         try {
-            return $this->db->select("C.Estilo AS ESTILO, C.stsavan, "
+            return $this->db->select("C.Estilo AS ESTILO, C.stsavan, C.AsignadoPegado as Asignado,"
                                     . "C.Color AS COLOR, C.ColorT as NOMCOLOR, "
                                     . "C.Pares AS PARES", false)
                             ->from('pedidox as C')
+                            ->where("C.Control", $CONTROL)
+                            ->limit(1)->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInfoXControlEnsuelado($CONTROL) {
+        try {
+            return $this->db->select("C.Estilo AS ESTILO, C.stsavan, C.AsignadoPegado as Asignado, CP.Proveedor as Empleado, "
+                                    . "C.Color AS COLOR, C.ColorT as NOMCOLOR, "
+                                    . "C.Pares AS PARES", false)
+                            ->from('pedidox as C')
+                            ->join('controlpla CP', 'CP.Control = C.Control AND CP.fraccion = "502" ', 'left')
                             ->where("C.Control", $CONTROL)
                             ->limit(1)->get()->result();
         } catch (Exception $exc) {

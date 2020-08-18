@@ -107,6 +107,7 @@
         init();
 
         pnlTablero.find('#Control').keypress(function (e) {
+            onOpenOverlay('Cargando...');
             if (e.keyCode === 13 && $(this).val()) {
                 $.getJSON(master_url + 'getControlCancelado', {
                     Control: $(this).val()
@@ -115,9 +116,7 @@
                         $.each(data[0], function (k, v) {
                             pnlTablero.find("#" + k).val(v);
                         });
-
                         pnlTablero.find('#EstatusProduccion').text(data[0].EstatusProduccion);
-                        getRecords(pnlTablero.find('#Control').val());
                         pnlTablero.find('#Control').focus().select();
                     } else { //Si el control no existe
                         swal({
@@ -132,6 +131,7 @@
                             }
                         });
                     }
+                    onCloseOverlay();
                 });
             }
         });

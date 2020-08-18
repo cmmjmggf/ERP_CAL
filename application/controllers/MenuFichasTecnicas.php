@@ -34,6 +34,10 @@ class MenuFichasTecnicas extends CI_Controller {
                     /* INGENIERIA */
                     $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     break;
+                case 'RECURSOS HUMANOS':
+                    /* RECURSOS HUMANOS */
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
+                    break;
             }
             $this->load->view('vFooter')->view('vWatermark', $dt);
         } else {

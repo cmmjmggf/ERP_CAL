@@ -22,7 +22,7 @@
                             <label>Del Proveedor:</label>
                             <div class="row">
                                 <div class="col-3">
-                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="dProveedorEdoCtaGen" name="dProveedorEdoCtaGen" maxlength="5" required="">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="dProveedorEdoCtaGen" name="Proveedor" maxlength="5" required="">
                                 </div>
                                 <div class="col-9">
                                     <select id="sdProveedorEdoCtaGen" name="sdProveedorEdoCtaGen" class="form-control form-control-sm required NotSelectize" required="" >
@@ -35,7 +35,7 @@
                             <label>Al Proveedor:</label>
                             <div class="row">
                                 <div class="col-3">
-                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="aProveedorEdoCtaGen" name="aProveedorEdoCtaGen" maxlength="5" required="">
+                                    <input type="text" class="form-control form-control-sm  numbersOnly " id="aProveedorEdoCtaGen" name="aProveedor" maxlength="5" required="">
                                 </div>
                                 <div class="col-9">
                                     <select id="saProveedorEdoCtaGen" name="saProveedorEdoCtaGen" class="form-control form-control-sm required NotSelectize" required="" >

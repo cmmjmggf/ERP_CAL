@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="776" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.8150000000000004"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="3.2153832150000032"/>
+	<property name="ireport.x" value="1346"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -159,11 +159,21 @@ FROM controlpla cp
 WHERE cp.control = pe.control AND cp.Fraccion = 502
 ORDER BY cp.id DESC
 LIMIT 1
- ),
- (SELECT 'PARA CIUCANI' AS texto FROM fracpagnomina
-WHERE numfrac = 502 AND control = pe.control LIMIT 1))
+ ),'')
 ELSE ''
 END AS Empleado,
+
+
+(CASE
+WHEN pe.AsignadoPegado = 1 AND PE.stsavan = 55 THEN
+     CASE WHEN (SELECT COUNT(*) FROM fracpagnomina WHERE numfrac = 502 AND control = pe.control) > 0 THEN 'PARA CIUCANI'
+     ELSE 'PEGADO DE SUELA' END
+WHEN pe.AsignadoPegado = 0 AND PE.stsavan = 55 THEN
+  CASE WHEN (SELECT COUNT(*) FROM fracpagnomina WHERE numfrac = 502 AND control = pe.control) > 0 THEN 'PARA CIUCANI'
+     ELSE '' END
+END)
+AS CiucaniInterno,
+
 
 ifnull(L.Descripcion,'N/E') as linea,
 PE.Estilo,
@@ -220,6 +230,7 @@ order by DEPTO_N, PE.control ASC]]>
 	<field name="Empleado" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="CiucaniInterno" class="java.lang.String"/>
 	<field name="linea" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -743,6 +754,13 @@ order by DEPTO_N, PE.control ASC]]>
 					<font size="6" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="633" y="0" width="57" height="9" forecolor="#CC0000" uuid="d5af3c8a-b54d-4171-8845-de2cce1bd0d5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CiucaniInterno}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

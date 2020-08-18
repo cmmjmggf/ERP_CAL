@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="1008" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="5.259203606311244"/>
-	<property name="ireport.x" value="4343"/>
-	<property name="ireport.y" value="32"/>
+	<property name="ireport.zoom" value="2.698803026006825"/>
+	<property name="ireport.x" value="1637"/>
+	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
@@ -158,6 +158,21 @@ order by cp.id desc
 limit 1
  ),'')
 
+WHEN  (PE.stsavan = 55) THEN
+IFNULL((
+SELECT
+CASE
+WHEN cp.estatus = '1' THEN cp.FraccionT
+WHEN cp.estatus = '2' THEN 'PARA CIUCANI'
+ELSE ''
+END AS Pegado
+FROM controlpla cp
+WHERE cp.control = pe.control AND cp.Fraccion = 502
+ORDER BY cp.id DESC
+LIMIT 1
+ ),'')
+
+
 else ''
 end as Empleado,
 
@@ -244,22 +259,17 @@ order by cp.id desc
 limit 1
  ),'') end as fechamaquila,
 
-CASE WHEN  (PE.stsavan = 55) THEN
-IFNULL((
-SELECT
-'PARA CIUCANNI' AS texto FROM controlpla cp
-WHERE cp.control = pe.control
-AND cp.fraccion IN (502)
-AND cp.estatus = '2'
-UNION
-SELECT
-'PARA CIUCANNI' AS texto FROM fracpagnomina
-WHERE numfrac = 502 AND control = pe.control
-GROUP BY texto
-LIMIT 1
- ),'')
-ELSE ''
-END AS Ciucanni,
+(CASE
+WHEN pe.AsignadoPegado = 1 AND PE.stsavan = 55 THEN
+     CASE WHEN (SELECT COUNT(*) FROM fracpagnomina WHERE numfrac = 502 AND control = pe.control) > 0 THEN 'PARA CIUCANI'
+     ELSE 'PEGADO SUELA' END
+WHEN pe.AsignadoPegado = 0 AND PE.stsavan = 55 THEN
+  CASE WHEN (SELECT COUNT(*) FROM fracpagnomina WHERE numfrac = 502 AND control = pe.control) > 0 THEN 'PARA CIUCANI'
+     ELSE '' END
+END)
+AS Ciucanni,
+
+
 
 ifnull(L.Descripcion,'N/E') as linea,
 PE.Estilo,
@@ -681,7 +691,7 @@ order by DEPTO_N, PE.control ASC]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha Maq]]></text>
+				<text><![CDATA[Proc Ensuelado]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -877,6 +887,13 @@ order by DEPTO_N, PE.control ASC]]>
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Ciucanni}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="980" y="0" width="60" height="13" forecolor="#FF0000" uuid="1ec343f6-1a4c-4137-a225-26cec9f1854a"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
