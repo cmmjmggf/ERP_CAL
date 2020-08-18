@@ -1,5 +1,5 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header"> 
+<div class="card m-2 animated fadeIn" id="pnlTablero">
+    <div class="card-header" style="padding: 8px 8px 0px 8px;">
         <div class="row">
             <div class="col-12 col-sm-12 col-xs-12 col-lg-4 col-xl-4">
                 <h4 class="card-title">Captura pagos solamente de Coppel</h4>  
@@ -8,10 +8,10 @@
                 <button type="button" class="btn btn-primary  btn-sm  font-weight-bold" onclick="location.reload();" style="background-color: #4CAF50; border-color: #4CAF50;">
                     <span class="fa fa-retweet"></span>     NUEVO
                 </button>
-                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-success btn-sm">
+                <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-success btn-sm font-weight-bold" style=" background-color: #0D47A1; border-color: #0D47A1;">
                     Movimientos
                 </button>
-                <button type="button" id="btnCierraNotaDeCredito" name="btnCierraNotaDeCredito" class="btn btn-danger btn-sm">
+                <button type="button" id="btnCierraNotaDeCredito" name="btnCierraNotaDeCredito" class="btn btn-danger btn-sm font-weight-bold">
                     Cierra nota de credito
                 </button>
             </div>
@@ -48,7 +48,7 @@
                     }
                     ?>
                 </select>
-                <input type="text" id="DocumentoBancario" name="DocumentoBancario" class="d-none">
+                <input type="text" id="DocumentoBancario" name="DocumentoBancario" class="d-none" readonly="">
             </div> 
             <div class="col-12 col-xs-12 col-sm-4 col-lg-2 col-xl-2">
                 <label for="">Importe</label>
@@ -56,11 +56,11 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-lg-2 col-xl-2">
                 <label for="">Aplicado</label>
-                <input type="text" id="AplicadoPDC" name="AplicadoPDC" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="AplicadoPDC" name="AplicadoPDC" readonly="" class="form-control form-control-sm numbersOnly">
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-lg-2 col-xl-2">
                 <label for="">Saldo</label>
-                <input type="text" id="SaldoDocumentoPDC" name="SaldoDocumentoPDC" class="form-control form-control-sm numbersOnly">
+                <input type="text" id="SaldoDocumentoPDC" name="SaldoDocumentoPDC" readonly="" class="form-control form-control-sm numbersOnly">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <label for="">Cliente</label>
@@ -107,17 +107,17 @@
             <div class="col-12 col-xs-12 col-sm-4 col-md-3 col-lg-2 col-xl-1">
                 <span class="text-primary font-weight-bold">2%</span>
                 <span class="text-danger font-weight-bold DosPorcientoPDC">$ 0.0</span>  
-                <input type="text" id="DosPorcientoPDC" name="DosPorcientoPDC" class="form-control form-control-sm d-none numbersOnly" readonly="">
+                <input type="text" id="DosPorcientoPDC" name="DosPorcientoPDC" class="form-control form-control-sm d-none" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-md-3 col-lg-2 col-xl-1">
                 <span class="text-primary font-weight-bold">3%</span>
                 <span class="text-danger font-weight-bold TresPorcientoPDC">$ 0.0</span> 
-                <input type="text" id="TresPorcientoPDC" name="TresPorcientoPDC" class="form-control form-control-sm numbersOnly d-none" readonly="">
+                <input type="text" id="TresPorcientoPDC" name="TresPorcientoPDC" class="form-control form-control-sm d-none" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-md-3 col-lg-2 col-xl-1">
                 <span class="text-primary font-weight-bold">Total%</span>
                 <span class="text-danger font-weight-bold TotalPorcientoPDC">$ 0.0</span> 
-                <input type="text" id="TotalPorcientoPDC" name="TotalPorcientoPDC" class="form-control form-control-sm numbersOnly d-none" readonly="">
+                <input type="text" id="TotalPorcientoPDC" name="TotalPorcientoPDC" class="form-control form-control-sm d-none" readonly="">
             </div>
             <div class="col-12 col-xs-12 col-sm-4 col-md-3 col-lg-2 col-xl-1">
                 <span class="text-primary font-weight-bold">I.V.A</span>
@@ -207,7 +207,7 @@
             <!--TABLA DE DOCUMENTOS CON SALDO POR CLIENTE--> 
 
             <div id="SaldoTotalPendiente" class="col-12">
-                <h4 class="text-danger font-weight-bold">Saldo </h4>
+                <h4 class="text-danger font-weight-bold" style="color: #B71C1C !important">Saldo </h4>
             </div>
         </div>
     </div>
@@ -239,7 +239,7 @@
         });
 
         btnAceptaPagos.click(function () {
-            if (DoctoPDC.val()) {
+            if (TPPDC.val() && Banco.val() && TPPDC.val() && DocumentoBancario.val() && DoctoPDC.val()) {
                 if (FolioFiscal.val()) {
                     HoldOn.open({
                         theme: 'sk-rect',
@@ -264,12 +264,35 @@
                     $.post('<?php print base_url('CapturaPagosSolamenteDeCoppel/onAgregarPagoDosTresTotal'); ?>', dostres).done(function () {
                         onNotifyOld('', 'SE HAN REALIZADO LOS MOVIMIENTOS', 'success');
                         PagosDeEsteDocumento.ajax.reload();
-                        DocumentosConSaldoXClientes.ajax.reload();
-                        pnlTablero.find("input:not(#Agente)").val('');
-                        $.each(pnlTablero.find("select:not(#ClientePDC)"), function (k, v) {
-                            $(v)[0].selectize.clear(true);
+                        DocumentosConSaldoXClientes.ajax.reload(function () {
+                            getImporteAplicado();
+                            DoctoPDC.focus().select();
                         });
-                        TPPDC[0].selectize.focus();
+                        DoctoPDC.val('');
+                        FechaDoctoPDC.val('');
+                        ImportePDC.val(0);
+                        pnlTablero.find(".ImportePDC").text("$" + $.number(0, 2, '.', ','));
+                        PagosPDC.val(0);
+                        pnlTablero.find(".PagosPDC").text("$" + $.number(0, 2, '.', ','));
+                        SaldoPDC.val(0);
+                        pnlTablero.find(".SaldoPDC").text("$" + $.number(0, 2, '.', ','));
+                        MontoPDC.val(0);
+                        pnlTablero.find(".MontoPDC").text("$" + $.number(0, 2, '.', ','));
+                        DosPorcientoPDC.val(0);
+                        pnlTablero.find(".DosPorcientoPDC").text("$" + $.number(0, 2, '.', ','));
+                        TresPorcientoPDC.val(0);
+                        pnlTablero.find(".TresPorcientoPDC").text("$" + $.number(0, 2, '.', ','));
+                        TotalPorcientoPDC.val(0);
+                        pnlTablero.find(".TotalPorcientoPDC").text("$" + $.number(0, 2, '.', ','));
+                        IVATotalPorcientoPDC.val(0);
+                        pnlTablero.find(".IVATotalPorcientoPDC").text("$" + $.number(0, 2, '.', ','));
+                        DepositoPDC.val($.number(0, 2, '.', ''));
+                        pnlTablero.find(".DepositoPDC").text("$" + $.number(0, 2, '.', ','));
+                        Captura.val(Hoy);
+                        FolioFiscal.val(0);
+                        pnlTablero.find(".foliofiscal").text('');
+                        SaldoDelDeposito.val($.number(0, 2, '.', ''));
+                        DoctoPDC.focus().select();
                         onBeep(1);
                     }).fail(function (x) {
                         getError(x);
@@ -285,7 +308,7 @@
                 }
             } else {
                 onBeep(2);
-                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR UN DOCUMENTO/FACTURA', 'warning').then((value) => {
+                swal('ATENCIÓN', 'DEBE DE ESPECIFICAR LOS DATOS REQUERIDOS', 'warning').then((value) => {
                     DoctoPDC.focus().select();
                 });
             }
@@ -295,100 +318,94 @@
         TPPDC[0].selectize.focus();
         DoctoPDC.on('keydown', function (e) {
             if (e.keyCode === 13) {
-                HoldOn.open({
-                    theme: 'sk-rect',
-                    message: 'Espere...'
-                });
-                $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getCartCliente'); ?>', {
-                    FACTURA: DoctoPDC.val()
-                }).done(function (a) {
-                    console.log(a);
-                    if (a.length > 0) {
-                        var m = a[0];
-                        FechaDoctoPDC.val(m.fecha);
-                        ImportePDC.val(m.importe);
-                        pnlTablero.find(".ImportePDC").text("$" + $.number(m.importe, 2, '.', ','));
-                        PagosPDC.val(m.pagos);
-                        pnlTablero.find(".PagosPDC").text("$" + $.number(m.pagos, 2, '.', ','));
-                        SaldoPDC.val(m.saldo);
-                        pnlTablero.find(".SaldoPDC").text("$" + $.number(m.saldo, 2, '.', ','));
-                        MontoPDC.val(m.importe);
-                        pnlTablero.find(".MontoPDC").text("$" + $.number(m.importe, 2, '.', ','));
-                        var dospr = ((m.importe * 0.02) / 1.16), trespr = ((m.importe * 0.03) / 1.16), total = 0, ivatt = 0, ttf = 0;
-                        DosPorcientoPDC.val($.number(dospr, 2, '.', ''));
-                        pnlTablero.find(".DosPorcientoPDC").text("$" + $.number(dospr, 2, '.', ','));
-                        TresPorcientoPDC.val($.number(trespr, 2, '.', ''));
-                        pnlTablero.find(".TresPorcientoPDC").text("$" + $.number(trespr, 2, '.', ','));
-                        total = (dospr + trespr);
-                        ivatt = total * 0.16;
-                        TotalPorcientoPDC.val($.number(total, 2, '.', ''));
-                        pnlTablero.find(".TotalPorcientoPDC").text("$" + $.number(total, 2, '.', ','));
-                        IVATotalPorcientoPDC.val($.number(ivatt, 2, '.', ''));
-                        pnlTablero.find(".IVATotalPorcientoPDC").text("$" + $.number(ivatt, 2, '.', ','));
-                        total += ivatt;
-                        ttf = m.importe - total;
-                        DepositoPDC.val($.number(ttf, 2, '.', ''));
-                        pnlTablero.find(".DepositoPDC").text("$" + $.number(ttf, 2, '.', ','));
-                        Captura.val(Hoy);
-                        /*OBTENER UUID*/
-                        $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getUUID'); ?>', {DOCUMENTO: DoctoPDC.val()}).done(function (aa) {
-                            //console.log(aa);
-                            if (aa.length > 0) {
-                                FolioFiscal.val(aa[0].UUID);
-                                pnlTablero.find(".foliofiscal").text(aa[0].UUID);
-                                SaldoDelDeposito.val($.number(ttf, 2, '.', ''));
-                            }
-                        }).fail(function (x) {
-                            getError(x);
-                        }).always(function () {
-                        });
-                        if (folio_nc) {
-                            $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getUltimaNC'); ?>').done(function (aaa) {
+                if (DoctoPDC.val()) {
+                    HoldOn.open({
+                        theme: 'sk-rect',
+                        message: 'Espere...'
+                    });
+                    $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getCartCliente'); ?>', {
+                        FACTURA: DoctoPDC.val()
+                    }).done(function (a) {
+                        console.log(a);
+                        if (a.length > 0) {
+                            var m = a[0];
+                            FechaDoctoPDC.val(m.fecha);
+                            ImportePDC.val(m.importe);
+                            pnlTablero.find(".ImportePDC").text("$" + $.number(m.importe, 2, '.', ','));
+                            PagosPDC.val(m.pagos);
+                            pnlTablero.find(".PagosPDC").text("$" + $.number(m.pagos, 2, '.', ','));
+                            SaldoPDC.val(m.saldo);
+                            pnlTablero.find(".SaldoPDC").text("$" + $.number(m.saldo, 2, '.', ','));
+                            MontoPDC.val(m.importe);
+                            pnlTablero.find(".MontoPDC").text("$" + $.number(m.importe, 2, '.', ','));
+                            var dospr = ((m.importe * 0.02) / 1.16), trespr = ((m.importe * 0.03) / 1.16), total = 0, ivatt = 0, ttf = 0;
+                            DosPorcientoPDC.val(dospr);
+                            pnlTablero.find(".DosPorcientoPDC").text("$" + $.number(dospr, 2, '.', ','));
+                            TresPorcientoPDC.val(trespr);
+                            pnlTablero.find(".TresPorcientoPDC").text("$" + $.number(trespr, 2, '.', ','));
+                            total = (dospr + trespr);
+                            ivatt = total * 0.16;
+                            TotalPorcientoPDC.val(total);
+                            pnlTablero.find(".TotalPorcientoPDC").text("$" + $.number(total, 2, '.', ','));
+                            IVATotalPorcientoPDC.val(ivatt);
+                            pnlTablero.find(".IVATotalPorcientoPDC").text("$" + $.number(ivatt, 2, '.', ','));
+                            total += ivatt;
+                            ttf = m.importe - total;
+                            DepositoPDC.val($.number(ttf, 2, '.', ''));
+                            pnlTablero.find(".DepositoPDC").text("$" + $.number(ttf, 2, '.', ','));
+                            Captura.val(Hoy);
+                            /*OBTENER UUID*/
+                            $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getUUID'); ?>', {DOCUMENTO: DoctoPDC.val()}).done(function (aa) {
                                 //console.log(aa);
-                                if (aaa.length > 0) {
-                                    NotaDeCredito.val(aaa[0].NCM);
+                                if (aa.length > 0) {
+                                    FolioFiscal.val(aa[0].UUID);
+                                    pnlTablero.find(".foliofiscal").text(aa[0].UUID);
+                                    SaldoDelDeposito.val($.number(ttf, 2, '.', ''));
                                 }
                             }).fail(function (x) {
                                 getError(x);
                             }).always(function () {
                             });
-                            folio_nc = false;
+                            if (folio_nc) {
+                                $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getUltimaNC'); ?>').done(function (aaa) {
+                                    //console.log(aa);
+                                    if (aaa.length > 0) {
+                                        NotaDeCredito.val(aaa[0].NCM);
+                                    }
+                                }).fail(function (x) {
+                                    getError(x);
+                                }).always(function () {
+                                });
+                                folio_nc = false;
+                            }
+                            PagosDeEsteDocumento.ajax.reload();
+                            DocumentosConSaldoXClientes.ajax.reload();
+                        } else {
+                            onDesabilitarPanel(pnlTablero);
+                            onCampoInvalido(pnlTablero, 'ESTA FACTURA NO EXISTE CON ESTE CLIENTE', function () {
+                                DoctoPDC.focus().select();
+                                onHabilitarPanel(pnlTablero);
+                            });
                         }
-                        PagosDeEsteDocumento.ajax.reload();
-                        DocumentosConSaldoXClientes.ajax.reload();
-                    } else {
-                        onDesabilitarPanel(pnlTablero);
-                        onCampoInvalido(pnlTablero, 'ESTA FACTURA NO EXISTE CON ESTE CLIENTE', function () {
-                            DoctoPDC.focus().select();
-                            onHabilitarPanel(pnlTablero);
-                        });
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    HoldOn.close();
-                });
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        HoldOn.close();
+                    });
+                } else {
+                    onDesabilitarPanel(pnlTablero);
+                    onCampoInvalido(pnlTablero, 'POR FAVOR, ESCRIBA UN DOCUMENTO', function () {
+                        DoctoPDC.focus().select();
+                        onHabilitarPanel(pnlTablero);
+                    });
+                }
             }
         });
 
         Documento.change(function () {
-            var model = $(this).val().split("-");
-            onOpenOverlay('');
-            var peticion = $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getDocumentoInfo'); ?>', {
-                DOCTO: model[5]
-            });
-            peticion.done(function (a) {
-                if (a.length > 0) {
-                    var b = a[0];
-                    Documento.val(b.DOCTO);
-                    ImporteDocumentoPDC.val(b.IMPORTE);
-                    AplicadoPDC.val(b.PAGOS);
-                    SaldoDocumentoPDC.val(b.SALDO);
-                    Deposito.val(b.FECHA);
-                    AplicadoPDC.focus().select();
-                }
-                onCloseOverlay();
-            });
+            if (Documento.val()) {
+                getImporteAplicado();
+            }
         });
 
         Banco.change(function () {
@@ -398,6 +415,25 @@
         getDocumentosConSaldoXClientes();
     });/*FIN DOCUMENT READY*/
 
+    function getImporteAplicado() {
+        var model = Documento.val().split("-");
+        onOpenOverlay('');
+        var peticion = $.getJSON('<?php print base_url('CapturaPagosSolamenteDeCoppel/getDocumentoInfo'); ?>', {
+            DOCTO: model[5]
+        });
+        peticion.done(function (a) {
+            if (a.length > 0) {
+                var b = a[0];
+                DocumentoBancario.val(b.DOCTO);
+                Documento.val(b.DOCTO);
+                ImporteDocumentoPDC.val(b.IMPORTE);
+                AplicadoPDC.val(b.PAGOS);
+                SaldoDocumentoPDC.val(b.SALDO);
+                Deposito.val(b.FECHA); 
+            }
+            onCloseOverlay();
+        });
+    }
 
     function getPagosDocumento() {
         $.fn.dataTable.ext.errMode = 'throw';

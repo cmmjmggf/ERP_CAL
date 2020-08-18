@@ -1471,6 +1471,7 @@
             opcion += '</a>';
             opcion += '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">';
             opcion += '<a class="dropdown-item text-center justify-content-center" href="#"><img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" width="50%" class="rounded-circle"></a>';
+            opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="#mdlPerfilUsuario"><i class="fa fa-question-circle"></i> Perfil</a>';
             opcion += '<a class="dropdown-item " href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema x</a>';
             opcion += '<a class="dropdown-item " href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>';
             opcion += '<a class="dropdown-item " href="#">';

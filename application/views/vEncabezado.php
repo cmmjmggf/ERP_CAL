@@ -144,3 +144,5 @@
             });
         </script>
     </head>
+<?php 
+$this->load->view('vPerfil');  

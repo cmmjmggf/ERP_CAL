@@ -15,7 +15,8 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item text-center justify-content-center" href="#"><img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" width="50%" class="rounded-circle"></a>
-                    <a class="dropdown-item" href="#"><i class="fa fa-question-circle"></i> Reportar un problema</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlPerfilUsuario"><i class="fa fa-user"></i> Perfil</a>
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#mdlReportarProblema"><i class="fa fa-question-circle"></i> Reportar un problema</a>
                     <a class="dropdown-item" href="#"><i class="fa fa-key"></i> Cambiar Contraseña</a>
                     <a class="dropdown-item " href="#">
                         <?php
@@ -28,4 +29,4 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav> 
