@@ -12,7 +12,7 @@ class Avance extends CI_Controller {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
-                case 'SUPER ADMINISTRADOR':
+                case 'SUPER ADMINISTRADOR' || 'PRODUCCION' || 'SUPERVISION':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vAvance')->view('vFooter');
                     break;
                 case 'DISEÑO Y DESARROLLO':
@@ -20,13 +20,7 @@ class Avance extends CI_Controller {
                     break;
                 case 'ALMACEN':
                     $this->load->view('vMenuMateriales')->view('vAvance')->view('vFooter');
-                    break;
-                case 'PRODUCCION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vAvance')->view('vFooter');
-                    break;
-                case 'SUPERVISION':
-                    $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vAvance')->view('vFooter');
-                    break;
+                    break; 
                 default:
                     header("Location: " . base_url());
                     break;

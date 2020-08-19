@@ -74,7 +74,7 @@ class FacturacionVarios extends CI_Controller {
                 "par22" => 0,
                 "precto" => $x["PRECIO"],
                 "subtot" => $x["SUBTOTAL"],
-                "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0) ? ($x["SUBTOTAL"] * 0.16) : 0),
+                "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0 || intval($x["TIPO_MONEDA"]) === 1 &&  intval($x["TP"]) === 1 ) ? ($x["SUBTOTAL"] * 0.16) : 0),
                 "staped" => 1,
                 "monletra" => $x["MONEDA_LETRA"],
                 "tmnda" => $x["TIPO_MONEDA"],
@@ -165,7 +165,7 @@ class FacturacionVarios extends CI_Controller {
                         "descripcion" => $Descripcion, "Precio" => $x["PRECIO"],
                         "importe" => ($x["CANTIDAD"] * $x["PRECIO"]),
                         "fecha" => $FECHIN, "control" => $CONTROLV,
-                        "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0) ? ($x["SUBTOTAL"] * 0.16) : 0),
+                        "iva" => ((intval($x["TP"]) === 1 && intval($x["NO_GENERA_IVA"]) === 0 || intval($x["TIPO_MONEDA"]) === 1 &&  intval($x["TP"]) === 1 ) ? ($x["SUBTOTAL"] * 0.16) : 0),
                         "tmnda" => intval($x["TIPO_MONEDA"]),
                         "tcamb" => (intval($x["TIPO_MONEDA"]) === 1 ? 0 : $x["TIPO_CAMBIO"]), "noidentificado" => $CodigoBarras,
                         "referencia" => $x["REFERENCIA"], "tienda" => $x['TIENDA']
@@ -232,7 +232,6 @@ class FacturacionVarios extends CI_Controller {
                     switch (intval($x['TIPO'])) {
                         case 1:
                             $TOTAL *= $x['TIPO_DE_CAMBIO'];
-                            $TOTAL *= 0.16;
                             break;
                         case 2:
                             $TOTAL = $IMPORTE_TOTAL_SIN_IVA * $x['TIPO_DE_CAMBIO'];
