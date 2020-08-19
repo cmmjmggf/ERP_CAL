@@ -342,7 +342,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                             "depto" => $v->DepartamentoFisico
                         ));
                     } else {
-
+                        
                     }
                     /* 3.7 INSERT PARA EL CONCEPTO 5 = SALARIO (DESTAJO) EN PRENOMINAL */
 //                    $EXISTE_EN_PRENOMINAL = $this->onExisteEnPrenominaL($x['ANIO'], $x['SEMANA'], $v->Numero);
@@ -728,7 +728,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             if (floatval($v->SaldoPres) > 0 && floatval($v->AbonoPres) > 0 && floatval($v->PressAcum) > 0) {
                 $SALDO_FINAL_PRESTAMO = 0;
                 $ACUMULADO_DE_PRESTAMOS = $this->db->query("SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}", false)->result();
-                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO}", false)->result();
+                $ACUMULADO_DE_PAGOS = $this->db->query("SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO} AND status = 2", false)->result();
                 if (!empty($ACUMULADO_DE_PRESTAMOS) && !empty($ACUMULADO_DE_PRESTAMOS)) {
                     if ($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) {
                         $SALDO_FINAL_PRESTAMO = floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) - floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO);
@@ -736,9 +736,15 @@ class GeneraNominaDeSemana extends CI_Controller {
                 }
 //                print "\n {$v->Numero} {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO}, {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}, $SALDO_FINAL_PRESTAMO \n";
                 if (floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) >= floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO)) {
+                    $ABONO = $v->AbonoPres;
+                    $ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO = $this->db->query("SELECT IFNULL((SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}) - 
+(SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO} AND status = 2),0) AS ABONOX ", false)->result();
+                    if (floatval($v->AbonoPres) > floatval($ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO[0]->ABONOX)) {
+                        $ABONO = floatval($ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO[0]->ABONOX);
+                    }
                     $this->db->insert('prestamospag', array(
                         "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d 00:00:00'),
-                        "preemp" => $v->PressAcum, "aboemp" => $v->{"AbonoPres"}, "saldoemp" => $SALDO_FINAL_PRESTAMO,
+                        "preemp" => $v->PressAcum, "aboemp" => $ABONO, "saldoemp" => $SALDO_FINAL_PRESTAMO,
                         "interes" => 0, "status" => 1
                     ));
                     $this->db->insert('prenomina', array(
@@ -746,11 +752,11 @@ class GeneraNominaDeSemana extends CI_Controller {
                         "numemp" => $v->Numero, "diasemp" => $ASISTENCIAS,
                         "numcon" => 65 /* 65 PRESTAMO C-AH */, "tpcon" => 0 /* 1 = PERCECION */,
                         "tpcond" => 2 /* 2 = DEDUCCION */, "importe" => 0,
-                        "imported" => $v->{"AbonoPres"}, "fecha" => Date('Y-m-d 00:00:00'),
+                        "imported" => $ABONO, "fecha" => Date('Y-m-d 00:00:00'),
                         "registro" => 0, "status" => 1, "tpomov" => 0,
                         "depto" => $v->DepartamentoFisico
                     ));
-                    $this->db->set('precaha', $v->{"AbonoPres"})->where('numsem', $SEM)
+                    $this->db->set('precaha', $ABONO)->where('numsem', $SEM)
                             ->where('año', $ANIO)->where('numemp', $v->Numero)
                             ->update('prenominal');
                 }
