@@ -77,9 +77,17 @@ class ControlEnsuelado extends CI_Controller {
 
     public function getEmpleados() {
         try {
-            print json_encode($this->db->select('PRM.Numero AS ID, PRM.BUSQUEDA AS EMPLEADO', false)
-                                    ->from('empleados AS PRM')->where('PRM.Altabaja ', '1')->where_in('PRM.FijoDestajoAmbos ', array('2', '3'))
-                                    ->order_by('EMPLEADO', 'ASC')->get()->result());
+            print json_encode($this->db->query("SELECT PRM.Numero AS ID, PRM.BUSQUEDA AS EMPLEADO
+                                                FROM empleados AS PRM
+                                                WHERE PRM.Altabaja = 1
+                                                AND PRM.FijoDestajoAmbos IN (2,3)
+
+                                                UNION
+
+                                                SELECT '9999' AS ID, 'PARA TEJIDO' AS EMPLEADO
+
+                                                ORDER BY EMPLEADO ASC
+                                                 ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -105,7 +113,10 @@ class ControlEnsuelado extends CI_Controller {
                 'Usuario' => $this->session->ID,
                 'UsuarioT' => $this->session->USERNAME
             ));
-            $this->db->set('AsignadoPegado', 1)->where('Control', $x->post('CONTROL'))->update('pedidox');
+
+            $asigadoA = ($x->post('Empleado') === '9999') ? 2 : 1;
+
+            $this->db->set('AsignadoPegado', $asigadoA)->where('Control', $x->post('CONTROL'))->update('pedidox');
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

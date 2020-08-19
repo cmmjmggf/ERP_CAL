@@ -33,36 +33,36 @@
                     </div>
                     <div class="col-4">
                         <label for="">Lta-1</label>
-                        <input type="text" id="ListaUnoCPVTAXLTA" name="ListaUnoCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
+                        <input type="text" id="ListaUnoCPVTAXLTA" name="ListaUnoCPVTAXLTA" class="form-control form-control-sm numbersOnly" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-2</label>
-                        <input type="text" id="ListaDosCPVTAXLTA" name="ListaDosCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
+                        <input type="text" id="ListaDosCPVTAXLTA" name="ListaDosCPVTAXLTA" class="form-control form-control-sm numbersOnly" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-3</label>
-                        <input type="text" id="ListaTresCPVTAXLTA" name="ListaTresCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
+                        <input type="text" id="ListaTresCPVTAXLTA" name="ListaTresCPVTAXLTA" class="form-control form-control-sm numbersOnly" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-6</label>
-                        <input type="text" id="ListaSeisCPVTAXLTA" name="ListaSeisCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
+                        <input type="text" id="ListaSeisCPVTAXLTA" name="ListaSeisCPVTAXLTA" class="form-control form-control-sm numbersOnly" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-12</label>
-                        <input type="text" id="ListaDoceCPVTAXLTA" name="ListaDoceCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
+                        <input type="text" id="ListaDoceCPVTAXLTA" name="ListaDoceCPVTAXLTA" class="form-control form-control-sm numbersOnly" maxlength="15">
                     </div>
                     <div class="col-4">
                         <label for="">Lta-25</label>
-                        <input type="text" id="ListaDosCincoCPVTAXLTA" name="ListaDosCincoCPVTAXLTA" class="form-control form-control-sm" maxlength="15">
+                        <input type="text" id="ListaDosCincoCPVTAXLTA" name="ListaDosCincoCPVTAXLTA" class="form-control form-control-sm numbersOnly" maxlength="15">
                     </div>
                     <div class="col-6 mt-2" align="left">
-                        <button type="button" id="btnPorListasDePreciosVolver" class="btn btn-primary d-none">
-                            <span class="fa fa-arrow-left"></span> Volver
+                        <button type="button" id="btnAceptaListaXEstilo" name="btnAceptaListaXEstilo" class="btn btn-primary">
+                            <span class="fa fa-check"></span> Acepta
                         </button>
                     </div>
                     <div class="col-6 mt-2" align="right">
-                        <button type="button" id="btnAceptaListaXEstilo" name="btnAceptaListaXEstilo" class="btn btn-primary">
-                            <span class="fa fa-check"></span> Acepta
+                        <button type="button" id="btnPorListasDePreciosVolver" class="btn btn-primary d-none">
+                            <span class="fa fa-arrow-left"></span> Volver
                         </button>
                     </div>
                 </div>

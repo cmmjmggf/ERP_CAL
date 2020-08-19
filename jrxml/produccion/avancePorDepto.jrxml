@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="776" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="3.2153832150000032"/>
-	<property name="ireport.x" value="1346"/>
+	<property name="ireport.x" value="1344"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -165,6 +165,8 @@ END AS Empleado,
 
 
 (CASE
+WHEN pe.AsignadoPegado = 2 AND PE.stsavan = 55 THEN
+     'PARA TEJIDO'
 WHEN pe.AsignadoPegado = 1 AND PE.stsavan = 55 THEN
      CASE WHEN (SELECT COUNT(*) FROM fracpagnomina WHERE numfrac = 502 AND control = pe.control) > 0 THEN 'PARA CIUCANI'
      ELSE 'PEGADO DE SUELA' END

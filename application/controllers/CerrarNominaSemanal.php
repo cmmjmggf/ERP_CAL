@@ -46,7 +46,7 @@ class CerrarNominaSemanal extends CI_Controller {
 
                     $saldo = 0;
                     //Si e saldo del prestamo ya es menor al abono actualizamos a 0
-                    if (floatval($Empleado[0]->SaldoPres) < floatval($Empleado[0]->AbonoPres)) {
+                    if (floatval($Empleado[0]->SaldoPres) <= floatval($Empleado[0]->AbonoPres)) {
                         //Como ya valida que es el ultimo abono siendo menor al saldo , pone todo en 0's
                         $this->db->query("update empleados set PressAcum = 0,SaldoPres = 0,AbonoPres = 0 where numero =  $numemp ");
                     } else {//si no ponemos el saldo actual menos el abono de la semana

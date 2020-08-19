@@ -78,7 +78,6 @@
 
 
     $(document).ready(function () {
-        handleEnterDiv(pnlCaptura);
         pnlTablero.find('select').selectize({
             openOnFocus: false
         });
@@ -90,21 +89,27 @@
             if (e.keyCode === 13) {
                 var txtemp = $(this).val();
                 if (txtemp) {
-                    $.getJSON('<?php print base_url('ControlEnsuelado/onVerificarEmpleado'); ?>', {Empleado: txtemp}).done(function (data) {
 
-                        if (data.length > 0) {
-                            sEmpleado[0].selectize.addItem(txtemp, true);
-                            Control.focus().select();
-                        } else {
-                            swal('ERROR', 'EL EMPLEADO CAPTURADO NO EXISTE', 'warning').then((value) => {
-                                sEmpleado[0].selectize.clear(true);
-                                Empleado.focus().val('');
-                            });
-                        }
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                    if (txtemp === '9999') {//Para tejido
+                        sEmpleado[0].selectize.addItem('9999', true);
+                        Control.focus().select();
+                    } else {//Normal
+
+                        $.getJSON('<?php print base_url('ControlEnsuelado/onVerificarEmpleado'); ?>', {Empleado: txtemp}).done(function (data) {
+                            if (data.length > 0) {
+                                sEmpleado[0].selectize.addItem(txtemp, true);
+                                Control.focus().select();
+                            } else {
+                                swal('ERROR', 'EL EMPLEADO CAPTURADO NO EXISTE', 'warning').then((value) => {
+                                    sEmpleado[0].selectize.clear(true);
+                                    Empleado.focus().val('');
+                                });
+                            }
+                        }).fail(function (x) {
+                            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                            console.log(x.responseText);
+                        });
+                    }
                 }
             }
         });
