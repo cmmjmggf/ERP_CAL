@@ -483,15 +483,62 @@
     }
     .card  {
         text-transform: uppercase;
+    }  
+
+    .loader {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, transparent, transparent 40%, #e5f403);
+        animation: animatex 2s linear infinite;
     }
 
+    .loader::before {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        bottom: 6px;
+        background-color: #333;
+        border-radius: 50%;
+        z-index: 1000;
+    }
+
+    .loader::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent, transparent 40%, #e5f403);
+        border-radius: 50%;
+        z-index: 100;
+        filter: blur(2px);
+    }
+
+    /* la animacion */
+
+    @keyframes animatex {
+        0% {
+            transform: rotate(0deg);
+            filter: hue-rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+            filter: hue-rotate(360deg);
+        }
+    }
 </style>
 <!--STYLE NEGRO-->
 <?php
 if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") {
     ?>
-<link rel="stylesheet" href="<?php print base_url('js/vegas/vegas.min.css'); ?>">
-<script src="<?php print base_url('js/vegas/vegas.min.js'); ?>"></script>
+    <link rel="stylesheet" href="<?php print base_url('js/vegas/vegas.min.css'); ?>">
+    <script src="<?php print base_url('js/vegas/vegas.min.js'); ?>"></script>
     <style>
         body{  
             /* Location of the image */

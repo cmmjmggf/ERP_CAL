@@ -442,6 +442,8 @@ class GeneraCostosVenta extends CI_Controller {
             $Usuario = $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos');
             $Fecha = Date('d/m/Y');
             $this->db->query("update estilos set seguridad = 1, UsuarioAbrioLinea = '$Usuario' , FechaAbrioLinea = '$Fecha' ");
+            $this->db->query("update estilos SET IP = '" . $_SERVER['REMOTE_ADDR'] . "'");
+            $l = new Logs("GENERA COSTOS DE VENTA", "HA CERRADO(1) TODAS LAS LINEAS {$Fecha}", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -464,6 +466,8 @@ class GeneraCostosVenta extends CI_Controller {
             $Fecha = Date('d/m/Y');
             $this->db->query("update estilos set seguridad = 1 , UsuarioAbrioLinea = '$Usuario' , FechaAbrioLinea = '$Fecha' "
                     . " where linea = '$Linea' ");
+            $this->db->query("update estilos SET IP = '" . $_SERVER['REMOTE_ADDR'] . "'");
+            $l = new Logs("GENERA COSTOS DE VENTA", "HA CERRADO(1) LA LINEA {$Linea} ,  {$Fecha}", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -476,6 +480,8 @@ class GeneraCostosVenta extends CI_Controller {
             $Usuario = $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos');
             $this->db->query("update estilos set seguridad = 0 , UsuarioAbrioLinea = '$Usuario' , FechaAbrioLinea = '$Fecha' "
                     . "where linea = '$Linea' ");
+            $this->db->query("update estilos SET IP = '" . $_SERVER['REMOTE_ADDR'] . "'");
+            $l = new Logs("GENERA COSTOS DE VENTA", "HA ABIERTO(0) LA LINEA {$Linea} ,  {$Fecha}", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

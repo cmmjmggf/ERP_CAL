@@ -1464,7 +1464,7 @@
         }, "json").fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
-            opcion += '<li class="nav-item dropdown ml-auto session-dropdown">';
+            opcion += '<li class="nav-item dropdown ml-auto session-dropdown">';  
             opcion += '<a class="btn btn-primary dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
             opcion += ' <img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" style="cursor:pointer;" class="rounded-circle" width="24">';
             opcion += ' <?php echo $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos'); ?> ';
@@ -1608,7 +1608,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                     modulos_counter = data.length;
                     switch (type) {
                         case 1:
-                            var effects = ["zoomIn", "flipInX", "flipInY", "zoomIn", "bounceIn", "jello","tada"];
+                            var effects = ["zoomIn", "flipInX", "flipInY", "zoomIn", "bounceIn", "jello", "tada"];
                             var effect = Math.floor(Math.random() * 6) + 1;
                             $.each(data, function (k, v) {
 <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>

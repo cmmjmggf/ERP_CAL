@@ -17,15 +17,15 @@
                         print "<p class='font-weight-bold font-italic' style='font-size: 18px;'><span class='fa fa-user'></span>  {$this->session->USERNAME}</p>";
                         print "<p class='font-weight-bold font-italic' style='font-size: 18px;'><span class='fa fa-key'></span> {$this->session->Nombre} {$this->session->Apellidos}</p>";
                         print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>{$this->session->TipoAcceso}</p>";
-                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>TEMA: {$this->session->TEMA} </p>";
-                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>SEGURIDAD: " . (intval($this->session->SEG) === 1 ? "SI" : "NO" ) . "</p>";
 
                         $fechin = Date('d/m/Y');
                         $datan = $this->db->select("S.Sem AS SEMANA_NOMINA", false)
                                         ->from('semanasnomina AS S')
                                         ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
                                         ->get()->result();
-                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>SEMANA: {$datan[0]->SEMANA_NOMINA}</p>";
+                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>SEMANA: <span style=\"color: #e8ff00\">{$datan[0]->SEMANA_NOMINA}</span></p>";
+                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>IP: <span style=\"color: #FFC107\">{$_SERVER['REMOTE_ADDR']}</span> </p>";
+                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>SEGURIDAD: " . (intval($this->session->SEG) === 1 ? "SI" : "NO" ) . "</p>";
                         ?>
                     </div>
                 </div>

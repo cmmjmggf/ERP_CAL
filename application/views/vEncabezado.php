@@ -132,17 +132,30 @@
         <script src="<?php echo base_url("js/momentjs/es.js"); ?>"></script>
         <script src="<?php echo base_url("js/momentjs/datetime-moment.js"); ?>"></script>
 
-<!--        <style>
-    .card{background-color:#fff;border-width:1px 2px 2px;border-style:solid;border-image:linear-gradient(to bottom,#09c,#036,rgb(0,0,0,0)) 1 100%}
-</style>-->
         <script>
             $(document).ready(function () {
                 Waves.attach('.btn:not(.btn-float)', ['waves-effect']);
                 Waves.init();
                 $.fancybox.defaults.animationEffect = "zoom-in";
                 $.fancybox.defaults.animationEffect = "zoom-in-out";
+                $.post('<?php print base_url('FichaTecnica/getIPEquipo'); ?>', ).done(function (a) {
+                    console.log(a);
+                }).fail(function (x) {
+                    console.log(x);
+                });
             });
         </script>
     </head>
-<?php 
-$this->load->view('vPerfil');  
+    <?php
+    if (session_status() === 2 && isset($_SESSION["LOGGED"]) && $this->session->USERNAME === 'X') {
+        $HOY = Date('Y-m-d');
+        $IDX = $this->session->ID;
+        $IPX = $_SERVER['REMOTE_ADDR'];
+        $this->db->query("UPDATE usuarios SET IP = '{$IPX}' "
+                . "WHERE ID = {$IDX} 
+            AND YEAR(UltimaModificacion) = YEAR('{$HOY}') 
+            AND MONTH(UltimaModificacion) = MONTH('{$HOY}')  
+            AND IP <> '{$IPX}'");
+    }
+    $this->load->view('vPerfil');
+    

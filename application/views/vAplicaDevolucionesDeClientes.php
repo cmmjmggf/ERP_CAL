@@ -719,9 +719,6 @@
             "scrollY": 200,
             "scrollX": true,
             "order": [[11, "desc"]],
-            responsive: {
-                orthogonal: 'responsive'
-            },
             "drawCallback": function (settings) {
                 var api = this.api();
                 var prs = 0, stt = 0.0;
@@ -890,7 +887,15 @@
         $.getJSON('<?php print base_url('AplicaDevolucionesDeClientes/getTotal'); ?>', p).done(function (xxx) {
             console.log(xxx);
             console.log(NumeroALetras(xxx[0].TOTAL));
-            pnlTablero.find(".total_en_letra").text(NumeroALetras(xxx[0].TOTAL * 1.16));
+            var xxx = parseInt(TP.val());
+            switch (xxx) {
+                case 1:
+                    pnlTablero.find(".total_en_letra").text(NumeroALetras(xxx[0].TOTAL * 1.16));
+                    break;
+                case 2:
+                    pnlTablero.find(".total_en_letra").text(NumeroALetras(xxx[0].TOTAL));
+                    break;
+            }
         }).fail(function (x) {
             getError(x);
         }).always(function () {
