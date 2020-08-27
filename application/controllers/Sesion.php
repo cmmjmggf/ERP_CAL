@@ -314,6 +314,10 @@ class Sesion extends CI_Controller {
                     $this->session->TEMA = 'ACTUAL';
                     $this->db->set("TEMA", "ACTUAL")->where("ID", $this->session->ID)->update("usuarios");
                     break;
+                case 3:
+                    $this->session->TEMA = 'OSCURO';
+                    $this->db->set("TEMA", "OSCURO")->where("ID", $this->session->ID)->update("usuarios");
+                    break;
                 default:
                     $this->session->TEMA = 'CLÁSICO';
                     $this->db->set("TEMA", "CLÁSICO")->where("ID", $this->session->ID)->update("usuarios");

@@ -535,15 +535,21 @@
 </style>
 <!--STYLE NEGRO-->
 <?php
-if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") {
+if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||
+        !is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
     ?>
     <link rel="stylesheet" href="<?php print base_url('js/vegas/vegas.min.css'); ?>">
     <script src="<?php print base_url('js/vegas/vegas.min.js'); ?>"></script>
     <style>
         body{  
             /* Location of the image */
-            background-image: url(<?php print base_url('media/7.jpg') ?>);
-
+            <?php
+            if (!is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
+                ?>
+                background-image: url(<?php print base_url('media/x5.jpg') ?>);
+            <?php } else { ?>
+                background-image: url(<?php print base_url('media/7.jpg') ?>);
+            <?php } ?>
             /* Background image is centered vertically and horizontally at all times */
             background-position: center center;
 
@@ -562,8 +568,14 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") {
                while the background image is loading */
             background-color: #464646;
         }   
-        .bg-primary , .dropdown-menu{
-            background-color: rgba(29,29,31,0.72)!important;
+        .bg-primary , .dropdown-menu{            
+            <?php
+            if ($this->session->TEMA === "OSCURO") {
+                ?>
+                background-color: rgba(0,0,0,.65) !important;
+            <?php } else { ?>
+                background-color: rgba(29,29,31,0.72)!important;
+            <?php } ?>
         }
         nav button.btn-primary,  .nav-item > .btn-primary{
             background-color: transparent !important;

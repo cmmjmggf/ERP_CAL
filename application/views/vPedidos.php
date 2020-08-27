@@ -545,8 +545,14 @@
                     $.post('<?php print base_url('Pedidos/onAgregarX'); ?>', p).done(function (a) {
                         if (a.length > 0) {
                             nuevo = false;
-                            var xxx = JSON.parse(a);
-                            getPedidoByID(xxx[0].Clave, xxx[0].Cliente);
+                            if (a.length > 0) {
+                                onCloseOverlay();
+                                var xxx = JSON.parse(a);
+                                getPedidoByID(xxx[0].Clave, xxx[0].Cliente);
+                            } else {
+                                onCloseOverlay();
+                                getPedidoByID(Clave.val(), PedidoxCliente.val());
+                            }
                         }
                     }).fail(function (x) {
                         getError(x);
@@ -1154,7 +1160,7 @@
                     }
                 }
             });
-            
+
             tblPedidos.find('tbody').on('click', 'tr', function () {
                 HoldOn.open({
                     theme: 'sk-cube',

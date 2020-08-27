@@ -1464,7 +1464,7 @@
         }, "json").fail(function (x, y, z) {
             console.log(x, y, z);
         }).always(function () {
-            opcion += '<li class="nav-item dropdown ml-auto session-dropdown">';  
+            opcion += '<li class="nav-item dropdown ml-auto session-dropdown">';
             opcion += '<a class="btn btn-primary dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
             opcion += ' <img src="<?php print base_url("img/usrs/{$this->session->TIPOMH}.jpg"); ?>" style="cursor:pointer;" class="rounded-circle" width="24">';
             opcion += ' <?php echo $this->session->userdata('Nombre') . ' ' . $this->session->userdata('Apellidos'); ?> ';
@@ -1477,11 +1477,23 @@
             opcion += '<a class="dropdown-item " href="#">';
 <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
                 opcion += '<button type="button" class="btn btn-info btn-block  font-weight-bold" onclick="onCambiarTema(1)"><i class="fa fa-paint-brush"></i> VERSIÓN CLÁSICA</button> ';
+                opcion += '<button type="button" class="btn btn-info btn-block font-weight-bold" style="background-color: #3F51B5; border-color: #3F51B5;"  onclick="onCambiarTema(3)">' +
+                        '<i class="fa fa-paint-brush"></i> VERSIÓN OSCURA</button>';
     <?php
 }
-if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
+if (!is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
+    ?>
+                opcion += '<button type="button" class="btn btn-info btn-block font-weight-bold"  onclick="onCambiarTema(1)">' +
+                        '<i class="fa fa-paint-brush"></i> VERSIÓN CLÁSICA</button>';
+                opcion += '<button type="button" class="btn btn-info btn-block font-weight-bold" style="background-color: #3F51B5; border-color: #3F51B5;"  onclick="onCambiarTema(2)">' +
+                        '<i class="fa fa-paint-brush"></i> VERSIÓN NUEVA</button>';
+    <?php
+}
+if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
     ?>
                 opcion += '<button type="button" class="btn btn-info ml-1 btn-block font-weight-bold"  onclick="onCambiarTema(2)"  style="background-color: var(--purple); border-color: var(--purple);"><i class="fa fa-paint-brush"></i> VERSIÓN NUEVA</button>';
+                opcion += '<button type="button" class="btn btn-info btn-block font-weight-bold" style="background-color: #3F51B5; border-color: #3F51B5;"  onclick="onCambiarTema(3)">' +
+                        '<i class="fa fa-paint-brush"></i> VERSIÓN OSCURA</button>';
     <?php
 }
 ?>
@@ -1611,7 +1623,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO" || is_
                             var effects = ["zoomIn", "flipInX", "flipInY", "zoomIn", "bounceIn", "jello", "tada"];
                             var effect = Math.floor(Math.random() * 6) + 1;
                             $.each(data, function (k, v) {
-<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" || $this->session->TEMA === "OSCURO") { ?>
                                     modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated ' + effects[parseInt(effect)] + '" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
                                     modulo += '<div class="card text-center " style="background-color: #0000008a;">';
 <?php } else { ?>

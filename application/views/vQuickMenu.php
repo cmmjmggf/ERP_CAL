@@ -36,15 +36,15 @@
         color: #fff;
     }
     .card  .card-body img{ 
-        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||  $this->session->TEMA === "OSCURO") { ?>
             filter: drop-shadow(0 0 0.75rem #cccccc);
         <?php } ?>
     }
     .card  .card-body{
         cursor: pointer !important;
         font-weight: bold;
-        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
-            background-color: #0000008a !important;
+        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||  $this->session->TEMA === "OSCURO") { ?>
+             background-color: #0000008a !important;
         <?php } ?>
         color: #333333;
     }
@@ -150,7 +150,7 @@
     $(document).ready(function () {
         Z2V0UXVpY2tNZW51(1);
         b25Db21wcm9iYXJNb2R1bG9z(1);
-<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL") { ?>
+<?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" || !is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") { ?>
             $("body").vegas({
                 overlay: '<?php print base_url('js/vegas/overlays/02.png'); ?>'
             });

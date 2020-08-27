@@ -287,7 +287,7 @@
         cursor: pointer !important;
         font-weight: bold; 
 
-        <?php if ($this->session->TEMA !== "ACTUAL") { ?>
+        <?php if ($this->session->TEMA !== "ACTUAL" ||  $this->session->TEMA !== "OSCURO") { ?>
             color: #000;
             background: #ffffff; /* Old browsers */
             background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
@@ -301,7 +301,7 @@
         cursor: pointer !important; 
         color: #fff;
 
-        <?php if ($this->session->TEMA !== "ACTUAL") { ?>
+        <?php if ($this->session->TEMA !== "ACTUAL" || $this->session->TEMA !== "OSCURO") { ?>
             /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#2b2b2b+0,272727+100 */
             background: #2b2b2b; /* Old browsers */
             background: -moz-linear-gradient(top,  #2b2b2b 0%, #272727 100%); /* FF3.6-15 */
@@ -339,7 +339,7 @@
         background-size: cover;
         color: #fff;  
         font-style: italic;
-        <?php if ($this->session->TEMA === "ACTUAL") { ?>
+        <?php if ($this->session->TEMA === "ACTUAL" ||  $this->session->TEMA === "OSCURO") { ?>
         border-radius: 10px; 
         text-shadow: 0 0 3px #000, 0 0 5px #0000FF !important;
         <?php } ?>
