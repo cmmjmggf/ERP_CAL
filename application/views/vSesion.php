@@ -8,7 +8,7 @@
         line-height: 1.5;
         color: #76838f;
         text-align: left; 
-        background-color: #fff;
+        background-color: #f2f2f2;
     }
 
     body {
@@ -69,8 +69,7 @@
     </div>
 </div>
 <?php if ($this->session->TEMA === "ACTUAL") { ?>
-    <div id="pnlAcceso" class="card  div-login animated fadeIn" style="  background-color: rgba(255, 255, 255, 0) !important; 
-         box-shadow:none !important; border: none;">
+    <div id="pnlAcceso" class="card  div-login animated fadeIn" style="background-color: rgba(255, 255, 255, 0) !important; ">
         <div class="card-body" style="padding: 15px;">
             <div class="row" style="padding: 15px;">
                 <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
@@ -102,7 +101,7 @@
     <?php
 } else {
     ?>
-    <div id="pnlAcceso" class="card  div-login">
+    <div id="pnlAcceso" class="card  div-login" style="border-radius:none !important; background-color: #0000008a;">
         <div class="card-body" style="padding: 15px;">
             <div class="row" style="padding: 15px;">
                 <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
@@ -285,9 +284,18 @@
     }
     .card  .card-body{
         cursor: pointer !important;
-        font-weight: bold; 
-
-        <?php if ($this->session->TEMA !== "ACTUAL" ||  $this->session->TEMA !== "OSCURO") { ?>
+        font-weight: bold;  
+        <?php  
+        if ($this->session->TEMA === "ACTUAL") { ?>
+         background-color: transparent;  
+         border: none;
+        <?php
+        } else  
+        if ($this->session->TEMA === "OSCURO") { ?>
+         background-color: #0000008a;  
+        <?php
+        } else 
+        if ($this->session->TEMA !== "ACTUAL" || $this->session->TEMA !== "OSCURO") { ?>
             color: #000;
             background: #ffffff; /* Old browsers */
             background: -moz-linear-gradient(top,  #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6-15 */
@@ -296,12 +304,14 @@
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
         <?php } ?>
     }
-    .card .card-footer{ 
+    .card .card-footer{
         border-top: none !important;
         cursor: pointer !important; 
         color: #fff;
-
-        <?php if ($this->session->TEMA !== "ACTUAL" || $this->session->TEMA !== "OSCURO") { ?>
+        <?php if ($this->session->TEMA === "OSCURO") { ?>
+        font-size: 20px;
+        <?php 
+        }else if ($this->session->TEMA !== "ACTUAL" || $this->session->TEMA !== "OSCURO") { ?>
             /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#2b2b2b+0,272727+100 */
             background: #2b2b2b; /* Old browsers */
             background: -moz-linear-gradient(top,  #2b2b2b 0%, #272727 100%); /* FF3.6-15 */
@@ -328,20 +338,15 @@
         background-color: #fff;
     }
     .card{
-        transition: all 0.3s;
-        /* The image used */
-
-        /* Full height */ 
-
-        /* Center and scale the image nicely */
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        color: #fff;  
+        transition: all 0.3s;  
+        color: #fff; 
         font-style: italic;
-        <?php if ($this->session->TEMA === "ACTUAL" ||  $this->session->TEMA === "OSCURO") { ?>
-        border-radius: 10px; 
-        text-shadow: 0 0 3px #000, 0 0 5px #0000FF !important;
+        <?php if ($this->session->TEMA === "ACTUAL") { ?>
+            border-radius: 10px; 
+            text-shadow: 0 0 3px #000, 0 0 5px #0000FF !important;
+        <?php } else { ?>
+            border-radius:0px !important;
+            border: 2px solid #000;
         <?php } ?>
     }
 

@@ -77,7 +77,7 @@ class Avance extends CI_Controller {
                             . "' ',(SELECT FR.Descripcion FROM fracciones AS FR WHERE FR.Clave = F.numfrac limit 1)) AS NUM_FRACCION, "
                             . "F.preciofrac AS PRECIO_FRACCION, F.pares AS PARES, F.subtot AS SUBTOTAL, "
                             . "F.status, DATE_FORMAT(F.fecha,\"%d/%m/%Y\")  AS FECHA, F.semana AS SEMANA, F.depto, "
-                            . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION", false)
+                            . "F.registro, F.anio, F.avance_id, F.fraccion AS FRACCION, F.modulo AS MODULO ", false)
                     ->from("fracpagnomina AS F");
             if ($x['CONTROL'] !== '') {
                 $this->db->where('F.control', $x['CONTROL']);
@@ -797,7 +797,7 @@ P.Maquila AS MAQUILA
             }
             /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
              * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
-            if ($depto === 44 && $frac === 51 && intval($xXx['EMPLEADO']) === 2160 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
+            if ($depto === 44 && $frac === 51 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
                 $revisa_almacen_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 105")->result();
                 if (intval($revisa_almacen_corte[0]->EXISTE) === 0) {
                     $this->onAvance($xXx['CONTROL'], 105, 'ALMACEN CORTE', NULL);
@@ -832,7 +832,7 @@ P.Maquila AS MAQUILA
 //            $empleados_pes = $this->db->query("SELECT GROUP_CONCAT(E.Numero) AS EMPLEADOS FROM empleados AS E WHERE E.DepartamentoFisico = 110 AND E.AltaBaja = 1")->result();
 //            $ex = array(23, 1122, 1186, 1348, 1815, 1870, 1880, 1912, 1995, 2005, 2080, 2217, 2274, 2408, 2498, 2614, 2630, 2631, 2632, 2647, 2684, 2685, 2718, 2752, 2801, 2808, 2809, 2863, 2988, 3005, 3006, 3075, 3076);
             $ex = array();
-            foreach ($this->db->query("SELECT E.Numero AS EMPLEADOS FROM empleados AS E WHERE E.DepartamentoFisico = 110 AND E.AltaBaja = 1")->result() as $k => $v) {
+            foreach ($this->db->query("SELECT E.Numero AS EMPLEADOS FROM empleados AS E WHERE E.DepartamentoFisico IN(110,70,115) AND E.AltaBaja = 1")->result() as $k => $v) {
                 array_push($ex, intval($v->EMPLEADOS));
             }
             if ($depto === 5 && $depto_actual === 44 && in_array(intval($xXx['EMPLEADO']), $ex)) {

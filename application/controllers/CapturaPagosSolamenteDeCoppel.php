@@ -257,7 +257,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
                 'numfac' => $x['DOCUMENTO'],
                 'tp' => $x['TP'],
                 'orden' => 5,
-                'fecha' => 0,
+                'fecha' => "$anio-$mes-$dia 00:00:00",
                 'hora' => Date('h:i:s a'),
                 'cant' => 1,
                 'descripcion' => "Desc.3% Nc-{$x['FOLIO_NC']}",

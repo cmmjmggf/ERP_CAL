@@ -122,10 +122,11 @@
                         });
                     }
                 }).fail(function (x, y, z) {
+                    onCloseOverlay();
                     console.log(x.responseText);
                     swal('ATENCION', 'HA OCURRIDO UN ERROR AL OBTENER EL REPORTE, REVISE LA CONSOLA PARA MÁS DETALLE', 'warning');
                 }).always(function () {
-                    HoldOn.close(); 
+                    onCloseOverlay();
                     btnGenerarM.attr("disabled", false);
                 });
             });
@@ -296,6 +297,7 @@
                 onBeep(1);
             }
         }).fail(function (x, y, z) {
+            onCloseOverlay();
             console.log(x.responseText);
         });
     }

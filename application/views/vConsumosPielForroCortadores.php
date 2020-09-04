@@ -322,6 +322,8 @@
     }
     .modal-content {
         border-radius: 1px !important;
-        border-image: linear-gradient(to bottom, #0099cc, #ccff00, rgb(0,0,0,0)) 1 99% !important;
+        border: solid 2px #000000 !important;
+        -webkit-box-shadow: 0px 2px 15px 5px #ffffff;   
+        box-shadow: 0px 0px 20px 5px rgb(255 255 255 / 0.5);    
     }
 </style>

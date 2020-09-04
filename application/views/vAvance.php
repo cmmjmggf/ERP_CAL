@@ -207,7 +207,7 @@
                 </div>
             </div>
             <!--SECCION DOS-->
-            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="col-12 col-sm-12 col-md-7 col-lg-7 col-xl-7">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h4>Fracciones pagadas en nomina de este control</h4>
@@ -222,7 +222,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
-                                    <th scope="col">Emp</th>
+                                    <th scope="col">Empleado</th>
                                     <th scope="col">Semana</th>
 
                                     <th scope="col">Fecha</th>
@@ -230,11 +230,12 @@
                                     <th scope="col">Maq</th>
 
                                     <th scope="col">Estilo</th>
-                                    <th scope="col">Frac</th>
+                                    <th scope="col">Fracción</th>
                                     <th scope="col">Precio</th>
 
                                     <th scope="col">Pares</th>
                                     <th scope="col">SubTotal</th>
+                                    <th scope="col">Mod</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -255,7 +256,7 @@
                 </div>
             </div>
             <!--SECCION TRES-->
-            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align="center">
+            <div class="col-12 col-sm-12 col-md-1 col-lg-1 col-xl-1" align="center">
                 <a href="<?php print base_url('img/LS.png'); ?>" data-fancybox="images">
                     <img id="FotoEstilo" src="<?php print base_url('img/LS.png'); ?>" class="img-fluid shadow-lg">
                 </a>
@@ -297,7 +298,7 @@
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Sem</th>
-                                    <th scope="col">Emp</th>
+                                    <th scope="col">Empleado</th>
                                     <th scope="col">Concepto</th>
                                     <th scope="col">Fecha</th>
                                     <th scope="col">Per</th>
@@ -363,9 +364,9 @@
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Control</th>
-                                    <th scope="col">Emp</th>
+                                    <th scope="col">Empleado</th>
                                     <th scope="col">Estilo</th>
-                                    <th scope="col">Frac</th>
+                                    <th scope="col">Fracción</th>
                                     <th scope="col">Fecha</th>
                                     <th scope="col">Semana</th>
                                     <th scope="col">Pares</th>
@@ -1501,7 +1502,8 @@
             {"data": "NUM_FRACCION"}/*7*/,
             {"data": "PRECIO_FRACCION"}/*8*/,
             {"data": "PARES"}/*9*/,
-            {"data": "SUBTOTAL"}/*10*/
+            {"data": "SUBTOTAL"}, /*10*/
+            {"data": "MODULO"}/*10*/
         ];
         var coldefs = [
             {
