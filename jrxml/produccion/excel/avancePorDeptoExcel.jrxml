@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="1008" pageHeight="612" orientation="Landscape" columnWidth="1008" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="2.9686833286075096"/>
-	<property name="ireport.x" value="1553"/>
+	<property name="ireport.x" value="1787"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
@@ -659,21 +659,21 @@ order by DEPTO_N, PE.control ASC]]>
 				<text><![CDATA[Nombre Cliente]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="762" y="45" width="63" height="11" forecolor="#000000" uuid="a8010d53-a3e2-40fe-a75f-6453e65c5d2f"/>
+				<reportElement style="Column header" x="762" y="45" width="91" height="11" forecolor="#000000" uuid="a8010d53-a3e2-40fe-a75f-6453e65c5d2f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true" isStrikeThrough="false"/>
 				</textElement>
 				<text><![CDATA[Empleado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="825" y="45" width="95" height="11" forecolor="#000000" uuid="be1f14a8-6167-425d-9a6b-b213c01ee33f"/>
+				<reportElement style="Column header" x="853" y="45" width="95" height="11" forecolor="#000000" uuid="be1f14a8-6167-425d-9a6b-b213c01ee33f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Proceso Maquila]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="920" y="45" width="60" height="11" forecolor="#000000" uuid="d6daa39c-9c73-45e6-8385-e9f0d7314a16"/>
+				<reportElement style="Column header" x="948" y="45" width="60" height="11" forecolor="#000000" uuid="d6daa39c-9c73-45e6-8385-e9f0d7314a16"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -840,28 +840,28 @@ order by DEPTO_N, PE.control ASC]]>
 				<textFieldExpression><![CDATA[$V{dias_prog}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="762" y="0" width="63" height="13" forecolor="#FF0000" uuid="824bf8cc-6dff-45df-8056-348a30e4d4d0"/>
+				<reportElement x="762" y="0" width="46" height="13" forecolor="#FF0000" uuid="824bf8cc-6dff-45df-8056-348a30e4d4d0"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="825" y="0" width="20" height="13" uuid="098e174f-aa7c-4753-b5d7-ac7751c98470"/>
+				<reportElement x="853" y="0" width="20" height="13" uuid="098e174f-aa7c-4753-b5d7-ac7751c98470"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numfracmaquila}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="845" y="0" width="75" height="13" uuid="e2791996-96e7-47b7-90b7-2c6e38af9025"/>
+				<reportElement x="873" y="0" width="75" height="13" uuid="e2791996-96e7-47b7-90b7-2c6e38af9025"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomfracmaquila}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="920" y="0" width="60" height="13" uuid="fadd7cae-da9a-450e-991a-8a2036cd3137"/>
+				<reportElement x="948" y="0" width="60" height="13" uuid="fadd7cae-da9a-450e-991a-8a2036cd3137"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
@@ -875,7 +875,7 @@ order by DEPTO_N, PE.control ASC]]>
 				<textFieldExpression><![CDATA[$F{semcontrol}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="762" y="0" width="63" height="13" forecolor="#FF0000" uuid="dbd78e0a-0135-4ac2-888a-80d0a107fdc8"/>
+				<reportElement x="808" y="0" width="45" height="13" forecolor="#FF0000" uuid="dbd78e0a-0135-4ac2-888a-80d0a107fdc8"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>

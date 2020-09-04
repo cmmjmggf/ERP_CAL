@@ -113,6 +113,8 @@
                         console.log(x, y, z);
                         HoldOn.close();
                     });
+                } else {
+                    HoldOn.close();
                 }
             });
 

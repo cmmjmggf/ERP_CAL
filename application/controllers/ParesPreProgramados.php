@@ -150,6 +150,9 @@ class ParesPreProgramados extends CI_Controller {
                         ->where("C.Clave", $v->CLAVE_CLIENTE);
 // ->where("C.Clave", 371);
                 $this->db->where("P.Registro BETWEEN str_to_date(\"{$x->post("FECHA")}\",\"%d/%m/%Y\")  AND str_to_date(\"{$x->post("FECHAF")}\" ,\"%d/%m/%Y\") ", null, false);
+                $this->db->order_by('CLAVE_LINEA', 'ASC');
+                $this->db->order_by('CLAVE_ESTILO', 'ASC');
+                $this->db->order_by('COLOR', 'ASC');
 
                 $PARES_PREPROGRAMADOS = $this->db->get()->result();
 //                print $this->db->last_query();

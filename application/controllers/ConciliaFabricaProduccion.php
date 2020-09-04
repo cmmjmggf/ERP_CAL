@@ -32,8 +32,13 @@ class ConciliaFabricaProduccion extends CI_Controller {
         $Maq = $this->input->get('Maq');
         $Sem = $this->input->get('Sem');
         $Ano = $this->input->get('Ano');
+        $Articulo = $this->input->get('Articulo');
 
         $MaqSub = ($Maq === '1') ? " '1','97' " : $Maq;
+        $xArticulo = ($Articulo === '') ? "" : " AND MA.Articulo = '$Articulo' ";
+        $xArticuloPed = ($Articulo === '') ? "" : " AND A.Clave = '$Articulo' ";
+
+
         $this->db->query("TRUNCATE TABLE concilias_temp ");
         //Sí Obtenemos todas las DEVOLUCIONES del minialmacen
 //        if ($Maq === '1') {
@@ -81,6 +86,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 AND MA.Ano = '$Ano'
                 AND MA.Sem = '$Sem'
                 AND MA.Maq in ($MaqSub)
+                $xArticulo
                 GROUP BY A.Clave, A.Descripcion, MA.tipomov
                 ORDER BY A.Descripcion ASC; ");
         //Obtenemos la explosión de materiales sin suela ni planta y los guardamos en concilias_temp
@@ -104,6 +110,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
                 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
                 JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='$Maq'
                 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
+                $xArticuloPed
                 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
                 JOIN `maquilas` `MA` ON `MA`.`Clave` = '$Maq'
                 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
@@ -118,7 +125,7 @@ class ConciliaFabricaProduccion extends CI_Controller {
 
 
         //Realizacion de consulta a cabeceros para insertarlos
-        $Explosion_tallas = $cm->getExplosionTallas($Ano, $Sem, $Maq);
+        $Explosion_tallas = $cm->getExplosionTallas($Ano, $Sem, $Maq, $xArticuloPed);
 
 
         foreach ($Explosion_tallas as $key => $D) {

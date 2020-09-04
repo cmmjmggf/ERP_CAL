@@ -155,14 +155,13 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
     public function getControl($Control) {
         try {
             $this->db->select("
-                            D.Clave AS Depto,
-                            D.Descripcion AS DeptoT,
+                            C.DeptoProduccion AS Depto,
+                            C.EstatusProduccion AS DeptoT,
                             C.Estilo Estilo,
                             C.Color AS Color,
                             C.Pares "
                             . "")
                     ->from("pedidox C")
-                    ->join("departamentos D", '`D`.`Clave` = `C`.`DeptoProduccion`')
                     ->where("C.Control", $Control);
             $query = $this->db->get();
             /*

@@ -37,6 +37,21 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Artículo <span class="badge badge-info mb-2" style="font-size: 12px;">Para un artículo en especifico, sólo captura el código</span></label>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" class="form-control form-control-sm numbersOnly" id="ArticuloConcilia" name="ArticuloConcilia" maxlength="6" >
+                                </div>
+                                <div class="col-9">
+                                    <select id="sArticuloConcilia" name="sArticuloConcilia" class="form-control form-control-sm NotSelectize selectNotEnter" >
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -49,17 +64,18 @@
 <script>
     var mdlConciliaFabricaProduccion = $('#mdlConciliaFabricaProduccion');
     $(document).ready(function () {
-        validacionSelectPorContenedor(mdlConciliaFabricaProduccion);
-        setFocusSelectToInputOnChange('#Precio', '#btnImprimir', mdlConciliaFabricaProduccion);
+        mdlConciliaFabricaProduccion.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
         mdlConciliaFabricaProduccion.on('shown.bs.modal', function () {
-            handleEnterDiv(mdlConciliaFabricaProduccion);
             mdlConciliaFabricaProduccion.find("input").val("");
             $.each(mdlConciliaFabricaProduccion.find("select"), function (k, v) {
                 mdlConciliaFabricaProduccion.find("select")[k].selectize.clear(true);
             });
+            getArticulosReporteConcilia();
             mdlConciliaFabricaProduccion.find('#Ano').focus();
         });
-
         mdlConciliaFabricaProduccion.find('#btnImprimir').on("click", function () {
             //mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', true);
             var t_precio = mdlConciliaFabricaProduccion.find('#Precio').val();
@@ -74,7 +90,8 @@
                             Precio: t_precio,
                             Maq: mdlConciliaFabricaProduccion.find('#Maq').val(),
                             Sem: mdlConciliaFabricaProduccion.find('#Sem').val(),
-                            Ano: mdlConciliaFabricaProduccion.find('#Ano').val()
+                            Ano: mdlConciliaFabricaProduccion.find('#Ano').val(),
+                            Articulo: mdlConciliaFabricaProduccion.find('#ArticuloConcilia').val()
                         }).done(function (data, x, jq) {
                             onImprimirReporteFancyAFC(data, function (a, b) {
                                 mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', false);
@@ -111,34 +128,80 @@
                 });
             }
         });
+        mdlConciliaFabricaProduccion.find("#Ano").keypress(function (e) {
+            if (e.keyCode === 13) {
 
-        mdlConciliaFabricaProduccion.find("#Ano").change(function () {
-            if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "AÑO INCORRECTO",
-                    icon: "warning",
-                    closeOnClickOutside: false,
-                    closeOnEsc: false,
-                    buttons: false,
-                    timer: 1000
-                }).then((action) => {
-                    mdlConciliaFabricaProduccion.find("#Ano").val("");
-                    mdlConciliaFabricaProduccion.find("#Ano").focus();
-                });
+                if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "AÑO INCORRECTO",
+                        icon: "warning",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        buttons: false,
+                        timer: 1000
+                    }).then((action) => {
+                        mdlConciliaFabricaProduccion.find("#Ano").val("");
+                        mdlConciliaFabricaProduccion.find("#Ano").focus();
+                    });
+                } else {
+                    mdlConciliaFabricaProduccion.find("#Maq").focus().select();
+                }
             }
         });
-        mdlConciliaFabricaProduccion.find("#Maq").change(function () {
-            onComprobarMaquilas($(this));
+        mdlConciliaFabricaProduccion.find("#Maq").keypress(function (e) {
+            if (e.keyCode === 13) {
+                onComprobarMaquilasConcilia($(this));
+            }
         });
-        mdlConciliaFabricaProduccion.find("#Sem").change(function () {
-            var ano = mdlConciliaFabricaProduccion.find("#Ano");
-            onComprobarSemanasProduccion($(this), ano.val());
+        mdlConciliaFabricaProduccion.find("#Sem").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var ano = mdlConciliaFabricaProduccion.find("#Ano");
+                onComprobarSemanasProduccionConcilia($(this), ano.val());
+            }
+        });
+        mdlConciliaFabricaProduccion.find('#Precio').change(function () {
+            var txtart = $(this).val();
+            if (txtart) {
+                mdlConciliaFabricaProduccion.find('#ArticuloConcilia').focus();
+            }
+        });
+        mdlConciliaFabricaProduccion.find('#ArticuloConcilia').keypress(function (e) {
+            if (e.keyCode === 13) {
+                var txtart = $(this).val();
+                if (txtart) {
+                    $.getJSON(base_url + 'index.php/ReportesKardex/onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                        if (data.length > 0) {
+                            mdlConciliaFabricaProduccion.find("#sArticuloConcilia")[0].selectize.addItem(txtart, true);
+                            mdlConciliaFabricaProduccion.find('#btnImprimir').focus();
+                        } else {
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                                mdlConciliaFabricaProduccion.find("#sArticuloConcilia")[0].selectize.clear(true);
+                                mdlConciliaFabricaProduccion.find('#ArticuloConcilia').focus().val('');
+                            });
+                        }
+                    }).fail(function (x) {
+                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                        console.log(x.responseText);
+                    });
+                } else {
+                    mdlConciliaFabricaProduccion.find("#sArticuloConcilia")[0].selectize.clear(true);
+                    mdlConciliaFabricaProduccion.find('#btnImprimir').focus();
+                }
+            }
+        });
+        mdlConciliaFabricaProduccion.find('#sArticuloConcilia').change(function () {
+            var txtart = $(this).val();
+            if (txtart) {
+                mdlConciliaFabricaProduccion.find('#ArticuloConcilia').val(txtart);
+                mdlConciliaFabricaProduccion.find('#btnImprimir').focus();
+            }
         });
     });
-    function onComprobarMaquilas(v) {
+    function onComprobarMaquilasConcilia(v) {
         $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarMaquilas', {Clave: $(v).val()}).done(function (data) {
             if (data.length > 0) {
+                mdlConciliaFabricaProduccion.find("#Sem").focus().select();
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -165,10 +228,10 @@
             console.log(x.responseText);
         });
     }
-    function onComprobarSemanasProduccion(v, ano) {
+    function onComprobarSemanasProduccionConcilia(v, ano) {
         $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarSemanasProduccion', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
-
+                mdlConciliaFabricaProduccion.find('#Precio')[0].selectize.focus();
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -195,6 +258,17 @@
             console.log(x.responseText);
         });
     }
-
+    function getArticulosReporteConcilia() {
+        mdlConciliaFabricaProduccion.find("#sArticuloConcilia")[0].selectize.clear(true);
+        mdlConciliaFabricaProduccion.find("#sArticuloConcilia")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/EntradasAlmacenMP/getArticulos').done(function (data) {
+            $.each(data, function (k, v) {
+                mdlConciliaFabricaProduccion.find("#sArticuloConcilia")[0].selectize.addOption({text: v.Articulo, value: v.ID});
+            });
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
 
 </script>

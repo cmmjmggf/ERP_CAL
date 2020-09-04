@@ -11,7 +11,7 @@ class ReporteConciliaFabricaProduccion_model extends CI_Model {
         date_default_timezone_set('America/Mexico_City');
     }
 
-    public function getExplosionTallas($Ano, $Semana, $Maquila) {
+    public function getExplosionTallas($Ano, $Semana, $Maquila, $xArticuloPed) {
         try {
             $this->db->query("set sql_mode=''");
             $this->db->select("
@@ -32,6 +32,7 @@ PE.Pares
 FROM `pedidox` `PE`
 JOIN `fichatecnica` `FT` ON `FT`.`Estilo` =  `PE`.`Estilo` AND `FT`.`Color` = `PE`.`Color`
 JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
+$xArticuloPed
 JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
 JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo`
 JOIN `series` `S` ON `S`.`Clave` =  `E`.`Serie`

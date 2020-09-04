@@ -255,11 +255,7 @@
             $('#mdlImprimeHistoryPrecios').modal('show');
         });
 
-        pnlTablero.find("#tblEmpleados_filter").find('input[type="search"]').on('keydown', function (e) {
-            if ($(this).val() && e.keyCode === 13) {
-                onBuscar($(this).val(), e, tblEmpleados, Empleados, $(this), 1);
-            }
-        });
+
         /*FUNCIONES INICIALES*/
         init();
         handleEnterDiv(pnlTablero);
