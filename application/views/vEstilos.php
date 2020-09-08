@@ -418,6 +418,7 @@
             if (foto) {
                 isValid('pnlDatos');
                 if (valido) {
+                    onDisable(btnGuardar);
                     var frm = new FormData(pnlDatos.find("#frmNuevoEstilo")[0]);
                     if (!nuevo) {
                         $.ajax({
@@ -432,6 +433,7 @@
                             Estilos.ajax.reload();
                             pnlDatos.addClass("d-none");
                             pnlTablero.removeClass("d-none");
+                            onEnable(btnGuardar);
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         }).always(function () {
@@ -452,6 +454,7 @@
                             Estilos.ajax.reload();
                             pnlDatos.addClass("d-none");
                             pnlTablero.removeClass("d-none");
+                            onEnable(btnGuardar);
                         }).fail(function (x, y, z) {
                             console.log(x, y, z);
                         }).always(function () {
