@@ -75,7 +75,8 @@ $vs = array(
     'vComparativoVentasPorAno',
     'vCartaCobranzaAgente',
     'vVentasPorLineaEstiloPorcentaje',
-    'vUtilidadFechasFacturaEstilo');
+    'vUtilidadFechasFacturaEstilo',
+    'vBajaControles');
 
 foreach ($vs as $v) {
     $this->load->view($v);

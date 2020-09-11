@@ -8,7 +8,7 @@
                 <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info selectNotEnter font-weight-bold" style="background-color: #3F51B5;">
                     <span class="fa fa-plus"></span> Nuevo
                 </button>
-                <div class="btn-group  selectNotEnter">
+                <div class="btn-group selectNotEnter">
                     <a class="btn btn-info btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         CATÁLOGOS
                     </a>
@@ -25,6 +25,9 @@
                 </button>
                 <button type="button" id="btnCambiaFolio" name="btnCambiaFolio" class="btn btn-info" style="background-color: #5D4037; border-color: #5D4037;">
                     <span class="fa fa-pen"></span> FOLIO 
+                </button>
+                <button type="button" id="btnFacAnticipos" name="btnFacAnticipos" class="btn btn-info" style="background-color: #689f38; border-color: #689f38;">
+                    <span class="fa fa-file-invoice"></span> ANTICIPOS 
                 </button>
                 <button type="button" id="btnVerTienda" name="btnVerTienda" class="btn btn-info d-none" style="background-color: #689F38; border-color: #689F38;">
                     <span class="fa fa-eye"></span> TIENDA 
@@ -56,6 +59,9 @@
                 </div>
             </div>
             <div class="col-12 col-xs-12 col-sm-5 col-md-5" align="right"> 
+                <button type="button" id="btnAnticipoX" name="btnAnticipoX" class="btn btn-info">
+                    <span class="fa fa-file-archive"></span> ANTICIPOS X
+                </button>
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" class="btn btn-danger" disabled="">
                     <span class="fa fa-file-archive"></span>   CIERRA DOCTO
                 </button>
@@ -189,12 +195,15 @@
                         </span>
                     </span>
                 </div>
-            </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1" style="padding-left: 5px; padding-right: 5px;">
-                <label class="d-none">FOLIO</label>
                 <input type="text" id="FolioFactura" name="FolioFactura" readonly="" class="form-control form-control-sm d-none">
-            </div>
-            <div class="col-6 col-xs-6 col-sm-3 col-md-1 col-lg-1 col-xl-1">
+            </div> 
+            <div class="col-6 col-xs-6 col-sm-3 col-md-1 col-lg-2 col-xl-2"> 
+                <div class="form-group mt-3">  
+                    <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input selectNotEnter" id="chkConsignacion" name="chkConsignacion" style="cursor: pointer !important;">
+                        <label class="custom-control-label text-danger labelCheck" for="chkConsignacion" style="cursor: pointer !important;">A CONSIGNACIÓN</label>
+                    </div>
+                </div>      
             </div>
             <div class="col-6 col-xs-6 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-none">
                 <label>Corrida</label>
@@ -722,7 +731,43 @@
     </div>
 </div>
 
-
+<div class="modal" id="mdlFacturasXAnticipo">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Facturas con anticipos</h5> 
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tblFacturasXAnticipo" class="table table-hover table-sm nowrap" style="width: 100% !important;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>-</th>
+                                    <th>CLIENTE</th>
+                                    <th>FACTURA</th>
+                                    <th>FECHA</th>
+                                    <th>TP</th>   
+                                    <th>TOTAL</th>
+                                    <th>xTOTAL</th>
+                                    <th>xCLIENTE</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="json_facturas d-none">-</span>
+                <span class="font-weight-bold total_anticipado" style="font-size: 18px; color: #C62828;">$ 0.0</span>
+                <button id="btnAceptaFacturasConAnticipo" type="button" class="btn btn-success"
+                        style="background-color: #4CAF50; border-color:#4CAF50" data-dismiss="modal"><span class="fa fa-check"></span> ACEPTA</button> 
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     var pnlTablero = $("#pnlTablero"), ParesFacturados, btnClientes = pnlTablero.find("#btnClientes"),
@@ -755,6 +800,7 @@
             EstiloTFacturacion = pnlTablero.find("#EstiloTFacturacion"),
             CodigoSat = pnlTablero.find("#CodigoSat"),
             ObservacionFacturacion = pnlTablero.find("#ObservacionFacturacion"),
+            chkConsignacion = pnlTablero.find("#chkConsignacion"),
             ColorFacturacion = pnlTablero.find('#ColorFacturacion'),
             ColorClaveFacturacion = pnlTablero.find("#ColorClaveFacturacion"),
             CorridaFacturacion = pnlTablero.find('#CorridaFacturacion'),
@@ -793,6 +839,12 @@
 //            xTiendaCoppel = mdlAddendaCoppel.find("#xTiendaCoppel"),
 //            FacturaCoppel = mdlAddendaCoppel.find("#FacturaCoppel");
 
+    var mdlFacturasXAnticipo = $("#mdlFacturasXAnticipo"), FacturasXAnticipo,
+            btnAceptaFacturasConAnticipo = mdlFacturasXAnticipo.find("#btnAceptaFacturasConAnticipo"),
+            btnFacAnticipos = pnlTablero.find("#btnFacAnticipos"),
+            tblFacturasXAnticipo = mdlFacturasXAnticipo.find("#tblFacturasXAnticipo"),
+            json_facturas = [], btnAnticipoX = pnlTablero.find("#btnAnticipoX");
+
     $("button:not(.grouped):not(.navbar-brand)").addClass("my-1 btn-sm");
     pnlTablero.find("#tblTallasF").find("input").addClass("form-control-sm");
     pnlTablero.find("input,textarea").addClass("font-weight-bold");
@@ -812,6 +864,137 @@
     $(document).ready(function () {
         handleEnterDiv(mdlConsignarA);
 
+        btnAnticipoX.click(function () {
+            $.post('<?php print base_url('FacturacionProduccion/onAnticiposTest') ?>', {
+                ANTICIPOS: JSON.stringify(json_facturas)
+            }).done(function (a) {
+                
+            }).fail(function () {
+
+            });
+        });
+
+        btnAceptaFacturasConAnticipo.click(function () {
+            onCalcularMontoXAnticipo();
+        });
+
+        btnFacAnticipos.click(function () {
+            if (ClienteClave.val()) {
+                mdlFacturasXAnticipo.modal('show');
+            } else {
+                onCampoInvalido(pnlTablero, "DEBE DE SELECCIONAR UN CLIENTE", function () {
+                    ClienteClave.focus().select();
+                });
+            }
+        });
+
+        mdlFacturasXAnticipo.on('hide.bs.modal', function () {
+            FacturasXAnticipo.search('').draw();
+            mdlFacturasXAnticipo.find("input[type='search']").val('');
+        });
+
+        mdlFacturasXAnticipo.on('hidden.bs.modal', function () {
+            onHabilitarPanel(pnlTablero);
+            if (json_facturas.length > 0) {
+                btnFacAnticipos.html('ANTICIPOS (' + json_facturas.length + ')');
+            } else {
+                btnFacAnticipos.text('ANTICIPOS');
+            }
+            PAGFactura.focus().select();
+        });
+
+        mdlFacturasXAnticipo.on('shown.bs.modal', function () {
+            onDesabilitarPanel(pnlTablero);
+            if ($.fn.DataTable.isDataTable('#tblFacturasXAnticipo')) {
+                onOpenOverlay('');
+                FacturasXAnticipo.ajax.reload(function () {
+                    onCloseOverlay();
+                });
+                return;
+            } else {
+                FacturasXAnticipo = tblFacturasXAnticipo.DataTable({
+                    dom: 'rtip', "ajax": {
+                        "url": '<?php print base_url('FacturacionProduccion/getFacturasXAnticipo'); ?>',
+                        "dataSrc": "",
+                        "data": function (d) {
+                            d.CLIENTE = ClienteFactura.val() ? ClienteFactura.val() : '';
+                        }
+                    },
+                    "columns": [
+                        {"data": "ID"},
+                        {"data": "CHEK",
+                            render: function (data, type, row) {
+                                return '<input type="checkbox" class="form-control editor-active check_facturas_x_anticipo" style="height: 25px; cursor:pointer;" onclick="onCalcularMontoXAnticipo(this)">';
+                                return data;
+                            }},
+                        {"data": "CLIENTE"},
+                        {"data": "FACTURA"},
+                        {"data": "FECHA"},
+                        {"data": "TP"},
+                        {"data": "TOTAL"},
+                        {"data": "TOTAL_SIN_FORMATO"},
+                        {"data": "CLAVE_CLIENTE"}
+                    ],
+                    "columnDefs": [
+                        //ID
+                        {
+                            "targets": [0],
+                            "visible": false,
+                            "searchable": false
+                        },
+                        {
+                            "targets": [7],
+                            "visible": false,
+                            "searchable": false
+                        },
+                        {
+                            "targets": [8],
+                            "visible": false,
+                            "searchable": false
+                        }],
+                    language: lang,
+                    select: false,
+                    "autoWidth": true,
+                    "colReorder": true,
+                    "displayLength": 99999,
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "scrollCollapse": false,
+                    "bSort": true,
+                    "scrollY": 250,
+                    "scrollX": true,
+                    responsive: false,
+                    "aaSorting": [
+                        [3, 'desc']/*ID*/
+                    ],
+                    drawCallback: function (settings) {
+                        if (json_facturas.length > 0) {
+                            console.log(FacturasXAnticipo.rows().data())
+                            $.each(json_facturas, function (k, v) {
+                                $.each(tblFacturasXAnticipo.find("tbody tr"), function (kk, vv) {
+                                    var cell = $(vv).find("input.check_facturas_x_anticipo")[0];
+                                    var data = FacturasXAnticipo.row(vv).data();
+                                    console.log(v.ID, data.ID, v.FACTURA, data.FACTURA, v, data);
+                                    if (v.ID === data.ID && v.FACTURA === data.FACTURA
+                                            && v.CLAVE_CLIENTE === data.CLAVE_CLIENTE) {
+                                        cell.checked = true;
+                                    }
+                                });
+                            });
+                        }
+                    }
+                });
+                tblFacturasXAnticipo.on('click', 'tr', function () {
+                    var checf = $(this).find("td input[type='checkbox']")[0];
+                    if (checf.checked) {
+                        checf.checked = false;
+                    } else {
+                        checf.checked = true;
+                    }
+                    onCalcularMontoXAnticipo();
+                });
+            }
+        });
         TMNDAFactura.on('keydown', function (e) {
             if (e.keyCode === 13 && TMNDAFactura.val()) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getTipoDeCambio'); ?>').done(function (abcde) {
@@ -856,7 +1039,6 @@
         }).on('hide.bs.modal', function (e) {
             $('body').removeClass("example-open");
         });
-
         $('input.notdot').keydown(function (e) {
             console.log(e.keyCode);
             /*
@@ -895,13 +1077,23 @@
             if (ClienteFactura.val()) {
                 ClienteClave.val(ClienteFactura.val());
                 ClienteFactura[0].selectize.disable();
+                if (json_facturas.length > 0) {
+                    $.each(json_facturas, function (k, v) {
+                        console.log("CLIENTE ", ClienteClave.val(), v.CLAVE_CLIENTE);
+                        if (ClienteClave.val() !== v.CLAVE_CLIENTE) {
+                            json_facturas = [];
+                            mdlFacturasXAnticipo.find("span.json_facturas").text('');
+                            mdlFacturasXAnticipo.find("div.modal-footer").find("span.total_anticipado").text("$ " + $.number(0, 2, '.', ','));
+                            return false;
+                        }
+                    });
+                }
             } else {
                 ClienteClave.val('');
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-
         ClienteClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 if (ClienteClave.val()) {
@@ -941,7 +1133,6 @@
                 ClienteFactura[0].selectize.clear(true);
             }
         });
-
         TiendaClave.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 ConsignarATienda[0].selectize.setValue(TiendaClave.val());
@@ -1128,7 +1319,7 @@
                                 //                                if (pares_finales <= pares && validos) {
                                 console.log('PARES OK');
                                 onAceptarControl();
-//                                } else {
+                                //                                } else {
                                 //                                    onCampoInvalido(pnlTablero, 'NO SE PUEDEN FACTURAR MÁS PARES DE LOS ESTABLECIDOS, INGRESE UNA CANTIDAD MENOR', function () {
                                 //                                        pnlTablero.find("#CAF1").focus().select();
                                 //                                    });
@@ -1169,14 +1360,16 @@
                 onOpenOverlay('Cerrando...');
                 var p = {
                     FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
-                    TP_DOCTO: TPFactura.val(), FACTURA: Documento.val(),
+                    TP_DOCTO: TPFactura.val(), FACTURA: Documento.val(), 
                     MONEDA: TMNDAFactura.val(), CAJAS: CajasFacturacion.val(),
                     IMPORTE_TOTAL_SIN_IVA: SubtotalFacturacion.val(),
                     IMPORTE_TOTAL_CON_IVA: SubtotalFacturacionIVA.val(),
                     TIPO_DE_CAMBIO: TIPODECAMBIO.val(),
                     REFACTURACION: (xRefacturacion[0].cheked ? 1 : 0),
                     TOTAL_EN_LETRA: TotalLetra.find("span").text(),
-                    REFERENCIA: ReferenciaFacturacion.val()
+                    REFERENCIA: ReferenciaFacturacion.val(),
+                    CONSIGNACION: chkConsignacion[0].checked ? 1 : 0,
+                    ANTICIPOS: JSON.stringify(json_facturas)
                 };
                 $.post('<?php print base_url('FacturacionProduccion/onCerrarDocto') ?>', p).done(function (abc) {
                     btnCierraDocto.attr('disabled', true);
@@ -1216,6 +1409,7 @@
                             ClienteClave.focus().select();
                             FechaFactura.val(Hoy);
                             ClienteClave.focus().select();
+                            chkConsignacion[0].checked = false;
                             onReadOnly(pnlTablero.find("#Documento"));
                         });
                     });
@@ -1410,7 +1604,7 @@
                 });
             }
         });
-
+        
         btnControlInCompleto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
@@ -1460,7 +1654,7 @@
                             {"data": "ID"},
                             {"data": "CONTROL"}, {"data": "PEDIDO"},
                             {"data": "CLIENTE"}, {"data": "FECHA_PEDIDO"},
-                            {"data": "FECHA_ENTREGA"},
+                            {"data": "FECHA_ENTREGA"}, 
                             {"data": "ESTILO"}, {"data": "COLOR"},
                             {"data": "PARES"}, {"data": "FAC"},
                             {"data": "MAQUILA"}, {"data": "SEMANA"},
@@ -1593,6 +1787,7 @@
             if (ClienteClave.val()) {
                 if (e.keyCode === 13 && parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                     getTipoDeCambioYUltimaFactura();
+                    onComprobarFacturasXAnticipo();
                 } else if (e.keyCode === 13) {
                     TPFactura.focus().select();
                     onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
@@ -1607,15 +1802,12 @@
                 return;
             }
         }).focusout(function () {
-
             if (ClienteClave.val()) {
                 if (parseInt(TPFactura.val()) >= 1 && parseInt(TPFactura.val()) <= 2) {
                     getTipoDeCambioYUltimaFactura();
+                    onComprobarFacturasXAnticipo();
                 } else {
                     TPFactura.focus().select();
-                    onCampoInvalido(pnlTablero, "SOLO SE PERMITE 1 Y 2", function () {
-                        TPFactura.focus().select();
-                    });
                     return;
                 }
             } else {
@@ -1717,8 +1909,7 @@
                     "targets": [41]/*NO IVA CONTROL*/,
                     "visible": false,
                     "searchable": true
-                }],
-            language: lang,
+                }], language: lang,
             select: true,
             "autoWidth": true,
             "colReorder": true,
@@ -1731,8 +1922,7 @@
             "scrollX": true,
             initComplete: function () {
                 onCloseOverlay();
-            },
-            "drawCallback": function (settings) {
+            }, "drawCallback": function (settings) {
                 var api = this.api();
                 var prs = 0;
                 console.log(api.rows().data());
@@ -1743,7 +1933,8 @@
                 pnlTablero.find("h3.pares_totales_facturados").text(prs + ' PARES');
             }
         });
-    });
+    }
+    );
 
     function getValor(e) {
         return (parseFloat(pnlTablero.find(e).val()) > 0 ? pnlTablero.find(e).val() : 0);
@@ -1798,7 +1989,7 @@
                     xrow.eq(22).find("input").val(0);
                     var index = 1;
                     $.each(pnlTablero.find("#tblTallasF tr#rCantidades:eq(0) td"), function (k, v) {
-//                    console.log(v, $(v).index());
+                        //                    console.log(v, $(v).index());
                         if ($(v).find("input").val() === '') {
                             onDisable(pnlTablero.find("#tblTallasF tr#rCantidades:eq(2) td:eq(" + $(v).index() + ") input"));
                         }
@@ -1835,7 +2026,6 @@
     function onCalcularPares(e, i) {
         getTotalPares();
     }
-
     function getTotalPares() {
         var ttp = 0, ttpf = 0, ttpaf = 0;
         for (var i = 1; i < 23; i++) {
@@ -1855,16 +2045,17 @@
                     CLIENTE: ClienteClave.val(),
                     CONTROL: Control.val()
                 }).done(function (a) {
-            var r = a[0];
-            pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
-            pnlTablero.find(".produccionsaldo").text(ttp - r.PARES_FACTURADOS);
-            TotalParesEntregaF.val(r.PARES_FACTURADOS);
-            var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
-            TotalParesEntregaAF.val(ttpaf);
+            if (a.length > 0) {
+                var r = a[0];
+                pnlTablero.find(".produccionfacturados").text(r.PARES_FACTURADOS);
+                pnlTablero.find(".produccionsaldo").text(ttp - r.PARES_FACTURADOS);
+                TotalParesEntregaF.val(r.PARES_FACTURADOS);
+                var total_para_facturar = r.PARES - r.PARES_FACTURADOS;
+                TotalParesEntregaAF.val(ttpaf);
+            }
         }).fail(function (x) {
             getError(x);
         }).always(function () {
-
         });
     }
 
@@ -1875,8 +2066,7 @@
                 num6 = 0, num7 = 0, num8 = 0, num9 = 0,
                 num10 = 0, num11 = 0, num12 = 0, num13 = 0,
                 num14 = 0, num15 = 0, num16 = 0, num17 = 0, num18 = 0,
-                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0,
-                txtreferen9 = 0, txtreferen10 = 0;
+                num19 = 313, num20 = 802, txtreferen2 = 0, txtreferen3 = 0, txtreferen4 = 0, txtreferen9 = 0, txtreferen10 = 0;
         console.log("\n ZERO PAD: ", txtreferen11, txtreferen11.length);
         for (var refe1 = 1; refe1 <= txtreferen11.length; refe1++) {
             txtreferen2 = txtreferen11.substr(refe1 - 1, 1);
@@ -1938,14 +2128,11 @@
             }
         }
 
-
-        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 +
-                num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
+        txtreferen3 = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9 + num10 + num11 + num12 + num13 + num14 + num15 + num16 + num17 + num18 + num19 + num20;
         var res = 0, res1 = 0, res2 = 0, res3 = 0;
         //        console.log("txtreferen3 => " + txtreferen3);
         txtreferen4 = txtreferen3 / 97;
-        //        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));         res = (txtreferen4 % 1);
-        res1 = res * 100;
+        //        console.log("txtreferen4 => " + txtreferen4, "txtreferen4 res =>" + (txtreferen4 % 1), "txtreferen4 - res=>" + (txtreferen4 - (txtreferen4 % 1)));         res = (txtreferen4 % 1);         res1 = res * 100;
         res2 = res1 % 1;
         res3 = res1 - res2;
         //        console.log("res => " + res, "res1=>" + res1, "res2=>" + res2, "res3=>" + res3);
@@ -1962,12 +2149,10 @@
     }
 
     function iMsg(msg, t, f) {
-        swal('ATENCIÓN', msg,
-                (t === 's' ? 'success' : (t === 'i' ? 'info' : (t === 'w' ? 'warning' : 'error')))).then(function () {
+        swal('ATENCIÓN', msg, (t === 's' ? 'success' : (t === 'i' ? 'info' : (t === 'w' ? 'warning' : 'error')))).then(function () {
             f();
         });
     }
-
     var control_pertenece_a_cliente = false;
     function getFacturacionDiff() {
         if (Control.val()) {
@@ -2144,7 +2329,6 @@
         CajasFacturacion.val('');
         getTotalFacturado();
     }
-
     function getTotalFacturado() {
         var t = 0, indice = 31;
         $.each(ParesFacturados.rows().data(), function (k, v) {
@@ -2219,8 +2403,7 @@
         }
         var rowx = [
             123456789010, Documento.val(), ClienteFactura.val(), Control.val(), FechaFactura.val(),
-            TotalParesEntregaAF.val()
-        ];
+            TotalParesEntregaAF.val()];
         for (var i = 1; i < 23; i++) {
             rowx.push(a + getTalla('#T' + i) + b + getValor('#CAF' + i) + c);
         }
@@ -2291,6 +2474,7 @@
         p["COLOR_TEXT"] = ColorFacturacion.val();
         p["ZONA"] = ZonaFacturacion.val();
         p["OBSERVACIONES"] = ObservacionFacturacion.val();
+        p["CONSIGNACION"] = chkConsignacion[0].checked ? 1 : 0;
         //        console.log("PARAMETROS 2 : ", p);
         $.post('<?php print base_url('FacturacionProduccion/onGuardarDocto'); ?>', p).done(function (a) {
             nuevo = false;
@@ -2380,6 +2564,51 @@
 
     }
 
+    function onComprobarFacturasXAnticipo() {
+        /*REVISAR SI TIENE FACTURAS POR ANTICIPO*/
+        $.getJSON('<?php print base_url('FacturacionProduccion/getFacturasXAnticipo'); ?>', {
+            CLIENTE: ClienteFactura.val()
+        }).done(function (a) {
+            if (a.length > 0) {
+                if (json_facturas.length > 0) {
+                    onCalcularMontoXAnticipo();
+                    mdlFacturasXAnticipo.modal('show');
+                } else {
+                    mdlFacturasXAnticipo.modal('show');
+                }
+            }
+        }).fail(function (x) {
+            console.log(x);
+            getError(x);
+        });
+    }
+
+    function  onCalcularMontoXAnticipo() {
+        var total = 0;
+
+        var facturas = [];
+        console.log(tblFacturasXAnticipo.find("tbody tr"));
+        $.each(tblFacturasXAnticipo.find("tbody tr"), function (k, v) {
+            var cell = $(v).find("input.check_facturas_x_anticipo");
+            if (cell[0].checked) {
+                var data = FacturasXAnticipo.row(v).data();
+                total += parseFloat(data.TOTAL_SIN_FORMATO);
+                facturas.push({
+                    ID: data.ID,
+                    FACTURA: data.FACTURA,
+                    CLAVE_CLIENTE: data.CLAVE_CLIENTE,
+                    TOTAL: data.TOTAL_SIN_FORMATO
+                });
+            }
+        });
+
+        json_facturas = facturas;
+        console.log(facturas);
+        mdlFacturasXAnticipo.find("span.json_facturas").text(JSON.stringify(facturas));
+        mdlFacturasXAnticipo.find("div.modal-footer").find("span.total_anticipado").text("$ " + $.number(total, 2, '.', ','));
+
+    }
+
     function getTipoDeCambioYUltimaFactura() {
         var tpx = parseInt(TPFactura.val());
         if (tpx >= 1 && tpx <= 2) {
@@ -2462,7 +2691,6 @@
             onCloseOverlay();
         });
     }
-
     var mdlHistorialFacturas = $("#mdlHistorialFacturas"),
             tblFacturas = mdlHistorialFacturas.find("#tblFacturas"),
             hFactura = mdlHistorialFacturas.find("#hFactura"),
@@ -2588,8 +2816,7 @@
     function getVistaPreviaDocumentoCerrado(f) {
         onBeep(1);
         onOpenOverlay('Espere un momento por favor...');
-        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '', DOCUMENTO_FACTURA: Documento.val() !== '' ? Documento.val() : '',
-            TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
+        $.post('<?php print base_url('FacturacionProduccion/getVistaPrevia'); ?>', {CLIENTE: ClienteFactura.val() !== '' ? ClienteFactura.val() : '', DOCUMENTO_FACTURA: Documento.val() !== '' ? Documento.val() : '', TP: TPFactura.val().trim() !== '' ? TPFactura.val() : ''
         }).done(function (data, x, jq) {
             onBeep(1);
             onImprimirReporteFancyAFC(data, f);
@@ -2612,6 +2839,24 @@
         user-select: none !important; /* Non-prefixed version, currently
                               supported by Chrome, Opera and Firefox */
     }
+
+    #tblFacturasXAnticipo tbody td { 
+        font-size: 18px; 
+        font-weight: bold;
+    }
+
+    #tblFacturasXAnticipo tbody td:nth-child(3){
+        color: #CC0000 !important; 
+    }
+
+    #tblFacturasXAnticipo tbody td:nth-child(5){
+        color: #007bff !important; 
+    }
+
+    #tblFacturasXAnticipo tbody td:nth-child(6){
+        color: #669900 !important; 
+    }
+
     #tblParesFacturados tbody td{
         font-weight: bold !important;
     }
@@ -2641,7 +2886,7 @@
     table thead tr{
         background-color: #000 !important;
         color: #fff !important;
-    }
+    } 
 </style>
 <?php
 $this->load->view('vAdendaCoppel');

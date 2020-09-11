@@ -47,7 +47,7 @@ class FacturacionProduccion extends CI_Controller {
             $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control IN(SELECT P.Control FROM pedidox AS P WHERE P.stsavan = 12 AND P.Pares = P.ParesFacturados );");
 
             /* SEGUNDO PEDIDOX, SEGUNDO PORQUE CONTROLES OCUPA SABER CUALES SON LOS CONTROLES CON DIFERENCIAS */
-            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F' WHERE stsavan = 12 AND Pares = ParesFacturados;");
+            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = Pares  WHERE stsavan = 12 AND Pares = ParesFacturados;");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -64,7 +64,7 @@ class FacturacionProduccion extends CI_Controller {
     public function getInfoXControl() {
         try {
             $x = $this->input->get();
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995);
             if (in_array($x['CLIENTE'], $people)) {
                 print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
                                         . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
@@ -172,7 +172,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $xxx = $this->input->get();
             $this->db->select("P.Cliente AS CLIENTE", false)->from("pedidox AS P")
                     ->where("P.Control", $xxx['CONTROL']);
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995);
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14))
                         ->where_not_in("P.Estatus", array('C'))
@@ -238,7 +238,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     ->where_not_in("P.stsavan", array(14))
                     ->where_not_in("P.Estatus", array('C'));
 
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995);
             if (!in_array($xxx['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14));
             }
@@ -365,7 +365,9 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                 'tcamb' => $x['TIPO_DE_CAMBIO'],
                 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                 'nc' => (($x['REFACTURACION'] === 1) ? 888 : 0),
-                'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1)));
+                'factura' => ((intval($x['TP_DOCTO']) === 1) ? 0 : 1),
+                'consignacion' => intval($x['CONSIGNACION']) === 1 ? 1 : 0));
+
             $l = new Logs("FACTURACION (CIERRE)", "HA CERRADO LA FACTURA {$x['FACTURA']} CON EL CLIENTE {$x['CLIENTE']} DE  $" . number_format($TOTAL, 4, ".", ",") . ", CON UNA MONEDA EN {$x["MONEDA"]} Y CON UN TIPO DE CAMBIO DE {$x['TIPO_DE_CAMBIO']}.", $this->session);
 
             /*             * *CARTAFAC** */
@@ -393,6 +395,15 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             ));
             $l = new Logs("FACTURACION (CIERRE)(CARTAFAC)", "HA GENERADO UNA CARTA PARA LA FACTURA ({$x['FACTURA']}) DEL CLIENTE({$x['CLIENTE']}) CON {$PARES} PARES TIPO {$x['TP_DOCTO']}.", $this->session);
             /*             * *CARTAFAC** */
+
+            /* SALDAR FACTURAS CON ANTICIPOS EN CARTCLIENTE */
+            $facturas_anticipos = json_decode($x['ANTICIPOS']);
+            if (count($facturas_anticipos) > 0) {
+                foreach ($facturas_anticipos as $k => $v) {
+                    print "{$v->FACTURA} <br>";
+                    $this->db->query("UPDATE cartcliente SET pagos = importe, saldo = 0 WHERE cliente = {$v->CLIENTE} AND remicion = {$v->FACTURA} AND anticipo = 1 AND factura = 1");
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -470,6 +481,8 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $f["modulo"] = "PRODUCCION";
             $f["usuario"] = $this->session->USERNAME;
             $f["usuario_id"] = $this->session->ID;
+            $f["pares_consigna"] = $x['PARES_A_FACTURAR'];
+            $f["consignacion"] = intval($x['CONSIGNACION']) === 1 ? 1 : 0;
             $this->db->insert('facturacion', $f);
 
 
@@ -608,7 +621,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                                 'descripcion' => $x['COLOR_TEXT'] . " " . $SERIE[0]->{"T$i"},
                                 'Precio' => $x['PRECIO'],
                                 'importe' => $XSUBTOTAL, 'fecha' => "$anio-$mes-$dia $hora",
-                                'control' => $x['CONTROL'], 'iva' => $XSUBTOTAL_IVA,
+                                'control' => $x['CONTROL'], 'iva' => intval($x["MONEDA"]) === 1 ? $XSUBTOTAL_IVA : 0,
                                 'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                                 'tcamb' => $tipo_cambio,
                                 'noidentificado' => $XETIQUETA,
@@ -627,7 +640,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                         'unidad' => 'PAR', 'codigo' => $x['ESTILO'],
                         'descripcion' => $x['COLOR_TEXT'], 'Precio' => $x['PRECIO'],
                         'importe' => $x['SUBTOTAL'], 'fecha' => "$anio-$mes-$dia $hora",
-                        'control' => $x['CONTROL'], 'iva' => $x['IVA'],
+                        'control' => $x['CONTROL'], 'iva' => intval($x["MONEDA"]) === 1 ? $x['IVA'] : 0,
                         'tmnda' => (intval($x["MONEDA"]) > 1 ? $x["MONEDA"] : 1),
                         'tcamb' => $tipo_cambio,
                         'noidentificado' => NULL,
@@ -647,7 +660,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
             );
             if ($saldopares === 0) {
                 //Validar clientes permitidos para facturar por adelantado
-                $people = array(39, 2121, 1810, 2260, 2394, 2343, 2228, 2285, 2428, 1445, 1782,995);
+                $people = array(39, 2121, 1810, 2260, 2394, 2343, 2228, 2285, 2428, 1445, 1782, 995);
                 if (!in_array($x['CLIENTE'], $people)) {
                     $EstatusProduccion = 'FACTURADO';
                     $DeptoProduccion = 260;
@@ -718,9 +731,9 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                         $c = intval($x["C$ii"]) - (intval($x["CF$ii"]) + intval($x["CAF$ii"]));
                     }
                     if ($ii < 10) {
-                        $facturaciondif["par0$ii"] = $c;
+                        $facturaciondif["par0$ii"] = intval($c) > 0 ? $c : 0;
                     } else {
-                        $facturaciondif["par$ii"] = $c;
+                        $facturaciondif["par$ii"] = intval($c) > 0 ? $c : 0;
                     }
                 }
                 $this->db->where('contped', $x['CONTROL'])
@@ -732,9 +745,9 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                         $c = (intval($x["C$iii"]) - intval($x["CAF$iii"]));
                     }
                     if ($iii < 10) {
-                        $facturaciondif["par0$iii"] = intval($x["CAF$iii"]);
+                        $facturaciondif["par0$iii"] = intval($x["CAF$iii"]) > 0 ? intval($x["CAF$iii"]) : 0;
                     } else {
-                        $facturaciondif["par$iii"] = intval($x["CAF$iii"]);
+                        $facturaciondif["par$iii"] = intval($x["CAF$iii"]) > 0 ? intval($x["CAF$iii"]) : 0;
                     }
                 }
                 $facturaciondif['contped'] = $x['CONTROL'];
@@ -814,7 +827,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
             $this->db->select("P.ParesFacturados AS PARES_FACTURADOS, P.Pares AS PARES ", false)
                     ->from("pedidox AS P ")->where("P.Control", $x['CONTROL']);
 
-            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332,995);
+            $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995);
             if (!in_array($x['CLIENTE'], $people)) {
                 $this->db->where_not_in("P.stsavan", array(13, 14))->where_not_in("P.Estatus", array('C'))
                         ->where_not_in("P.EstatusProduccion", array('CANCELADO'))
@@ -1094,7 +1107,8 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             PRINT $jc->getReport();
                             exit(0);
                             break;
-                        case 1755: /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
+                        case 1755:
+                            /* GRUPO EMPRESARIAL S.J., S.A. DE C.V. */
                             $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
                             $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
                             $pr["qrCode"] = base_url('qrplus/qr.png');
@@ -1253,6 +1267,20 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                             $jc->setParametros($pr);
                             $jc->setJasperurl('jrxml\facturacion\facturaelec2422.jasper');
                             $jc->setFilename("facturaelec39_2422_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                            $jc->setDocumentformat('pdf');
+                            PRINT $jc->getReport();
+                            exit(0);
+                            break;
+                        case 500:
+                            $pr["callecolonia"] = "{$this->session->EMPRESA_DIRECCION} #{$this->session->EMPRESA_NOEXT}, COL.{$this->session->EMPRESA_COLONIA}";
+                            $pr["ciudadestadotel"] = utf8_decode("{$this->session->EMPRESA_CIUDAD}, {$this->session->EMPRESA_ESTADO}, MEXICO, {$this->session->EMPRESA_CP}");
+                            $pr["qrCode"] = base_url('qrplus/qr.png');
+                            $pr["factura"] = $x['DOCUMENTO_FACTURA'];
+                            $pr["cliente"] = $x['CLIENTE'];
+                            $pr["certificado"] = $CERTIFICADO_CFD;
+                            $jc->setParametros($pr);
+                            $jc->setJasperurl('jrxml\facturacion\facturaelec3.jasper');
+                            $jc->setFilename("f3{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                             $jc->setDocumentformat('pdf');
                             PRINT $jc->getReport();
                             exit(0);
@@ -1492,6 +1520,39 @@ FD.TotalConDescuentoItem AS TOTAL_CON_DESCUENTO", false)
             $this->db->order_by('FD.Factura', 'DESC');
             $data = $this->db->get()->result();
             print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getFacturasXAnticipo() {
+        try {
+            $x = $this->input->get();
+            $data = $this->db->query("SELECT "
+                            . "CONCAT(C.cliente,\" \",(SELECT LEFT(CC.RazonS,30) FROM clientes AS CC WHERE CC.Clave = C.cliente LIMIT 1) ) AS CLIENTE, "
+                            . "C.ID AS ID, C.remicion AS FACTURA, "
+                            . "DATE_FORMAT(C.fecha,\"%d/%m/%Y\") AS FECHA ,"
+                            . "C.tipo AS TP, "
+                            . "FORMAT(C.importe,2) AS TOTAL, "
+                            . "C.importe AS TOTAL_SIN_FORMATO,"
+                            . "0 AS CHEK, C.cliente AS CLAVE_CLIENTE "
+                            . "FROM cartcliente AS C WHERE C.cliente = {$x['CLIENTE']} AND C.anticipo = 1 AND C.saldo > 0")->result();
+            print json_encode($data);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onAnticiposTest() {
+        try {
+            $x = $this->input->post();
+            $facturas_anticipos = json_decode($x['ANTICIPOS']);
+            var_dump($facturas_anticipos);
+            if (count($facturas_anticipos) > 0) {
+                foreach ($facturas_anticipos as $k => $v) {
+                    print "{$v->FACTURA} <br>";
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -342,6 +342,13 @@
         color: #fff !important;
         text-decoration: none;
         background-color: #111 !important;
+        
+       <?php     if (!is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
+           ?>
+        color: #000 !important;
+        text-decoration: none;
+        background-color: #ffffff !important; 
+       <?php } ?>
     }
 
     label {
