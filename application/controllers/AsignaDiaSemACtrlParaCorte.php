@@ -274,7 +274,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                     if ($CONTROL !== '') {
                         $this->db->where("PE.Control", $CONTROL);
                     }
-                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(2,40))->group_by('A.Descripcion');
+                    $this->db->where("FXE.Fraccion = ", $tipo)->where_in("A.Grupo", array(2, 40))->group_by('A.Descripcion');
                     $DTM = $this->db->get()->result();
                     break;
                 case 100:
@@ -358,12 +358,12 @@ JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
                 $TIEMPO_PRECIO_ARTICULO_X_FRACCION = 0;
                 switch (intval($FRACCION)) {
                     case 99:
-                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
+                        $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
 FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS FROM `pedidox` AS `PE`
 JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
-WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) GROUP BY `A`.`Descripcion`)")->result();
+WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2) GROUP BY `A`.`Descripcion`")->result();
                         break;
                     case 100:
                         $TIEMPO_PRECIO_ARTICULO_X_FRACCION = $this->db->query("(SELECT FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
@@ -513,6 +513,64 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
                 }
                 $jc->setParametros($P);
                 $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatfraccion.jasper');
+                $jc->setFilename('asidiacontmatfraccion_' . $P["FRACCION"] . '_' . Date('dmYhis'));
+            } else {
+                $jc->setParametros($P);
+                $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmat.jasper');
+                $jc->setFilename('asidiacontmat_' . Date('dmYhis'));
+            }
+            $jc->setDocumentformat('pdf');
+            $reports['2DOS'] = $jc->getReport();
+
+            /* 3. REPORTE Entrega de material para corte del programa - agrupado grupos de articulo */
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["SEMANA"] = $x['SEMANA'];
+            $P["DIA"] = $x['DIA'];
+            $P["DIAT"] = $x['DIAT'];
+            $P["ANO"] = $x['ANO'];
+            $jc->setParametros($P);
+            $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatg.jasper');
+            $jc->setFilename('asidiacontmatg_' . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');
+            $reports['3TRES'] = $jc->getReport();
+
+            print json_encode($reports);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+    public function getReportesXSemDiaAno99() {
+        try {
+            $reports = array();
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $x = $this->input->post(); 
+            /* 2. REPORTE Entrega de material para corte del programa - agrupado empleado  */
+
+            $P = array();
+            $P["logo"] = base_url() . $this->session->LOGO;
+            $P["empresa"] = $this->session->EMPRESA_RAZON;
+            $P["SEMANA"] = $x['SEMANA'];
+            $P["DIA"] = $x['DIA'];
+            $P["DIAT"] = $x['DIAT'];
+            $P["ANO"] = $x['ANO'];
+            if ($x['FRACCION'] !== "" || $x['FRACCION'] === 99 || $x['FRACCION'] === 100 ||
+                    $x['FRACCION'] === "99" || $x['FRACCION'] === "100" || $x['FRACCION'] === "99,100") {
+                switch ($x['FRACCION']) {
+                    case "99":
+                        $P["FRACCION"] = str_replace(",", "", $x['FRACCION']);
+                        break;
+                    case "100":
+                        $P["FRACCION"] = str_replace(",", "", $x['FRACCION']);
+                        break;
+                    default :
+                        $P["FRACCION"] = 0;
+                        break;
+                }
+                $jc->setParametros($P);
+                $jc->setJasperurl('jrxml\programacionxdiasem\asidiacontmatfraccion99.jasper');
                 $jc->setFilename('asidiacontmatfraccion_' . $P["FRACCION"] . '_' . Date('dmYhis'));
             } else {
                 $jc->setParametros($P);
