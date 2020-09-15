@@ -159,6 +159,7 @@ class CapturaFraccionesParaNomina_model extends CI_Model {
                             C.EstatusProduccion AS DeptoT,
                             C.Estilo Estilo,
                             C.Color AS Color,
+                            C.Maquila AS Maquila,
                             C.Pares "
                             . "")
                     ->from("pedidox C")

@@ -14,6 +14,7 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
 
     public function index() {
         if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
+            $this->onRedondeaYActualizaSaldos();
             $this->load->view('vEncabezado');
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
@@ -31,6 +32,15 @@ class CapturaPagosSolamenteDeCoppel extends CI_Controller {
             $this->load->view('vFondo')->view('vCapturaPagosSolamenteDeCoppel')->view('vFooter');
         } else {
             $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
+        }
+    }
+
+    public function onRedondeaYActualizaSaldos() {
+        try {
+            $this->db->query(" update cartcliente set saldo = 0, status = 3 where saldo <= 1 and saldo >= 0 and status <> 4 ");
+            $this->db->query(" update cartcliente set saldo = 0, status = 3 where saldo <= 0 and saldo >= -1 and status <> 4 ");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
         }
     }
 

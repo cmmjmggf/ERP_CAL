@@ -313,10 +313,31 @@
                         Control: $(this).val()
                     }).done(function (data) {
                         if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
-                            if (data[0].Depto === '270' && data[0].Depto !== '') {
+                            if (data[0].Maquila !== '98') {
+                                if (data[0].Depto === '270' && data[0].Depto !== '') {
+                                    swal({
+                                        title: "CONTROL CANCELADO POR EL CLIENTE",
+                                        text: "****MOTIVO EXTEMPORANEO****",
+                                        icon: "warning",
+                                        closeOnClickOutside: false,
+                                        closeOnEsc: false
+                                    }).then((action) => {
+                                        if (action) {
+                                            Control.val('').focus();
+                                        }
+                                    });
+                                } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
+                                    ParesPed = data[0].Pares;
+                                    pnlTablero.find("#EstatusProduccion").html(data[0].Depto + '  ' + data[0].DeptoT);
+                                    pnlTablero.find("#Estilo").val(data[0].Estilo);
+                                    pnlTablero.find("#Color").val(data[0].Color);
+                                    pnlTablero.find("#Pares").val(data[0].Pares).focus().select();
+                                    getFraccionesByEstilo(data[0].Estilo);
+                                }
+                            } else {
                                 swal({
-                                    title: "CONTROL CANCELADO POR EL CLIENTE",
-                                    text: "****MOTIVO EXTEMPORANEO****",
+                                    title: "ATENCIÓN",
+                                    text: "NO SE PERMITEN CONTROLES DE LA MAQUILA 98 EN ESTE MÓDULO",
                                     icon: "warning",
                                     closeOnClickOutside: false,
                                     closeOnEsc: false
@@ -325,13 +346,6 @@
                                         Control.val('').focus();
                                     }
                                 });
-                            } else { //Si el control no está cancelado y existe nos traemos sus pares y su avance
-                                ParesPed = data[0].Pares;
-                                pnlTablero.find("#EstatusProduccion").html(data[0].Depto + '  ' + data[0].DeptoT);
-                                pnlTablero.find("#Estilo").val(data[0].Estilo);
-                                pnlTablero.find("#Color").val(data[0].Color);
-                                pnlTablero.find("#Pares").val(data[0].Pares).focus().select();
-                                getFraccionesByEstilo(data[0].Estilo);
                             }
                         } else { //Si el control no existe
                             swal({
