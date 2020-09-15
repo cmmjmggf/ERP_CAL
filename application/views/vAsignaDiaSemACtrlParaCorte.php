@@ -7,7 +7,10 @@
                     <span class="fa fa-retweet"></span>
                 </button>
                 <button type="button" id="btnImprimeXDia" name="btnImprimeXDia" class="btn btn-sm btn-info " data-toggle="tooltip" data-placement="top" title="Imprime x dia">
-                    <span class="fa fa-print"></span> X dia
+                    <span class="fa fa-print"></span> X dia (100)
+                </button>
+                <button type="button" id="btnImprimeXDia99" name="btnImprimeXDia99" class="btn btn-sm btn-info " data-toggle="tooltip" data-placement="top" title="Imprime x dia">
+                    <span class="fa fa-print"></span> X dia (99)
                 </button>
                 <button type="button" id="btnImprimeXSem" name="btnImprimeXSem" class="btn btn-sm btn-info " data-toggle="tooltip" data-placement="top" title="Imprime x Sem">
                     <span class="fa fa-print"></span> X sem
@@ -225,6 +228,7 @@
             btnFraccionesXEstilos = pnlTablero.find("#btnFraccionesXEstilos"),
             Cortadores = pnlTablero.find("#CortadorADSCPC"), mdlFracciones = $("#mdlFracciones"),
             btnImprimeXDia = pnlTablero.find("#btnImprimeXDia"),
+            btnImprimeXDia99 = pnlTablero.find("#btnImprimeXDia99"),
             btnImprimeXSem = pnlTablero.find("#btnImprimeXSem");
     var dias = {
         4: 'LUNES',
@@ -325,6 +329,50 @@
                             if (xxx.length > 0) {
                                 onImprimirReporteFancyArrayAFC(JSON.parse(xxx), function (instance, current) {
                                     btnImprimeXDia.attr('disabled', false);
+                                });
+                            } else {
+                                iMsg('NO SE HA PODIDO GENERAR LOS REPORTES SOLICITADOS, INTENTE DE NUEVO O MÁS TARDE', 'w', function () {
+                                    Semana.focus().select();
+                                });
+                            }
+                        }).fail(function (x, y, z) {
+                            getError(x);
+                        }).always(function () {
+                            onCloseOverlay();
+                        });
+                    } else {
+                        iMsg('DEBE DE ESPECIFICAR UN DIA', 'w', function () {
+                            Dia.focus().select();
+                        });
+                    }
+                } else {
+                    iMsg('DEBE DE ESPECIFICAR UNA SEMANA', 'w', function () {
+                        Semana.focus().select();
+                    });
+                }
+            } else {
+                iMsg('DEBE DE ESPECIFICAR UN AÑO', 'w', function () {
+                    Anio.focus().select();
+                });
+            }
+        });
+        btnImprimeXDia99.click(function () {
+            if (Anio.val()) {
+                if (Semana.val()) {
+                    if (Dia.val()) {
+                        var p = {
+                            SEMANA: Semana.val() ? Semana.val() : '',
+                            DIA: Dia.val() ? Dia.val() : '',
+                            DIAT: DiaT.val() ? DiaT.val() : '',
+                            ANO: Anio.val() ? Anio.val() : '',
+                            FRACCION: 99
+                        };
+                        onOpenOverlay('Espere un momento...');
+                        btnImprimeXDia99.attr('disabled', true);
+                        $.post('<?php print base_url('AsignaDiaSemACtrlParaCorte/getReportesXSemDiaAno99'); ?>', p).done(function (xxx) {
+                            if (xxx.length > 0) {
+                                onImprimirReporteFancyArrayAFC(JSON.parse(xxx), function (instance, current) {
+                                    btnImprimeXDia99.attr('disabled', false);
                                 });
                             } else {
                                 iMsg('NO SE HA PODIDO GENERAR LOS REPORTES SOLICITADOS, INTENTE DE NUEVO O MÁS TARDE', 'w', function () {

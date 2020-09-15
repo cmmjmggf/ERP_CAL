@@ -33,7 +33,7 @@ WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND P
 WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) = 0 AND
 (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) > 0 THEN AA.`Grupo` IN(2,12,15,16,17,18,30,31,34,40,41,50,9)  AND  C.frac IN(99)
 END)
-END)  AND C.frac = 100
+END) AND C.frac = 99
 GROUP BY C.numemp, AA.Articulo
 ORDER BY ABS(C.numemp) ASC, ABS(AA.`Grupo`) ASC, ABS(AA.Articulo) ASC ;]]>
 	</queryString>
