@@ -30,9 +30,11 @@
                                         <input type="text" id="Maquinaria_ID" name="Maquinaria_ID" readonly="" class="form-control form-control-sm d-none">
                                         <input type="text" id="CodigoMaquina" name="CodigoMaquina" readonly="" class="form-control form-control-sm">
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-5">
                                         <label>Id</label>
                                         <input type="text" id="IdMaquina" name="IdMaquina" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-7 ultimo_maqid_ingresado" >  
                                     </div>
                                     <div class="col-12">
                                         <label>Maquila</label>
@@ -70,13 +72,13 @@
                                         <input type="text" id="SerieMaquina" name="SerieMaquina" maxlength="99" class="form-control form-control-sm">
                                     </div>
                                     <div class="col-12">
-                                        <label>Depto</label>
+                                        <label>Departamento</label>
                                         <div class="row">
                                             <div class="col-4 col-xs-4 col-sm-4">
-                                                <input type="text" id="DeptoClaveMaquina" name="DeptoClaveMaquina" class="form-control" maxlength="3">
+                                                <input type="text" id="DeptoClaveMaquinaria" name="DeptoClaveMaquinaria" class="form-control" maxlength="3">
                                             </div>
                                             <div class="col-8 col-xs-8 col-sm-8"> 
-                                                <select id="DeptoMaquina" name="DeptoMaquina" class="form-control form-control-sm">
+                                                <select id="DeptoMaquinaria" name="DeptoMaquinaria" class="form-control form-control-sm">
                                                     <option></option>                                   
                                                     <?php
                                                     $departamentos = $this->db->query("SELECT Clave, Descripcion FROM departamentos;")->result();
@@ -344,8 +346,8 @@
             MarcaMaquina = mdlMaquinaria.find('#MarcaMaquina'),
             ModeloMaquina = mdlMaquinaria.find('#ModeloMaquina'),
             SerieMaquina = mdlMaquinaria.find('#SerieMaquina'),
-            DeptoClaveMaquina = mdlMaquinaria.find('#DeptoClaveMaquina'),
-            DeptoMaquina = mdlMaquinaria.find('#DeptoMaquina'),
+            DeptoClaveMaquinaria = mdlMaquinaria.find('#DeptoClaveMaquinaria'),
+            DeptoMaquinaria = mdlMaquinaria.find('#DeptoMaquinaria'),
             FechaAltaMaquina = mdlMaquinaria.find('#FechaAltaMaquina'),
             FacturaMaquina = mdlMaquinaria.find('#FacturaMaquina'),
             CostoMaquina = mdlMaquinaria.find('#CostoMaquina'),
@@ -359,7 +361,7 @@
             indice = 1, indice_imagen = 1,
             sin_foto = "<?php print base_url('img/sin_foto_sm.jpg'); ?>",
             imgns = [xImagenUno, xImagenUno, xImagenDos, xImagenTres, xImagenCuatro, xImagenCinco, xImagenSeis];
-    
+
     function onEliminarImagenMaquinaria(ID, indice) {
         swal({
             title: "¿Estas seguro?",
@@ -533,22 +535,30 @@
             }
         });
 
-        DeptoClaveMaquina.on('keydown', function (e) {
-            if (e.keyCode === 13 && DeptoClaveMaquina.val()) {
-                setValueSelectize(DeptoMaquina, DeptoClaveMaquina.val());
-                onDisable(DeptoMaquina);
+        DeptoClaveMaquinaria.on('keydown', function (e) {
+            if (e.keyCode === 13 && DeptoClaveMaquinaria.val()) {
+                setValueSelectize(DeptoMaquinaria, DeptoClaveMaquinaria.val());
+                onDisable(DeptoMaquinaria);
             }
-            if (e.keyCode === 13 && DeptoClaveMaquina.val() === '' ||
-                    e.keyCode === 8 && DeptoClaveMaquina.val() === '') {
-                onClear(DeptoMaquina);
-                onEnable(DeptoMaquina);
+            if (e.keyCode === 13 && DeptoClaveMaquinaria.val() === '' ||
+                    e.keyCode === 8 && DeptoClaveMaquinaria.val() === '') {
+                onClear(DeptoMaquinaria);
+                onEnable(DeptoMaquinaria);
+            }
+            if (e.keyCode === 13 && DeptoClaveMaquinaria.val() !== '' && DeptoMaquinaria.val() === '') {
+                onCampoInvalido(mdlMaquinaria, "DEBE DE ESPECIFICAR UN DEPARTAMENTO VÁLIDO.", function () {
+                    DeptoClaveMaquinaria.focus().select();
+                });
             }
         });
 
-        DeptoMaquina.change(function () {
-            if (DeptoMaquina.val()) {
-                DeptoClaveMaquina.val(DeptoMaquina.val());
-            }
+        DeptoMaquinaria.change(function () {
+            console.log(DeptoClaveMaquinaria.val());
+            console.log(DeptoMaquinaria.val());
+            DeptoClaveMaquinaria.val(DeptoMaquinaria.val());
+            console.log(DeptoClaveMaquinaria.val());
+            console.log(DeptoMaquinaria.val());
+            FechaAltaMaquina.focus();
         });
 
         MaquilaClaveMaquina.on('keydown', function (e) {
@@ -561,6 +571,11 @@
                 onClear(MaquilaMaquina);
                 onEnable(MaquilaMaquina);
             }
+            if (e.keyCode === 13 && MaquilaClaveMaquina.val() && MaquilaMaquina.val() === '') {
+                onCampoInvalido(mdlMaquinaria, "DEBE DE ESPECIFICAR UNA MAQUILA VÁLIDA", function () {
+                    MaquilaClaveMaquina.focus().select();
+                });
+            }
         });
 
         MaquilaMaquina.change(function () {
@@ -571,9 +586,21 @@
         });
 
         btnGuardaMaquina.click(function () {
+            if (!IdMaquina.val()) {
+                onCampoInvalido(mdlMaquinaria, "DEBE DE ESPECIFICAR AL MENOS UN ID.", function () {
+                    IdMaquina.focus().select();
+                });
+                return;
+            }
+            if (DescripcionMaquina.val() === '' && DescripcionMaquina.val().length <= 1) {
+                onCampoInvalido(mdlMaquinaria, "DEBE DE ESPECIFICAR AL MENOS UNA DESCRIPCION DE MÁS DE 2 CARACTERES.", function () {
+                    DescripcionMaquina.focus().select();
+                });
+                return;
+            }
             onDisable(btnGuardaMaquina);
             onEnable(MaquilaMaquina);
-            onEnable(DeptoMaquina);
+            onEnable(DeptoMaquinaria);
             onOpenOverlay('Guardando...');
             var f = new FormData();
             /*CAMPOS*/
@@ -585,8 +612,8 @@
             f.append('MarcaMaquina', MarcaMaquina.val());
             f.append('ModeloMaquina', ModeloMaquina.val());
             f.append('SerieMaquina', SerieMaquina.val());
-            f.append('DeptoClaveMaquina', DeptoClaveMaquina.val());
-            f.append('DeptoMaquina', DeptoMaquina.val());
+            f.append('DeptoClaveMaquina', DeptoClaveMaquinaria.val());
+            f.append('DeptoMaquina', DeptoMaquinaria.val());
             f.append('FechaAltaMaquina', FechaAltaMaquina.val());
             f.append('FacturaMaquina', FacturaMaquina.val());
             f.append('CostoMaquina', CostoMaquina.val());
@@ -887,7 +914,9 @@
                 btnVerMaquinaria.removeClass("d-none");
                 btnNuevaMaquina.addClass("d-none");
                 getUltimaMaquinaria(function () {
-                    IdMaquina.focus();
+                    getUltimaIDMaquinaria(function () {
+                        IdMaquina.focus();
+                    });
                 });
                 IdMaquina.focus().select();
                 xImagenUno[0].src = sin_foto;
@@ -906,13 +935,13 @@
             mdlMaquinaria.find("#Maquinaria").removeClass("d-none");
             btnVerMaquinaria.addClass("d-none");
             btnNuevaMaquina.removeClass("d-none");
-            getMaquinaria();
+            getInfoMaquinarias();
         });
 
         mdlMaquinaria.on('hidden.bs.modal', function () {
             mdlMaquinaria.find("input").val('');
             onClear(MaquilaMaquina);
-            onClear(DeptoMaquina);
+            onClear(DeptoMaquinaria);
             onClear(ClaveCriticidadMaquina);
             onClear(ClaveEstatusMaquina);
             onClear(xImagenUno);
@@ -922,7 +951,9 @@
         mdlMaquinaria.on('shown.bs.modal', function () {
             onVolverPrimerPestana();
             getUltimaMaquinaria(function () {
-                IdMaquina.focus();
+                getUltimaIDMaquinaria(function () {
+                    IdMaquina.focus();
+                });
             });
         });
 
@@ -936,7 +967,7 @@
 
     });
 
-    function getMaquinaria() {
+    function getInfoMaquinarias() {
         onOpenOverlay('Cargando...');
         $.fn.dataTable.ext.errMode = 'throw';
         if ($.fn.DataTable.isDataTable('#tblMaquinaria')) {
@@ -1025,8 +1056,8 @@
         MarcaMaquina.val(dtm.MARCA);
         ModeloMaquina.val(dtm.MODELO);
         SerieMaquina.val(dtm.SERIE);
-        DeptoClaveMaquina.val(dtm.DEPTO);
-        setValueSelectize(DeptoMaquina, dtm.DEPTO);
+        DeptoClaveMaquinaria.val(dtm.DEPTO);
+        setValueSelectize(DeptoMaquinaria, dtm.DEPTO);
         FechaAltaMaquina.val(dtm.FECHA_ALTA);
         FacturaMaquina.val(dtm.FACTURA);
         CostoMaquina.val(dtm.COSTOSF);
@@ -1097,6 +1128,16 @@
         $.getJSON('<?php print base_url('Maquinaria/getUltimaMaquinaria') ?>').done(function (a, b, c) {
             console.log(a);
             CodigoMaquina.val(a[0].ULTIMO_CODIGO);
+            f();
+        }).fail(function (x) {
+            getError(x);
+        });
+    }
+
+    function getUltimaIDMaquinaria(f) {
+        $.getJSON('<?php print base_url('Maquinaria/getUltimaIDMaquinaria') ?>').done(function (a, b, c) {
+            console.log(a);
+            mdlMaquinaria.find("div.ultimo_maqid_ingresado").html("<p>ULTIMO ID INGRESADO: </p><span style=\"color: #cc0000; font-weight:bold;\">" + a[0].UID + "</span>");
             f();
         }).fail(function (x) {
             getError(x);

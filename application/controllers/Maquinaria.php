@@ -50,6 +50,14 @@ class Maquinaria extends CI_Controller {
         }
     }
 
+    public function getUltimaIDMaquinaria() {
+        try {
+            print json_encode($this->db->query("SELECT A.id AS UID FROM maquinaria AS A ORDER BY id DESC LIMIT 5;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onGuardar() {
         try {
             $x = $this->input->post();
