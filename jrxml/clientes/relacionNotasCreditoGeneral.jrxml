@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.5921068276150097"/>
-	<property name="ireport.x" value="395"/>
-	<property name="ireport.y" value="24"/>
+	<property name="ireport.zoom" value="2.0276506581568503"/>
+	<property name="ireport.x" value="37"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -25,7 +25,7 @@ join clientes ct on ct.Clave = nc.cliente
 where nc.tp = $P{tp}
 and nc.fecha between $P{fechaIni} and $P{fechaFin}
 and nc.status < 3
-order by nc.orden, nc.nc asc;]]>
+order by nc.orden, nc.nc asc, ABS(nc.numfac) ASC;]]>
 	</queryString>
 	<field name="nc" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -65,6 +65,9 @@ order by nc.orden, nc.nc asc;]]>
 		<variableExpression><![CDATA[$F{cant}]]></variableExpression>
 	</variable>
 	<variable name="subtot_1" class="java.lang.Float" calculation="Sum">
+		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
+	</variable>
+	<variable name="subtot_2" class="java.lang.Float" resetType="Group" resetGroup="Tipo" calculation="Sum">
 		<variableExpression><![CDATA[$F{subtot}]]></variableExpression>
 	</variable>
 	<group name="Tipo" isStartNewPage="true" isReprintHeaderOnEachPage="true">
@@ -108,6 +111,14 @@ order by nc.orden, nc.nc asc;]]>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{cant_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="525" y="1" width="63" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="3c1dd4a6-ee00-4e0a-a3c3-20f445d081e3"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{subtot_2}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
