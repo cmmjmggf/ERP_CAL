@@ -1001,7 +1001,7 @@
                     FraccionS[0].selectize.enable();
                     FraccionS[0].selectize.clear();
                 }
-            } else {
+            } else if (Fraccion.val() === '') {
                 FraccionS[0].selectize.enable();
                 FraccionS[0].selectize.clear();
             }
@@ -1317,6 +1317,10 @@
                                 Fraccion.val(102);
                                 FraccionS[0].selectize.setValue(102);
                                 onEnable(btnAceptar);
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(113);
+                                    FraccionS[0].selectize.setValue(113);
+                                }
                             }
                             if (xDepartamento === 33 && stsavan === 3) {
                                 if (parseInt(rr.MAQUILA) === 98) {
@@ -1344,6 +1348,10 @@
                                 Fraccion.val(103);
                                 FraccionS[0].selectize.setValue(103);
                                 onEnable(btnAceptar);
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(114);
+                                    FraccionS[0].selectize.setValue(114);
+                                }
                             }
                             if (xDepartamento === 44 && stsavan === 40) {
                                 Fraccion.val(60);
@@ -1390,6 +1398,10 @@
                             if (xDepartamento === 7 && stsavan === 6) {
                                 Fraccion.val(401);
                                 FraccionS[0].selectize.setValue(401);
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(402);
+                                    FraccionS[0].selectize.setValue(402);
+                                }
                             }
                             if (xDepartamento === 8 && stsavan === 7) {
                                 Fraccion.val(401);
@@ -1397,6 +1409,10 @@
                                 Empleado.focus().select();
                                 btnAceptar.attr('disabled', false);
                                 btnAceptar.focus();
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(402);
+                                    FraccionS[0].selectize.setValue(402);
+                                }
                             }
                             if (xDepartamento === 9 && stsavan === 8) {
                                 btnAceptar.attr('disabled', false);
@@ -1404,9 +1420,21 @@
                             }
                             if (xDepartamento === 10 && stsavan === 9) {
                                 Empleado.focus().select();
+                                Fraccion.val(500);
+                                FraccionS[0].selectize.setValue(500);
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(499);
+                                    FraccionS[0].selectize.setValue(499);
+                                }
                             }
                             if (xDepartamento === 11 && stsavan === 10) {
                                 Empleado.focus().select();
+                                Fraccion.val(600);
+                                FraccionS[0].selectize.setValue(600);
+                                if (parseInt(rr.MAQUILA) === 98) {
+                                    Fraccion.val(601);
+                                    FraccionS[0].selectize.setValue(601);
+                                }
                             }
                         } else if (parseInt(rr.ESTATUS_PRODUCCION) === 13) {
                             onCampoInvalido(pnlTablero, "ESTE CONTROL YA HA SIDO FACTURADO", 'w', function () {
@@ -1445,6 +1473,9 @@
                                 btnAceptar.attr('disabled', true);
                                 return;
                             });
+                        }
+                        if (parseInt(rr.MAQUILA) === 98) {
+                            onEnable(btnAceptar);
                         }
                     } else {
                         $.getJSON('<?php print base_url('Avance/getInformacionXControlFC') ?>', {CONTROL: Control.val() ? Control.val() : ''}).done(function (a, b, c) {

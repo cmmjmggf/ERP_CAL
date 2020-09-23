@@ -373,6 +373,6 @@
     h2 {
         text-shadow: 2px 2px 4px #000000;
     }
-    html, body {background-color: #f5f5f5 !important;
+    html, body {background-color: #f2f2f2 !important;
     }
 </style>

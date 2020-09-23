@@ -53,6 +53,7 @@ $vs = array('vExplosionSemanal', 'vExplosionSemanalCliente', 'vExplosionSemanalA
     'vMaquinaria',
     'vRefacciones',
     'vSolicitudDeMantenimiento',
+    'vCierraSolicitudDeMantenimiento',
     'vAvanceDeProduccionAMaquilas'
 );
 foreach ($vs as $v) {

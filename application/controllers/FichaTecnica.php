@@ -834,7 +834,9 @@ class FichaTecnica extends CI_Controller {
             print base_url() . $url;
         }
     }
-
+    public function getIPEquipo() {
+       print $_SERVER['REMOTE_ADDR'];
+    }
 }
 
 class PDF extends FPDF {

@@ -185,6 +185,7 @@ class AvanceTejido extends CI_Controller {
             $x = $this->input->get();
             $check_maquila = $this->db->query("SELECT P.Maquila, P.stsavan FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}")->result();
             switch (intval($check_maquila[0]->Maquila)) {
+                case 98:
                 case 1:
                     print json_encode($this->db->select("COUNT(A.ID) AS EXISTE, 1 AS MAQUILA", false)
                                             ->from('avance AS A')
@@ -300,7 +301,7 @@ class AvanceTejido extends CI_Controller {
                     'Usuario' => $_SESSION["ID"],
                     'Fecha' => Date('d/m/Y'),
                     'Hora' => Date('h:i:s a'),
-                    'Fraccion' => 401
+                    'Fraccion' => $xXx['FRACCION']
                 ));
                 $ID = $this->db->insert_id();
                 $this->db->insert('fracpagnomina', array(

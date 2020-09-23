@@ -104,90 +104,93 @@
         });
 
         mdlRastreoXControl.on('shown.bs.modal', function () {
+            onClear(EmpleadoRXCTROL);
+            onClearSelect(EmpleadoRXCTROL);
+            $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
+                d.forEach(function (v) {
+                    EmpleadoRXCTROL[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
+                });
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+            });
+            if ($.fn.DataTable.isDataTable('#tblxRastreoXControl')) {
+                xRastreoXControl.ajax.reload();
+                return;
+            } else {
+                xRastreoXControl = tblxRastreoXControl.DataTable({
+                    "dom": 'ritp',
+                    "ajax": {
+                        "url": '<?php print base_url('Avance/getRastreoXControl'); ?>',
+                        "contentType": "application/json",
+                        "dataSrc": "",
+                        "data": function (d) {
+                            d.CONTROL = ControlRXCTROL.val() ? ControlRXCTROL.val() : '';
+                            d.SEMANA = SemanaRXCTROL.val() ? SemanaRXCTROL.val() : '';
+                            d.EMPLEADO = EmpleadoRXCTROL.val() ? EmpleadoRXCTROL.val() : '';
+                        }
+                    },
+                    buttons: buttons,
+                    "columns": [
+                        {"data": "ID"}/*0*/,
+                        {"data": "CONTROL"}/*1*/,
+                        {"data": "EMPLEADO"}/*2*/,
+                        {"data": "ESTILO"}/*3*/,
+                        {"data": "NUM_FRACCION"}/*4*/,
+                        {"data": "FECHA"}/*5*/,
+                        {"data": "SEMANA"}/*6*/,
+                        {"data": "PARES"}/*7*/,
+                        {"data": "PRECIO_FRACCION"}/*8*/,
+                        {"data": "SUBTOTAL"}/*10*/
+                    ],
+                    "columnDefs": coldefs, language: lang,
+                    select: true,
+                    "autoWidth": true,
+                    "colReorder": true,
+                    "displayLength": 50,
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "scrollCollapse": false,
+                    "bSort": true,
+                    "scrollY": "250px",
+                    "scrollX": true,
+                    "aaSorting": [
+                        [0, 'desc']
+                    ],
+                    "drawCallback": function (settings) {
+                        var api = this.api();
+                        var r = 0, prs = 0;
+                        $.each(api.rows().data(), function (k, v) {
+                            r += parseFloat(v.SUBTOTAL);
+                        });
+                        mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
+                    }
+                });
+                tblxRastreoXControl.find('tbody').on('click', 'tr', function () {
+                    var row = xRastreoXControl.row(this).data();
+                    console.log(row);
+                    SemanaRXCTROL.val(row.SEMANA);
+                    EmpleadoRXCTROL[0].selectize.setValue(row.EMPLEADO);
+                    $.post('<?php print base_url('Avance/getInfoXControlParaRastreo'); ?>', {
+                        CONTROL: row.CONTROL,
+                        FRACCION: row.NUM_FRACCION
+                    }).done(function (a) {
+                        console.log(a, a.length);
+                        if (a.length > 0) {
+                            var r = JSON.parse(a);
+                            console.log(r);
+                            FraccionRXCTROL.val(r[0].FRACCION_DES);
+                            AvanceActual.val(r[0].AVANCE_ACTUAL);
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    });
+                });
+            }
             mdlRastreoXControl.find("input").val('');
             $.each(mdlRastreoXControl.find("select"), function (k, v) {
                 mdlRastreoXControl.find("select")[k].selectize.clear(true);
             });
             ControlRXCTROL.focus();
         });
-
-        $.getJSON('<?php print base_url('Avance/getEmpleados'); ?>').done(function (d) {
-            d.forEach(function (v) {
-                EmpleadoRXCTROL[0].selectize.addOption({text: v.EMPLEADO, value: v.CLAVE});
-            });
-        }).fail(function (x, y, z) {
-            console.log(x, y, z);
-        });
-
-        xRastreoXControl = tblxRastreoXControl.DataTable({
-            "dom": 'ritp',
-            "ajax": {
-                "url": '<?php print base_url('Avance/getRastreoXControl'); ?>',
-                "contentType": "application/json",
-                "dataSrc": "",
-                "data": function (d) {
-                    d.CONTROL = ControlRXCTROL.val() ? ControlRXCTROL.val() : '';
-                    d.SEMANA = SemanaRXCTROL.val() ? SemanaRXCTROL.val() : '';
-                    d.EMPLEADO = EmpleadoRXCTROL.val() ? EmpleadoRXCTROL.val() : '';
-                }
-            },
-            buttons: buttons,
-            "columns": [
-                {"data": "ID"}/*0*/,
-                {"data": "CONTROL"}/*1*/,
-                {"data": "EMPLEADO"}/*2*/,
-                {"data": "ESTILO"}/*3*/,
-                {"data": "NUM_FRACCION"}/*4*/,
-                {"data": "FECHA"}/*5*/,
-                {"data": "SEMANA"}/*6*/,
-                {"data": "PARES"}/*7*/,
-                {"data": "PRECIO_FRACCION"}/*8*/,
-                {"data": "SUBTOTAL"}/*10*/
-            ],
-            "columnDefs": coldefs,
-            language: lang,
-            select: true,
-            "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 50,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            "bSort": true,
-            "scrollY": "250px",
-            "scrollX": true,
-            "aaSorting": [
-                [0, 'desc']
-            ],
-            "drawCallback": function (settings) {
-                var api = this.api();
-                var r = 0, prs = 0;
-                $.each(api.rows().data(), function (k, v) {
-                    r += parseFloat(v.SUBTOTAL);
-                });
-                mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
-            }
-        });
-        tblxRastreoXControl.find('tbody').on('click', 'tr', function () {
-            var row = xRastreoXControl.row(this).data();
-            console.log(row);
-            SemanaRXCTROL.val(row.SEMANA);
-            EmpleadoRXCTROL[0].selectize.setValue(row.EMPLEADO);
-            $.post('<?php print base_url('Avance/getInfoXControlParaRastreo'); ?>', {
-                CONTROL: row.CONTROL,
-                FRACCION: row.NUM_FRACCION
-            }).done(function (a) {
-                console.log(a, a.length);
-                if (a.length > 0) {
-                    var r = JSON.parse(a);
-                    console.log(r);
-                    FraccionRXCTROL.val(r[0].FRACCION_DES);
-                    AvanceActual.val(r[0].AVANCE_ACTUAL);
-                }
-            }).fail(function (x) {
-                getError(x);
-            });
-        });
     });
-
 </script>
