@@ -233,7 +233,7 @@ class Avance8 extends CI_Controller {
             $SPAN_102 = "<span style='color: #e20303;'>102</span>";
             $this->db->select("F.ID, F.numeroempleado, F.maquila, "
                             . "F.control AS CONTROL, F.estilo AS ESTILO, "
-                            . "(CASE " 
+                            . "(CASE "
                             . "WHEN F.numfrac = 102 THEN \"$SPAN_102\" "
                             . "WHEN F.numfrac = 103 THEN \"$SPAN_103\" "
                             . "WHEN F.numfrac = 397 THEN \"$SPAN_397\" "
@@ -359,9 +359,12 @@ class Avance8 extends CI_Controller {
                     $id = 0;
                     if (intval($v->NUMERO_FRACCION) !== 60) {
                         switch (intval($x['NUMERO_FRACCION'])) {
+                            case 127:
                             case 51:
-                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60) AND control = {$xXx['CONTROL']}")->result();
-                                if (intval($check_fracciones_obligadas[0]->EXISTE) === 4) {
+                                $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
+
+                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,96,113,60) AND control = {$xXx['CONTROL']}")->result();
+                                if (intval($check_fracciones_obligadas[0]->EXISTE) === 4 || intval($check_fracciones_obligadas[0]->EXISTE) >= 2 && intval($maquila_control[0]->Maquila) === 98) {
                                     /* 51 = ENTRETELADO */
                                     /* SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO */
                                     $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
@@ -407,7 +410,7 @@ class Avance8 extends CI_Controller {
                                                     ->update('avaprd');
                                         }
                                         /* REVISAR SI YA SE PAGO LA FRACCION 51 */
-                                        $fraccion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 51 AND F.control = {$xXx['CONTROL']}")->result();
+                                        $fraccion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(51,127) AND F.control = {$xXx['CONTROL']}")->result();
                                         if (intval($fraccion_existe[0]->EXISTE) === 0) {
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
@@ -446,7 +449,7 @@ class Avance8 extends CI_Controller {
                                                     ->update('avaprd');
                                         }
                                         /* REVISAR SI YA SE PAGO LA FRACCION 51 */
-                                        $fraccion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 51 AND F.control = {$xXx['CONTROL']}")->result();
+                                        $fraccion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(51,127) AND F.control = {$xXx['CONTROL']}")->result();
                                         if (intval($fraccion_existe[0]->EXISTE) === 0) {
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
@@ -454,7 +457,7 @@ class Avance8 extends CI_Controller {
                                             $this->db->insert('fracpagnomina', $data);
                                         }
                                     }
-                                    $fraccion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 51 AND F.control = {$xXx['CONTROL']}")->result();
+                                    $fraccion_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac  IN(51,127) AND F.control = {$xXx['CONTROL']}")->result();
                                     if (intval($fraccion_existe[0]->EXISTE) === 0) {
                                         $data["fraccion"] = $v->NUMERO_FRACCION;
                                         $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
@@ -584,7 +587,7 @@ class Avance8 extends CI_Controller {
                         $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(102)")->result();
                         if (intval($check_rayado[0]->EXISTE) === 0) {
                             exit(0);
-                        } 
+                        }
                         $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();
                         if (intval($check_foleado[0]->EXISTE) === 0) {
                             $avance = array(

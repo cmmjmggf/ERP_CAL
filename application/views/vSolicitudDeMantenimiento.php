@@ -1,6 +1,6 @@
 <div class="modal fade" id="mdlSolicitudDeMantenimiento" tabindex="-1" role="dialog" 
      aria-labelledby="mdlSolicitudDeMantenimiento" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable " role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg notdraggable " role="document" >
         <div class="modal-content notresizable">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalCenterTitle">
@@ -127,15 +127,47 @@
                         </button> 
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <table id="tblSolicitudesMto" class="table  table-sm table-bordered" style="width:  100%;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th> 
+                                    <th scope="col">CÓDIGO</th> 
+                                    <th scope="col">DESCRIPCIÓN</th> 
+
+                                    <th scope="col">DESCRIPCIONREF</th> 
+                                    <th scope="col">HORALLEGADA</th> 
+                                    <th scope="col">HORAENTRADA</th> 
+
+                                    <th scope="col">REFACCION_UNO</th> 
+                                    <th scope="col">CANTIDAD_UNO</th> 
+                                    <th scope="col">PRECIO_UNO</th> 
+
+                                    <th scope="col">REFACCION_DOS</th> 
+                                    <th scope="col">CANTIDAD_DOS</th> 
+                                    <th scope="col">PRECIO_DOS</th>  
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: #C62828;    border-color: #B71C1C;">Cerrar</button> 
+            <div class="modal-footer"> 
+                <div class="col-6" align="left">
+                    <button type="button" id="btnVerSolicitudes" class="btn btn-secondary"  style="background-color: #C62828;    border-color: #B71C1C;">Ver solicitudes</button> 
+                </div>
+                <div class="col-6"  align="right">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background-color: #C62828;    border-color: #B71C1C;">Cerrar</button> 
+                </div> 
             </div>
         </div>
     </div>
 </div>
 <script>
-    var mdlSolicitudDeMantenimiento = $("#mdlSolicitudDeMantenimiento");
+    var mdlSolicitudDeMantenimiento = $("#mdlSolicitudDeMantenimiento"), btnCierraSolicitudMto = mdlSolicitudDeMantenimiento.find("#btnCierraSolicitudMto");
 
     var DeptoClaveMaquina = mdlSolicitudDeMantenimiento.find('#DeptoClaveMaquina'),
             DeptoMaquina = mdlSolicitudDeMantenimiento.find('#DeptoMaquina'),
@@ -153,9 +185,20 @@
             ClaveCriticidadSolicitud = mdlSolicitudDeMantenimiento.find('#ClaveCriticidadSolicitud'),
             ClaveEstatusSolicitud = mdlSolicitudDeMantenimiento.find('#ClaveEstatusSolicitud'),
             DescripcionDelProblemaSolicitud = mdlSolicitudDeMantenimiento.find('#DescripcionDelProblemaSolicitud'),
-            btnImprimeGuardaSolicitudMto = mdlSolicitudDeMantenimiento.find('#btnImprimeGuardaSolicitudMto');
+            btnImprimeGuardaSolicitudMto = mdlSolicitudDeMantenimiento.find('#btnImprimeGuardaSolicitudMto'),
+            tblSolicitudesMto = mdlSolicitudDeMantenimiento.find("#tblSolicitudesMto"), Solicitudes;
+
 
     $(document).ready(function () {
+
+        mdlSolicitudDeMantenimiento.on('shown.bs.modal', function () {
+            getSolicitudesMto();
+        });
+
+        btnCierraSolicitudMto.click(function () {
+            mdlSolicitudDeMantenimiento.modal('hide');
+            mdlCierraSolicitudDeMantenimiento.modal('show');
+        });
 
         mdlSolicitudDeMantenimiento.find("button").addClass("font-weight-bold").css({"text-transform": "uppercase"});
 
@@ -207,6 +250,62 @@
 
         });
     }
+
+    function getSolicitudesMto() {
+        if ($.fn.DataTable.isDataTable('#tblSolicitudesMto')) {
+            Solicitudes.ajax.reload();
+            return;
+        } else {
+            var cols = [
+                {"data": "ID"}/*0*/,
+                {"data": "CODIGO"}/*1*/,
+                {"data": "DESCRIPCION"}/*2*/,
+                {"data": "DESCRIPCIONREF"}/*3*/,
+                {"data": "HORALLEGADA"}/*4*/,
+                {"data": "HORAENTRADA"}/*5*/,
+                {"data": "REFACCION_UNO"}/*6*/,
+                {"data": "CANTIDAD_UNO"}/*7*/,
+                {"data": "PRECIO_UNO"}/*8*/,
+                {"data": "REFACCION_DOS"}/*9*/,
+                {"data": "CANTIDAD_DOS"}/*10*/,
+                {"data": "PRECIO_DOS"}/*11*/
+            ];
+            var coldefs = [
+                {
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }
+            ];
+            Solicitudes = tblSolicitudesMto.DataTable({
+                "dom": 'rtp',
+                "ajax": {
+                    "url": '<?php print base_url('SolicitudDeMantenimiento/getSolicitudes'); ?>',
+                    "dataSrc": "",
+                    "data": function (d) {
+                        d.VALE = 1;
+                    }
+                },
+                buttons: buttons,
+                "columns": cols,
+                "columnDefs": coldefs,
+                language: lang,
+                select: true,
+                "autoWidth": true,
+                "colReorder": true,
+                "displayLength": 50,
+                "bLengthChange": false,
+                "deferRender": true,
+                "scrollCollapse": false,
+                "bSort": true,
+                "scrollY": "350px",
+                "scrollX": true,
+                "aaSorting": [
+                    [1, 'desc']
+                ]
+            });
+        }
+    }
 </script>
 <style>
     button.swal-button--cancelar{
@@ -231,5 +330,10 @@
     }
     #mdlSolicitudDeMantenimiento .selectize-input{
         font-weight: bold !important;
+    }
+    @media (min-width: 500px) {
+        #mdlSolicitudDeMantenimiento.modal-lg {
+            width: 900px !important; 
+        }
     }
 </style>
