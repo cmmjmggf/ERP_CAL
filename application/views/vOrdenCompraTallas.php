@@ -157,14 +157,18 @@
                                         print '<td><input type="text" style="width: 55px;" id="T' . $index . '" name="T' . $index . '" disabled class="form-control form-control-sm numbersOnly "></td>';
                                     }
                                     ?>
+                                    <td class="font-weight-bold">Total:</td>
+                                </tr>
                                 </tr>
                                 <tr class="rCapturaCantidades" id="rCantidades">
                                     <td class="font-weight-bold">Cant.</td>
                                     <?php
                                     for ($index = 1; $index < 21; $index++) {
-                                        print '<td><input type="text" style="width: 55px;" id="C' . $index . '" class="form-control form-control-sm numeric " name="C' . $index . '" ></td>';
+                                        print '<td><input type="text" style="width: 55px;" id="C' . $index . '" class="form-control form-control-sm numeric " name="C' . $index . '" onfocus="onCalcularPares(this);" on change="onCalcularPares(this);" keyup="onCalcularPares(this);" onfocusout="onCalcularPares(this);" ></td>';
                                     }
                                     ?>
+                                    <td class="font-weight-bold"><input type="text" style="width: 55px;" id="TotalParesEntrega" class="form-control form-control-sm " disabled=""></td>
+
                                     <td>
                                         <button type="button" id="btnAgregar" class="btn btn-primary btn-sm d-sm-block" data-toggle="tooltip" data-placement="right" title="Agregar">
                                             <span class="fa fa-plus"></span> AGREGAR
@@ -201,12 +205,12 @@
                         <tbody></tbody>
                         <tfoot>
                             <tr>
-                                <td class="d-none"></td>
-                                <td class="d-none"></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <th class="d-none"></th>
+                                <th class="d-none"></th>
                                 <th>Total:</th>
+                                <th>0.0</th>
+                                <th></th>
+                                <th></th>
                                 <th>$0.0</th>
                                 <td></td>
                             </tr>
@@ -232,7 +236,13 @@
     var btnVerProveedores = pnlTablero.find('#btnVerProveedores');
     var btnVerArticulos = pnlTablero.find('#btnVerArticulos');
 
-
+    function onCalcularPares(e) {
+        var total_pares = 0;
+        $.each(pnlDatosDetalle.find("#tblTallas input[name*='C']"), function (k, v) {
+            total_pares += (parseInt($(v).val()) > 0) ? parseInt($(v).val()) : 0;
+            pnlDatosDetalle.find("#TotalParesEntrega").val(total_pares);
+        });
+    }
     /*Busqueda*/
     var btnBuscar = $('#btnBuscar');
     var btnAceptarBusqueda = $('#btnAceptarBusqueda');
@@ -787,6 +797,7 @@
                 pnlDatosDetalle.find('#rCantidades').find("input").prop('disabled', true);
             }
             HoldOn.close();
+            pnlDatosDetalle.find("#TotalParesEntrega").val(0);
             pnlDatosDetalle.find('#rCantidades').find('#C1').focus().select();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
@@ -1006,6 +1017,15 @@
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api();//Get access to Datatable API
                 // Update footer
+                var totalc = api.column(3).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric((a)) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(3).footer()).html(api.column(3, {page: 'current'}).data().reduce(function (a, b) {
+                    return  $.number(parseFloat(totalc), 2, '.', ',');
+                }, 0));
                 var total = api.column(6).data().reduce(function (a, b) {
                     var ax = 0, bx = 0;
                     ax = $.isNumeric((a)) ? parseFloat(a) : 0;

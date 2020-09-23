@@ -68,6 +68,19 @@ class Estilos extends CI_Controller {
         }
     }
 
+    public function getEmpleados() {
+        try {
+
+            print json_encode($this->db->query("
+                SELECT Numero, CONCAT(Numero,'-',Busqueda) AS Empleado
+                        FROM empleados
+                        WHERE DepartamentoFisico = '370'
+                        AND altabaja = 1 ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getLineas() {
         try {
             extract($this->input->post());
@@ -209,6 +222,8 @@ class Estilos extends CI_Controller {
                 'MaqPlant3' => $x->post('MaqPlant3'),
                 'MaqPlant4' => $x->post('MaqPlant4'),
                 'TipoConstruccion' => $x->post('TipoConstruccion'),
+                'DisenadoPor' => $x->post('DisenadoPor'),
+                'ModeladoPor' => $x->post('ModeladoPor'),
                 'Estatus' => 'ACTIVO'
             ));
             $AdjuntoP = $this->input->post('Foto');
@@ -288,6 +303,8 @@ class Estilos extends CI_Controller {
                 'MaqPlant3' => ($x->post('MaqPlant3') !== NULL) ? $x->post('MaqPlant3') : NULL,
                 'MaqPlant4' => ($x->post('MaqPlant4') !== NULL) ? $x->post('MaqPlant4') : NULL,
                 'TipoConstruccion' => ($x->post('TipoConstruccion') !== NULL) ? $x->post('TipoConstruccion') : NULL,
+                'DisenadoPor' => ($x->post('DisenadoPor') !== NULL) ? $x->post('DisenadoPor') : NULL,
+                'ModeladoPor' => ($x->post('ModeladoPor') !== NULL) ? $x->post('ModeladoPor') : NULL,
             ));
 
             $ID = $x->post('ID');
@@ -335,9 +352,39 @@ class Estilos extends CI_Controller {
         }
     }
 
-    public function onEliminar() {
+    public function onCancelarEstilo() {
         try {
-            $this->Estilos_model->onEliminar($this->input->post('ID'));
+            //Datos POST
+            $x = $this->input;
+            $estilo = $x->post('Estilo');
+            $fecha = $x->post('Fecha');
+            $motivo = $x->post('Motivo');
+            //Consultar estilo
+            $Est = $this->db->query("select * from estilos where clave = '{$estilo}' ")->result();
+            $linea = $Est[0]->Linea;
+            $año = $Est[0]->Ano;
+            $usuario = $this->session->USERNAME;
+            $diseñadopor = $Est[0]->DisenadoPor;
+            $modeladopor = $Est[0]->ModeladoPor;
+            $temporada = $Est[0]->Temporada;
+            //insertar
+            $this->db->insert("estiloscancelados",
+                    array(
+                        'estilo' => $estilo,
+                        'fechacan' => $fecha,
+                        'linea' => $linea,
+                        'año' => $año,
+                        'usuario' => $usuario,
+                        'disenadopor' => $diseñadopor,
+                        'modeladopor' => $modeladopor,
+                        'motivo' => $motivo,
+                        'temporada' => $temporada
+                    )
+            );
+            $this->db->query("delete from estilos where clave = '{$estilo}' ");
+            $this->db->query("delete from colores where estilo = '{$estilo}' ");
+            $this->db->query("delete from fichatecnica where estilo = '{$estilo}' ");
+            $this->db->query("delete from pedidox where estilo = '{$estilo}' ");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

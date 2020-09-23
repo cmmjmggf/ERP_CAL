@@ -64,6 +64,12 @@
                         closeOnEsc: false
                     }).then((action) => {
                         mdlBajaEmpleado.modal('hide');
+                        btnGuardar.addClass('d-none');
+                        btnImprimeContrato.addClass('d-none');
+                        btnCredencial.addClass('d-none');
+                        btnBajaEmpleado.addClass('d-none');
+                        pnlDatos.find('#dMotivoBaja').removeClass('d-none');
+                        pnlDatos.find('#tMotivoBaja').html(data[0].MotivoBaja);
                     });
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);

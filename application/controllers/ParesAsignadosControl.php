@@ -160,4 +160,32 @@ class ParesAsignadosControl extends CI_Controller {
         exit(0);
     }
 
+    public function getParesAsignadosControlXLSSimple() {
+
+        /*
+         * MFA.TpoSuPlEn = 1
+         * 1 = SUELA
+         * 2 = PLANTA
+         * 3 = ENTRESUELA
+         */
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $x = $this->input;
+        $parametros["MAQUILAINICIO"] = intval($x->post('MAQUILA_INICIAL'));
+        $parametros["MAQUILAFIN"] = intval($x->post('MAQUILA_FINAL'));
+        $parametros["SEMANAINICIO"] = intval($x->post('SEMANA_INICIAL'));
+        $parametros["SEMANAFIN"] = intval($x->post('SEMANA_FINAL'));
+        $parametros["ANO"] = intval($x->post('ANIO'));
+
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\asignados\excel\ParesAsignadosAMaquilaSeriePorControlSimple.jasper');
+        $jc->setFilename('ParesAsignadosAMaquilaSerie_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        print $jc->getReport();
+        exit(0);
+    }
+
 }

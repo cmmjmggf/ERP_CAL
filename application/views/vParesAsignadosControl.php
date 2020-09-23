@@ -69,6 +69,10 @@
                     <span class="fa fa-file-excel"></span> A EXCEL</button>
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-2" align="left">
+                <button type="button" class="btn btn-success" id="btnAceptarXLSSimple">
+                    <span class="fa fa-file-excel"></span> A EXCEL AVIOS</button>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-2" align="left">
                 <button type="button" class="btn btn-success" id="btnAceptarXLSDiseño">
                     <span class="fa fa-file-excel"></span> A EXCEL PARA DISEÑO</button>
             </div>
@@ -86,6 +90,7 @@
     var pnlTablero = $("#pnlTablero"), ParesAnio = pnlTablero.find("#ParesAnio"),
             btnAceptarXLS = pnlTablero.find("#btnAceptarXLS"),
             btnAceptarXLSDiseño = pnlTablero.find("#btnAceptarXLSDiseño"),
+            btnAceptarXLSSimple = pnlTablero.find("#btnAceptarXLSSimple"),
             btnAceptar = pnlTablero.find("#btnAceptar"),
             ParesMaquilaInicial = pnlTablero.find("#ParesMaquilaInicial"),
             ParesMaquilaFinal = pnlTablero.find("#ParesMaquilaFinal"),
@@ -155,7 +160,6 @@
                 });
             }
         });
-
         btnAceptarXLS.click(function () {
             if (ParesMaquilaInicial.val() && ParesMaquilaFinal.val()
                     && ParesSemanaInicial.val() && ParesSemanaFinal.val()) {
@@ -208,6 +212,48 @@
                 console.log('TIPO', pnlTablero.find("#btnControl")[0].checked ? 1 :
                         pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0)
                 $.post('<?php print base_url('ParesAsignadosControl/getParesAsignadosControlXLSDiseno'); ?>', {
+                    MAQUILA_INICIAL: ParesMaquilaInicial.val().trim() !== '' ? parseInt(ParesMaquilaInicial.val()) : '',
+                    MAQUILA_FINAL: ParesMaquilaFinal.val().trim() !== '' ? parseInt(ParesMaquilaFinal.val()) : '',
+                    SEMANA_INICIAL: ParesSemanaInicial.val().trim() !== '' ? ParesSemanaInicial.val() : '',
+                    SEMANA_FINAL: ParesSemanaFinal.val().trim() !== '' ? ParesSemanaFinal.val() : '',
+                    ANIO: ParesAnio.val().trim() !== '' ? ParesAnio.val() : '',
+                    TIPO: pnlTablero.find("#btnControl")[0].checked ? 1 :
+                            pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0,
+                    NUMERACION: pnlTablero.find("#rConNumeracion")[0].checked ? 1 : 0
+                }).done(function (data, x, jq) {
+                    onBeep(1);
+//                    onImprimirReporteFancyArray(JSON.parse(data));
+                    onOpenWindowBlank(data);
+                }).fail(function (x, y, z) {
+                    console.log(x.responseText);
+                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                }).always(function () {
+                    HoldOn.close();
+                });
+            } else {
+                swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
+                    if (ParesMaquilaInicial.val()) {
+                        ParesMaquilaInicial.focus();
+                    } else if (ParesMaquilaFinal.val()) {
+                        ParesMaquilaFinal.focus().select();
+                    } else if (ParesSemanaInicial.val()) {
+                        ParesSemanaInicial.focus().select();
+                    } else if (ParesSemanaFinal.val()) {
+                        ParesSemanaFinal.focus().select();
+                    }
+                });
+            }
+        });
+        btnAceptarXLSSimple.click(function () {
+            if (ParesMaquilaInicial.val() && ParesMaquilaFinal.val()
+                    && ParesSemanaInicial.val() && ParesSemanaFinal.val()) {
+                HoldOn.open({
+                    theme: 'sk-cube',
+                    message: 'Por favor espere...'
+                });
+                console.log('TIPO', pnlTablero.find("#btnControl")[0].checked ? 1 :
+                        pnlTablero.find("#btnEsponjasYLatex")[0].checked ? 2 : 0)
+                $.post('<?php print base_url('ParesAsignadosControl/getParesAsignadosControlXLSSimple'); ?>', {
                     MAQUILA_INICIAL: ParesMaquilaInicial.val().trim() !== '' ? parseInt(ParesMaquilaInicial.val()) : '',
                     MAQUILA_FINAL: ParesMaquilaFinal.val().trim() !== '' ? parseInt(ParesMaquilaFinal.val()) : '',
                     SEMANA_INICIAL: ParesSemanaInicial.val().trim() !== '' ? ParesSemanaInicial.val() : '',

@@ -599,6 +599,20 @@ class GeneraCostosVenta extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onImprimirListaPreciosExcel() {
+
+
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["lista"] = $this->input->post('Lista');
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\costos\reporteListasPreciosPabloSapica.jasper');
+        $jc->setFilename('REPORTE_LISTAS_PRECIO_' . Date('h_i_s'));
+        $jc->setDocumentformat('xls');
+        PRINT $jc->getReport();
+    }
+
     public function onImprimirReporteCostos() {
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);

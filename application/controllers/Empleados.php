@@ -63,7 +63,7 @@ class Empleados extends CI_Controller {
     }
 
     public function getRecords() {
-        try { 
+        try {
             $this->db->select("E.ID, "
                             . "E.Numero AS No, "
                             . "E.NumFis, E.Egresos, E.Activos, "
@@ -90,10 +90,9 @@ class Empleados extends CI_Controller {
                 $this->db->where('E.altabaja', '1');
             } else {
                 $this->db->where_in('E.altabaja', array('1', '2'));
-            } 
+            }
             print json_encode($this->db->get()->result());
-       
-            } catch (Exception $exc) {
+        } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
@@ -390,7 +389,6 @@ class Empleados extends CI_Controller {
                     $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
                 }
             }
-
             $FECHA_FINAL_EGRE = date("Y-m-d", strtotime(str_replace('/', '-', $x->post('Egreso'))));
             $data['Egreso'] = $FECHA_FINAL_EGRE;
             unset($data["Numero"]);
@@ -738,7 +736,7 @@ class Empleados extends CI_Controller {
             $empleados = $this->db->query("SELECT E.Numero, E.SaldoPres,E.AbonoPres, "
                             . "(SELECT SUM(PP.preemp) AS ACUMULADO FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero) AS ACUMULADO_PRES, "
                             . "(SELECT  ifnull(SUM(PP.Aboemp),0) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = E.Numero AND PP.año = {$ANIO}  AND PP.status = 2) AS TOTAL_PAGADO,
-(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO   
+(SELECT aboemp FROM prestamos AS PP WHERE YEAR(PP.fechapre) = {$ANIO} AND PP.numemp = E.Numero ORDER BY ID DESC LIMIT 1) AS ABONO
     FROM empleados AS E WHERE E.AltaBaja = 1 HAVING ACUMULADO_PRES IS NOT NULL AND ACUMULADO_PRES > TOTAL_PAGADO;")->result();
             foreach ($empleados as $k => $v) {
                 $SALDO_PRESTAMOS = floatval($v->ACUMULADO_PRES) - floatval($v->TOTAL_PAGADO);
@@ -746,7 +744,7 @@ class Empleados extends CI_Controller {
                 if (floatval($SALDO_PRESTAMOS) > 0) {
                     $this->db->set("SaldoPres", $SALDO_PRESTAMOS);
                 } else {
-                    $this->db->set("SaldoPres", 0); 
+                    $this->db->set("SaldoPres", 0);
                 }
                 $this->db->where("Numero", $v->Numero)->update("empleados");
             }

@@ -40,6 +40,13 @@
                         <i class="fa fa-check-square"></i> Clasifica Estilo p' Precio-Vta
                     </a>
                     <a class="btn btn-secondary" href="#" onclick="onImprimirListaPrecios()"><i class="fa fa-file-invoice-dollar"></i> Imp. Lista Precios</a>
+                    <?php
+                    if ($_SESSION["USERNAME"] === 'JP_TAVARES' || $_SESSION["USERNAME"] === 'CMEDINA') {
+                        ?>
+                        <a class="btn btn-success" href="#" onclick="onImprimirListaPreciosExcel()"><i class="fa fa-file-excel"></i> Exp. Lista Precios</a>
+                        <?php
+                    }
+                    ?>
                     <a class="btn btn-secondary" href="#" data-toggle="modal" data-target="#mdlParametrosFijos"><i class="fa fa-cogs"></i> Param. Fijos</a>
                     <button class="btn btn-warning " onclick="init()">
                         <i class="fa fa-file-alt"></i> Otra Linea-Corr-Lista
@@ -1259,6 +1266,24 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             $.post(base_url + 'index.php/GeneraCostosVenta/onImprimirListaPrecios', {Lista: lista}).done(function (data) {
                 onImprimirReporteFancy(data);
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+            });
+        } else {
+            swal('ERROR', 'SELECCIONE UNA LISTA DE PRECIOS', 'warning').then((value) => {
+                pnlTablero.find('#ListaPrecios').focus();
+            });
+        }
+    }
+    function onImprimirListaPreciosExcel() {
+        var lista = pnlTablero.find('#ListaPrecios').val();
+        if (lista) {
+            HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+            $.post(base_url + 'index.php/GeneraCostosVenta/onImprimirListaPreciosExcel', {Lista: lista}).done(function (data) {
+                console.log(data);
+                onOpenWindowBlank(data);
                 HoldOn.close();
             }).fail(function (x, y, z) {
                 console.log(x, y, z);

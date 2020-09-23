@@ -38,16 +38,19 @@
         <form id="frmNuevoEstilo">
             <fieldset>
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-md-4 float-left">
+                    <div class="col-12 col-sm-4 col-md-4 float-left">
                         <legend>Estilo</legend>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-8" align="right">
+                    <div class="col-6 col-sm-4 col-md-4">
+                        <button type="button" class="btn btn-danger btn-sm d-none" id="btnCancelarEstilo">
+                            <span class="fa fa-trash fa-1x"></span> CANCELAR ESTILO
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4 col-md-4" align="right">
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                             <span class="fa fa-arrow-left" ></span> REGRESAR
                         </button>
-                        <!--                        <button type="button" class="btn btn-danger btn-sm d-none" id="btnEliminar">
-                                                    <span class="fa fa-trash fa-1x"></span> ELIMINAR
-                                                </button>-->
+
                     </div>
                 </div>
                 <hr>
@@ -279,6 +282,28 @@
                                 <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="CM REBAJADO"  name="CmRebajado">
                             </div>
                         </div>
+
+                        <!--DECIMO RENGLON-->
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                                <legend class="badge badge-success"> DATOS ESTADÍSTICOS</legend>
+                            </div>
+
+                            <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-5">
+                                <label for="" >Diseñado por*</label>
+                                <select id="DisenadoPor" name="DisenadoPor" class="form-control form-control-sm required" >
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-5">
+                                <label for="" >Modelado por*</label>
+                                <select id="ModeladoPor" name="ModeladoPor" class="form-control form-control-sm required" >
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+
                         <div class="row pt-2">
                             <div class="col-6 col-md-6 ">
                                 <h6 class="text-danger">Los campos con * son obligatorios</h6>
@@ -318,18 +343,51 @@
         </form>
     </div>
 </div>
+
+<div class="modal " id="mdlCancelarEstilo"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancelación del Estilo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="pnlCancelarEstilo">
+                <form id="frmCaptura">
+                    <div class="row">
+                        <div class="col-4" >
+                            <label>Fecha Cancelación</label>
+                            <input type="text" maxlength="10" class="form-control form-control-sm date notEnter" id="FechaCan" name="FechaCan" required="">
+                        </div>
+                        <div class="col-12">
+                            <label class="mb-2">Motivo: <span class="badge badge-danger" style="font-size: 14px;">Capture el motivo de la cancelación</span></label>
+                            <input type="text" maxlength="500" class="form-control form-control-sm " id="MotivoCancelacion" name="MotivoCancelacion" required="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAceptarCancelacion">ACEPTAR</button>
+                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     var master_url = base_url + 'index.php/Estilos/';
     var tblEstilos = $('#tblEstilos');
     var Estilos;
-    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar");
+    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos");
     var nuevo = false;
     var Archivo = $("#Foto");
     var btnArchivo = $("#btnArchivo");
+    var btnCancelarEstilo = $("#btnCancelarEstilo");
     var VistaPrevia = $("#VistaPrevia");
     var foto;
-
+    var mdlCancelarEstilo = $('#mdlCancelarEstilo');
+    var btnAceptarCancelacion = mdlCancelarEstilo.find('#btnAceptarCancelacion');
 
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
@@ -355,6 +413,11 @@
         setFocusSelectToSelectOnChange('#MaqPlant3', '#MaqPlant4', pnlDatos);
         setFocusSelectToInputOnChange('#MaqPlant4', '#PiezasCorte', pnlDatos);
 
+        handleEnterDiv(mdlCancelarEstilo);
+        mdlCancelarEstilo.on('shown.bs.modal', function () {
+            mdlCancelarEstilo.find("input").val("");
+            mdlCancelarEstilo.find('#FechaCan').focus();
+        });
 
         pnlDatos.find("#Clave").focusout(function () {
             if (nuevo) {
@@ -478,10 +541,14 @@
 
         });
 
-        btnEliminar.click(function () {
+        btnCancelarEstilo.click(function () {
+            mdlCancelarEstilo.modal('show');
+        });
+
+        btnAceptarCancelacion.click(function () {
             swal({
                 title: "¿Estas seguro?",
-                text: "Nota: No se eliminara ninguna unidad que tenga alguna relacion con otro dato dentro del sistema",
+                text: "Nota: Esta acción no se puede revertir, ya que cancelará el estilo por completo",
                 icon: "warning",
                 buttons: {
                     cancelar: {
@@ -496,8 +563,12 @@
             }).then((value) => {
                 switch (value) {
                     case "eliminar":
-                        $.post(master_url + 'onEliminar', {ID: temp}).done(function () {
-                            swal('ATENCIÓN', 'SE HA ELIMINADO EL REGISTRO', 'success');
+                        var estilo = pnlDatos.find("#Clave").val();
+                        var fecha = mdlCancelarEstilo.find("#FechaCan").val();
+                        var motivo = mdlCancelarEstilo.find("#MotivoCancelacion").val();
+                        $.post(master_url + 'onCancelarEstilo', {Estilo: estilo, Fecha: fecha, Motivo: motivo}).done(function () {
+                            mdlCancelarEstilo.modal('hide');
+                            swal('ATENCIÓN', 'SE HA CANCELADO EL ESTILO CORRECTAMENTE', 'success');
                             Estilos.ajax.reload();
                             pnlDatos.addClass("d-none");
                             pnlTablero.removeClass("d-none");
@@ -519,7 +590,7 @@
             VistaPrevia.html(' <img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid rounded mx-auto " >');
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass("d-none");
-            btnEliminar.addClass("d-none");
+            btnCancelarEstilo.addClass("d-none");
             pnlDatos.find("[name='Clave']").focus();
             pnlDatos.find("[name='Fechaalta']").focus();
             pnlDatos.find("[name='Clave']").removeClass('disabledForms');
@@ -569,6 +640,7 @@
         getMaqPlantillas();
         getMaquilas();
         getLineas();
+        getEmpleados();
     }
 
     function getRecords() {
@@ -676,7 +748,7 @@
 
                 pnlTablero.addClass("d-none");
                 pnlDatos.removeClass('d-none');
-                btnEliminar.removeClass("d-none");
+                btnCancelarEstilo.removeClass("d-none");
                 pnlDatos.find("#Clave").addClass('disabledForms');
                 pnlDatos.find("#Descripcion").focus().select();
                 pnlDatos.find('#dFechaBaja').removeClass('d-none');
@@ -780,6 +852,20 @@
                 pnlDatos.find("[name='MaqPlant2']")[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
                 pnlDatos.find("[name='MaqPlant3']")[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
                 pnlDatos.find("[name='MaqPlant4']")[0].selectize.addOption({text: v.MaquilasPlantillas, value: v.Clave});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        });
+    }
+    function getEmpleados() {
+        $.ajax({
+            url: master_url + 'getEmpleados',
+            type: "POST",
+            dataType: "JSON"
+        }).done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                pnlDatos.find("[name='DisenadoPor']")[0].selectize.addOption({text: v.Empleado, value: v.Numero});
+                pnlDatos.find("[name='ModeladoPor']")[0].selectize.addOption({text: v.Empleado, value: v.Numero});
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
