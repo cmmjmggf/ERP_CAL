@@ -1,6 +1,6 @@
 <!--RASTREO X CONTROL-->
-<div class="modal " id="mdlRastreoXControl">
-    <div class="modal-dialog modal-lg notdraggable" role="document">
+<div class="modal " id="mdlRastreoXControl">    
+    <div class="modal-dialog modal-lg notdraggable modal-dialog-centered" style="min-width: 50%;max-width: 80%; " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-search"></span> RASTREO POR CONTROL</h5>
@@ -12,7 +12,14 @@
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Control</label>
-                        <input type="text" id="ControlRXCTROL" name="ControlRXCTROL" class="form-control form-control-sm numeric">
+                        <input type="text" id="ControlRXCTROL" name="ControlRXCTROL" class="form-control form-control-sm numeric" style="
+                               font-size: 24px;
+                               padding-top: 0px;
+                               padding-bottom: 0px;
+                               height: 33px;
+                               text-align: center;
+                               color: #1B5E20 !important;
+                               ">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label>Semana</label>
@@ -31,26 +38,28 @@
                         <input type="text" id="AvanceActual" name="AvanceActual" class="form-control form-control-sm" readonly="">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblxRastreoXControl" class="table table-hover table-sm" style="width: 100% !important;">
+                        <table id="tblxRastreoXControl" class="table table-striped table-bordered table-hover table-sm nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Control</th>
-                                    <th scope="col">Emp</th>
+                                    <th scope="col">EMPLEADO</th>
                                     <th scope="col">Estilo</th>
-                                    <th scope="col">Frac</th>
+                                    <th scope="col">FRACCIÓN</th>
                                     <th scope="col">Fecha</th>
                                     <th scope="col">Semana</th>
                                     <th scope="col">Pares</th>
                                     <th scope="col">Precio</th>
                                     <th scope="col">SubTotal</th>
+                                    <th scope="col">EMPLEADO_CLAVE</th>
+                                    <th scope="col">FRACCION_CLAVE</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-                        <p class="font-weight-bold total_pesos" style="color: #cc0033 !important;" >$0.0</p>
+                    </div> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="center" style="background-color: #000;">
+                        <p class="font-weight-bold total_pesos" style="color: #FFD700 !important;font-size: 25px;font-style: italic;margin-bottom: 0px;">$ 0.0</p>
                     </div>
                 </div>
             </div>
@@ -74,6 +83,16 @@
             "targets": [0],
             "visible": false,
             "searchable": false
+        },
+        {
+            "targets": [10],
+            "visible": false,
+            "searchable": false
+        },
+        {
+            "targets": [11],
+            "visible": false,
+            "searchable": false
         }
     ];
     $(document).ready(function () {
@@ -85,9 +104,6 @@
             }
         });
 
-        EmpleadoRXCTROL.change(function (e) {
-            xRastreoXControl.ajax.reload();
-        });
         SemanaRXCTROL.on('keydown', function (e) {
             if (e.keyCode === 13) {
                 xRastreoXControl.ajax.reload();
@@ -96,9 +112,27 @@
 
         ControlRXCTROL.on('keydown', function (e) {
             if (e.keyCode === 13) {
+                onClear(EmpleadoRXCTROL);
+                onClear(SemanaRXCTROL);
+                onClear(FraccionRXCTROL);
                 xRastreoXControl.ajax.reload();
+                return;
+            }
+            if (e.keyCode === 13 && ControlRXCTROL.val() === '' || e.keyCode === 8 && ControlRXCTROL.val() === '') {
+                onClear(EmpleadoRXCTROL);
+                onClear(SemanaRXCTROL);
+                onClear(FraccionRXCTROL);
+                xRastreoXControl.ajax.reload();
+                return;
+            }
+            if (ControlRXCTROL.val() === '') {
+                onClear(EmpleadoRXCTROL);
+                onClear(SemanaRXCTROL);
+                onClear(FraccionRXCTROL);
+                return;
             }
         });
+
         mdlRastreoXControl.on('hidden.bs.modal', function () {
             Control.focus().select();
         });
@@ -140,7 +174,9 @@
                         {"data": "SEMANA"}/*6*/,
                         {"data": "PARES"}/*7*/,
                         {"data": "PRECIO_FRACCION"}/*8*/,
-                        {"data": "SUBTOTAL"}/*10*/
+                        {"data": "SUBTOTAL"}/*10*/,
+                        {"data": "EMPLEADO_CLAVE"}/*11*/,
+                        {"data": "FRACCION_CLAVE"}/*11*/
                     ],
                     "columnDefs": coldefs, language: lang,
                     select: true,
@@ -151,7 +187,7 @@
                     "deferRender": true,
                     "scrollCollapse": false,
                     "bSort": true,
-                    "scrollY": "250px",
+                    "scrollY": "500px",
                     "scrollX": true,
                     "aaSorting": [
                         [0, 'desc']
@@ -160,7 +196,7 @@
                         var api = this.api();
                         var r = 0, prs = 0;
                         $.each(api.rows().data(), function (k, v) {
-                            r += parseFloat(v.SUBTOTAL);
+                            r += parseFloat(v.SUBTOTALSF);
                         });
                         mdlRastreoXControl.find(".total_pesos").text("$ " + r.toFixed(3));
                     }
@@ -169,10 +205,10 @@
                     var row = xRastreoXControl.row(this).data();
                     console.log(row);
                     SemanaRXCTROL.val(row.SEMANA);
-                    EmpleadoRXCTROL[0].selectize.setValue(row.EMPLEADO);
+                    EmpleadoRXCTROL[0].selectize.setValue(row.EMPLEADO_CLAVE);
                     $.post('<?php print base_url('Avance/getInfoXControlParaRastreo'); ?>', {
                         CONTROL: row.CONTROL,
-                        FRACCION: row.NUM_FRACCION
+                        FRACCION: row.FRACCION_CLAVE
                     }).done(function (a) {
                         console.log(a, a.length);
                         if (a.length > 0) {
@@ -194,3 +230,44 @@
         });
     });
 </script>
+<style>
+    #tblxRastreoXControl tbody td{
+        font-weight: bold;
+        font-size: 18px;
+    }
+    #tblxRastreoXControl tbody td:nth-child(1){ 
+        color:#cc0000;
+    }
+    #tblxRastreoXControl tbody td:nth-child(2){ 
+        color:#2196F3;
+        min-width: 150px;
+    }
+    .rastreo_x_control_tr{
+        color: #cc0000;
+    }
+    #tblxRastreoXControl tbody tr:hover span.rastreo_x_control_tr{
+        color: #FFD700 !important;
+    }
+
+    .rastreo_x_control_tr_default{
+        color: #000000;
+    }
+    #tblxRastreoXControl tbody tr:hover span.rastreo_x_control_tr_default{
+        color: #FFD700 !important;
+    } 
+    #tblxRastreoXControl tbody tr:hover td:nth-child(1){
+        color: #CDDC39 !important;
+    }
+    #tblxRastreoXControl tbody tr:hover td:nth-child(2){
+        color: #fff !important;
+    }
+    #tblxRastreoXControl tbody tr:hover td:nth-child(8){
+        color: #FFD700 !important;
+    }
+    #tblxRastreoXControl tbody tr:hover td:nth-child(9){
+        color: #8BC34A !important
+    }
+    #tblxRastreoXControl.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
+        background-color: #000000;
+    }
+</style>

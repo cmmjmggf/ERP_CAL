@@ -177,11 +177,30 @@ class Avance extends CI_Controller {
         try {
 //            print json_encode($this->avm->getRastreoXControl());
             $x = $this->input->get();
-            $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO, FP.estilo AS ESTILO, "
-                            . "FP.numfrac AS NUM_FRACCION, DATE_FORMAT(FP.fecha,\"%d/%m/%Y\")  AS FECHA, "
+            $this->db->select("FP.ID, FP.control AS CONTROL, FP.numeroempleado AS EMPLEADO_CLAVE, FP.numfrac AS FRACCION_CLAVE,(SELECT (CASE "
+                            . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
+                            . "CONCAT(\"<span class='rastreo_x_control_tr'>\",E.Numero,\"</span>\",' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',"
+                            . "(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',"
+                            . "(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', "
+                            . "(CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
+                            . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                            . "WHEN E.AltaBaja = 2 AND E.Celula IN(0) AND E.Numero IN(991,992,993,1005,1006) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                            . "END)  FROM empleados AS E WHERE E.Numero =  FP.numeroempleado LIMIT 1) AS EMPLEADO, FP.estilo AS ESTILO, "
+                            . "concat("
+                            . "(CASE "
+                            . "WHEN FP.numfrac = 401 THEN \"<span class='rastreo_x_control_tr'>401</span>\" "
+                            . "WHEN FP.numfrac = 397 THEN \"<span class='rastreo_x_control_tr'>397</span>\" "
+                            . "WHEN FP.numfrac = 300 THEN \"<span  class='rastreo_x_control_tr'>300</span>\" "
+                            . "WHEN FP.numfrac = 51 THEN \"<span  class='rastreo_x_control_tr'>51</span>\" "
+                            . "WHEN FP.numfrac = 60 THEN \"<span  class='rastreo_x_control_tr'>60</span>\" "
+                            . "WHEN FP.numfrac = 103 THEN \"<span  class='rastreo_x_control_tr'>103</span>\" "
+                            . "WHEN FP.numfrac = 102 THEN \"<span  class='rastreo_x_control_tr'>102</span>\" "
+                            . "WHEN FP.numfrac = 100 THEN \"<span  class='rastreo_x_control_tr'>100</span>\" "
+                            . "ELSE CONCAT(\"<span  class='rastreo_x_control_tr_default'>\",FP.numfrac,\"</span>\") END)"
+                            . ",\" \" ,(SELECT F.Descripcion FROM fracciones AS F WHERE F.Clave = FP.numfrac) ) AS NUM_FRACCION, DATE_FORMAT(FP.fecha,\"%d/%m/%Y\")  AS FECHA, "
                             . "DATE_FORMAT(FP.fecha,\"%d/%m/%Y\")  AS FECHA,FP.Semana AS SEMANA, "
-                            . "FP.pares AS PARES, FP.preciofrac AS PRECIO_FRACCION, "
-                            . "FP.subtot AS SUBTOTAL")
+                            . "FP.pares AS PARES, CONCAT(\"$\",FORMAT(FP.preciofrac,2)) AS PRECIO_FRACCION, "
+                            . "CONCAT(\"$\",FORMAT(FP.subtot,2)) AS SUBTOTAL,  FP.subtot  AS SUBTOTALSF")
                     ->from("fracpagnomina AS FP");
 
             if ($x['SEMANA'] !== '') {
@@ -193,6 +212,7 @@ class Avance extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('FP.control', $x['CONTROL']);
             }
+//            $this->db->where_not_in('FP.numfrac', array(304,112,111));
             $this->db->order_by('FP.ID', 'DESC');
             if ($x['SEMANA'] === '' && $x['EMPLEADO'] === '' && $x['CONTROL'] === '') {
                 $this->db->limit(50);
@@ -552,11 +572,11 @@ P.Maquila AS MAQUILA
                     exit(0);
                 }
             }
-            
+
             /* AVANCE A ALMACEN DE TEJIDO , PAGA NOMINA DE TEJIDO */
             $fracciones_tejido = array(89, 320, 401, 402, 403, 404);
             if ($depto === 8 && $depto_actual === 7 && in_array(intval($frac), $fracciones_tejido)) {
-                 switch (intval($frac)) {
+                switch (intval($frac)) {
                     case 402:
                     case 401:
                         /* YA NO SE PAGA FRACCION PORQUE ESTE TIENE UN MODULO DEDICADO DONDE SE PAGA DIRECTO,SOLO MUEVE EL CONTROL A ALMACEN TEJIDO 
@@ -571,7 +591,7 @@ P.Maquila AS MAQUILA
                         $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))->where('fec8 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                         $l = new Logs("Captura de Avance de produccion", " HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE TEJIDO.  ", $this->session);
                         exit(0);
-                        break; 
+                        break;
                 }
             }
             /* MARTIN */
@@ -1027,7 +1047,7 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
-            /* AVANCE A ALMACEN DE TEJIDO , PAGA NOMINA DE TEJIDO */ 
+            /* AVANCE A ALMACEN DE TEJIDO , PAGA NOMINA DE TEJIDO */
             if ($depto === 8 && $depto_actual === 7 && in_array(intval($frac), $fracciones_tejido)) {
 
                 $check_fraccion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control = {$xXx["CONTROL"]} AND F.numfrac ={$frac} ")->result();
