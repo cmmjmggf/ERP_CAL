@@ -9,7 +9,7 @@ class Pedidos extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
-        $this->load->library('session')->helper('Pedido_helper')->model('Pedidos_model', 'pem');
+        $this->load->library('session')->helper('jaspercommand_helper')->helper('Pedido_helper')->model('Pedidos_model', 'pem');
     }
 
     public function index() {
@@ -140,8 +140,8 @@ class Pedidos extends CI_Controller {
     public function getRecords() {
         try {
             print json_encode($this->db->select("P.ID, P.Clave, P.Cliente AS Cliente, P.Agente Agente,P.FechaPedido,SUM(P.Pares) AS Pares", false)
-                            ->from('pedidox AS P')->group_by('P.Clave')->group_by('P.Cliente')
-                            ->order_by('P.FechaPedido', 'DESC')->get()->result());
+                                    ->from('pedidox AS P')->group_by('P.Clave')->group_by('P.Cliente')
+                                    ->order_by('P.FechaPedido', 'DESC')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -606,6 +606,21 @@ class Pedidos extends CI_Controller {
 
     function onImprimirPedidoReducido() {
         try {
+            $jc = new JasperCommand();
+            $rpt = $this->input->post();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $parametros = array();
+            $parametros["logo"] = base_url() . $this->session->LOGO;
+            $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["Clave"] = $rpt['ID'];
+            $parametros["Cliente"] = $rpt['CLIENTE'];
+            $jc->setParametros($parametros);
+            $jc->setJasperurl('jrxml\pedidos\pedido.jasper');
+            $jc->setFilename($rpt['ID'] . '_' . $rpt['CLIENTE'] . '_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+            
+            exit(0);
             $pdf = new PDF('L', 'mm', array(215.9, 279.4));
             $pdf->AddFont('Calibri', '');
             $pdf->AddFont('Calibri', 'I');

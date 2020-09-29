@@ -104,28 +104,110 @@
                                 </a>   
                             </div>   
                         </div>
-                    </div>
-                    <div class="col-12" id="Contenedor">
-                        <div class="row">
-                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                            <table id="tblRefaccionesMto" class="table  table-sm table-bordered" style="width:  100%;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th> 
+                                        <th scope="col">CÓDIGO</th> 
+                                        <th scope="col">DESCRIPCIÓN</th>   
+
+                                        <th scope="col">FECHA ALTA</th> 
+                                        <th scope="col">COSTO</th> 
+                                        <th scope="col">DEPARTAMENTO</th>  
+                                        <th scope="col">PROVEEDOR UNO</th>  
+                                        <th scope="col">PROVEEDOR DOS</th>  
+                                        <th scope="col">PROVEEDOR TRES</th>  
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div> 
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> 
+                <div class="col-6">
+                    <div align="left">
+                        <button type="button" class="btn btn-success" style="background-color: #0D47A1; border-color: #0D47A1;">Ver Refacciones</button> 
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div align="right">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <script>
     var mdlRefacciones = $("#mdlRefacciones"),
-            btnSubirFotosRefacciones = mdlRefacciones.find("#btnSubirFotosRefacciones");
+            btnSubirFotosRefacciones = mdlRefacciones.find("#btnSubirFotosRefacciones"),
+            tblRefaccionesMto = mdlRefacciones.find("#tblRefaccionesMto"), RefaccionesMto;
 
     $(document).ready(function () {
 
         mdlRefacciones.on('shown.bs.modal', function () {
             mdlRefacciones.find("input").val('');
             mdlRefacciones.find("#Contenedor div.row").html('');
+
+            if ($.fn.DataTable.isDataTable('#tblRefaccionesMto')) {
+                RefaccionesMto.ajax.reload();
+                return;
+            } else {
+                var cols = [
+                    {"data": "ID"}/*0*/,
+                    {"data": "CODIGO"}/*1*/,
+                    {"data": "DESCRIPCION"}/*2*/,
+                    {"data": "DESCRIPCIONREF"}/*3*/,
+                    {"data": "HORALLEGADA"}/*4*/,
+                    {"data": "HORAENTRADA"}/*5*/,
+                    {"data": "REFACCION_UNO"}/*6*/,
+                    {"data": "CANTIDAD_UNO"}/*7*/,
+                    {"data": "PRECIO_UNO"}/*8*/,
+                    {"data": "REFACCION_DOS"}/*9*/,
+                    {"data": "CANTIDAD_DOS"}/*10*/,
+                    {"data": "PRECIO_DOS"}/*11*/
+                ];
+                var coldefs = [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }
+                ];
+                Solicitudes = tblSolicitudesMto.DataTable({
+                    "dom": 'rtp',
+                    "ajax": {
+                        "url": '<?php print base_url('SolicitudDeMantenimiento/getSolicitudes'); ?>',
+                        "dataSrc": "",
+                        "data": function (d) {
+                            d.VALE = 1;
+                        }
+                    },
+                    buttons: buttons,
+                    "columns": cols,
+                    "columnDefs": coldefs,
+                    language: lang,
+                    select: true,
+                    "autoWidth": true,
+                    "colReorder": true,
+                    "displayLength": 50,
+                    "bLengthChange": false,
+                    "deferRender": true,
+                    "scrollCollapse": false,
+                    "bSort": true,
+                    "scrollY": "350px",
+                    "scrollX": true,
+                    "aaSorting": [
+                        [1, 'desc']
+                    ]
+                });
+            }
         });
 
         mdlRefacciones.on('hidden.bs.modal', function () {
