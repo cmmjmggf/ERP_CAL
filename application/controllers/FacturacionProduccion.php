@@ -44,10 +44,14 @@ class FacturacionProduccion extends CI_Controller {
 
             /* FACTURADO */
             /* PRIMERO CONTROLES */
-            $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control IN(SELECT P.Control FROM pedidox AS P WHERE P.stsavan = 12 AND P.Pares = P.ParesFacturados );");
+            $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 "
+                    . " WHERE Control IN(SELECT P.Control FROM pedidox AS P WHERE P.stsavan = 12 AND P.Pares = P.ParesFacturados ) "
+                    . " AND Cliente not in (39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995) ;");
 
             /* SEGUNDO PEDIDOX, SEGUNDO PORQUE CONTROLES OCUPA SABER CUALES SON LOS CONTROLES CON DIFERENCIAS */
-            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = Pares  WHERE stsavan = 12 AND Pares = ParesFacturados;");
+            $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = Pares  "
+                    . " WHERE stsavan = 12 AND Pares = ParesFacturados"
+                    . " AND Cliente not in (39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995) ;");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -67,7 +71,7 @@ class FacturacionProduccion extends CI_Controller {
             $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995);
             if (in_array($x['CLIENTE'], $people)) {
                 print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
-                                        . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
+                                        . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios
 WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
                                         . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                         . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
@@ -128,14 +132,14 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                                 . "WHERE F.contped = {$x['CONTROL']} LIMIT 1")->result();
 
                 $facturacion_dif = $this->db->query("SELECT
-                                        F.contped, F.pareped, 
-                                        (par01 +  par02 +  par03 +  par04 +  par05 +  
-                                        par06 +  par07 +  par08 +  par09 +  par10 +  
-                                        par11 +  par12 +  par13 +  par14 +  par15 +  
-                                        par16 +  par17 +  par18 +  par19 +  par20 +  
+                                        F.contped, F.pareped,
+                                        (par01 +  par02 +  par03 +  par04 +  par05 +
+                                        par06 +  par07 +  par08 +  par09 +  par10 +
+                                        par11 +  par12 +  par13 +  par14 +  par15 +
+                                        par16 +  par17 +  par18 +  par19 +  par20 +
                                         par21 +  par22) AS TOTAL_PARES, F.staped, P.Cliente AS CLIENTE
-                                        FROM facturaciondif AS F 
-                                        INNER JOIN pedidox AS P ON F.contped = P.Control 
+                                        FROM facturaciondif AS F
+                                        INNER JOIN pedidox AS P ON F.contped = P.Control
                                         WHERE F.contped = '{$x['CONTROL']}' LIMIT 1")->result();
 
                 if (intval($pedidox[0]->PARES_FACTURADOS) === intval($facturacion[0]->PARES_FACTURADOS)) {
@@ -145,8 +149,8 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                                         F.par11, F.par12, F.par13, F.par14, F.par15,
                                         F.par16, F.par17, F.par18, F.par19, F.par20,
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
-                                        FROM facturaciondif AS F 
-                                        INNER JOIN pedidox AS P ON F.contped = P.Control 
+                                        FROM facturaciondif AS F
+                                        INNER JOIN pedidox AS P ON F.contped = P.Control
                                         WHERE F.contped = '{$x['CONTROL']}'   AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result());
                     exit(0);
                 } else {
@@ -156,8 +160,8 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                                         F.par11, F.par12, F.par13, F.par14, F.par15,
                                         F.par16, F.par17, F.par18, F.par19, F.par20,
                                         F.par21, F.par22, F.staped, P.Cliente AS CLIENTE
-                                        FROM facturaciondif AS F 
-                                        INNER JOIN pedidox AS P ON F.contped = P.Control 
+                                        FROM facturaciondif AS F
+                                        INNER JOIN pedidox AS P ON F.contped = P.Control
                                         WHERE F.contped = '{$x['CONTROL']}'  AND P.stsavan NOT IN(14) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.DeptoProduccion NOT IN(270) LIMIT 1")->result());
                 }
 //            }
@@ -219,16 +223,16 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             $xxx = $this->input->get();
             $this->db->select("P.ID, P.Control AS CONTROL,
                                 P.Clave AS PEDIDO,
-                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C 
+                                (SELECT CONCAT(P.Cliente,' ',C.RazonS) FROM clientes AS C
                                 WHERE C.Clave = P.Cliente LIMIT 1) AS CLIENTE,
                                 P.FechaPedido  AS FECHA_PEDIDO, P.FechaEntrega AS FECHA_ENTREGA,
                                 P.Estilo AS ESTILO, P.Color AS COLOR, P.Pares AS PARES,
                                 0  AS FAC, P.Maquila AS MAQUILA, P.Semana AS SEMANA,
-                                
-                                (SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
-                                WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo ORDER BY C.ID DESC LIMIT 1) AS PRECIO, 
 
-FORMAT((SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios 
+                                (SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios
+                                WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo ORDER BY C.ID DESC LIMIT 1) AS PRECIO,
+
+FORMAT((SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios
 WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1),2) AS PRECIOT,
 
                                 P.ColorT AS COLORT", false)
@@ -508,73 +512,73 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
                     for ($i = 1; $i < 23; $i++) {
                         $talla = "";
                         if (floatval($x["CAF$i"]) > 0) {
-                            $SERIE = $this->db->query("SELECT S.Clave, 
-(CASE 
+                            $SERIE = $this->db->query("SELECT S.Clave,
+(CASE
 WHEN length(S.T1)= 2 THEN CONCAT(S.T1,\"0\") WHEN length(S.T1)= 4 THEN REPLACE(S.T1,\".\",\"\")
-END) AS T1, S.T1 AS XT1, 
-(CASE 
+END) AS T1, S.T1 AS XT1,
+(CASE
 WHEN length(S.T2)= 2 THEN CONCAT(S.T2,\"0\") WHEN length(S.T2)= 4 THEN REPLACE(S.T2,\".\",\"\")
 END) AS T2, S.T2 AS XT2,
-(CASE 
+(CASE
 WHEN length(S.T3)= 2 THEN CONCAT(S.T3,\"0\") WHEN length(S.T3)= 4 THEN REPLACE(S.T3,\".\",\"\")
 END) AS T3,  S.T3 AS XT3,
-(CASE 
+(CASE
 WHEN length(S.T4)= 2 THEN CONCAT(S.T4,\"0\") WHEN length(S.T4)= 4 THEN REPLACE(S.T4,\".\",\"\")
 END) AS T4,  S.T4 AS XT4,
-(CASE 
+(CASE
 WHEN length(S.T5)= 2 THEN CONCAT(S.T5,\"0\") WHEN length(S.T5)= 4 THEN REPLACE(S.T5,\".\",\"\")
-END) AS T5, S.T5 AS XT5, 
-(CASE 
+END) AS T5, S.T5 AS XT5,
+(CASE
 WHEN length(S.T6)= 2 THEN CONCAT(S.T6,\"0\") WHEN length(S.T6)= 4 THEN REPLACE(S.T6,\".\",\"\")
-END) AS T6, S.T6 AS XT6, 
-(CASE 
+END) AS T6, S.T6 AS XT6,
+(CASE
 WHEN length(S.T7)= 2 THEN CONCAT(S.T7,\"0\") WHEN length(S.T7)= 4 THEN REPLACE(S.T7,\".\",\"\")
-END) AS T7, S.T7 AS XT7, 
-(CASE 
+END) AS T7, S.T7 AS XT7,
+(CASE
 WHEN length(S.T8)= 2 THEN CONCAT(S.T8,\"0\") WHEN length(S.T8)= 4 THEN REPLACE(S.T8,\".\",\"\")
-END) AS T8, S.T8 AS XT8, 
-(CASE 
+END) AS T8, S.T8 AS XT8,
+(CASE
 WHEN length(S.T9)= 2 THEN CONCAT(S.T9,\"0\") WHEN length(S.T9)= 4 THEN REPLACE(S.T9,\".\",\"\")
-END) AS T9, S.T9 AS XT9,  
-(CASE 
+END) AS T9, S.T9 AS XT9,
+(CASE
 WHEN length(S.T10)= 2 THEN CONCAT(S.T10,\"0\") WHEN length(S.T10)= 4 THEN REPLACE(S.T10,\".\",\"\")
-END) AS T10, S.T10 AS XT10,  
-(CASE 
+END) AS T10, S.T10 AS XT10,
+(CASE
 WHEN length(S.T11)= 2 THEN CONCAT(S.T11,\"0\") WHEN length(S.T11)= 4 THEN REPLACE(S.T11,\".\",\"\")
-END) AS T11, S.T11 AS XT11,  
-(CASE 
+END) AS T11, S.T11 AS XT11,
+(CASE
 WHEN length(S.T12)= 2 THEN CONCAT(S.T12,\"0\") WHEN length(S.T12)= 4 THEN REPLACE(S.T12,\".\",\"\")
-END) AS T12,S.T12 AS XT12,  
-(CASE 
+END) AS T12,S.T12 AS XT12,
+(CASE
 WHEN length(S.T13)= 2 THEN CONCAT(S.T13,\"0\") WHEN length(S.T13)= 4 THEN REPLACE(S.T13,\".\",\"\")
-END) AS T13,S.T13 AS XT13,  
-(CASE 
+END) AS T13,S.T13 AS XT13,
+(CASE
 WHEN length(S.T14)= 2 THEN CONCAT(S.T14,\"0\") WHEN length(S.T14)= 4 THEN REPLACE(S.T14,\".\",\"\")
-END) AS T14,S.T14 AS XT14, 
-(CASE 
+END) AS T14,S.T14 AS XT14,
+(CASE
 WHEN length(S.T15)= 2 THEN CONCAT(S.T15,\"0\") WHEN length(S.T15)= 4 THEN REPLACE(S.T15,\".\",\"\")
-END) AS T15,S.T15 AS XT15,  
-(CASE 
+END) AS T15,S.T15 AS XT15,
+(CASE
 WHEN length(S.T16)= 2 THEN CONCAT(S.T16,\"0\") WHEN length(S.T16)= 4 THEN REPLACE(S.T16,\".\",\"\")
-END) AS T16,S.T16 AS XT16, 
-(CASE 
+END) AS T16,S.T16 AS XT16,
+(CASE
 WHEN length(S.T17)= 2 THEN CONCAT(S.T17,\"0\") WHEN length(S.T17)= 4 THEN REPLACE(S.T17,\".\",\"\")
-END) AS T17,S.T17 AS XT17, 
-(CASE 
+END) AS T17,S.T17 AS XT17,
+(CASE
 WHEN length(S.T18)= 2 THEN CONCAT(S.T18,\"0\") WHEN length(S.T18)= 4 THEN REPLACE(S.T18,\".\",\"\")
-END) AS T18,S.T18 AS XT18, 
-(CASE 
+END) AS T18,S.T18 AS XT18,
+(CASE
 WHEN length(S.T19)= 2 THEN CONCAT(S.T19,\"0\") WHEN length(S.T19)= 4 THEN REPLACE(S.T19,\".\",\"\")
-END) AS T19,S.T19 AS XT19, 
-(CASE 
+END) AS T19,S.T19 AS XT19,
+(CASE
 WHEN length(S.T20)= 2 THEN CONCAT(S.T20,\"0\") WHEN length(S.T20)= 4 THEN REPLACE(S.T20,\".\",\"\")
-END) AS T20,S.T20 AS XT20, 
-(CASE 
+END) AS T20,S.T20 AS XT20,
+(CASE
 WHEN length(S.T21)= 2 THEN CONCAT(S.T21,\"0\") WHEN length(S.T21)= 4 THEN REPLACE(S.T21,\".\",\"\")
-END) AS T21,S.T21 AS XT21, 
-(CASE 
+END) AS T21,S.T21 AS XT21,
+(CASE
 WHEN length(S.T22)= 2 THEN CONCAT(S.T22,\"0\") WHEN length(S.T22)= 4 THEN REPLACE(S.T22,\".\",\"\")
-END) AS T22, S.T22 AS XT22 
+END) AS T22, S.T22 AS XT22
 FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$x['CONTROL']} LIMIT 1")->result();
 
                             $XETIQUETA = NULL;
@@ -1390,15 +1394,15 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
 (CASE WHEN F.par01 = 0 THEN \"\" ELSE F.par01 END) AS par01, (CASE WHEN F.par02 = 0 THEN \"\" ELSE F.par02 END) AS par02, (CASE WHEN F.par03 = 0 THEN \"\" ELSE F.par03 END) AS par03, (CASE WHEN F.par04 = 0 THEN \"\" ELSE F.par04 END) AS par04, (CASE WHEN F.par05 = 0 THEN \"\" ELSE F.par05 END) AS par05, (CASE WHEN F.par06 = 0 THEN \"\" ELSE F.par06 END) AS par06, (CASE WHEN F.par07 = 0 THEN \"\" ELSE F.par07 END) AS par07, (CASE WHEN F.par08 = 0 THEN \"\" ELSE F.par08 END) AS par08, (CASE WHEN F.par09 = 0 THEN \"\" ELSE F.par09 END) AS par09, (CASE WHEN F.par10 = 0 THEN \"\" ELSE F.par10 END) AS par10,
             (CASE WHEN F.par11 = 0 THEN \"\" ELSE F.par11 END) AS par11, (CASE WHEN F.par12 = 0 THEN \"\" ELSE F.par12 END) AS par12, (CASE WHEN F.par13 = 0 THEN \"\" ELSE F.par13 END) AS par13, (CASE WHEN F.par14 = 0 THEN \"\" ELSE F.par14 END) AS par14, (CASE WHEN F.par15 = 0 THEN \"\" ELSE F.par15 END) AS par15, (CASE WHEN F.par16 = 0 THEN \"\" ELSE F.par16 END) AS par16, (CASE WHEN F.par17 = 0 THEN \"\" ELSE F.par17 END) AS par17, (CASE WHEN F.par18 = 0 THEN \"\" ELSE F.par18 END) AS par18, (CASE WHEN F.par19 = 0 THEN \"\" ELSE F.par19 END) AS par19, (CASE WHEN F.par20 = 0 THEN \"\" ELSE F.par20 END) AS par20,
             (CASE WHEN F.par21 = 0 THEN \"\" ELSE F.par21 END) AS par21, (CASE WHEN F.par22 = 0 THEN \"\" ELSE F.par22 END) AS par22,
-            
+
 F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
             F.tmnda AS TIPO_MONEDA, F.tcamb AS TIPO_CAMBIO, F.cajas AS CAJAS_FACTURACION, F.origen, F.referen, F.decdias, F.agente,
             F.colsuel, F.tpofac, F.año, F.zona, F.horas, F.numero, F.talla, F.cobarr, F.pedime, F.ordcom,
             F.numadu, F.nomadu, F.regadu, F.periodo, F.costo, F.obs AS OBS,
             (SELECT P.EstatusProduccion AS ESTATUS_PRODUCCION
             FROM pedidox AS P WHERE P.Control = F.contped LIMIT 1) AS ESTATUS_PRODUCCION
-            FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave   
-            INNER JOIN cartcliente AS CC ON CC.cliente = C.Clave AND CC.remicion = F.factura AND CC.tipo = F.tp 
+            FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave
+            INNER JOIN cartcliente AS CC ON CC.cliente = C.Clave AND CC.remicion = F.factura AND CC.tipo = F.tp
             WHERE F.factura = '{$x['FACTURA']}' AND F.tp = {$x['TP']} AND F.cliente = '{$x['CLIENTE']}' "
                                         . "AND C.Clave = '{$x['CLIENTE']}'")->result());
             }
@@ -1409,7 +1413,7 @@ F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
 
     public function getParesDevueltos() {
         try {
-            
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1447,7 +1451,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
 
     public function onControlSinTerminar() {
         try {
-            
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1498,17 +1502,17 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
         try {
             $x = $this->input->get();
             $this->db->select("FD.Factura AS FACTURA,
-(SELECT T.numtda FROM facturas AS F INNER JOIN tiendas AS T ON F.NumeroBodega = T.numtda 
-WHERE F.Factura = FD.Factura LIMIT 1) AS RAZON_SOCIAL, 
-FD.EstiloCliente AS EST_CTE, 
-FD.Talla AS TALLA, FD.Estilo4E AS EST_4E,  
-FD.ParesPorPunto AS PARES, 
-FD.PrecioPorPunto AS PRECIO, 
+(SELECT T.numtda FROM facturas AS F INNER JOIN tiendas AS T ON F.NumeroBodega = T.numtda
+WHERE F.Factura = FD.Factura LIMIT 1) AS RAZON_SOCIAL,
+FD.EstiloCliente AS EST_CTE,
+FD.Talla AS TALLA, FD.Estilo4E AS EST_4E,
+FD.ParesPorPunto AS PARES,
+FD.PrecioPorPunto AS PRECIO,
 FD.PrecioConDescuento AS PRE_CON_DES,
 FD.CantidadPrepack AS CANTIDAD,
-FD.PorcentajeDescuento AS PORCENTAJE_DESCUENTO, 
-FD.MontoDelDescuento AS MONTO_DESCUENTO, 
-FD.TotalItem AS TOTAL, 
+FD.PorcentajeDescuento AS PORCENTAJE_DESCUENTO,
+FD.MontoDelDescuento AS MONTO_DESCUENTO,
+FD.TotalItem AS TOTAL,
 FD.TotalConDescuentoItem AS TOTAL_CON_DESCUENTO", false)
                     ->from("facturasdetalles AS FD");
             if ($x['FACTURA'] !== '') {
