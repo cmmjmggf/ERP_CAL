@@ -32,6 +32,84 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
+    
+    public function onReporteVentasPorLineaEstiloPorcentajeTotalesXLineaEspecifica() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["LINEA"] = $this->input->post('LINEA');
+        $jc->setJasperurl('jrxml\ventas\VentasPorLineaEstiloPorcentajeTotalesXLineaEspecifica.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VENTAS_X_LIN_ESTI_CON_PORCEN_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+    public function onReporteVentasPorLineaEstiloPorcentajeTotalesXLinea() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["LINEA"] = $this->input->post('LINEA');
+        $jc->setJasperurl('jrxml\ventas\paresVendidosXLineaEstiloPorcentajetotalesXEstiloLinea.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VENTAS_X_LIN_ESTI_CON_PORCEN_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+    
+    public function onReporteVentasPorLineaEstiloPorcentajeTotales() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $jc->setJasperurl('jrxml\ventas\paresVendidosXLineaEstiloPorcentajetotales.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VENTAS_X_LIN_ESTI_CON_PORCEN_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+    
+    public function onReporteVentasPorLineaEstiloPorcentajeTotalesXLineaDetallada() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["LINEA"] = $this->input->post('LINEA');
+        $jc->setJasperurl('jrxml\ventas\paresVendidosXLineaEstiloPorcentajeLineaDetallada.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VENTAS_X_LIN_ESTI_CON_PORCEN_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
 
     public function onReporteVentasPorFecha() {
 
