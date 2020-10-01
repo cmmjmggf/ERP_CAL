@@ -16,18 +16,18 @@
                             <input type="text" class="form-control form-control-sm date notEnter" id="FechaFinVentasLinEstiPorce" name="FechaFinVentasLinEstiPorce" >
                         </div>
                         <div class="col-12">
-                            <label>Linea: </label>
+                            <label>Lineas: </label>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-4 d-none">
                                     <input type="text" class="form-control form-control-sm" id="ClaveLineaVentaXLineaEstilo" name="ClaveLineaVentaXLineaEstilo" >
                                 </div>
-                                <div class="col-8">
-                                    <select class="form-control form-control-sm" id="LineaVentaXLineaEstilo" name="LineaVentaXLineaEstilo" >
+                                <div class="col-12">
+                                    <select class="form-control form-control-sm NotSelectize" id="LineaVentaXLineaEstilo" name="LineaVentaXLineaEstilo" multiple="" >
                                         <option></option>
                                         <?php
                                         $lineasx = $this->db->query("SELECT * FROM lineas AS L ORDER BY L.clave ASC")->result();
                                         foreach ($lineasx as $k => $v) {
-                                            print "<option value='{$v->Clave}'>{$v->Clave} {$v->Descripcion}</option>";
+                                            print "<option value='{$v->Clave}'>{$v->Descripcion}</option>";
                                         }
                                         ?>
                                     </select> 
@@ -35,31 +35,41 @@
                             </div>
                         </div>
                         <div class="w-100 my-2"></div>
+                        <div class="col-6">
+                            <span class="switch switch-lg">
+                                <input id="checkCABALLERO" name="checkCABALLERO"  type="checkbox" checked="" class="switch">
+                                <label for="checkCABALLERO">CABALLERO</label>
+                            </span>
+                        </div>
+                        <div class="col-6"> 
+                            <span class="switch switch-lg">
+                                <input id="checkDAMA" name="checkDAMA"  type="checkbox" checked="" class="switch">
+                                <label for="checkDAMA">DAMA</label>
+                            </span>
+                        </div>
+                        <div class="w-100 my-2"><hr></div>
                         <div class="col-12">
                             <span class="switch switch-lg">
                                 <input id="checkTotalesVendidos" name="checkTotalesVendidos"  type="checkbox" class="switch">
                                 <label for="checkTotalesVendidos">TOTALES</label>
                             </span>
                         </div>
-                        <div class="w-100 my-2"></div>
-                        <div class="col-4 d-none">
-                            <span class="switch switch-lg">
-                                <input id="checkCABALLERO" name="checkCABALLERO"  type="checkbox" checked="" class="switch">
-                                <label for="checkCABALLERO">CABALLERO</label>
-                            </span>
+                        <div class="w-100 my-2"><hr></div> 
+                        <div class="col-12"> 
+                            <label for="checkOrdenPorPares">ORDENADO POR PARES</label> 
+                            <select id="TipoOrdenPorPares" name="TipoOrdenPorPares" class="form-control">
+                                <option  value="1">ASCENDENTE</option>
+                                <option value="2">DESCENDENTE</option>
+                            </select>
                         </div>
-                        <div class="col-4 d-none"> 
-                            <span class="switch switch-lg">
-                                <input id="checkDAMA" name="checkDAMA"  type="checkbox" checked="" class="switch">
-                                <label for="checkDAMA">DAMA</label>
-                            </span>
-                        </div>
-                        <div class="col-4 d-none"> 
-                            <span class="switch switch-lg">
-                                <input id="checkAMBOS" name="checkAMBOS"  type="checkbox" checked="" class="switch">
-                                <label for="checkAMBOS">AMBOS</label>
-                            </span>
-                        </div>
+                        <div class="col-6 d-none"> 
+                            <label for="checkOrdenPorPorcentaje">POR PORCENTAJE</label>
+                            <select id="TipoOrdenPorPorcentaje" name="TipoOrdenPorPorcentaje" class="form-control">
+                                <option></option>
+                                <option value="1">ASCENDENTE</option>
+                                <option value="2">DESCENDENTE</option>
+                            </select>
+                        </div> 
                     </div>
                 </form>
             </div>
@@ -76,12 +86,22 @@
             ClaveLineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#ClaveLineaVentaXLineaEstilo"),
             LineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#LineaVentaXLineaEstilo")
     checkTotalesVendidos = mdlVentasPorLineaEstiloPorcentaje.find("#checkTotalesVendidos"),
-    checkCABALLERO = mdlVentasPorLineaEstiloPorcentaje.find("#checkCABALLERO"),
+            checkCABALLERO = mdlVentasPorLineaEstiloPorcentaje.find("#checkCABALLERO"),
             checkDAMA = mdlVentasPorLineaEstiloPorcentaje.find("#checkDAMA"),
-            checkAMBOS = mdlVentasPorLineaEstiloPorcentaje.find("#checkAMBOS");
+            checkAMBOS = mdlVentasPorLineaEstiloPorcentaje.find("#checkAMBOS")
+    checkOrdenPorPares = mdlVentasPorLineaEstiloPorcentaje.find("#checkOrdenPorPares"),
+            TipoOrdenPorPares = mdlVentasPorLineaEstiloPorcentaje.find("#TipoOrdenPorPares"),
+            checkOrdenPorPorcentaje = mdlVentasPorLineaEstiloPorcentaje.find("#checkOrdenPorPorcentaje"),
+            TipoOrdenPorPorcentaje = mdlVentasPorLineaEstiloPorcentaje.find("#TipoOrdenPorPorcentaje");
 
     $(document).ready(function () {
-
+        
+        LineaVentaXLineaEstilo.selectize({ 
+            persist: true,
+            create: false,
+            hideSelected: true
+        });
+        
         checkAMBOS.change(function () {
             if (checkAMBOS[0].checked) {
                 checkDAMA[0].checked = true;
@@ -124,7 +144,50 @@
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlVentasPorLineaEstiloPorcentaje.find("#frmCaptura")[0]);
             frm.append('Reporte', mdlVentasPorLineaEstiloPorcentaje.find('input[name=ReporteVentasPorFecha]:checked').attr('valor'));
-            if (LineaVentaXLineaEstilo.val() !== '' && checkTotalesVendidos[0].checked) {
+
+            frm.append('LINEA', LineaVentaXLineaEstilo.val() ? LineaVentaXLineaEstilo.val() : '');
+            if (checkDAMA[0].checked && checkCABALLERO[0].checked) {
+                frm.append('GENERO', 4);
+            } else
+            if (checkDAMA[0].checked && !checkCABALLERO[0].checked) {
+                frm.append('GENERO', 2);
+            } else if (!checkDAMA[0].checked && checkCABALLERO[0].checked) {
+                frm.append('GENERO', 1);
+            }
+            var jasper = '';
+            if (checkTotalesVendidos[0].checked) {
+                jasper = '<?php print base_url('ReportesClientesJasper/getParesVendidosXFechasXLineaXGeneroTotales'); ?>';
+            } else {
+                jasper = '<?php print base_url('ReportesClientesJasper/getParesVendidosXFechasXLineaXGenero'); ?>';
+            }
+
+            frm.append('ORDEN_PARES', TipoOrdenPorPares.val() ? parseInt(TipoOrdenPorPares.val()) : 0);
+            frm.append('ORDEN_PORCENTAJE', TipoOrdenPorPorcentaje.val() ? parseInt(TipoOrdenPorPorcentaje.val()) : 0);
+
+            $.ajax({
+                url: jasper,
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                console.log(data);
+                onImprimirReporteFancyAFC(data, function () {
+                    onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimirConTotales'));
+                    onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimir'));
+                });
+                HoldOn.close();
+            }).fail(function (x, y, z) {
+                console.log(x, y, z);
+                HoldOn.close();
+                onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimirConTotales'));
+                onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimir'));
+            });
+
+            return;
+            if (LineaVentaXLineaEstilo.val() !== '' && checkTotalesVendidos[0].checked
+                    && !checkDAMA[0].checked && !checkCABALLERO[0].checked) {
                 frm.append('LINEA', LineaVentaXLineaEstilo.val());
                 $.ajax({
                     url: '<?php print base_url('ReportesClientesJasper/onReporteVentasPorLineaEstiloPorcentajeTotalesXLineaEspecifica'); ?>',
@@ -146,7 +209,7 @@
                     onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimirConTotales'));
                     onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimir'));
                 });
-            } else if (LineaVentaXLineaEstilo.val() !== '' && !checkTotalesVendidos[0].checked) {
+            } else if (LineaVentaXLineaEstilo.val() !== '' && !checkTotalesVendidos[0].checked && !checkDAMA[0].checked && !checkCABALLERO[0].checked) {
                 frm.append('LINEA', LineaVentaXLineaEstilo.val());
                 $.ajax({
                     url: '<?php print base_url('ReportesClientesJasper/onReporteVentasPorLineaEstiloPorcentajeTotalesXLineaDetallada'); ?>',
@@ -168,8 +231,8 @@
                     onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimirConTotales'));
                     onEnable(mdlVentasPorLineaEstiloPorcentaje.find('#btnImprimir'));
                 });
-            
-            } else if (checkTotalesVendidos[0].checked) {
+
+            } else if (checkTotalesVendidos[0].checked && !checkDAMA[0].checked && !checkCABALLERO[0].checked) {
                 frm.append('LINEA', LineaVentaXLineaEstilo.val());
                 $.ajax({
                     url: '<?php print base_url('ReportesClientesJasper/onReporteVentasPorLineaEstiloPorcentajeTotalesXLinea'); ?>',
@@ -244,4 +307,9 @@
     input[type="checkbox"]:hover, span:hover input[type="checkbox"] {
         cursor: pointer;
     }    
+    .selectize-control.multi .selectize-input > div {
+        background: #000000;
+        color: #ffffff;
+        border-radius: 10px;
+    }
 </style>

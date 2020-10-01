@@ -32,7 +32,7 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
-    
+
     public function onReporteVentasPorLineaEstiloPorcentajeTotalesXLineaEspecifica() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
@@ -52,6 +52,81 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
+
+    public function getParesVendidosXFechasXLineaXGenero() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["ORDEN_PARES"] = $this->input->post('ORDEN_PARES');
+        $parametros["ORDEN_PORCENTAJE"] = $this->input->post('ORDEN_PORCENTAJE');
+
+        $LINEAS = $this->input->post('LINEA');
+        if ($LINEAS === '') {
+            $parametros["GENERO"] = $this->input->post('GENERO');
+            $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGeneroSinLinea.jasper');
+            $jc->setParametros($parametros);
+            $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+            exit(0);
+        } else if ($LINEAS !== '') {
+            $LINEAS = str_replace(",", "','", $this->input->post('LINEA'));
+            $LINEAS = "'{$LINEAS}'";
+        }
+        $parametros["LINEA"] = $LINEAS;
+        $parametros["GENERO"] = $this->input->post('GENERO');
+        $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGenero.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function getParesVendidosXFechasXLineaXGeneroTotales() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $parametros["ORDEN_PARES"] = $this->input->post('ORDEN_PARES');
+        
+        $LINEAS = $this->input->post('LINEA');
+        if ($LINEAS === '') {
+            $parametros["GENERO"] = $this->input->post('GENERO');
+            $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGeneroTotalesSinLinea.jasper');
+            $jc->setParametros($parametros);
+            $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+            exit(0);
+        } else if ($LINEAS !== '') {
+            $LINEAS = str_replace(",", "','", $this->input->post('LINEA'));
+            $LINEAS = "'{$LINEAS}'";
+        }
+        $parametros["LINEA"] = $LINEAS;
+//        print "\n $LINEAS \n";
+        $parametros["GENERO"] = $this->input->post('GENERO');
+        $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGeneroTotales.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteVentasPorLineaEstiloPorcentajeTotalesXLinea() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
@@ -71,7 +146,7 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
-    
+
     public function onReporteVentasPorLineaEstiloPorcentajeTotales() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
@@ -90,7 +165,7 @@ class ReportesClientesJasper extends CI_Controller {
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
-    
+
     public function onReporteVentasPorLineaEstiloPorcentajeTotalesXLineaDetallada() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
