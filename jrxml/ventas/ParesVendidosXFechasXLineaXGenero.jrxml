@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="paresVendidosXLineaEstiloPorcentajetotales" language="groovy" columnCount="3" pageWidth="612" pageHeight="792" columnWidth="186" columnSpacing="14" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.2655516614682134"/>
-	<property name="ireport.x" value="893"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesVendidosXFechasXLineaXGenero" language="groovy" columnCount="3" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="246" columnSpacing="14" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="2.4534572963698094"/>
+	<property name="ireport.x" value="805"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -27,6 +27,9 @@
 	<parameter name="ORDEN_PORCENTAJE" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="MODELADORDISENADOR" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select
 case
@@ -40,11 +43,16 @@ sum(pe.pares) as pares, sum(pe.pares) as pares_orden, (SELECT sum(px.pares) from
 join estilos e on e.clave = px.estilo
 join lineas l on l.clave = e.linea
 where str_to_date(px.FechaEntrega,'%d/%m/%Y') between $P{fechaIni} and $P{fechaFin}
-and px.stsavan <> 14 and px.maquila <> 98  limit 1) as pares_totales
-from pedidox pe
+and px.stsavan <> 14 and px.maquila <> 98  limit 1) as pares_totales,
+
+
+(SELECT CONCAT(EE.PrimerNombre," ",CASE WHEN EE.SegundoNombre = 0 OR EE.SegundoNombre = '0' THEN "" ELSE EE.SegundoNombre END) FROM empleados AS EE WHERE EE.Numero = e.disenadopor)   AS DISENADO_POR,
+(SELECT CONCAT(EE.PrimerNombre," ",EE.SegundoNombre) FROM empleados AS EE WHERE EE.Numero = e.modeladopor) AS MODELADO_POR
+
+FROM pedidox pe
 join estilos e on e.clave = pe.estilo
 join lineas l on l.clave = e.linea
-where str_to_date(pe.FechaEntrega,'%d/%m/%Y') between $P{fechaIni} and $P{fechaFin}
+WHERE str_to_date(pe.FechaEntrega,'%d/%m/%Y') BETWEEN $P{fechaIni} and $P{fechaFin}
 and pe.stsavan <> 14 and pe.maquila <> 98 AND
 CASE
 WHEN $P{LINEA} <> '' THEN l.clave IN($P!{LINEA})
@@ -73,6 +81,8 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 	</field>
 	<field name="pares_orden" class="java.lang.Double"/>
 	<field name="pares_totales" class="java.lang.Double"/>
+	<field name="DISENADO_POR" class="java.lang.String"/>
+	<field name="MODELADO_POR" class="java.lang.String"/>
 	<variable name="pares_1" class="java.lang.Double" resetType="Group" resetGroup="genero" calculation="Sum">
 		<variableExpression><![CDATA[$F{pares}]]></variableExpression>
 	</variable>
@@ -85,15 +95,21 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 	<group name="genero" isStartNewColumn="true" keepTogether="true">
 		<groupExpression><![CDATA[$F{Genero}]]></groupExpression>
 		<groupHeader>
-			<band height="11">
-				<textField>
-					<reportElement x="1" y="0" width="153" height="11" uuid="ef3502af-ffb8-44bd-92af-58903fbeb0d2"/>
+			<band height="12">
+				<rectangle>
+					<reportElement x="1" y="0" width="245" height="11" backcolor="#333333" uuid="53e672bf-00e5-4722-bca0-5af39cc073ff"/>
+					<graphicElement>
+						<pen lineWidth="0.75"/>
+					</graphicElement>
+				</rectangle>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="1" y="0" width="245" height="12" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="ef3502af-ffb8-44bd-92af-58903fbeb0d2"/>
 					<box>
 						<bottomPen lineWidth="1.5"/>
 					</box>
-					<textElement verticalAlignment="Middle">
-						<font size="7" isBold="true" isItalic="true"/>
-						<paragraph leftIndent="3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single" leftIndent="3"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Genero}]]></textFieldExpression>
 				</textField>
@@ -171,21 +187,21 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 	<pageHeader>
 		<band height="51" splitType="Stretch">
 			<textField>
-				<reportElement x="491" y="0" width="80" height="12" uuid="6b713664-7e14-470b-817e-114b62f12fc2"/>
+				<reportElement x="672" y="0" width="80" height="12" uuid="6b713664-7e14-470b-817e-114b62f12fc2"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement x="572" y="0" width="15" height="12" uuid="bb3d53dd-52de-441b-8f18-2279ef0c01e7"/>
+				<reportElement x="753" y="0" width="15" height="12" uuid="bb3d53dd-52de-441b-8f18-2279ef0c01e7"/>
 				<textElement textAlignment="Left">
 					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEE, d MMM yyyy HH:mm:ss">
-				<reportElement x="448" y="12" width="139" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
+				<reportElement x="629" y="12" width="139" height="12" uuid="e1425944-7e58-40bd-8d33-418fa9ddc808"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
@@ -233,9 +249,9 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="11">
+		<band height="9">
 			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="94" y="0" width="31" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="aa6ffdcb-c02b-4116-9a77-ca05b09756b3"/>
+				<reportElement style="Column header" mode="Opaque" x="94" y="0" width="31" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="aa6ffdcb-c02b-4116-9a77-ca05b09756b3"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -245,10 +261,10 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pares]]></text>
+				<text><![CDATA[PARES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="34" y="0" width="60" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="a4eaa0b6-6e3e-463c-825d-a0bae371b9b8"/>
+				<reportElement style="Column header" mode="Opaque" x="34" y="0" width="60" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="a4eaa0b6-6e3e-463c-825d-a0bae371b9b8"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -258,36 +274,12 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Linea]]></text>
+				<text><![CDATA[LINEA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="125" y="0" width="29" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="fc0f9fad-18ab-40f1-ad25-33282f1f5bb3"/>
-				<box>
-					<topPen lineWidth="1.0" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[%]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="1" y="0" width="33" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="4f064204-7e37-4de6-a8b3-485e5abf0e7d"/>
-				<box>
-					<topPen lineWidth="1.0" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Estilo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="324" y="0" width="29" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="233c73d4-7cf7-490f-8e4d-eb1aec393856"/>
+				<reportElement style="Column header" mode="Opaque" x="125" y="0" width="29" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="fc0f9fad-18ab-40f1-ad25-33282f1f5bb3">
+					<printWhenExpression><![CDATA[$P{MODELADORDISENADOR}>0]]></printWhenExpression>
+				</reportElement>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -300,20 +292,7 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<text><![CDATA[%]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="200" y="0" width="33" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="13da4052-cb96-40f9-981c-3bf3c016ac6a"/>
-				<box>
-					<topPen lineWidth="1.0" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Estilo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="293" y="0" width="31" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="5d4efc2f-80c8-4bce-8ef4-da6472befa02"/>
+				<reportElement style="Column header" mode="Opaque" x="1" y="0" width="33" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="4f064204-7e37-4de6-a8b3-485e5abf0e7d"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -323,23 +302,10 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pares]]></text>
+				<text><![CDATA[ESTILO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" mode="Opaque" x="233" y="0" width="60" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="8c8846ea-0405-4473-b2e9-8930105d51fe"/>
-				<box>
-					<topPen lineWidth="1.0" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Linea]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="525" y="0" width="29" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="47138ef0-e70f-48be-b8b7-9eb04eecafd4"/>
+				<reportElement style="Column header" mode="Opaque" x="385" y="0" width="29" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="233c73d4-7cf7-490f-8e4d-eb1aec393856"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -352,7 +318,7 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<text><![CDATA[%]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="401" y="0" width="33" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="1305bf9b-2af7-4681-aed8-668cf6ff8990"/>
+				<reportElement style="Column header" mode="Opaque" x="261" y="0" width="33" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="13da4052-cb96-40f9-981c-3bf3c016ac6a"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -362,10 +328,10 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Estilo]]></text>
+				<text><![CDATA[ESTILO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="494" y="0" width="31" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="ada2a6d3-c83b-489f-8db1-59397d8d22af"/>
+				<reportElement style="Column header" mode="Opaque" x="354" y="0" width="31" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="5d4efc2f-80c8-4bce-8ef4-da6472befa02"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -375,10 +341,10 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pares]]></text>
+				<text><![CDATA[PARES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="434" y="0" width="60" height="11" forecolor="#FFFFFF" backcolor="#000000" uuid="92e67b26-e77c-4b49-9cff-300034b58689"/>
+				<reportElement style="Column header" mode="Opaque" x="294" y="0" width="60" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="8c8846ea-0405-4473-b2e9-8930105d51fe"/>
 				<box>
 					<topPen lineWidth="1.0" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineColor="#000000"/>
@@ -388,14 +354,96 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Linea]]></text>
+				<text><![CDATA[LINEA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="645" y="0" width="29" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="47138ef0-e70f-48be-b8b7-9eb04eecafd4"/>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="521" y="0" width="33" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="1305bf9b-2af7-4681-aed8-668cf6ff8990"/>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTILO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="614" y="0" width="31" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="ada2a6d3-c83b-489f-8db1-59397d8d22af"/>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" mode="Opaque" x="554" y="0" width="60" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="92e67b26-e77c-4b49-9cff-300034b58689"/>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LINEA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Opaque" x="154" y="0" width="46" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="febfe1ab-1f85-4501-9acb-174ac176f247">
+					<printWhenExpression><![CDATA[$P{MODELADORDISENADOR}>0]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DISEÑADOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" mode="Opaque" x="200" y="0" width="46" height="9" forecolor="#FFFFFF" backcolor="#000000" uuid="03cc535c-6a47-4323-b093-21e5d35f7878">
+					<printWhenExpression><![CDATA[$P{MODELADORDISENADOR}>0]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MODELADOR]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="10" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<textField pattern="">
-				<reportElement x="1" y="0" width="33" height="10" uuid="0ca51bfd-0160-4f31-99d8-9e1f17c899cc"/>
+				<reportElement x="1" y="0" width="33" height="11" uuid="0ca51bfd-0160-4f31-99d8-9e1f17c899cc"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -409,7 +457,7 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textFieldExpression><![CDATA[$F{estilo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
-				<reportElement x="94" y="0" width="31" height="10" uuid="3f982175-fe71-4904-9aa3-83be1b55cd26"/>
+				<reportElement x="94" y="0" width="31" height="11" uuid="3f982175-fe71-4904-9aa3-83be1b55cd26"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -423,7 +471,7 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textFieldExpression><![CDATA[$F{pares}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Auto" pattern="#,##0.00%">
-				<reportElement x="125" y="0" width="29" height="10" uuid="ade43ca3-90e2-4b42-9377-a8d2d307e196"/>
+				<reportElement x="125" y="0" width="29" height="11" uuid="ade43ca3-90e2-4b42-9377-a8d2d307e196"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -437,7 +485,7 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 				<textFieldExpression><![CDATA[$F{pares}/$V{pares_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement x="34" y="0" width="60" height="10" uuid="5e99c3bc-2212-4ad1-80f7-d99d52fd5f05"/>
+				<reportElement x="34" y="0" width="60" height="11" uuid="5e99c3bc-2212-4ad1-80f7-d99d52fd5f05"/>
 				<box>
 					<topPen lineWidth="0.5" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineColor="#000000"/>
@@ -449,6 +497,38 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{linea}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="154" y="0" width="46" height="11" forecolor="#0033CC" uuid="3fa23d36-d52f-4d2b-b6b6-653e29044a2a">
+					<printWhenExpression><![CDATA[$P{MODELADORDISENADOR}>0]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DISENADO_POR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="200" y="0" width="46" height="11" forecolor="#0033CC" uuid="6aad62c3-8d26-48d7-99ff-291c08f6ecf1">
+					<printWhenExpression><![CDATA[$P{MODELADORDISENADOR}>0]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MODELADO_POR}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

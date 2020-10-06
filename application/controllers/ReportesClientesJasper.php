@@ -71,6 +71,7 @@ class ReportesClientesJasper extends CI_Controller {
         $LINEAS = $this->input->post('LINEA');
         if ($LINEAS === '') {
             $parametros["GENERO"] = $this->input->post('GENERO');
+            $parametros["MODELADORDISENADOR"] = $this->input->post('MODELADORDISENADOR');
             $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGeneroSinLinea.jasper');
             $jc->setParametros($parametros);
             $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
@@ -83,9 +84,10 @@ class ReportesClientesJasper extends CI_Controller {
         }
         $parametros["LINEA"] = $LINEAS;
         $parametros["GENERO"] = $this->input->post('GENERO');
+        $parametros["MODELADORDISENADOR"] = $this->input->post('MODELADORDISENADOR');
         $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGenero.jasper');
         $jc->setParametros($parametros);
-        $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
+        $jc->setFilename('ParesVendidosXFechasXLineaXGenero_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
@@ -103,7 +105,7 @@ class ReportesClientesJasper extends CI_Controller {
         $parametros["fechaIni"] = $nuevaFechaIni;
         $parametros["fechaFin"] = $nuevaFechaFin;
         $parametros["ORDEN_PARES"] = $this->input->post('ORDEN_PARES');
-        
+
         $LINEAS = $this->input->post('LINEA');
         if ($LINEAS === '') {
             $parametros["GENERO"] = $this->input->post('GENERO');

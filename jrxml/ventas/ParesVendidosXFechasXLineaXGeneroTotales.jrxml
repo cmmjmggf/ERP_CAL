@@ -35,9 +35,9 @@ l.descripcion as linea,
 pe.estilo,
 sum(pe.pares) as pares, (SELECT sum(px.pares) from pedidox px
 join estilos e on e.clave = px.estilo
-join lineas l on l.clave = e.linea
+join lineas ll on ll.clave = e.linea
 where str_to_date(px.FechaEntrega,'%d/%m/%Y') between $P{fechaIni} and $P{fechaFin}
-and px.stsavan <> 14 and px.maquila <> 98  limit 1) as pares_totales
+and px.stsavan <> 14 and px.maquila <> 98  AND ll.Clave = l.Clave  limit 1) as pares_totales, e.disenadopor AS DISENADO_POR, e.modeladopor AS MODELADO_POR
 from pedidox pe
 join estilos e on e.clave = pe.estilo
 join lineas l on l.clave = e.linea
@@ -52,11 +52,11 @@ WHEN $P{GENERO} = 2 THEN pe.serie = '2'
 WHEN $P{GENERO} = 3 THEN pe.serie = '3'
 ELSE  pe.serie IN('1','2','3')
 END
-group by pe.Estilo
+GROUP BY l.Clave
 ORDER BY abs(pe.serie) ASC,linea asc,
-CASE WHEN $P{ORDEN_PARES} = 0 THEN  abs( sum(pe.pares)) END,
-CASE WHEN $P{ORDEN_PARES} = 1 THEN  abs( sum(pe.pares)) END asc,
-CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
+CASE WHEN $P{ORDEN_PARES} = 0 THEN  abs(pares_totales) END,
+CASE WHEN $P{ORDEN_PARES} = 1 THEN  abs(pares_totales) END ASC,
+CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs(pares_totales) END DESC]]>
 	</queryString>
 	<field name="Genero" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -69,6 +69,8 @@ CASE WHEN $P{ORDEN_PARES} = 2 THEN  abs( sum(pe.pares)) END DESC]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="pares_totales" class="java.lang.Double"/>
+	<field name="DISENADO_POR" class="java.lang.Integer"/>
+	<field name="MODELADO_POR" class="java.lang.Integer"/>
 	<variable name="pares_1" class="java.lang.Double" resetType="Group" resetGroup="genero" calculation="Sum">
 		<variableExpression><![CDATA[$F{pares}]]></variableExpression>
 	</variable>

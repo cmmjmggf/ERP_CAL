@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
+	<property name="ireport.zoom" value="2.2578957202151178"/>
+	<property name="ireport.x" value="658"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="MAQUILA" class="java.lang.Integer"/>
+	<parameter name="SEMANAINICIO" class="java.lang.Integer"/>
+	<parameter name="SEMANAFIN" class="java.lang.Integer"/>
+	<parameter name="ANO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ARTICULO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT A.Empleado AS EMPLEADO_CLAVE,
+
+CONCAT(E.Numero," - ",E.PrimerNombre," ", E.SegundoNombre ," ",E.Paterno," ",E.Materno) AS EMPLEADO_NOMBRE,
+
+A.Control AS Control, A.Estilo, A.Color, A.PrecioActual AS Precio, CAST(A.Pares AS SIGNED) AS PARES,A.PrecioActual AS Precio,
+CAST(A.Devolucion AS DECIMAL(20,4)) AS DEVOLUCION,
+
+(((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)  AS X_CONTROL,
+
+(SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion)  AS ENTREGADO,
+
+((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS X_ESTILO,
+
+(SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) - CAST(A.Devolucion AS DECIMAL(20,4))
+ AS ENT_DEV,
+
+
+ (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)
+ AS DIFERENCIA,
+
+((((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)/A.Pares) AS DCM2,
+
+(((SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) -A.Devolucion ) / (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)) AS PORCENTAJE,
+
+((((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) * A.Pares) * A.PrecioActual) AS SISTEMAPESOS,
+
+(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS REALPESOS_SISTEMA,
+
+0 AS DIFERENCIAPESOS_SISTEMA,
+cast(A.Piocha as decimal(10,4)) AS PIOCHA,
+
+(SELECT CONCAT(OPD.Articulo," ",OPD.ArticuloT) FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion
+WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo LIMIT 1) AS ARTICULO_DESC
+
+FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
+OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
+WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND A.Fraccion = 100 AND E.AltaBaja = 1 AND
+(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
+GROUP BY  A.Control,  A.Articulo
+ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
+	</queryString>
+	<field name="EMPLEADO_CLAVE" class="java.lang.String"/>
+	<field name="EMPLEADO_NOMBRE" class="java.lang.String"/>
+	<field name="Control" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Estilo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Color" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Precio" class="java.lang.String"/>
+	<field name="PARES" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DEVOLUCION" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="X_CONTROL" class="java.lang.Double"/>
+	<field name="ENTREGADO" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="X_ESTILO" class="java.lang.Double"/>
+	<field name="ENT_DEV" class="java.lang.Double"/>
+	<field name="DIFERENCIA" class="java.lang.Double"/>
+	<field name="DCM2" class="java.lang.Double"/>
+	<field name="PORCENTAJE" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SISTEMAPESOS" class="java.lang.Double"/>
+	<field name="REALPESOS_SISTEMA" class="java.lang.Double"/>
+	<field name="DIFERENCIAPESOS_SISTEMA" class="java.lang.Long"/>
+	<field name="PIOCHA" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ARTICULO_DESC" class="java.lang.String"/>
+	<variable name="X_ESTILO_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_ESTILO}]]></variableExpression>
+	</variable>
+	<variable name="X_ESTILO_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_ESTILO}]]></variableExpression>
+	</variable>
+	<variable name="X_ESTILO_3" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_ESTILO}]]></variableExpression>
+	</variable>
+	<variable name="X_CONTROL_1" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_CONTROL}]]></variableExpression>
+	</variable>
+	<variable name="X_CONTROL_2" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_CONTROL}]]></variableExpression>
+	</variable>
+	<variable name="ENTREGADO_1" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
+	</variable>
+	<variable name="ENTREGADO_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENTREGADO}]]></variableExpression>
+	</variable>
+	<variable name="DEVOLUCION_1" class="java.math.BigDecimal" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVOLUCION}]]></variableExpression>
+	</variable>
+	<variable name="DEVOLUCION_2" class="java.math.BigDecimal" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{DEVOLUCION}]]></variableExpression>
+	</variable>
+	<variable name="ENT_DEV_1" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENT_DEV}]]></variableExpression>
+	</variable>
+	<variable name="ENT_DEV_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{ENT_DEV}]]></variableExpression>
+	</variable>
+	<variable name="XDIFERENCIA" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{X_CONTROL}-$F{ENT_DEV}]]></variableExpression>
+	</variable>
+	<variable name="XDIFERENCIA_X_ESTILO" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_CONTROL}-$F{ENT_DEV}]]></variableExpression>
+	</variable>
+	<variable name="XDIFERENCIA_X_CORTADOR" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{X_CONTROL}-$F{ENT_DEV}]]></variableExpression>
+	</variable>
+	<variable name="DCM2_1" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{DCM2}]]></variableExpression>
+	</variable>
+	<variable name="DCM2_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{DCM2}]]></variableExpression>
+	</variable>
+	<variable name="SISTEMAPESOS_1" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{SISTEMAPESOS}]]></variableExpression>
+	</variable>
+	<variable name="SISTEMAPESOS_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{SISTEMAPESOS}]]></variableExpression>
+	</variable>
+	<variable name="REALPESOS_SISTEMA_1" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{REALPESOS_SISTEMA}]]></variableExpression>
+	</variable>
+	<variable name="REALPESOS_SISTEMA_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{REALPESOS_SISTEMA}]]></variableExpression>
+	</variable>
+	<variable name="DIFERENCIAPESOS" class="java.lang.Double" resetType="None">
+		<variableExpression><![CDATA[$F{SISTEMAPESOS}-$F{REALPESOS_SISTEMA}]]></variableExpression>
+	</variable>
+	<variable name="DIFERENCIAPESOS_X_ESTILO" class="java.lang.Double" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{SISTEMAPESOS}-$F{REALPESOS_SISTEMA}]]></variableExpression>
+	</variable>
+	<variable name="DIFERENCIAPESOS_X_EMPLEADO" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{SISTEMAPESOS}-$F{REALPESOS_SISTEMA}]]></variableExpression>
+	</variable>
+	<variable name="PIOCHA_1" class="java.math.BigDecimal" resetType="Group" resetGroup="ESTILO" calculation="Sum">
+		<variableExpression><![CDATA[$F{PIOCHA}]]></variableExpression>
+	</variable>
+	<variable name="PIOCHA_2" class="java.math.BigDecimal" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$F{PIOCHA}]]></variableExpression>
+	</variable>
+	<group name="EMPLEADO_CLAVE" isStartNewPage="true" keepTogether="true">
+		<groupExpression><![CDATA[$F{EMPLEADO_CLAVE}]]></groupExpression>
+		<groupHeader>
+			<band height="14">
+				<rectangle>
+					<reportElement x="-1" y="0" width="336" height="13" backcolor="#CCCCCC" uuid="15f0103e-0d69-4308-8c14-5b1ed42ef6ee"/>
+				</rectangle>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="2" y="0" width="333" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="46bb9b7c-86f7-437f-b4a2-f60231b42321"/>
+					<textElement verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{EMPLEADO_NOMBRE}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="14">
+				<rectangle>
+					<reportElement x="333" y="0" width="507" height="13" backcolor="#CCCCCC" uuid="2d7ef917-7fd2-48f2-bebe-521df6f7a78e"/>
+				</rectangle>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="439" y="0" width="45" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="ccc0cc25-ac81-40a9-8d7a-8137afff6c29"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{X_CONTROL_1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="331" y="0" width="103" height="14" forecolor="#000000" uuid="4e658528-e79c-403b-8506-cc4b94be2447"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="9" isBold="true" isItalic="true"/>
+					</textElement>
+					<text><![CDATA[Total por cortador]]></text>
+				</staticText>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="484" y="0" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="b5b2b4c5-f545-43f5-aa14-bdb9ce290c10"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ENTREGADO_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="524" y="0" width="35" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="9f8f4733-600c-4910-9849-2dba7089d33a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{DEVOLUCION_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="558" y="0" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="af0427e4-9234-4dd6-af6a-71e70bebb479"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ENT_DEV_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="598" y="0" width="39" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="5357382b-e192-42a5-a668-644123212caf"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{XDIFERENCIA_X_CORTADOR}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="695" y="0" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="2096b430-2298-4e18-a3b0-5eb71ba351b8"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SISTEMAPESOS_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="734" y="0" width="40" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="70d6b880-1bb8-4d26-9c85-fc2d1473a815"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{REALPESOS_SISTEMA_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="773" y="0" width="35" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="59c1e620-f869-435b-af0c-fa5fad55b65e"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{DIFERENCIAPESOS_X_EMPLEADO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="808" y="0" width="32" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="80cce108-02a5-4511-ad00-9570fb6cacf0"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PIOCHA_2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="ESTILO" keepTogether="true">
+		<groupExpression><![CDATA[$F{Estilo}]]></groupExpression>
+		<groupFooter>
+			<band height="12">
+				<rectangle>
+					<reportElement x="333" y="0" width="507" height="12" backcolor="#CCCCCC" uuid="45bff13a-733b-4e69-9514-70ae41c6e198"/>
+				</rectangle>
+				<staticText>
+					<reportElement style="Column header" x="331" y="0" width="103" height="12" forecolor="#000000" uuid="ea6bd158-c9f2-4911-a050-488329204bae"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Total por estilo]]></text>
+				</staticText>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="439" y="0" width="45" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cfe97bb7-67e1-457a-842e-ec217bdb253c"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{X_CONTROL_2}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="484" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="df1e70bd-e86a-427f-9916-f6435b8473a7"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ENTREGADO_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="524" y="0" width="35" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="47ee8bb2-cd95-42af-9748-f317fd6380a5">
+						<printWhenExpression><![CDATA[$V{DEVOLUCION_1}>0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{DEVOLUCION_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="558" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="7a378d26-d87c-4491-97de-5f5fb7805ba6"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ENT_DEV_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="598" y="0" width="39" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="02373604-62db-4720-a9c4-54f3429a08c9"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{XDIFERENCIA_X_ESTILO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="695" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="548b1eb8-7b0f-4eb1-a449-d2b48b62d17e"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SISTEMAPESOS_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="734" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0d450689-386d-45bf-865c-b9d50f7e7b7c"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{REALPESOS_SISTEMA_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="773" y="0" width="35" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="47c35d43-7115-4de0-9d34-5e596490e3eb"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{DIFERENCIAPESOS_X_ESTILO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00" isBlankWhenNull="true">
+					<reportElement mode="Transparent" x="808" y="0" width="32" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="32169605-3ee4-4386-a12a-b6cb05a699a9"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PIOCHA_1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="56" splitType="Stretch">
+			<rectangle>
+				<reportElement x="695" y="31" width="113" height="25" uuid="570b856b-0ff3-4cdd-92cd-195e60f44363"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="637" y="31" width="59" height="25" uuid="3aadb9ed-8ac3-4f7a-82d7-087e84976513"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="484" y="31" width="153" height="25" uuid="6e5374cd-7686-4b7e-a9b0-b8419ec78bef"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="400" y="31" width="84" height="25" uuid="f06f04eb-beb4-44cf-9ed6-1cc85dbe7f05"/>
+			</rectangle>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="73" y="14" width="146" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="bd8043fa-27d0-4681-a45d-d1f3f978fa10"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consumo real de la semana]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="73" y="0" width="331" height="14" isPrintInFirstWholeBand="true" uuid="c8ff27c6-5271-4ea8-9e04-10188524d357"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="72" height="42" isPrintInFirstWholeBand="true" uuid="4d158c2d-a555-4c5f-92fd-dd55f50bd76c"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="666" y="0" width="51" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="8ab3b222-25a6-4d00-83ed-37dfc6f44481"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="717" y="0" width="55" height="14" uuid="fefc6c75-217d-4849-aaa0-a3663d9822ab"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="818" y="0" width="16" height="14" uuid="f0a50a3d-0484-44ef-938d-6ba1507cca1c"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="772" y="0" width="47" height="14" uuid="caa136ff-bb5e-425e-9d45-ef775429a2fb"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="0" y="42" width="50" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="b71b2d68-4d1e-400d-a406-473adce03610"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Control]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="335" y="42" width="35" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="a59652b9-71b9-479e-bdb4-3fd5dd3bb9f4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-1" y="55" width="841" height="1" uuid="1bf118f4-d164-4d20-baac-41f6100f479c"/>
+			</line>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="219" y="14" width="61" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="23b6c171-8c2c-4cf5-921d-e350677dee1b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[De la sem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="311" y="14" width="61" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="302229c7-44f5-4d62-8e33-fc5ae80de893"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A la sem]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="279" y="14" width="32" height="14" uuid="4b0214a4-cc8f-4e66-986f-488973e2d427"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{SEMANAINICIO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="372" y="14" width="32" height="14" uuid="5215d526-3694-4539-81b9-3dd091307e4c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$P{SEMANAFIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="404" y="0" width="213" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="571f2f78-532f-4a69-ab84-bbb29a3f1bf7"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[< Piel>]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="50" y="42" width="30" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="a79daff8-6b5b-427d-99d1-597c8f7838cf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="80" y="42" width="25" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="f4f59afd-b007-4a07-8deb-e6743fc900c6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Color]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="105" y="42" width="230" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="003785fc-dafb-4e7f-a82a-02a9ee286ba2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Articulo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="370" y="42" width="30" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="8e081387-1fa4-4ca8-9440-cb29c4f5be1c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="400" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="436fdf32-fac3-4748-a1ad-0180e35f2fe4"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X Estilo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="439" y="42" width="45" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="162e793c-c625-4395-bed5-6987bceb9e24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X Control]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="484" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="5c5c9192-ae92-43a1-a316-b261948da118"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Entregado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="524" y="42" width="35" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="0c86d59f-1048-420a-8c73-70eb5220c5a0"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Devolu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="400" y="31" width="84" height="11" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="c40d5e4e-f9e4-46b6-b420-99f53532fd3b"/>
+				<box>
+					<pen lineColor="#000000"/>
+					<topPen lineColor="#000000"/>
+					<leftPen lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cons ord.prod]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="558" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="3942b0bc-b9bc-4e9a-a62e-ae6776264529"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ent-Dev]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="597" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="136c3245-f412-433d-8046-89c9481903c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Difere]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="484" y="31" width="153" height="11" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="9addef94-dbe5-4020-ac75-7662adf83f0e"/>
+				<box>
+					<pen lineColor="#000000"/>
+					<topPen lineColor="#000000"/>
+					<leftPen lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consumo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="637" y="42" width="30" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="1eaf38f1-5261-49f5-baf3-fe87bbbd9ca5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dcm2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="666" y="42" width="30" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="40f3ce5e-7b39-4318-ac1c-5ce1ef89c0cd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="695" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="f343d78c-d887-43d5-8d82-5dc8abaa2b6e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="734" y="42" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="9b5e269f-2707-4847-82a2-bd83d376fe4e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Real]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="773" y="42" width="35" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="7990307a-b525-4853-bba0-633315557e09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Difere]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="808" y="42" width="32" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="97876254-477b-47cf-aac1-7addf6dd191a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Piochas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="637" y="31" width="59" height="11" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="3c975ab2-e688-44d0-b536-d9f4dd64cdb3"/>
+				<box>
+					<pen lineColor="#000000"/>
+					<topPen lineColor="#000000"/>
+					<leftPen lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consumo real]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" isPrintRepeatedValues="false" x="695" y="31" width="113" height="11" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="1022c449-9aaf-4339-a812-178c393db2a3"/>
+				<box>
+					<pen lineColor="#000000"/>
+					<topPen lineColor="#000000"/>
+					<leftPen lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineColor="#000000"/>
+					<rightPen lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pesos $]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="12" uuid="0fca99ec-ae61-4c86-b70a-ae3c8130b998"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="0" width="30" height="12" uuid="c16b1dbc-51ed-4db8-bc15-a7f3c6a3529f"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="840" height="1" uuid="79fa7203-f871-4c81-8910-8fee779b0f3c"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="80" y="0" width="25" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="39ed76a1-2f0d-49fa-8d15-3d0d9ff03ad3"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Color}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="105" y="0" width="230" height="12" uuid="f0345a21-d3e5-440b-85e2-b840a23c867d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ARTICULO_DESC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="335" y="0" width="35" height="12" uuid="7e7ba806-9c9a-4186-a45e-d6ad4f70b9b1"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Precio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="370" y="0" width="30" height="13" uuid="d1159092-70ff-4f9a-87a7-e33db75effda"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PARES}*99]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="400" y="0" width="40" height="12" uuid="35b0dd5f-66d0-4200-8091-165d140b778a"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{X_ESTILO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="439" y="0" width="45" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3bc50d7c-1cc0-4e94-9629-b389a8c555bf"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{X_CONTROL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="484" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c634f401-8f9d-464e-ad83-34ffe406e410"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENTREGADO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="524" y="0" width="35" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="915c522d-dc6a-4ee7-bd4e-745f06a8cb5f">
+					<printWhenExpression><![CDATA[$F{DEVOLUCION}>0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DEVOLUCION}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="558" y="0" width="40" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="2284be11-57b8-4faa-bedb-a86f297f37bc"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ENT_DEV}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="597" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ea74da50-c30d-4df6-b90a-675f9a348f1f"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{XDIFERENCIA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="637" y="0" width="30" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="13cc908b-2ece-4c88-82a7-51973b53cfb5"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DCM2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="666" y="0" width="30" height="12" uuid="3d766a31-d6c1-4b3d-aa79-6a554728a319"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PORCENTAJE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="695" y="0" width="40" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="c9457b48-9a0e-4c9c-b78c-8eb784419a4f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SISTEMAPESOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="734" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cc03ae6f-6345-4564-b130-deba8d52a4e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REALPESOS_SISTEMA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="773" y="0" width="35" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2153bd9a-9976-4138-895b-ae5f740cc4b8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIFERENCIAPESOS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="808" y="0" width="32" height="12" uuid="654696f7-dfad-4168-8a1b-ebefb5da72cc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PIOCHA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

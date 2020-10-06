@@ -77,6 +77,49 @@ class ConsumosPielForroCortadores extends CI_Controller {
 
     function getReportePielForro() {
         try {
+
+            $TIPO = $this->input->post('TIPO');
+            switch ($TIPO) {
+                case 1:
+                    $x = $this->input->post();
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $pr["logo"] = base_url() . $this->session->LOGO;
+                    $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                    $pr["MAQUILA"] = $x['MAQUILA'];
+                    $pr["SEMANAINICIO"] = $x['SEMANA_INICIAL'];
+                    $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
+                    $pr["ANO"] = $x['ANIO'];
+                    $pr["ARTICULO"] = $x['ARTICULO'];
+                    $jc->setParametros($pr);
+                    $jc->setJasperurl('jrxml\conspifo\ConsumoDePiel.jasper');
+                    $jc->setFilename("CONSUMO_PIEL_" . Date('dmYhis'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
+                case 2:
+                    $x = $this->input->post();
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $pr["logo"] = base_url() . $this->session->LOGO;
+                    $pr["empresa"] = $this->session->EMPRESA_RAZON;
+                    $pr["MAQUILA"] = $x['MAQUILA'];
+                    $pr["SEMANAINICIO"] = $x['SEMANA_INICIAL'];
+                    $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
+                    $pr["ANO"] = $x['ANIO'];
+                    $pr["ARTICULO"] = $x['ARTICULO'];
+                    $jc->setParametros($pr);
+                    $jc->setJasperurl('jrxml\conspifo\ConsumoDeForro.jasper');
+                    $jc->setFilename("CONSUMO_FORRO_" . Date('dmYhis'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
+                default:
+                    break;
+            }
+
+
+            exit(0);
             $pdf = new PDF('L', 'mm', array(215.9, 279.4));
             $pdf->AddFont('Calibri', '');
             $pdf->AddFont('Calibri', 'I');
@@ -992,7 +1035,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pr["ANO"] = $x['ANIO'];
             $pr["ARTICULO"] = $x['ARTICULO'];
             $jc->setParametros($pr);
-            $jc->setJasperurl('jrxml\conspifo\PielGeneral.jasper');
+            $jc->setJasperurl('jrxml\conspifo\ConsumoDePielGeneral.jasper');
             $jc->setFilename("CONSUMO_PIEL_GENERAL_" . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
             print $jc->getReport();
@@ -1013,8 +1056,8 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
             $pr["ANO"] = $x['ANIO'];
             $pr["ARTICULO"] = $x['ARTICULO'];
-            $jc->setParametros($pr);
-            $jc->setJasperurl('jrxml\conspifo\ForroGeneral.jasper');
+            $jc->setParametros($pr); 
+            $jc->setJasperurl('jrxml\conspifo\ConsumoDeForroGeneral.jasper');
             $jc->setFilename("CONSUMO_FORRO_GENERAL_" . Date('dmYhis'));
             $jc->setDocumentformat('pdf');
             print $jc->getReport();
