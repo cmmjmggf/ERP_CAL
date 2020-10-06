@@ -48,6 +48,13 @@
                             </span>
                         </div>
                         <div class="w-100 my-2"><hr></div>
+                        <div class="col-12"> 
+                            <span class="switch switch-lg">
+                                <input id="checkModeladorDisenador" name="checkModeladorDisenador"  type="checkbox" checked="" class="switch">
+                                <label for="checkModeladorDisenador">CON DISEÑADOR / MODELADO (SOLO POR ESTILO)</label>
+                            </span>
+                        </div>
+                        <div class="w-100 my-2"><hr></div>
                         <div class="col-12">
                             <span class="switch switch-lg">
                                 <input id="checkTotalesVendidos" name="checkTotalesVendidos"  type="checkbox" class="switch">
@@ -58,8 +65,8 @@
                         <div class="col-12"> 
                             <label for="checkOrdenPorPares">ORDENADO POR PARES</label> 
                             <select id="TipoOrdenPorPares" name="TipoOrdenPorPares" class="form-control">
-                                <option  value="1">ASCENDENTE</option>
                                 <option value="2">DESCENDENTE</option>
+                                <option  value="1">ASCENDENTE</option>
                             </select>
                         </div>
                         <div class="col-6 d-none"> 
@@ -74,7 +81,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="btnImprimirConTotales"><span class="fa fa-plus"></span> ACEPTAR (TOTALES)</button>
+                <button type="button" class="btn btn-info font-weight-bold" id="btnImprimirConTotales" style="background-color: #689F38;  border-color: #689F38;"><span class="fa fa-plus"></span> ACEPTAR (TOTALES)</button>
                 <button type="button" class="btn btn-info" id="btnImprimir"><span class="fa fa-check"></span> ACEPTAR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
@@ -84,24 +91,25 @@
 <script>
     var mdlVentasPorLineaEstiloPorcentaje = $('#mdlVentasPorLineaEstiloPorcentaje'),
             ClaveLineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#ClaveLineaVentaXLineaEstilo"),
-            LineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#LineaVentaXLineaEstilo")
-    checkTotalesVendidos = mdlVentasPorLineaEstiloPorcentaje.find("#checkTotalesVendidos"),
+            LineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#LineaVentaXLineaEstilo"),
+            checkTotalesVendidos = mdlVentasPorLineaEstiloPorcentaje.find("#checkTotalesVendidos"),
             checkCABALLERO = mdlVentasPorLineaEstiloPorcentaje.find("#checkCABALLERO"),
             checkDAMA = mdlVentasPorLineaEstiloPorcentaje.find("#checkDAMA"),
-            checkAMBOS = mdlVentasPorLineaEstiloPorcentaje.find("#checkAMBOS")
-    checkOrdenPorPares = mdlVentasPorLineaEstiloPorcentaje.find("#checkOrdenPorPares"),
+            checkModeladorDisenador = mdlVentasPorLineaEstiloPorcentaje.find("#checkModeladorDisenador"),
+            checkAMBOS = mdlVentasPorLineaEstiloPorcentaje.find("#checkAMBOS"),
+            checkOrdenPorPares = mdlVentasPorLineaEstiloPorcentaje.find("#checkOrdenPorPares"),
             TipoOrdenPorPares = mdlVentasPorLineaEstiloPorcentaje.find("#TipoOrdenPorPares"),
             checkOrdenPorPorcentaje = mdlVentasPorLineaEstiloPorcentaje.find("#checkOrdenPorPorcentaje"),
             TipoOrdenPorPorcentaje = mdlVentasPorLineaEstiloPorcentaje.find("#TipoOrdenPorPorcentaje");
 
     $(document).ready(function () {
-        
-        LineaVentaXLineaEstilo.selectize({ 
+
+        LineaVentaXLineaEstilo.selectize({
             persist: true,
             create: false,
             hideSelected: true
         });
-        
+
         checkAMBOS.change(function () {
             if (checkAMBOS[0].checked) {
                 checkDAMA[0].checked = true;
@@ -154,11 +162,17 @@
             } else if (!checkDAMA[0].checked && checkCABALLERO[0].checked) {
                 frm.append('GENERO', 1);
             }
+
             var jasper = '';
             if (checkTotalesVendidos[0].checked) {
                 jasper = '<?php print base_url('ReportesClientesJasper/getParesVendidosXFechasXLineaXGeneroTotales'); ?>';
             } else {
                 jasper = '<?php print base_url('ReportesClientesJasper/getParesVendidosXFechasXLineaXGenero'); ?>';
+                if (checkModeladorDisenador[0].checked) {
+                    frm.append('MODELADORDISENADOR', 1);
+                } else {
+                    frm.append('MODELADORDISENADOR', 0);
+                }
             }
 
             frm.append('ORDEN_PARES', TipoOrdenPorPares.val() ? parseInt(TipoOrdenPorPares.val()) : 0);

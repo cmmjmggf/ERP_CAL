@@ -493,6 +493,21 @@ P.Maquila AS MAQUILA
 
 
             /* INICIO COMODINES */
+            
+
+            /* DE FOLEADO A ENTRETELADO */
+            if ($depto === 40 && $depto_actual === 4 && $frac === 60) {
+                $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('controles');
+                $this->db->set('stsavan', 40)->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                $this->db->set('fec40', Date('Y-m-d 00:00:00'))->where('fec40 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+
+                $revisa_entretelado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
+                                . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 90")->result();
+                if (intval($revisa_entretelado[0]->EXISTE) === 0) {
+                    $this->onAvance($xXx['CONTROL'], 90, 'ENTRETELADO', 51);
+                }
+                exit(0);
+            }
             /*
              * ES PORQUE ESTAN EN ENTRETELADO, PERO NO LLEVAN ENTRETELADO, 
              * PERO LOS MUEVEN DE A "PROCESO MAQUILA PARA PODER AVANZAR"
@@ -539,6 +554,20 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
+            /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
+             * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
+            if ($depto === 44 && $frac === 51 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
+                $revisa_almacen_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 105")->result();
+                if (intval($revisa_almacen_corte[0]->EXISTE) === 0) {
+                    $this->onAvance($xXx['CONTROL'], 105, 'ALMACEN CORTE', NULL);
+                    $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])->update('controles');
+                    $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                    $this->db->set('fec44', Date('Y-m-d 00:00:00'))->where('fec44 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE. ", $this->session);
+                    exit(0);
+                }
+            }
+            
             if ($depto === 5 && $depto_actual === 44) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
                 $revisa_pespunte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 110")->result();
@@ -809,20 +838,6 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
-            /* DE FOLEADO A ENTRETELADO */
-            if ($depto === 40 && $depto_actual === 4 && $frac === 60) {
-                $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('controles');
-                $this->db->set('stsavan', 40)->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                $this->db->set('fec40', Date('Y-m-d 00:00:00'))->where('fec40 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-
-                $revisa_entretelado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
-                                . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 90")->result();
-                if (intval($revisa_entretelado[0]->EXISTE) === 0) {
-                    $this->onAvance($xXx['CONTROL'], 90, 'ENTRETELADO', 51);
-                }
-                exit(0);
-            }
-
             /* DE FOLEADO A REBAJADO */
             if ($depto === 33 && $depto_actual === 4 && $frac === 103) {
                 $this->db->set('EstatusProduccion', 'REBAJADO')->set('DeptoProduccion', 30)->where('Control', $xXx['CONTROL'])->update('controles');
@@ -837,19 +852,6 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
-            /* CUANDO NO OCUPAN (40 ENTRETELADO) PERO ESTAN EN ESE DEPTO 
-             * Y ES NECESARIO MOVERLOS A (44 ALM-CORTE) PORQUE TAMPOCO UTILIZAN (42 PROCESO MAQUILA) */
-            if ($depto === 44 && $frac === 51 && $depto_actual === 40 && $PROCESO_MAQUILA === 0) {
-                $revisa_almacen_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 105")->result();
-                if (intval($revisa_almacen_corte[0]->EXISTE) === 0) {
-                    $this->onAvance($xXx['CONTROL'], 105, 'ALMACEN CORTE', NULL);
-                    $this->db->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])->update('controles');
-                    $this->db->set('stsavan', 44)->set('EstatusProduccion', 'ALMACEN CORTE')->set('DeptoProduccion', 105)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                    $this->db->set('fec44', Date('Y-m-d 00:00:00'))->where('fec44 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN DE CORTE. ", $this->session);
-                    exit(0);
-                }
-            }
 
 
 //            $empleados_pes = $this->db->query("SELECT GROUP_CONCAT(E.Numero) AS EMPLEADOS FROM empleados AS E WHERE E.DepartamentoFisico = 110 AND E.AltaBaja = 1")->result();
