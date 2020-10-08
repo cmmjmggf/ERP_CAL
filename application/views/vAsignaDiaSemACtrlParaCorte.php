@@ -75,9 +75,9 @@
             </div>
             <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <label>Fracción</label>
-               <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="7">
-<!--                <select id="Fraccion" name="Fraccion" class="form-control form-control-sm" multiple="">
-                </select>-->
+                <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="7">
+ <!--                <select id="Fraccion" name="Fraccion" class="form-control form-control-sm" multiple="">
+                 </select>-->
                 <input type="text" id="FraccionesSeleccionadas" class="form-control-sm d-none" readonly="">
                 <button type="button" class="btn btn-primary d-none" id="btnFraccionCheck">Obtener</button>
             </div>
@@ -739,8 +739,27 @@
                 Articulo.val(r.ARTICULO);
                 ClaveArticulo.val(r.CLAVE_ARTICULO);
             } else {
-                swal('ATENCIÓN', 'NO SE HAN ESTABLECIDO TIEMPOS PARA ESTE CONTROL EN CORTE', 'warning').then((value) => {
-                    Control.focus().select();
+                $.getJSON('<?php print base_url('AsignaDiaSemACtrlParaCorte/getEstatusControl'); ?>', {
+                    CONTROL: e, TIPO: JSON.stringify(FRACCIONES)
+                }).done(function (data, x, jq) {
+                    var r = data[0];
+                    switch (parseInt(r.ESTATUS_DEL_CONTROL)) {
+                        case 13:
+                            swal('ATENCIÓN', 'ESTE CONTROL YA HA SIDO FACTURADO.', 'warning').then((value) => {
+                                Control.focus().select();
+                            });
+                            break;
+                        case 14:
+                            swal('ATENCIÓN', 'ESTE CONTROL HA SIDO CANCELADO.', 'warning').then((value) => {
+                                Control.focus().select();
+                            });
+                            break;
+                        default:
+                            swal('ATENCIÓN', 'NO SE HAN ESTABLECIDO TIEMPOS PARA ESTE CONTROL EN CORTE', 'warning').then((value) => {
+                                Control.focus().select();
+                            });
+                            break;
+                    }
                 });
             }
         }).fail(function (x, y, z) {

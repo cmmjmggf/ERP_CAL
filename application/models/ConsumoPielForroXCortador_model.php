@@ -131,7 +131,7 @@ class ConsumoPielForroXCortador_model extends CI_Model {
             $this->db->select("OP.ControlT AS Control, OP.Estilo, OP.Color, OPD.Articulo, OPD.ArticuloT, "
                             . "A.PrecioActual AS Precio, OP.Pares, "
                             . "((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS Consumo, "
-                            . "ifnull(OP.CantidadPiel1,0) AS Cantidad, 
+                            . "ifnull(OP.CantidadPiel1,0) AS Cantidad, A.Fraccion, 
 (SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS Abono, "
                             . "A.Devolucion, A.Basura, A.Piocha,"
                             . "(ifnull(OP.CantidadPiel1,0)  - A.Abono)+(IFNULL(A.Basura,0)+(IFNULL(A.Devolucion,0))) AS Diferencia,"

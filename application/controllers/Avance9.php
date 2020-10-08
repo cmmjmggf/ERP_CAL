@@ -578,7 +578,7 @@ class Avance9 extends CI_Controller {
             if (count($FRACCIONES) <= 0 && intval($xXx['DEPARTAMENTO']) !== 10) {
                 switch (intval($xXx['DEPARTAMENTO'])) {
                     case 80:
-                        $check_fraccionesxestilo_102_113 = $this->db->query("SELECT COUNT(*) AS EXISTEN FROM fraccionesxestilo AS F WHERE F.Estilo ={$xXx['ESTILO']} AND F.Fraccion IN(102,113)")->result();
+                        $check_fraccionesxestilo_102_113 = $this->db->query("SELECT COUNT(*) AS EXISTEN FROM fraccionesxestilo AS F WHERE F.Estilo ='{$xXx['ESTILO']}' AND F.Fraccion IN(102,113)")->result();
                         if (intval($check_fraccionesxestilo_102_113[0]->EXISTEN) === 0) {
                             PRINT "NO EXISTEN FRACCIONES DE RAYADO PARA ESTE ESTILO, NO ES POSIBLE PAGARLAS.";
                             exit(0);
@@ -788,9 +788,10 @@ class Avance9 extends CI_Controller {
                             }
                         }
 
+                        $rebajadores = array(49, 1894, 3105);
+                        $rebajadores = array(49, 3105);
 
-                        if (intval($xXx['NUMERO_EMPLEADO']) === 1894 ||
-                                intval($xXx['NUMERO_EMPLEADO']) === 49) {
+                        if (in_array(intval($xXx['NUMERO_EMPLEADO']), $rebajadores)) {
                             /* REVISAR SI LA FRACCION "102 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO */
                             $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)
                                             ->from('fracpagnomina AS F')

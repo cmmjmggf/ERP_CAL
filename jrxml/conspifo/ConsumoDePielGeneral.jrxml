@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ConsumoDePielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.2578957202151178"/>
-	<property name="ireport.x" value="845"/>
+	<property name="ireport.x" value="1056"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -73,7 +73,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	<field name="Color" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Precio" class="java.lang.String"/>
+	<field name="Precio" class="java.lang.Double"/>
 	<field name="PARES" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -129,13 +129,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 		<variableExpression><![CDATA[$F{SISTEMAPESOS}]]></variableExpression>
 	</variable>
 	<variable name="REALPESOS_SISTEMA_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
-		<variableExpression><![CDATA[$F{REALPESOS_SISTEMA}]]></variableExpression>
-	</variable>
-	<variable name="DIFERENCIAPESOS" class="java.lang.Double" resetType="None">
-		<variableExpression><![CDATA[$F{SISTEMAPESOS}-$F{REALPESOS_SISTEMA}]]></variableExpression>
-	</variable>
-	<variable name="DIFERENCIAPESOS_X_EMPLEADO" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
-		<variableExpression><![CDATA[$F{SISTEMAPESOS}-$F{REALPESOS_SISTEMA}]]></variableExpression>
+		<variableExpression><![CDATA[$F{ENT_DEV}*$F{Precio}]]></variableExpression>
 	</variable>
 	<variable name="PIOCHA_2" class="java.math.BigDecimal" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
 		<variableExpression><![CDATA[$F{PIOCHA}]]></variableExpression>
@@ -164,20 +158,26 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	<variable name="ENT_DEV_1" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{ENT_DEV}]]></variableExpression>
 	</variable>
-	<variable name="XDIFERENCIA_SUMMARY" class="java.lang.Double" resetType="None" calculation="Sum">
-		<variableExpression><![CDATA[$V{X_CONTROL_2}-$V{ENT_DEV_1}]]></variableExpression>
-	</variable>
-	<variable name="SISTEMAPESOS_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{SISTEMAPESOS}]]></variableExpression>
+	<variable name="SISTEMAPESOS_1" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$V{SISTEMAPESOS_2}]]></variableExpression>
 	</variable>
 	<variable name="REALPESOS_SISTEMA_1" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{REALPESOS_SISTEMA}]]></variableExpression>
-	</variable>
-	<variable name="DIFERENCIAPESOS_X_EMPLEADO_SUMMARY" class="java.lang.Double" resetType="None" calculation="Sum">
-		<variableExpression><![CDATA[$V{SISTEMAPESOS_1}-$V{REALPESOS_SISTEMA_1}]]></variableExpression>
+		<variableExpression><![CDATA[$F{ENT_DEV}*$F{Precio}]]></variableExpression>
 	</variable>
 	<variable name="PIOCHA_1" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{PIOCHA}]]></variableExpression>
+	</variable>
+	<variable name="DIFERENCIA_PESOS_X_EMPLEADO" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$V{SISTEMAPESOS_2}-$V{REALPESOS_SISTEMA_2}]]></variableExpression>
+	</variable>
+	<variable name="XDIFERENCIA_SUMMARY" class="java.lang.Double" resetType="None" incrementType="Group" incrementGroup="EMPLEADO_CLAVE" calculation="Sum">
+		<variableExpression><![CDATA[$V{SISTEMAPESOS_2}-$V{REALPESOS_SISTEMA_2}]]></variableExpression>
+	</variable>
+	<variable name="SISTEMA_PESOS_SUMMARY" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$V{SISTEMAPESOS_2}]]></variableExpression>
+	</variable>
+	<variable name="SISTEMAPESOS_3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SISTEMAPESOS}]]></variableExpression>
 	</variable>
 	<group name="EMPLEADO_CLAVE" keepTogether="true">
 		<groupExpression><![CDATA[$F{EMPLEADO_CLAVE}]]></groupExpression>
@@ -275,7 +275,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{DIFERENCIAPESOS_X_EMPLEADO}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{SISTEMAPESOS_2}-$V{REALPESOS_SISTEMA_2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="709" y="0" width="51" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="70d6b880-1bb8-4d26-9c85-fc2d1473a815"/>
@@ -477,7 +477,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 		</band>
 	</columnHeader>
 	<summary>
-		<band height="28" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<rectangle>
 				<reportElement x="280" y="0" width="561" height="20" backcolor="#CCCCCC" uuid="5c8db88b-741f-49eb-b743-05468f56fb5b"/>
 			</rectangle>
@@ -536,21 +536,13 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{ENT_DEV_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="554" y="0" width="45" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="d8469f51-d2e6-4934-a784-9e8e646c90f4"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{XDIFERENCIA_SUMMARY}]]></textFieldExpression>
-			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="659" y="0" width="50" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="3e653e91-b5a6-49a5-a6fe-91fc25b2dac8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SISTEMAPESOS_1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SISTEMAPESOS_3}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="709" y="0" width="51" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="cb9fd99e-004d-4e10-85fd-9142f6c0b968"/>
@@ -566,7 +558,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{DIFERENCIAPESOS_X_EMPLEADO_SUMMARY}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SISTEMAPESOS_3}-$V{REALPESOS_SISTEMA_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="809" y="0" width="32" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="58bd23c9-3cf2-4830-ae54-0c78645cd55a"/>
@@ -575,6 +567,14 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PIOCHA_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="554" y="0" width="45" height="20" forecolor="#000000" backcolor="#FFFFFF" uuid="478c9fc6-0a5c-4f35-88f3-ea238f0a8fb4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{XDIFERENCIA_SUMMARY}-$V{ENT_DEV_1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

@@ -125,7 +125,10 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                             . " CONCAT('{$spbf}',PR.frac,'{$spf}') AS Frac, DATE_FORMAT(PR.fecha, \"%d/%m/%Y\") AS Fecha, PR.estilo AS Estilo, "
                             . "PR.par AS Pares, PR.tiempo AS Tiempo, PR.precio AS Precio, "
                             . "PR.nomart", false)
-                    ->from("programacion AS PR")->where_in("PR.frac", array(99, 100));
+                    ->from("programacion AS PR")
+                    ->join('pedidox AS P', 'P.Control = PR.control')
+                    ->where_in("PR.frac", array(99, 100))
+                    ->where_not_in("P.stsavan", array(13, 14));
             if ($x['ANIO'] !== '') {
                 $this->db->where('PR.año', $x['ANIO']);
             }
@@ -306,7 +309,7 @@ FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO,
 JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
-WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
+WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND PE.stsavan NOT IN(13,14) AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
 UNION
 (SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
 FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS
@@ -315,7 +318,7 @@ JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = 
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave`
 JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
- WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2,40) )")->result();
+ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}' AND PE.stsavan NOT IN(13,14)  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2,40) )")->result();
                     break;
                 case 10099:
 //                    print $tipo . "\n";
@@ -324,7 +327,7 @@ FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO,
 JOIN `colores` AS `C` ON `PE`.`Color` = `C`.`Clave` AND `C`.`Estilo` = `PE`.`Estilo` JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = `FT`.`Color`
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave` JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
-WHERE FR.Departamento = 10 AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
+WHERE FR.Departamento = 10 AND PE.Control = '{$CONTROL}'  AND PE.stsavan NOT IN(13,14) AND `FXE`.`Fraccion` = '100' AND `A`.`Grupo` IN(1) GROUP BY `A`.`Descripcion`)
 UNION
 (SELECT  FT.Estilo AS ESTILO, FT.Color AS COLOR, C.Descripcion AS DES_COLOR, PE.Clave CLAVE_PEDIDO, FT.Articulo AS CLAVE_ARTICULO, FXE.Fraccion AS FRACCION, A.Descripcion AS ARTICULO,
 FR.Departamento AS CLAVE_DEPARTAMENTO, PE.Pares AS PARES, FXE.CostoMO AS PRECIO, TXE.cortef AS TIEMPO, (TXE.cortef) AS TXPAR, (PE.Pares*FXE.CostoMO) AS PESOS
@@ -333,7 +336,7 @@ JOIN `fichatecnica` AS `FT` ON `PE`.`Estilo` = `FT`.`Estilo` AND `PE`.`Color` = 
 JOIN `articulos` AS `A` ON `FT`.`Articulo` = `A`.`Clave`
 JOIN `fraccionesxestilo` AS `FXE` ON `FXE`.`Estilo` = `FT`.`Estilo` JOIN `fracciones` AS `FR` ON `FXE`.`Fraccion` = `FR`.`Clave`
 JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
- WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2,40) )")->result();
+ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND PE.stsavan NOT IN(13,14) AND `FXE`.`Fraccion` = '99' AND `A`.`Grupo` IN(2,40) )")->result();
                     break;
             }
 //            PRINT $this->db->last_query() . "\n";
@@ -343,6 +346,15 @@ JOIN  `estilostiempox` AS `TXE` ON `PE`.`Estilo` = `TXE`.`estilo`
             echo $exc->getTraceAsString();
         }
     }
+    
+    public function getEstatusControl() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE, P.stsavan AS ESTATUS_DEL_CONTROL FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND P.stsavan IN(13,14)")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+        }
 
     public function onGuardarAsignacionDeDiaXControl() {
         try {
@@ -541,12 +553,13 @@ WHERE FR.Departamento = 10  AND PE.Control = '{$CONTROL}'  AND `FXE`.`Fraccion` 
             echo $exc->getTraceAsString();
         }
     }
+
     public function getReportesXSemDiaAno99() {
         try {
             $reports = array();
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
-            $x = $this->input->post(); 
+            $x = $this->input->post();
             /* 2. REPORTE Entrega de material para corte del programa - agrupado empleado  */
 
             $P = array();
