@@ -794,6 +794,13 @@
             var estilo = pnlDatos.find("#Estilo").val();
             var cliente = pnlDatos.find("#PedidoxCliente").val();
             if (color !== '') {
+                $.getJSON(master_url + 'onVerificaColorXEstilo', {Estilo: estilo, Color: color}).done(function (data) {
+                    if (data.length > 0) {
+                        nomColor = data[0].Color;
+                    }
+                }).fail(function (x, y, z) {
+                    getError(x);
+                });
                 //OBTENER PRECIO ESTILO/COLOR
                 $.getJSON('<?php print base_url('Pedidos/getPrecioEstiloColor'); ?>', {Color: color, Estilo: estilo, Cliente: cliente}).done(function (data) {
                     if (data.length > 0) {
