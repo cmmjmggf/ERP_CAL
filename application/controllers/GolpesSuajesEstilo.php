@@ -45,8 +45,6 @@ class GolpesSuajesEstilo extends CI_Controller {
             if (!empty($A)) {
                 $this->db->where('estilo', $x->post('estilo'));
                 $this->db->update("golpessuajesestilo", array(
-                    'glpsuajepiel' => $x->post('glpsuajepiel'),
-                    'glpsuajeforro' => $x->post('glpsuajeforro'),
                     'fechaaltasuajepiel' => $nuevaFechapiel,
                     'fechaaltasuajeforro' => $nuevaFechaIforro
                 ));
@@ -54,8 +52,6 @@ class GolpesSuajesEstilo extends CI_Controller {
                 $this->db->insert("golpessuajesestilo", array(
                     'linea' => $linea,
                     'estilo' => $x->post('estilo'),
-                    'glpsuajepiel' => $x->post('glpsuajepiel'),
-                    'glpsuajeforro' => $x->post('glpsuajeforro'),
                     'fechaaltasuajepiel' => $nuevaFechapiel,
                     'fechaaltasuajeforro' => $nuevaFechaIforro
                 ));
@@ -70,9 +66,7 @@ class GolpesSuajesEstilo extends CI_Controller {
             print json_encode($this->db->query("select "
                                     . "ID, "
                                     . "estilo,"
-                                    . "glpsuajepiel,"
                                     . "date_format(fechaaltasuajepiel,'%d/%m/%Y') as fechaaltasuajepiel,"
-                                    . "glpsuajeforro,"
                                     . "date_format(fechaaltasuajeforro,'%d/%m/%Y') as fechaaltasuajeforro,"
                                     . 'CONCAT(\'<span class="fa fa-trash fa-lg text-danger" onclick="onEliminarByID(\',ID,\')">\',\'</span>\') AS BTN '
                                     . " from golpessuajesestilo ")->result());

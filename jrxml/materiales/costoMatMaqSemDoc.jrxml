@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.6757443455841492"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="4.346449261414099"/>
+	<property name="ireport.x" value="706"/>
+	<property name="ireport.y" value="139"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -30,7 +30,7 @@ SUM(MA.CantidadMov) AS CantidadMov,
 MA.PrecioMov,
 SUM(MA.Subtotal) AS Subtotal
 FROM
-movarticulos_fabrica as MA
+movarticulos as MA
 INNER JOIN
 articulos A ON A.Clave = MA.Articulo
 WHERE
@@ -44,7 +44,7 @@ MA.Ano = $P{ano}
 AND
 MA.DocMov = $P{doc}
 AND
-MA.TipoMov IN ('SXM', 'SPR', 'SXP', 'SXC')
+MA.TipoMov IN ('SXM', 'SPR', 'SXP', 'SXC', 'SXV')
 group by MA.DocMov, A.Clave
 ORDER BY Doc ASC, ClaveGrupo ASC, A.Descripcion ASC]]>
 	</queryString>
@@ -88,6 +88,12 @@ ORDER BY Doc ASC, ClaveGrupo ASC, A.Descripcion ASC]]>
 	<variable name="Subtotal_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{Subtotal}]]></variableExpression>
 	</variable>
+	<variable name="CantidadMov_1" class="java.lang.Double" resetType="Group" resetGroup="Grupo" calculation="Sum">
+		<variableExpression><![CDATA[$F{CantidadMov}]]></variableExpression>
+	</variable>
+	<variable name="CantidadMov_2" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{CantidadMov}]]></variableExpression>
+	</variable>
 	<group name="Grupo">
 		<groupExpression><![CDATA[$F{ClaveGrupo}]]></groupExpression>
 		<groupHeader>
@@ -124,7 +130,7 @@ ORDER BY Doc ASC, ClaveGrupo ASC, A.Descripcion ASC]]>
 		<groupFooter>
 			<band height="13">
 				<staticText>
-					<reportElement style="Column header" x="218" y="0" width="111" height="12" forecolor="#000000" uuid="f3ae3ad9-eaf7-4a0d-a877-e6c6a5629230"/>
+					<reportElement style="Column header" x="160" y="1" width="110" height="12" forecolor="#000000" uuid="f3ae3ad9-eaf7-4a0d-a877-e6c6a5629230"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
@@ -136,6 +142,14 @@ ORDER BY Doc ASC, ClaveGrupo ASC, A.Descripcion ASC]]>
 						<font size="8" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{Subtotal_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="271" y="1" width="39" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0b8135c1-037e-459e-8d11-c6731d7bae9a"/>
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+						<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{CantidadMov_1}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -390,7 +404,7 @@ ORDER BY Doc ASC, ClaveGrupo ASC, A.Descripcion ASC]]>
 	<summary>
 		<band height="14" splitType="Stretch">
 			<staticText>
-				<reportElement style="Column header" x="218" y="1" width="111" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
+				<reportElement style="Column header" x="160" y="2" width="110" height="12" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
@@ -406,6 +420,14 @@ ORDER BY Doc ASC, ClaveGrupo ASC, A.Descripcion ASC]]>
 			<line>
 				<reportElement x="215" y="0" width="204" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
 			</line>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="271" y="2" width="39" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="8be31a47-a81e-4d83-b9b5-c1e2f1af1bd7"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CantidadMov_2}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

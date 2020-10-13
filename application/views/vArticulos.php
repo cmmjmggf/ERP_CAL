@@ -418,6 +418,7 @@
         });
 
         btnGuardar.click(function () {
+            onDisable(btnGuardar);
             isValid('pnlDatos');
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
@@ -446,6 +447,7 @@
                         data: frm
                     }).done(function (data, x, jq) {
                         console.log(data);
+                        onEnable(btnGuardar);
 //                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
 //                        nuevo = false;
 //                        PrecioVentaParaMaquilas.clear().draw();
@@ -454,8 +456,10 @@
                         //pnlDatosDetalle.addClass('d-none');
                         //pnlTablero.removeClass("d-none");
                     }).fail(function (x, y, z) {
+                        onEnable(btnGuardar);
                         console.log(x, y, z);
                     }).always(function () {
+                        onEnable(btnGuardar);
                         HoldOn.close();
                     });
                 } else {
@@ -469,6 +473,7 @@
                         processData: false,
                         data: frm
                     }).done(function (data, x, jq) {
+                        onEnable(btnGuardar);
                         pnlDatos.find("[name='ID']").val(data);
                         nuevo = false;
                         Articulos.ajax.reload();
@@ -483,8 +488,10 @@
                             pnlDatosDetalle.find('#Maquila')[0].selectize.focus();
                         });
                     }).fail(function (x, y, z) {
+                        onEnable(btnGuardar);
                         console.log(x, y, z);
                     }).always(function () {
+                        onEnable(btnGuardar);
                         HoldOn.close();
                     });
                 }

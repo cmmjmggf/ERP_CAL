@@ -104,6 +104,7 @@ class Departamentos extends CI_Controller {
                 'Tipo' => ($x->post('Tipo') !== NULL) ? $x->post('Tipo') : NULL,
                 'Avance' => ($x->post('Avance') !== NULL) ? $x->post('Avance') : NULL,
                 'Fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
+                'Eficiencia' => ($x->post('Eficiencia') !== NULL) ? $x->post('Eficiencia') : NULL,
                 'Estatus' => 'ACTIVO'
             ));
         } catch (Exception $exc) {
@@ -119,6 +120,7 @@ class Departamentos extends CI_Controller {
                 'Tipo' => ($x->post('Tipo') !== NULL) ? $x->post('Tipo') : NULL,
                 'Avance' => ($x->post('Avance') !== NULL) ? $x->post('Avance') : NULL,
                 'Fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
+                'Eficiencia' => ($x->post('Eficiencia') !== NULL) ? $x->post('Eficiencia') : NULL,
                 'Estatus' => 'ACTIVO'
             ));
         } catch (Exception $exc) {

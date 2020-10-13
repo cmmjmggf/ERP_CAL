@@ -3,7 +3,7 @@
 header('Access-Control-Allow-Origin: *');
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Subfracciones extends CI_Controller {
+class SubfraccionesXEstilo extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -40,7 +40,7 @@ class Subfracciones extends CI_Controller {
                     break;
             }
 
-            $this->load->view('vFondo')->view('vSubfracciones')->view('vFooter');
+            $this->load->view('vFondo')->view('vSubfraccionesXEstilo')->view('vFooter');
         } else {
             $this->load->view('vFondo')->view('vSesion')->view('vFooter');
         }

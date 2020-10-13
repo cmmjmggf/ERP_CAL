@@ -18,19 +18,11 @@
                     <input type="text" id="estilo" name="estilo" class="form-control form-control-sm" maxlength="7">
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
-                    <label>Golpes Piel</label>
-                    <input type="text" id="glpsuajepiel" name="glpsuajepiel" class="form-control form-control-sm numbersOnly" maxlength="3">
-                </div>
                 <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-1 col-xl-2">
                     <label>Fecha Compra Suaje Piel</label>
                     <input type="text" id="fechaaltasuajepiel" name="fechaaltasuajepiel" class="form-control form-control-sm date">
                 </div>
                 <div class="w-100"></div>
-                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
-                    <label>Golpes Forro</label>
-                    <input type="text" id="glpsuajeforro" name="glpsuajeforro" class="form-control form-control-sm numbersOnly" maxlength="3">
-                </div>
                 <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-1 col-xl-2">
                     <label>Fecha Compra Suaje Forro</label>
                     <input type="text" id="fechaaltasuajeforro" name="fechaaltasuajeforro" class="form-control form-control-sm date">
@@ -48,9 +40,7 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Estilo</th>
-                                <th scope="col">Golpes Piel</th>
                                 <th scope="col">Fecha Ini Piel</th>
-                                <th scope="col">Golpes Forro</th>
                                 <th scope="col">Fecha Ini Forro</th>
                                 <th scope="col">(-)</th>
                             </tr>
@@ -68,8 +58,6 @@
     var GolpesSuajesEstilo;
     var pnlTablero = $('#pnlTablero');
     var Estilo = pnlTablero.find("#estilo");
-    var glpsuajepiel = pnlTablero.find("#glpsuajepiel");
-    var glpsuajeforro = pnlTablero.find("#glpsuajeforro");
     var fechaaltasuajepiel = pnlTablero.find("#fechaaltasuajepiel");
     var fechaaltasuajeforro = pnlTablero.find("#fechaaltasuajeforro");
     var btnAceptar = pnlTablero.find("#btnAceptar");
@@ -84,7 +72,7 @@
                 if (estilo) {
                     $.getJSON(base_url + 'index.php/Pedidos/onVerificaEstilo', {Estilo: estilo}).done(function (data) {
                         if (data.length > 0) {
-                            glpsuajepiel.focus();
+                            fechaaltasuajepiel.focus();
                         } else {
                             swal('ERROR', 'EL ESTILO NO EXISTE', 'warning').then((value) => {
                                 Estilo.focus().val('');
@@ -94,23 +82,7 @@
                 }
             }
         });
-        glpsuajepiel.keypress(function (e) {
-            if (e.keyCode === 13) {
-                var value = $(this).val();
-                if (value) {
-                    fechaaltasuajepiel.focus();
-                }
-            }
-        });
         fechaaltasuajepiel.keypress(function (e) {
-            if (e.keyCode === 13) {
-                var value = $(this).val();
-                if (value) {
-                    glpsuajeforro.focus();
-                }
-            }
-        });
-        glpsuajeforro.keypress(function (e) {
             if (e.keyCode === 13) {
                 var value = $(this).val();
                 if (value) {
@@ -129,16 +101,12 @@
         btnAceptar.on("click", function () {
             $.post(master_url + 'onAgregarInfoSuajes', {
                 estilo: Estilo.val(),
-                glpsuajepiel: glpsuajepiel.val(),
-                glpsuajeforro: glpsuajeforro.val(),
                 fechaaltasuajepiel: fechaaltasuajepiel.val(),
                 fechaaltasuajeforro: fechaaltasuajeforro.val()
             }).done(function (data) {
                 console.log(data);
                 onNotifyOld('', 'REGISTRO AGREGADO', 'success');
                 GolpesSuajesEstilo.ajax.reload();
-                glpsuajeforro.val('');
-                glpsuajepiel.val('');
                 fechaaltasuajepiel.val('');
                 fechaaltasuajeforro.val('');
                 Estilo.val('').focus();
@@ -194,9 +162,7 @@
             "columns": [
                 {"data": "ID"},
                 {"data": "estilo"},
-                {"data": "glpsuajepiel"},
                 {"data": "fechaaltasuajepiel"},
-                {"data": "glpsuajeforro"},
                 {"data": "fechaaltasuajeforro"},
                 {"data": "BTN"}
             ],

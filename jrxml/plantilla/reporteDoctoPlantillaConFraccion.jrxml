@@ -49,7 +49,7 @@ join pedidox pe on pe.Control = cp.Control
 join maquilasplantillas mp on cp.Tipo = mp.Clave
 join estilos e on e.clave = cp.estilo
 join series S on S.Clave = e.Serie
-where cp.documento = $P{docto} and cp.FechaRetorna = $P{fecha} AND cp.FechaRetorna IS NOT NULL
+where cp.documento = $P{docto}
 order by cp.Documento, S.clave, e.linea, cp.control  asc]]>
 	</queryString>
 	<field name="ProveedorT" class="java.lang.String">

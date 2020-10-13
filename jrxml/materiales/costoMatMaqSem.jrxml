@@ -45,7 +45,7 @@ MA.Sem = $P{sem}
 AND
 MA.Ano = $P{ano}
 AND
-MA.TipoMov IN ('SXM', 'SPR', 'SXP', 'SXC')
+MA.TipoMov IN ('SXM', 'SPR', 'SXP', 'SXC','SXV')
 group by MA.DocMov, A.Clave
 ORDER BY Doc ASC, A.Descripcion ASC]]>
 	</queryString>

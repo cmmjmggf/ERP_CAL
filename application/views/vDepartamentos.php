@@ -83,6 +83,10 @@
                             <option value=""></option>
                         </select>
                     </div>
+                    <div class="col-6 col-md-6 col-sm-6">
+                        <label for="Eficiencia" >Eficiencia* (Ej. 20% => .2)</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" id="Eficiencia" name="Eficiencia" required >
+                    </div>
                 </div>
                 <div class="row pt-2">
                     <div class="col-6 col-md-6 ">

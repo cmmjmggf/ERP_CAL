@@ -682,6 +682,7 @@
             btnCredencial.addClass("d-none");
             FotoPerfil[0].src = '<?php print base_url('img/empleado_sin_foto.png'); ?>';
             nuevo = true;
+            btnGuardar.removeClass('d-none');
             tfoto = false;
             pnlDatos.find("input").val("");
             $.each(pnlDatos.find("select"), function (k, v) {
