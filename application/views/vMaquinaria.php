@@ -952,7 +952,9 @@
             onVolverPrimerPestana();
             getUltimaMaquinaria(function () {
                 getUltimaIDMaquinaria(function () {
-                    IdMaquina.focus();
+                    getUltimoIDMaquinariaSugerido(function () {
+                        IdMaquina.focus();
+                    });
                 });
             });
         });
@@ -983,7 +985,7 @@
                 "contentType": "application/json",
                 "dataSrc": "",
                 "data": function (d) {
-//                    d.CONTROL = ControlRXCTROL.val() ? ControlRXCTROL.val() : ''; 
+                    //                    d.CONTROL = ControlRXCTROL.val() ? ControlRXCTROL.val() : ''; 
                 }
             },
             buttons: buttons,
@@ -999,8 +1001,7 @@
                 {"data": "DEPTO"}/*7*/,
                 {"data": "FECHA_ALTA"}/*8*/,
                 {"data": "FACTURA"}/*10*/,
-                {"data": "COSTO"}/*10*/
-            ],
+                {"data": "COSTO"}/*10*/],
             "columnDefs": coldefs,
             language: lang,
             select: true,
@@ -1143,6 +1144,14 @@
             getError(x);
         });
     }
+    function getUltimoIDMaquinariaSugerido(f) {
+        $.getJSON('<?php print base_url('Maquinaria/getUltimoIDMaquinariaSugerido') ?>').done(function (a, b, c) {
+            mdlMaquinaria.find("#IdMaquina").val(a[0].ID_SUGERIDO);
+            f();
+        }).fail(function (x) {
+            getError(x);
+        });
+    }
 
     function onVolverPrimerPestana() {
         mdlMaquinaria.find("li a").removeClass("active");
@@ -1202,8 +1211,7 @@
             onBeep(1);
             onCloseOverlay();
             swal({
-                title: "ATENCIÓN",
-                text: "SE HA GUARDADO LA IMAGEN",
+                title: "ATENCIÓN", text: "SE HA GUARDADO LA IMAGEN",
                 icon: "success",
                 buttons: false,
                 timer: 1500

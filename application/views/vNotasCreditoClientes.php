@@ -469,71 +469,91 @@
         });
         btnAceptar.click(function () {
             onDisable(btnAceptar);
-            isValid('pnlTablero');
-            if (valido) {
-                var importenc = pnlTablero.find("#ImporteNC").val();
-                var txtsaldo = pnlTablero.find("#Saldo").val();
-                if (parseFloat(importenc) > parseFloat(txtsaldo)) {
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "IMPORTE A PAGAR NO DEBE DE SER MAYOR AL SALDO DEL DOCUMENTO",
-                        icon: "error",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false
-                    }).then((action) => {
-                        onEnable(btnAceptar);
-                        pnlTablero.find("#ImporteNC").val('').focus();
-                    });
-                } else {
-                    //HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-                    $.post(master_url + 'onAgregar', {
-                        tp: pnlTablero.find("#Tp").val(),
-                        cliente: pnlTablero.find("#Cliente").val(),
-                        numfac: pnlTablero.find("#Docto").val(),
-                        orden: pnlTablero.find("#Tipo").val(),
-                        fecha: pnlTablero.find("#fechacap").val(),
-                        descripcion: pnlTablero.find("#Concepto").val(),
-                        cantidad: pnlTablero.find("#Cantidad").val(),
-                        precio: importenc,
-                        subtot: importenc,
-                        defecto: pnlTablero.find("#Defecto").val(),
-                        detalle: pnlTablero.find("#DetalleDefecto").val(),
-                        tmnda: pnlTablero.find("#Moneda").val(),
-                        tcamb: pnlTablero.find("#TipoCambio").val(),
-                        uuid: pnlTablero.find("#UUID").val(),
-                        nuevo: nuevo,
-                        folioact: notcred
-                    }).done(function (data) {
-                        onEnable(btnAceptar);
-                        notcred = data;
-                        totalFinal += parseFloat(importenc);
-                        if (nuevo === 1) {
-                            getDetalleNC(pnlTablero.find("#Cliente").val(), notcred, pnlTablero.find("#Tp").val());
-                        } else {
-                            DetalleNC.ajax.reload();
-                        }
-                        nuevo = 0;
-                        var conc = pnlTablero.find("#Concepto").val();
-                        pnlTablero.find("#Concepto").val(conc + data);
-                        pnlTablero.find("#FolioNC").html(data);
-                        pnlTablero.find("#ImporteNC").val('');
-                        pnlTablero.find("#Cantidad").val('1');
-                        pnlTablero.find("#Concepto").val('');
-                        pnlTablero.find("#Defecto")[0].selectize.clear(true);
-                        pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
-                        pnlTablero.find("#Tipo")[0].selectize.clear(true);
-                        pnlTablero.find("#Tipo")[0].selectize.focus();
-                        HoldOn.close();
-                        onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
+            var xdocto = pnlTablero.find("#Docto").val();
+            $.getJSON('<?php print base_url('NotasCreditoClientes/onVerificaFactura'); ?>', {
+                CLIENTE: pnlTablero.find("#Cliente").val(),
+                FACTURA: pnlTablero.find("#Docto").val(),
+                TP: pnlTablero.find("#Tp").val()
+            }).done(function (a, b, c) {
+                if (a.length > 0) {
+                    var r = a[0];
+                    switch (parseInt(r.EXISTE)) {
+                        case 0:
+                            onCampoInvalido(pnlTablero, "EL DOCUMENTO ESPECIFICADO NO EXISTE O YA FUE SALDADO, INTENTE CON OTRO DOCUMENTO.", function () {
+                                pnlTablero.find("#Docto").focus().select();
+                            });
+                            break;
+                        case 1: 
+                            isValid('pnlTablero');
+                            if (valido) {
+                                var importenc = pnlTablero.find("#ImporteNC").val();
+                                var txtsaldo = pnlTablero.find("#Saldo").val();
+                                if (parseFloat(importenc) > parseFloat(txtsaldo)) {
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "IMPORTE A PAGAR NO DEBE DE SER MAYOR AL SALDO DEL DOCUMENTO",
+                                        icon: "error",
+                                        closeOnClickOutside: false,
+                                        closeOnEsc: false
+                                    }).then((action) => {
+                                        onEnable(btnAceptar);
+                                        pnlTablero.find("#ImporteNC").val('').focus();
+                                    });
+                                } else {
+                                    //HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
+                                    $.post(master_url + 'onAgregar', {
+                                        tp: pnlTablero.find("#Tp").val(),
+                                        cliente: pnlTablero.find("#Cliente").val(),
+                                        numfac: pnlTablero.find("#Docto").val(),
+                                        orden: pnlTablero.find("#Tipo").val(),
+                                        fecha: pnlTablero.find("#fechacap").val(),
+                                        descripcion: pnlTablero.find("#Concepto").val(),
+                                        cantidad: pnlTablero.find("#Cantidad").val(),
+                                        precio: importenc,
+                                        subtot: importenc,
+                                        defecto: pnlTablero.find("#Defecto").val(),
+                                        detalle: pnlTablero.find("#DetalleDefecto").val(),
+                                        tmnda: pnlTablero.find("#Moneda").val(),
+                                        tcamb: pnlTablero.find("#TipoCambio").val(),
+                                        uuid: pnlTablero.find("#UUID").val(),
+                                        nuevo: nuevo,
+                                        folioact: notcred
+                                    }).done(function (data) {
+                                        onEnable(btnAceptar);
+                                        notcred = data;
+                                        totalFinal += parseFloat(importenc);
+                                        if (nuevo === 1) {
+                                            getDetalleNC(pnlTablero.find("#Cliente").val(), notcred, pnlTablero.find("#Tp").val());
+                                        } else {
+                                            DetalleNC.ajax.reload();
+                                        }
+                                        nuevo = 0;
+                                        var conc = pnlTablero.find("#Concepto").val();
+                                        pnlTablero.find("#Concepto").val(conc + data);
+                                        pnlTablero.find("#FolioNC").html(data);
+                                        pnlTablero.find("#ImporteNC").val('');
+                                        pnlTablero.find("#Cantidad").val('1');
+                                        pnlTablero.find("#Concepto").val('');
+                                        pnlTablero.find("#Defecto")[0].selectize.clear(true);
+                                        pnlTablero.find("#DetalleDefecto")[0].selectize.clear(true);
+                                        pnlTablero.find("#Tipo")[0].selectize.clear(true);
+                                        pnlTablero.find("#Tipo")[0].selectize.focus();
+                                        HoldOn.close();
+                                        onNotifyOld('fa fa-check', 'DOCUMENTO GUARDADO', 'info');
 
-                    }).fail(function (x, y, z) {
-                        onEnable(btnAceptar);
-                        console.log(x, y, z);
-                    });
+                                    }).fail(function (x, y, z) {
+                                        onEnable(btnAceptar);
+                                        console.log(x, y, z);
+                                    });
+                                }
+                            } else {
+                                onEnable(btnAceptar);
+                            }
+                            break;
+                    }
                 }
-            } else {
-                onEnable(btnAceptar);
-            }
+            });
+
         });
         btnCerrarNotaCredito.click(function () {
             var cliente = pnlTablero.find("#Cliente").val();

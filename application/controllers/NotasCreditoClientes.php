@@ -244,6 +244,15 @@ class NotasCreditoClientes extends CI_Controller {
             echo $exc->getTraceAsString();
         }
     }
+    
+    public function onVerificaFactura() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE FROM cartcliente AS C WHERE C.remicion = {$x['FACTURA']} AND C.status NOT IN(3) AND C.saldo > 0 AND C.cliente = {$x['CLIENTE']} AND C.tipo = {$x['TP']}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 
     public function getDetalleNC() {
         try {

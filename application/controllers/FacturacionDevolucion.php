@@ -107,6 +107,11 @@ class FacturacionDevolucion extends CI_Controller {
                     break;
 
                 default:
+                    $OBTENER_TP_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM devolucionnp WHERE control = '{$this->input->get('CONTROL')}' AND stafac <= 1 LIMIT 1")->result();
+                    if (intval($OBTENER_TP_EXISTE[0]->EXISTE) === 0) {
+                        print "[]";
+                        exit(0);
+                    } 
                     $OBTENER_TP = $this->db->query("SELECT tp AS TIPO FROM devolucionnp WHERE control = '{$this->input->get('CONTROL')}' AND stafac <= 1 LIMIT 1")->result();
                     if (intval($this->input->get('TP')) === 1 && intval($OBTENER_TP[0]->TIPO) === 1 ||
                             intval($this->input->get('TP')) === 2 && intval($OBTENER_TP[0]->TIPO) === 2 ||

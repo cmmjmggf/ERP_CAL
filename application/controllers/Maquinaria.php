@@ -11,8 +11,25 @@ class Maquinaria extends CI_Controller {
         $this->load->library('session')->helper('string');
     }
 
+    public function index() {
+        try {
+            $maquinaria = $this->db->query("SELECT nummaq FROM maquinaria")->result();
+            foreach ($maquinaria as $k => $v) {
+                mkdir("uploads/Maquinaria/{$v->nummaq}/{$v->id}.jpg", 0777, true);
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getMaquinaria() {
         try {
+//            $maquinaria = $this->db->query("SELECT nummaq FROM maquinaria")->result();
+//            foreach ($maquinaria as $k => $v) {
+//                mkdir("uploads/Maquinaria/{$v->nummaq}/{$v->id}.jpg", 0777, true);
+//                move_uploaded_file('uploads/Maquinaria/X/{$v->id}.jpg')
+//            }
+            
             print json_encode($this->db->query("SELECT M.IDE AS IDE, M.nummaq AS CODIGO, M.id AS ID, M.maq AS MAQUILA, "
                                     . "M.nommaq AS DESCRIPCION, M.marmaq AS MARCA, M.modmaq AS MODELO, "
                                     . "M.sermaq AS SERIE,M.depmaq AS DEPTO, DATE_FORMAT(M.fechaalt,\"%d/%m/%Y\") AS FECHA_ALTA, "
@@ -53,6 +70,14 @@ class Maquinaria extends CI_Controller {
     public function getUltimaIDMaquinaria() {
         try {
             print json_encode($this->db->query("SELECT A.id AS UID FROM maquinaria AS A ORDER BY id DESC LIMIT 5;")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getUltimoIDMaquinariaSugerido() {
+        try {
+            print json_encode($this->db->query("SELECT id AS ID_ANTERIOR,  CONCAT(SUBSTRING_INDEX(id,'-',1),\"-\", SUBSTRING_INDEX(id,'-',-1) +1) AS ID_SUGERIDO FROM  maquinaria ORDER BY id DESC LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

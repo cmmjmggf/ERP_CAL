@@ -291,7 +291,7 @@
                                 <td>
                                 </td>
                             </tr>
-                            <tr class="rCapturaCantidades d-none" id="rParesFacturados">
+                            <tr class="rCapturaCantidades dd-none" id="rParesFacturados">
                                 <td class="font-weight-bold">Facturado</td>
                                 <?php
                                 for ($index = 1; $index < 23; $index++) {
@@ -726,7 +726,9 @@
             var cde = e.keyCode;
             if (cde === 13 || cde === 9) {
                 var input = $(this);
+                var cantidad_control = pnlTablero.find("#C" + parseInt($(this).attr('indice'))).val() ? pnlTablero.find("#C" + parseInt($(this).attr('indice'))).val() : 0;
                 var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val() ? pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val() : 0;
+                cantidad_facturada = cantidad_control - cantidad_facturada;
                 var cantidad_a_devolver = $(this).val();
                 console.log(cantidad_a_devolver, cantidad_facturada);
                 if (cantidad_facturada > 0) {
@@ -748,7 +750,9 @@
             }
         }).focusout(function () {
             var input = $(this);
+            var cantidad_control = pnlTablero.find("#C" + parseInt($(this).attr('indice'))).val();
             var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(this).attr('indice'))).val();
+            cantidad_facturada = cantidad_control - cantidad_facturada;
             var cantidad_a_devolver = $(this).val();
             if (parseFloat(cantidad_a_devolver) > parseFloat(cantidad_facturada)) {
                 onDisable(btnAcepta);
@@ -866,13 +870,15 @@
                 /*REVISAR QUE LOS PARES DEVUELTOS NO SEAN MAYORES A LA CANTIDAD FACTURADA*/
                 var registro_valido = false, pares_devueltos = 0;
                 for (var i = 1; i < 23; i++) {
+                    var pares_control = pnlTablero.find("#C" + i).val();
                     var pares_facturados = pnlTablero.find("#CF" + i).val();
                     var pares_a_devolver = pnlTablero.find("#CAF" + i).val();
+                    pares_facturados = pares_control - pares_facturados;
                     if (pares_facturados > 0) {
                         if (pares_a_devolver > pares_facturados) {
                             btnAcepta.attr('disabled', true);
                             registro_valido = false;
-                            onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR', function () {
+                            onCampoInvalido(pnlTablero, 'NO SE PUEDEN DEVOLVER MÁS PARES DE LOS FACTURADOS, INGRESE UNA CANTIDAD MENOR. ' + pares_a_devolver + " " + pares_facturados, function () {
                                 pnlTablero.find("#CAF" + i).focus().select();
                             });
                             return;
@@ -1606,13 +1612,15 @@
 
     function onCalcularPares(e, i, evt) {
 //        console.log("CODEEEE", evt.keyCode);
+        var cantidad_control = pnlTablero.find("#C" + parseInt($(e).attr('indice'))).val() ? pnlTablero.find("#C" + parseInt($(e).attr('indice'))).val() : 0;
         var cantidad_facturada = pnlTablero.find("#CF" + parseInt($(e).attr('indice'))).val() ? pnlTablero.find("#CF" + parseInt($(e).attr('indice'))).val() : 0;
+        cantidad_facturada = cantidad_control - cantidad_facturada;
         var cantidad_a_devolver = $(e).val();
         if (evt.keyCode === 13 || evt.keyCode === 9) {
             if (cantidad_facturada > 0) {
                 if (parseFloat(cantidad_a_devolver) > parseFloat(cantidad_facturada)) {
                     btnAcepta.attr('disabled', true);
-                    onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA", function () {
+                    onCampoInvalido(pnlTablero, "LA CANTIDAD DEBE DE SER MENOR A LA CANTIDAD FACTURADA (Calculando pares) " + cantidad_a_devolver + " " + cantidad_facturada, function () {
                         $(e).focus().select();
                         btnAcepta.attr('disabled', true);
                     });
@@ -1713,6 +1721,7 @@
                         TP: TPFactura.val() ? TPFactura.val() : ''
                     }).done(function (a) {
                         if (a.length > 0) {
+                            onEnable(btnAcepta);
                             if (a[0].hasOwnProperty('EXISTE')) {
                                 console.log('TIENE LA PROPIEDAD EXISTE');
                             } else {
@@ -1778,6 +1787,12 @@
                             btnFacturaXAnticipoDeProducto.attr('disabled', true);
                             btnControlInCompleto.attr('disabled', true);
                             btnControlCompleto.attr('disabled', true);
+                            onDisable(btnAcepta);
+                            onCloseOverlay();
+                            onCampoInvalido(pnlTablero, "ESTE CONTROL YA FUE FACTURADO O NO EXISTE,  INTENTE CON OTRO.", function () {
+                                Control.focus().select();
+                            });
+                            return;
                         }
 //                        for (var i = 1; i < 23; i++) {
 //                            if (parseInt(pnlTablero.find("#C" + i).val()) <= 0 || pnlTablero.find("#C" + i).val() === '') {

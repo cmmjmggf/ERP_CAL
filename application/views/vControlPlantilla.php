@@ -1,3 +1,6 @@
+<?php
+//var_dump($this->session->TipoAcceso);
+?>
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
@@ -1147,35 +1150,37 @@
         }).done(function (a) {
             if (a.length > 0) {
                 var r = a[0];
-                if (parseInt(r.stsavan) === 12) {
-                    swal('ERROR', 'EL CONTROL YA ESTÁ EN TERMINADO', 'warning').then((value) => {
-                        Estilo.val('');
-                        Color.val('');
-                        Pares.val('');
-                        btnAcepta.attr('disabled', true);
-                        Control.val('').focus();
-                        return;
-                    });
-                }
-                if (parseInt(r.stsavan) === 13) {
-                    swal('ERROR', 'EL CONTROL YA ESTÁ FACTURADO', 'warning').then((value) => {
-                        Estilo.val('');
-                        Color.val('');
-                        Pares.val('');
-                        btnAcepta.attr('disabled', true);
-                        Control.val('').focus();
-                        return;
-                    });
-                }
-                if (parseInt(r.stsavan) === 14) {
-                    swal('ERROR', 'EL CONTROL HA SIDO CANCELADO', 'warning').then((value) => {
-                        Estilo.val('');
-                        Color.val('');
-                        Pares.val('');
-                        btnAcepta.attr('disabled', true);
-                        Control.val('').focus();
-                        return;
-                    });
+                if ('<?php print $this->session->TipoAcceso; ?>' !== 'SUPER ADMINISTRADOR') {
+                    if (parseInt(r.stsavan) === 12) {
+                        swal('ERROR', 'EL CONTROL YA ESTÁ EN TERMINADO', 'warning').then((value) => {
+                            Estilo.val('');
+                            Color.val('');
+                            Pares.val('');
+                            btnAcepta.attr('disabled', true);
+                            Control.val('').focus();
+                            return;
+                        });
+                    }
+                    if (parseInt(r.stsavan) === 13) {
+                        swal('ERROR', 'EL CONTROL YA ESTÁ FACTURADO', 'warning').then((value) => {
+                            Estilo.val('');
+                            Color.val('');
+                            Pares.val('');
+                            btnAcepta.attr('disabled', true);
+                            Control.val('').focus();
+                            return;
+                        });
+                    }
+                    if (parseInt(r.stsavan) === 14) {
+                        swal('ERROR', 'EL CONTROL HA SIDO CANCELADO', 'warning').then((value) => {
+                            Estilo.val('');
+                            Color.val('');
+                            Pares.val('');
+                            btnAcepta.attr('disabled', true);
+                            Control.val('').focus();
+                            return;
+                        });
+                    }
                 }
                 Estilo.val(r.ESTILO);
                 getFraccionesXEstilo(r);

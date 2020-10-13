@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ConsumoDePielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.2578957202151178"/>
-	<property name="ireport.x" value="1056"/>
+	<property name="ireport.x" value="608"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -119,8 +119,8 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	<variable name="XDIFERENCIA" class="java.lang.Double">
 		<variableExpression><![CDATA[$F{X_CONTROL}-$F{ENT_DEV}]]></variableExpression>
 	</variable>
-	<variable name="XDIFERENCIA_X_CORTADOR" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
-		<variableExpression><![CDATA[$F{X_CONTROL}-$F{ENT_DEV}]]></variableExpression>
+	<variable name="XDIFERENCIA_X_CORTADOR" class="java.lang.Double" resetType="None" calculation="Sum">
+		<variableExpression><![CDATA[$V{X_CONTROL_1} - $V{ENT_DEV_2}]]></variableExpression>
 	</variable>
 	<variable name="DCM2_2" class="java.lang.Double" resetType="Group" resetGroup="EMPLEADO_CLAVE" calculation="Sum">
 		<variableExpression><![CDATA[$F{DCM2}]]></variableExpression>
@@ -179,6 +179,9 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	<variable name="SISTEMAPESOS_3" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{SISTEMAPESOS}]]></variableExpression>
 	</variable>
+	<variable name="XENT_DEV_SUMMARY" class="java.lang.Double" resetType="None" calculation="Sum">
+		<variableExpression><![CDATA[$V{XDIFERENCIA_X_CORTADOR}]]></variableExpression>
+	</variable>
 	<group name="EMPLEADO_CLAVE" keepTogether="true">
 		<groupExpression><![CDATA[$F{EMPLEADO_CLAVE}]]></groupExpression>
 		<groupHeader>
@@ -224,7 +227,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 						<font fontName="SansSerif" size="8" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{XDIFERENCIA_X_CORTADOR}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{X_CONTROL_1}-$V{ENT_DEV_2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 					<reportElement mode="Transparent" x="658" y="0" width="51" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="2096b430-2298-4e18-a3b0-5eb71ba351b8"/>
@@ -574,7 +577,7 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{XDIFERENCIA_SUMMARY}-$V{ENT_DEV_1}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{X_CONTROL_2}-$V{ENT_DEV_1}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
