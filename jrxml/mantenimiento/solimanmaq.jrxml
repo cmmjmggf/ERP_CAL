@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="solimanmaq" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
-	<property name="ireport.zoom" value="3.2210200000000104"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="720"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="VALE" class="java.lang.Integer">
@@ -862,7 +862,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pre6}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="360" y="72" width="50" height="12" uuid="92376c46-e5d3-4a39-b1bd-d3256f8cfbff">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_SIETE}>0]]></printWhenExpression>
 				</reportElement>
@@ -915,7 +915,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{pre7}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="360" y="84" width="50" height="12" uuid="f97f93e8-2c9c-4b95-b604-66cebdfbba5d">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_OCHO}>0]]></printWhenExpression>
 				</reportElement>
@@ -995,7 +995,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{refa9}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="360" y="96" width="50" height="12" uuid="562a7078-1482-4918-9cc9-db410bf4ce42">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_NUEVE}>0]]></printWhenExpression>
 				</reportElement>
@@ -1048,7 +1048,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cant10}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.00">
 				<reportElement x="360" y="108" width="50" height="12" uuid="7d98b5c4-8ee1-4d3d-8ae5-29b0f24b5a8a">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_DIEZ}>0]]></printWhenExpression>
 				</reportElement>
@@ -1087,7 +1087,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<text><![CDATA[Costo de refacciones]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="360" y="0" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1c956389-cf50-423e-936a-41c93de0b284">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_UNO}>0]]></printWhenExpression>
 				</reportElement>
@@ -1101,7 +1101,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_REFACCION_UNO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="360" y="12" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="314c336d-d7a3-4120-a6b9-fbb5a84510f9">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_DOS}>0]]></printWhenExpression>
 				</reportElement>
@@ -1115,7 +1115,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_REFACCION_DOS}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="360" y="24" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c9288f8a-0102-476b-9653-f17b821b7072">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_TRES}>0]]></printWhenExpression>
 				</reportElement>
@@ -1129,7 +1129,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_REFACCION_TRES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="360" y="36" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="dd25c93e-e6cf-4578-9695-a192d112c6c6">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_CUATRO}>0]]></printWhenExpression>
 				</reportElement>
@@ -1143,7 +1143,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_REFACCION_CUATRO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="360" y="48" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="53e860ac-a309-429e-8e98-9d3901403185">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_CINCO}>0]]></printWhenExpression>
 				</reportElement>
@@ -1157,7 +1157,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_REFACCION_CINCO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="360" y="60" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="42f345c9-c018-4845-8c6e-a7105f8b3749">
 					<printWhenExpression><![CDATA[$V{TOTAL_REFACCION_SEIS}>0]]></printWhenExpression>
 				</reportElement>
@@ -1197,7 +1197,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="499" y="96" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="67cde76f-58aa-47e6-ac0d-3975fd79271a"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -1211,7 +1211,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{COSTO_REFACCIONES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="499" y="108" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="9dc7301b-2e83-41f9-b795-ebc2e6922b6b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -1225,7 +1225,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ctomaho}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="499" y="120" width="55" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2b412cd5-d98e-4c03-b533-1929716272a3"/>
 				<box>
 					<topPen lineWidth="1.0"/>

@@ -319,68 +319,68 @@
                         </div>
                         <div class="col-4">
                             <label>Refacción</label>
-                            <input type="text" id="refa1" class="form-control">
-                            <input type="text" id="refa3" class="form-control my-1">
-                            <input type="text" id="refa5" class="form-control">
-                            <input type="text" id="refa7" class="form-control my-1"> 
-                            <input type="text" id="refa9" class="form-control"> 
+                            <input type="text" id="refa1" class="form-control" maxlength="45">
+                            <input type="text" id="refa2" class="form-control my-1" maxlength="45">
+                            <input type="text" id="refa3" class="form-control" maxlength="45">
+                            <input type="text" id="refa4" class="form-control my-1" maxlength="45"> 
+                            <input type="text" id="refa5" class="form-control" maxlength="45"> 
                         </div>
                         <div class="col-1">
                             <label>Cantidad</label>
-                            <input type="text" id="cant1" class="form-control">
-                            <input type="text" id="cant3" class="form-control my-1">
-                            <input type="text" id="cant5" class="form-control">
-                            <input type="text" id="cant7" class="form-control my-1">
-                            <input type="text" id="cant9" class="form-control">
+                            <input type="text" id="cant1" class="form-control numbersOnly">
+                            <input type="text" id="cant2" class="form-control numbersOnly my-1">
+                            <input type="text" id="cant3" class="form-control numbersOnly">
+                            <input type="text" id="cant4" class="form-control numbersOnly my-1">
+                            <input type="text" id="cant5" class="form-control numbersOnly">
                         </div>
                         <div class="col-1">
                             <label>Precio</label>
-                            <input type="text" id="pre1" class="form-control">
-                            <input type="text" id="pre3" class="form-control my-1">
-                            <input type="text" id="pre5" class="form-control">
-                            <input type="text" id="pre7" class="form-control my-1">
-                            <input type="text" id="pre9" class="form-control">
+                            <input type="text" id="pre1" class="form-control numbersOnly">
+                            <input type="text" id="pre2" class="form-control numbersOnly my-1">
+                            <input type="text" id="pre3" class="form-control numbersOnly">
+                            <input type="text" id="pre4" class="form-control numbersOnly my-1">
+                            <input type="text" id="pre5" class="form-control numbersOnly">
                         </div>
                         <div class="col-4">
                             <label>Refacción</label>
-                            <input type="text" id="refa2" class="form-control">
-                            <input type="text" id="refa4" class="form-control my-1">
-                            <input type="text" id="refa6" class="form-control">
-                            <input type="text" id="refa8" class="form-control my-1">
-                            <input type="text" id="refa10" class="form-control">
+                            <input type="text" id="refa6" class="form-control" maxlength="45">
+                            <input type="text" id="refa7" class="form-control my-1" maxlength="45">
+                            <input type="text" id="refa8" class="form-control" maxlength="45">
+                            <input type="text" id="refa9" class="form-control my-1" maxlength="45">
+                            <input type="text" id="refa10" class="form-control" maxlength="45">
                         </div>
                         <div class="col-1">
                             <label>Cantidad</label>
-                            <input type="text" id="cant2" class="form-control">
-                            <input type="text" id="cant4" class="form-control my-1">
-                            <input type="text" id="cant6" class="form-control">
-                            <input type="text" id="cant8" class="form-control my-1">
-                            <input type="text" id="cant10" class="form-control">
+                            <input type="text" id="cant6" class="form-control numbersOnly" maxlength="6">
+                            <input type="text" id="cant7" class="form-control numbersOnly my-1" maxlength="6">
+                            <input type="text" id="cant8" class="form-control numbersOnly" maxlength="6">
+                            <input type="text" id="cant9" class="form-control my-1  numbersOnly" maxlength="6">
+                            <input type="text" id="cant10" class="form-control numbersOnly" maxlength="6">
                         </div>
                         <div class="col-1">
                             <label>Precio</label>
-                            <input type="text" id="pre2" class="form-control">
-                            <input type="text" id="pre4" class="form-control my-1">
-                            <input type="text" id="pre6" class="form-control">
-                            <input type="text" id="pre8" class="form-control my-1">
-                            <input type="text" id="pre10" class="form-control">
+                            <input type="text" id="pre6" class="form-control numbersOnly" maxlength="6">
+                            <input type="text" id="pre7" class="form-control my-1 numbersOnly" maxlength="6">
+                            <input type="text" id="pre8" class="form-control numbersOnly" maxlength="6">
+                            <input type="text" id="pre9" class="form-control my-1 numbersOnly" maxlength="6">
+                            <input type="text" id="pre10" class="form-control numbersOnly" maxlength="6">
                         </div>
                     </div>
                     <div class="col-1">
                         <label>TP</label>
-                        <input type="text" id="CSTP" name="CSTP" class="form-control">
+                        <input type="text" id="CSTP" name="CSTP" class="form-control numbersOnly" maxlength="1">
                     </div>
                     <div class="col-2">
                         <label>Factura</label>
-                        <input type="text" id="numfac" name="numfac" class="form-control">
+                        <input type="text" id="numfac" name="numfac" class="form-control" maxlength="10">
                     </div>
                     <div class="col-6">
                         <label>Proveedor</label>
-                        <input type="text" id="numpro" name="numpro" class="form-control">
+                        <input type="text" id="numpro" name="numpro" class="form-control" maxlength="90">
                     </div>
                     <div class="col-3">
                         <label>Costo Mano de obra</label>
-                        <input type="text" id="ctomaho" name="ctomaho" class="form-control">
+                        <input type="text" id="ctomaho" name="ctomaho" class="form-control numbersOnly" maxlength="10">
                     </div>
                 </div> 
                 <div class="row" id="SolicitudesDeManto">
@@ -389,19 +389,25 @@
                             <span class="fa fa-file-archive"></span> CIERRA SOLICITUD
                         </button>  
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4" align="left">
+                    <div class="col-12 col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="left">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-2">
                                 <input type="text" id="NoVale" name="NoVale" class="form-control" autofocus="">
                             </div>
-                            <div class="col-8">
+                            <div class="col-2">
                                 <button type="button" class="btn btn-info font-weight-bold" id="btnImprimeXNoVale">
                                     <span class="fa fa-print"></span> 
                                 </button> 
+                            </div> 
+                            <div class="col-4">
+                                <p class="font-italic numero_de_solicitudes_cerradas">0 SOLICITUDES CERRADAS</p>
+                            </div>
+                            <div class="col-4">
+                                <p class="font-italic numero_de_solicitudes_abiertas">0 SOLICITUDES ABIERTAS</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6" align="right">
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="right">
                         <button type="button" id="btnNuevaSolicitud" class="btn btn-info" style="background-color: #4CAF50; border-color: #4CAF50;">
                             <span class="fa fa-star"></span> NUEVO 
                         </button>
@@ -411,6 +417,9 @@
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th> 
+                                    <th scope="col">ESTATUSID</th> 
+                                    <th scope="col">ESTATUS</th> 
+                                    <th scope="col">VALE</th> 
                                     <th scope="col">CÓDIGO</th> 
                                     <th scope="col">DESCRIPCIÓN</th> 
 
@@ -466,7 +475,46 @@
             btnImprimeSolicitudDeMToXVale = mdlSolicitudDeMantenimiento.find("#btnImprimeSolicitudDeMToXVale"),
             btnImprimeXNoVale = mdlSolicitudDeMantenimiento.find("#btnImprimeXNoVale"),
             nuevo = true;
-    var CSSolicitudMtoVale = mdlSolicitudDeMantenimiento.find("#CSSolicitudMtoVale"),
+    var
+            CSIdMaquinariaRefaccion = mdlSolicitudDeMantenimiento.find("#CSIdMaquinariaRefaccion"),
+            CSSolicitudMtoVale = mdlSolicitudDeMantenimiento.find("#CSSolicitudMtoVale"),
+            CSDeptoClaveMaquina = mdlSolicitudDeMantenimiento.find("#CSDeptoClaveMaquina"),
+            CSCodigoSolicitud = mdlSolicitudDeMantenimiento.find("#CSCodigoSolicitud"),
+            CSDescripcionDeloRealizado = mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado"),
+            CS_REFACCION_UNO = mdlSolicitudDeMantenimiento.find("#refa1"),
+            CS_CANTIDAD_UNO = mdlSolicitudDeMantenimiento.find("#cant1"),
+            CS_PRECIO_UNO = mdlSolicitudDeMantenimiento.find("#pre1"),
+            CS_REFACCION_DOS = mdlSolicitudDeMantenimiento.find("#refa2"),
+            CS_CANTIDAD_DOS = mdlSolicitudDeMantenimiento.find("#cant2"),
+            CS_PRECIO_DOS = mdlSolicitudDeMantenimiento.find("#pre2"),
+            CS_REFACCION_TRES = mdlSolicitudDeMantenimiento.find("#refa3"),
+            CS_CANTIDAD_TRES = mdlSolicitudDeMantenimiento.find("#cant3"),
+            CS_PRECIO_TRES = mdlSolicitudDeMantenimiento.find("#pre3"),
+            CS_REFACCION_CUATRO = mdlSolicitudDeMantenimiento.find("#refa4"),
+            CS_CANTIDAD_CUATRO = mdlSolicitudDeMantenimiento.find("#cant4"),
+            CS_PRECIO_CUATRO = mdlSolicitudDeMantenimiento.find("#pre4"),
+            CS_REFACCION_CINCO = mdlSolicitudDeMantenimiento.find("#refa5"),
+            CS_CANTIDAD_CINCO = mdlSolicitudDeMantenimiento.find("#cant5"),
+            CS_PRECIO_CINCO = mdlSolicitudDeMantenimiento.find("#pre5"),
+            CS_REFACCION_SEIS = mdlSolicitudDeMantenimiento.find("#refa6"),
+            CS_CANTIDAD_SEIS = mdlSolicitudDeMantenimiento.find("#cant6"),
+            CS_PRECIO_SEIS = mdlSolicitudDeMantenimiento.find("#pre6"),
+            CS_REFACCION_SIETE = mdlSolicitudDeMantenimiento.find("#refa7"),
+            CS_CANTIDAD_SIETE = mdlSolicitudDeMantenimiento.find("#cant7"),
+            CS_PRECIO_SIETE = mdlSolicitudDeMantenimiento.find("#pre7"),
+            CS_REFACCION_OCHO = mdlSolicitudDeMantenimiento.find("#refa8"),
+            CS_CANTIDAD_OCHO = mdlSolicitudDeMantenimiento.find("#cant8"),
+            CS_PRECIO_OCHO = mdlSolicitudDeMantenimiento.find("#pre8"),
+            CS_REFACCION_NUEVE = mdlSolicitudDeMantenimiento.find("#refa9"),
+            CS_CANTIDAD_NUEVE = mdlSolicitudDeMantenimiento.find("#cant9"),
+            CS_PRECIO_NUEVE = mdlSolicitudDeMantenimiento.find("#pre9"),
+            CS_REFACCION_DIEZ = mdlSolicitudDeMantenimiento.find("#refa10"),
+            CS_CANTIDAD_DIEZ = mdlSolicitudDeMantenimiento.find("#cant10"),
+            CS_PRECIO_DIEZ = mdlSolicitudDeMantenimiento.find("#pre10"),
+            CS_TP = mdlSolicitudDeMantenimiento.find("#CSTP"),
+            CS_FACTURA = mdlSolicitudDeMantenimiento.find("#numfac"),
+            CS_PROVEEDOR = mdlSolicitudDeMantenimiento.find("#numpro"),
+            CS_MANO_DE_OBRA = mdlSolicitudDeMantenimiento.find("#ctomaho"),
             btnGuardarCierreSolicitud = mdlSolicitudDeMantenimiento.find("#btnGuardarCierreSolicitud");
 
     function onSalirSolMto() {
@@ -604,15 +652,127 @@
     $(document).ready(function () {
 
         btnGuardarCierreSolicitud.click(function () {
+            if (CSSolicitudMtoVale.val() && CSIdMaquinariaRefaccion.val() && CSCodigoSolicitud.val() && CSDeptoClaveMaquina.val()) {
+                onOpenOverlay('CARGANDO...');
+                $.getJSON('<?php print base_url('SolicitudDeMantenimiento/onRevisarValeValido'); ?>',
+                        {VALE: CSSolicitudMtoVale.val()}).done(function (a) {
+                    if (a.length > 0) {
+                        var r = a[0];
+                        switch (parseInt(r.EXISTE)) {
+                            case 0:
+                                onCloseOverlay();
+                                onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN NUMERO DE VALE VÁLIDO", function () {
+                                    CSSolicitudMtoVale.focus().select();
+                                });
+                                return;
+                                break;
+                            case 1:
+                                onCloseOverlay();
+                                onOpenOverlay('GUARDANDO...');
+                                $.post('<?php print base_url('SolicitudDeMantenimiento/onCerrarSolicitudDeMto'); ?>',
+                                        {
+                                            MAQUINARIA_CLAVE: CSIdMaquinariaRefaccion.val(),
+                                            VALE: CSSolicitudMtoVale.val(),
+                                            DEPTO_CLAVE: CSDeptoClaveMaquina.val(),
+                                            CODIGO: CSCodigoSolicitud.val(),
 
+                                            DESCRIPCION_DELO_REALIZADO: CSDescripcionDeloRealizado.val(),
+                                            REFACCION_UNO: CS_REFACCION_UNO.val(),
+                                            CANTIDAD_UNO: CS_CANTIDAD_UNO.val(),
+                                            PRECIO_UNO: CS_PRECIO_UNO.val(),
+
+                                            REFACCION_DOS: CS_REFACCION_DOS.val(),
+                                            CANTIDAD_DOS: CS_CANTIDAD_DOS.val(),
+                                            PRECIO_DOS: CS_PRECIO_DOS.val(),
+
+                                            REFACCION_TRES: CS_REFACCION_TRES.val(),
+                                            PRECIO_TRES: CS_CANTIDAD_TRES.val(),
+                                            CANTIDAD_TRES: CS_PRECIO_TRES.val(),
+
+                                            REFACCION_CUATRO: CS_REFACCION_CUATRO.val(),
+                                            CANTIDAD_CUATRO: CS_CANTIDAD_CUATRO.val(),
+                                            PRECIO_CUATRO: CS_PRECIO_CUATRO.val(),
+
+                                            REFACCION_CINCO: CS_REFACCION_CINCO.val(),
+                                            CANTIDAD_CINCO: CS_CANTIDAD_CINCO.val(),
+                                            PRECIO_CINCO: CS_PRECIO_CINCO.val(),
+
+                                            REFACCION_SEIS: CS_REFACCION_SEIS.val(),
+                                            CANTIDAD_SEIS: CS_CANTIDAD_SEIS.val(),
+                                            PRECIO_SEIS: CS_PRECIO_SEIS.val(),
+
+                                            REFACCION_SIETE: CS_REFACCION_SIETE.val(),
+                                            CANTIDAD_SIETE: CS_CANTIDAD_SIETE.val(),
+                                            PRECIO_SIETE: CS_PRECIO_SIETE.val(),
+
+                                            REFACCION_OCHO: CS_REFACCION_OCHO.val(),
+                                            CANTIDAD_OCHO: CS_CANTIDAD_OCHO.val(),
+                                            PRECIO_OCHO: CS_PRECIO_OCHO.val(),
+
+                                            REFACCION_NUEVE: CS_REFACCION_NUEVE.val(),
+                                            CANTIDAD_NUEVE: CS_CANTIDAD_NUEVE.val(),
+                                            PRECIO_NUEVE: CS_PRECIO_NUEVE.val(),
+
+                                            REFACCION_DIEZ: CS_REFACCION_DIEZ.val(),
+                                            CANTIDAD_DIEZ: CS_CANTIDAD_DIEZ.val(),
+                                            PRECIO_DIEZ: CS_PRECIO_DIEZ.val(),
+
+                                            MANO_DE_OBRA: CS_MANO_DE_OBRA.val(),
+                                            TP: CS_TP.val(),
+                                            FACTURA: CS_FACTURA.val(),
+                                            PROVEEDOR: CS_PROVEEDOR.val()
+                                        }).done(function (a) {
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "SE HA CERRADO LA SOLICITUD.",
+                                        icon: "success"
+                                    }).then((action) => {
+                                        getSolicitudXNumeroDeVale(CSSolicitudMtoVale, btnImprimeXNoVale);
+                                        btnImprimeGuardaSolicitudMto.addClass("d-none");
+                                        AltaSolicitudMto.addClass("d-none");
+                                        SolicitudesDeManto.removeClass("d-none");
+                                        mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").addClass("d-none");
+                                        mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").find("input").val("");
+                                        mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").find("").val("");
+                                        onClearPanelInputSelect(mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto"));
+                                        getSolicitudesMto();
+                                    });
+                                }).fail(function (x) {
+                                    console.log(x, x.responseText);
+                                    onCloseOverlay();
+                                    getError(x);
+                                }).always(function () {
+
+                                });
+                                break;
+                        }
+                    }
+                }).fail(function (x) {
+                    onCloseOverlay();
+                    getError(x);
+                }).always(function () {
+
+                });
+            } else {
+                onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN NUMERO DE VALE VÁLIDO", function () {
+                    CSSolicitudMtoVale.focus().select();
+                });
+                return;
+            }
+        });
+        
+        MaquinariaRefaccion.change(function () {
+            if (MaquinariaRefaccion.val()) {
+                CodigoMaquinaria.val(MaquinariaRefaccion.val());
+                onChangeMaquinariaClave();
+            }
         });
 
         CSSolicitudMtoVale.keydown(function (e) {
             if (e.keyCode === 13 && CSSolicitudMtoVale.val()) {
                 onOpenOverlay('Cargando...');
                 $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getSolicitudXNumeroDeVale'); ?>', {
-                    VALE: CSSolicitudMtoVale.val()
-                }).done(function (a, b, c) {
+                    VALE: CSSolicitudMtoVale.val()}).done(function (a, b, c) {
                     if (a.length > 0) {
                         var r = a[0];
                         mdlSolicitudDeMantenimiento.find("#CSDeptoClaveMaquina").val(r.depto);
@@ -639,10 +799,35 @@
                             mdlSolicitudDeMantenimiento.find("#pre" + i).val(r["pre" + i]);
                         }
                         mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").val(r.desdrea);
-                        mdlSolicitudDeMantenimiento.find("#CSTP").val(r.tp);
-                        mdlSolicitudDeMantenimiento.find("#numfac").val(r.numfac);
-                        mdlSolicitudDeMantenimiento.find("#numpro").val(r.numpro);
+                        mdlSolicitudDeMantenimiento.find("#CSTP").val(r.TP);
+                        mdlSolicitudDeMantenimiento.find("#numfac").val(r.FACTURA);
+                        mdlSolicitudDeMantenimiento.find("#numpro").val(r.PROVEEDOR);
                         mdlSolicitudDeMantenimiento.find("#ctomaho").val(r.ctomaho);
+
+                        var url_site = '<?php print base_url(); ?>/';
+                        onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs img"), url_site + r.FotoUno);
+                        mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs").find("a")[0].href = url_site + r.FotoUno;
+
+                        if (r.FotoUno !== null) {
+                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_uno_cs img"), url_site + r.FotoUno);
+                        }
+                        if (r.FotoDos !== null) {
+                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_dos_cs img"), url_site + r.FotoDos);
+                        }
+                        if (r.FotoTres !== null) {
+                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_tres_cs img"), url_site + r.FotoTres);
+                        }
+                        if (r.FotoCuatro !== null) {
+                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cuatro_cs img"), url_site + r.FotoCuatro);
+                        }
+                        if (r.FotoCinco !== null) {
+                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cinco_cs img"), url_site + r.FotoCinco);
+                        }
+                        if (r.FotoSeis !== null) {
+                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_seis_cs img"), url_site + r.FotoSeis);
+                        }
+
+
                         if (parseInt(r.stsmaq) === 2) {
                             onCampoInvalido(mdlSolicitudDeMantenimiento, "MAQUINA DADA DE BAJA.", function () {
                                 CSSolicitudMtoVale.focus().select();
@@ -664,7 +849,6 @@
                 });
             }
         });
-
         SolicitudMtoVale.keydown(function (e) {
             if (e.keyCode === 13 && SolicitudMtoVale.val()) {
                 getSolicitudXVale();
@@ -690,6 +874,11 @@
             mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina").find("a")[0].href = $(this)[0].src;
         });
 
+        mdlSolicitudDeMantenimiento.find("div.foto_uno_cs img, div.foto_dos_cs img, div.foto_tres_cs img,div.foto_cuatro_cs img,div.foto_cinco_cs img,div.foto_seis_cs img").click(function () {
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs img"), $(this)[0].src);
+            mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs").find("a")[0].href = $(this)[0].src;
+        });
+
         CodigoMaquinaria.keydown(function (e) {
             if (e.keyCode === 13 && CodigoMaquinaria.val()) {
                 MaquinariaRefaccion[0].selectize.setValue(CodigoMaquinaria.val());
@@ -709,52 +898,7 @@
                     });
                     return;
                 }
-                onOpenOverlay('Cargando...');
-                $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getMaquinariabyID'); ?>',
-                        {ID: CodigoMaquinaria.val()}).done(function (a) {
-                    console.log(a.length, a);
-                    if (a.length > 0) {
-                        var r = a[0];
-                        CodigoSolicitud.val(r.nummaq);
-                        DescripcionSolicitud.val(r.nommaq);
-                        MarcaSolicitud.val(r.marmaq);
-                        ModeloSolicitud.val(r.modmaq);
-                        SerieSolicitud.val(r.sermaq);
-                        FechaAltaSolicitud.val(r.fechaalt);
-                        UltimoMantenimientoSolicitud.val(r.fechaalt);
-                        DiasSolicitud.val(r.diasmaq);
-
-                        ClaveCriticidadSolicitud[0].checked = (parseInt(r.critisida) === 2) ? true : false;
-                        ClaveEstatusSolicitud[0].checked = (parseInt(r.stsmaq) === 2) ? true : false;
-                        var url_site = '<?php print base_url(); ?>/';
-                        onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina img"), url_site + r.FotoUno);
-                        mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina").find("a")[0].href = url_site + r.FotoUno;
-                        if (r.FotoUno !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_uno img"), url_site + r.FotoUno);
-                        }
-                        if (r.FotoDos !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_dos img"), url_site + r.FotoDos);
-                        }
-                        if (r.FotoTres !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_tres img"), url_site + r.FotoTres);
-                        }
-                        if (r.FotoCuatro !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cuatro img"), url_site + r.FotoCuatro);
-                        }
-                        if (r.FotoCinco !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cinco img"), url_site + r.FotoCinco);
-                        }
-                        if (r.FotoSeis !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_seis img"), url_site + r.FotoSeis);
-                        }
-
-                        DescripcionDelProblemaSolicitud.focus().select();
-                    }
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                }).always(function () {
-                    onCloseOverlay();
-                });
+                onChangeMaquinariaClave();
             }
         });
 
@@ -791,6 +935,16 @@
             mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").removeClass("d-none");
             mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").find("#CSSolicitudMtoVale").focus().select();
             mdlSolicitudDeMantenimiento.find("#atrassolmto").removeClass("d-none");
+            onEnable(btnGuardarCierreSolicitud);
+            var url_camera_default = '<?php print base_url('img/camera.png'); ?>';
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs img"), url_camera_default);
+            mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs").find("a")[0].href = url_camera_default;
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_uno_cs img"), url_camera_default);
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_dos_cs img"), url_camera_default);
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_tres_cs img"), url_camera_default);
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cuatro_cs img"), url_camera_default);
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cinco_cs img"), url_camera_default);
+            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_seis_cs img"), url_camera_default);
         });
 
         mdlSolicitudDeMantenimiento.find("button").addClass("font-weight-bold").css({"text-transform": "uppercase"});
@@ -802,7 +956,7 @@
                         onDisable(btnImprimeGuardaSolicitudMto);
                         HoldOn.open({
                             theme: 'sk-rect',
-                            message: 'GENERANDO...'
+                            message: 'GUARDANDO...'
                         });
                         $.post('<?php print base_url('SolicitudDeMantenimiento/onAgregar'); ?>',
                                 {
@@ -816,14 +970,26 @@
                                     {
                                         VALE: SolicitudMtoVale.val(),
                                     }).done(function (data, x, jq) {
+                                onCloseOverlay();
                                 onImprimirReporteFancyAFC(data, function (a, b) {
+
                                     nuevo = true;
                                     mdlSolicitudDeMantenimiento.find("input").val('');
                                     $.each(mdlSolicitudDeMantenimiento.find("select"), function (k, v) {
                                         mdlSolicitudDeMantenimiento.find("select")[k].selectize.clear(true);
                                     });
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: "SE HA GENERADO LA SOLICITUD DE MANTENIMIENTO PARA LA MAQUINA.",
+                                        icon: "success"
+                                    }).then((action) => {
+                                        btnImprimeGuardaSolicitudMto.addClass("d-none");
+                                        mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").addClass("d-none");
+                                        AltaSolicitudMto.addClass("d-none");
+                                        SolicitudesDeManto.removeClass("d-none");
+                                        getSolicitudesMto();
+                                    });
                                 });
-                                onCloseOverlay();
                             }).fail(function (x) {
                                 onCloseOverlay();
                                 console.log(x.responseText);
@@ -858,6 +1024,7 @@
                 });
             }
         });
+
         mdlSolicitudDeMantenimiento.on('shown.bs.modal', function () {
             mdlSolicitudDeMantenimiento.find("input,textarea").val('');
             DeptoClaveMaquina.focus();
@@ -867,12 +1034,62 @@
                 DeptoMaquina[0].selectize.setValue(DeptoClaveMaquina.val());
             }
         });
+
         DeptoMaquina.change(function () {
             DeptoClaveMaquina.val($(this).val());
             CodigoMaquinaria.focus();
         });
 
     });
+
+    function onChangeMaquinariaClave() {
+        onOpenOverlay('Cargando...');
+        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getMaquinariabyID'); ?>',
+                {ID: CodigoMaquinaria.val()}).done(function (a) {
+            console.log(a.length, a);
+            if (a.length > 0) {
+                var r = a[0];
+                CodigoSolicitud.val(r.nummaq);
+                DescripcionSolicitud.val(r.nommaq);
+                MarcaSolicitud.val(r.marmaq);
+                ModeloSolicitud.val(r.modmaq);
+                SerieSolicitud.val(r.sermaq);
+                FechaAltaSolicitud.val(r.fechaalt);
+                UltimoMantenimientoSolicitud.val(r.fechaalt);
+                DiasSolicitud.val(r.diasmaq);
+
+                ClaveCriticidadSolicitud[0].checked = (parseInt(r.critisida) === 2) ? true : false;
+                ClaveEstatusSolicitud[0].checked = (parseInt(r.stsmaq) === 2) ? true : false;
+                var url_site = '<?php print base_url(); ?>/';
+                onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina img"), url_site + r.FotoUno);
+                mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina").find("a")[0].href = url_site + r.FotoUno;
+                if (r.FotoUno !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_uno img"), url_site + r.FotoUno);
+                }
+                if (r.FotoDos !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_dos img"), url_site + r.FotoDos);
+                }
+                if (r.FotoTres !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_tres img"), url_site + r.FotoTres);
+                }
+                if (r.FotoCuatro !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cuatro img"), url_site + r.FotoCuatro);
+                }
+                if (r.FotoCinco !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cinco img"), url_site + r.FotoCinco);
+                }
+                if (r.FotoSeis !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_seis img"), url_site + r.FotoSeis);
+                }
+
+                DescripcionDelProblemaSolicitud.focus().select();
+            }
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
 
     function getUltimoVale() {
         $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getUltimoVale'); ?>').done(function (d) {
@@ -898,26 +1115,29 @@
     }
 
     function getSolicitudesMto() {
+        onOpenOverlay('Cargando...');
         if ($.fn.DataTable.isDataTable('#tblSolicitudesMto')) {
             Solicitudes.ajax.reload(function () {
                 mdlSolicitudDeMantenimiento.find("#NoVale").focus();
+                getNoDeSolicitudesAbiertasYCerradas();
             });
             return;
         } else {
-            var cols = [{"data": "ID"}/*0*/,
-                {"data": "CODIGO"}/*1*/,
-                {"data": "DESCRIPCION"}/*2*/,
-                {"data": "DESCRIPCIONREF"}/*3*/,
-                {"data": "HORALLEGADA"}/*4*/, {"data": "HORAENTRADA"}/*5*/,
-                {"data": "REFACCION_UNO"}/*6*/,
-                {"data": "CANTIDAD_UNO"}/*7*/,
-                {"data": "PRECIO_UNO"}/*8*/,
-                {"data": "REFACCION_DOS"}/*9*/,
-                {"data": "CANTIDAD_DOS"}/*10*/,
-                {"data": "PRECIO_DOS"}/*11*/
+            var cols = [{"data": "ID"}/*0*/, {"data": "ABIERTA_CERRADA_ID"}/*11*/, 
+                {"data": "ABIERTA_CERRADA"}/*1*/, {"data": "VALE"}/*1*/, 
+                {"data": "CODIGO"}/*1*/, {"data": "DESCRIPCION"}/*2*/, 
+                {"data": "DESCRIPCIONREF"}/*3*/, {"data": "HORALLEGADA"}/*4*/, 
+                {"data": "HORAENTRADA"}/*5*/, {"data": "REFACCION_UNO"}/*6*/, 
+                {"data": "CANTIDAD_UNO"}/*7*/, {"data": "PRECIO_UNO"}/*8*/, 
+                {"data": "REFACCION_DOS"}/*9*/, {"data": "CANTIDAD_DOS"}/*10*/, {"data": "PRECIO_DOS"}/*11*/
+                
             ];
             var coldefs = [{
                     "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                },{
+                    "targets": [1],
                     "visible": false,
                     "searchable": false
                 }
@@ -925,29 +1145,45 @@
             Solicitudes = tblSolicitudesMto.DataTable({
                 "dom": 'ritp',
                 "ajax": {
-                    "url": '<?php print base_url('SolicitudDeMantenimiento/getSolicitudes'); ?>',
-                    "dataSrc": "", "data": function (d) {
+                    "url": '<?php print base_url('SolicitudDeMantenimiento/getSolicitudes'); ?>', "dataSrc": "", "data": function (d) {
                         d.VALE = 1;
-                    }},
-                buttons: buttons,
+                    }}, buttons: buttons,
                 "columns": cols,
                 "columnDefs": coldefs,
                 language: lang, select: true,
                 "autoWidth": true,
-                "colReorder": true,
-                "displayLength": 50, "bLengthChange": false, "deferRender": true, "scrollCollapse": false, "bSort": true,
+                "colReorder": true, "displayLength": 50, "bLengthChange": false, "deferRender": true, "scrollCollapse": false, "bSort": true,
                 "scrollY": "450px",
                 "scrollX": true,
                 "aaSorting": [
-                    [1, 'desc']
-                ],
-                initComplete: function (a, b) {
+                    [2, 'asc']
+                ], initComplete: function (a, b) {
                     mdlSolicitudDeMantenimiento.find("#NoVale").focus();
+                    getNoDeSolicitudesAbiertasYCerradas();
                 }
+            });
+
+            tblSolicitudesMto.find('tbody').on('click', 'tr', function () {
+                var row = Solicitudes.row(this).data();
+                mdlSolicitudDeMantenimiento.find("#NoVale").val(row.VALE);
+                mdlSolicitudDeMantenimiento.find("#NoVale").focus().select();
             });
         }
     }
-
+    function getNoDeSolicitudesAbiertasYCerradas() {
+        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getSolicitudesAbiertasCerradas') ?>').done(function (a) {
+            if (a.length > 0) {
+                var r = a[0];
+                mdlSolicitudDeMantenimiento.find("p.numero_de_solicitudes_cerradas").text(r.SOLICITUDES_CERRADAS + ' SOLICITUDES CERRADAS');
+                mdlSolicitudDeMantenimiento.find("p.numero_de_solicitudes_abiertas").text(r.SOLICITUDES_ABIERTAS + ' SOLICITUDES ABIERTAS');
+            }
+        }).fail(function (x) {
+            onCloseOverlay();
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
     function onSetImagen(objeto, url) {
         if (url !== null) {
             objeto[0].src = url;
@@ -1002,5 +1238,8 @@
         color: #0099ff !important;
         -ms-transform: scale(2,2); /* IE 9 */
         transform: scale(2,2);
+    }
+    #tblSolicitudesMto.dataTable tbody>tr.selected, #tblSolicitudesMto.dataTable tbody>tr>.selected {
+        background-color: #000000;
     }
 </style>

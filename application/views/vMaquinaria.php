@@ -288,19 +288,6 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-6">
-                        </div>
-                        <div class="col-6" align="right">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                <span class="fa fa-times"></span> Cerrar
-                            </button> 
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -646,6 +633,7 @@
                     onCloseOverlay();
                     onEnable(btnGuardaMaquina);
                     iMsg("MAQUINA GUARDADA", "s", function () {
+                        btnVerMaquinaria.trigger('click');
 //                    onClear(MaquilaMaquina);
 //                    onClear(DeptoMaquina);
 //                    onClear(ClaveCriticidadMaquina);
@@ -946,6 +934,7 @@
             onClear(ClaveEstatusMaquina);
             onClear(xImagenUno);
             onVolverPrimerPestana();
+            btnNuevaMaquina.trigger('click');
         });
 
         mdlMaquinaria.on('shown.bs.modal', function () {

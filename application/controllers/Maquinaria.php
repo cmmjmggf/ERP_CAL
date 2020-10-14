@@ -13,10 +13,21 @@ class Maquinaria extends CI_Controller {
 
     public function index() {
         try {
-            $maquinaria = $this->db->query("SELECT nummaq FROM maquinaria")->result();
-            foreach ($maquinaria as $k => $v) {
-                mkdir("uploads/Maquinaria/{$v->nummaq}/{$v->id}.jpg", 0777, true);
-            }
+//            $maquinaria = $this->db->query("SELECT nummaq FROM maquinaria")->result();
+//            foreach ($maquinaria as $k => $v) {
+//                mkdir("uploads/Maquinaria/{$v->nummaq}", 0777, true);
+//            } 
+//            $maquinaria = $this->db->query("SELECT nummaq,id FROM maquinaria")->result();
+//            foreach ($maquinaria as $k => $v) { 
+//                $archivo = "uploads/Maquinaria/X/" . $v->id . ".jpg";
+//                $archivo_destino = "uploads/Maquinaria/" . $v->nummaq . "/" . $v->id . ".jpg";
+//                copy($archivo, $archivo_destino); 
+//            }
+            
+//            UPDATE maquinaria 
+//SET FotoUno = CONCAT('uploads/Maquinaria/',nummaq,'/',id,'.jpg')
+//WHERE FotoUno IS NULL AND IDE > 0 ;
+
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -24,12 +35,6 @@ class Maquinaria extends CI_Controller {
 
     public function getMaquinaria() {
         try {
-//            $maquinaria = $this->db->query("SELECT nummaq FROM maquinaria")->result();
-//            foreach ($maquinaria as $k => $v) {
-//                mkdir("uploads/Maquinaria/{$v->nummaq}/{$v->id}.jpg", 0777, true);
-//                move_uploaded_file('uploads/Maquinaria/X/{$v->id}.jpg')
-//            }
-            
             print json_encode($this->db->query("SELECT M.IDE AS IDE, M.nummaq AS CODIGO, M.id AS ID, M.maq AS MAQUILA, "
                                     . "M.nommaq AS DESCRIPCION, M.marmaq AS MARCA, M.modmaq AS MODELO, "
                                     . "M.sermaq AS SERIE,M.depmaq AS DEPTO, DATE_FORMAT(M.fechaalt,\"%d/%m/%Y\") AS FECHA_ALTA, "
