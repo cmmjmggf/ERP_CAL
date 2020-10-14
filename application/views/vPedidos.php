@@ -553,6 +553,7 @@
                                 onCloseOverlay();
                                 getPedidoByID(Clave.val(), PedidoxCliente.val());
                             }
+                            pnlDatos.find("#Semana").val('');
                         }
                     }).fail(function (x) {
                         getError(x);
@@ -566,6 +567,7 @@
                             nuevo = false;
                             var xxx = JSON.parse(a);
                             getPedidoByID(xxx[0].Clave, xxx[0].Cliente);
+                            pnlDatos.find("#Semana").val('');
                         }
                     }).fail(function (x) {
                         getError(x);
@@ -1021,7 +1023,7 @@
             pnlDatos.find("#PedidoxCliente")[0].selectize.enable();
             pnlDatos.find("#Agente")[0].selectize.enable();
 //            pnlDatos.find("#FechaEntrega").prop('readonly', true);
-            pnlDatos.find("#Semana").prop('readonly', true);
+//            pnlDatos.find("#Semana").prop('readonly', true);
             pnlDatos.find("#Recibido")[0].selectize.disable();
             Clave.prop('readonly', true);
             pnlDatos.find("#FechaPedido").prop('readonly', true);
@@ -1335,7 +1337,7 @@
             pnlDatos.find("#Agente")[0].selectize.setValue(dt.Agente);
 
 //            pnlDatos.find("#FechaEntrega").val(dt.FechaEntrega);
-            pnlDatos.find("#Semana").val(dt.Semana);
+//            pnlDatos.find("#Semana").val(dt.Semana);
             pnlDatos.find("#Recibido")[0].selectize.setValue(dt.Recibido);
 
             Clave.prop('readonly', true);
