@@ -280,6 +280,7 @@ class Empleados extends CI_Controller {
             } else {
                 $this->db->set('Foto', null)->where('ID', $ID)->update('empleados');
             }
+            $l = new Logs("EMPLEADOS", "HA MODIFICADO AL EMPLEADO " . $x->post('ID') . ";SUELDO:" . $data['Sueldo'] ." SUELDO FIJO:" . $data['SueldoFijo'] . " PRESTAMO ACUMULADO:" . $data['SaldoPres'] . "; SALDO PRESTAMO:" . $data['SaldoPres'] . ", ABONO PRESTAMO: " . $data['AbonoPres'], $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

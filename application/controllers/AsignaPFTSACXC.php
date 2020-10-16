@@ -116,9 +116,10 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where("A.Control", $x['CONTROL']);
             }
-            $this->db->order_by('A.ID', 'DESC')->order_by('A.Semana', 'DESC');
+            $this->db->order_by('A.ID', 'DESC') 
+                    ->order_by('A.Semana', 'DESC');
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
-                $this->db->limit(25);
+                $this->db->limit(10);
             }
             $dtm = $this->db->get()->result();
 //            print $this->db->last_query();

@@ -16,6 +16,7 @@
                 <?php } ?>
                 <?php
                 if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
+                        $this->session->Nombre === "JULIANNA" && $this->session->TipoAcceso === "PRODUCCION"||
                         $this->session->Nombre === "GUSTAVO" && $this->session->TipoAcceso === "PRODUCCION") {
                     ?>
                     <button type="button" id="btnPespunteFraccionesFail" name="btnPespunteFraccionesFail" class="btn btn-sm btn-info" style="background-color: #940d0d; border-color: #940d0d" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
@@ -1860,6 +1861,7 @@
                 Control.focus().select();
                 btnAceptar.attr('disabled', false);
                 break;
+            case "JULIANNA":
             case "GUSTAVO":
                 switch (parseInt(Departamento.val())) {
                     case 40:

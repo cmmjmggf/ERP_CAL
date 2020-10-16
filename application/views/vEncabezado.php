@@ -147,7 +147,7 @@
         </script>
     </head>
     <?php
-    if (session_status() === 2 && isset($_SESSION["LOGGED"]) && $this->session->USERNAME === 'X') {
+    if (session_status() === 2 && isset($_SESSION["LOGGED"])) {
         $HOY = Date('Y-m-d');
         $IDX = $this->session->ID;
         $IPX = $_SERVER['REMOTE_ADDR'];

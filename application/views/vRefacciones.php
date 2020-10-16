@@ -40,13 +40,13 @@
                                 <label>Departamento</label>
                                 <div class="row">
                                     <div class="col-4 col-xs-4 col-sm-4">
-                                        <input type="text" id="DeptoClaveMaquina" name="DeptoClaveMaquina" class="form-control" maxlength="3">
+                                        <input type="text" id="DeptoClaveMaquinaRefacciones" name="DeptoClaveMaquinaRefacciones" class="form-control" maxlength="3">
                                     </div>
                                     <div class="col-8 col-xs-8 col-sm-8"> 
-                                        <select id="DeptoMaquina" name="DeptoMaquina" class="form-control form-control-sm">
+                                        <select id="DeptoMaquinaRefacciones" name="DeptoMaquinaRefacciones" class="form-control form-control-sm">
                                             <option></option>                                   
                                             <?php
-                                            $departamentos = $this->db->query("SELECT Clave, Descripcion FROM departamentos;")->result();
+                                            $departamentos = $this->db->query("SELECT Clave, Descripcion FROM departamentos ORDER BY Descripcion ASC;")->result();
                                             foreach ($departamentos as $k => $v) {
                                                 print "<option value='{$v->Clave}'>{$v->Descripcion}</option>";
                                             }
@@ -102,10 +102,13 @@
                                 <a href="<?php print base_url('img/camera.png'); ?>" data-fancybox>
                                     <img src="<?php print base_url('img/camera.png'); ?>" width="100%" class="img-fluid imagen_principal" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);" style="cursor: pointer;">
                                 </a>   
-                            </div>   
+                            </div> 
+                            <div id="Contenedor" class="col-12">
+                                <div class="row"></div>
+                            </div>
                         </div>
                     </div> 
-                    <div class="row">
+                    <div class="row d-none">
                         <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
                             <table id="tblRefaccionesMto" class="table  table-sm table-bordered" style="width:  100%;">
@@ -137,7 +140,9 @@
                 </div>
                 <div class="col-6">
                     <div align="right">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> 
+                        <button type="button" class="btn btn-secondary" id="btnGuardarRefaccion" style="background-color: #000000; border-color: #000000;">
+                            <span class="fa fa-save"></span> Guardar
+                        </button> 
                     </div>
                 </div>
             </div>
@@ -146,17 +151,29 @@
 </div>
 <script>
     var mdlRefacciones = $("#mdlRefacciones"),
+            CodigoRefaccion = mdlRefacciones.find("#CodigoRefaccion"),
+            DeptoMaquinaRefacciones = mdlRefacciones.find("#DeptoMaquinaRefacciones"),
+            DeptoClaveMaquinaRefacciones = mdlRefacciones.find("#DeptoClaveMaquinaRefacciones"),
             btnSubirFotosRefacciones = mdlRefacciones.find("#btnSubirFotosRefacciones"),
             tblRefaccionesMto = mdlRefacciones.find("#tblRefaccionesMto"), RefaccionesMto;
 
     $(document).ready(function () {
 
+        DeptoMaquinaRefacciones.change(function () {
+            console.log(DeptoMaquinaRefacciones.val());
+            if (DeptoMaquinaRefacciones.val()) {
+                DeptoClaveMaquinaRefacciones.val(DeptoMaquinaRefacciones.val());
+            }
+        });
+
         mdlRefacciones.on('shown.bs.modal', function () {
             mdlRefacciones.find("input").val('');
             mdlRefacciones.find("#Contenedor div.row").html('');
-
+            return;
             if ($.fn.DataTable.isDataTable('#tblRefaccionesMto')) {
-                RefaccionesMto.ajax.reload();
+                RefaccionesMto.ajax.reload(function(){
+                    CodigoRefaccion.focus().select();
+                });
                 return;
             } else {
                 var cols = [

@@ -1,5 +1,5 @@
 <div class="modal" id="mdlSolicitudDeMantenimiento" tabindex="-1" role="dialog" 
-     aria-labelledby="mdlSolicitudDeMantenimiento" aria-hidden="true">
+     aria-labelledby="mdlSolicitudDeMantenimiento" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg notdraggable " style="min-width: 40%;max-width: 70%; "  role="document" >
         <div class="modal-content notresizable">
             <div class="modal-header">
@@ -384,21 +384,17 @@
                     </div>
                 </div> 
                 <div class="row" id="SolicitudesDeManto">
-                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="left">
-                        <button type="button" class="btn btn-info font-weight-bold" id="btnCierraSolicitudMto">
-                            <span class="fa fa-file-archive"></span> CIERRA SOLICITUD
-                        </button>  
+
+                    <div class="col-2">
+                        <input type="text" id="NoVale" name="NoVale" class="form-control" autofocus="">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="left">
+                    <div class="col-2">
+                        <button type="button" class="btn btn-info font-weight-bold" id="btnImprimeXNoVale">
+                            <span class="fa fa-print"></span> 
+                        </button> 
+                    </div> 
+                    <div class="col-12 col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4" align="left">
                         <div class="row">
-                            <div class="col-2">
-                                <input type="text" id="NoVale" name="NoVale" class="form-control" autofocus="">
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn btn-info font-weight-bold" id="btnImprimeXNoVale">
-                                    <span class="fa fa-print"></span> 
-                                </button> 
-                            </div> 
                             <div class="col-4">
                                 <p class="font-italic numero_de_solicitudes_cerradas">0 SOLICITUDES CERRADAS</p>
                             </div>
@@ -406,6 +402,11 @@
                                 <p class="font-italic numero_de_solicitudes_abiertas">0 SOLICITUDES ABIERTAS</p>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="right">
+                        <button type="button" class="btn btn-info font-weight-bold" id="btnCierraSolicitudMto">
+                            <span class="fa fa-file-archive"></span> CIERRA SOLICITUD
+                        </button>  
                     </div>
                     <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="right">
                         <button type="button" id="btnNuevaSolicitud" class="btn btn-info" style="background-color: #4CAF50; border-color: #4CAF50;">
@@ -599,6 +600,86 @@
         getSolicitudesMto();
     }
 
+    function getValeXNoDeVale() {
+        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getSolicitudXNumeroDeVale'); ?>', {
+            VALE: CSSolicitudMtoVale.val()}).done(function (a, b, c) {
+            if (a.length > 0) {
+                var r = a[0];
+                mdlSolicitudDeMantenimiento.find("#CSDeptoClaveMaquina").val(r.depto);
+                mdlSolicitudDeMantenimiento.find("#CSDeptoMaquina")[0].selectize.setValue(r.depto);
+                mdlSolicitudDeMantenimiento.find("#CSIdMaquinariaRefaccion").val(r.codigo);
+                mdlSolicitudDeMantenimiento.find("#CSMaquinariaRefaccion")[0].selectize.setValue(r.idmaq);
+                mdlSolicitudDeMantenimiento.find("#CSCodigoSolicitud").val(r.nummaq);
+                mdlSolicitudDeMantenimiento.find("#CSDescripcionSolicitud").val(r.nommaq);
+                mdlSolicitudDeMantenimiento.find("#CSMarcaSolicitud").val(r.marmaq);
+                mdlSolicitudDeMantenimiento.find("#CSModeloSolicitud").val(r.modmaq);
+                mdlSolicitudDeMantenimiento.find("#CSSerieSolicitud").val(r.sermaq);
+                mdlSolicitudDeMantenimiento.find("#CSFechaAltaSolicitud").val(r.fechaalt);
+                mdlSolicitudDeMantenimiento.find("#CSUltimoMantenimientoSolicitud").val(r.fecultma);
+                mdlSolicitudDeMantenimiento.find("#CSDiasSolicitud").val(r.diasmaq);
+                mdlSolicitudDeMantenimiento.find("#CSDescripcionDelProblemaSolicitud").val(r.desdpro);
+                mdlSolicitudDeMantenimiento.find("#CSClaveCriticidadSolicitud")[0].checked = parseInt(r.critisida) === 2;
+                mdlSolicitudDeMantenimiento.find("#CSClaveEstatusSolicitud")[0].checked = parseInt(r.stsmaq) === 2;
+                mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").val(r.desdrea);
+                mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").focus().select();
+
+                for (var i = 1, max = 10; i <= max; i++) {
+                    mdlSolicitudDeMantenimiento.find("#refa" + i).val(r["refa" + i]);
+                    mdlSolicitudDeMantenimiento.find("#cant" + i).val(r["cant" + i]);
+                    mdlSolicitudDeMantenimiento.find("#pre" + i).val(r["pre" + i]);
+                }
+                mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").val(r.desdrea);
+                mdlSolicitudDeMantenimiento.find("#CSTP").val(r.TP);
+                mdlSolicitudDeMantenimiento.find("#numfac").val(r.FACTURA);
+                mdlSolicitudDeMantenimiento.find("#numpro").val(r.PROVEEDOR);
+                mdlSolicitudDeMantenimiento.find("#ctomaho").val(r.ctomaho);
+
+                var url_site = '<?php print base_url(); ?>/';
+                onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs img"), url_site + r.FotoUno);
+                mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs").find("a")[0].href = url_site + r.FotoUno;
+
+                if (r.FotoUno !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_uno_cs img"), url_site + r.FotoUno);
+                }
+                if (r.FotoDos !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_dos_cs img"), url_site + r.FotoDos);
+                }
+                if (r.FotoTres !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_tres_cs img"), url_site + r.FotoTres);
+                }
+                if (r.FotoCuatro !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cuatro_cs img"), url_site + r.FotoCuatro);
+                }
+                if (r.FotoCinco !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cinco_cs img"), url_site + r.FotoCinco);
+                }
+                if (r.FotoSeis !== null) {
+                    onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_seis_cs img"), url_site + r.FotoSeis);
+                }
+
+
+                if (parseInt(r.stsmaq) === 2) {
+                    onCampoInvalido(mdlSolicitudDeMantenimiento, "MAQUINA DADA DE BAJA.", function () {
+                        CSSolicitudMtoVale.focus().select();
+                    });
+                }
+                if (parseInt(r.ident) === 2) {
+                    onDisable(btnGuardarCierreSolicitud);
+                    onCampoInvalido(mdlSolicitudDeMantenimiento, "SOLICITUD CERRADA.", function () {
+                        CSSolicitudMtoVale.focus().select();
+                        onEnable(btnGuardarCierreSolicitud);
+                    });
+                } else {
+                    onEnable(btnGuardarCierreSolicitud);
+                }
+            }
+            onCloseOverlay();
+        }).fail(function (x, y, z) {
+            onCloseOverlay();
+            getError(x);
+        });
+    }
+
     function getSolicitudXNumeroDeVale(novale, btnvale) {
         var vale = novale.val();
         if (vale) {
@@ -729,6 +810,7 @@
                                     }).then((action) => {
                                         getSolicitudXNumeroDeVale(CSSolicitudMtoVale, btnImprimeXNoVale);
                                         btnImprimeGuardaSolicitudMto.addClass("d-none");
+                                        btnGuardarCierreSolicitud.addClass("d-none");
                                         AltaSolicitudMto.addClass("d-none");
                                         SolicitudesDeManto.removeClass("d-none");
                                         mdlSolicitudDeMantenimiento.find("#CierraSolicitudDeMto").addClass("d-none");
@@ -754,13 +836,15 @@
 
                 });
             } else {
-                onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN NUMERO DE VALE VÁLIDO", function () {
-                    CSSolicitudMtoVale.focus().select();
-                });
-                return;
+                if (CSSolicitudMtoVale.val()) {
+                    onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN NUMERO DE VALE VÁLIDO", function () {
+                        CSSolicitudMtoVale.focus().select();
+                    });
+                    return;
+                }
             }
         });
-        
+
         MaquinariaRefaccion.change(function () {
             if (MaquinariaRefaccion.val()) {
                 CodigoMaquinaria.val(MaquinariaRefaccion.val());
@@ -771,82 +855,7 @@
         CSSolicitudMtoVale.keydown(function (e) {
             if (e.keyCode === 13 && CSSolicitudMtoVale.val()) {
                 onOpenOverlay('Cargando...');
-                $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getSolicitudXNumeroDeVale'); ?>', {
-                    VALE: CSSolicitudMtoVale.val()}).done(function (a, b, c) {
-                    if (a.length > 0) {
-                        var r = a[0];
-                        mdlSolicitudDeMantenimiento.find("#CSDeptoClaveMaquina").val(r.depto);
-                        mdlSolicitudDeMantenimiento.find("#CSDeptoMaquina")[0].selectize.setValue(r.depto);
-                        mdlSolicitudDeMantenimiento.find("#CSIdMaquinariaRefaccion").val(r.codigo);
-                        mdlSolicitudDeMantenimiento.find("#CSMaquinariaRefaccion")[0].selectize.setValue(r.idmaq);
-                        mdlSolicitudDeMantenimiento.find("#CSCodigoSolicitud").val(r.nummaq);
-                        mdlSolicitudDeMantenimiento.find("#CSDescripcionSolicitud").val(r.nommaq);
-                        mdlSolicitudDeMantenimiento.find("#CSMarcaSolicitud").val(r.marmaq);
-                        mdlSolicitudDeMantenimiento.find("#CSModeloSolicitud").val(r.modmaq);
-                        mdlSolicitudDeMantenimiento.find("#CSSerieSolicitud").val(r.sermaq);
-                        mdlSolicitudDeMantenimiento.find("#CSFechaAltaSolicitud").val(r.fechaalt);
-                        mdlSolicitudDeMantenimiento.find("#CSUltimoMantenimientoSolicitud").val(r.fecultma);
-                        mdlSolicitudDeMantenimiento.find("#CSDiasSolicitud").val(r.diasmaq);
-                        mdlSolicitudDeMantenimiento.find("#CSDescripcionDelProblemaSolicitud").val(r.desdpro);
-                        mdlSolicitudDeMantenimiento.find("#CSClaveCriticidadSolicitud")[0].checked = parseInt(r.critisida) === 2;
-                        mdlSolicitudDeMantenimiento.find("#CSClaveEstatusSolicitud")[0].checked = parseInt(r.stsmaq) === 2;
-                        mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").val(r.desdrea);
-                        mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").focus().select();
-
-                        for (var i = 1, max = 10; i <= max; i++) {
-                            mdlSolicitudDeMantenimiento.find("#refa" + i).val(r["refa" + i]);
-                            mdlSolicitudDeMantenimiento.find("#cant" + i).val(r["cant" + i]);
-                            mdlSolicitudDeMantenimiento.find("#pre" + i).val(r["pre" + i]);
-                        }
-                        mdlSolicitudDeMantenimiento.find("#CSDescripcionDeloRealizado").val(r.desdrea);
-                        mdlSolicitudDeMantenimiento.find("#CSTP").val(r.TP);
-                        mdlSolicitudDeMantenimiento.find("#numfac").val(r.FACTURA);
-                        mdlSolicitudDeMantenimiento.find("#numpro").val(r.PROVEEDOR);
-                        mdlSolicitudDeMantenimiento.find("#ctomaho").val(r.ctomaho);
-
-                        var url_site = '<?php print base_url(); ?>/';
-                        onSetImagen(mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs img"), url_site + r.FotoUno);
-                        mdlSolicitudDeMantenimiento.find("div.imagen_principal_maquina_cs").find("a")[0].href = url_site + r.FotoUno;
-
-                        if (r.FotoUno !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_uno_cs img"), url_site + r.FotoUno);
-                        }
-                        if (r.FotoDos !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_dos_cs img"), url_site + r.FotoDos);
-                        }
-                        if (r.FotoTres !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_tres_cs img"), url_site + r.FotoTres);
-                        }
-                        if (r.FotoCuatro !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cuatro_cs img"), url_site + r.FotoCuatro);
-                        }
-                        if (r.FotoCinco !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_cinco_cs img"), url_site + r.FotoCinco);
-                        }
-                        if (r.FotoSeis !== null) {
-                            onSetImagen(mdlSolicitudDeMantenimiento.find("div.foto_seis_cs img"), url_site + r.FotoSeis);
-                        }
-
-
-                        if (parseInt(r.stsmaq) === 2) {
-                            onCampoInvalido(mdlSolicitudDeMantenimiento, "MAQUINA DADA DE BAJA.", function () {
-                                CSSolicitudMtoVale.focus().select();
-                            });
-                        }
-                        if (parseInt(r.ident) === 2) {
-                            onDisable(btnGuardarCierreSolicitud);
-                            onCampoInvalido(mdlSolicitudDeMantenimiento, "SOLICITUD CERRADA.", function () {
-                                CSSolicitudMtoVale.focus().select();
-                            });
-                        } else {
-                            onEnable(btnGuardarCierreSolicitud);
-                        }
-                    }
-                    onCloseOverlay();
-                }).fail(function (x, y, z) {
-                    onCloseOverlay();
-                    getError(x);
-                });
+                getValeXNoDeVale();
             }
         });
         SolicitudMtoVale.keydown(function (e) {
@@ -903,6 +912,7 @@
         });
 
         btnNuevaSolicitud.click(function () {
+            onEnable(btnImprimeGuardaSolicitudMto);
             mdlSolicitudDeMantenimiento.find("#atrassolmton").removeClass("d-none");
             btnImprimeGuardaSolicitudMto.removeClass("d-none");
             btnGuardarCierreSolicitud.addClass("d-none");
@@ -922,6 +932,8 @@
         mdlSolicitudDeMantenimiento.on('shown.bs.modal', function () {
             AltaSolicitudMto.addClass("d-none");
             SolicitudesDeManto.removeClass("d-none");
+            btnImprimeGuardaSolicitudMto.addClass("d-none");
+            btnGuardarCierreSolicitud.addClass("d-none");
             getSolicitudesMto();
             nuevo = true;
         });
@@ -1013,7 +1025,7 @@
                     }
                 } else {
                     onEnable(btnImprimeGuardaSolicitudMto);
-                    onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN DEPARTAMENTO", function () {
+                    onCampoInvalido(mdlSolicitudDeMantenimiento, "DEBE DE ESPECIFICAR UN DEPARTAMENTO VÁLIDO", function () {
                         DeptoClaveMaquina.focus().select();
                     });
                 }
@@ -1123,27 +1135,27 @@
             });
             return;
         } else {
-            var cols = [{"data": "ID"}/*0*/, {"data": "ABIERTA_CERRADA_ID"}/*11*/, 
-                {"data": "ABIERTA_CERRADA"}/*1*/, {"data": "VALE"}/*1*/, 
-                {"data": "CODIGO"}/*1*/, {"data": "DESCRIPCION"}/*2*/, 
-                {"data": "DESCRIPCIONREF"}/*3*/, {"data": "HORALLEGADA"}/*4*/, 
-                {"data": "HORAENTRADA"}/*5*/, {"data": "REFACCION_UNO"}/*6*/, 
-                {"data": "CANTIDAD_UNO"}/*7*/, {"data": "PRECIO_UNO"}/*8*/, 
+            var cols = [{"data": "ID"}/*0*/, {"data": "ABIERTA_CERRADA_ID"}/*11*/,
+                {"data": "ABIERTA_CERRADA"}/*1*/, {"data": "VALE"}/*1*/,
+                {"data": "CODIGO"}/*1*/, {"data": "DESCRIPCION"}/*2*/,
+                {"data": "DESCRIPCIONREF"}/*3*/, {"data": "HORALLEGADA"}/*4*/,
+                {"data": "HORAENTRADA"}/*5*/, {"data": "REFACCION_UNO"}/*6*/,
+                {"data": "CANTIDAD_UNO"}/*7*/, {"data": "PRECIO_UNO"}/*8*/,
                 {"data": "REFACCION_DOS"}/*9*/, {"data": "CANTIDAD_DOS"}/*10*/, {"data": "PRECIO_DOS"}/*11*/
-                
+
             ];
             var coldefs = [{
                     "targets": [0],
                     "visible": false,
                     "searchable": false
-                },{
+                }, {
                     "targets": [1],
                     "visible": false,
                     "searchable": false
                 }
             ];
             Solicitudes = tblSolicitudesMto.DataTable({
-                "dom": 'ritp',
+                "dom": 'fritp',
                 "ajax": {
                     "url": '<?php print base_url('SolicitudDeMantenimiento/getSolicitudes'); ?>', "dataSrc": "", "data": function (d) {
                         d.VALE = 1;
@@ -1167,6 +1179,14 @@
                 var row = Solicitudes.row(this).data();
                 mdlSolicitudDeMantenimiento.find("#NoVale").val(row.VALE);
                 mdlSolicitudDeMantenimiento.find("#NoVale").focus().select();
+            });
+            tblSolicitudesMto.find('tbody').on('dblclick', 'tr', function () {
+                var row = Solicitudes.row(this).data();
+                mdlSolicitudDeMantenimiento.find("#NoVale").val(row.VALE);
+                mdlSolicitudDeMantenimiento.find("#NoVale").focus().select();
+                btnCierraSolicitudMto.trigger('click');
+                CSSolicitudMtoVale.val(row.VALE);
+                getValeXNoDeVale();
             });
         }
     }

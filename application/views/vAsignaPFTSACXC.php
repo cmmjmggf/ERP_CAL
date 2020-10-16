@@ -258,10 +258,10 @@
 </div>
 
 <div class="modal" id="mdlRetornaMaterial">
-    <div class="modal-dialog modal-lg notdraggable" role="document">
+    <div class="modal-dialog modal-lg notdraggable modal-dialog-centered" role="document" style="min-width: 70%">
         <div class="modal-content">
             <div class="modal-header text-center" align="center">
-                <h4 class="modal-title"><span class="fa fa-retweet"></span> Regresa materiales de corte a almacen</h4>
+                <h6 class="modal-title"><span class="fa fa-retweet"></span> Regresa materiales de corte a almacen</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -344,24 +344,24 @@
                     </div>
                     <div class="w-100"></div>
                     <div class="col-6"></div>
-                    <div class="col-6 mb-2" align="right"><button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
+                    <div class="col-6 my-2" align="right"><button type="button" class="btn btn-info" id="btnAceptar" name="btnAceptar">
                             <span class="fa fa-check"></span> Aceptar</button>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table id="tblRegresos" class="table table-hover table-sm" style="width: 100%;">
+                        <table id="tblRegresos" class="table table-hover table-sm nowrap" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th scope="col">ID</th><!--0-->
                                     <th scope="col">Cortador</th><!--1-->
                                     <th scope="col">Control</th><!--2-->
 
-                                    <th scope="col">Pi-Fo</th><!--100 = piel, 99 = forro--><!--3-->
+                                    <th scope="col">Fracción</th><!--100 = piel, 99 = forro--><!--3-->
                                     <th scope="col">Estilo</th><!--4-->
-                                    <th scope="col">Col</th><!--5-->
+                                    <th scope="col">Color</th><!--5-->
 
                                     <th scope="col">Pares</th><!--6-->
-                                    <th scope="col">Art.</th><!--7-->
-                                    <th scope="col">Art.Des</th><!--8-->
+                                    <th scope="col">Articulo</th><!--7-->
+                                    <th scope="col">Art.Descripción</th><!--8-->
 
                                     <th scope="col">Entregado</th><!--9-->
                                     <th scope="col">Regreso</th><!--10-->
@@ -440,7 +440,6 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRetornaMaterial);
-
         xPielForro.on('keydown', function (e) {
             if (e.keyCode === 13 && xPielForro.val()) {
                 PielForro[0].selectize.setValue(xPielForro.val());
@@ -457,8 +456,6 @@
                 onClear(PielForro);
             }
         });
-
-
         Semana.on('keydown', function (e) {
             Pieles.ajax.reload();
             Forros.ajax.reload();
@@ -466,7 +463,6 @@
             Textiles.ajax.reload();
             ControlesAsignados.ajax.reload();
         });
-
         ControlRetorna.on('keydown', function (e) {
             if (ControlRetorna.val() && e.keyCode === 13) {
                 var xpifo = 100;
@@ -503,11 +499,9 @@
                 });
             }
         });
-
         btnEntregar.click(function () {
             onEntregarMaterial();
         });
-
         CortadorClave.on('keydown', function (e) {
             if (e.keyCode === 13 && CortadorClave.val()) {
                 onDisable(Cortador);
@@ -520,7 +514,6 @@
             }
 
         });
-
         mdlRetornaMaterial.on('hidden.bs.modal', function () {
             mdlRetornaMaterial.find("input").val("");
             $.each(mdlRetornaMaterial.find("select"), function (k, v) {
@@ -532,7 +525,6 @@
             CortadorClave.focus();
             Regresos.ajax.reload();
         });
-
         mdlRetornaMaterial.find("#Control").focusout(function () {
             if (mdlRetornaMaterial.find("#Control").val()) {
 //                swal('SUCCESS', 'AHORA,DEBE DE SELECCIONAR UN REGISTRO DE LA TABLA CON EL CONTROL ESPECIFICADO', 'success').then((value) => {
@@ -567,7 +559,6 @@
                 btnAceptar.focus();
             }
         });
-
         btnAceptar.click(function () {
             onEnable(Cortador);
             onDisable(btnAceptar);
@@ -586,20 +577,17 @@
                 return;
             }
         });
-
         mdlRetornaMaterial.find("#Control").keydown(function (e) {
             if (e.keyCode === 13) {
                 getParesXControl($(this));
             }
         });
-
         mdlRetornaMaterial.find("#Cortador").change(function () {
             if ($(this).val() !== '') {
                 mdlRetornaMaterial.find("#PielForro")[0].selectize.open();
                 mdlRetornaMaterial.find("#PielForro")[0].selectize.focus();
             }
         });
-
         btnRetornaMaterial.click(function () {
             mdlRetornaMaterial.modal('show');
         });
@@ -690,7 +678,6 @@
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 1);
                 tipo_consumo = 1; /*PIEL*/
                 $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
-
             } else {
                 onUnSelect();
             }
@@ -720,7 +707,6 @@
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 2);
                 tipo_consumo = 2; /*FORRO*/
                 $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
-
             } else {
                 onUnSelect();
             }
@@ -750,7 +736,6 @@
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 34);
                 tipo_consumo = 34; /*TEXTIL*/
                 $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
-
             } else {
                 onUnSelect();
             }
@@ -780,7 +765,6 @@
                 getExplosionXSemanaControlFraccionArticulo(Semana, Control, Fraccion, data.ARTICULO_CLAVE, 40);
                 tipo_consumo = 40; /*SINTETICOS*/
                 $(".card div[id='tblPieles_wrapper'],.card div[id='tblForros_wrapper'], .card div[id='tblSinteticos_wrapper'], .card div[id='tblTextiles_wrapper']").removeClass("highlight-wrapper");
-
             } else {
                 onUnSelect();
             }
@@ -919,16 +903,28 @@
             "scrollCollapse": false
         });
         tblRegresos.on('click', 'tr', function () {
-            var data = Regresos.row(this).data();
-            console.log('Regresos', data);
-            mdlRetornaMaterial.find("#Articulo").val(data.Articulo);
-            mdlRetornaMaterial.find("#ArticuloT").val(data.ArticuloT);
-            mdlRetornaMaterial.find("#Entrego").val(data.Entregado);
-            mdlRetornaMaterial.find("#IDA").val(data.ID);
-            mdlRetornaMaterial.find("#Estilo").val(data.Estilo);
-            mdlRetornaMaterial.find("#Color").val(data.Color);
-            mdlRetornaMaterial.find("#AnteriormenteRetorno").val(data.Regreso);
-            mdlRetornaMaterial.find("#Regreso").focus();
+            if (CortadorClave.val()) {
+                if (xPielForro.val()) {
+                    var data = Regresos.row(this).data();
+                    console.log('Regresos', data);
+                    mdlRetornaMaterial.find("#Articulo").val(data.Articulo);
+                    mdlRetornaMaterial.find("#ArticuloT").val(data.ArticuloT);
+                    mdlRetornaMaterial.find("#Entrego").val(data.Entregado);
+                    mdlRetornaMaterial.find("#IDA").val(data.ID);
+                    mdlRetornaMaterial.find("#Estilo").val(data.Estilo);
+                    mdlRetornaMaterial.find("#Color").val(data.Color);
+                    mdlRetornaMaterial.find("#AnteriormenteRetorno").val(data.Regreso);
+                    mdlRetornaMaterial.find("#Regreso").focus();
+                } else {
+                    onCampoInvalido(mdlRetornaMaterial, "DEBE DE ESPECIFICAR UN TIPO (1 PIEL O 2 FORRO)", function () {
+                        xPielForro.focus().select();
+                    });
+                }
+            } else {
+                onCampoInvalido(mdlRetornaMaterial, "DEBE DE ESPECIFICAR UN CORTADOR", function () {
+                    CortadorClave.focus().select();
+                });
+            }
         });
         init();
     });
@@ -1015,7 +1011,6 @@
             tblRegresos.DataTable().column(i).search('').draw();
         }
     }
-
     function onCalcularAlBuscar() {
         $(Pieles.column(8).footer()).html($.number(
                 Pieles.column(8, {page: 'current'}).data().reduce(function (a, b) {
@@ -1103,8 +1098,7 @@
                     var options = {
                         title: "INDIQUE UNA SEMANA DE PRODUCCIÓN VÁLIDA",
                         text: "LA SEMANA " + $(e).val() + " NO EXISTE O NO HA SIDO GENERADA.",
-                        icon: "warning",
-                        focusConfirm: true,
+                        icon: "warning", focusConfirm: true,
                         closeOnClickOutside: false,
                         closeOnEsc: false
                     };
@@ -1119,7 +1113,6 @@
             });
         }
     }
-
     function onEntregar(e, evt) {
         if (evt.keyCode === 13) {
             console.log('KEY CODE 13');
@@ -1429,5 +1422,27 @@
     #pnlTablero h5{
         font-size: 25px;
         font-style: italic;
+    }
+    #tblRegresos tr td{
+        font-size: 16px;
+        font-weight: bold;
+    } 
+    #tblRegresos tr th,#tblRegresos tr td{
+        text-align: center;
+    }
+    #mdlRetornaMaterial table thead th{
+        color:#ffffff;
+        background-color: #000000 !important;
+    }
+    #tblRegresos tr:hover td:nth-child(2), 
+    #tblRegresos tr:hover td:nth-child(4), 
+    #tblRegresos tr:hover td:nth-child(6), 
+    #tblRegresos tr:hover td:nth-child(8), 
+    #tblRegresos tr:hover td:nth-child(10){
+        color:#ffcc33;
+    }
+    #tblRegresos.dataTable tbody>tr.selected, #tblRegresos.dataTable tbody>tr>.selected {
+        background-color: #000000;
+        color: #CDDC39;
     }
 </style>

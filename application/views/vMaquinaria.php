@@ -893,6 +893,7 @@
         });
 
         btnNuevaMaquina.click(function () {
+            onOpenOverlay('');
             onVolverPrimerPestana();
             mdlMaquinaria.find("#RegistroMaquinaria").find("input").val("");
             onClearPanelInputSelect(mdlMaquinaria.find("#RegistroMaquinaria"), function () {
@@ -903,7 +904,10 @@
                 btnNuevaMaquina.addClass("d-none");
                 getUltimaMaquinaria(function () {
                     getUltimaIDMaquinaria(function () {
-                        IdMaquina.focus();
+                        getUltimoIDMaquinariaSugerido(function () {
+                            onCloseOverlay();
+                            IdMaquina.focus();
+                        });
                     });
                 });
                 IdMaquina.focus().select();
