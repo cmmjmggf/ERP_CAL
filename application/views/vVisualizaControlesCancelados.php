@@ -107,8 +107,9 @@
         init();
 
         pnlTablero.find('#Control').keypress(function (e) {
-            onOpenOverlay('Cargando...');
+            
             if (e.keyCode === 13 && $(this).val()) {
+                onOpenOverlay('Cargando...');
                 $.getJSON(master_url + 'getControlCancelado', {
                     Control: $(this).val()
                 }).done(function (data) {

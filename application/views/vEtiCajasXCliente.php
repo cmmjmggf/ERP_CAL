@@ -2,7 +2,8 @@
     <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Etiquetas por Cliente</h5>
+                <h5 class="modal-title">
+                    <span class="fa fa-barcode"></span> Etiquetas por Cliente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -83,7 +84,6 @@
             mdlEtiCajaXCliente.find('#Ano').val(getYear());
             mdlEtiCajaXCliente.find('#Cliente').focus();
         });
-
         mdlEtiCajaXCliente.find('#Cliente').keypress(function (e) {
             if (e.keyCode === 13) {
                 var txtCliente = $(this).val();
@@ -172,81 +172,85 @@
             }
         });
         mdlEtiCajaXCliente.find('#btnImprimir').on("click", function () {
-            onDisable(mdlEtiCajaXCliente.find('#btnImprimir'));
-            HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
-            var reporte = 'OnReporteEtiquetasCajasGeneral';
-            var csv = 'onExportarCSVGenerico';
-
-            var cte = mdlEtiCajaXCliente.find('#Cliente').val();
-            if (cte === '854') {//PAKAR
-                reporte = 'OnReporteEtiquetasCajasPakar';
-                csv = 'onExportarCSVPakar';
-            } else if (cte === '39' || cte === '995') {//PRICE y ZAPATERÍA SUPER
-                reporte = 'OnReporteEtiquetasCajasPriceSuper';
-                csv = 'onExportarCSVPriceSuper';
-            } else if (cte === '2564' || cte === '2566' || cte === '2567' || cte === '2568') {//EXPORTACION SUSANA
-                reporte = 'OnReporteEtiquetasCajasExportacion';
-                csv = 'onExportarCSVExportacion';
-            } else {//CUALQUIER OTRO CLIENTE QUE NO SEA LOS ANTERIORES
-                reporte = 'OnReporteEtiquetasCajasGeneral';
-                csv = 'onExportarCSVGenerico';
-            }
-
-
-            var frm = new FormData(mdlEtiCajaXCliente.find("#frmCaptura")[0]);
-            var tpo = mdlEtiCajaXCliente.find("#bPorControlEti")[0].checked ? '1' : '0';
-            frm.append('Tipo', tpo);
-            $.ajax({
-                url: base_url + 'index.php/ReportesEstiquetasProduccion/' + reporte,
-                type: "POST",
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: frm
-            }).done(function (data, x, jq) {
-                console.log(data);
-                if (data.length > 0) {
-
-
-                    $.ajax({
-                        url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
-                        type: "POST"
-                    }).done(function (data, x, jq) {
-                        console.log(data);
-                        if (data.length > 0) {
-                            window.open(data, '_blank');
-                            onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
-                        }
-                        HoldOn.close();
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                        HoldOn.close();
-                    });
-
-
-                } else {
-                    HoldOn.close();
-                    swal({
-                        title: "ATENCIÓN",
-                        text: "NO EXISTEN DATOS PARA GENERAR EL ARCHIVO",
-                        icon: "error"
-                    }).then((action) => {
-                        mdlEtiCajaXCliente.find('#Ano').focus();
-                    });
+            var client = mdlEtiCajaXCliente.find('#Cliente');
+            if (client.val() === '') {
+                onCampoInvalido(mdlEtiCajaXCliente, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
+                    client.focus().select();
+                });
+                return;
+            } else {
+                onDisable(mdlEtiCajaXCliente.find('#btnImprimir'));
+                HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
+                var reporte = 'OnReporteEtiquetasCajasGeneral';
+                var csv = 'onExportarCSVGenerico';
+                var cte = mdlEtiCajaXCliente.find('#Cliente').val();
+                if (cte === '854') {//PAKAR
+                    reporte = 'OnReporteEtiquetasCajasPakar';
+                    csv = 'onExportarCSVPakar';
+                } else if (cte === '39' || cte === '995') {//PRICE y ZAPATERÍA SUPER
+                    reporte = 'OnReporteEtiquetasCajasPriceSuper';
+                    csv = 'onExportarCSVPriceSuper';
+                } else if (cte === '2564' || cte === '2566' || cte === '2567' || cte === '2568') {//EXPORTACION SUSANA
+                    reporte = 'OnReporteEtiquetasCajasExportacion';
+                    csv = 'onExportarCSVExportacion';
+                } else {//CUALQUIER OTRO CLIENTE QUE NO SEA LOS ANTERIORES
+                    reporte = 'OnReporteEtiquetasCajasGeneral';
+                    csv = 'onExportarCSVGenerico';
                 }
-                onEnable(mdlEtiCajaXCliente.find('#btnImprimir'));
-            }).fail(function (x, y, z) {
-                onEnable(mdlEtiCajaXCliente.find('#btnImprimir'));
-                console.log(x.responseText);
-                HoldOn.close();
-                swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
-            }).always(function () {
 
-            });
+
+                var frm = new FormData(mdlEtiCajaXCliente.find("#frmCaptura")[0]);
+                var tpo = mdlEtiCajaXCliente.find("#bPorControlEti")[0].checked ? '1' : '0';
+                frm.append('Tipo', tpo);
+                $.ajax({
+                    url: base_url + 'index.php/ReportesEstiquetasProduccion/' + reporte,
+                    type: "POST",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: frm
+                }).done(function (data, x, jq) {
+                    console.log(data);
+                    if (data.length > 0) {
+
+
+                        $.ajax({
+                            url: base_url + 'index.php/ReportesEstiquetasProduccion/' + csv,
+                            type: "POST"
+                        }).done(function (data, x, jq) {
+                            console.log(data);
+                            if (data.length > 0) {
+                                window.open(data, '_blank');
+                                onNotifyOld('<span class="fa fa-check fa-lg"></span>', 'REPORTE EN EXCEL GENERADO', 'success');
+                            }
+                            HoldOn.close();
+                        }).fail(function (x, y, z) {
+                            console.log(x, y, z);
+                            HoldOn.close();
+                        });
+                    } else {
+                        HoldOn.close();
+                        swal({
+                            title: "ATENCIÓN",
+                            text: "NO EXISTEN DATOS PARA GENERAR EL ARCHIVO",
+                            icon: "error"
+                        }).then((action) => {
+                            mdlEtiCajaXCliente.find('#Ano').focus();
+                        });
+                    }
+                    onEnable(mdlEtiCajaXCliente.find('#btnImprimir'));
+                }).fail(function (x, y, z) {
+                    onEnable(mdlEtiCajaXCliente.find('#btnImprimir'));
+                    console.log(x.responseText);
+                    HoldOn.close();
+                    swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+                }).always(function () {
+
+                });
+            }
         });
 
     });
-
     function onComprobarSemanasProduccionEtiquetasCaja(v, ano) {
         $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarSemanasProduccion', {Clave: $(v).val(), Ano: ano}).done(function (data) {
             if (data.length > 0) {
