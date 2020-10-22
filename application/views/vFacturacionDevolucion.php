@@ -1891,7 +1891,7 @@
         onOpenOverlay('Guardando...');
         onRecalcularSubtotal();
         getTotalPares();
-        getUltimoFolio();
+//        getUltimoFolio();
         var a = '<div class="row"><div class="col-12 text-danger text-nowrap talla font-weight-bold" align="center">';
         var b = '</div><div class="col-12 cantidad" align="center">';
         var c = '</div></div>';

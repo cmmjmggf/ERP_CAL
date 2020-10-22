@@ -5,6 +5,15 @@
                 <h2>CONTROL DEL COMEDOR</h2>
             </div>
             <?php
+            if ($_SESSION["USERNAME"] === '666666') {
+                ?>
+                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2" align='right'>
+                    <button type="button" id="btnSalir" name="btnSalir" class="btn btn-primary font-weight-bold" style="background-color: #f71100; font-size: 20px;">
+                        <span class="fa fa-door-open"></span> SALIR
+                    </button>
+                </div>
+                <?php
+            }
             if ($_SESSION["USERNAME"] === 'MONICARH' || $_SESSION["USERNAME"] === 'CECY' || $_SESSION["USERNAME"] === 'ALICIA' || $_SESSION["USERNAME"] === 'CMEDINA') {
                 ?>
                 <div class="col-12 col-sm-12 col-md-2 mt-2" align='center'>
@@ -68,9 +77,26 @@
     var typed = false;
     var tblEmpleadosComidasSemana = $('#tblEmpleadosComidasSemana');
     var EmpleadosComidasSemana;
-    var btnAplicarANomina = pnlTablero.find("#btnAplicarANomina");
+    var btnAplicarANomina = pnlTablero.find("#btnAplicarANomina"),
+            btnSalir = pnlTablero.find("#btnSalir");
 
     $(document).ready(function () {
+        
+        btnSalir.click(function () {
+            swal({
+                buttons: ["Cancelar", "Aceptar"],
+                title: '¿Estas seguro?',
+                text: "Saliendo del comedor...",
+                icon: "warning",
+                closeOnEsc: false,
+                closeOnClickOutside: false
+            }).then((action) => {
+                if (action) {
+                    location.href = '<?php print base_url('Sesion/onSalir'); ?>';
+                }
+            });
+        });
+        
         btnAplicarANomina.click(function () {
             swal({
                 title: 'Aplicar comidas a Nómina',

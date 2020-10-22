@@ -14,10 +14,10 @@
                 <label>Empleado</label>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2  text-center">
-                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="8" style="height: 50px; font-weight: bold; font-size: 45px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
+                <input type="text" id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control shadow-lg numeric" maxlength="8" style="height: 50px; font-weight: bold; font-size: 45px; color: #673AB7 !important" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-10 text-center">
-                <h1 style="color: #c1850c !important;" class="nombre_empleado">-</h1>
+                <h1 style="color: #c1850c !important;" class="nombre_empleado font-italic">-</h1>
                 <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control d-none" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <div class="w-100 my-1"></div>
@@ -36,7 +36,7 @@
                             <th scope="col">Control</th>
 
                             <th scope="col">Estilo</th>
-                            <th scope="col">Frac.</th>
+                            <th scope="col">Fracción</th>
                             <th scope="col">Pares</th>
 
                             <th scope="col">Precio</th>
@@ -115,30 +115,38 @@
                                         ->get()->result();
                         ?>
                         <label>Semana</label>
-                        <input type="text" id="Semana" name="Semana"  readonly=""  class="form-control form-control-sm numeric" maxlength="2">
+                        <br>
+                        <span class="font-weight-bold font-italic" style="color: #f71100; font-size: 20px;"><?php print $SP[0]->Semana; ?></span>
+                        <input type="text" id="Semana" name="Semana"  readonly=""  class="form-control d-none form-control-sm numeric" maxlength="2">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 text-center">
                         <label>Fecha</label>
-                        <input type="text" id="Fecha" name="Fecha" readonly="" class="form-control form-control-sm date notEnter">
+                        <br>
+                        <span class="font-weight-bold font-italic fecha_actual" style="color: #f71100; font-size: 20px;">
+                        </span>
+                        <input type="text" id="Fecha" name="Fecha" readonly="" class="form-control form-control-sm date notEnter d-none">
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 text-center">
                         <label>Departamento</label>
-                        <input type="text" id="Departamento" readonly="" name="Departamento" class="form-control form-control-sm numeric" maxlength="3">
+                        <br>
+                        <span class="font-weight-bold font-italic departameto_actual_emp" style="color: #f71100; font-size: 20px;">
+                        </span>
+                        <input type="text" id="Departamento" readonly="" name="Departamento" class="form-control form-control-sm numeric d-none" maxlength="3">
                         <input type="text" id="DepartamentoDes" name="DepartamentoDes" class="form-control d-none" maxlength="3">
                     </div>
                     <div class="w-100"></div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <label>Control</label>
-                        <input type="text" id="Control" name="Control"  style="height: 50px; font-weight: bold; font-size: 45px;" class="form-control form-control-sm numeric" maxlength="10">
+                        <input type="text" id="Control" name="Control"  style="color: #f71100 !important; height: 50px; font-weight: bold; font-size: 45px;" class="form-control form-control-sm numeric  shadow-lg" maxlength="10">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label>Estilo</label>
-                        <h1 style="color: #c1850c !important;" class="estilo_control">-</h1>
+                        <h1 style="color: #1565C0 !important" class="estilo_control">-</h1>
                         <input type="text" id="Estilo" name="Estilo" readonly="" class="form-control form-control-sm d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label>Pares</label>
-                        <h1 style="color: #c1850c !important;"  class="pares_control">-</h1>
+                        <h1 style="color: #5a8c0b !important"  class="pares_control">-</h1>
                         <input type="text" id="Pares" name="Pares" readonly=""  class="form-control form-control-sm numeric d-none">
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -166,14 +174,14 @@
                     <div class="col-12 my-1">
                         <hr>
                     </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 px-1 mr-3 text-center  border border-dark shadow-lg" style="border-radius: 10px; max-height: 100px !important;">
                         <span class="font-weight-bold" style="color : #3F51B5 !important;">ESTATUS ACTUAL DEL AVANCE </span>  
                         <div class="w-100"></div>
                         <span class="font-weight-bold estatus_de_avance" style="color : #ef1000 !important; font-size: 22px !important;">-</span>
                         <input type="text" id="EstatusAvance" name="EstatusAvance" readonly="" class="form-control form-control-sm d-none" style="text-align: center">
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <p class="text-info font-weight-bold" style="color : #3F51B5 !important;">PAGO DE NÓMINA</p>
+                    </div> 
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center border border-dark shadow-lg" style="border-radius: 10px;">
+                        <p class="text-info font-weight-bold" style="color : #3F51B5 !important; font-size: 22px;">PAGO DE NÓMINA</p>
                         <div id="DiasPagoDeNomina" class="row"></div>
                     </div> 
                 </div>
@@ -229,6 +237,7 @@
 
         Semana.val('<?php print $SP[0]->Semana; ?>');
         Fecha.val('<?php print $F; ?>');
+        Fecha.parent().find("span.fecha_actual").text('<?php print $F; ?>');
         btnAceptar.click(function () {
             if (NumeroDeEmpleado.val()) {
                 if (pnlTablero.find("input[type='checkbox']:checked").length > 0) {
@@ -309,10 +318,17 @@
                 getInformacionEmpleado();
                 Control.focus().select();
                 onBeep(1);
-            } else {
+            } else if (e.keyCode === 13 && NumeroDeEmpleado.val() === '' ||
+                    e.keyCode === 8 && NumeroDeEmpleado.val() === '' ||
+                    e.keyCode === 46 && NumeroDeEmpleado.val() === '') {
                 onClearMO();
                 DiasPagoDeNomina.find("input").val(0);
+
+                dias.forEach(function (i) {
+                    DiasPagoDeNomina.find("span.txt" + i).text(0);
+                });
                 DiasPagoDeNomina.find("#txtTotal").val(0);
+                DiasPagoDeNomina.find("span.total_acumulado_x_empleado").text("$" + 0);
                 pnlTablero.find(".nombre_empleado").text('-');
                 btnAceptar.attr('disabled', true);
             }
@@ -320,20 +336,26 @@
         });
 
         /*FRACCIONES*/
-        var fracciones = '';
+        var fracciones = '', ii = 1;
         dias.forEach(function (i) {
             fracciones += '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">' +
                     '<label>' + i + '</label>' +
                     '</div>' +
-                    '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                    '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; " readonly="">' +
+                    '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">' +
+                    '<span class="txt' + i + ' font-weight-bold font-italic" style="color: #2196F3; font-size:20px">0</span>';
+            if (ii < dias.length) {
+                fracciones += '<hr>';
+                ii += 1;
+            }
+            fracciones += '<input type="text" id="txt' + i + '" name="txt' + i + '" class="form-control form-control-sm d-none" placeholder="0"  style="font-weight: bold; " readonly="">' +
                     '</div>';
         });
         fracciones += '<div class="col-12"><hr></div><div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
                 '<label>TOTAL</label>' +
                 '</div>' +
-                '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">' +
-                '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm" placeholder="0"  style="font-weight: bold; ">' +
+                '<div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">' +
+                '<span class="font-weight-bold total_acumulado_x_empleado" style="font-size: 26px; color: #388E3C; font-style: italic;">0.0</span>'
+                + '<input type="text" id="txtTotal" disabled="" name="txtTotal" class="form-control form-control-sm d-none" placeholder="0"  style="font-weight: bold; ">' +
                 '</div>';
         DiasPagoDeNomina.html(fracciones);
 
@@ -345,7 +367,7 @@
 //        $(_0x6b99[3])[_0x6b99[2]]
 //                (_0x6b99[0], function (_0xd777x1) {
 //                    _0xd777x1[_0x6b99[1]]();
-//                });
+        //                });
 
         var cols = [
             {"data": "ID"}/*0*/, {"data": "FECHA"}/*1*/,
@@ -400,7 +422,7 @@
                 $(api.column(5).footer()).html(
                         '<span class="font-weight-bold">' + prs + ' pares</span>');
                 $(api.column(7).footer()).html(
-                        '<span class="font-weight-bold">$' +
+                        '<span class="font-weight-bold" style="font-size:24px; color: #388E3C; font-style:italic;">$' +
                         $.number(r, 2, '.', ',') + '</span>');
             }
         };
@@ -434,6 +456,7 @@
                         NombreEmpleado.val(dt[0].NOMBRE_COMPLETO);
                         pnlTablero.find(".nombre_empleado").text(dt[0].NOMBRE_COMPLETO);
                         Departamento.val(dt[0].DEPTO);
+                        Departamento.parent().find("span.departameto_actual_emp").text(dt[0].DEPTO);
                         DepartamentoDes.val(dt[0].DEPTO_DES);
                         GeneraAvance.val(dt[0].GENERA_AVANCE);
                         $.getJSON('<?php print base_url('Avance9/getSemanaByFecha'); ?>').done(function (data) {
@@ -448,7 +471,7 @@
                         });
 //                        swal('ATENCIÓN', 'SELECCIONE UNA FRACCIÓN', 'success').then((value) => {
 //                            pnlTablero.find("#ManoDeObra label.custom-control-label").addClass("highlight");
-//                        });
+                        //                        });
                     } else {
                         NombreEmpleado.val('');
                         pnlTablero.find(".nombre_empleado").text('-');
@@ -460,7 +483,11 @@
                             Departamento.val('');
                             Control.val('');
                             DiasPagoDeNomina.find("input").val(0);
+                            dias.forEach(function (e) {
+                                DiasPagoDeNomina.find("span.txt"+e).text(0);
+                            });
                             DiasPagoDeNomina.find("#txtTotal").val(0);
+                            DiasPagoDeNomina.find("span.total_acumulado_x_empleado").text("$" + 0);
                         });
                     }
                 }).fail(function (x, y, z) {
@@ -500,7 +527,7 @@
                 if (data[0].MENSAJE !== undefined) {
                     swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
-                ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                                    ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
                         Control.focus().select();
                     });
                     return;
@@ -527,6 +554,7 @@
                             stf = stf.slice(0, (stf.indexOf(".")) + 3);
 
                             DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(stf);
+                            DiasPagoDeNomina.find("span.txt" + ndias[n - 1]).text(stf);
                             var tt = 0;
                             ndias.forEach(function (i) {
                                 tt += parseFloat(pnlTablero.find("#txt" + i).val());
@@ -535,6 +563,8 @@
                             tf = tf.toString();
                             tf = tf.slice(0, (tf.indexOf(".")) + 3);
                             DiasPagoDeNomina.find("#txtTotal").val(tf);
+                            DiasPagoDeNomina.find("span.total_acumulado_x_empleado").text("$" + $.number(tf, 2, '.', ','));
+
                             getPagosXEmpleadoXSemana();
                             if (type) {
                                 onAvanzar();
@@ -542,7 +572,7 @@
                         } else {
                             swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
-                ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                                                    ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
                                 Control.focus().select();
                             });
                         }
@@ -555,7 +585,7 @@
                 } else {
                     swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
-                ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                                            ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
                         Control.focus().select();
                         Pares.val('');
                         SigAvance.val('');
@@ -582,7 +612,7 @@
 
         if (Control.val()) {
             /*COMPROBAR SI EL EMPLEADO ES DE RAYADO*/
-//            $.post('<?php print base_url('Avance9/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
+            //            $.post('<?php print base_url('Avance9/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
 
             $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
                     {CR: Control.val(), FR: '', DEPTO: Departamento.val()})
@@ -596,7 +626,7 @@
                             FraccionDes.val(r.FRACCION_DES);
                             pnlTablero.find(".estilo_control").text(r.Estilo);
                             pnlTablero.find(".pares_control").text(r.Pares);
-//                                console.log('Avance9/getUltimoAvanceXControl', data);
+                            //                                console.log('Avance9/getUltimoAvanceXControl', data);
                             $.getJSON('<?php print base_url('Avance9/getUltimoAvanceXControl'); ?>', {C: Control.val()}).done(function (data) {
                                 if (data.length > 0) {
                                     SigAvance.val(data[0].Departamento);
@@ -609,6 +639,7 @@
                                     stf = stf.toString();
                                     stf = stf.slice(0, (stf.indexOf(".")) + 3);
                                     DiasPagoDeNomina.find("#txt" + ndias[n - 1]).val(stf);
+                                    DiasPagoDeNomina.find("span.txt" + ndias[n - 1]).text(stf);
                                     var tt = 0;
                                     ndias.forEach(function (i) {
                                         tt += parseFloat(pnlTablero.find("#txt" + i).val());
@@ -617,6 +648,7 @@
                                     tf = tf.toString();
                                     tf = tf.slice(0, (tf.indexOf(".")) + 3);
                                     DiasPagoDeNomina.find("#txtTotal").val(tf);
+                                    DiasPagoDeNomina.find("span.total_acumulado_x_empleado").text("$" + $.number(tf, 2, '.', ','));
                                     onAvanzar();
                                 }
                             }).fail(function (x, y, z) {
@@ -637,7 +669,7 @@
 //                console.log(x, y, z);
 //                swal('ERROR', 'ALGO SALIO MAL, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
 //            }).always(function () {
-//            });
+            //            });
         } else {
             onNotifyOld('<span class="fa fa-check"></span>', 'DEBE DE ESPECIFICAR UN CONTROL', 'danger');
             Control.focus().select();
@@ -755,11 +787,11 @@
                             if (avanzo > 0) {
                                 Avance.ajax.reload();
                                 onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
-//                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
+                                //                    swal('ATENCIÓN', 'SE HA AVANZADO EL CONTROL Y SE HA HECHO EL PAGO AL EMPLEADO ' + NumeroDeEmpleado.val(), 'success').then((value) => {
                                 onClearMO();
                                 Control.focus().select();
                                 onBeep(5);
-//                    });
+                                //                    });
                             } else {
                                 onBeep(2);
                                 Avance.ajax.reload();
@@ -831,9 +863,12 @@
                 var tt = 0;
                 ndias.forEach(function (i) {
                     pnlTablero.find("#txt" + i).val(b[i]);
+                    pnlTablero.find("span.txt" + i).text(b[i]);
                     tt += $.isNumeric(b[i]) ? parseFloat(b[i]) : 0;
+                    console.log(b[i])
                 });
                 pnlTablero.find("#txtTotal").val(tt);
+                pnlTablero.find("span.total_acumulado_x_empleado").text("$" + $.number(tt, 2, '.', ','));
             }
         }).fail(function (x, y, z) {
             console.log(x.responseText);
@@ -964,6 +999,10 @@
         font-weight: bold !important;
     }
 
+    table tbody tr td { 
+        font-weight: bold !important;
+        font-size: 16px;
+    }
     table tbody tr:hover { 
         color: #fff !important;
     }
@@ -971,5 +1010,8 @@
     table tbody tr:hover td{
         background-color: #0375d8 !important; 
         font-weight: bold !important;
+    }
+    table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
+        background-color: #000000;
     }
 </style>

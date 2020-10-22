@@ -347,7 +347,8 @@ class Avance9 extends CI_Controller {
                     ->order_by('ABS(FACN.anio)', 'DESC')
                     ->order_by('ABS(FACN.semana)', 'DESC');
             if ($x['EMPLEADO'] === '') {
-                $this->db->limit(5);
+                $this->db->where('FACN.numeroempleado', 99999999999999999999);
+                $this->db->limit(1);
             }
             $DATA = $this->db->get()->result();
 //            print $this->db->last_query();
@@ -364,7 +365,7 @@ class Avance9 extends CI_Controller {
 //                                    $this->input->get('EMPLEADO'), $this->input->get('SEMANA'), $this->input->get('FRACCIONES')));
             $x = $this->input->get();
             $ANIO = Date('Y');
-            $a = "IFNULL((SELECT FORMAT(SUM(fpn.subtot),2) FROM fracpagnomina AS fpn WHERE dayofweek(fpn.fecha)";
+            $a = "IFNULL((SELECT SUM(fpn.subtot) FROM fracpagnomina AS fpn WHERE dayofweek(fpn.fecha)";
             $b = "AND fpn.numeroempleado = '{$x['EMPLEADO']}' AND fpn.Semana = {$x['SEMANA']} AND YEAR(fpn.fecha) = {$ANIO}  GROUP BY dayofweek(fpn.fecha)),0)";
             print json_encode($this->db->select("{$a}= 2 {$b} AS LUNES,"
                                             . "{$a} = 3 {$b} AS MARTES,"

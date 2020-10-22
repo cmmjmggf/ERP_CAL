@@ -1049,6 +1049,7 @@
 
         DeptoMaquina.change(function () {
             DeptoClaveMaquina.val($(this).val());
+            getMaquinariaXDepto();
             CodigoMaquinaria.focus();
         });
 
@@ -1120,6 +1121,24 @@
                 mdlSolicitudDeMantenimiento.find("#CSMaquinariaRefaccion")[0].selectize.addOption({text: v.nommaq, value: v.id});
             });
         }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+
+        });
+    }
+
+    function getMaquinariaXDepto() {
+        onOpenOverlay('Cargando maquinas por departamento...');
+        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getMaquinariaXDepto'); ?>',{
+            DEPTO: parseInt(DeptoMaquina.val())
+        }).done(function (a, b, c) {
+            onClearSelect(MaquinariaRefaccion); 
+            $.each(a, function (k, v) {
+                MaquinariaRefaccion[0].selectize.addOption({text: v.nommaq, value: v.id});
+            });
+            onCloseOverlay();
+        }).fail(function (x, y, z) {
+            onCloseOverlay();
             console.log(x, y, z);
         }).always(function () {
 

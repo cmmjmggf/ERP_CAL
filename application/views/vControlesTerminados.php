@@ -396,11 +396,12 @@
                                     closeOnEsc: false
                                 }).then((action) => {
                                     if (action) {
-                                        Control.val('').focus();
+                                        Control.focus().select();
                                     }
                                 });
                             } else {
-                                if (data[0].Depto === '260') {
+                                var r = data[0];
+                                if (data[0].Depto === '260' && parseInt(r.FACTURA_ADELANTADO) === 0) {
                                     swal({
                                         title: "CONTROL YA FACTURADO",
                                         text: "EL CONTROL YA HA SIDO FACTURADO VERIFIQUE CON VENTAS ",
@@ -409,7 +410,7 @@
                                         closeOnEsc: false
                                     }).then((action) => {
                                         if (action) {
-                                            Control.val('').focus();
+                                            Control.focus().select();
                                         }
                                     });
                                 } else if (data[0].Depto === '270') {
@@ -421,7 +422,7 @@
                                         closeOnEsc: false
                                     }).then((action) => {
                                         if (action) {
-                                            Control.val('').focus();
+                                            Control.focus().select();
                                         }
                                     });
                                 } else { //si el control no está cancelado o facturado permite continuar
@@ -435,7 +436,7 @@
                                             closeOnEsc: false
                                         }).then((action) => {
                                             if (action) {
-                                                Control.val('').focus();
+                                                Control.focus().select();
                                             }
                                         });
                                     } else { //Si el control no está recibido en controlterm
@@ -451,7 +452,7 @@
                                                     closeOnEsc: false
                                                 }).then((action) => {
                                                     if (action) {
-                                                        Control.val('').focus();
+                                                        Control.focus().select();
                                                     }
                                                 });
                                             } else {

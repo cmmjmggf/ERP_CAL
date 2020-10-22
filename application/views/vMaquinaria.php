@@ -938,11 +938,11 @@
             onClear(ClaveEstatusMaquina);
             onClear(xImagenUno);
             onVolverPrimerPestana();
-            btnNuevaMaquina.trigger('click');
         });
 
         mdlMaquinaria.on('shown.bs.modal', function () {
             onVolverPrimerPestana();
+            btnNuevaMaquina.trigger('click');
             getUltimaMaquinaria(function () {
                 getUltimaIDMaquinaria(function () {
                     getUltimoIDMaquinariaSugerido(function () {

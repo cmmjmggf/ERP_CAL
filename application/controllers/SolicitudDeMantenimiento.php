@@ -26,7 +26,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
                     "horalle" => DATE('h:i:s'),
                     "desdpro" => strtoupper($x['DESCRIPCION_PROBLEMA']),
                     "ident" => 1
-                )); 
+                ));
             } else {
                 print "\n\nESTA SOLICITUD YA EXISTE: VALE: {$x['VALE']}, CODIGO: {$x['CODIGO']}\n\n";
             }
@@ -86,6 +86,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
                         ->where('depto', $x['DEPTO_CLAVE'])
                         ->where('codigo', $x['MAQUINARIA_CLAVE'])
                         ->update('repomaqui');
+                $l = new Logs("SOLICITUD DE MANTENIMIENTO (CIERRE)", "CERRO EL VALE " . $x['VALE'], $this->session);
             } else {
                 print "\n\nESTA SOLICITUD YA EXISTE: VALE: {$x['VALE']}, CODIGO: {$x['CODIGO']}\n\n";
             }
@@ -98,6 +99,16 @@ class SolicitudDeMantenimiento extends CI_Controller {
     public function getMaquinaria() {
         try {
             print json_encode($this->db->query("SELECT nummaq,id,CONCAT(nummaq,\" \",id,\" \",nommaq) AS nommaq FROM maquinaria ORDER BY ID DESC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString
+            ();
+        }
+    }
+
+    public function getMaquinariaXDepto() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT nummaq,id,CONCAT(nummaq,\" \",id,\" \",nommaq) AS nommaq FROM maquinaria WHERE depmaq = {$x['DEPTO']} ORDER BY ID DESC")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString
             ();
@@ -222,6 +233,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
                     "horalle" => $x['HORA_LLEGADA'],
                     "desdpro" => $x['DESCRIPCION_DEL_PROBLEMA'],
                     "ident" => 1));
+
                 $jc = new JasperCommand();
                 $jc->setFolder('rpt/' . $this->session->USERNAME);
                 $pr ["logo"] = base_url() . $this->session->LOGO;
@@ -232,6 +244,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
                 $jc->setFilename("SOLICITUD_DE_MTO_{$x['VALE']}_" . Date('dmYhis'));
                 $jc->setDocumentformat('pdf');
                 print $jc->getReport();
+                $l = new Logs("SOLICITUD DE MANTENIMIENTO", "AGREGO EL VALE " . $x['VALE'], $this->session);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString

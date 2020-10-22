@@ -149,8 +149,7 @@ class DocDirectos_model extends CI_Model {
 
     public function onVerificarExisteDocumento($Doc, $Tp, $Proveedor) {
         try {
-            $this->db->select("C.Doc "
-                            . "")
+            $this->db->select("C.Doc ")
                     ->from("cartera_proveedores AS C")
                     ->where("C.Doc", $Doc)
                     ->where("C.Tp", $Tp)

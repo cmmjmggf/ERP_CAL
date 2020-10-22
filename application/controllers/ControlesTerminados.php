@@ -98,7 +98,32 @@ class ControlesTerminados extends CI_Controller {
 
     public function getControl() {
         try {
-            print json_encode($this->ctm->getControl($this->input->get('Control'), $this->input->get('Maq')));
+            $x = $this->input->get();
+            $this->db->select("
+                                CONCAT(PE.Estilo, ' - ', PE.EstiloT) AS Estilo,
+                                CONCAT(PE.Color, ' - ', PE.ColorT) AS Color,
+                                PE.Estilo AS  `ClaveEstilo`,
+                                PE.Color AS `ClaveColor`,
+                                (select linea from estilos where clave = PE.Estilo) AS `Linea`,
+                                PE.Semana,
+                                PE.Maquila,
+                                PE.Pares,
+                                CAST(ifnull(LPM.PrecioVta, 0) AS DECIMAL(5, 2)) AS Precio,
+                                `PE`.`DeptoProduccion` AS `Depto`,
+                                ifnull(CT.Control, '') AS Terminado, PE.cliente AS CLIENTE,
+                                (CASE 
+                                WHEN PE.cliente IN(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995) THEN 1 
+                                ELSE 0 END) AS FACTURA_ADELANTADO 
+                                FROM `pedidox` `PE`
+                                LEFT JOIN `listapreciosmaquilas` `LPM` 
+                                ON `LPM`.`Estilo` = `PE`.`Estilo` AND `LPM`.`Color` =  `PE`.`Color` AND `LPM`.`Maq` = '{$x['Maq']}'
+                                LEFT JOIN `controlterm` `CT` ON `CT`.`Control` = `PE`.`Control`
+                                WHERE `PE`.`Control` = '{$x['Control']}' ");
+            $query = $this->db->get(); 
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

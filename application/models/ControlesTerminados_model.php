@@ -14,38 +14,7 @@ class ControlesTerminados_model extends CI_Model {
     public function __construct() {
         parent::__construct();
     }
-
-    public function getControl($Control, $Maq) {
-        try {
-            $this->db->select("
-                                CONCAT(PE.Estilo, ' - ', PE.EstiloT) AS Estilo,
-                                CONCAT(PE.Color, ' - ', PE.ColorT) AS Color,
-                                PE.Estilo AS  `ClaveEstilo`,
-                                PE.Color AS `ClaveColor`,
-                                (select linea from estilos where clave = PE.Estilo) AS `Linea`,
-                                PE.Semana,
-                                PE.Maquila,
-                                PE.Pares,
-                                CAST(ifnull(LPM.PrecioVta, 0) AS DECIMAL(5, 2)) AS Precio,
-                                `PE`.`DeptoProduccion` AS `Depto`,
-                                ifnull(CT.Control, '') AS Terminado
-                                FROM `pedidox` `PE`
-                                LEFT JOIN `listapreciosmaquilas` `LPM` ON `LPM`.`Estilo` = `PE`.`Estilo` AND `LPM`.`Color` =  `PE`.`Color` AND `LPM`.`Maq` = '$Maq'
-                                LEFT JOIN `controlterm` `CT` ON `CT`.`Control` = `PE`.`Control`
-                                WHERE `PE`.`Control` = '$Control' ");
-            $query = $this->db->get();
-            /*
-             * FOR DEBUG ONLY
-             */
-            $str = $this->db->last_query();
-            //print $str;
-            $data = $query->result();
-            return $data;
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        }
-    }
-
+ 
     public function getControlesRechazados($Docto, $Maq) {
         try {
             $this->db->select("
