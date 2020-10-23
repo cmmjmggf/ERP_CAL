@@ -578,6 +578,7 @@ class Avance9 extends CI_Controller {
             /* SI NO ESPECIFICO FRACCIONES ES PARA 80 102 RAYADO => FOLEADO */
             if (count($FRACCIONES) <= 0 && intval($xXx['DEPARTAMENTO']) !== 10) {
                 switch (intval($xXx['DEPARTAMENTO'])) {
+                    case 70:
                     case 80:
                         $check_fraccionesxestilo_102_113 = $this->db->query("SELECT COUNT(*) AS EXISTEN FROM fraccionesxestilo AS F WHERE F.Estilo ='{$xXx['ESTILO']}' AND F.Fraccion IN(102,113)")->result();
                         if (intval($check_fraccionesxestilo_102_113[0]->EXISTEN) === 0) {
