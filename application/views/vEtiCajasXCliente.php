@@ -62,7 +62,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-primary" id="btnImprimir"><span class="fa fa-check"></span> ACEPTAR</button>
                 <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
@@ -71,6 +71,14 @@
 <script>
     var mdlEtiCajaXCliente = $('#mdlEtiCajaXCliente');
     $(document).ready(function () {
+
+        mdlEtiCajaXCliente.on('hidden.bs.modal', function () {
+            mdlEtiCajaXCliente.find("#bPorControlEti")[0].checked = false;
+            mdlEtiCajaXCliente.find("#dEtiquetasPorMaSemAno").removeClass('d-none');
+            mdlEtiCajaXCliente.find("#dPorControl").addClass('d-none');
+            mdlEtiCajaXCliente.find("#Cliente").focus();
+        });
+
         mdlEtiCajaXCliente.find('.NotSelectize').selectize({
             hideSelected: false,
             openOnFocus: false
@@ -173,7 +181,7 @@
         });
         mdlEtiCajaXCliente.find('#btnImprimir').on("click", function () {
             var client = mdlEtiCajaXCliente.find('#Cliente');
-            if (client.val() === '') {
+            if (client.val() === '' && !mdlEtiCajaXCliente.find('#bPorControlEti')[0].checked) {
                 onCampoInvalido(mdlEtiCajaXCliente, "DEBE DE ESPECIFICAR UN CLIENTE", function () {
                     client.focus().select();
                 });
