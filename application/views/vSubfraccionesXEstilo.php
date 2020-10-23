@@ -1,26 +1,20 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-6 float-left">
+            <div class="col-sm-12 float-left">
                 <legend class="float-left">Subfracciones por Estilo</legend>
             </div>
-            <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-primary" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
-            </div>
         </div>
-        <div class="card-block mt-4">
-            <div id="Fracciones" class="table-responsive">
-                <table id="tblFracciones" class="table table-sm display " style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>No. Fracción</th>
-                            <th>Nombre Fracción</th>
-                            <th class="d-none">Departamento</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+        <hr>
+        <div class="card-block">
+            <div class="row">
+                <div class="col-4 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                    <label for="" >Estilo</label>
+                    <input type="text" class="form-control form-control-sm " maxlength="7" id="bEstilo" name="bEstilo">
+                </div>
+                <div class="col-1" >
+                    <button type="button" class="btn btn-info btn-sm mt-4" id="btnBuscarSFE"> <span class="fa fa-check"></span> ACEPTAR</button>
+                </div>
             </div>
         </div>
     </div>
@@ -30,10 +24,10 @@
         <form id="frmNuevo">
             <fieldset>
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-md-4 float-left">
-                        <legend >Sub Fracciones de la Fracción</legend>
+                    <div class="col-12 col-sm-8 col-md-8 float-left">
+                        <legend >Sub Fracciones  del Estilo: <span id="spEstilo" class="text-strong text-info" style="font-size: 35px;"></span></legend>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-8" align="right">
+                    <div class="col-12 col-sm-4 col-md-4" align="right">
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                             <span class="fa fa-arrow-left" ></span> REGRESAR
                         </button>
@@ -42,7 +36,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-5 col-xl-4">
                         <label>Fracción</label>
                         <select id="Fraccion" name="Fraccion" class="form-control form-control-sm required" >
                             <option></option>
@@ -55,30 +49,24 @@
                             ?>
                         </select>
                     </div>
+                    <div class="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                        <label for="Eficiencia" >Eficiencia %</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" readonly="" id="Eficiencia" name="Eficiencia" >
+                    </div>
                     <div class="w-100"></div>
-                    <div class="d-none">
-                        <input type="text"  name="ID" class="form-control form-control-sm" >
-                    </div>
                     <div class="col-12 col-sm-4 col-md-2 col-lg-2 col-xl-1">
-                        <label for="Clave" >Clave</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Clave" name="Clave" required>
+                        <label for="Clave" >Sub-Fraccion</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="SubFraccion" name="SubFraccion" required>
                     </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3">
-                        <label for="Descripcion" >Descripción</label>
-                        <input type="text" id="Descripcion" name="Descripcion" class="form-control form-control-sm" placeholder="" required>
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3">
-                        <label>Puesto</label>
-                        <select id="Puesto" name="Puesto" class="form-control form-control-sm required" >
+                    <div class="col-12 col-sm-7 col-md-7 col-lg-5 col-xl-4">
+                        <label>--</label>
+                        <select id="sSubFraccion" name="sSubFraccion" class="form-control form-control-sm required" >
                             <option></option>
-                            <?php
-                            //YA CONTIENE LOS BLOQUEOS DE VENTA
-                            $clientes = $this->db->query("SELECT C.Clave AS CLAVE, C.Descripcion AS PUESTO FROM puestos AS C ORDER BY ABS(CLAVE) ASC;")->result();
-                            foreach ($clientes as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} - {$v->PUESTO}</option>";
-                            }
-                            ?>
                         </select>
+                    </div>
+                    <div class="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                        <label for="TiempoEstandar" >T. Estandar</label>
+                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="7" id="TiempoEstandar" name="TiempoEstandar" >
                     </div>
                     <div class="col-12 col-sm-4 col-md-2 col-lg-2 col-xl-1 mt-4">
                         <button type="button" class="btn btn-info btn-sm" id="btnGuardar" >
@@ -98,13 +86,37 @@
                                     <thead>
                                         <tr>
                                             <th class="d-none">ID</th>
-                                            <th>Subfraccion</th>
-                                            <th>Fracción</th>
+                                            <th>Fraccion</th>
+                                            <th></th>
+                                            <th>Subfracción</th>
+                                            <th></th>
                                             <th>Puesto</th>
+                                            <th>T.Estandar.</th>
+                                            <th>Eficiencia</th>
+                                            <th>T. Real</th>
+                                            <th>Base</th>
+                                            <th>Costo</th>
                                             <th>Eliminar</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="d-none"></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Totales:</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+
                                 </table>
                             </div>
                         </div>
@@ -116,10 +128,10 @@
     </div>
 </div>
 <script>
-    var master_url = base_url + 'index.php/Subfracciones/';
+    var master_url = base_url + 'index.php/SubfraccionesXEstilo/';
     var tblFracciones = $('#tblFracciones');
     var Fracciones;
-    var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
+    var btnBuscarSFE = $("#btnBuscarSFE"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos");
     var nuevo = false;
 
@@ -127,44 +139,146 @@
     var tblDetalle = $('#tblDetalle');
     var Detalle;
 
+    var Estilo;
+    var SueldoBase;
+    var Puesto;
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
 
-        pnlTablero.find("#tblFracciones_filter").find('input[type="search"]').on('keydown', function (e) {
-            if ($(this).val() && e.keyCode === 13) {
-                getSubfraccionByID($(this).val());
+        pnlTablero.find("#bEstilo").keypress(function (e) {
+            if (e.keyCode === 13) {
+                var Estilo = $(this).val();
+                if (Estilo) {
+                    $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {
+                        Clave: Estilo
+                    }).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            btnBuscarSFE.focus();
+                        } else {
+                            swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
+                                pnlTablero.find('#bEstilo').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                }
+            }
+        });
+        btnBuscarSFE.click(function () {
+            var val = pnlTablero.find("#bEstilo").val();
+            if (val) {
+                $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {
+                    Clave: val
+                }).done(function (data, x, jq) {
+                    if (data.length > 0) {
+                        Estilo = val;
+                        pnlTablero.addClass('d-none');
+                        pnlDatos.removeClass('d-none');
+                        Detalle.ajax.reload();
+                        pnlDatos.find('#spEstilo').html(Estilo);
+                        pnlDatos.find("#Fraccion")[0].selectize.focus();
+                    } else {
+                        swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
+                            pnlTablero.find('#bEstilo').focus().val('');
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                });
             }
         });
 
         pnlDatos.find("#Fraccion").change(function () {
-            if ($(this).val()) {
-                Detalle.ajax.reload();
-                pnlDatos.find("#Clave").focus();
+            var fracc = $(this).val();
+            if (fracc) {
+                $.getJSON(base_url + 'index.php/SubfraccionesXEstilo/getEficiencia', {
+                    Fraccion: fracc
+                }).done(function (data, x, jq) {
+                    if (data.length > 0) {
+                        //Cargamos las subfracciones de esta fraccion
+                        pnlDatos.find("#Eficiencia").val(data[0].eficiencia * 100);
+                        getSubfraccionesXFraccion(fracc);
+                        pnlDatos.find("#SubFraccion").focus().select();
+                    } else {
+                        swal('ERROR', 'LA FRACCIÓN NO EXISTE', 'warning').then((value) => {
+                            pnlDatos.find('#Fraccion').focus().val('');
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                });
             }
         });
 
-        pnlDatos.find('#Clave').keypress(function (e) {
+        pnlDatos.find("#SubFraccion").keypress(function (e) {
             if (e.keyCode === 13) {
-                var txtclave = $(this).val();
-                if (txtclave) {
-                    pnlDatos.find('#Descripcion').focus();
+                var val = $(this).val();
+                var fraccion = pnlDatos.find("#Fraccion").val();
+                if (val && fraccion) {
+                    $.getJSON(base_url + 'index.php/SubfraccionesXEstilo/getSubfraccionXFraccion', {
+                        Subfraccion: val,
+                        Fraccion: fraccion
+                    }).done(function (data, x, jq) {
+                        if (data.length > 0) {
+                            SueldoBase = data[0].SueldoBase;
+                            Puesto = data[0].Puesto;
+                            pnlDatos.find("#sSubFraccion")[0].selectize.addItem(val, true);
+                            pnlDatos.find("#TiempoEstandar").focus();
+                        } else {
+                            swal('ERROR', 'SUBFRACCION NO EXISTENTE', 'warning').then((value) => {
+                                pnlDatos.find("#sSubFraccion")[0].selectize.clear(true);
+                                pnlDatos.find('#SubFraccion').focus().val('');
+                            });
+                        }
+                    }).fail(function (x, y, z) {
+                        console.log(x, y, z);
+                    });
+                } else {
+                    swal('ERROR', 'DEBES CAPTURAR LA FRACCION Y SUBFRACCION', 'warning').then((value) => {
+                        pnlDatos.find("#sSubFraccion")[0].selectize.clear(true);
+                        pnlDatos.find('#SubFraccion').focus().val('');
+                    });
                 }
             }
         });
 
-        pnlDatos.find('#Descripcion').keypress(function (e) {
-            if (e.keyCode === 13) {
-                var txtclave = $(this).val();
-                if (txtclave) {
-                    pnlDatos.find('#Puesto')[0].selectize.focus();
-                }
+        pnlDatos.find("#sSubFraccion").change(function () {
+            var val = $(this).val();
+            var fraccion = pnlDatos.find("#Fraccion").val();
+            if (val && fraccion) {
+                $.getJSON(base_url + 'index.php/SubfraccionesXEstilo/getSubfraccionXFraccion', {
+                    Subfraccion: val,
+                    Fraccion: fraccion
+                }).done(function (data, x, jq) {
+                    if (data.length > 0) {
+                        pnlDatos.find("#SubFraccion").val(val);
+                        SueldoBase = data[0].SueldoBase;
+                        Puesto = data[0].Puesto;
+                        pnlDatos.find("#TiempoEstandar").focus();
+                    } else {
+                        swal('ERROR', 'SUBFRACCION NO EXISTENTE', 'warning').then((value) => {
+                            pnlDatos.find("#sSubFraccion")[0].selectize.clear(true);
+                            pnlDatos.find('#SubFraccion').focus().val('');
+                        });
+                    }
+                }).fail(function (x, y, z) {
+                    console.log(x, y, z);
+                });
+            } else {
+                swal('ERROR', 'DEBES CAPTURAR LA FRACCION Y SUBFRACCION', 'warning').then((value) => {
+                    pnlDatos.find("#sSubFraccion")[0].selectize.clear(true);
+                    pnlDatos.find('#SubFraccion').focus().val('');
+                });
             }
         });
 
-        pnlDatos.find("#Puesto").change(function () {
-            if ($(this).val()) {
-                btnGuardar.focus();
+        pnlDatos.find("#TiempoEstandar").keypress(function (e) {
+            if (e.keyCode === 13) {
+                if ($(this).val()) {
+                    btnGuardar.focus();
+                }
             }
         });
 
@@ -173,6 +287,20 @@
             isValid('pnlDatos');
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                var eficiencia = pnlDatos.find("#Eficiencia").val() / 100;
+                var tiempo_estandar = pnlDatos.find("#TiempoEstandar").val();
+                var sueldo = SueldoBase;
+                var minxdia = 2850;//Minutos laborados semanalmente ya que en un dia son 570
+                var tiempo_real = tiempo_estandar / eficiencia;
+                var costo = (sueldo / minxdia) * tiempo_real;
+
+                frm.append('Puesto', Puesto);
+                frm.append('TiempoReal', tiempo_real.toFixed(2));
+                frm.append('SueldoBase', sueldo);
+                frm.append('Costo', costo.toFixed(2));
+                frm.append('Estilo', Estilo);
+                frm.append('Eficiencia', eficiencia);
+
                 $.ajax({
                     url: master_url + 'onAgregar',
                     type: "POST",
@@ -182,9 +310,9 @@
                     data: frm
                 }).done(function (data, x, jq) {
                     Detalle.ajax.reload();
-                    pnlDatos.find("#Descripcion").val('');
-                    pnlDatos.find("#Puesto")[0].selectize.clear(true);
-                    pnlDatos.find("#Clave").val('').focus();
+                    pnlDatos.find("#sSubFraccion")[0].selectize.clear(true);
+                    pnlDatos.find("#TiempoEstandar").val('');
+                    pnlDatos.find("#SubFraccion").val('').focus();
                 }).fail(function (x, y, z) {
                     console.log(x, y, z);
                 }).always(function () {
@@ -195,18 +323,6 @@
             }
         });
 
-        btnNuevo.click(function () {
-            nuevo = true;
-            pnlDatos.find("input").val("");
-            pnlTablero.addClass("d-none");
-            pnlDatos.removeClass("d-none");
-            $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true);
-            });
-            pnlDatos.find("#Fraccion")[0].selectize.focus();
-            Detalle.ajax.reload();
-        });
-
         btnCancelar.click(function () {
             pnlTablero.removeClass("d-none");
             pnlDatos.addClass("d-none");
@@ -214,93 +330,20 @@
     });
 
     function init() {
-        getRecords();
+        pnlTablero.find('#bEstilo').focus();
         getDesgloce();
     }
 
-    function getSubfraccionByID(ID) {
-        $.getJSON(master_url + 'getSubFraccionByID', {ID: ID}).done(function (data) {
-            console.log(data);
-            pnlDatos.find("input").val("");
-            $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true);
+    function getSubfraccionesXFraccion(Fraccion) {
+        pnlDatos.find("#sSubFraccion")[0].selectize.clear(true);
+        pnlDatos.find("#sSubFraccion")[0].selectize.clearOptions();
+        $.getJSON(base_url + 'index.php/SubfraccionesXEstilo/getSubfraccionesXFraccion', {Fraccion: Fraccion}).done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                pnlDatos.find("#sSubFraccion")[0].selectize.addOption({text: v.Descripcion, value: v.ID});
             });
-            pnlDatos.find("#Fraccion")[0].selectize.addItem(data[0].Fraccion, true);
-            pnlTablero.addClass("d-none");
-            pnlDatos.removeClass('d-none');
-            Detalle.ajax.reload();
         }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        }).always(function () {
-            HoldOn.close();
+            console.log(x, y, z);
         });
-    }
-
-    function getRecords() {
-        temp = 0;
-        HoldOn.open({
-            theme: 'sk-cube',
-            message: 'CARGANDO...'
-        });
-        $.fn.dataTable.ext.errMode = 'throw';
-        if ($.fn.DataTable.isDataTable('#tblFracciones')) {
-            tblFracciones.DataTable().destroy();
-        }
-        Fracciones = tblFracciones.DataTable({
-            "dom": 'Bfrtip',
-            buttons: buttons,
-            "ajax": {
-                "url": master_url + 'getRecords',
-                "dataSrc": ""
-            },
-            "columns": [
-                {"data": "ID"}, {"data": "Clave"}, {"data": "Descripcion"}, {"data": "Departamento"}, {"data": "Depto"}
-            ],
-            "columnDefs": [
-                {
-                    "targets": [0, 3, 4],
-                    "visible": false,
-                    "searchable": false
-                }
-            ],
-            rowGroup: {
-                startRender: function (rows, group) {
-                    return $('<tr>').append('<td colspan="4" align="center">******' + group + '******</td></tr>');
-                },
-                dataSrc: "Depto"
-            },
-            language: lang,
-            select: true,
-            "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 500,
-            "scrollX": true,
-            "scrollY": 250,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            "bSort": true,
-            "aaSorting": [
-                [3, 'asc']/*ID*/
-            ]
-        });
-
-        $('#tblFracciones_filter input[type=search]').focus();
-
-        tblFracciones.find('tbody').on('click', 'tr', function () {
-            HoldOn.open({
-                theme: 'sk-cube',
-                message: 'CARGANDO...'
-            });
-            nuevo = false;
-            tblFracciones.find("tbody tr").removeClass("success");
-            $(this).addClass("success");
-            var dtm = Fracciones.row(this).data();
-            temp = (dtm.Clave);
-            getSubfraccionByID(temp);
-        });
-        HoldOn.close();
     }
 
     function getDesgloce() {
@@ -312,27 +355,89 @@
             "dom": 'rtp',
             buttons: buttons,
             "ajax": {
-                "url": master_url + 'getDesgloce',
+                "url": master_url + 'getDetalle',
                 "dataSrc": "",
                 "type": "POST",
                 "data": function (d) {
-                    d.Fraccion = pnlDatos.find("#Fraccion").val() ? pnlDatos.find("#Fraccion").val() : '';
+                    d.Estilo = Estilo ? Estilo : '';
                 }
             },
             "columns": [
                 {"data": "ID"},
-                {"data": "Subfraccion"},
-                {"data": "Fraccion"},
-                {"data": "Puesto"},
+                {"data": "numfra"},
+                {"data": "nomfra"},
+                {"data": "numsubfra"},
+                {"data": "nomsubfra"},
+                {"data": "puesto"},
+                {"data": "tiempoestandar"},
+                {"data": "efi"},
+                {"data": "tiemporeal"},
+                {"data": "sueldobase"},
+                {"data": "costo"},
                 {"data": "Eliminar"}
             ],
             "columnDefs": [
                 {
-                    "targets": [0, 2],
+                    "targets": [0],
                     "visible": false,
                     "searchable": false
+                },
+                {
+                    "targets": [6, 8],
+                    "render": function (data, type, row) {
+                        return $.number(parseFloat(data), 2, '.', ',');
+                    }
+                },
+                {
+                    "targets": [7],
+                    "render": function (data, type, row) {
+                        return $.number(parseFloat(data), 2, '.', ',') + ' %';
+                    }
+                },
+                {
+                    "targets": [9, 10],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
                 }
             ],
+            rowGroup: {
+                endRender: function (rows, group) {
+                    var nomfra = rows.data()[0].nomfra;
+                    var tiemporeal = $.number(rows.data().pluck('tiemporeal').reduce(function (a, b) {
+                        return a + parseFloat(b);
+                    }, 0), 2, '.', ',');
+                    var costo = $.number(rows.data().pluck('costo').reduce(function (a, b) {
+                        return a + parseFloat(b);
+                    }, 0), 2, '.', ',');
+                    return $('<tr>').
+                            append('<td colspan="3"></td><td colspan="1">Total de: ' + group + " " + nomfra + '</td><td colspan="3"></td>').append('<td>' + tiemporeal + '</td><td></td><td>$' + costo + '</td><td></td></tr>');
+                },
+                dataSrc: "numfra"
+            },
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api();//Get access to Datatable API
+                // Update footer
+                var totaltr = api.column(8).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(8).footer()).html(api.column(8, {page: 'current'}).data().reduce(function (a, b) {
+                    return $.number(parseFloat(totaltr), 2, '.', ',');
+                }, 0));
+
+                var totalcosto = api.column(10).data().reduce(function (a, b) {
+                    var ax = 0, bx = 0;
+                    ax = $.isNumeric(a) ? parseFloat(a) : 0;
+                    bx = $.isNumeric(getNumberFloat(b)) ? getNumberFloat(b) : 0;
+                    return  (ax + bx);
+                }, 0);
+                $(api.column(10).footer()).html(api.column(10, {page: 'current'}).data().reduce(function (a, b) {
+                    return '$' + $.number(parseFloat(totalcosto), 2, '.', ',');
+                }, 0));
+            },
             language: lang,
             "autoWidth": true,
             "colReorder": true,
@@ -351,7 +456,23 @@
                     var c = $(v);
                     var index = parseInt(k);
                     switch (index) {
-                        case 2:
+                        case 0:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong');
+                            break;
+                        case 1:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong');
+                            break;
+                        case 8:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong');
+                            break;
+                        case 9:
+                            /*FECHA ENTREGA*/
+                            c.addClass('text-strong text-info');
+                            break;
+                        case 10:
                             /*FECHA ENTREGA*/
                             c.addClass('text-danger');
                             break;

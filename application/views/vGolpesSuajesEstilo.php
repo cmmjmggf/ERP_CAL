@@ -17,16 +17,47 @@
                     <label>Estilo</label>
                     <input type="text" id="estilo" name="estilo" class="form-control form-control-sm" maxlength="7">
                 </div>
-                <div class="w-100"></div>
+                <div class="w-100"><hr></div>
+                <div class="col-12">
+                    <h5 class="text-info">Suaje Piel</h5>
+                </div>
                 <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-1 col-xl-2">
-                    <label>Fecha Compra Suaje Piel</label>
+                    <label>Fecha Compra</label>
                     <input type="text" id="fechaaltasuajepiel" name="fechaaltasuajepiel" class="form-control form-control-sm date">
                 </div>
-                <div class="w-100"></div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <label>Proveedor</label>
+                    <input type="text" id="proveedorpiel" name="proveedorpiel" class="form-control form-control-sm">
+                </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
+                    <label>Factura</label>
+                    <input type="text" id="facturapiel" name="facturapiel" class="form-control form-control-sm" maxlength="10">
+                </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
+                    <label>Costo</label>
+                    <input type="text" id="costopiel" name="costopiel" class="form-control form-control-sm numbersOnly" >
+                </div>
+                <div class="w-100"><hr></div>
+                <div class="col-12">
+                    <h5 class="text-info">Suaje Forro</h5>
+                </div>
                 <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-1 col-xl-2">
-                    <label>Fecha Compra Suaje Forro</label>
+                    <label>Fecha Compra </label>
                     <input type="text" id="fechaaltasuajeforro" name="fechaaltasuajeforro" class="form-control form-control-sm date">
                 </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <label>Proveedor</label>
+                    <input type="text" id="proveedorforro" name="proveedorforro" class="form-control form-control-sm">
+                </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
+                    <label>Factura</label>
+                    <input type="text" id="facturaforro" name="facturaforro" class="form-control form-control-sm" maxlength="10">
+                </div>
+                <div class="col-12 col-xs-12 col-sm-6 col-md-6 col-lg-2 col-xl-1">
+                    <label>Costo</label>
+                    <input type="text" id="costoforro" name="costoforro" class="form-control form-control-sm numbersOnly" >
+                </div>
+
                 <div class="col-6 col-sm-5 col-md-5 col-lg-2 col-xl-3 mt-4">
                     <button type="button" class="btn btn-primary btn-sm" id="btnAceptar">
                         <i class="fa fa-check"></i> ACEPTAR
@@ -40,14 +71,48 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Estilo</th>
-                                <th scope="col">Fecha Ini Piel</th>
-                                <th scope="col">Fecha Ini Forro</th>
+                                <th scope="col">Factura Piel</th>
+                                <th scope="col">Fecha Piel</th>
+                                <th scope="col">Proveedor Piel</th>
+                                <th scope="col">Costo Piel</th>
+                                <th scope="col">Factura Forro</th>
+                                <th scope="col">Fecha Forro</th>
+                                <th scope="col">Proveedor Forro</th>
+                                <th scope="col">Costo Forro</th>
                                 <th scope="col">(-)</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal " id="mdlImprimeReporteCostosSuajes"  role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Imprime Reporte Costos por Suaje</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCaptura">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Linea</label>
+                            <select id="Linea" name="Linea" class="form-control form-control-sm required">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAceptaImprimir">ACEPTAR</button>
+                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
             </div>
         </div>
     </div>
@@ -62,9 +127,36 @@
     var fechaaltasuajeforro = pnlTablero.find("#fechaaltasuajeforro");
     var btnAceptar = pnlTablero.find("#btnAceptar");
     var btnImprimirReporte = pnlTablero.find("#btnImprimirReporte");
+    var proveedorpiel = pnlTablero.find("#proveedorpiel");
+    var facturapiel = pnlTablero.find("#facturapiel");
+    var costopiel = pnlTablero.find("#costopiel");
+
+    var proveedorforro = pnlTablero.find("#proveedorforro");
+    var facturaforro = pnlTablero.find("#facturaforro");
+    var costoforro = pnlTablero.find("#costoforro");
+
+
+    var mdlImprimeReporteCostosSuajes = $('#mdlImprimeReporteCostosSuajes');
+    var btnAceptaImprimir = mdlImprimeReporteCostosSuajes.find('#btnAceptaImprimir');
+    var Linea = mdlImprimeReporteCostosSuajes.find("#Linea");
 
     $(document).ready(function () {
         init();
+
+
+        mdlImprimeReporteCostosSuajes.on('shown.bs.modal', function () {
+            handleEnterDiv(mdlImprimeReporteCostosSuajes);
+            $.each(mdlEtiZapica.find("select"), function (k, v) {
+                mdlEtiZapica.find("select")[k].selectize.clear(true);
+            });
+            getLineasCostoSuajes();
+            mdlImprimeReporteCostosSuajes.find('#Linea')[0].selectize.open();
+        });
+
+
+        btnImprimirReporte.on("click", function () {
+            mdlImprimeReporteCostosSuajes.modal('show');
+        });
 
         Estilo.keypress(function (e) {
             if (e.keyCode === 13) {
@@ -86,11 +178,63 @@
             if (e.keyCode === 13) {
                 var value = $(this).val();
                 if (value) {
+                    proveedorpiel.focus();
+                }
+            }
+        });
+
+        proveedorpiel.keypress(function (e) {
+            if (e.keyCode === 13) {
+                var value = $(this).val();
+                if (value) {
+                    facturapiel.focus();
+                }
+            }
+        });
+        facturapiel.keypress(function (e) {
+            if (e.keyCode === 13) {
+                var value = $(this).val();
+                if (value) {
+                    costopiel.focus();
+                }
+            }
+        });
+        costopiel.keypress(function (e) {
+            if (e.keyCode === 13) {
+                var value = $(this).val();
+                if (value) {
                     fechaaltasuajeforro.focus();
                 }
             }
         });
+
+
         fechaaltasuajeforro.keypress(function (e) {
+            if (e.keyCode === 13) {
+                var value = $(this).val();
+                if (value) {
+                    proveedorforro.focus();
+                }
+            }
+        });
+
+        proveedorforro.keypress(function (e) {
+            if (e.keyCode === 13) {
+                var value = $(this).val();
+                if (value) {
+                    facturaforro.focus();
+                }
+            }
+        });
+        facturaforro.keypress(function (e) {
+            if (e.keyCode === 13) {
+                var value = $(this).val();
+                if (value) {
+                    costoforro.focus();
+                }
+            }
+        });
+        costoforro.keypress(function (e) {
             if (e.keyCode === 13) {
                 var value = $(this).val();
                 if (value) {
@@ -98,29 +242,35 @@
                 }
             }
         });
+
         btnAceptar.on("click", function () {
             $.post(master_url + 'onAgregarInfoSuajes', {
                 estilo: Estilo.val(),
+                costopiel: costopiel.val(),
+                proveedorpiel: proveedorpiel.val(),
+                facturapiel: facturapiel.val(),
+                costoforro: costoforro.val(),
+                proveedorforro: proveedorforro.val(),
+                facturaforro: facturaforro.val(),
                 fechaaltasuajepiel: fechaaltasuajepiel.val(),
                 fechaaltasuajeforro: fechaaltasuajeforro.val()
             }).done(function (data) {
                 console.log(data);
                 onNotifyOld('', 'REGISTRO AGREGADO', 'success');
                 GolpesSuajesEstilo.ajax.reload();
-                fechaaltasuajepiel.val('');
-                fechaaltasuajeforro.val('');
-                Estilo.val('').focus();
+                pnlTablero.find('input').val('');
+                Estilo.focus();
             }).fail(function (x, y, z) {
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
                 console.log(x.responseText);
             });
         });
 
-        btnImprimirReporte.on("click", function () {
-            if (Estilo.val()) {
+        btnAceptaImprimir.on("click", function () {
+            if (Linea.val()) {
                 onOpenOverlay("Generando reporte");
                 $.post(master_url + 'onImprimirReporteSuajes', {
-                    estilo: Estilo.val()
+                    linea: Linea.val()
                 }).done(function (data) {
                     onCloseOverlay();
                     console.log(data);
@@ -132,8 +282,8 @@
                     console.log(x.responseText);
                 });
             } else {
-                swal('ERROR', 'DEBES DE SELECCIONAR UN ESTILO', 'warning').then((value) => {
-                    Estilo.focus().val('');
+                swal('ERROR', 'DEBES DE SELECCIONAR UNA LINEA', 'warning').then((value) => {
+                    Linea.focus().val('');
                 });
             }
         });
@@ -162,8 +312,14 @@
             "columns": [
                 {"data": "ID"},
                 {"data": "estilo"},
+                {"data": "facturapiel"},
                 {"data": "fechaaltasuajepiel"},
+                {"data": "proveedorpiel"},
+                {"data": "costopiel"},
+                {"data": "facturaforro"},
                 {"data": "fechaaltasuajeforro"},
+                {"data": "proveedorforro"},
+                {"data": "costoforro"},
                 {"data": "BTN"}
             ],
             "columnDefs": [
@@ -171,8 +327,29 @@
                     "targets": [0],
                     "visible": false,
                     "searchable": false
+                },
+                {
+                    "targets": [5, 9],
+                    "render": function (data, type, row) {
+                        return '$' + $.number(parseFloat(data), 2, '.', ',');
+                    }
                 }
             ],
+            "createdRow": function (row, data, index) {
+                $.each($(row).find("td"), function (k, v) {
+                    var c = $(v);
+                    var index = parseInt(k);
+
+                    if (index > 0 && index <= 4) {
+                        c.addClass('text-info text-strong');
+                    } else if (index > 4) {
+                        c.addClass('text-warning text-strong');
+                    } else {
+                        c.addClass('text-strong');
+                    }
+
+                });
+            },
             language: lang,
             "autoWidth": true,
             "colReorder": true,
@@ -208,6 +385,18 @@
 
                 });
             }
+        });
+    }
+
+    function getLineasCostoSuajes() {
+        $.getJSON(base_url + 'index.php/Lineas/' + 'getLineasSelect').done(function (data, x, jq) {
+            $.each(data, function (k, v) {
+                mdlImprimeReporteCostosSuajes.find("#Linea")[0].selectize.addOption({text: v.Linea, value: v.Clave});
+            });
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
+            HoldOn.close();
         });
     }
 </script>

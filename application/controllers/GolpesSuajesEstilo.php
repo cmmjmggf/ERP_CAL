@@ -41,10 +41,23 @@ class GolpesSuajesEstilo extends CI_Controller {
             $nuevaFechapiel = date("Y-m-d", strtotime($fechapiel));
             $fechaforro = str_replace('/', '-', $x->post('fechaaltasuajeforro'));
             $nuevaFechaIforro = date("Y-m-d", strtotime($fechaforro));
+            $costopiel = $x->post('costopiel');
+            $proveedorpiel = $x->post('proveedorpiel');
+            $facturapiel = $x->post('facturapiel');
+
+            $costoforro = $x->post('costoforro');
+            $proveedorforro = $x->post('proveedorforro');
+            $facturaforro = $x->post('facturaforro');
 
             if (!empty($A)) {
                 $this->db->where('estilo', $x->post('estilo'));
                 $this->db->update("golpessuajesestilo", array(
+                    'costopiel' => $costopiel,
+                    'proveedorpiel' => $proveedorpiel,
+                    'facturapiel' => $facturapiel,
+                    'costoforro' => $costoforro,
+                    'proveedorforro' => $proveedorforro,
+                    'facturaforro' => $facturaforro,
                     'fechaaltasuajepiel' => $nuevaFechapiel,
                     'fechaaltasuajeforro' => $nuevaFechaIforro
                 ));
@@ -53,7 +66,13 @@ class GolpesSuajesEstilo extends CI_Controller {
                     'linea' => $linea,
                     'estilo' => $x->post('estilo'),
                     'fechaaltasuajepiel' => $nuevaFechapiel,
-                    'fechaaltasuajeforro' => $nuevaFechaIforro
+                    'fechaaltasuajeforro' => $nuevaFechaIforro,
+                    'costopiel' => $costopiel,
+                    'proveedorpiel' => $proveedorpiel,
+                    'facturapiel' => $facturapiel,
+                    'costoforro' => $costoforro,
+                    'proveedorforro' => $proveedorforro,
+                    'facturaforro' => $facturaforro
                 ));
             }
         } catch (Exception $exc) {
@@ -67,7 +86,13 @@ class GolpesSuajesEstilo extends CI_Controller {
                                     . "ID, "
                                     . "estilo,"
                                     . "date_format(fechaaltasuajepiel,'%d/%m/%Y') as fechaaltasuajepiel,"
+                                    . "proveedorpiel,"
+                                    . "facturapiel,"
+                                    . "costopiel,"
                                     . "date_format(fechaaltasuajeforro,'%d/%m/%Y') as fechaaltasuajeforro,"
+                                    . "proveedorforro,"
+                                    . "facturaforro,"
+                                    . "costoforro,"
                                     . 'CONCAT(\'<span class="fa fa-trash fa-lg text-danger" onclick="onEliminarByID(\',ID,\')">\',\'</span>\') AS BTN '
                                     . " from golpessuajesestilo ")->result());
         } catch (Exception $exc) {
@@ -91,7 +116,7 @@ class GolpesSuajesEstilo extends CI_Controller {
             $parametros = array();
             $parametros["logo"] = base_url() . $this->session->LOGO;
             $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-            $parametros["estilo"] = $this->input->post('estilo');
+            $parametros["linea"] = $this->input->post('linea');
             $jc->setJasperurl('jrxml\suajes\reporteGolpesSuajes.jasper');
             $jc->setParametros($parametros);
             $jc->setFilename('REPORTE_SUAJES_' . Date('h_i_s'));
