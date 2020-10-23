@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesFabricadosPorPersonaSemana" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a794adb0-6fa2-46fd-9077-1bac41841638">
 	<property name="ireport.zoom" value="2.0000000000000218"/>
-	<property name="ireport.x" value="108"/>
+	<property name="ireport.x" value="96"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.String"/>
 	<parameter name="ANO" class="java.lang.String"/>
@@ -52,8 +52,9 @@ WHEN E.Numero = 1132 THEN "MARIA EUGENIA MEDINA ESCAREÑO" WHEN E.Numero = 2025 
 WHEN E.Numero = 2051 THEN "SANTIAGO ROCHA" WHEN E.Numero = 2179 THEN "DOMITILA NICASIO RAMIREZ"
 WHEN E.Numero = 2361 THEN "J  PATRICIO CHAVEZ CERVANTES" WHEN E.Numero = 2640 THEN "ANTONIO HERNANDEZ HERNANDEZ"
 WHEN E.Numero = 2641 THEN "ALMA DELIA GUERRERO ESPINOZA" WHEN E.Numero = 2716 THEN "CAROLINA  GALVAN FONSECA"
- WHEN E.Numero = 2748 THEN "MARIA GUADALUPE CASTILLO REYES"
+ WHEN E.Numero = 2748 THEN "MARIA GUADALUPE CASTILLO REYES" ELSE CONCAT(E.PrimerNombre, " ", E.SegundoNombre," ",E.Paterno," ",E.Materno)
 END),"-")) AS DEPARTAMENTO,
+
 SUM(F.pares) AS TOTAL_PARES,
 IFNULL(
 (SELECT SUM(FF.Pares) FROM fracpagnomina AS FF
