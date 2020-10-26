@@ -20,12 +20,14 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <h4 class="font-weight-bold font-italic pares_facturados_del_control_baja " style="#000">-</h4>
                     </div>
+                    <div class="w-100"><hr></div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <h4 class="font-weight-bold font-italic estatus_del_control_baja">-</h4>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <h4 class="font-weight-bold font-italic cliente_del_control_baja">-</h4>
                     </div>
+                    <div class="w-100"><hr></div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <h4 class="font-weight-bold font-italic estilo_control_baja">-</h4>
                     </div>
@@ -35,41 +37,106 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btnAceptaBajaControl" style="    background-color: #4CAF50;
-    border-color: #4CAF50; font-weight: bold;"><span class="fa fa-check"></span> ACEPTA</button> 
+                <button type="button" class="btn btn-success" id="btnAceptaBajaControl" style="background-color: #4CAF50;border-color: #4CAF50; font-weight: bold;">
+                    <span class="fa fa-check"></span> ACEPTA</button> 
             </div>
         </div>
     </div>
 </div>
 <script>
-    var mdlBajaControles = $("#mdlBajaControles"), ControlADarDeBaja = mdlBajaControles.find("#ControlADarDeBaja");
+    var mdlBajaControles = $("#mdlBajaControles"), ControlADarDeBaja = mdlBajaControles.find("#ControlADarDeBaja"),
+            btnAceptaBajaControl = mdlBajaControles.find("#btnAceptaBajaControl");
     $(document).ready(function () {
+
+        handleEnterDiv(mdlBajaControles);
+
+        btnAceptaBajaControl.click(function () {
+            onDisable(btnAceptaBajaControl);
+            if (ControlADarDeBaja.val()) {
+                onOpenOverlay('');
+                $.post('<?php print base_url('BajaControles/onDarDeBajaControl'); ?>',
+                        {CONTROL: ControlADarDeBaja.val()}).done(function (a) {
+                    onCloseOverlay();
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "SE HA DADO DE BAJA EL CONTROL",
+                        icon: "success",
+                        buttons: false,
+                        timer: 500
+                    }).then((action) => {
+                        getInformacionDelControl();
+                        onDisable(btnAceptaBajaControl);
+                        ControlADarDeBaja.focus().select();
+                    });
+                }).fail(function (e) {
+                    onCloseOverlay();
+                    onEnable(btnAceptaBajaControl);
+                    getError(e);
+                }).always(function () {
+                    onCloseOverlay();
+                    onDisable(btnAceptaBajaControl);
+                });
+            } else {
+                ControlADarDeBaja.focus().select();
+                onEnable(btnAceptaBajaControl);
+            }
+        });
+
         mdlBajaControles.on('shown.bs.modal', function () {
             mdlBajaControles.find("input").val("");
+            onDisable(btnAceptaBajaControl);
             ControlADarDeBaja.focus();
+        });
+        mdlBajaControles.on('hidden.bs.modal', function () {
+            mdlBajaControles.find("h4.pares_del_control_baja").html('0<br> PARES');
+            mdlBajaControles.find("h4.pares_facturados_del_control_baja").html('0<br>PARES FACTURADOS');
+            mdlBajaControles.find("h4.estatus_del_control_baja").html('<span style="color:#cc0000;">-</span>');
+            mdlBajaControles.find("h4.cliente_del_control_baja").text('-');
+            mdlBajaControles.find("h4.estilo_control_baja").html('ESTILO <span style="color:#558B2F;">-</span>');
+            mdlBajaControles.find("h4.color_control_baja").html('COLOR <span style="color:#cc0000;">-</span>');
         });
 
         ControlADarDeBaja.keydown(function (e) {
             if (ControlADarDeBaja.val() && e.keyCode === 13) {
-                onOpenOverlay('');
-                $.post('<?php print base_url('BajaControles/getInformacionXControl'); ?>',
-                        {CONTROL: ControlADarDeBaja.val()}).done(function (a) {
-                    if (a.length > 0) {
-                        var c = JSON.parse(a)[0];
-                        console.log(c)
-                        mdlBajaControles.find("h4.pares_del_control_baja").text(c.Pares + ' PARES');
-                        mdlBajaControles.find("h4.pares_facturados_del_control_baja").text(c.ParesFacturados + ' PARES FACTURADOS');
-                        mdlBajaControles.find("h4.estatus_del_control_baja").text(c.EstatusProduccion);
-                        mdlBajaControles.find("h4.cliente_del_control_baja").text(c.Cliente);
-                    }
-                    onCloseOverlay();
-                }).fail(function (e) {
-                    onCloseOverlay();
-                    getError(e);
-                }).always(function () {
-                    onCloseOverlay();
-                });
+                getInformacionDelControl();
+            }
+            if (ControlADarDeBaja.val() === '' && e.keyCode === 13 ||
+                    ControlADarDeBaja.val() === '' && e.keyCode === 8 ||
+                    ControlADarDeBaja.val() === '' && e.keyCode === 46) {
+                mdlBajaControles.find("h4.pares_del_control_baja").html('0<br> PARES');
+                mdlBajaControles.find("h4.pares_facturados_del_control_baja").html('0<br>PARES FACTURADOS');
+                mdlBajaControles.find("h4.estatus_del_control_baja").html('<span style="color:#cc0000;">-</span>');
+                mdlBajaControles.find("h4.cliente_del_control_baja").text('-');
+                mdlBajaControles.find("h4.estilo_control_baja").html('ESTILO <span style="color:#558B2F;">-</span>');
+                mdlBajaControles.find("h4.color_control_baja").html('COLOR <span style="color:#cc0000;">-</span>');
             }
         });
     });
+    function getInformacionDelControl( ) {
+        onOpenOverlay('');
+        $.post('<?php print base_url('BajaControles/getInformacionXControl'); ?>',
+                {CONTROL: ControlADarDeBaja.val()}).done(function (a) {
+            if (a.length > 0) {
+                var c = JSON.parse(a)[0];
+                mdlBajaControles.find("h4.pares_del_control_baja").html(c.Pares + '<br> PARES');
+                mdlBajaControles.find("h4.pares_facturados_del_control_baja").html(c.ParesFacturados + '<br>PARES FACTURADOS');
+                mdlBajaControles.find("h4.estatus_del_control_baja").html('<span style="color:#cc0000;">' + c.DeptoProduccion + ' ' + c.EstatusProduccion + '<br>(' + c.stsavan + ')</span>');
+                mdlBajaControles.find("h4.cliente_del_control_baja").text(c.Cliente);
+                mdlBajaControles.find("h4.estilo_control_baja").html('ESTILO <span style="color:#558B2F;">' + c.Estilo + '</span>');
+                mdlBajaControles.find("h4.color_control_baja").html('COLOR <span style="color:#cc0000;">' + c.Color + '</span>');
+
+                if (parseInt(c.stsavan) === 12) {
+                    onEnable(btnAceptaBajaControl);
+                } else {
+                    onDisable(btnAceptaBajaControl);
+                }
+            }
+            onCloseOverlay();
+        }).fail(function (e) {
+            onCloseOverlay();
+            getError(e);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
 </script>

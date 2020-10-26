@@ -840,7 +840,7 @@ class Avance9 extends CI_Controller {
                                 /* 28 / 01 / 2020 */
                                 /* REVISAR SI TIENE ENTRETELADO */
                                 $REVISAR_ENTRETELADO_X_ESTILO_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fraccionesxestilo AS F WHERE F.Fraccion IN(51,127) AND F.Estilo = '{$xXx['ESTILO']}' LIMIT 1")->result();
-                                if (intval($REVISAR_ENTRETELADO_X_ESTILO_CONTROL[0]->EXISTE) === 1) {
+                                if (intval($REVISAR_ENTRETELADO_X_ESTILO_CONTROL[0]->EXISTE) >= 1) {
                                     $check_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
                                                     . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 90")->result();
                                     if (intval($check_avance[0]->EXISTE) === 0) {
