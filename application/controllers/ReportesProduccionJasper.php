@@ -435,6 +435,21 @@ class ReportesProduccionJasper extends CI_Controller {
         }
     }
 
+    public function ReporteMinutosPresupiestadosCORTE() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $x = $this->input;
+        $parametros["ano"] = intval($x->post('Ano'));
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\paresAsignadosMaqSemGenCORTE.jasper');
+        $jc->setFilename('presupuestoMinutaceCorte' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function ReporteParesAsignadosMaqSemGen() {
 
         $sem = $this->db->query("SELECT S.Sem AS SEMANA FROM semanasproduccion AS S
