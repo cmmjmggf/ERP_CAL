@@ -42,7 +42,7 @@ class Maquinaria extends CI_Controller {
                                     . "M.FotoUno AS FOTO_UNO, M.FotoDos AS FOTO_DOS, M.FotoTres AS FOTO_TRES, M.FotoCuatro AS FOTO_CUATRO, "
                                     . "M.FotoCinco AS FOTO_CINCO, M.FotoSeis AS FOTO_SEIS, M.fecultma AS FECHA_ULTIMO_MANTENIMIENTO, "
                                     . "M.diasmaq AS DIAS_M, M.critisida AS CRITISIDAD, M.stsmaq AS ESTATUS_MAQ, "
-                                    . "M.fecbaja AS FECHA_BAJA, M.motmaq AS MOTIVO_BAJA FROM maquinaria AS M")->result());
+                                    . "M.fecbaja AS FECHA_BAJA, M.motmaq AS MOTIVO_BAJA,  M.Operario AS OPERARIO_CLAVE, M.OperarioT AS OPERARIO_NOMBRE FROM maquinaria AS M")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -58,7 +58,7 @@ class Maquinaria extends CI_Controller {
                                     . "M.FotoUno AS FOTO_UNO, M.FotoDos AS FOTO_DOS, M.FotoTres AS FOTO_TRES, M.FotoCuatro AS FOTO_CUATRO, "
                                     . "M.FotoCinco AS FOTO_CINCO, M.FotoSeis AS FOTO_SEIS, M.fecultma AS FECHA_ULTIMO_MANTENIMIENTO, "
                                     . "M.diasmaq AS DIAS_M, M.critisida AS CRITISIDAD, M.stsmaq AS ESTATUS_MAQ, "
-                                    . "M.fecbaja AS FECHA_BAJA, M.motmaq AS MOTIVO_BAJA FROM maquinaria AS M WHERE M.IDE = {$x['IDE']}")->result());
+                                    . "M.fecbaja AS FECHA_BAJA, M.motmaq AS MOTIVO_BAJA, M.Operario AS OPERARIO_CLAVE, M.OperarioT AS OPERARIO_NOMBRE FROM maquinaria AS M WHERE M.IDE = {$x['IDE']}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -131,7 +131,9 @@ class Maquinaria extends CI_Controller {
                 "fecbaja" => $x['FechaBajaMaquina'] !== '' ? $x['FechaBajaMaquina'] : NULL,
                 "motmaq" => $x['MotivoMaquina'],
                 "critisida" => $x['CriticidadMaquina'],
-                "maq" => $x['MaquilaMaquina']
+                "maq" => $x['MaquilaMaquina'],
+                "Operario" => $x['ClaveOperarioMaquinaria'],
+                "OperarioT" => $x['OperarioMaquinaria']
             ));
             $i = 1;
             foreach ($_FILES as $k => $v) {
@@ -208,6 +210,8 @@ class Maquinaria extends CI_Controller {
                     ->set("cosmaq", $x["CostoMaquina"])
                     ->set("motmaq", $x['MotivoMaquina'])
                     ->set("critisida", $x['CriticidadMaquina'])
+                    ->set("Operario", $x['ClaveOperarioMaquinaria'])
+                    ->set("OperarioT", $x['OperarioMaquinaria']) 
                     ->set("fecultma", $x['UltimoMantenimientoMaquina'] !== '' ? $UltimoMantenimientoMaquina->format('Y-m-d 00:00:00') : NULL)
                     ->where("nummaq", $x["CodigoMaquina"])
                     ->where("IDE", $x["ID"])

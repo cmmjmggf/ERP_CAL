@@ -60,6 +60,25 @@
                                         <input type="text" id="DescripcionMaquina" name="DescripcionMaquina" maxlength="500" class="form-control form-control-sm">
                                     </div>
                                     <div class="col-12">
+                                        <label>Operario</label>
+                                        <div class="row">
+                                            <div class="col-4 col-xs-4 col-sm-4">
+                                                <input type="text" id="ClaveOperarioMaquinaria" name="ClaveOperarioMaquinaria" class="form-control" maxlength="6">
+                                            </div>
+                                            <div class="col-8 col-xs-8 col-sm-8"> 
+                                                <select id="OperarioMaquinaria" name="OperarioMaquinaria" class="form-control form-control-sm">
+                                                    <option></option>                                   
+                                                    <?php
+                                                    $empleados = $this->db->query("SELECT Numero, PrimerNombre, SegundoNombre, Paterno, Materno FROM empleados AS E WHERE E.DepartamentoFisico IN(10,110) AND E.AltaBaja IN(1);")->result();
+                                                    foreach ($empleados as $k => $v) {
+                                                        print "<option value='{$v->Numero}'>" . $v->PrimerNombre . " " . $v->SegundoNombre . " " . $v->Paterno . " " . $v->Materno . "</option>";
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
                                         <label>Marca</label>
                                         <input type="text" id="MarcaMaquina" name="MarcaMaquina" maxlength="99" class="form-control form-control-sm">
                                     </div>
@@ -345,6 +364,8 @@
             EstatusMaquina = mdlMaquinaria.find('#EstatusMaquina'),
             FechaBajaMaquina = mdlMaquinaria.find('#FechaBajaMaquina'),
             MotivoMaquina = mdlMaquinaria.find('#MotivoMaquina'),
+            ClaveOperarioMaquinaria = mdlMaquinaria.find('#ClaveOperarioMaquinaria'),
+            OperarioMaquinaria = mdlMaquinaria.find('#OperarioMaquinaria'),
             indice = 1, indice_imagen = 1,
             sin_foto = "<?php print base_url('img/sin_foto_sm.jpg'); ?>",
             imgns = [xImagenUno, xImagenUno, xImagenDos, xImagenTres, xImagenCuatro, xImagenCinco, xImagenSeis];
@@ -431,6 +452,24 @@
     $(document).ready(function () {
         onVolverPrimerPestana();
         handleEnterDiv(mdlMaquinaria);
+
+        ClaveOperarioMaquinaria.on('keydown', function (e) {
+            if (e.keyCode === 13 && ClaveOperarioMaquinaria.val()) {
+                setValueSelectize(OperarioMaquinaria, ClaveOperarioMaquinaria.val());
+            }
+            if (e.keyCode === 8 && ClaveOperarioMaquinaria.val() === '' ||
+                    e.keyCode === 13 && ClaveOperarioMaquinaria.val() === '' ||
+                    e.keyCode === 46 && ClaveOperarioMaquinaria.val() === '') {
+                onClearSelect(OperarioMaquinaria);
+            }
+        });
+
+        OperarioMaquinaria.change(function () {
+            if (OperarioMaquinaria.val()) {
+                ClaveOperarioMaquinaria.val(OperarioMaquinaria.val());
+            }
+        });
+
         mdlMaquinaria.on('keydown', function (e) {
             if (e.keyCode === 39) {
                 mdlMaquinaria.find("#span_right_img").trigger('click');
@@ -610,6 +649,9 @@
             f.append('EstatusMaquina', ClaveEstatusMaquina[0].checked ? 2 : 1);
             f.append('FechaBajaMaquina', FechaBajaMaquina.val() ? FechaBajaMaquina.val() : '');
             f.append('MotivoMaquina', MotivoMaquina.val());
+            
+            f.append('ClaveOperarioMaquinaria', ClaveOperarioMaquinaria.val());
+            f.append('OperarioMaquinaria', OperarioMaquinaria.find("option:selected").text());
 
             /*ARCHIVOS*/
             f.append('FotoUno', xFileMaquinaUno[0].files[0]);
@@ -648,8 +690,7 @@
                 console.log('Modificando...');
                 f.append('ID', Maquinaria_ID.val());
                 $.ajax({
-                    url: '<?php print base_url('Maquinaria/onModificar'); ?>',
-                    type: "POST",
+                    url: '<?php print base_url('Maquinaria/onModificar'); ?>', type: "POST",
                     cache: true,
                     contentType: false,
                     processData: false,
@@ -972,8 +1013,7 @@
             return;
         }
         xMaquinaria = tblMaquinaria.DataTable({
-            "dom": 'fritp',
-            "ajax": {
+            "dom": 'fritp', "ajax": {
                 "url": '<?php print base_url('Maquinaria/getMaquinaria'); ?>',
                 "contentType": "application/json",
                 "dataSrc": "",
@@ -984,10 +1024,8 @@
             buttons: buttons,
             "columns": [
                 {"data": "IDE"}/*0*/,
-                {"data": "CODIGO"}/*1*/,
-                {"data": "ID"}/*2*/,
-                {"data": "MAQUILA"}/*3*/,
-                {"data": "DESCRIPCION"}/*4*/,
+                {"data": "CODIGO"}/*1*/, {"data": "ID"}/*2*/,
+                {"data": "MAQUILA"}/*3*/, {"data": "DESCRIPCION"}/*4*/,
                 {"data": "MARCA"}/*4*/,
                 {"data": "MODELO"}/*5*/,
                 {"data": "SERIE"}/*6*/,
@@ -1075,6 +1113,9 @@
         }
         FechaBajaMaquina.val(dtm.FECHA_BAJA);
         MotivoMaquina.val(dtm.MOTIVO_BAJA);
+        
+        ClaveOperarioMaquinaria.val(dtm.OPERARIO_CLAVE);
+        setValueSelectize(OperarioMaquinaria, dtm.OPERARIO_CLAVE); 
 
         xImagenUno[0].src = dtm.FOTO_UNO !== null ? '<?php print base_url(); ?>' + dtm.FOTO_UNO : sin_foto;
         xImagenDos[0].src = dtm.FOTO_DOS !== null ? '<?php print base_url(); ?>' + dtm.FOTO_DOS : sin_foto;
@@ -1166,7 +1207,6 @@
         xImagenCinco[0].src = '<?php print base_url('img/sin_foto_sm.jpg'); ?>';
         onClear(xImagenSeis);
         xImagenSeis[0].src = '<?php print base_url('img/sin_foto_sm.jpg'); ?>';
-
         xFileMaquinaUno[0].type = 'text';
         xFileMaquinaUno[0].type = 'file';
 
@@ -1175,13 +1215,10 @@
 
         xFileMaquinaTres[0].type = 'text';
         xFileMaquinaTres[0].type = 'file';
-
         xFileMaquinaCuatro[0].type = 'text';
         xFileMaquinaCuatro[0].type = 'file';
-
         xFileMaquinaCinco[0].type = 'text';
         xFileMaquinaCinco[0].type = 'file';
-
         xFileMaquinaSeis[0].type = 'text';
         xFileMaquinaSeis[0].type = 'file';
     }
