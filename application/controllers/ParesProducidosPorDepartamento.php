@@ -62,7 +62,24 @@ class ParesProducidosPorDepartamento extends CI_Controller {
                     $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
                     $jc->setParametros($parametros);
                     $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoCORTE.jasper');
-                    $jc->setFilename('ParesProducidosPorDepartamento10CORTE' . Date('h_i_s'));
+                    $jc->setFilename('ParesProducidosPorDepartamento_10_CORTE_PIEL' . Date('h_i_s'));
+                    $jc->setDocumentformat('pdf');
+                    print $jc->getReport();
+                    break;
+                case 11:
+                    /* OK 25/01/2020 ULTIMA MODIFICACIÓN */
+                    $jc = new JasperCommand();
+                    $jc->setFolder('rpt/' . $this->session->USERNAME);
+                    $parametros = array();
+                    $parametros["logo"] = base_url() . $this->session->LOGO;
+                    $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+                    $x = $this->input;
+                    $parametros["MAQUILA"] = intval($x->post('MAQUILA'));
+                    $parametros["FECHAINICIAL"] = $x->post('FECHA_INICIAL');
+                    $parametros["FECHAFINAL"] = $x->post('FECHA_FINAL');
+                    $jc->setParametros($parametros);
+                    $jc->setJasperurl('jrxml\producidosxdepto\ParesProducidosPorDepartamentoCORTEFORRO.jasper');
+                    $jc->setFilename('ParesProducidosPorDepartamento_10_CORTE_FORRO' . Date('h_i_s'));
                     $jc->setDocumentformat('pdf');
                     print $jc->getReport();
                     break;

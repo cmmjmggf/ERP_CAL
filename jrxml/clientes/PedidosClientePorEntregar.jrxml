@@ -33,6 +33,9 @@
 	<parameter name="cliente" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="estilo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select  p.cliente, c.razons as nomcliente, c.diasplazo,
 (select descripcion from transportes where clave = c.Transporte) as nomtransporte,
@@ -69,6 +72,7 @@ join clientes c on c.clave = p.cliente
 left join controlterm ct on ct.control = p.control
 where p.cliente = $P{cliente}
 and p.stsavan not in (13,14)
+and (case when $P{estilo} <> '' then p.estilo = $P{estilo} else p.estilo like '%%' end)
 order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]>
 	</queryString>
 	<field name="cliente" class="java.lang.String">
@@ -87,9 +91,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 	</field>
 	<field name="nommaqui" class="java.lang.String"/>
 	<field name="pedido" class="java.lang.String"/>
-	<field name="fecent" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="fecent" class="java.sql.Date"/>
 	<field name="fecentrada" class="java.sql.Timestamp"/>
 	<field name="Control" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>

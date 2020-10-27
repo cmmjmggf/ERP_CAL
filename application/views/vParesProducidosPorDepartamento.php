@@ -23,97 +23,107 @@
                     </div>
                     <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnCorte" name="btnCorte" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnCorteP" name="btnCorte" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
-                            <span class="fa fa-file"></span> CORTE
+                            <span class="fa fa-file"></span> CORTE PIEL
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnRayado" name="btnRayado" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnCorteF" name="btnCorte" class="btn btn-sm btn-info font-weight-bold"
+                                style="background-color: #373a3c;  border-color: #373a3c;">
+                            <span class="fa fa-file"></span> CORTE FORRO
+                        </button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" id="btnRayado" name="btnRayado" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> RAYADO
                         </button>
                     </div>
+                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnRebajado" name="btnRebajado" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnRebajado" name="btnRebajado" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> REBAJADO
                         </button>
                     </div>
-                    <div class="w-100 my-2"></div>
+
 
                     <div class="col-4">
-                        <button type="button" id="btnFoleado" name="btnFoleado" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnFoleado" name="btnFoleado" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> FOLEADO
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnEntretelado" name="btnEntretelado" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnEntretelado" name="btnEntretelado" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> ENTRETELADO
                         </button>
                     </div>
+                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnAlmCorte" name="btnAlmCorte" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnAlmCorte" name="btnAlmCorte" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #990000;  border-color: #990000;">
-                            <span class="fa fa-file"></span> ALM-CORTE 
+                            <span class="fa fa-file"></span> ALM-CORTE
                         </button>
                     </div>
-                    <div class="w-100 my-2"></div>
 
                     <div class="col-4">
-                        <button type="button" id="btnPespunte" name="btnPespunte" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnPespunte" name="btnPespunte" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> PESPUNTE
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnEnsuelado" name="btnEnsuelado" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnEnsuelado" name="btnEnsuelado" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> ENSUELADO
                         </button>
                     </div>
+
+                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnAlmPespunte" name="btnAlmPespunte" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnAlmPespunte" name="btnAlmPespunte" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #990000;  border-color: #990000;">
                             <span class="fa fa-file"></span> ALM-PESPUNTE
                         </button>
                     </div>
-                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnTejido" name="btnTejido" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnTejido" name="btnTejido" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> TEJIDO
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnAlmTejido" name="btnAlmTejido" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnAlmTejido" name="btnAlmTejido" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #990000;  border-color: #990000;">
                             <span class="fa fa-file"></span> ALM-TEJIDO
                         </button>
                     </div>
+                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnMontado" name="btnMontado" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnMontado" name="btnMontado" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> MONTADO
                         </button>
                     </div>
-                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnAdorno" name="btnAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnAdorno" name="btnAdorno" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> ADORNO
                         </button>
                     </div>
                     <div class="col-4">
-                        <button type="button" id="btnAlmAdorno" name="btnAlmAdorno" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnAlmAdorno" name="btnAlmAdorno" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #990000;  border-color: #990000;">
                             <span class="fa fa-file"></span> ALM-ADORNO
                         </button>
                     </div>
+
+                    <div class="w-100 my-2"></div>
                     <div class="col-4">
-                        <button type="button" id="btnLaser" name="btnLaser" class="btn btn-sm btn-info font-weight-bold" 
+                        <button type="button" id="btnLaser" name="btnLaser" class="btn btn-sm btn-info font-weight-bold"
                                 style="background-color: #373a3c;  border-color: #373a3c;">
                             <span class="fa fa-file"></span> LASER
                         </button>
@@ -139,12 +149,12 @@
     $(document).ready(function () {
         handleEnterDiv(mdlParesProducidosPorDepartamento);
 
-        mdlParesProducidosPorDepartamento.find("#btnCorte").click(function () {
+        mdlParesProducidosPorDepartamento.find("#btnCorteP").click(function () {
             getReportexDepto(10);
         });
 
-        mdlParesProducidosPorDepartamento.find("#btnRayado").click(function () {
-            getReportexDepto(20);
+        mdlParesProducidosPorDepartamento.find("#btnCorteF").click(function () {
+            getReportexDepto(11);
         });
 
         mdlParesProducidosPorDepartamento.find("#btnRebajado").click(function () {
@@ -465,5 +475,5 @@
     }
     .switch + .switch {
         margin-left: 1rem;
-    } 
+    }
 </style>

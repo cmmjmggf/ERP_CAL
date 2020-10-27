@@ -43,13 +43,14 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
     public function onImprimirReportePedidosXEntregarFecha() {
         try {
             $Cliente = $this->input->post('Cliente');
-
+            $Estilo = $this->input->post('Estilo');
             $jc = new JasperCommand();
             $jc->setFolder('rpt/' . $this->session->USERNAME);
             $parametros = array();
             $parametros["logo"] = base_url() . $this->session->LOGO;
             $parametros["empresa"] = $this->session->EMPRESA_RAZON;
             $parametros["cliente"] = $Cliente;
+            $parametros["estilo"] = $Estilo;
             $jc->setParametros($parametros);
             $jc->setJasperurl('jrxml\clientes\PedidosClientePorEntregar.jasper');
             $jc->setFilename('CTE_PEDIDOS_X_ENTREGAR' . Date('h_i_s'));
@@ -78,7 +79,7 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                                             p.semana, p.pares, p.paresfacturados,
                                             p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
                                             ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
-                                            FROM pedidox P 
+                                            FROM pedidox P
                                             WHERE p.stsavan = 13 and p.cliente= $cte  ")->result());
     }
 
@@ -91,7 +92,7 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                                             p.semana, p.pares, p.paresfacturados,
                                             p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
                                             ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
-                                            FROM pedidox P 
+                                            FROM pedidox P
                                             WHERE p.stsavan <> 13 and p.stsavan <> 14 and p.cliente= $cte  ")->result());
     }
 

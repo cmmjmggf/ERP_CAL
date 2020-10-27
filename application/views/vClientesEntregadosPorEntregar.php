@@ -67,6 +67,23 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th class="d-none">Cliente</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Totales:</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -115,7 +132,7 @@
     var EntregadosCliente;
     var tblNoEntregadosCliente = $('#tblNoEntregadosCliente');
     var NoEntregadosCliente;
-
+    var search_value;
 
     $(document).ready(function () {
         pnlTablero.find('.NotSelectize').selectize({
@@ -175,12 +192,16 @@
         });
 
         /*Botones*/
+        $('#tblNoEntregadosCliente').on('search.dt', function () {
+            search_value = $('.dataTables_filter input').val();
+        });
 
         pnlTablero.find("#btnImprimePedidosXEntregar").click(function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             if (pnlTablero.find('#Cliente').val()) {
                 $.post(base_url + 'index.php/ClientesEntregadosPorEntregar/onImprimirReportePedidosXEntregarFecha', {
-                    Cliente: pnlTablero.find('#Cliente').val()
+                    Cliente: pnlTablero.find('#Cliente').val(),
+                    Estilo: search_value
                 }).done(function (data, x, jq) {
                     HoldOn.close();
                     console.log(data);
@@ -412,6 +433,34 @@
                 {"data": "precio"},
                 {"data": "avance"}
             ],
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(), data;
+                // Remove the formatting to get integer data for summation
+                var intVal = function (i) {
+                    return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '') * 1 :
+                            typeof i === 'number' ?
+                            i : 0;
+                };
+                // Total 1
+                var pageTotal = api
+                        .column(6, {page: 'current'})
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                // Update footer
+                $(api.column(6).footer()).html(pageTotal);
+                // Total 2
+                var pageTotal = api
+                        .column(7, {page: 'current'})
+                        .data()
+                        .reduce(function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+                // Update footer
+                $(api.column(7).footer()).html(pageTotal);
+            },
 
             language: lang,
             "autoWidth": true,
@@ -426,7 +475,8 @@
             "aaSorting": [
                 [1, 'asc'], [4, 'asc']
             ]
-        });
+        }
+        );
         tblNoEntregadosCliente.find('tbody').on('click', 'tr', function () {
             tblNoEntregadosCliente.find("tbody tr").removeClass("success");
             $(this).addClass("success");
@@ -435,7 +485,6 @@
             tblNoEntregadosCliente.find("tbody tr").removeClass("success");
             $(this).addClass("success");
             var dtm = NoEntregadosCliente.row(this).data();
-
             swal("Imprimir", "Pedido: " + dtm.pedido + ' \nCliente: ' + dtm.cliente, {
                 buttons: ["Cancelar", true]
             }).then((value) => {
@@ -450,7 +499,6 @@
                     });
                 }
             });
-
         });
     }
 </script>
