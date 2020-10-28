@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="asidiacontmat" language="groovy" pageWidth="595" pageHeight="840" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
-	<property name="ireport.zoom" value="1.927716447147658"/>
+	<property name="ireport.zoom" value="1.7524694974069617"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SEMANA" class="java.lang.Integer"/>
@@ -15,7 +15,7 @@ CONCAT(D.`PrimerNombre`," ",(CASE WHEN D.`SegundoNombre` = "0" THEN "" ELSE D.`S
 AA.Articulo, AA.ArticuloT, AA.UnidadMedidaT, SUM(AA.Cantidad) AS CANTIDAD, AA.`Grupo`
  FROM ordendeproduccion AS A   INNER JOIN ordendeproducciond AS AA ON A.ID = AA.OrdenDeProduccion
 INNER JOIN programacion AS C ON C.control = A.ControlT INNER JOIN empleados AS D ON C.numemp = D.Numero
-WHERE C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.`frac` < 300 AND C.año = 2020  AND C.semana =$P{SEMANA}
+WHERE C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.`frac` < 300 AND C.año =  $P{ANO} AND C.semana =$P{SEMANA}
 AND AA.`Grupo` IN(1,12,15,16,17,18,2,30,31,34,40,41,50,9)
 GROUP BY C.numemp,AA.Articulo
 ORDER BY ABS(C.numemp) ASC, ABS(AA.`Grupo`) ASC, ABS(AA.Articulo) ASC ;]]>
