@@ -99,7 +99,7 @@ class Consignatarios extends CI_Controller {
             }
             $data["Estatus"] = 'ACTIVO';
             $data["Registro"] = Date('d/m/Y h:i:s');
-            $this->Consignatarios_model->onAgregar($data);
+            $this->db->insert("consignatarios", $data); 
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

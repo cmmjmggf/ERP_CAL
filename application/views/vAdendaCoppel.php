@@ -18,9 +18,9 @@
                                 <select id="TiendaCoppel" name="TiendaCoppel" class="form-control form-control-sm">
                                     <option></option>
                                     <?php
-                                    $data = $this->db->query("SELECT numtda, nomtda, dirtda, numetda, numitda, coltda, ciutda, edotda, teltda1, teltda2, teltda3, coptda, tpprov, provee FROM tiendas AS T ORDER BY ABS(T.numtda) ASC ")->result();
+                                    $data = $this->db->query("SELECT T.* FROM consignatarios AS T ORDER BY ABS(T.Clave) ASC")->result();
                                     foreach ($data as $k => $v) {
-                                        print "<option value='{$v->numtda}'>{$v->nomtda}</option>";
+                                        print "<option value='{$v->Clave}'>{$v->Consignatario}</option>";
                                     }
                                     ?>
                                 </select>
@@ -44,18 +44,18 @@
                                 <?php
                                 foreach ($data as $k => $v) {
                                     $row = "<tr>"
-                                            . "<td>{$v->numtda}</td>" . "<td th scope=\"row\">{$v->nomtda}</td>"
-                                            . "<td>{$v->dirtda}</td>" . "<td>{$v->numetda}</td>"
-                                            . "<td>{$v->numitda}</td>";
-                                    $row .= "<td>{$v->coltda}</td>";
-                                    $row .= "<td>{$v->ciutda}</td>";
-                                    $row .= "<td>{$v->edotda}</td>";
-                                    $row .= "<td>{$v->teltda1}</td>";
-                                    $row .= "<td>{$v->teltda2}</td>";
-                                    $row .= "<td>{$v->teltda3}</td>";
-                                    $row .= "<td>{$v->coptda}</td>";
-                                    $row .= "<td>{$v->tpprov}</td>";
-                                    $row .= "<td>{$v->provee}</td>";
+                                            . "<td>{$v->Clave}</td>" . "<td th scope=\"row\">{$v->Consignatario}</td>"
+                                            . "<td>{$v->Direccion}</td>" . "<td>{$v->NumeroExterior}</td>"
+                                            . "<td>{$v->NumeroInterior}</td>";
+                                    $row .= "<td>{$v->Colonia}</td>";
+                                    $row .= "<td>{$v->Ciudad}</td>";
+                                    $row .= "<td>{$v->Estado}</td>";
+                                    $row .= "<td>{$v->TelOficina}</td>";
+                                    $row .= "<td>{$v->TelParticular}</td>";
+                                    $row .= "<td>{$v->TelParticular2}</td>";
+                                    $row .= "<td>{$v->CodigoPostal}</td>";
+                                    $row .= "<td>{$v->TPProveedor}</td>";
+                                    $row .= "<td>{$v->NumeroDeProveedor}</td>";
                                     $row .= "</tr>";
                                     print $row;
                                 }

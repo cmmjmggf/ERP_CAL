@@ -2,17 +2,17 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Consignatarios</legend>
+                <legend class="float-left"><span class="fa fa-store"></span> Consignatarios</legend>
             </div>
             <div class="col-sm-6 float-right" align="right">
-                <button type="button" class="btn btn-primary animated flipInX" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-plus"></span><br></button>
+                <button type="button" class="btn btn-primary animated flipInX" style="background-color: #8BC34A; border-color: #8BC34A;" id="btnNuevo" data-toggle="tooltip" data-placement="left" title="Agregar"><span class="fa fa-star"></span> NUEVO<br></button>
             </div>
         </div>
         <div class="card-block mt-4">
             <div id="Consignatarios" class="table-responsive">
-                <table id="tblConsignatarios" class="table table-sm display " style="width:100%">
+                <table id="tblConsignatarios" class="table table-sm display " style="width:100%;">
                     <thead>
-                        <tr>
+                        <tr style="  background-color: #000000 !important; color: #fff;">
                             <th>ID</th>
                             <th>Cliente</th>
                             <th>Consignatario</th>
@@ -34,7 +34,7 @@
             <fieldset>
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 float-left">
-                        <legend>Consignatario</legend>
+                        <legend><span class="fa fa-store"></span>  Consignatario</legend>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
@@ -256,10 +256,7 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "bSort": true,
-            "aaSorting": [
-                [1, 'ASC']
-            ],
+            "bSort": true, 
             initComplete: function (x, y) {
                 HoldOn.close();
             }
@@ -329,3 +326,10 @@
         });
     }
 </script>
+<style>
+    #tblConsignatarios tbody tr td {  
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+</style>

@@ -73,6 +73,10 @@
                                 <textarea id="DescripcionSolicitud" name="DescripcionSolicitud" class="form-control" maxlength="500" rows="3" cols="5"  style="resize: none;">
                                 </textarea>
                             </div>
+                            <div class="col-12">
+                                <label>Operario</label>  
+                                <p class="operario_maquina font-weight-bold font-italic">-</p>
+                            </div>
                             <div class="col-6">
                                 <label>Marca</label>
                                 <input type="text" id="MarcaSolicitud" name="MarcaSolicitud" class="form-control" maxlength="15">
@@ -896,6 +900,7 @@
                         CodigoMaquinaria.focus().select();
                         CodigoSolicitud.val("");
                         DescripcionSolicitud.val("");
+                        mdlSolicitudDeMantenimiento.find("p.operario_maquina").text("-");
                         MarcaSolicitud.val("");
                         ModeloSolicitud.val("");
                         SerieSolicitud.val("");
@@ -1064,6 +1069,7 @@
                 var r = a[0];
                 CodigoSolicitud.val(r.nummaq);
                 DescripcionSolicitud.val(r.nommaq);
+                mdlSolicitudDeMantenimiento.find("p.operario_maquina").text(r.OperarioT);
                 MarcaSolicitud.val(r.marmaq);
                 ModeloSolicitud.val(r.modmaq);
                 SerieSolicitud.val(r.sermaq);
@@ -1129,10 +1135,10 @@
 
     function getMaquinariaXDepto() {
         onOpenOverlay('Cargando maquinas por departamento...');
-        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getMaquinariaXDepto'); ?>',{
+        $.getJSON('<?php print base_url('SolicitudDeMantenimiento/getMaquinariaXDepto'); ?>', {
             DEPTO: parseInt(DeptoMaquina.val())
         }).done(function (a, b, c) {
-            onClearSelect(MaquinariaRefaccion); 
+            onClearSelect(MaquinariaRefaccion);
             $.each(a, function (k, v) {
                 MaquinariaRefaccion[0].selectize.addOption({text: v.nommaq, value: v.id});
             });
