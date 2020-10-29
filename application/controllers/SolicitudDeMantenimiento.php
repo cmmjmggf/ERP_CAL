@@ -118,7 +118,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
     public function getMaquinariabyID() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT M.nummaq, M.id, M.nommaq, M.marmaq, M.modmaq, M.sermaq, M.depmaq,DATE_FORMAT(M.fechaalt,\"%d/%m/%Y\") AS fechaalt, DATE_FORMAT(M.fecultma,\"%d/%m/%Y\") AS fecultma, M.diasmaq, M.stsmaq, M.facmaq, M.cosmaq, M.fecbaja, M.motmaq, M.critisida, M.maq, M.IDE, M.FotoUno, M.FotoDos, M.FotoTres, M.FotoCuatro, M.FotoCinco, M.FotoSeis FROM maquinaria AS M WHERE M.id = '{$x['ID']
+            print json_encode($this->db->query("SELECT M.nummaq, M.id, M.nommaq, M.marmaq, M.modmaq, M.sermaq, M.depmaq,DATE_FORMAT(M.fechaalt,\"%d/%m/%Y\") AS fechaalt, DATE_FORMAT(M.fecultma,\"%d/%m/%Y\") AS fecultma, M.diasmaq, M.stsmaq, M.facmaq, M.cosmaq, M.fecbaja, M.motmaq, M.critisida, M.maq, M.IDE, M.FotoUno, M.FotoDos, M.FotoTres, M.FotoCuatro, M.FotoCinco, M.FotoSeis, M.Operario, M.OperarioT FROM maquinaria AS M WHERE M.id = '{$x['ID']
                                     }' LIMIT 1")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString

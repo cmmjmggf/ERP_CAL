@@ -61,7 +61,7 @@ class Avance9 extends CI_Controller {
     public function onComprobarRetornoDeMaterialXControl() {
         try {
             $x = $this->input->get();
-            if ($x['FR'] !== '' && intval($x['DEPTO']) === 10) {
+            if ($x['FR'] !== '' && intval($x['DEPTO']) === 10 || $x['FR'] !== '' && intval($x['DEPTO']) === 15) {
                 $FRACCIONES = json_decode($x['FR']);
                 $TIENE_LAS_FRACCIONES_99_Y_100 = 0;
                 foreach ($FRACCIONES as $k => $v) {
@@ -955,6 +955,7 @@ class Avance9 extends CI_Controller {
             $departamento = $xXx['DEPARTAMENTO'];
             switch ($departamento) {
                 case 10:
+                case 15:
                     $data["fraccion"] = 102;
                     $data["modulo"] = 'A9';
                     $this->db->insert('fracpagnomina', $data);

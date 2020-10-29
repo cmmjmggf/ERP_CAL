@@ -985,7 +985,7 @@
                             console.log(data);
                             $.post('<?php print base_url('SolicitudDeMantenimiento/getReporteDeSolicitudMantenimiento'); ?>',
                                     {
-                                        VALE: SolicitudMtoVale.val(),
+                                        VALE: SolicitudMtoVale.val()
                                     }).done(function (data, x, jq) {
                                 onCloseOverlay();
                                 onImprimirReporteFancyAFC(data, function (a, b) {

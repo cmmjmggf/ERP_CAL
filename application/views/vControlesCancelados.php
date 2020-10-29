@@ -341,10 +341,10 @@
             $("#btnCancelarSeleccionados").click(function () {
                 onCancelarSeleccionados();
             });
-// Initialize the tour
-            tour.init();
-// Start the tour
-            tour.start();
+//// Initialize the tour
+//            tour.init();
+//// Start the tour
+//            tour.start();
             init();
 
             $('#ControlesCancelados').on("contextmenu", function (e) {

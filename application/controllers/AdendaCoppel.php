@@ -67,7 +67,7 @@ class AdendaCoppel extends CI_Controller {
         try {
             $x = $this->input->get();
             $this->db->select("FD.Factura AS FACTURA,
-(SELECT T.numtda FROM facturas AS F INNER JOIN tiendas AS T ON F.NumeroBodega = T.numtda 
+(SELECT T.Clave FROM facturas AS F INNER JOIN consignatarios AS T ON F.NumeroBodega = T.Clave 
 WHERE F.Factura = FD.Factura LIMIT 1) AS RAZON_SOCIAL, 
 FD.EstiloCliente AS EST_CTE, 
 FD.Talla AS TALLA, FD.Estilo4E AS EST_4E,  
@@ -101,10 +101,10 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
     public function onGuardar() {
         try {
             $x = $this->input->post();
-            $tienda_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM tiendas AS T WHERE T.numtda = {$x['TIENDA']}")->result();
+            $tienda_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM consignatarios AS T WHERE T.Clave = {$x['TIENDA']}")->result();
             $facturadetalle_existe = $this->db->query("SELECT COUNT(*) AS EXISTE FROM facturadetalle AS F WHERE F.numfac = {$x['FACTURA']} AND F.numcte= 2121")->result();
             if ($x['TIENDA'] !== '' && intval($tienda_existe[0]->EXISTE) > 0 && intval($facturadetalle_existe[0]->EXISTE) > 0) {
-                $tienda = $this->db->query("SELECT * FROM tiendas AS T WHERE T.numtda = {$x['TIENDA']}")->result();
+                $tienda = $this->db->query("SELECT * FROM consignatarios AS T WHERE T.Clave = {$x['TIENDA']}")->result();
                 $this->db->set("tienda", $x['TIENDA'])->where("numfac", $x['FACTURA'])->update("facturadetalle");
                 $this->db->insert("facturas",
                         array("factura" => $x["FACTURA"],
@@ -113,13 +113,13 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                             "pedido" => $x["PEDIDO"],
                             "fechapedido" => $x["FECHA_PEDIDO"],
                             "referenciapedido" => $x["PEDIDO"],
-                            "proveedor" => $tienda[0]->provee,
-                            "tipoproveedor" => $tienda[0]->tpprov,
-                            "nombrebodega" => $tienda[0]->nomtda,
-                            "direccion" => $tienda[0]->dirtda,
-                            "ciudad" => $tienda[0]->ciutda,
-                            "codigopostal" => $tienda[0]->coptda,
-                            "numerobodega" => $tienda[0]->numtda,
+                            "proveedor" => $tienda[0]->NumeroDeProveedor,
+                            "tipoproveedor" => $tienda[0]->TPProveedor,
+                            "nombrebodega" => $tienda[0]->Consignatario,
+                            "direccion" => $tienda[0]->Direccion,
+                            "ciudad" => $tienda[0]->Ciudad,
+                            "codigopostal" => $tienda[0]->CodigoPostal,
+                            "numerobodega" => $tienda[0]->Clave,
                             "cantidadlotes" => $x["CANTIDAD_LOTES"],
                             "importe" => $x["IMPORTE"],
                             "descuento" => $x["DESCUENTO"],

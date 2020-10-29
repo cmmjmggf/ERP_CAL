@@ -130,8 +130,12 @@ class AsignaPFTSACXC extends CI_Controller {
     }
 
     public function getEmpleados() {
-        try {
-            print json_encode($this->apftsacxc->getEmpleados());
+        try {                    
+            $data = $this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+                            ->from("empleados AS E")
+                    ->where_in('E.DepartamentoFisico', array(10,15))
+                    ->where('E.AltaBaja', 1)->get()->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -162,7 +166,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $xdb->where('OP.ControlT', $x['CONTROL']);
             }
-            $xdb->where('OPD.Grupo', 1)->where('OPD.Departamento', 10)
+            $xdb->where('OPD.Grupo', 1)->where_in('OPD.Departamento', array(10,15))
                     ->group_by('OPD.OrdenDeProduccion')
                     ->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')
@@ -202,7 +206,8 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('OP.ControlT', $x['CONTROL']);
             }
-            $this->db->where('OPD.Grupo', 2)->where('OPD.Departamento', 10)
+            $this->db->where('OPD.Grupo', 2)
+                    ->where_in('OPD.Departamento', array(10,15))
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
@@ -239,7 +244,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('OP.ControlT', $x['CONTROL']);
             }
-            $this->db->where('OPD.Grupo', 34)->where('OPD.Departamento', 10)
+            $this->db->where('OPD.Grupo', 34)->where_in('OPD.Departamento', array(10,15))
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
@@ -278,7 +283,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('OP.ControlT', $x['CONTROL']);
             }
-            $this->db->where('OPD.Grupo', 40)->where('OPD.Departamento', 10)
+            $this->db->where('OPD.Grupo', 40)->where_in('OPD.Departamento', array(10,15))
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');

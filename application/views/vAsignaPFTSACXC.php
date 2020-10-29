@@ -502,6 +502,16 @@
         btnEntregar.click(function () {
             onEntregarMaterial();
         });
+
+        Cortador.change(function () {
+            if (Cortador.val()) {
+                CortadorClave.val(Cortador.val());
+            }
+            if (Cortador.val() === '') {
+                CortadorClave.val('');
+            }
+        });
+
         CortadorClave.on('keydown', function (e) {
             if (e.keyCode === 13 && CortadorClave.val()) {
                 onDisable(Cortador);
@@ -538,18 +548,22 @@
         mdlRetornaMaterial.find("#PielForro").change(function () {
             if ($(this).val() !== '') {
                 mdlRetornaMaterial.find("#Control").focus();
+                xPielForro.val($(this).val());
                 Regresos.ajax.reload();
 //                tblRegresos.DataTable().column(11).search($(this).val()).draw();
-            } else {
+            } else if($(this).val() === ''){
+                xPielForro.val('');
                 Regresos.ajax.reload();
 //                tblRegresos.DataTable().column(11).search('').draw();
             }
         }).blur(function () {
             if (mdlRetornaMaterial.find("#PielForro").val() !== '') {
+                xPielForro.val(mdlRetornaMaterial.find("#PielForro").val());
                 mdlRetornaMaterial.find("#Control").focus();
                 Regresos.ajax.reload();
 //                tblRegresos.DataTable().column(11).search(mdlRetornaMaterial.find("#PielForro").val()).draw();
             } else {
+                xPielForro.val('');
                 Regresos.ajax.reload();
 //                tblRegresos.DataTable().column(11).search('').draw();
             }

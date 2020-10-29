@@ -1502,7 +1502,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
         try {
             $x = $this->input->get();
             $this->db->select("FD.Factura AS FACTURA,
-(SELECT T.numtda FROM facturas AS F INNER JOIN tiendas AS T ON F.NumeroBodega = T.numtda
+(SELECT T.Clave FROM facturas AS F INNER JOIN consignatarios AS T ON F.NumeroBodega = T.Clave
 WHERE F.Factura = FD.Factura LIMIT 1) AS RAZON_SOCIAL,
 FD.EstiloCliente AS EST_CTE,
 FD.Talla AS TALLA, FD.Estilo4E AS EST_4E,
