@@ -320,7 +320,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 print "CANTIDAD EN CEROS";
                 exit(0);
             }
-            $check_programacion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM programacion AS P WHERE P.control = {$xXx["CONTROL"]} AND P.numemp = {$xXx['NUMERO_EMPLEADO']} AND P.frac = 100")->result();
+            $check_programacion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM programacion AS P WHERE P.control = {$x["CONTROL"]} AND P.frac = 100")->result();
             if (intval($check_programacion[0]->EXISTE) === 0) {
                 exit(0);
             }
