@@ -231,6 +231,10 @@
                                     <textarea id="CSDescripcionSolicitud" name="CSDescripcionSolicitud" readonly="" class="form-control" maxlength="500" rows="3" cols="5"  style="resize: none;">
                                     </textarea>
                                 </div>
+                                <div class="col-12">
+                                    <label>Operario</label> 
+                                    <p class="operario_maquina_cs font-weight-bold font-italic text-center" style="color:#cc0000;">-</p>
+                                </div>
                                 <div class="col-6">
                                     <label>Marca</label>
                                     <input type="text" id="CSMarcaSolicitud" name="CSMarcaSolicitud" readonly="" class="form-control" maxlength="15">
@@ -389,15 +393,29 @@
                 </div> 
                 <div class="row" id="SolicitudesDeManto">
 
-                    <div class="col-2">
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="left">
+                        <button type="button" class="btn btn-info font-weight-bold" id="btnCierraSolicitudMto" style="background-color: #c50e00; border-color: #c50e00 ; color: #ffffff;">
+                            <span class="fa fa-file-archive"></span> CIERRA SOLICITUD
+                        </button>  
+                    </div>
+                    <div class="col-4">
+                        <label>SOLICITUDES</label>
+                        <select id="TipoSolicitudes" class="form-control">
+                            <option value="0">ABIERTAS/CERRADAS</option>
+                            <option value="1">ABIERTAS</option>
+                            <option value="2">CERRADAS</option>
+                        </select>
+                    </div> 
+                    <div class="col-3">
+                        <label>Reimprime Solicitud</label>
                         <input type="text" id="NoVale" name="NoVale" class="form-control" autofocus="">
                     </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-info font-weight-bold" id="btnImprimeXNoVale">
-                            <span class="fa fa-print"></span> 
+                    <div class="col-1">
+                        <button type="button" class="btn btn-info font-weight-bold mt-3" id="btnImprimeXNoVale">
+                            <span class="fa fa-print"></span> Imprime
                         </button> 
                     </div> 
-                    <div class="col-12 col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4" align="left">
+                    <div class="col-12 col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3 d-none" align="left">
                         <div class="row">
                             <div class="col-4">
                                 <p class="font-italic numero_de_solicitudes_cerradas">0 SOLICITUDES CERRADAS</p>
@@ -408,13 +426,8 @@
                         </div>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="right">
-                        <button type="button" class="btn btn-info font-weight-bold" id="btnCierraSolicitudMto">
-                            <span class="fa fa-file-archive"></span> CIERRA SOLICITUD
-                        </button>  
-                    </div>
-                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2" align="right">
                         <button type="button" id="btnNuevaSolicitud" class="btn btn-info" style="background-color: #4CAF50; border-color: #4CAF50;">
-                            <span class="fa fa-star"></span> NUEVO 
+                            <span class="fa fa-star"></span> NUEVA SOLICITUD 
                         </button>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -481,6 +494,7 @@
             btnImprimeXNoVale = mdlSolicitudDeMantenimiento.find("#btnImprimeXNoVale"),
             nuevo = true;
     var
+            TipoSolicitudes = mdlSolicitudDeMantenimiento.find("#TipoSolicitudes"),
             CSIdMaquinariaRefaccion = mdlSolicitudDeMantenimiento.find("#CSIdMaquinariaRefaccion"),
             CSSolicitudMtoVale = mdlSolicitudDeMantenimiento.find("#CSSolicitudMtoVale"),
             CSDeptoClaveMaquina = mdlSolicitudDeMantenimiento.find("#CSDeptoClaveMaquina"),
@@ -615,6 +629,7 @@
                 mdlSolicitudDeMantenimiento.find("#CSMaquinariaRefaccion")[0].selectize.setValue(r.idmaq);
                 mdlSolicitudDeMantenimiento.find("#CSCodigoSolicitud").val(r.nummaq);
                 mdlSolicitudDeMantenimiento.find("#CSDescripcionSolicitud").val(r.nommaq);
+                mdlSolicitudDeMantenimiento.find("p.operario_maquina_cs").text(r.OPERARIO);
                 mdlSolicitudDeMantenimiento.find("#CSMarcaSolicitud").val(r.marmaq);
                 mdlSolicitudDeMantenimiento.find("#CSModeloSolicitud").val(r.modmaq);
                 mdlSolicitudDeMantenimiento.find("#CSSerieSolicitud").val(r.sermaq);
@@ -943,6 +958,10 @@
             nuevo = true;
         });
 
+        TipoSolicitudes.change(function () {
+            getSolicitudesMto();
+        });
+
         btnCierraSolicitudMto.click(function () {
             getMaquinaria();
             btnGuardarCierreSolicitud.removeClass("d-none");
@@ -1183,7 +1202,7 @@
                 "dom": 'fritp',
                 "ajax": {
                     "url": '<?php print base_url('SolicitudDeMantenimiento/getSolicitudes'); ?>', "dataSrc": "", "data": function (d) {
-                        d.VALE = 1;
+                        d.VALE = TipoSolicitudes.val() ? TipoSolicitudes.val() : 0;
                     }}, buttons: buttons,
                 "columns": cols,
                 "columnDefs": coldefs,

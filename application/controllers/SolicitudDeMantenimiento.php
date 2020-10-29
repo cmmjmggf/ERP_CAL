@@ -171,7 +171,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
                                         M.sermaq, M.depmaq, DATE_FORMAT(M.fechaalt,\"%d/%m/%Y\") AS fechaalt, 
                                         DATE_FORMAT(M.fecultma,\"%d/%m/%Y\") AS fecultma, M.diasmaq, 
                                         M.stsmaq, M.facmaq, M.cosmaq, M.fecbaja, M.motmaq, 
-                                        M.critisida, M.maq, M.IDE, 
+                                        M.critisida, M.maq, M.IDE, M.OperarioT AS OPERARIO, 
                                         M.FotoUno, M.FotoDos, M.FotoTres, M.FotoCuatro, M.FotoCinco, M.FotoSeis, 
                                         R.tp AS TP, R.factura AS FACTURA, R.proveedor AS PROVEEDOR, R.proveedorid AS PROVEEDOR_ID  
                                         FROM repomaqui AS R INNER JOIN maquinaria AS M ON R.codigo = M.id WHERE R.vale = {$x['VALE']}")->result());
@@ -183,6 +183,19 @@ class SolicitudDeMantenimiento extends CI_Controller {
 
     public function getSolicitudes() {
         try {
+            $x = $this->input->get();
+            $VALE = "1,2";
+            switch (intval($x['VALE'])) {
+                case 0:
+                    $VALE = "1,2";
+                    break;
+                case 1:
+                    $VALE = "1";
+                    break;
+                case 2:
+                    $VALE = "2";
+                    break;
+            }
             print json_encode($this->db->query("
                 SELECT R.ID AS ID,
                   R.ident AS ABIERTA_CERRADA_ID, 
@@ -202,7 +215,7 @@ class SolicitudDeMantenimiento extends CI_Controller {
                 CASE WHEN R.refa2 = 0 THEN \"\" ELSE R.refa2 END AS REFACCION_DOS, 
                 CASE WHEN R.cant2 = 0 THEN \"\" ELSE R.cant2 END AS CANTIDAD_DOS, 
                 CASE WHEN R.pre2 = 0 THEN \"\" ELSE CONCAT(\"<SPAN CLASS='solicitud_de_mto_codigo'>\", \"$\",FORMAT(R.pre2,2),\"</SPAN>\") END AS PRECIO_DOS 
-                FROM repomaqui AS R ORDER BY R.ident ASC, ABS(R.vale) DESC;")->result());
+                FROM repomaqui AS R WHERE R.ident IN({$VALE}) ORDER BY R.ident ASC, ABS(R.vale) DESC;")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString
             ();
