@@ -72,6 +72,7 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
 
     public function getPedidosEntregados() {
         $cte = $this->input->get('Cliente');
+
         print json_encode($this->db->query("SELECT
                                             p.cliente, p.clave as pedido, p.maquila,
                                             date_format( str_to_date(p.fechapedido,'%d/%m/%Y') , '%d/%m/%Y') as fechaped,
@@ -85,7 +86,8 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
 
     public function getPedidosNoEntregados() {
         $cte = $this->input->get('Cliente');
-        print json_encode($this->db->query("SELECT
+        if(intval($this->session->ID) === 78 && $this->session->USERNAME === 'VIKY') {
+            print json_encode($this->db->query("SELECT
                                             p.cliente, p.clave as pedido, p.maquila,
                                             date_format( str_to_date(p.fechapedido,'%d/%m/%Y') , '%d/%m/%Y') as fechaped,
                                             date_format( str_to_date(p.fechaentrega,'%d/%m/%Y') , '%d/%m/%Y') as fechaentrega,
@@ -93,7 +95,18 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                                             p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
                                             ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
                                             FROM pedidox P
-                                            WHERE p.stsavan <> 13 and p.stsavan <> 14 and p.cliente= $cte  ")->result());
+                                            WHERE p.stsavan <> 13 and p.stsavan <> 14 and p.cliente= $cte AND p.Maquila <> 98 ")->result());
+        } else {
+            print json_encode($this->db->query("SELECT
+                                            p.cliente, p.clave as pedido, p.maquila,
+                                            date_format( str_to_date(p.fechapedido,'%d/%m/%Y') , '%d/%m/%Y') as fechaped,
+                                            date_format( str_to_date(p.fechaentrega,'%d/%m/%Y') , '%d/%m/%Y') as fechaentrega,
+                                            p.semana, p.pares, p.paresfacturados,
+                                            p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
+                                            ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
+                                            FROM pedidox P
+        WHERE p.stsavan <> 13 and p.stsavan <> 14 and p.cliente= $cte  ")->result());
+        }
     }
 
     public function getClientes() {

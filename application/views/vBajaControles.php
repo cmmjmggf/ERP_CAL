@@ -121,11 +121,11 @@
                 mdlBajaControles.find("h4.pares_del_control_baja").html(c.Pares + '<br> PARES');
                 mdlBajaControles.find("h4.pares_facturados_del_control_baja").html(c.ParesFacturados + '<br>PARES FACTURADOS');
                 mdlBajaControles.find("h4.estatus_del_control_baja").html('<span style="color:#cc0000;">' + c.DeptoProduccion + ' ' + c.EstatusProduccion + '<br>(' + c.stsavan + ')</span>');
-                mdlBajaControles.find("h4.cliente_del_control_baja").text(c.Cliente);
-                mdlBajaControles.find("h4.estilo_control_baja").html('ESTILO <span style="color:#558B2F;">' + c.Estilo + '</span>');
-                mdlBajaControles.find("h4.color_control_baja").html('COLOR <span style="color:#cc0000;">' + c.Color + '</span>');
+                mdlBajaControles.find("h4.cliente_del_control_baja").html('CLIENTE <br><span style="color:#558B2F;">' + c.Cliente + '</span>');
+                mdlBajaControles.find("h4.estilo_control_baja").html('ESTILO <br><span style="color:#558B2F;">' + c.Estilo + '</span>');
+                mdlBajaControles.find("h4.color_control_baja").html('COLOR <br><span style="color:#cc0000;">' + c.Color + '</span>');
 
-                if (parseInt(c.stsavan) === 12) {
+                if (parseInt(c.stsavan) === 12 && parseInt(c.DeptoProduccion) === 240) {
                     onEnable(btnAceptaBajaControl);
                 } else {
                     onDisable(btnAceptaBajaControl);

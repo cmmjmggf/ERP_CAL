@@ -7,7 +7,7 @@ class BajaControles extends CI_Controller {
     public function getInformacionXControl() {
         try {
             $x = $this->input->post();
-            print json_encode($this->db->query("SELECT (SELECT CONCAT(C.Clave,\" \",C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS Cliente, P.Pares, P.EstatusProduccion, P.stsavan, P.DeptoProduccion,IFNULL(P.ParesFacturados,0) AS ParesFacturados, P.Color, P.Estilo FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]}")->result());
+            print json_encode($this->db->query("SELECT (SELECT CONCAT(C.Clave,\" \",C.RazonS) FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1) AS Cliente, P.Pares, P.EstatusProduccion, P.stsavan, P.DeptoProduccion,IFNULL(P.ParesFacturados,0) AS ParesFacturados, CONCAT(P.Color,\" \",(SELECT CX.Descripcion FROM colores AS CX WHERE CX.Clave = P.Color AND CX.Estilo = P.Estilo LIMIT 1)) AS Color, P.Estilo FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
