@@ -69,7 +69,7 @@
     </div>
 </div>
 <?php if ($this->session->TEMA === "ACTUAL") { ?>
-    <div id="pnlAcceso" class="card  div-login animated fadeIn" style="background-color: rgba(255, 255, 255, 0) !important; ">
+    <div id="pnlAcceso" class="card  div-login animated fadeIn card-session" style="background-color: rgba(255, 255, 255, 0) !important; ">
         <div class="card-body" style="padding: 15px;">
             <div class="row" style="padding: 15px;">
                 <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">
@@ -101,7 +101,7 @@
     <?php
 } else {
     ?>
-    <div id="pnlAcceso" class="card  div-login" style="border-radius:none !important; background-color: #0000008a;">
+    <div id="pnlAcceso" class="card  div-login card-session" style="border-radius:none !important; background-color: #0000008a;">
         <div class="card-body" style="padding: 15px;">
             <div class="row" style="padding: 15px;">
                 <div class="col-12 text-center mb-4" onclick="$('#iplocal').toggleClass('d-none');">

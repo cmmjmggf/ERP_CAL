@@ -488,7 +488,7 @@
         border: 2px solid #000 !important;
         font-weight: bold !important;
     }
-    div:not(.card-menu).card  {
+    div:not(.card-menu):not(.card-session).card  {
         text-transform: uppercase;
         background: rgb(255,255,255);
         background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%); 
