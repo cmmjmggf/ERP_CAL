@@ -92,7 +92,7 @@
                     <!--segunda tabla-->
                     <div class="col-12 mt-1" >
                         <div class="col-12" align="center">
-                            <label class="badge badge-success" style="font-size: 14px;">Pedidos Entregados</label>
+                            <label class="badge badge-success" style="font-size: 14px; background-color: #4CAF50;">Pedidos Entregados</label>
                         </div>
                         <div class="card-block ">
                             <div id="EntregadosCliente" class="datatable-wide">

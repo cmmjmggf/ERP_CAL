@@ -1625,7 +1625,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
                             $.each(data, function (k, v) {
 <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" || $this->session->TEMA === "OSCURO") { ?>
                                     modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2 animated ' + effects[parseInt(effect)] + '" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
-                                    modulo += '<div class="card text-center " style="background-color: #0000008a;">';
+                                    modulo += '<div class="card text-center card-menu" style="background-color: #0000008a;">';
 <?php } else { ?>
                                     modulo += '<div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-2 m-2" onclick="b25NZW51RGlzcGxheQ(\'' + v.Ref + '\',this);">';
                                     modulo += '<div class="card text-center">';

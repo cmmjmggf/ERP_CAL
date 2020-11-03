@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Consulta de Movimientos Clientes</legend>
+                <h5><span class="fa fa-search"></span> Consulta de Movimientos Clientes</h5>
             </div>
             <div class="col-sm-6" align="right">
                 <button type="button" class="btn btn-danger btn-sm " id="btnVerCartera" >
@@ -40,7 +40,7 @@
                 <label>Documentos <span class="badge badge-info" style="font-size: 13px !important;">Doble click para imprimir documento</span></label>
                 <div class="card-block mt-2">
                     <div id="MovimientosClientes">
-                        <table id="tblMovimientosClientes" class="table table-sm display " style="width:100%">
+                        <table id="tblMovimientosClientes" class="table table-sm display nowrap" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Cliente</th>
@@ -73,7 +73,7 @@
                 <label>Pagos</label>
                 <div class="card-block mt-2">
                     <div id="PagosClientes">
-                        <table id="tblPagosClientes" class="table table-sm display " style="width:100%">
+                        <table id="tblPagosClientes" class="table table-sm display nowrap " style="width:100%">
                             <thead>
                                 <tr>
                                     <th class="d-none">tipo</th>
@@ -169,8 +169,12 @@
         pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
                 pnlTablero.find("#Doc").val('');
-                PagosClientes.ajax.reload();
-                MovimientosClientes.ajax.reload();
+                PagosClientes.ajax.reload(function () {
+                    onOpenOverlay('Cargando...');
+                });
+                MovimientosClientes.ajax.reload(function () {
+                    onCloseOverlay();
+                });
 
                 pnlTablero.find("#Cliente").val($(this).val());
                 MovimientosClientes.ajax.reload();
@@ -537,6 +541,14 @@
 
     .table th, .table td {
         vertical-align: middle;
+    }
+    table thead tr th{
+        background-color: #000000;
+        color:#ffffff;
+    }
+    table tbody tr td{
+        font-weight: bold;
+        font-size: 14px;
     }
 </style>
 
