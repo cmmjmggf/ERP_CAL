@@ -1618,10 +1618,7 @@
         border-bottom-color: #007bff !important;
         background-color: #fff !important;
         color: #000 !important;
-    }
-    .card {
-        background-color: #efefef; 
-    }
+    } 
     .card input{
         border-color: #000;
     } 

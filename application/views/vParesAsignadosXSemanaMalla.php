@@ -180,10 +180,6 @@
     }
 </script> 
 <style>
-
-    .card {
-        background-color: #efefef;; 
-    }
     .btn-success {
         color: #fff;
         background-color: #4CAF50;

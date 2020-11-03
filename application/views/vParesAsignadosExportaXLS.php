@@ -62,11 +62,7 @@
     });
 </script> 
 <style>
-
-    .card {
-        background-color: #efefef;; 
-    }
-    .btn-success {
+     .btn-success {
         color: #fff;
         background-color: #8BC34A;
         border-color: #8BC34A;

@@ -342,13 +342,13 @@
         color: #fff !important;
         text-decoration: none;
         background-color: #111 !important;
-        
-       <?php     if (!is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
-           ?>
-        color: #000 !important;
-        text-decoration: none;
-        background-color: #ffffff !important; 
-       <?php } ?>
+
+        <?php if (!is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
+            ?>
+            color: #000 !important;
+            text-decoration: none;
+            background-color: #ffffff !important; 
+        <?php } ?>
     }
 
     label {
@@ -490,6 +490,8 @@
     }
     .card  {
         text-transform: uppercase;
+        background: rgb(255,255,255);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);
     }  
 
     .loader {

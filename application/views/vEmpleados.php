@@ -43,7 +43,8 @@
         </div>
     </div>
 </div>
-<div class="card m-3 d-none animated fadeIn" id="pnlDatos">
+<div class="card m-3 d-none animated fadeIn" id="pnlDatos" style="background: rgb(255,255,255);
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);">
     <div class="card-body text-dark">
         <form id="frmNuevo">
             <fieldset>
@@ -971,10 +972,7 @@
         color: #fff;
         background-color: #97c310;
         border: 2px solid #97c310;
-    }
-    .card {
-        background-color: #efefef;
-    }
+    } 
     .card input{
         border-color: #000;
     }

@@ -1,24 +1,24 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-3 float-left">
-                <legend class="float-left">Pedidos Entregados y por Entregar</legend>
-
+            <div class="col-sm-3 float-left font-weight-bold">
+                <h5> <span class="fa fa-eye"></span> Pedidos Entregados y por Entregar </h5>
             </div>
             <div class="col-sm-9" align="right">
-                <button type="button" class="btn btn-info btn-sm " id="btnImprimePedidosXEntregar" >
+                <button type="button" class="btn btn-info btn-sm font-weight-bold" id="btnImprimePedidosXEntregar" >
                     <span class="fa fa-search" ></span> PEDIDOS X ENTREGAR POR MAQ-SEM-FECHA
                 </button>
-                <button type="button" class="btn btn-success btn-sm " id="btnVerMovimientos" >
+                <button type="button" class="btn btn-success btn-sm font-weight-bold" id="btnVerMovimientos" style="background-color: #4CAF50; border-color: #4CAF50;" >
                     <span class="fa fa-dollar-sign" ></span> MOVIMIENTOS
                 </button>
-                <button type="button" class="btn btn-primary btn-sm " id="btnRastreoPedido" >
+                <button type="button" class="btn btn-primary btn-sm  font-weight-bold" id="btnRastreoPedido" >
                     <span class="fa fa-search" ></span> RASTREO ESTILO-CLIENTE-PEDIDO
                 </button>
-                <button type="button" class="btn btn-danger btn-sm " id="btnVerCartera" >
+                <button type="button" class="btn btn-danger btn-sm  font-weight-bold" id="btnVerCartera" >
                     <span class="fa fa-dollar-sign" ></span> DESFACES PEDIDOS
                 </button>
             </div>
+            <div class="w-100 my-1"></div>
         </div>
         <hr>
         <div class="row ">
@@ -53,15 +53,15 @@
                                         <tr>
                                             <th class="d-none">Cliente</th>
                                             <th>Pedido</th>
-                                            <th>Maq</th>
+                                            <th>Maquila</th>
                                             <th>Fec-Ped</th>
                                             <th>Fec-Ent</th>
-                                            <th>Sem</th>
+                                            <th>Semana</th>
                                             <th>Par-fab</th>
                                             <th>Par-ent</th>
                                             <th>Control</th>
                                             <th>Estilo</th>
-                                            <th>Col</th>
+                                            <th>Color</th>
                                             <th>Precio</th>
                                             <th>Av</th>
                                         </tr>
@@ -101,15 +101,15 @@
                                         <tr>
                                             <th class="d-none">Cliente</th>
                                             <th>Pedido</th>
-                                            <th>Maq</th>
+                                            <th>Maquila</th>
                                             <th>Fec-Ped</th>
                                             <th>Fec-Ent</th>
-                                            <th>Sem</th>
+                                            <th>Semana</th>
                                             <th>Par-fab</th>
                                             <th>Par-ent</th>
                                             <th>Control</th>
                                             <th>Estilo</th>
-                                            <th>Col</th>
+                                            <th>Color</th>
                                             <th>Precio</th>
                                             <th>Av</th>
                                         </tr>
@@ -537,5 +537,8 @@
         margin-top: 0.14rem;
         margin-bottom: 0.0rem;
     }
-
+    
+    table tbody tr td{
+        font-weight: bold;
+    }
 </style>
