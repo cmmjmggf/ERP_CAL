@@ -1086,7 +1086,7 @@
             pnlTablero.find("select")[k].selectize.clear(true);
         });
 
-        pnlTablero.find("#MinutosAprob").val(2850);
+        pnlTablero.find("#MinutosAprob").val(2880);
         var d = new Date();
         pnlTablero.find("#Ano").val(d.getFullYear()).focus().select();
     }

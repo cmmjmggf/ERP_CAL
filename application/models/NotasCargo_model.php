@@ -182,6 +182,34 @@ class NotasCargo_model extends CI_Model {
         }
     }
 
+    public function getNotaCreditoParaReporteDirecta($Tp, $Folio, $Proveedor) {
+        try {
+            return $this->db->select("NC.ID, "
+                                    . "NC.Proveedor, "
+                                    . "CASE WHEN NC.Tp = '1' THEN P.NombreF ELSE P.NombreI END AS NombreProv, "
+                                    . "NC.DocCartProv, "
+                                    . "NC.Fecha, "
+                                    . "NC.CantidadLetra, "
+                                    . "NC.Concepto, "
+                                    . "'DIRECTA' AS Clave, "
+                                    . "NC.Concepto AS Descripcion, "
+                                    . "NC.Cantidad, "
+                                    . "'N/A' as Unidad,"
+                                    . "NC.Precio, "
+                                    . "NC.Subtotal "
+                                    . "", false)
+                            ->from("notascreditoprov NC")
+                            ->join("proveedores P", 'ON P.Clave = NC.Proveedor')
+                            ->where('NC.Proveedor', $Proveedor)
+                            ->where('NC.Folio', $Folio)
+                            ->where('NC.Tp', $Tp)
+                            ->where('NC.Estatus', '2')
+                            ->get()->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getNotaCreditoDirectaParaReporte($Tp, $Folio, $Proveedor) {
         try {
             return $this->db->select("NC.ID, "
