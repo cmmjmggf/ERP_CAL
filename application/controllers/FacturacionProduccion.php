@@ -72,7 +72,7 @@ class FacturacionProduccion extends CI_Controller {
             if (in_array($x['CLIENTE'], $people)) {
                 print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
                                         . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios
-WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
+WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo AND C.color = P.Color ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
                                         . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                         . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                         . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
@@ -85,7 +85,7 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo   ORDER BY C.ID DESC LIMIT 1)
             } else {
                 print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
                                         . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios "
-                                        . "WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo  ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
+                                        . "WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo  AND C.color = P.Color ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
                                         . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
                                         . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
                                         . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
@@ -1300,7 +1300,7 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                                 $pr["CLIENTE"] = $x['CLIENTE'];
                                 $jc->setParametros($pr);
                                 $jc->setJasperurl('jrxml\facturacion\factura_exportacion.jasper');
-                                $jc->setFilename("{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
+                                $jc->setFilename("fe_{$x['CLIENTE']}_{$x['DOCUMENTO_FACTURA']}_" . Date('dmYhis'));
                                 $jc->setDocumentformat('pdf');
                                 PRINT $jc->getReport();
                                 exit(0);
