@@ -329,9 +329,16 @@ class NotasCargo extends CI_Controller {
         $Tp = $this->input->post('Tp');
         $Folio = $this->input->post('Folio');
         $Proveedor = $this->input->post('Proveedor');
-
+        $EsDirecta = $this->input->post('EsDirecta');
         $cm = $this->NotasCargo_model;
-        $Articulos = $cm->getNotaCreditoParaReporte($Tp, $Folio, $Proveedor);
+
+        if ($EsDirecta === '1') {
+            $Articulos = $cm->getNotaCreditoParaReporteDirecta($Tp, $Folio, $Proveedor);
+        } else {
+            $Articulos = $cm->getNotaCreditoParaReporte($Tp, $Folio, $Proveedor);
+        }
+
+
 
 
         if (!empty($Articulos)) {

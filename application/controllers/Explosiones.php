@@ -642,7 +642,7 @@ class Explosiones extends CI_Controller {
                                                             ft.pieza as numpza, p.Descripcion as nompza, ft.estilo as numestilo,
                                                             ft.PzXPar as pzaxpar, u.descripcion as unidad
                                             from fichatecnica ft
-                                            join estilos e on e.clave = ft.estilo and e.liberado = 2
+                                            join estilos e on e.clave = ft.estilo and e.liberado in (2,3)
                                             join articulos a on a.clave = ft.articulo and a.grupo = 3
                                             join piezas p on p.clave = ft.pieza
                                             join unidades u on u.clave = a.unidadmedida

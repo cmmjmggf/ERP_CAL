@@ -203,7 +203,7 @@ class Explosiones_model extends CI_Model {
                                     LEFT JOIN `piezas` `PZA` ON `FT`.`Pieza`= `PZA`.`Clave`
                                     JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='1'
                                     JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
-                                    JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo` AND E.Liberado = 2
+                                    JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo` AND E.Liberado in (2,3)
                                     JOIN `maquilas` `MA` ON `MA`.`Clave` = PE.Maquila
                                     JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                     WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila
@@ -268,7 +268,7 @@ class Explosiones_model extends CI_Model {
                                     LEFT JOIN `piezas` `PZA` ON `FT`.`Pieza`= `PZA`.`Clave`
                                     JOIN `preciosmaquilas` `PM` ON `PM`.`Articulo` = `FT`.`Articulo` AND `PM`.`Maquila` ='1'
                                     JOIN `articulos` `A` ON `A`.`Clave` =  `FT`.`Articulo`
-                                    JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo` AND E.Liberado = 2
+                                    JOIN `estilos` `E` ON `E`.`Clave` = `PE`.`Estilo` AND E.Liberado in (2,3)
                                     JOIN `maquilas` `MA` ON `MA`.`Clave` = '1'
                                     JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
                                     WHERE cast(PE.Maquila as signed) BETWEEN $Maquila AND $aMaquila

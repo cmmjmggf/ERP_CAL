@@ -1,5 +1,5 @@
 <div class="modal " id="mdlReimprimirNotaCargo"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Reimprime Nota de Cargo a Proveedores</h5>
@@ -32,6 +32,13 @@
                             <select id="NotaCargo" name="NotaCargo" class="form-control form-control-sm mb-2 required" required="" >
                                 <option value=""></option>
                             </select>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-12 col-sm-6">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chDirecta" name="chDirecta" >
+                                <label class="custom-control-label text-info labelCheck" for="chDirecta">Es directa?</label>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -198,20 +205,23 @@
         });
 
         mdlReimprimirNotaCargo.find('#btnImprimir').on("click", function () {
+            onDisable(mdlReimprimirNotaCargo.find('#btnImprimir'));
             var tp = mdlReimprimirNotaCargo.find("#Tp").val();
             var folio = mdlReimprimirNotaCargo.find("#NotaCargo").val();
             var prov = mdlReimprimirNotaCargo.find("#Proveedor").val();
-            onImprimirReporteNotaCargo(tp, folio, prov);
+            var esDirecta = mdlReimprimirNotaCargo.find("#chDirecta")[0].checked ? '1' : '0';
+            onImprimirReporteNotaCargo(tp, folio, prov, esDirecta);
         });
     });
 
 
-    function onImprimirReporteNotaCargo(tp, folio, prov) {
+    function onImprimirReporteNotaCargo(tp, folio, prov, EsDirecta) {
         HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
         $.post(base_url + 'index.php/NotasCargo/onImprimirReporteNotaCargo', {
             Tp: tp,
             Folio: folio,
-            Proveedor: prov
+            Proveedor: prov,
+            EsDirecta: EsDirecta
         }).done(function (data, x, jq) {
             console.log(data);
             if (data.length > 0) {
@@ -227,6 +237,7 @@
                                 mdlReimprimirNotaCargo.find("select")[k].selectize.clear(true);
                             });
                             mdlReimprimirNotaCargo.find('#Tp').focus();
+                            onEnable(mdlReimprimirNotaCargo.find('#btnImprimir'));
                         },
                         iframe: {
                             // Iframe template
@@ -246,6 +257,7 @@
                     }
                 });
             } else {
+                onEnable(mdlReimprimirNotaCargo.find('#btnImprimir'));
                 swal({
                     title: "ATENCIÓN",
                     text: "NO EXISTEN REGISTROS",
@@ -254,6 +266,7 @@
             }
             HoldOn.close();
         }).fail(function (x, y, z) {
+            onEnable(mdlReimprimirNotaCargo.find('#btnImprimir'));
             console.log(x, y, z);
             HoldOn.close();
         });
