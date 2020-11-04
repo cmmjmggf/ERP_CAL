@@ -415,6 +415,49 @@ class Avance9 extends CI_Controller {
                 "anio" => $xXx['ANIO']);
             $msj = "[";
             $pifo_contador = 0;
+            /* MUESTRA */
+
+            /* MUESTRAS */
+            $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P WHERE P.Estatus IN('A') AND P.EstatusProduccion IN('PROGRAMADO') AND P.DeptoProduccion IN(1) AND P.stsavan IN(1) AND  P.stsavan NOT IN(3,33,4,40,42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
+            if (intval($control_muestra[0]->EXISTE)) {
+                switch (intval($control_muestra[0]->Maquila)) {
+                    case 98:
+                        switch (intval($xXx['NUMERO_EMPLEADO'])) {
+                            case 2328:
+                                $this->db->set('EstatusProduccion', 'FOLEADO')
+                                        ->set('DeptoProduccion', 40)
+                                        ->where('Control', $xXx['CONTROL'])->update('controles');
+
+                                $this->db->set('stsavan', 4)
+                                        ->set('EstatusProduccion', 'FOLEADO')
+                                        ->set('DeptoProduccion', 40)
+                                        ->where('Control', $xXx['CONTROL'])->update('pedidox');
+
+                                $this->db->set('fec3', Date('Y-m-d 00:00:00'))
+                                        ->set('fec33', Date('Y-m-d 00:00:00'))
+                                        ->set('fec4', Date('Y-m-d 00:00:00'))
+                                        ->where('contped', $xXx['CONTROL'])
+                                        ->update('avaprd');
+
+                                $this->db->insert('avance', array(
+                                    'Control' => $xXx['CONTROL'],
+                                    'FechaAProduccion' => Date('d/m/Y'),
+                                    'Departamento' => 40,
+                                    'DepartamentoT' => 'FOLEADO',
+                                    'FechaAvance' => Date('d/m/Y'),
+                                    'Estatus' => 'A',
+                                    'Usuario' => $_SESSION["ID"],
+                                    'Fecha' => Date('d/m/Y'),
+                                    'Hora' => Date('h:i:s a'),
+                                    'modulo' => 'ASPFTS',
+                                    'Fraccion' => 60
+                                ));
+                                break;
+                        }
+                        break;
+                }
+                /* FIN MUESTRA */
+            }
             foreach ($FRACCIONES as $k => $v) {
 //                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";
 //exit(0);

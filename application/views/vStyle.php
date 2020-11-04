@@ -63,9 +63,6 @@
     .card-body {
         background-color: transparent !important;
     }
-    .card {
-        background-color: transparent;
-    }
 
     /*Formularios*/
     label {
@@ -159,8 +156,7 @@
     ::placeholder { /* Recent browsers */
         text-transform: none;
     }
-    .card {
-        background-color: #fff;
+    .card { 
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
     .btn:not(.dropdown-toggle):not(.navbar-brand){
@@ -291,8 +287,7 @@
         color: #fff;
         background-color: #673AB7;
     }
-    .card {
-        background-color: #d7e1e6;
+    .card { 
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
 

@@ -466,6 +466,16 @@ P.Maquila AS MAQUILA
         }
     }
 
+    public function onRevisaEmpleado() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE FROM empleados AS E "
+                    . "WHERE E.Numero ={$x['EMPLEADO']} ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function onAvanzar() {
         try {
             $db = $this->db;
@@ -493,7 +503,7 @@ P.Maquila AS MAQUILA
 
 
             /* INICIO COMODINES */
-            
+
 
             /* DE FOLEADO A ENTRETELADO */
             if ($depto === 40 && $depto_actual === 4 && $frac === 60) {
@@ -567,7 +577,7 @@ P.Maquila AS MAQUILA
                     exit(0);
                 }
             }
-            
+
             if ($depto === 5 && $depto_actual === 44) {
                 /* 44 ALMACEN DE CORTE A 5 PESPUNTE */
                 $revisa_pespunte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 110")->result();
@@ -640,6 +650,20 @@ P.Maquila AS MAQUILA
                 exit(0);
             }
 
+
+            /* DE REBAJADO A ENTRETELADO */
+            if ($depto === 40 && $depto_actual === 33 && $frac === 103) {
+                $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('controles');
+                $this->db->set('stsavan', 40)->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                $this->db->set('fec40', Date('Y-m-d 00:00:00'))->where('fec40 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+
+                $revisa_entretelado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
+                                . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 90")->result();
+                if (intval($revisa_entretelado[0]->EXISTE) === 0) {
+                    $this->onAvance($xXx['CONTROL'], 90, 'ENTRETELADO', 51);
+                }
+                exit(0);
+            }
 
             /* FIN COMODINES */
 
@@ -750,20 +774,6 @@ P.Maquila AS MAQUILA
                                 . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 40")->result();
                 if (intval($revisa_foleado[0]->EXISTE) === 0) {
                     $this->onAvance($xXx['CONTROL'], 40, 'FOLEADO', 60);
-                }
-                exit(0);
-            }
-
-            /* DE REBAJADO A ENTRETELADO */
-            if ($depto === 40 && $depto_actual === 33 && $frac === 103) {
-                $this->db->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('controles');
-                $this->db->set('stsavan', 40)->set('EstatusProduccion', 'ENTRETELADO')->set('DeptoProduccion', 90)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                $this->db->set('fec40', Date('Y-m-d 00:00:00'))->where('fec40 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-
-                $revisa_entretelado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance "
-                                . "WHERE Control = {$xXx['CONTROL']} AND Departamento = 90")->result();
-                if (intval($revisa_entretelado[0]->EXISTE) === 0) {
-                    $this->onAvance($xXx['CONTROL'], 90, 'ENTRETELADO', 51);
                 }
                 exit(0);
             }
