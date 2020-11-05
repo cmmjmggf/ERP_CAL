@@ -17,7 +17,7 @@
         </div>
         <div class="card-block mt-4">
             <div id="Empleados" class="table-responsive">
-                <table id="tblEmpleados" class="table table-sm display " style="width:100%">
+                <table id="tblEmpleados" class="table table-sm display nowrap " style="width:100%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -44,7 +44,7 @@
     </div>
 </div>
 <div class="card m-3 d-none animated fadeIn" id="pnlDatos" style="background: rgb(255,255,255);
-background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);">
+     background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);">
     <div class="card-body text-dark">
         <form id="frmNuevo">
             <fieldset>
@@ -335,10 +335,24 @@ background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 1
                                         <label for="PressAcum" >Press Acum</label>
                                         <input type="text" id="PressAcum" name="PressAcum" class="form-control form-control-sm numbersOnly" readonly="">
                                     </div>
-                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                        <label for="AbonoPres" >Abono Pres</label>
-                                        <input type="text" id="AbonoPres" name="AbonoPres" class="form-control form-control-sm numbersOnly">
-                                    </div>
+                                    <?php
+                                    if ($this->session->TipoAcceso === 'SUPER ADMINISTRADOR' ||
+                                            $this->session->USERNAME === 'ALICIA' && $this->session->TipoAcceso === 'SUPER ADMINISTRADOR') {
+                                        ?> 
+                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                            <label for="AbonoPres" >Abono Pres</label>
+                                            <input type="text" id="AbonoPres" name="AbonoPres" class="form-control form-control-sm numbersOnly">
+                                        </div>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                            <label for="AbonoPres" >Abono Pres</label>
+                                            <input type="text" id="AbonoPres" name="AbonoPres" class="form-control form-control-sm numbersOnly" disabled="" readonly="">
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
                                     <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <label for="SaldoPres" >Saldo Pres.</label>
                                         <input type="text" id="SaldoPres" name="SaldoPres" class="form-control form-control-sm numbersOnly" readonly="">
@@ -986,6 +1000,14 @@ background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 1
     table thead th  {
         background-color: #000;
         color: #fff;
+    }
+
+    #tblEmpleados tbody tr td{
+        font-weight: bold;
+        font-size: 15px;
+    }
+    button.btn{
+        font-weight: bold;
     }
 </style>
 <?php
