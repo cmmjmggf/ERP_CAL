@@ -469,8 +469,14 @@ P.Maquila AS MAQUILA
     public function onRevisaEmpleado() {
         try {
             $x = $this->input->get();
-            print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE FROM empleados AS E "
-                    . "WHERE E.Numero ={$x['EMPLEADO']} ")->result());
+            $fracciones_avance = array(100, 96, 102, 113, 103, 114, 60, 61, 51, 127, 300, 397, 401, 500, 600);
+            $departamento = array(42, 44, 5, 6, 8, 9, 11);
+            if (in_array(intval($x['AVANCE']), $departamento)) {
+                print json_encode($this->db->query("SELECT 1 AS EXISTE")->result());
+            } else {
+                print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE FROM empleados AS E "
+                                        . "WHERE E.Numero ={$x['EMPLEADO']} ")->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

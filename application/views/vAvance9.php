@@ -1,4 +1,4 @@
-<div class="card m-2 animated fadeIn" id="pnlTablero">
+<div class="card m-2 animated fadeIn" id="pnlTablero" style=" background: #ffffff !important; background-color: #ffffff !important;">
     <div class="card-body" style="padding-top: 3px; padding-bottom: 3px;">
         <div class="row">
             <div class="col-6">
@@ -316,6 +316,10 @@
             if (e.keyCode === 13 && NumeroDeEmpleado.val()) {
                 btnAceptar.attr('disabled', false);
                 getInformacionEmpleado();
+                pnlTablero.find("#chk99")[0].checked = false;
+                pnlTablero.find("#chk100")[0].checked = false;
+                pnlTablero.find("#chk96")[0].checked = false;
+                Control.val('');
                 Control.focus().select();
                 onBeep(1);
             } else if (e.keyCode === 13 && NumeroDeEmpleado.val() === '' ||
@@ -484,7 +488,7 @@
                             Control.val('');
                             DiasPagoDeNomina.find("input").val(0);
                             dias.forEach(function (e) {
-                                DiasPagoDeNomina.find("span.txt"+e).text(0);
+                                DiasPagoDeNomina.find("span.txt" + e).text(0);
                             });
                             DiasPagoDeNomina.find("#txtTotal").val(0);
                             DiasPagoDeNomina.find("span.total_acumulado_x_empleado").text("$" + 0);
@@ -524,13 +528,15 @@
             }
             $.getJSON('<?php print base_url('Avance9/onComprobarRetornoDeMaterialXControl'); ?>',
                     {CR: Control.val(), FR: JSON.stringify(fra), DEPTO: Departamento.val()}).done(function (data) {
-                if (data[0].MENSAJE !== undefined) {
-                    swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
+                if (data.length > 0) {
+                    if (data[0].MENSAJE !== undefined) {
+                        swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
-                                    ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
-                        Control.focus().select();
-                    });
-                    return;
+                                    ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA (1).', 'warning').then((value) => {
+                            Control.focus().select();
+                        });
+                        return;
+                    }
                 }
                 if (data.length > 0) {
                     var r = data[0];
@@ -569,10 +575,10 @@
                             if (type) {
                                 onAvanzar();
                             }
-                        } else {
+                        } else {  
                             swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
-                                                    ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                                                    ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA (2).', 'warning').then((value) => {
                                 Control.focus().select();
                             });
                         }
@@ -585,7 +591,7 @@
                 } else {
                     swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
-                                            ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA.', 'warning').then((value) => {
+                                            ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA (3).', 'warning').then((value) => {
                         Control.focus().select();
                         Pares.val('');
                         SigAvance.val('');
@@ -607,9 +613,6 @@
     }
 
     function onAgregarAvanceSinFraccion() {
-
-
-
         if (Control.val()) {
             /*COMPROBAR SI EL EMPLEADO ES DE RAYADO*/
             //            $.post('<?php print base_url('Avance9/onComprobarDeptoXEmpleado') ?>', {EMPLEADO: NumeroDeEmpleado.val()}).done(function (a) {
@@ -658,6 +661,8 @@
                                 HoldOn.close();
                                 getPagosXEmpleadoXSemana();
                             });
+                        } else {
+                            swal('ERROR', 'DEBE ESPECIFICAR UNA FRACCIÓN', 'error');
                         }
                     }).fail(function (x, y, z) {
                 console.log(x, y, z);
@@ -1013,5 +1018,5 @@
     }
     table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
         background-color: #000000;
-    }
+    } 
 </style>

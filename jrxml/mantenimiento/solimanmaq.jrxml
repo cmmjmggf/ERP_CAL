@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="solimanmaq" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b83fcaac-3859-4d68-b2bf-43d31ea2712d">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="1.8150000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
@@ -14,7 +14,8 @@ R.pre1, R.refa2, R.cant2, R.pre2, R.refa3, R.cant3, R.pre3, R.refa4, R.cant4, R.
  R.refa8, R.cant8, R.pre8, R.refa9, R.cant9, R.pre9, R.refa10, R.cant10, R.pre10, R.numfac, R.numpro, R.ident, R.reg,R.ID,
 
  (SELECT D.Descripcion FROM departamentos AS D WHERE D.Clave = R.depto) AS DEPARTAMENTO_T, M.nummaq AS Numero, M.id AS XCODIGO, M.marmaq AS XMARCA, M.sermaq AS XSERIE,
- M.nommaq AS DESCRIPCION, M.modmaq AS MODELO, M.stsmaq AS ESTATUS, (CASE WHEN M.stsmaq = 1 THEN "ALTA" ELSE "BAJA" END) AS ESTATUS_T
+ M.nommaq AS DESCRIPCION, M.modmaq AS MODELO, M.stsmaq AS ESTATUS, (CASE WHEN M.stsmaq = 1 THEN "ALTA" ELSE "BAJA" END) AS ESTATUS_T,
+UPPER(M.OperarioT) AS OPERARIO
 FROM repomaqui AS R INNER JOIN maquinaria AS M ON R.codigo = M.id WHERE R.vale =  $P{VALE};]]>
 	</queryString>
 	<field name="vale" class="java.lang.Integer">
@@ -170,6 +171,9 @@ FROM repomaqui AS R INNER JOIN maquinaria AS M ON R.codigo = M.id WHERE R.vale =
 	<field name="MODELO" class="java.lang.String"/>
 	<field name="ESTATUS" class="java.lang.Integer"/>
 	<field name="ESTATUS_T" class="java.lang.String"/>
+	<field name="OPERARIO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="TOTAL_REFACCION_UNO" class="java.lang.Double">
 		<variableExpression><![CDATA[$F{pre1}*$F{cant1}]]></variableExpression>
 	</variable>
@@ -206,7 +210,7 @@ $V{TOTAL_REFACCION_SEIS}+$V{TOTAL_REFACCION_SIETE}+$V{TOTAL_REFACCION_OCHO}+
 $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 	</variable>
 	<title>
-		<band height="326">
+		<band height="340">
 			<rectangle>
 				<reportElement x="102" y="46" width="251" height="12" uuid="de63bc63-5f0d-482c-ac57-ddeec10dacca"/>
 			</rectangle>
@@ -465,7 +469,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<textFieldExpression><![CDATA[$F{ESTATUS_T}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="103" width="555" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="a7aec5eb-7832-491d-a52c-32c792be9457"/>
+				<reportElement x="0" y="117" width="555" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="a7aec5eb-7832-491d-a52c-32c792be9457"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -478,7 +482,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[DESCRIPCIÓN DEL PROBLEMA]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="115" width="555" height="60" uuid="e37940f3-2558-493b-b831-7feac49384be"/>
+				<reportElement x="0" y="129" width="555" height="60" uuid="e37940f3-2558-493b-b831-7feac49384be"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -489,7 +493,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<textFieldExpression><![CDATA[$F{desdpro}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="421" y="212" width="134" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="cd49671e-1ad7-4f9b-9f32-0d8acb36df31"/>
+				<reportElement x="420" y="224" width="134" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="cd49671e-1ad7-4f9b-9f32-0d8acb36df31"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -502,7 +506,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[Solicitante nombre y firma]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="224" width="555" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="52f56cff-8b11-4faa-a79e-5fcd5b8babeb"/>
+				<reportElement x="-1" y="236" width="555" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="52f56cff-8b11-4faa-a79e-5fcd5b8babeb"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -515,7 +519,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[DESCRIPCIÓN DE LO REALIZADO]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="236" width="555" height="60" uuid="c357b05b-576b-476a-9b06-8ffce2f80bde"/>
+				<reportElement x="-1" y="248" width="555" height="60" uuid="c357b05b-576b-476a-9b06-8ffce2f80bde"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -533,7 +537,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[Fecha impresión]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="301" width="555" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="2016286d-fa80-4782-bd46-85b405e2bbf6"/>
+				<reportElement x="0" y="316" width="555" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="2016286d-fa80-4782-bd46-85b405e2bbf6"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -560,7 +564,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="313" width="260" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="92cca29f-5d77-4cb3-bfce-02334364537b"/>
+				<reportElement x="0" y="328" width="260" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="92cca29f-5d77-4cb3-bfce-02334364537b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -573,7 +577,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[Descripción de refacciones]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="260" y="313" width="50" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="82d86705-2350-4dea-b979-8d480fa4bdfb"/>
+				<reportElement x="260" y="328" width="50" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="82d86705-2350-4dea-b979-8d480fa4bdfb"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -586,7 +590,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[Cantidad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="310" y="313" width="50" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="4670f125-9345-4f3e-b2e8-8a61d56890d5"/>
+				<reportElement x="310" y="328" width="50" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="4670f125-9345-4f3e-b2e8-8a61d56890d5"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -599,7 +603,7 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 				<text><![CDATA[Precio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="360" y="313" width="50" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="4860153c-ee38-4a65-b351-6ed50170ec3e"/>
+				<reportElement x="360" y="328" width="50" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="4860153c-ee38-4a65-b351-6ed50170ec3e"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -617,6 +621,31 @@ $V{TOTAL_REFACCION_NUEVE}+$V{TOTAL_REFACCION_DIEZ}]]></variableExpression>
 					<font size="7" isBold="true" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="98" width="71" height="12" forecolor="#000000" backcolor="#CCCCCC" uuid="e80af569-7e36-4a3a-821f-9b882d325602"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operario]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="71" y="98" width="484" height="12" uuid="a9cee663-6630-43c6-9176-a5eff2374ec2"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OPERARIO}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

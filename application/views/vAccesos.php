@@ -28,13 +28,15 @@
                 </select>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pb-3"align="right">
-                <button id="btnCopiarAccesos" type="button" data-toggle="modal" data-target="#mdlCopiaAccesosUsuario" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="COPIAR ACCESOS DE USUARIO">
-                    <span class="fa fa-copy"></span>
+                <button id="btnCopiarAccesos" type="button" 
+                        data-toggle="modal" data-target="#mdlCopiaAccesosUsuario" class="btn btn-primary font-weight-bold"  data-toggle="tooltip" data-placement="top" title="COPIAR ACCESOS DE USUARIO">
+                    <span class="fa fa-copy"></span> COPIAR ACCESOS
                 </button>
-                <button id="btnAsignaTodo" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR TODOS">
-                    <span class="fa fa-shield-alt"></span>
+                <button id="btnAsignaTodo" type="button" class="btn btn-default font-weight-bold shadow" style="background-color: #004fa9; border-color: #004fa9;"  
+                        data-toggle="tooltip" data-placement="top" title="ASIGNAR TODOS">
+                    <span class="fa fa-shield-alt"></span> ASIGNAR TODOS
                 </button>
-                <button id="btnAsignaAccesosRapidos" type="button" class="btn btn-primary"  data-toggle="tooltip" data-placement="top" title="ASIGNAR ACCESOS RÁPIDOS">
+                <button id="btnAsignaAccesosRapidos" type="button" class="btn btn-primary font-weight-bold"  data-toggle="tooltip" data-placement="top" title="ASIGNAR ACCESOS RÁPIDOS">
                     <span class="fa fa-cubes"></span>
                 </button>
                 <button id="btnAsignaAvaPRD" type="button" class="btn btn-primary d-none"  data-toggle="tooltip" data-placement="top" title="ASIGNAR AVAPRD">

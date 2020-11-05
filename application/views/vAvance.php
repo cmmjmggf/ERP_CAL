@@ -16,18 +16,22 @@
                 <?php } ?>
                 <?php
                 if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
-                        $this->session->Nombre === "JULIANNA" && $this->session->TipoAcceso === "PRODUCCION"||
+                        $this->session->Nombre === "JULIANNA" && $this->session->TipoAcceso === "PRODUCCION" ||
                         $this->session->Nombre === "GUSTAVO" && $this->session->TipoAcceso === "PRODUCCION") {
                     ?>
                     <button type="button" id="btnPespunteFraccionesFail" name="btnPespunteFraccionesFail" class="btn btn-sm btn-info" style="background-color: #940d0d; border-color: #940d0d" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
                         <span class="fa fa-tag"></span>
                         Pespunte
                     </button>    
+                    <?php
+                }
+                if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR") {
+                    ?>
+                    <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
+                        <span class="fa fa-bullseye"></span>
+                        Rastreo X Concepto
+                    </button>
                 <?php } ?>
-                <button type="button" id="btnRastreoXConcepto" name="btnRastreoXConcepto" class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
-                    <span class="fa fa-bullseye"></span>
-                    Rastreo X Concepto
-                </button>
                 <button type="button" id="btnRastreoXControl" name="btnRastreoXControl" class="btn  btn-sm btn-info"   data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un control">
                     <span class="fa fa-globe"></span>
                     Rastreo X Control
@@ -1163,64 +1167,80 @@
         });
 
         btnAceptar.click(function () {
+            $.getJSON('<?PHP print base_url('Avance/onRevisaEmpleado'); ?>', {
+                AVANCE: Departamento.val(),
+                FRACCION: Fraccion.val(),
+                EMPLEADO: Empleado.val()
+            }).done(function (a) {
+                if (a.length > 0) {
+                    switch (parseInt(a[0].EXISTE)) {
+                        case 0:
+                            onCampoInvalido(pnlTablero, "ESTE EMPLEADO NO EXISTE O ESTA DADO DE BAJA", function () {
+                                Empleado.focus().select();
+                            });
+                            break;
+                        case 1:
+                            if (Departamento.val() && Control.val()) {
+                                var f = new FormData();
+                                f.append('CONTROL', Control.val());
+                                f.append('FECHA', Fecha.val());
+                                f.append('DEPTO', Departamento.val());
+                                f.append('SEMANA', Semana.val());
+                                f.append('PROCESO_MAQUILA', ProcesoMaquila.val() ? ProcesoMaquila.val() : 0);
+                                f.append('EMPLEADO', Empleado.val());
+                                f.append('FRACCION', Fraccion.val());
+                                var frt = Fraccion.find("option:selected").text();
+                                frt = frt.replace(Fraccion.val() + ' ', '');
+                                f.append('FRACCIONT', frt);
+                                f.append('ESTILO', Estilo.val());
+                                f.append('DEPTOACTUAL', DeptoActual.val());
+                                f.append('AVANCEDEPTOACTUAL', AvanceDeptoActual.val());
+                                f.append('DEPTOT', DeptoDes.val());
+                                f.append('PARES', Pares.val());
+                                f.append('PRECIO_FRACCION', (PrecioFraccion.val() ? PrecioFraccion.val() : ''));
+                                $.ajax({
+                                    url: '<?php print base_url('Avance/onAvanzar'); ?>',
+                                    type: "POST",
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    data: f
+                                }).done(function (a, b, c) {
+                                    console.log(a);
+                                    onNotifyOld('<span class="fa fa-check"></span>', 'SE HA AVANZADO EL CONTROL ' + Control.val(), 'success');
+                                    Fraccion.val('');
+                                    FraccionS[0].selectize.clear();
+                                    Empleado.val('');
+                                    EmpleadoS[0].selectize.clear();
+                                    Estilo.val('');
+                                    DeptoActual.val('');
+                                    AvanceDeptoActual.val('');
+                                    pnlTablero.find(".estatus_de_avance").text('');
+                                    Pares.val('');
+                                    btnAceptar.attr('disabled', true);
+                                    Control.focus().select();
+                                }).fail(function (x, y, z) {
+                                    getError(x);
+                                });
+                            } else {
+                                if (Departamento.val()) {
+                                    if (Control.val()) {
 
-            if (Departamento.val() && Control.val()) {
-                var f = new FormData();
-                f.append('CONTROL', Control.val());
-                f.append('FECHA', Fecha.val());
-                f.append('DEPTO', Departamento.val());
-                f.append('SEMANA', Semana.val());
-                f.append('PROCESO_MAQUILA', ProcesoMaquila.val() ? ProcesoMaquila.val() : 0);
-                f.append('EMPLEADO', Empleado.val());
-                f.append('FRACCION', Fraccion.val());
-                var frt = Fraccion.find("option:selected").text();
-                frt = frt.replace(Fraccion.val() + ' ', '');
-                f.append('FRACCIONT', frt);
-                f.append('ESTILO', Estilo.val());
-                f.append('DEPTOACTUAL', DeptoActual.val());
-                f.append('AVANCEDEPTOACTUAL', AvanceDeptoActual.val());
-                f.append('DEPTOT', DeptoDes.val());
-                f.append('PARES', Pares.val());
-                f.append('PRECIO_FRACCION', (PrecioFraccion.val() ? PrecioFraccion.val() : ''));
-                $.ajax({
-                    url: '<?php print base_url('Avance/onAvanzar'); ?>',
-                    type: "POST",
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: f
-                }).done(function (a, b, c) {
-                    console.log(a);
-                    onNotifyOld('<span class="fa fa-check"></span>', 'SE HA AVANZADO EL CONTROL ' + Control.val(), 'success');
-                    Fraccion.val('');
-                    FraccionS[0].selectize.clear();
-                    Empleado.val('');
-                    EmpleadoS[0].selectize.clear();
-                    Estilo.val('');
-                    DeptoActual.val('');
-                    AvanceDeptoActual.val('');
-                    pnlTablero.find(".estatus_de_avance").text('');
-                    Pares.val('');
-                    btnAceptar.attr('disabled', true);
-                    Control.focus().select();
-                }).fail(function (x, y, z) {
-                    getError(x);
-                });
-            } else {
-                if (Departamento.val()) {
-                    if (Control.val()) {
-
-                    } else {
-                        iMsg('DEBE DE ESPECIFICAR UN CONTROL', 'w', function () {
-                            Control.focus().select();
-                        });
+                                    } else {
+                                        iMsg('DEBE DE ESPECIFICAR UN CONTROL', 'w', function () {
+                                            Control.focus().select();
+                                        });
+                                    }
+                                } else {
+                                    iMsg('DEBE DE ESPECIFICAR UN DEPARTAMENTO', 'w', function () {
+                                        Departamento.focus().select();
+                                    });
+                                }
+                            }
+                            break;
                     }
-                } else {
-                    iMsg('DEBE DE ESPECIFICAR UN DEPARTAMENTO', 'w', function () {
-                        Departamento.focus().select();
-                    });
                 }
-            }
+            });
         });
 
 //        Estilo.on('change keydown keypress', function () {

@@ -33,6 +33,7 @@ DATE_FORMAT(F.fecha,"%d/%m/%Y") AS FECHA,
 F.subtot, F.iva,  F.subtot  AS SUBTOTAL,
 (CASE
 WHEN F.zero = 0 THEN  F.subtot
+WHEN F.zero IS NULL THEN  F.subtot
 WHEN F.zero = 1 THEN  0
 END) AS SUBTOTAL_VALIDO,
 F.zero AS FACTURA_EN_CEROS,
@@ -686,7 +687,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				</textElement>
 				<textFieldExpression><![CDATA[$F{REFERENCIA}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="58" y="63" width="424" height="12" uuid="d9ffee3c-207f-41b7-8c8c-5b5bd3b4f531"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
@@ -709,7 +710,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				</textElement>
 				<textFieldExpression><![CDATA[$F{UUID}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="58" y="75" width="424" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0ac79157-cf43-4288-8b3d-67ad618c20e8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

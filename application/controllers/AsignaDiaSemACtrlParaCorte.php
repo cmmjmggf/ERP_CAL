@@ -66,7 +66,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
             }
             $this->db->order_by("YEAR(PR.fecha)", "DESC")->order_by("MONTH(PR.fecha)", "DESC")->order_by("DAY(PR.fecha)", "DESC");
             if ($x['ANIO'] === '' && $x['SEMANA'] === '' && $x['CONTROL'] === '') {
-                $this->db->limit(25);
+                $this->db->limit(10);
             }
             print json_encode($this->db->get()->result());
         } catch (Exception $exc) {
@@ -127,7 +127,7 @@ class AsignaDiaSemACtrlParaCorte extends CI_Controller {
                             . "PR.nomart", false)
                     ->from("programacion AS PR")
                     ->join('pedidox AS P', 'P.Control = PR.control')
-                    ->where_in("PR.frac", array(99, 100))
+                    ->where_in("PR.frac", array(99, 100,96))
                     ->where_not_in("P.stsavan", array(13, 14));
             if ($x['ANIO'] !== '') {
                 $this->db->where('PR.año', $x['ANIO']);
