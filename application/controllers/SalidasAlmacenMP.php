@@ -41,7 +41,8 @@ class SalidasAlmacenMP extends CI_Controller {
     public function onVerificarArticulo() {
         try {
             $Articulo = $this->input->get('Articulo');
-            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo '  ")->result());
+            $depto = $this->input->get('Departamento');
+            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo ' and departamento = '$depto' ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -76,7 +77,8 @@ class SalidasAlmacenMP extends CI_Controller {
 
     public function getArticulos() {
         try {
-            print json_encode($this->SalidasAlmacenMP_model->getArticulos());
+            $depto = $this->input->get('Depto');
+            print json_encode($this->SalidasAlmacenMP_model->getArticulos($depto));
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -14,6 +14,25 @@ class ReportesClientesJasper extends CI_Controller {
         setlocale(LC_TIME, 'spanish');
     }
 
+    public function onImprimirVentasClientesRanking() {
+        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasRanking'));
+        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
+        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasRanking'));
+        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $parametros["fechaIni"] = $nuevaFechaIni;
+        $parametros["fechaFin"] = $nuevaFechaFin;
+        $jc->setJasperurl('jrxml\clientes\facturacionGeneralPorFechas.jasper');
+        $jc->setParametros($parametros);
+        $jc->setFilename('REPORTE_VENTAS_RANKING_' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function onReporteVentasPorLineaEstiloPorcentaje() {
         $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
@@ -460,10 +479,10 @@ class ReportesClientesJasper extends CI_Controller {
         try {
             $ANIO = Date('Y');
             $this->db->set("stafac", 2)->where("paredev = parefac", null, false)->update("devolucionnp");
-            $revision = $this->db->query("SELECT ID, control, paredev, parefac, 
-                (SELECT SUM(F.pareped) FROM facturacion AS F 
-                WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) AS PARES_FAC, 
-                stafac AS ESTATUS_FAC  
+            $revision = $this->db->query("SELECT ID, control, paredev, parefac,
+                (SELECT SUM(F.pareped) FROM facturacion AS F
+                WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) AS PARES_FAC,
+                stafac AS ESTATUS_FAC
                 FROM devolucionnp AS D WHERE YEAR(D.fechadev) = {$ANIO} AND paredev > parefac "
                             . "HAVING (SELECT SUM(F.pareped) FROM facturacion AS F "
                             . "WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) IS NOT NULL")->result();
@@ -637,23 +656,15 @@ class ReportesClientesJasper extends CI_Controller {
     }
 
     public function onReporteControlesEntregadosPorFabrica() {
-        $fechaini = str_replace('/', '-', $this->input->post('FechaIni'));
-        $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
-
-        $fechafin = str_replace('/', '-', $this->input->post('FechaFin'));
-        $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
-
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array();
         $parametros["logo"] = base_url() . $this->session->LOGO;
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
-        $parametros["fechaIni"] = $nuevaFechaIni;
-        $parametros["fechaFin"] = $nuevaFechaFin;
-        $parametros["fechaIniF"] = $this->input->post('FechaIni');
-        $parametros["fechaFinF"] = $this->input->post('FechaFin');
+        $parametros["fechaIni"] = $this->input->post('FechaIni');
+        $parametros["fechaFin"] = $this->input->post('FechaFin');
         $jc->setParametros($parametros);
-        $jc->setJasperurl('jrxml\clientes\reporteControlesEntregadosPorMaquila.jasper');
+        $jc->setJasperurl('jrxml\produccion\relacionControlesEntregadosMaq.jasper');
         $jc->setFilename('REPORTE_CONTROLES_ENTREGADOS_POR_MAQUILA_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();

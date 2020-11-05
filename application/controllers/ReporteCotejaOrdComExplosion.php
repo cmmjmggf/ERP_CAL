@@ -168,12 +168,12 @@ class ReporteCotejaOrdComExplosion extends CI_Controller {
                         //Totales generales
                         $GCantPedida += $D->CantPedida;
                         $GCantEntregada += $D->CantEntregada;
-                        $SaldoXEntregarG += $SaldoXEntregar;
+                        $GSaldoXEntregar += $SaldoXEntregar;
                         $GEntregadoMaquilas += $D->EntregadoMaquilas;
 
                         $GCantPedidaP += $D->CantPedida * $D->Precio;
                         $GCantEntregadaP += $D->CantEntregada * $D->Precio;
-                        $GSaldoXEntregar += $SaldoXEntregar * $D->Precio;
+                        $GSaldoXEntregarP += $SaldoXEntregar * $D->Precio;
                         $GEntregadoMaquilasP += $D->EntregadoMaquilas * $D->Precio;
                     }
                 }
@@ -375,12 +375,12 @@ class ReporteCotejaOrdComExplosion extends CI_Controller {
                         //Totales generales
                         $GCantPedida += $D->CantPedida;
                         $GCantEntregada += $D->CantEntregada;
-                        $SaldoXEntregarG += $SaldoXEntregar;
+                        $GSaldoXEntregar += $SaldoXEntregar;
                         $GEntregadoMaquilas += $D->EntregadoMaquilas;
 
                         $GCantPedidaP += $D->CantPedida * $D->Precio;
                         $GCantEntregadaP += $D->CantEntregada * $D->Precio;
-                        $GSaldoXEntregar += $SaldoXEntregar * $D->Precio;
+                        $GSaldoXEntregarP += $SaldoXEntregar * $D->Precio;
                         $GEntregadoMaquilasP += $D->EntregadoMaquilas * $D->Precio;
                     }
                 }

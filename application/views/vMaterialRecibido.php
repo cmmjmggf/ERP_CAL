@@ -342,7 +342,7 @@
             ],
             "columnDefs": [
                 {
-                    "targets": [0, 1, 2, 3, 19, 21, 22, 23, 24],
+                    "targets": [0, 2, 3, 19, 21, 22, 23, 24],
                     "visible": false,
                     "searchable": true
                 },
@@ -368,7 +368,7 @@
                     var c = $(v);
                     var index = parseInt(k);
                     switch (index) {
-                        case 9:
+                        case 10:
                             /*FECHA ENTREGA*/
                             c.addClass('text-danger text-strong');
                             break;

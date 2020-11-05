@@ -48,12 +48,22 @@
                     <option value="STR">STR - SALIDA POR TRASPASO</option>
                 </select>
             </div>
-            <div class="col-6 col-sm-5 col-md-3 col-lg-2 col-xl-2">
+            <div class="col-6 col-sm-5 col-md-3 col-lg-2 col-xl-2 d-none">
                 <label for="">Mat Ent. a Maq 1 de Otra Maq</label>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input selectNotEnter" id="MatOtraMaquila" name="MatOtraMaquila" >
                     <label class="custom-control-label" for="MatOtraMaquila"></label>
                 </div>
+            </div>
+
+            <div class="col-6 col-sm-5 col-md-3 col-lg-2 col-xl-2">
+                <label for="">Departamento</label>
+                <select id="Departamento" name="Departamento" class="form-control form-control-sm required" required="">
+                    <option value=""></option>
+                    <option value="10">10 - PIEL Y FORRO</option>
+                    <option value="80">80 - SUELA</option>
+                    <option value="90">90 - PELETERÍA</option>
+                </select>
             </div>
         </div>
         <div class="row" id="Detalle">
@@ -146,14 +156,15 @@
     var nuevo = true;
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
+        pnlTablero.find("#Maq").focus();
         pnlTablero.find('.NotSelectize').selectize({
             hideSelected: false,
             openOnFocus: false
         });
         validacionSelectPorContenedor(pnlTablero);
-        setFocusSelectToSelectOnChange('#TipoMov', '#sArticulo', pnlTablero);
+        setFocusSelectToSelectOnChange('#TipoMov', '#Departamento', pnlTablero);
+        setFocusSelectToSelectOnChange('#Departamento', '#sArticulo', pnlTablero);
         setFocusSelectToInputOnChange('#sArticulo', '#Cantidad', pnlTablero);
-        getArticulos();
         getRecords('0', '0');
         getMatEntregado('', '', '', '');
         pnlTablero.find('#Ano').keypress(function (e) {
@@ -217,15 +228,23 @@
                     }
                 });
             } else {
+                pnlTablero.find('#Departamento')[0].selectize.focus();
+            }
+
+        });
+        pnlTablero.find("#Departamento").change(function () {
+            var depto = $(this).val();
+            if (depto) {
                 isValid('Encabezado');
                 if (valido) {
+                    getArticulos(depto);
                     pnlTablero.find('#Encabezado').find('input').addClass('disabledForms');
                     pnlTablero.find('#Detalle').find('input, button').removeClass('disabledForms');
                     $.when(pnlTablero.find("#sArticulo")[0].selectize.enable()).then(function (data, textStatus, jqXHR) {
                         pnlTablero.find("#TipoMov")[0].selectize.disable();
+                        pnlTablero.find("#Departamento")[0].selectize.disable();
                         pnlTablero.find("#Articulo").attr('readonly', false);
                         pnlTablero.find("#Articulo").focus();
-
                     });
                 } else {
                     swal('ATENCION', 'Completa los campos requeridos', 'warning');
@@ -238,9 +257,10 @@
         });
         pnlTablero.find('#Articulo').keypress(function (e) {
             if (e.keyCode === 13) {
+                var depto = pnlTablero.find("#Departamento").val();
                 var txtart = $(this).val();
                 if (txtart) {
-                    $.getJSON(master_url + 'onVerificarArticulo', {Articulo: txtart}).done(function (data) {
+                    $.getJSON(master_url + 'onVerificarArticulo', {Articulo: txtart, Departamento: depto}).done(function (data) {
                         if (data.length > 0) {
                             pnlTablero.find("#sArticulo")[0].selectize.addItem(txtart, true);
                             var maq = pnlTablero.find("#Maq").val();
@@ -308,7 +328,8 @@
                             }
 
                         } else {
-                            swal('ERROR', 'EL ARTÍCULO NO EXISTE', 'warning').then((value) => {
+                            var depto = pnlTablero.find("#Departamento").val();
+                            swal('ERROR', 'EL ARTÍCULO NO EXISTE Ó NO PERTENECE AL DEPARTAMENTO ' + depto, 'warning').then((value) => {
                                 pnlTablero.find("#sArticulo")[0].selectize.clear(true);
                                 pnlTablero.find('#Articulo').focus().val('');
                             });
@@ -675,21 +696,15 @@
                 + ('0' + currentdate.getSeconds()).slice(-2);
         pnlTablero.find('#DocMov').val(datetime);
     }
-
-    function getArticulos() {
-        HoldOn.open({theme: 'sk-bounce', message: 'INCIALIZANDO DATOS...'});
-        $.when($.getJSON(master_url + 'getArticulos').done(function (data) {
+    function getArticulos(depto) {
+        $.getJSON(master_url + 'getArticulos', {Depto: depto}).done(function (data) {
             $.each(data, function (k, v) {
                 pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
-        })).then(function (x) {
-            HoldOn.close();
-            btnNuevo.trigger('click');
         });
-
     }
     var depto1, depto2, depto3;
     function onComprobarMaquilas(v) {

@@ -789,6 +789,20 @@
         }
     }
 
+    function getFirstDayYear() {
+        var date = new Date();
+
+        var date = new Date(date.getFullYear(), date.getMonth(), 1);
+        var iday = date.getDate();
+        var imonth = '01';
+        var iyear = date.getFullYear();
+
+        if (iday < 10)
+            iday = "0" + iday;
+        var ini = iday + "-" + imonth + "-" + iyear;
+        return ini;
+    }
+
     function getFirstDayMonth() {
         var date = new Date();
 

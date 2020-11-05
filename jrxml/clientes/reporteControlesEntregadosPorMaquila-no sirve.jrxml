@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.0276506581568547"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.9513175103765197"/>
+	<property name="ireport.x" value="536"/>
+	<property name="ireport.y" value="115"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -363,7 +363,7 @@ order by ct.maq, ct.docto, abs(ct.sem), ct.control asc;]]>
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="181" y="42" width="34" height="11" forecolor="#000000" uuid="e4cd7e8b-d011-44c4-b06d-fad31f651f0c"/>
+				<reportElement style="Column header" x="181" y="42" width="41" height="11" forecolor="#000000" uuid="e4cd7e8b-d011-44c4-b06d-fad31f651f0c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -377,14 +377,14 @@ order by ct.maq, ct.docto, abs(ct.sem), ct.control asc;]]>
 				<text><![CDATA[Días]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="216" y="42" width="23" height="11" forecolor="#000000" uuid="f49574fe-9685-488b-b51d-cf73668b326f"/>
+				<reportElement style="Column header" x="224" y="42" width="23" height="11" forecolor="#000000" uuid="f49574fe-9685-488b-b51d-cf73668b326f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Estilo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="241" y="42" width="22" height="11" forecolor="#000000" uuid="dfefba07-edd9-4f7d-831e-fa57e8f45b6c"/>
+				<reportElement style="Column header" x="247" y="42" width="28" height="11" forecolor="#000000" uuid="dfefba07-edd9-4f7d-831e-fa57e8f45b6c"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -443,28 +443,28 @@ order by ct.maq, ct.docto, abs(ct.sem), ct.control asc;]]>
 				<textFieldExpression><![CDATA[$F{nomcliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="181" y="0" width="34" height="10" uuid="4a55460d-ba42-4184-aeab-d1891e4a4f29"/>
+				<reportElement x="181" y="0" width="41" height="10" uuid="4a55460d-ba42-4184-aeab-d1891e4a4f29"/>
 				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="216" y="0" width="23" height="10" uuid="240c8498-5545-4b8c-8c3b-1c403bc76da6"/>
+				<reportElement x="224" y="0" width="23" height="10" uuid="240c8498-5545-4b8c-8c3b-1c403bc76da6"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="242" y="0" width="10" height="10" uuid="86980bf6-ff45-4857-9d08-3efe65ee82bb"/>
+				<reportElement x="247" y="0" width="10" height="10" uuid="86980bf6-ff45-4857-9d08-3efe65ee82bb"/>
 				<textElement textAlignment="Right">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{color}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="255" y="0" width="106" height="10" uuid="fec513bd-bc75-4c41-a0c7-b5d7552e6524"/>
+				<reportElement x="260" y="0" width="104" height="10" uuid="fec513bd-bc75-4c41-a0c7-b5d7552e6524"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>

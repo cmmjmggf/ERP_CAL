@@ -86,10 +86,11 @@ class SalidasAlmacenMP_model extends CI_Model {
         }
     }
 
-    public function getArticulos() {
+    public function getArticulos($depto) {
         try {
             return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Articulo")
                             ->from("articulos AS D")
+                            ->where("D.Departamento", $depto)
                             ->order_by('Articulo', 'ASC')
                             ->get()->result();
         } catch (Exception $exc) {

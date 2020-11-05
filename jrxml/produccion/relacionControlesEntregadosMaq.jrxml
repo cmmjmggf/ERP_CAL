@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="3.9513175103764793"/>
-	<property name="ireport.x" value="420"/>
-	<property name="ireport.y" value="31"/>
+	<property name="ireport.zoom" value="3.9513175103764806"/>
+	<property name="ireport.x" value="533"/>
+	<property name="ireport.y" value="27"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -275,7 +275,7 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="156" y="44" width="41" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
+				<reportElement style="Column header" x="154" y="44" width="53" height="11" forecolor="#000000" uuid="e060d432-48d9-48a1-8673-13aae0d018bc"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
@@ -356,7 +356,7 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				<textFieldExpression><![CDATA[$P{fechaFin}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="198" y="44" width="28" height="11" forecolor="#000000" uuid="c9dff90b-f813-49a8-8ae5-c65e45301818"/>
+				<reportElement style="Column header" x="207" y="44" width="25" height="11" forecolor="#000000" uuid="c9dff90b-f813-49a8-8ae5-c65e45301818"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
@@ -370,7 +370,7 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				<text><![CDATA[Subtotal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="227" y="44" width="39" height="11" forecolor="#000000" uuid="563d3d1d-5fe6-4d67-a975-f1863b56f4eb"/>
+				<reportElement style="Column header" x="233" y="44" width="33" height="11" forecolor="#000000" uuid="563d3d1d-5fe6-4d67-a975-f1863b56f4eb"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="6" isBold="true"/>
 				</textElement>
@@ -449,28 +449,28 @@ order by abs(pe.maquila) asc, abs(ct.docto) asc, abs(ct.sem) asc, CT.control;]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="156" y="0" width="41" height="10" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
+				<reportElement x="154" y="0" width="53" height="10" uuid="a4840844-9bcf-4d79-874c-2261fdc3baf2"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{control}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="198" y="0" width="28" height="10" uuid="a18d6528-7385-4ad9-85f9-34c7d3d55d8b"/>
+				<reportElement x="207" y="0" width="25" height="10" uuid="a18d6528-7385-4ad9-85f9-34c7d3d55d8b"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="227" y="0" width="20" height="10" uuid="ff34f104-314a-40f4-9147-3652f6d9b2a8"/>
+				<reportElement x="232" y="0" width="13" height="10" uuid="ff34f104-314a-40f4-9147-3652f6d9b2a8"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{color}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="240" y="0" width="117" height="10" uuid="6b54c228-5423-42f9-bc66-9d9b7f26eb2f"/>
+				<reportElement x="245" y="0" width="112" height="10" uuid="6b54c228-5423-42f9-bc66-9d9b7f26eb2f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="false"/>
 				</textElement>
