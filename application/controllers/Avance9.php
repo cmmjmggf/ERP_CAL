@@ -429,7 +429,7 @@ class Avance9 extends CI_Controller {
             /* MUESTRA */
 
             /* MUESTRAS */
-            $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P WHERE P.Estatus IN('A') AND P.EstatusProduccion IN('PROGRAMADO') AND P.DeptoProduccion IN(1) AND P.stsavan IN(1) AND  P.stsavan NOT IN(3,33,4,40,42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
+            $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P WHERE P.Estatus IN('A') AND P.EstatusProduccion IN('CORTE') AND P.DeptoProduccion IN(10) AND P.stsavan IN(2) AND P.Maquila = 98 AND  P.stsavan NOT IN(33,4,40,42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
 //            var_dump($control_muestra);
             if (intval($control_muestra[0]->EXISTE) === 1 && count($FRACCIONES) > 0) {
                 switch (intval($control_muestra[0]->Maquila)) {
@@ -450,7 +450,6 @@ class Avance9 extends CI_Controller {
                                         ->set('fec4', Date('Y-m-d 00:00:00'))
                                         ->where('contped', $xXx['CONTROL'])
                                         ->update('avaprd');
-
                                 $avance_muestra = array(
                                     'Control' => $xXx['CONTROL'],
                                     'FechaAProduccion' => Date('d/m/Y'),
@@ -464,9 +463,12 @@ class Avance9 extends CI_Controller {
                                     'modulo' => 'A9',
                                     'Fraccion' => 96
                                 );
-                                $this->db->insert('avance', $avance_muestra);
+                                $check_avance_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Departamento = 10 AND DepartamentoT = 'CORTE' AND Control = {$xXx['CONTROL']}")->result();
+                                if (intval($check_avance_muestra[0]->EXISTE) === 0) {
+                                    $this->db->insert('avance', $avance_muestra);
+                                }
                                 $this->db->insert('fracpagnomina', array(
-                                    "numeroempleado" => 0,
+                                    "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
                                     "maquila" => 98,
                                     "control" => $xXx['CONTROL'],
                                     "estilo" => $xXx['ESTILO'],
@@ -485,7 +487,7 @@ class Avance9 extends CI_Controller {
                                 $avance_muestra['Fraccion'] = 113;
                                 $this->db->insert('avance', $avance_muestra);
                                 $this->db->insert('fracpagnomina', array(
-                                    "numeroempleado" => 0,
+                                    "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
                                     "maquila" => 98,
                                     "control" => $xXx['CONTROL'],
                                     "estilo" => $xXx['ESTILO'],
@@ -504,7 +506,7 @@ class Avance9 extends CI_Controller {
                                 $avance_muestra['Fraccion'] = 61;
                                 $this->db->insert('avance', $avance_muestra);
                                 $this->db->insert('fracpagnomina', array(
-                                    "numeroempleado" => 0,
+                                    "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
                                     "maquila" => 98,
                                     "control" => $xXx['CONTROL'],
                                     "estilo" => $xXx['ESTILO'],
@@ -517,13 +519,24 @@ class Avance9 extends CI_Controller {
                                     "depto" => 40,
                                     "fecha_registro" => Date('d/m/Y h:i:s'),
                                     "anio" => Date('Y')));
-                                PRINT "{$xXx['CONTROL']} SE HA AVANZADO LA MUESTRA A FOLEADO.";
+                                print '{"AVANZO":"1","FR":"60","RETORNO":"SI","MESSAGE":"' . $xXx['CONTROL'] . ' SE HA AVANZADO LA MUESTRA A FOLEADO."}';
                                 exit(0);
                                 break;
                         }
                         break;
                 }
                 /* FIN MUESTRA */
+                exit(0);
+            }
+            $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P WHERE P.Maquila = 98 AND P.Control = " . $xXx['CONTROL'])->result();
+            switch (intval($control_muestra[0]->Maquila)) {
+                case 98:
+                    switch (intval($xXx['NUMERO_EMPLEADO'])) {
+                        case 2328:
+                            exit(0);
+                            break;
+                    }
+                    break;
             }
             foreach ($FRACCIONES as $k => $v) {
 //                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";

@@ -116,7 +116,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where("A.Control", $x['CONTROL']);
             }
-            $this->db->order_by('A.ID', 'DESC') 
+            $this->db->order_by('A.ID', 'DESC')
                     ->order_by('A.Semana', 'DESC');
             if ($x['CORTADOR'] === '' && $x['PIFO'] === '') {
                 $this->db->limit(10);
@@ -130,11 +130,21 @@ class AsignaPFTSACXC extends CI_Controller {
     }
 
     public function getEmpleados() {
-        try {                    
-            $data = $this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
-                            ->from("empleados AS E")
-                    ->where_in('E.DepartamentoFisico', array(10,15))
-                    ->where('E.AltaBaja', 1)->get()->result();
+        try {
+//            $data = $this->db->select("E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO")
+//                            ->from("empleados AS E")
+//                            ->where_in('E.DepartamentoFisico', array(10, 15,370))
+//                            ->where('E.AltaBaja', 1)->get()->result();
+            $data = $this->db->query("SELECT * FROM (SELECT E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO 
+FROM empleados AS E 
+WHERE    E.DepartamentoFisico IN(10, 15)  AND E.AltaBaja = 1   
+
+UNION ALL
+
+SELECT E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO 
+FROM empleados AS E 
+WHERE    E.DepartamentoFisico IN(370) and E.Numero = 2328  AND E.AltaBaja = 1 ) AS EMPLEADOS 
+ORDER BY ABS(CLAVE) ASC")->result();
             print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -166,7 +176,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $xdb->where('OP.ControlT', $x['CONTROL']);
             }
-            $xdb->where('OPD.Grupo', 1)->where_in('OPD.Departamento', array(10,15))
+            $xdb->where('OPD.Grupo', 1)->where_in('OPD.Departamento', array(10, 15))
                     ->group_by('OPD.OrdenDeProduccion')
                     ->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')
@@ -207,7 +217,7 @@ class AsignaPFTSACXC extends CI_Controller {
                 $this->db->where('OP.ControlT', $x['CONTROL']);
             }
             $this->db->where('OPD.Grupo', 2)
-                    ->where_in('OPD.Departamento', array(10,15))
+                    ->where_in('OPD.Departamento', array(10, 15))
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
@@ -244,7 +254,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('OP.ControlT', $x['CONTROL']);
             }
-            $this->db->where('OPD.Grupo', 34)->where_in('OPD.Departamento', array(10,15))
+            $this->db->where('OPD.Grupo', 34)->where_in('OPD.Departamento', array(10, 15))
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
@@ -283,7 +293,7 @@ class AsignaPFTSACXC extends CI_Controller {
             if ($x['CONTROL'] !== '') {
                 $this->db->where('OP.ControlT', $x['CONTROL']);
             }
-            $this->db->where('OPD.Grupo', 40)->where_in('OPD.Departamento', array(10,15))
+            $this->db->where('OPD.Grupo', 40)->where_in('OPD.Departamento', array(10, 15))
                     ->group_by('OPD.OrdenDeProduccion')->group_by('OP.ControlT')
                     ->group_by('OPD.Pieza')->group_by('OPD.Articulo')
                     ->group_by('OPD.UnidadMedidaT');
@@ -320,9 +330,13 @@ class AsignaPFTSACXC extends CI_Controller {
                 print "CANTIDAD EN CEROS";
                 exit(0);
             }
-            $check_programacion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM programacion AS P WHERE P.control = {$x["CONTROL"]} AND P.frac = 100")->result();
-            if (intval($check_programacion[0]->EXISTE) === 0) {
-                exit(0);
+            $check_maquila = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = " . $x['CONTROL'] . " AND P.stsavan NOT IN(12,13,14) AND P.DeptoProduccion NOT IN(240,260,270)")->result();
+            if (intval($check_maquila[0]->Maquila) === 1) {
+                $check_programacion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM programacion AS P WHERE P.control = {$x["CONTROL"]} AND P.frac IN(96, 100)")->result();
+                if (intval($check_programacion[0]->EXISTE) === 0) {
+                    print $x['CONTROL'] . " ESTE CONTROL NO HA SIDO PROGRAMADO POR INGENIERIA, REVISE.";
+                    exit(0);
+                }
             }
             $CONTROL_EXISTE = $this->db->query("SELECT COUNT(*) AS EXISTE "
                             . "FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} "
@@ -536,6 +550,41 @@ class AsignaPFTSACXC extends CI_Controller {
                         $this->db->set('fec2', Date('Y-m-d 00:00:00'))
                                 ->where('contped', $x['CONTROL'])
                                 ->update('avaprd');
+                        
+                        /*MUESTRAS*/
+//                        $control = $this->db->query("SELECT P.Control, P.Maquila FROM pedidox AS P WHERE P.stsavan NOT IN(3,33,4,40,42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = ".$x['CONTROL'])->result();
+//                        switch (intval($control[0]->Maquila)) {
+//                            case 98:
+//                                $this->db->set('EstatusProduccion', 'FOLEADO')
+//                                        ->set('DeptoProduccion', 40)
+//                                        ->where('Control', $x['CONTROL'])->update('controles');
+//                                
+//                                $this->db->set('stsavan', 4)
+//                                        ->set('EstatusProduccion', 'FOLEADO')
+//                                        ->set('DeptoProduccion', 40)
+//                                        ->where('Control', $x['CONTROL'])->update('pedidox');
+//                                
+//                                $this->db->set('fec3', Date('Y-m-d 00:00:00'))
+//                                        ->set('fec33', Date('Y-m-d 00:00:00'))
+//                                        ->set('fec4', Date('Y-m-d 00:00:00'))
+//                                        ->where('contped', $x['CONTROL'])
+//                                        ->update('avaprd');
+//
+//                                $this->db->insert('avance', array(
+//                                    'Control' => $x['CONTROL'],
+//                                    'FechaAProduccion' => Date('d/m/Y'),
+//                                    'Departamento' => 40,
+//                                    'DepartamentoT' => 'FOLEADO',
+//                                    'FechaAvance' => Date('d/m/Y'),
+//                                    'Estatus' => 'A',
+//                                    'Usuario' => $_SESSION["ID"],
+//                                    'Fecha' => Date('d/m/Y'),
+//                                    'Hora' => Date('h:i:s a'),
+//                                    'modulo' => 'ASPFTS',
+//                                    'Fraccion' => 60
+//                                ));
+//                                break;
+//                        }
                     }
                     /* FIN DE AVANCE DE CONTROL A CORTE */
 
@@ -669,12 +718,26 @@ class AsignaPFTSACXC extends CI_Controller {
     public function getInfoXControl() {
         try {
             $x = $this->input->get();
-            $PIFO = 100;
-            $FRACCION = 100;
+            $check_maquila = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = " . $x['CONTROL'] . " AND P.stsavan NOT IN(12,13,14)")->result();
+            if (intval($check_maquila[0]->Maquila) === 1) {
+                $PIFO = 100;
+                $FRACCION = 100;
+            }
+            if (intval($check_maquila[0]->Maquila) === 98) {
+                $PIFO = 96;
+                $FRACCION = 96;
+            }
             switch ($PIFO) {
+                case 96:
                 case 100:
-                    $FRACCION = 100;
-                    $PIFO = 1;
+                    if (intval($check_maquila[0]->Maquila) === 1) {
+                        $PIFO = 1;
+                        $FRACCION = 100;
+                    }
+                    if (intval($check_maquila[0]->Maquila) === 98) {
+                        $PIFO = 1;
+                        $FRACCION = 96;
+                    }
                     break;
                 case 99:
                     $FRACCION = 99;
