@@ -251,7 +251,7 @@
                                     <div class="card-body">-->
 
                     <div class="row">
-                        <div class="col-12"> 
+                        <div class="col-12">
                             <table id="tblPedidoDetalle" class="table table-hover table-sm"  style="width: 100% !important;">
                                 <thead>
                                     <tr>
@@ -306,7 +306,7 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div> 
+                        </div>
                     </div><!--ROW-->
                     <div class="row mt-3">
                         <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 font-weight-bold "></div>
@@ -314,7 +314,7 @@
                             <h4 class="font-weight-bold">Pares</h4>
                         </div>
                         <div id="ParesTotales" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center" style="color: #4caf50 !important;"></div>
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center"> 
+                        <div class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold" align="center">
                             <h4 class="font-weight-bold">Total</h4>
                         </div>
                         <div id="Total" class="col-12 col-sm-12 col-md-3 col-lg-1 col-xl-1 font-weight-bold text-nowrap" align="center"></div>
@@ -588,147 +588,160 @@
                 if (estilo) {
                     $.getJSON(master_url + 'onVerificaEstilo', {Estilo: estilo}).done(function (data) {
                         if (data.length > 0) {
-                            var liberado = parseInt(data[0].LIBERADO);
-                            if (liberado === 3) {
-                                swal('ERROR', 'EL ESTILO ESTA CANCELADO.', 'warning').then((value) => {
+                            var adjunto = data[0].ADJUNTO;
+
+                            if (adjunto !== '') {
+                                var liberado = parseInt(data[0].LIBERADO);
+                                if (liberado === 3) {
+                                    swal('ERROR', 'EL ESTILO ESTA CANCELADO.', 'warning').then((value) => {
+                                        pnlDatos.find("#sColor")[0].selectize.clear(true);
+                                        pnlDatos.find("#Color").val('');
+                                        pnlDatos.find("#Maquila").val('');
+                                        pnlDatos.find("#tblTallas").find('input').val('');
+                                        pnlDatos.find('#Estilo').focus().val('');
+                                    });
+                                } else {
+                                    nomEstilo = data[0].Estilo;
+                                    pnlDatos.find("#sColor")[0].selectize.clear(true);
+                                    pnlDatos.find("#sColor")[0].selectize.clearOptions();
+
+
+                                    //OBTENER COLORES POR ESTILO
+                                    $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo'); ?>', {Estilo: estilo}).done(function (data) {
+                                        $.each(data, function (k, v) {
+                                            pnlDatos.find("#sColor")[0].selectize.addOption({text: v.Color, value: v.Clave});
+                                        });
+                                        pnlDatos.find("#Color").focus();
+                                    }).fail(function (x, y, z) {
+                                        getError(x);
+                                    });
+
+                                    /*COMPROBAR QUE EL ESTILO TENGA DEFINIDA SU FICHA TECNICA Y LAS FRACCIONES X ESTILO*/
+                                    $.getJSON('<?php print base_url('Pedidos/onComprobarFichaTecnicaXEstilo'); ?>', {ESTILO: Estilo.val()})
+                                            .done(function (a) {
+                                                if (a.length > 0) {
+                                                    if (parseInt(a[0].TIENEFICHA) > 0) {
+                                                        $.getJSON('<?php print base_url('Pedidos/onComprobarFraccionesXEstilo'); ?>', {ESTILO: Estilo.val()})
+                                                                .done(function (a) {
+                                                                    if (a.length > 0) {
+                                                                        /*YOUR WIN*/
+                                                                    } else {
+                                                                        swal('ATENCIÓN', 'ESTE ESTILO NO TIENE FRACCIONES DEFINIDAS', 'warning').then((value) => {
+                                                                            Estilo.focus();
+                                                                            return;
+                                                                        });
+                                                                    }
+                                                                }).fail(function (x) {
+                                                            getError(x);
+                                                        }).always(function () {
+                                                            onCloseOverlay();
+                                                        });
+                                                    } else {
+                                                        swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA UNA FICHA TECNICA', 'warning').then((value) => {
+                                                            Estilo.focus();
+                                                        });
+                                                    }
+                                                }
+                                            }).fail(function (x) {
+                                        getError(x);
+                                    }).always(function () {
+                                        onCloseOverlay();
+                                    });
+
+                                    //OBTENER MAQUILA/SERIE
+                                    $.getJSON(master_url + 'getMaquilaSerieXEstilo', {Estilo: estilo}).done(function (data) {
+                                        if (data.length > 0) {
+                                            var dtm = data[0];
+                                            pnlDatos.find("#Serie").val(dtm.Serie);
+                                            pnlDatos.find("#Maquila").val(dtm.Maquila);
+                                            onComprobarSemanaMaquila(dtm.Maquila, pnlDatos.find("#Semana").val());
+                                            //MOSTRAR FOTO
+                                            if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
+                                                var ext = getExt(dtm.Foto);
+                                                if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                                    $.notify({
+                                                        // options
+                                                        icon: base_url + dtm.Foto
+                                                    }, {
+                                                        // settings
+                                                        placement: _placement_,
+                                                        animate: _animate_,
+                                                        icon_type: 'img',
+                                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                                                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                                                '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                                                                '</div>'
+                                                    });
+                                                }
+                                                if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                                    $.notify({
+                                                        // options
+                                                        icon: base_url + dtm.Foto
+                                                    }, {
+                                                        // settings
+                                                        placement: _placement_,
+                                                        animate: _animate_,
+                                                        icon_type: 'img',
+                                                        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                                                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                                                '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                                                                '</div>'
+                                                    });
+                                                }
+                                            } else {
+                                                $.notify({
+                                                    // options
+                                                    icon: base_url + dtm.Foto
+                                                }, {
+                                                    // settings
+                                                    placement: _placement_,
+                                                    animate: _animate_,
+                                                    icon_type: 'img',
+                                                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                                                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
+                                                            '</div>'
+                                                });
+                                            }
+                                            //SET TALLAS
+                                            console.log("* * * * * *  dtm ANTES DEL DELETE * * * * * * ");
+                                            console.log(dtm);
+                                            console.log("* * * * * * * * * * * * * * * * * * * * * * * ");
+                                            delete dtm.Maquila;
+                                            delete dtm.Serie;
+                                            delete dtm.Foto;
+                                            console.log("* * * * * *  dtm DESPUES DEL DELETE * * * * * * ");
+                                            console.log(dtm);
+                                            console.log("* * * * * * * * * * * * * * * * * * * * * * * ");
+                                            $.each(data[0], function (k, v) {
+                                                var Can = k.replace("T", "C");
+                                                var rCantidades = pnlDatos.find("#rCantidades"),
+                                                        tblTallas = pnlDatos.find('#tblTallas');
+                                                if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
+                                                    onDisable(rCantidades.find("#" + Can));
+                                                } else {
+                                                    onEnable(rCantidades.find("#" + Can));
+                                                    tblTallas.find("[name='" + k + "']").val(v);
+                                                    tblTallas.find("span." + k).text(v);
+                                                }
+                                            });
+                                        } else {
+                                            pnlDatos.find('#tblTallas').find("input").val("");
+                                            pnlDatos.find('#rCantidades').find("input").prop('disabled', true);
+                                        }
+                                    }).fail(function (x, y, z) {
+                                        getError(x);
+                                    });
+                                }
+                            } else {
+                                swal('ESTILO BLOQUEADO', 'EL ESTILO NO CUENTA CON LA CARTA DE LIBERACIÓN. \n\n Revisar detalles con el depto. de DISEÑO', 'warning').then((value) => {
                                     pnlDatos.find("#sColor")[0].selectize.clear(true);
                                     pnlDatos.find("#Color").val('');
                                     pnlDatos.find("#Maquila").val('');
                                     pnlDatos.find("#tblTallas").find('input').val('');
                                     pnlDatos.find('#Estilo').focus().val('');
                                 });
-                            } else {
-                                nomEstilo = data[0].Estilo;
-                                pnlDatos.find("#sColor")[0].selectize.clear(true);
-                                pnlDatos.find("#sColor")[0].selectize.clearOptions();
 
-
-                                //OBTENER COLORES POR ESTILO
-                                $.getJSON('<?php print base_url('Pedidos/getColoresXEstilo'); ?>', {Estilo: estilo}).done(function (data) {
-                                    $.each(data, function (k, v) {
-                                        pnlDatos.find("#sColor")[0].selectize.addOption({text: v.Color, value: v.Clave});
-                                    });
-                                    pnlDatos.find("#Color").focus();
-                                }).fail(function (x, y, z) {
-                                    getError(x);
-                                });
-
-                                /*COMPROBAR QUE EL ESTILO TENGA DEFINIDA SU FICHA TECNICA Y LAS FRACCIONES X ESTILO*/
-                                $.getJSON('<?php print base_url('Pedidos/onComprobarFichaTecnicaXEstilo'); ?>', {ESTILO: Estilo.val()})
-                                        .done(function (a) {
-                                            if (a.length > 0) {
-                                                if (parseInt(a[0].TIENEFICHA) > 0) {
-                                                    $.getJSON('<?php print base_url('Pedidos/onComprobarFraccionesXEstilo'); ?>', {ESTILO: Estilo.val()})
-                                                            .done(function (a) {
-                                                                if (a.length > 0) {
-                                                                    /*YOUR WIN*/
-                                                                } else {
-                                                                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE FRACCIONES DEFINIDAS', 'warning').then((value) => {
-                                                                        Estilo.focus();
-                                                                        return;
-                                                                    });
-                                                                }
-                                                            }).fail(function (x) {
-                                                        getError(x);
-                                                    }).always(function () {
-                                                        onCloseOverlay();
-                                                    });
-                                                } else {
-                                                    swal('ATENCIÓN', 'ESTE ESTILO NO TIENE DEFINIDA UNA FICHA TECNICA', 'warning').then((value) => {
-                                                        Estilo.focus();
-                                                    });
-                                                }
-                                            }
-                                        }).fail(function (x) {
-                                    getError(x);
-                                }).always(function () {
-                                    onCloseOverlay();
-                                });
-
-                                //OBTENER MAQUILA/SERIE
-                                $.getJSON(master_url + 'getMaquilaSerieXEstilo', {Estilo: estilo}).done(function (data) {
-                                    if (data.length > 0) {
-                                        var dtm = data[0];
-                                        pnlDatos.find("#Serie").val(dtm.Serie);
-                                        pnlDatos.find("#Maquila").val(dtm.Maquila);
-                                        onComprobarSemanaMaquila(dtm.Maquila, pnlDatos.find("#Semana").val());
-                                        //MOSTRAR FOTO
-                                        if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
-                                            var ext = getExt(dtm.Foto);
-                                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
-                                                $.notify({
-                                                    // options
-                                                    icon: base_url + dtm.Foto
-                                                }, {
-                                                    // settings
-                                                    placement: _placement_,
-                                                    animate: _animate_,
-                                                    icon_type: 'img',
-                                                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
-                                                            '</div>'
-                                                });
-                                            }
-                                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
-                                                $.notify({
-                                                    // options
-                                                    icon: base_url + dtm.Foto
-                                                }, {
-                                                    // settings
-                                                    placement: _placement_,
-                                                    animate: _animate_,
-                                                    icon_type: 'img',
-                                                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                                            '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
-                                                            '</div>'
-                                                });
-                                            }
-                                        } else {
-                                            $.notify({
-                                                // options
-                                                icon: base_url + dtm.Foto
-                                            }, {
-                                                // settings
-                                                placement: _placement_,
-                                                animate: _animate_,
-                                                icon_type: 'img',
-                                                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                                                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                                                        '<img  data-notify="icon" class="col-12 img-circle pull-left">' +
-                                                        '</div>'
-                                            });
-                                        }
-                                        //SET TALLAS
-                                        console.log("* * * * * *  dtm ANTES DEL DELETE * * * * * * ");
-                                        console.log(dtm);
-                                        console.log("* * * * * * * * * * * * * * * * * * * * * * * ");
-                                        delete dtm.Maquila;
-                                        delete dtm.Serie;
-                                        delete dtm.Foto;
-                                        console.log("* * * * * *  dtm DESPUES DEL DELETE * * * * * * ");
-                                        console.log(dtm);
-                                        console.log("* * * * * * * * * * * * * * * * * * * * * * * ");
-                                        $.each(data[0], function (k, v) {
-                                            var Can = k.replace("T", "C");
-                                            var rCantidades = pnlDatos.find("#rCantidades"),
-                                                    tblTallas = pnlDatos.find('#tblTallas');
-                                            if (v === null || v === 'undefined' || v === '' || v === undefined || parseInt(v) === 0) {
-                                                onDisable(rCantidades.find("#" + Can));
-                                            } else {
-                                                onEnable(rCantidades.find("#" + Can));
-                                                tblTallas.find("[name='" + k + "']").val(v);
-                                                tblTallas.find("span." + k).text(v);
-                                            }
-                                        });
-                                    } else {
-                                        pnlDatos.find('#tblTallas').find("input").val("");
-                                        pnlDatos.find('#rCantidades').find("input").prop('disabled', true);
-                                    }
-                                }).fail(function (x, y, z) {
-                                    getError(x);
-                                });
                             }
 
                         } else {
@@ -1618,10 +1631,10 @@
         border-bottom-color: #007bff !important;
         background-color: #fff !important;
         color: #000 !important;
-    } 
+    }
     .card input{
         border-color: #000;
-    } 
+    }
     .selectize-input {
         border: 1px solid #000000;
     }

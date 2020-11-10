@@ -156,17 +156,14 @@
     var nuevo = true;
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
-        pnlTablero.find("#Maq").focus();
-        pnlTablero.find('.NotSelectize').selectize({
-            hideSelected: false,
-            openOnFocus: false
-        });
+        getRecords('0', '0');
+        getMatEntregado('', '', '', '');
+        init();
         validacionSelectPorContenedor(pnlTablero);
         setFocusSelectToSelectOnChange('#TipoMov', '#Departamento', pnlTablero);
         setFocusSelectToSelectOnChange('#Departamento', '#sArticulo', pnlTablero);
         setFocusSelectToInputOnChange('#sArticulo', '#Cantidad', pnlTablero);
-        getRecords('0', '0');
-        getMatEntregado('', '', '', '');
+
         pnlTablero.find('#Ano').keypress(function (e) {
             if (e.keyCode === 13) {
                 if (parseInt($(this).val()) < 2015 || parseInt($(this).val()) > 2025 || $(this).val() === '') {
@@ -469,22 +466,7 @@
             }
         });
         btnNuevo.click(function () {
-            nuevo = true;
-            Movimientos.clear().draw();
-            MatEntregado.clear().draw();
-            pnlTablero.find("input").val("");
-            $.each(pnlTablero.find("select"), function (k, v) {
-                pnlTablero.find("select")[k].selectize.clear(true);
-            });
-            pnlTablero.find('#Encabezado').find('input, button').removeClass('disabledForms');
-            pnlTablero.find("#TipoMov")[0].selectize.enable();
-            pnlTablero.find("#sArticulo")[0].selectize.disable();
-            pnlTablero.find("#Articulo").attr('readonly', true);
-            pnlTablero.find("#FechaMov").val(getToday());
-            pnlTablero.find("#Maq").focus();
-            depto1 = '';
-            depto2 = '';
-            depto3 = '';
+            init();
         });
         btnTerminarCaptura.click(function () {
             var docMov = pnlTablero.find("#DocMov").val();
@@ -522,6 +504,31 @@
             });
         });
     });
+
+    function init() {
+        pnlTablero.find("#Maq").focus();
+        pnlTablero.find('.NotSelectize').selectize({
+            hideSelected: false,
+            openOnFocus: false
+        });
+        nuevo = true;
+        Movimientos.clear().draw();
+        MatEntregado.clear().draw();
+        pnlTablero.find("input").val("");
+        $.each(pnlTablero.find("select"), function (k, v) {
+            pnlTablero.find("select")[k].selectize.clear(true);
+        });
+        pnlTablero.find('#Encabezado').find('input, button').removeClass('disabledForms');
+        pnlTablero.find("#TipoMov")[0].selectize.enable();
+        pnlTablero.find("#sArticulo")[0].selectize.disable();
+        pnlTablero.find("#Articulo").attr('readonly', true);
+        pnlTablero.find("#FechaMov").val(getToday());
+        pnlTablero.find("#Maq").focus();
+        depto1 = '';
+        depto2 = '';
+        depto3 = '';
+
+    }
 
     function getMatEntregado(ano, maq, sem, art) {
         temp = 0;

@@ -42,7 +42,9 @@ class SalidasAlmacenMP extends CI_Controller {
         try {
             $Articulo = $this->input->get('Articulo');
             $depto = $this->input->get('Departamento');
-            print json_encode($this->db->query("select clave from articulos where clave = '$Articulo ' and departamento = '$depto' ")->result());
+            print json_encode($this->db->query("select clave from articulos where "
+                                    . " (estatus = 'INACTIVO' AND Existencia > 0) OR (estatus = 'ACTIVO') "
+                                    . " and clave = '$Articulo ' and departamento = '$depto' ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

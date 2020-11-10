@@ -48,10 +48,12 @@ class EntradasAlmacenMP_model extends CI_Model {
 
     public function getArticulos() {
         try {
-            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Articulo")
-                            ->from("articulos AS D")
-                            ->order_by('Articulo', 'ASC')
-                            ->get()->result();
+            return $this->db->query("SELECT CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Articulo
+                                    FROM articulos D WHERE
+                                    (D.estatus = 'INACTIVO' AND D.Existencia > 0)
+                                    OR
+                                    (D.estatus = 'ACTIVO')
+                                    ORDER BY Articulo ASC ")->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -265,6 +265,46 @@ class Estilos extends CI_Controller {
                 );
                 $this->trabajo_model->onModificar($ID, $DATA);
             }
+            //ADJUNTO
+            $AdjuntoArch = $this->input->post('Adjunto');
+            if (empty($AdjuntoArch)) {
+                if ($_FILES["Adjunto"]["tmp_name"] !== "") {
+                    $URL_DOC = 'uploads/AdjuntosEstilos';
+                    $master_url = $URL_DOC . '/';
+                    if (isset($_FILES["Adjunto"]["name"])) {
+                        if (!file_exists($URL_DOC)) {
+                            mkdir($URL_DOC, 0777, true);
+                        }
+                        if (!file_exists(utf8_decode($URL_DOC))) {
+                            mkdir(utf8_decode($URL_DOC), 0777, true);
+                        }
+                        if (move_uploaded_file($_FILES["Adjunto"]["tmp_name"], $URL_DOC . '/' . utf8_decode($_FILES["Adjunto"]["name"]))) {
+                            $img = $master_url . $_FILES["Adjunto"]["name"];
+                            $this->load->library('image_lib');
+                            $config['image_library'] = 'gd2';
+                            $config['source_image'] = $img;
+                            $config['maintain_ratio'] = true;
+                            $config['width'] = 800;
+                            $this->image_lib->initialize($config);
+                            $this->image_lib->resize();
+                            $DATA = array(
+                                'Adjunto' => ($img),
+                            );
+                            $this->Estilos_model->onModificar($ID, $DATA);
+                        } else {
+                            $DATA = array(
+                                'Adjunto' => (null),
+                            );
+                            $this->Estilos_model->onModificar($ID, $DATA);
+                        }
+                    }
+                }
+            } else {
+                $DATA = array(
+                    'Adjunto' => (null),
+                );
+                $this->trabajo_model->onModificar($ID, $DATA);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -346,6 +386,46 @@ class Estilos extends CI_Controller {
                     'Foto' => (null),
                 );
                 $this->Estilos_model->onModificar($ID, $DATA);
+            }
+            //ADJUNTO
+            $AdjuntoArch = $this->input->post('Adjunto');
+            if (empty($AdjuntoArch)) {
+                if ($_FILES["Adjunto"]["tmp_name"] !== "") {
+                    $URL_DOC = 'uploads/AdjuntosEstilos';
+                    $master_url = $URL_DOC . '/';
+                    if (isset($_FILES["Adjunto"]["name"])) {
+                        if (!file_exists($URL_DOC)) {
+                            mkdir($URL_DOC, 0777, true);
+                        }
+                        if (!file_exists(utf8_decode($URL_DOC))) {
+                            mkdir(utf8_decode($URL_DOC), 0777, true);
+                        }
+                        if (move_uploaded_file($_FILES["Adjunto"]["tmp_name"], $URL_DOC . '/' . utf8_decode($_FILES["Adjunto"]["name"]))) {
+                            $img = $master_url . $_FILES["Adjunto"]["name"];
+                            $this->load->library('image_lib');
+                            $config['image_library'] = 'gd2';
+                            $config['source_image'] = $img;
+                            $config['maintain_ratio'] = true;
+                            $config['width'] = 800;
+                            $this->image_lib->initialize($config);
+                            $this->image_lib->resize();
+                            $DATA = array(
+                                'Adjunto' => ($img),
+                            );
+                            $this->Estilos_model->onModificar($ID, $DATA);
+                        } else {
+                            $DATA = array(
+                                'Adjunto' => (null),
+                            );
+                            $this->Estilos_model->onModificar($ID, $DATA);
+                        }
+                    }
+                }
+            } else {
+                $DATA = array(
+                    'Adjunto' => (null),
+                );
+                $this->trabajo_model->onModificar($ID, $DATA);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

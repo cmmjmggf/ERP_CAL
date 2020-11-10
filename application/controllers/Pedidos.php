@@ -73,7 +73,8 @@ class Pedidos extends CI_Controller {
         try {
             $x = $this->input->get();
             $ESTILO = $x['Estilo'];
-            print json_encode($this->db->query("SELECT E.Descripcion AS Estilo, E.Liberado AS LIBERADO FROM estilos AS E  WHERE E.Estatus = 'ACTIVO' and E.clave = '$ESTILO'")->result());
+            print json_encode($this->db->query("SELECT E.Descripcion AS Estilo, E.Liberado AS LIBERADO, ifnull(E.Adjunto,'') as ADJUNTO "
+                                    . " FROM estilos AS E  WHERE E.Estatus = 'ACTIVO' and E.clave = '$ESTILO'")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -401,8 +402,8 @@ class Pedidos extends CI_Controller {
             );
             $this->db->insert('pedidox', $p);
 
-            $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
-                INNER JOIN colores AS C ON E.Clave = C.Estilo 
+            $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E
+                INNER JOIN colores AS C ON E.Clave = C.Estilo
                 WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};")->result();
 
             $this->db->set("ColorT", $COLOR_DESCRIPCION[0]->DESCRIPCION_COLOR)
@@ -545,33 +546,33 @@ class Pedidos extends CI_Controller {
             $this->db->trans_begin();
             $dt = date_parse($x['FECHA_ENTREGA']);
             $p = array(
-            "Clave" => $x['PEDIDO'], "Cliente" => $x['CLIENTE'],
-            "Agente" => $x['AGENTE'], "FechaPedido" => $x['FECHA_PEDIDO'],
-            "FechaRecepcion" => $x['FECHA_RECEPCION'], "Usuario" => $_SESSION["USERNAME"],
-            "Estilo" => $x['ESTILO'], "Color" => $x['COLOR'],
-            "FechaEntrega" => $x['FECHA_ENTREGA'], "Maquila" => $x['MAQUILA'],
-            "Semana" => $x['SEMANA'], "Ano" =>$dt['year'],
-            "Recio" => $x['RECIO'], "Precio" => $x['PRECIO'],
-            "Observacion" => $x['OBSERVACION'],
-            "ObservacionDetalle" => $x['OBSERVACION_DETALLE'],
-            "Serie" => $x['SERIE'], "Control" => 0,
-            "C1" => $x['C1'], "C2" => $x['C2'], "C3" => $x['C3'], "C4" => $x['C4'],
-            "C5" => $x['C5'], "C6" => $x['C6'], "C7" => $x['C7'], "C8" => $x['C8'],
-            "C9" => $x['C9'], "C10" => $x['C10'], "C11" => $x['C11'], "C12" => $x['C12'],
-            "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
-            "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
-            "C21" => $x['C21'], "C22" => $x['C22'],
-            "Estatus" => 'A', "Registro" => Date('Y-m-d 00:00:00'), "Recibido" => $x['RECIBIDO'],
-            "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
-            "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
-            "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
-            "Empleado" => NULL, "Tiempo" => NULL, "EstatusProduccion" => NULL,
-            "DeptoProduccion" => NULL
+                "Clave" => $x['PEDIDO'], "Cliente" => $x['CLIENTE'],
+                "Agente" => $x['AGENTE'], "FechaPedido" => $x['FECHA_PEDIDO'],
+                "FechaRecepcion" => $x['FECHA_RECEPCION'], "Usuario" => $_SESSION["USERNAME"],
+                "Estilo" => $x['ESTILO'], "Color" => $x['COLOR'],
+                "FechaEntrega" => $x['FECHA_ENTREGA'], "Maquila" => $x['MAQUILA'],
+                "Semana" => $x['SEMANA'], "Ano" => $dt['year'],
+                "Recio" => $x['RECIO'], "Precio" => $x['PRECIO'],
+                "Observacion" => $x['OBSERVACION'],
+                "ObservacionDetalle" => $x['OBSERVACION_DETALLE'],
+                "Serie" => $x['SERIE'], "Control" => 0,
+                "C1" => $x['C1'], "C2" => $x['C2'], "C3" => $x['C3'], "C4" => $x['C4'],
+                "C5" => $x['C5'], "C6" => $x['C6'], "C7" => $x['C7'], "C8" => $x['C8'],
+                "C9" => $x['C9'], "C10" => $x['C10'], "C11" => $x['C11'], "C12" => $x['C12'],
+                "C13" => $x['C13'], "C14" => $x['C14'], "C15" => $x['C15'], "C16" => $x['C16'],
+                "C17" => $x['C17'], "C18" => $x['C18'], "C19" => $x['C19'], "C20" => $x['C20'],
+                "C21" => $x['C21'], "C22" => $x['C22'],
+                "Estatus" => 'A', "Registro" => Date('Y-m-d 00:00:00'), "Recibido" => $x['RECIBIDO'],
+                "Pares" => $x['PARES'], "ParesFacturados" => 0, "EstiloT" => $x['ESTILOT'],
+                "ColorT" => $x['COLORT'], "DiaProg" => 0, "SemProg" => 0,
+                "AnioProg" => 0, "FechaProg" => NULL, "HoraProg" => NULL,
+                "Empleado" => NULL, "Tiempo" => NULL, "EstatusProduccion" => NULL,
+                "DeptoProduccion" => NULL
             );
             $this->db->insert('pedidox', $p);
 
-            $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E 
-                INNER JOIN colores AS C ON E.Clave = C.Estilo 
+            $COLOR_DESCRIPCION = $this->db->query("SELECT C.Descripcion AS DESCRIPCION_COLOR FROM estilos AS E
+                INNER JOIN colores AS C ON E.Clave = C.Estilo
                 WHERE E.Clave = '{$x['ESTILO']}' AND C.Clave = {$x['COLOR']};")->result();
 
             $this->db->set("ColorT", $COLOR_DESCRIPCION[0]->DESCRIPCION_COLOR)

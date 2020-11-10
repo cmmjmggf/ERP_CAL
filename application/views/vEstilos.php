@@ -50,295 +50,321 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                             <span class="fa fa-arrow-left" ></span> REGRESAR
                         </button>
-
+                        <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
+                            <i class="fa fa-save"></i>
+                        </button>
                     </div>
                 </div>
                 <hr>
 
-                <div class="row">
-                    <!--DATOS DEL ESTILO-->
-                    <div class="col-12 col-md-8 col-lg-8">
-                        <!--PRIMER RENGLON-->
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#estilo">Estilo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#adjunto">Hoja de Liberación</a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade show active" id="estilo">
                         <div class="row">
-                            <div class="d-none">
-                                <input type="text"  name="ID" class="form-control form-control-sm" >
-                            </div>
-                            <div class="col-12 mt-2">
-                                <legend class="badge badge-info"> INFORMACIÓN GENERAL DEL ESTILO</legend>
-                            </div>
-                            <div class="col-6 col-sm-2 col-md-2 col-lg-4 col-xl-3">
-                                <label for="Clave" >Clave*</label>
-                                <input type="text" class="form-control form-control-sm" id="Clave" name="Clave" required >
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Descripcion" >Descripción*</label>
-                                <input type="text" id="Descripcion" name="Descripcion" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="col-6  col-sm-2 col-md-2 col-lg-2 col-xl-3">
-                                <label for="" >F. Alta</label>
-                                <input type="text" id="FechaAlta" name="FechaAlta" class="form-control form-control-sm date notEnter required" required="" >
-                            </div>
-                            <div class="col-6  col-sm-2 col-md-2 col-lg-2 col-xl-3" id="dFechaBaja">
-                                <label for="" >F. Baja</label>
-                                <input type="text" id="FechaBaja" name="FechaBaja" class="form-control form-control-sm date notEnter" >
-                            </div>
-                        </div>
-                        <!--SEGUNDO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="" >Linea*</label>
-                                <select id="Linea" name="Linea" class="form-control form-control-sm required" >
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="" >Horma*</label>
-                                <select id="Horma" name="Horma" class="form-control form-control-sm required" >
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="" >Genero*</label>
-                                <select id="Genero" name="Genero" class="form-control form-control-sm required" >
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--TERCER RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="" >Dificultad</label>
-                                <select id="GdoDif" name="GdoDif" class="form-control form-control-sm" >
-                                    <option value=""></option>
-                                    <option value="1">1 NORMAL</option>
-                                    <option value="2">2 DIFÍCIL</option>
-                                    <option value="3">3 EXTREMO</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Serie">Serie*</label>
-                                <select class="form-control form-control-sm required" id="Serie" name="Serie" required="">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="" >Corrida</label>
-                                <select id="Corrida" name="Corrida" class="form-control form-control-sm" >
-                                    <option value=""></option>
-                                    <option value="1">1-17/21 &frac12; Nn </option>
-                                    <option value="2">2-22/27 Dn</option>
-                                    <option value="3">3-25/31 Hn</option>
-                                    <option value="4">4-17/21 &frac12; Ne</option>
-                                    <option value="5">5-5/11 De</option>
-                                    <option value="6">6-6/13 He</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--CUARTO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="ConsumoPiel">C. Piel</label>
-                                <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" placeholder="" id="ConsumoPiel" name="ConsumoPiel">
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="ConsumoForro">C. Forro</label>
-                                <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" placeholder="" id="ConsumoForro" name="ConsumoForro">
-                            </div>
-                        </div>
-                        <!--QUINTO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Maquila">Maquila*</label>
-                                <select class="form-control form-control-sm required" id="Maquila" name="Maquila" required="">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Liberado">Liberado Para:</label>
-                                <select class="form-control form-control-sm" id="Liberado"  name="Liberado">
-                                    <option value=""></option>
-                                    <option value="1">1 DISEÑO</option>
-                                    <option value="2">2 PRODUCCIÓN</option>
-                                    <option value="3">3 CANCELADO</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Costos">Costos*</label>
-                                <select class="form-control form-control-sm required"  id="Costos" name="Costos">
-                                    <option value=""></option>
-                                    <option value="0">0 SI</option>
-                                    <option value="1">1 NO</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--SEXTO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Herramental">Herramental</label>
-                                <select class="form-control form-control-sm" id="Herramental"  name="Herramental">
-                                    <option value=""></option>
-                                    <option value="1">1 PATRÓN BASE</option>
-                                    <option value="2">2 CARTÓN Y TESEO</option>
-                                    <option value="3">3 TESEO</option>
-                                    <option value="4">4 SUAJE</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-6 col-lg-6">
-                                <label for="Observaciones" > <span class="badge badge-warning">(Observaciones que irán en la orden de producción)</span></label>
-                                <input type="text" id="Observaciones" name="Observaciones" class="form-control form-control-sm">
-                            </div>
-                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                <label for="Ano" >Año*</label>
-                                <input type="text" id="Ano" onchange="yearValidation(this.value, event, this)"
-                                       name="Ano" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="" required="">
-                            </div>
-                        </div>
-                        <!--SEPTIMO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="PuntoCentra">Punto Central</label>
-                                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" id="PuntoCentral" name="PuntoCentral">
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="" >Temporada*</label>
-                                <select id="Temporada" name="Temporada" class="form-control form-control-sm required" >
-                                    <option value=""></option>
-                                </select>
+                            <!--DATOS DEL ESTILO-->
+                            <div class="col-12 col-md-8 col-lg-8">
+                                <!--PRIMER RENGLON-->
+                                <div class="row">
+                                    <div class="d-none">
+                                        <input type="text"  name="ID" class="form-control form-control-sm" >
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <legend class="badge badge-info"> INFORMACIÓN GENERAL DEL ESTILO</legend>
+                                    </div>
+                                    <div class="col-6 col-sm-2 col-md-2 col-lg-4 col-xl-3">
+                                        <label for="Clave" >Clave*</label>
+                                        <input type="text" class="form-control form-control-sm" id="Clave" name="Clave" required >
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Descripcion" >Descripción*</label>
+                                        <input type="text" id="Descripcion" name="Descripcion" class="form-control form-control-sm" required>
+                                    </div>
+                                    <div class="col-6  col-sm-2 col-md-2 col-lg-2 col-xl-3">
+                                        <label for="" >F. Alta</label>
+                                        <input type="text" id="FechaAlta" name="FechaAlta" class="form-control form-control-sm date notEnter required" required="" >
+                                    </div>
+                                    <div class="col-6  col-sm-2 col-md-2 col-lg-2 col-xl-3" id="dFechaBaja">
+                                        <label for="" >F. Baja</label>
+                                        <input type="text" id="FechaBaja" name="FechaBaja" class="form-control form-control-sm date notEnter" >
+                                    </div>
+                                </div>
+                                <!--SEGUNDO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="" >Linea*</label>
+                                        <select id="Linea" name="Linea" class="form-control form-control-sm required" >
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="" >Horma*</label>
+                                        <select id="Horma" name="Horma" class="form-control form-control-sm required" >
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="" >Genero*</label>
+                                        <select id="Genero" name="Genero" class="form-control form-control-sm required" >
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--TERCER RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="" >Dificultad</label>
+                                        <select id="GdoDif" name="GdoDif" class="form-control form-control-sm" >
+                                            <option value=""></option>
+                                            <option value="1">1 NORMAL</option>
+                                            <option value="2">2 DIFÍCIL</option>
+                                            <option value="3">3 EXTREMO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Serie">Serie*</label>
+                                        <select class="form-control form-control-sm required" id="Serie" name="Serie" required="">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="" >Corrida</label>
+                                        <select id="Corrida" name="Corrida" class="form-control form-control-sm" >
+                                            <option value=""></option>
+                                            <option value="1">1-17/21 &frac12; Nn </option>
+                                            <option value="2">2-22/27 Dn</option>
+                                            <option value="3">3-25/31 Hn</option>
+                                            <option value="4">4-17/21 &frac12; Ne</option>
+                                            <option value="5">5-5/11 De</option>
+                                            <option value="6">6-6/13 He</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--CUARTO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="ConsumoPiel">C. Piel</label>
+                                        <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" placeholder="" id="ConsumoPiel" name="ConsumoPiel">
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="ConsumoForro">C. Forro</label>
+                                        <input type="text" maxlength="3" class="form-control form-control-sm numbersOnly" placeholder="" id="ConsumoForro" name="ConsumoForro">
+                                    </div>
+                                </div>
+                                <!--QUINTO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Maquila">Maquila*</label>
+                                        <select class="form-control form-control-sm required" id="Maquila" name="Maquila" required="">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Liberado">Liberado Para:</label>
+                                        <select class="form-control form-control-sm" id="Liberado"  name="Liberado">
+                                            <option value=""></option>
+                                            <option value="1">1 DISEÑO</option>
+                                            <option value="2">2 PRODUCCIÓN</option>
+                                            <option value="3">3 CANCELADO</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Costos">Costos*</label>
+                                        <select class="form-control form-control-sm required"  id="Costos" name="Costos">
+                                            <option value=""></option>
+                                            <option value="0">0 SI</option>
+                                            <option value="1">1 NO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--SEXTO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Herramental">Herramental</label>
+                                        <select class="form-control form-control-sm" id="Herramental"  name="Herramental">
+                                            <option value=""></option>
+                                            <option value="1">1 PATRÓN BASE</option>
+                                            <option value="2">2 CARTÓN Y TESEO</option>
+                                            <option value="3">3 TESEO</option>
+                                            <option value="4">4 SUAJE</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+                                        <label for="Observaciones" > <span class="badge badge-warning">(Observaciones que irán en la orden de producción)</span></label>
+                                        <input type="text" id="Observaciones" name="Observaciones" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                        <label for="Ano" >Año*</label>
+                                        <input type="text" id="Ano" onchange="yearValidation(this.value, event, this)"
+                                               name="Ano" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="" required="">
+                                    </div>
+                                </div>
+                                <!--SEPTIMO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="PuntoCentra">Punto Central</label>
+                                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="4" id="PuntoCentral" name="PuntoCentral">
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="" >Temporada*</label>
+                                        <select id="Temporada" name="Temporada" class="form-control form-control-sm required" >
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="EstatusEstilo">Estatus del Estilo*</label>
+                                        <select class="form-control form-control-sm required" id="EstatusEstilo"  name="EstatusEstilo" required="">
+                                            <option value=""></option>
+                                            <option value="0">0 PRODUCCIÓN</option>
+                                            <option value="1">1 PROTOTIPO</option>
+                                            <option value="2">2 MUESTRA</option>
+                                            <option value="3">3 EXTENCIÓN</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="TipoConstruccion">Tipo Construcción</label>
+                                        <select class="form-control form-control-sm"  id="TipoConstruccion" name="TipoConstruccion">
+                                            <option value=""></option>
+                                            <option value="1">1 OPANKA</option>
+                                            <option value="2">2 MONTADO/PEGADO</option>
+                                            <option value="3">3 OPANKA/PEGADO</option>
+                                            <option value="4">4 CIUCANI/CALZADO</option>
+                                            <option value="5">5 OPANKA/FOOTBED</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--OCTAVO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="Observaciones" ><span class="badge badge-warning">Maquila o Plantilla</span> 1 </label>
+                                        <select class="form-control form-control-sm" id="MaqPlant1"  name="MaqPlant1">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="">2</label>
+                                        <select class="form-control form-control-sm" id="MaqPlant2"  name="MaqPlant2">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="">3</label>
+                                        <select class="form-control form-control-sm" id="MaqPlant3"  name="MaqPlant3">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
+                                        <label for="">4</label>
+                                        <select class="form-control form-control-sm"  id="MaqPlant4" name="MaqPlant4">
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--NOVENO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 mt-2">
+                                        <legend class="badge badge-danger"> INFORMACIÓN PARA COSTOS DE MANO DE OBRA</legend>
+                                    </div>
+
+                                    <div class="col-6 col-md-2 col-sm-2">
+                                        <label for="">Pzas Corte</label>
+                                        <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="PIEZAS CORTE" id="PiezasCorte" name="PiezasCorte">
+                                    </div>
+                                    <div class="col-6 col-md-2 col-sm-2">
+                                        <label for="">Glp Corte P.</label>
+                                        <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="GOLPES CORTE PIEL"  name="GolpesCortePiel">
+                                    </div>
+                                    <div class="col-6 col-md-2 col-sm-2">
+                                        <label for="">Glp Corte F.</label>
+                                        <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="GOLPES CORTE FORRO"  name="GolpesCorteForro">
+                                    </div>
+                                    <div class="col-6 col-md-2 col-sm-2">
+                                        <label for="">Cm. Pesp.</label>
+                                        <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="CM PESPUNTE"  name="CmPespunte">
+                                    </div>
+                                    <div class="col-6 col-md-2 col-sm-2">
+                                        <label for="">Cm. Reb.</label>
+                                        <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="CM REBAJADO"  name="CmRebajado">
+                                    </div>
+                                </div>
+
+                                <!--DECIMO RENGLON-->
+                                <div class="row">
+                                    <div class="col-12 mt-2">
+                                        <legend class="badge badge-success"> DATOS ESTADÍSTICOS</legend>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-5">
+                                        <label for="" >Diseñado por*</label>
+                                        <select id="DisenadoPor" name="DisenadoPor" class="form-control form-control-sm required" >
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-5">
+                                        <label for="" >Modelado por*</label>
+                                        <select id="ModeladoPor" name="ModeladoPor" class="form-control form-control-sm required" >
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col-6 col-md-6 ">
+                                        <h6 class="text-danger">Los campos con * son obligatorios</h6>
+                                    </div>
+
+                                </div>
                             </div>
 
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="EstatusEstilo">Estatus del Estilo*</label>
-                                <select class="form-control form-control-sm required" id="EstatusEstilo"  name="EstatusEstilo" required="">
-                                    <option value=""></option>
-                                    <option value="0">0 PRODUCCIÓN</option>
-                                    <option value="1">1 PROTOTIPO</option>
-                                    <option value="2">2 MUESTRA</option>
-                                    <option value="3">3 EXTENCIÓN</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="TipoConstruccion">Tipo Construcción</label>
-                                <select class="form-control form-control-sm"  id="TipoConstruccion" name="TipoConstruccion">
-                                    <option value=""></option>
-                                    <option value="1">1 OPANKA</option>
-                                    <option value="2">2 MONTADO/PEGADO</option>
-                                    <option value="3">3 OPANKA/PEGADO</option>
-                                    <option value="4">4 CIUCANI/CALZADO</option>
-                                    <option value="5">5 OPANKA/FOOTBED</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--OCTAVO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="Observaciones" ><span class="badge badge-warning">Maquila o Plantilla</span> 1 </label>
-                                <select class="form-control form-control-sm" id="MaqPlant1"  name="MaqPlant1">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="">2</label>
-                                <select class="form-control form-control-sm" id="MaqPlant2"  name="MaqPlant2">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="">3</label>
-                                <select class="form-control form-control-sm" id="MaqPlant3"  name="MaqPlant3">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-4 col-xl-3">
-                                <label for="">4</label>
-                                <select class="form-control form-control-sm"  id="MaqPlant4" name="MaqPlant4">
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        <!--NOVENO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 mt-2">
-                                <legend class="badge badge-danger"> INFORMACIÓN PARA COSTOS DE MANO DE OBRA</legend>
-                            </div>
+                            <!--FOTO-->
+                            <div class="col-12 col-md-4 col-lg-4">
+                                <div class="row">
+                                    <div class="col-12 my-2">
+                                        <legend class="badge badge-success"> FOTOGRAFÍA</legend>
+                                    </div>
+                                    <div class="col-12" align='center'>
+                                        <input type="file" id="Foto" name="Foto" class="d-none">
+                                        <button type="button" class="btn btn-info btn-sm" id="btnArchivo" name="btnArchivo">
+                                            <span class="fa fa-upload fa-1x"></span> SELECCIONA EL ARCHIVO
+                                        </button>
+                                        <br><hr>
+                                        <div id="VistaPrevia" align="center">
 
-                            <div class="col-6 col-md-2 col-sm-2">
-                                <label for="">Pzas Corte</label>
-                                <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="PIEZAS CORTE" id="PiezasCorte" name="PiezasCorte">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6 col-md-2 col-sm-2">
-                                <label for="">Glp Corte P.</label>
-                                <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="GOLPES CORTE PIEL"  name="GolpesCortePiel">
-                            </div>
-                            <div class="col-6 col-md-2 col-sm-2">
-                                <label for="">Glp Corte F.</label>
-                                <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="GOLPES CORTE FORRO"  name="GolpesCorteForro">
-                            </div>
-                            <div class="col-6 col-md-2 col-sm-2">
-                                <label for="">Cm. Pesp.</label>
-                                <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="CM PESPUNTE"  name="CmPespunte">
-                            </div>
-                            <div class="col-6 col-md-2 col-sm-2">
-                                <label for="">Cm. Reb.</label>
-                                <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" placeholder="CM REBAJADO"  name="CmRebajado">
-                            </div>
-                        </div>
-
-                        <!--DECIMO RENGLON-->
-                        <div class="row">
-                            <div class="col-12 mt-2">
-                                <legend class="badge badge-success"> DATOS ESTADÍSTICOS</legend>
-                            </div>
-
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-5">
-                                <label for="" >Diseñado por*</label>
-                                <select id="DisenadoPor" name="DisenadoPor" class="form-control form-control-sm required" >
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-sm-4 col-md-6 col-lg-5 col-xl-5">
-                                <label for="" >Modelado por*</label>
-                                <select id="ModeladoPor" name="ModeladoPor" class="form-control form-control-sm required" >
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <div class="row pt-2">
-                            <div class="col-6 col-md-6 ">
-                                <h6 class="text-danger">Los campos con * son obligatorios</h6>
-                            </div>
-                            <button type="button" class="btn btn-info btn-lg btn-float" id="btnGuardar" data-toggle="tooltip" data-placement="left" title="Guardar">
-                                <i class="fa fa-save"></i>
-                            </button>
-                            <!--                    <div class="col-6 col-sm-6 col-md-6" align="right">
-                                                    <button type="button" class="btn btn-raised btn-info btn-sm" id="btnGuardar">
-                                                        <span class="fa fa-save "></span> GUARDAR
-                                                    </button>
-                                                </div>-->
                         </div>
                     </div>
-
-                    <!--FOTO-->
-                    <div class="col-12 col-md-4 col-lg-4">
+                    <div class="tab-pane fade" id="adjunto">
+                        <!--ADJUNTO-->
                         <div class="row">
-                            <div class="col-12 my-2">
-                                <legend class="badge badge-success"> FOTOGRAFÍA</legend>
-                            </div>
-                            <div class="col-12" align='center'>
-                                <input type="file" id="Foto" name="Foto" class="d-none">
-                                <button type="button" class="btn btn-info btn-sm" id="btnArchivo" name="btnArchivo">
-                                    <span class="fa fa-upload fa-1x"></span> SELECCIONA EL ARCHIVO
-                                </button>
-                                <br><hr>
-                                <div id="VistaPrevia" align="center">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12 my-2">
+                                        <legend class="badge badge-success"> HOJA DE LIBERACIÓN</legend>
+                                    </div>
+                                    <div class="col-12" align='center'>
+                                        <input type="file" id="Adjunto" name="Adjunto" class="d-none">
+                                        <button type="button" class="btn btn-info btn-sm" id="btnAdjunto" name="btnAdjunto">
+                                            <span class="fa fa-upload fa-1x"></span> SELECCIONA EL ARCHIVO A SUBIR
+                                        </button>
+                                        <br><hr>
+                                        <div id="VistaPreviaAdjunto" align="center">
 
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </fieldset>
         </form>
     </div>
@@ -386,6 +412,11 @@
     var btnCancelarEstilo = $("#btnCancelarEstilo");
     var VistaPrevia = $("#VistaPrevia");
     var foto;
+    /*Adjunto*/
+    var Adjunto = $("#Adjunto");
+    var btnAdjunto = $("#btnAdjunto");
+    var VistaPreviaAdjunto = $("#VistaPreviaAdjunto");
+    var adjunto;
     var mdlCancelarEstilo = $('#mdlCancelarEstilo');
     var btnAceptarCancelacion = mdlCancelarEstilo.find('#btnAceptarCancelacion');
 
@@ -443,41 +474,75 @@
             }
         });
 
+        Archivo.change(function () {
+            HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
+            var imageType = /image.*/;
+            if (Archivo[0].files[0] !== undefined && Archivo[0].files[0].type.match(imageType)) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var preview = '<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img src="' + reader.result + '" class="img-thumbnail img-fluid rounded mx-auto"><div class="caption"><p>' + Archivo[0].files[0].name + '</p></div>';
+                    VistaPrevia.html(preview);
+                };
+                reader.readAsDataURL(Archivo[0].files[0]);
+                foto = true;
+            } else {
+                if (Archivo[0].files[0] !== undefined && Archivo[0].files[0].type.match('application/pdf')) {
+
+                    var readerpdf = new FileReader();
+                    readerpdf.onload = function (e) {
+                        VistaPrevia.html('<div><button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br> <embed src="' + readerpdf.result + '" type="application/pdf" width="90%" height="800px"' +
+                                ' pluginspage="http://www.adobe.com/products/acrobat/readstep2.html"></div>');
+                    };
+                    readerpdf.readAsDataURL(Archivo[0].files[0]);
+                } else {
+                    VistaPrevia.html('EL ARCHIVO SE SUBIRÁ, PERO NO ES POSIBLE RECONOCER SI ES UN PDF O UNA IMAGEN');
+                }
+            }
+            HoldOn.close();
+        });
+
         btnArchivo.on("click", function () {
             $('#Foto').attr("type", "file");
             $('#Foto').val('');
-            Archivo.change(function () {
-                HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
-                var imageType = /image.*/;
-                if (Archivo[0].files[0] !== undefined && Archivo[0].files[0].type.match(imageType)) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        var preview = '<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img src="' + reader.result + '" class="img-thumbnail img-fluid rounded mx-auto"><div class="caption"><p>' + Archivo[0].files[0].name + '</p></div>';
-                        VistaPrevia.html(preview);
-                    };
-                    reader.readAsDataURL(Archivo[0].files[0]);
-                    foto = true;
-                } else {
-                    if (Archivo[0].files[0] !== undefined && Archivo[0].files[0].type.match('application/pdf')) {
-
-                        var readerpdf = new FileReader();
-                        readerpdf.onload = function (e) {
-                            VistaPrevia.html('<div><button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP" name="btnQuitarVP" onclick="onRemovePreview(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br> <embed src="' + readerpdf.result + '" type="application/pdf" width="90%" height="800px"' +
-                                    ' pluginspage="http://www.adobe.com/products/acrobat/readstep2.html"></div>');
-                        };
-                        readerpdf.readAsDataURL(Archivo[0].files[0]);
-                    } else {
-                        VistaPrevia.html('EL ARCHIVO SE SUBIRÁ, PERO NO ES POSIBLE RECONOCER SI ES UN PDF O UNA IMAGEN');
-                    }
-                }
-                HoldOn.close();
-            });
             Archivo.trigger('click');
+        });
+
+        Adjunto.change(function () {
+            HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
+            var imageType = /image.*/;
+            if (Adjunto[0].files[0] !== undefined && Adjunto[0].files[0].type.match(imageType)) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var preview = '<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP2" name="btnQuitarVP2" onclick="onRemovePreviewAdjunto(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img src="' + reader.result + '" class="img-thumbnail img-fluid rounded mx-auto"><div class="caption"><p>' + Adjunto[0].files[0].name + '</p></div>';
+                    VistaPreviaAdjunto.html(preview);
+                };
+                reader.readAsDataURL(Adjunto[0].files[0]);
+                adjunto = true;
+            } else {
+                if (Adjunto[0].files[0] !== undefined && Adjunto[0].files[0].type.match('application/pdf')) {
+
+                    var readerpdf = new FileReader();
+                    readerpdf.onload = function (e) {
+                        VistaPreviaAdjunto.html('<div><button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP2" name="btnQuitarVP2" onclick="onRemovePreviewAdjunto(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br> <embed src="' + readerpdf.result + '" type="application/pdf" width="90%" height="800px"' +
+                                ' pluginspage="http://www.adobe.com/products/acrobat/readstep2.html"></div>');
+                    };
+                    readerpdf.readAsDataURL(Adjunto[0].files[0]);
+                    adjunto = true;
+                } else {
+                    VistaPreviaAdjunto.html('EL ARCHIVO SE SUBIRÁ, PERO NO ES POSIBLE RECONOCER SI ES UN PDF O UNA IMAGEN');
+                }
+            }
+            HoldOn.close();
+        });
+
+        btnAdjunto.on("click", function () {
+            $('#Adjunto').attr("type", "file");
+            $('#Adjunto').val('');
+            Adjunto.trigger('click');
         });
 
         /*FUNCIONES X BOTON*/
         btnGuardar.click(function () {
-
             if (foto) {
                 isValid('pnlDatos');
                 if (valido) {
@@ -487,11 +552,12 @@
                         $.ajax({
                             url: master_url + 'onModificar',
                             type: "POST",
-                            cache: false,
+                            cache: true,
                             contentType: false,
                             processData: false,
                             data: frm
                         }).done(function (data, x, jq) {
+                            console.log(data);
                             swal('ATENCIÓN', 'SE HA MODIFICADO EL REGISTRO', 'info');
                             Estilos.ajax.reload();
                             pnlDatos.addClass("d-none");
@@ -507,7 +573,7 @@
                         $.ajax({
                             url: master_url + 'onAgregar',
                             type: "POST",
-                            cache: false,
+                            cache: true,
                             contentType: false,
                             processData: false,
                             data: frm
@@ -588,6 +654,7 @@
             nuevo = true;
             pnlDatos.find("input").val("");
             VistaPrevia.html(' <img src="' + base_url + 'img/camera.png" class="img-thumbnail img-fluid rounded mx-auto " >');
+            VistaPreviaAdjunto.html(' <img src="' + base_url + 'img/sinarch.jpg" class="img-thumbnail img-fluid rounded mx-auto " >');
             pnlTablero.addClass("d-none");
             pnlDatos.removeClass("d-none");
             btnCancelarEstilo.addClass("d-none");
@@ -600,7 +667,14 @@
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
             foto = false;
+            adjunto = false;
 
+            pnlDatos.find("li a").removeClass("active");
+            pnlDatos.find("li a").attr("aria-selected", false);
+            pnlDatos.find("li:eq(0) a").attr("aria-selected", true);
+            pnlDatos.find("li:eq(0) a").addClass("active");
+            pnlDatos.find("#estilo").addClass("show active");
+            pnlDatos.find("#adjunto").removeClass("show active");
         });
 
         btnCancelar.click(function () {
@@ -708,7 +782,7 @@
                     pnlDatos.find("select")[k].selectize.clear(true);
                 });
                 $.each(data[0], function (k, v) {
-                    if (k !== 'Foto') {
+                    if (k !== 'Foto' && k !== 'Adjunto') {
                         pnlDatos.find("[name='" + k + "']").val(v);
                         if (pnlDatos.find("[name='" + k + "']").is('select')) {
                             pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
@@ -745,7 +819,36 @@
                     }
                 });
 
+                //Adjunto
+                var sinarch = '<?php print base_url('img/sinarch.jpg'); ?>';
+                $.ajax({
+                    url: base_url + dtm.Adjunto,
+                    type: 'HEAD',
+                    error: function ()
+                    {
+                        adjunto = false;
+                        VistaPreviaAdjunto.html(' <img src="' + sinarch + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                    },
+                    success: function ()
+                    {
+                        if (dtm.Adjunto !== null && dtm.Adjunto !== undefined && dtm.Adjunto !== '') {
+                            var ext = getExt(dtm.Adjunto);
 
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                adjunto = true;
+                                pnlDatos.find("#VistaPreviaAdjunto").html('<button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP1" name="btnQuitarVP1" onclick="onRemovePreviewAdjunto(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><img id="trtImagen" src="' + base_url + dtm.Adjunto + '" class ="img-thumbnail img-fluid rounded mx-auto"  onclick="printImg(\' ' + base_url + dtm.Adjunto + ' \')"  />');
+                            }
+                            if (ext === "PDF" || ext === "Pdf" || ext === "pdf") {
+                                pnlDatos.find("#VistaPreviaAdjunto").html('<div class="col-md-8"></div> <button type="button" class="btn btn-danger btn-sm" id="btnQuitarVP1" name="btnQuitarVP1" onclick="onRemovePreviewAdjunto(this)"><span class="fa fa-times fa-2x danger-icon"></span></button><br><embed src="' + base_url + dtm.Adjunto + '" type="application/pdf" width="90%" height="800px" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">');
+                            }
+                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                VistaPreviaAdjunto.html(' <img src="' + sinarch + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                            }
+                        } else {
+                            VistaPreviaAdjunto.html(' <img src="' + sinarch + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                        }
+                    }
+                });
                 pnlTablero.addClass("d-none");
                 pnlDatos.removeClass('d-none');
                 btnCancelarEstilo.removeClass("d-none");
@@ -876,6 +979,12 @@
         Archivo.attr("type", "text");
         Archivo.val('N');
         foto = false;
+    }
+    function onRemovePreviewAdjunto(e) {
+        $(e).parent("#VistaPreviaAdjunto").html("");
+        Adjunto.attr("type", "text");
+        Adjunto.val('N');
+        adjunto = false;
     }
     function printImg(url) {
         var win = window.open('');

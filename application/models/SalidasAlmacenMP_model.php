@@ -88,11 +88,13 @@ class SalidasAlmacenMP_model extends CI_Model {
 
     public function getArticulos($depto) {
         try {
-            return $this->db->select(" CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Articulo")
-                            ->from("articulos AS D")
-                            ->where("D.Departamento", $depto)
-                            ->order_by('Articulo', 'ASC')
-                            ->get()->result();
+            return $this->db->query("SELECT CAST(D.Clave AS SIGNED ) AS ID ,CONCAT(D.Descripcion) AS Articulo
+                                    FROM articulos D WHERE
+                                    (D.estatus = 'INACTIVO' AND D.Existencia > 0)
+                                    OR
+                                    (D.estatus = 'ACTIVO')
+                                    and D.Departamento = '{$depto}'
+                                    ORDER BY Articulo ASC ")->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

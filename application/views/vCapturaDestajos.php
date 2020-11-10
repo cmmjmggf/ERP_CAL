@@ -313,7 +313,7 @@
                         Control: $(this).val()
                     }).done(function (data) {
                         if (data.length > 0) { //Si el control existe primero se valida que no este fact o cancelado
-//                            if (data[0].Maquila !== '98') {
+                            if (data[0].Maquila !== '98') {
                                 if (data[0].Depto === '270' && data[0].Depto !== '') {
                                     swal({
                                         title: "CONTROL CANCELADO POR EL CLIENTE",
@@ -334,19 +334,19 @@
                                     pnlTablero.find("#Pares").val(data[0].Pares).focus().select();
                                     getFraccionesByEstilo(data[0].Estilo);
                                 }
-//                            } else {
-//                                swal({
-//                                    title: "ATENCIÓN",
-//                                    text: "NO SE PERMITEN CONTROLES DE LA MAQUILA 98 EN ESTE MÓDULO",
-//                                    icon: "warning",
-//                                    closeOnClickOutside: false,
-//                                    closeOnEsc: false
-//                                }).then((action) => {
-//                                    if (action) {
-//                                        Control.val('').focus();
-//                                    }
-//                                });
-//                            }
+                            } else {
+                                swal({
+                                    title: "ATENCIÓN",
+                                    text: "NO SE PERMITEN CONTROLES DE LA MAQUILA 98 EN ESTE MÓDULO",
+                                    icon: "warning",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false
+                                }).then((action) => {
+                                    if (action) {
+                                        Control.val('').focus();
+                                    }
+                                });
+                            }
                         } else { //Si el control no existe
                             swal({
                                 title: "ATENCIÓN",
