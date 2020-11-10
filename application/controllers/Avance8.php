@@ -586,7 +586,7 @@ class Avance8 extends CI_Controller {
                         /* REVISA MUESTRA */
                         $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P "
                                         . "WHERE P.Estatus IN('A') AND P.EstatusProduccion IN('FOLEADO') "
-                                        . "AND P.DeptoProduccion IN(40) AND P.stsavan IN(4) AND  P.stsavan NOT IN(40,42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
+                                        . "AND P.DeptoProduccion IN(40) AND P.stsavan IN(4) AND P.Maquila = 98 AND P.stsavan NOT IN(42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
 
                         if (intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 60 ||
                                 intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 61) {
@@ -611,10 +611,12 @@ class Avance8 extends CI_Controller {
 
                         $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
                         if (intval($check_corte[0]->EXISTE) === 0) {
+                            PRINT "NO TIENE CORTE";
                             exit(0);
                         }
                         $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(102)")->result();
                         if (intval($check_rayado[0]->EXISTE) === 0) {
+                            PRINT "NO TIENE RAYADO";
                             exit(0);
                         }
                         $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();

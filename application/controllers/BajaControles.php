@@ -20,6 +20,20 @@ class BajaControles extends CI_Controller {
             if ($x['CONTROL'] !== "" && intval($check_existe_control[0]->EXISTE) >= 1) {
                 $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control = {$x['CONTROL']};");
                 $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = Pares  WHERE Control = {$x['CONTROL']} AND stsavan = 12 AND DeptoProduccion = 240;");
+                $this->db->query("UPDATE avaprd SET fec13 = " . Date('Y-m-d 00:00:00') . " WHERE contped = {$x['CONTROL']};");
+                $this->db->inser('avance', array(
+                    'Control' => $x['CONTROL'],
+                    'FechaAProduccion' => Date('d/m/Y'),
+                    'Departamento' => 260,
+                    'DepartamentoT' => 'FACTURADO',
+                    'FechaAvance' => Date('d/m/Y'),
+                    'Estatus' => 'A',
+                    'Usuario' => $_SESSION["ID"],
+                    'Fecha' => Date('d/m/Y'),
+                    'Hora' => Date('h:i:s a'),
+                    'Fraccion' => 0,
+                    'modulo' => 'BJC'
+                ));
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

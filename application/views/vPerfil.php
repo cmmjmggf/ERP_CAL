@@ -23,9 +23,40 @@
                                         ->from('semanasnomina AS S')
                                         ->where("STR_TO_DATE(\"{$fechin}\", \"%d/%m/%Y\") BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")", null, false)
                                         ->get()->result();
-                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>SEMANA: <span style=\"color: #e8ff00\">{$datan[0]->SEMANA_NOMINA}</span></p>";
-                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>IP: <span style=\"color: #FFC107\">{$_SERVER['REMOTE_ADDR']}</span> </p>";
-                        print "<p class='font-weight-bold font-italic' style='font-size: 18px;'>SEGURIDAD: " . (intval($this->session->SEG) === 1 ? "SI" : "NO" ) . "</p>";
+
+                        $FECHA_COMPRA = "2020-08-28"; 
+                        $DURACION_DIAS = 365; 
+                        $LICENCIA = "2020-08-27"; 
+                        $PARRAFO_INICIO = "<p class='font-weight-bold font-italic' style='font-size: 18px;'>";
+                        $CADUCA = $this->db->select("DATE_FORMAT(DATE_ADD(\"{$FECHA_COMPRA}\", INTERVAL {$DURACION_DIAS} DAY),\"%d/%m/%Y\") AS CADUCIDAD", false)->get()->result();
+
+                        print "{$PARRAFO_INICIO}SEMANA: <span style=\"color: #e8ff00\">{$datan[0]->SEMANA_NOMINA}</span></p>";
+                        print "{$PARRAFO_INICIO}IP: <span style=\"color: #FFC107\">{$_SERVER['REMOTE_ADDR']}</span> </p>";
+                        print "{$PARRAFO_INICIO}SEGURIDAD: " . (intval($this->session->SEG) === 1 ? "SI" : "NO" ) . "</p>";
+                        print "{$PARRAFO_INICIO}FECHA COMPRA: <span style=\"color: #29B6F6\">05/02/2018</span></p>";
+                        print "{$PARRAFO_INICIO}DURACIÓN DE LA LICENCIA: <span style=\"color: #CDDC39\">1 AÑO</span> </p>";
+                        print "{$PARRAFO_INICIO}CADUCA EL:  <span style=\"color: #CDDC39\">{$CADUCA[0]->CADUCIDAD}</span> </p>";
+
+                        $ESTATUS_LICENCIA = $this->db->select("DATEDIFF(\"{$LICENCIA}\",\"{$FECHA_COMPRA}\") AS VENCIMIENTO", false)->get()->result();
+                        $DIAS_LICENCIA = intval($ESTATUS_LICENCIA[0]->VENCIMIENTO);
+                        if ($DIAS_LICENCIA >= 0) {
+                            print "{$PARRAFO_INICIO}ESTATUS DE LA LICENCIA:  <span style=\"color: #CDDC39\">VIGENTE</span> </p>";
+                            switch ($DIAS_LICENCIA) {
+                                case 0:
+                                    print "<p class='font-weight-bold font-italic' style='font-size: 18px; color: #f91100'> VENCE HOY</p>";
+                                    break;
+                                case 1:
+                                    print "<p class='font-weight-bold font-italic' style='font-size: 18px;'> QUEDA {$DIAS_LICENCIA} DIA PARA SU VENCIMIENTO</p>";
+                                    break; 
+                                case $DIAS_LICENCIA > 1:
+                                    print "<p class='font-weight-bold font-italic' style='font-size: 18px;'> QUEDAN <span style=\"color: #CDDC39\">{$DIAS_LICENCIA}</span> DIAS PARA SU VENCIMIENTO</p>";
+                                    break; 
+                            }
+                        } else {
+                            print "{$PARRAFO_INICIO}ESTATUS DE LA LICENCIA:  <span style=\"color: #f91100\">VENCIDA</span> </p>";
+                            print "{$PARRAFO_INICIO}COMUNIQUESE AL 4776491615 Ó POR CORREO ELECTRONICO ing.giovanniflores93@gmail.com </p>";
+                            print "{$PARRAFO_INICIO}OTROS MEDIOS DE PAGO </p>";
+                        }
                         ?>
                     </div>
                 </div>

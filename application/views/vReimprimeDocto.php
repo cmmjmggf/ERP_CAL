@@ -1,5 +1,5 @@
 <div class="modal" id="mdlReimprimeDocto">
-    <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
+    <div class="modal-dialog modal-dialog-centered notdraggable notresizable" role="document" style="min-width: 30%;">
         <div class="modal-content"> 
             <div class="modal-header">
                 <h6 class="modal-title">

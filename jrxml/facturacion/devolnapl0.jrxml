@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="devolnapl0" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4c5a9430-ece8-4171-babc-688b04e6ab2a">
 	<property name="ireport.zoom" value="2.0526324729228356"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="633"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="FECHA_INICIAL" class="java.lang.String"/>
 	<parameter name="FECHA_FINAL" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT   P.Precio  AS PRECIO ,
+		<![CDATA[SELECT    IFNULL((SELECT FF.precto FROM facturacion AS FF WHERE FF.contped = D.control AND FF.cliente = D.cliente AND ff.estilo = D.estilo ORDER BY FF.ID DESC LIMIT 1),0) AS PRECIO ,
  D.fecha, D.clasif AS CLASIFICACION,
 (CASE
 WHEN D.clasif = 1 THEN "***** PARA VENTA *****"
@@ -31,14 +31,14 @@ D.defecto AS DEFECTO_CLAVE,
 D.detalle AS DETALLE_CLAVE,
 (SELECT DD.Descripcion FROM defectosdetalle AS DD WHERE D.detalle = DD.Clave LIMIT 1) AS DETALLE_DOS,
 
-D.staapl AS STATUS_APLICADA, D.cargoa AS CARGO_A, (D.paredev * P.Precio) AS VTA_PARES, 90 AS DEVO, (90 * D.paredev) AS DEV_PARES_NOVNTA,
-((D.paredev * P.Precio) - (90 * D.paredev)) AS DIFER, D.maq AS MAQUILA, D.maq AS MAQUILA_CLAVE, (SELECT M.Nombre FROM maquilas AS M WHERE M.Clave = D.maq LIMIT 1) AS MAQUILA_DES
+D.staapl AS STATUS_APLICADA, D.cargoa AS CARGO_A, (D.paredev * D.preciodev) AS VTA_PARES, D.preciodev AS DEVO, (D.preciodev * D.paredev) AS DEV_PARES_NOVNTA,
+((D.paredev * P.Precio) - (D.preciodev * D.paredev)) AS DIFER, D.maq AS MAQUILA, D.maq AS MAQUILA_CLAVE, (SELECT M.Nombre FROM maquilas AS M WHERE M.Clave = D.maq LIMIT 1) AS MAQUILA_DES
 FROM devolucionnp as D INNER JOIN clientes AS C ON D.cliente = C.Clave
 INNER JOIN pedidox AS P ON D.control = P.Control
 WHERE  D.fecha BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y") AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
 AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 	</queryString>
-	<field name="PRECIO" class="java.lang.String">
+	<field name="PRECIO" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fecha" class="java.sql.Timestamp">
@@ -67,8 +67,8 @@ AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 	<field name="STATUS_APLICADA" class="java.lang.Integer"/>
 	<field name="CARGO_A" class="java.lang.Integer"/>
 	<field name="VTA_PARES" class="java.lang.Double"/>
-	<field name="DEVO" class="java.lang.Long"/>
-	<field name="DEV_PARES_NOVNTA" class="java.lang.Long"/>
+	<field name="DEVO" class="java.lang.Double"/>
+	<field name="DEV_PARES_NOVNTA" class="java.lang.Double"/>
 	<field name="DIFER" class="java.lang.Double"/>
 	<field name="MAQUILA" class="java.lang.Integer"/>
 	<field name="MAQUILA_CLAVE" class="java.lang.Integer"/>
@@ -136,28 +136,12 @@ AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 					<textFieldExpression><![CDATA[$V{PARES_DEVUELTOS_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="664" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a81afa20-3407-478a-bdb7-8c752a843ada"/>
+					<reportElement mode="Transparent" x="664" y="0" width="78" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a81afa20-3407-478a-bdb7-8c752a843ada"/>
 					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{VTA_PARES_1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="703" y="0" width="40" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="92e42e03-fe72-4518-bf0b-8d6b98f176f7"/>
-					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{DEV_PARES_NOVNTA_1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="#,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="742" y="0" width="60" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="39d82f79-e1a0-45ee-9b9d-99066b262ac7"/>
-					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{DIFER_1}]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement x="156" y="12" width="646" height="1" uuid="45f0ce25-eb42-4560-a7e7-601540c60095"/>
@@ -304,20 +288,12 @@ AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 				<text><![CDATA[Cargo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="612" y="43" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="714c37fc-5daf-4849-8099-9937507d5061"/>
+				<reportElement mode="Transparent" x="612" y="43" width="51" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="714c37fc-5daf-4849-8099-9937507d5061"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Venta]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="646" y="43" width="19" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6de16eb6-e128-4656-a3b7-62008e3dadd6"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Devo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="664" y="43" width="78" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="3d84634c-8f2c-49a2-8f84-7730bd3714ee"/>
@@ -326,14 +302,6 @@ AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Subtotal]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="742" y="43" width="60" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="22932871-389c-4b52-afc7-469174bf368c"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Diferencia]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="618" y="29" width="48" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="cc7b1756-f76d-44ed-b361-69eccfdde478"/>
@@ -454,45 +422,21 @@ AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CARGO_A}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="612" y="0" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="620802ac-ffd1-495a-a023-82728037db81"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="612" y="0" width="51" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="620802ac-ffd1-495a-a023-82728037db81"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{PRECIO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="647" y="0" width="19" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5eb31776-a5d9-4ae9-a94f-c23cf20e50bf"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{DEVO}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="664" y="0" width="40" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9e7d42a2-8b61-4bb9-9a65-888792d0a9c9"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="664" y="0" width="78" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9e7d42a2-8b61-4bb9-9a65-888792d0a9c9"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VTA_PARES}]]></textFieldExpression>
-			</textField>
-			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="703" y="0" width="40" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="9a24d3c1-9465-4396-9b8c-14c6a69a85ad"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{DEV_PARES_NOVNTA}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="742" y="0" width="60" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="73d02fed-3135-414f-bfb8-b3f5dacd2d4f"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{DIFER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="24" y="0" width="100" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2a9ef132-0493-4eca-b7bf-dd608dafc52d"/>
@@ -556,28 +500,12 @@ AND D.cargoa = 0 ORDER BY ABS(D.maq) ASC, D.fecha DESC;]]>
 				<textFieldExpression><![CDATA[$V{PARES_DEVUELTOS_2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="664" y="0" width="40" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8efc79f3-620a-4800-a482-a02d7f390ff8"/>
+				<reportElement mode="Transparent" x="664" y="0" width="78" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8efc79f3-620a-4800-a482-a02d7f390ff8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{VTA_PARES_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="703" y="0" width="40" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="8c351a29-1b46-4b10-861d-f1a15f0542f9"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{DEV_PARES_NOVNTA_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="742" y="0" width="60" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="999597cf-5203-42d6-9b30-8045066fb40c"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{DIFER_2}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="156" y="13" width="646" height="1" uuid="ad9623d4-0bac-448b-ba10-a95fae21b31d"/>

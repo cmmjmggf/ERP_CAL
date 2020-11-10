@@ -127,6 +127,7 @@
 
                 if (parseInt(c.stsavan) === 12 && parseInt(c.DeptoProduccion) === 240) {
                     onEnable(btnAceptaBajaControl);
+                    btnAceptaBajaControl.focus();
                 } else {
                     onDisable(btnAceptaBajaControl);
                 }

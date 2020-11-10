@@ -225,7 +225,7 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <table id="tblAvance" class="table table-hover table-sm table-bordered  compact nowrap" style="width:100% !important;">
                             <thead>
-                                <tr>
+                                <tr style="color: #ffffff; background-color: #000000 !important;">
                                     <th scope="col">ID</th>
                                     <th scope="col">Empleado</th>
                                     <th scope="col">Semana</th>
@@ -2271,6 +2271,10 @@
     table thead th, label, button,h4{
         text-transform:  uppercase !important;   
     } 
+    #tblAvance thead tr th{
+        color: #ffffff;
+        background-color: #000000 !important;
+    }
 
     @-moz-keyframes myfirst /* Firefox */
     {
