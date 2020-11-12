@@ -357,7 +357,7 @@ class Avance8 extends CI_Controller {
                     $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
                     /* SOLO FRACCION 51 ENTRETELADO Y 397 ENSUELADO */
                     $id = 0;
-                    if (intval($v->NUMERO_FRACCION) !== 60) {
+                    if (intval($v->NUMERO_FRACCION) !== 60 && intval($v->NUMERO_FRACCION) !== 61 && intval($v->NUMERO_FRACCION) !== 71) {
                         switch (intval($x['NUMERO_FRACCION'])) {
                             case 127:
                             case 51:
@@ -582,14 +582,17 @@ class Avance8 extends CI_Controller {
                     $data["fraccion"] = $v->NUMERO_FRACCION;
                     $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
 
-                    if (intval($v->NUMERO_FRACCION) === 60 || intval($v->NUMERO_FRACCION) === 61) {
+                    if (intval($v->NUMERO_FRACCION) === 60 || 
+                            intval($v->NUMERO_FRACCION) === 61 || 
+                            intval($v->NUMERO_FRACCION) === 71) {
                         /* REVISA MUESTRA */
                         $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P "
                                         . "WHERE P.Estatus IN('A') AND P.EstatusProduccion IN('FOLEADO') "
                                         . "AND P.DeptoProduccion IN(40) AND P.stsavan IN(4) AND P.Maquila = 98 AND P.stsavan NOT IN(42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
 
                         if (intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 60 ||
-                                intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 61) {
+                                intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 61 ||
+                                intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 71) {
                             switch (intval($control_muestra[0]->Maquila)) {
                                 case 98:
                                     $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();

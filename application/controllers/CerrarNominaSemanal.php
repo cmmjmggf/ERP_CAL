@@ -49,9 +49,11 @@ class CerrarNominaSemanal extends CI_Controller {
                     if (floatval($Empleado[0]->SaldoPres) <= floatval($Empleado[0]->AbonoPres)) {
                         //Como ya valida que es el ultimo abono siendo menor al saldo , pone todo en 0's
                         $this->db->query("update empleados set PressAcum = 0,SaldoPres = 0,AbonoPres = 0 where numero =  $numemp ");
+                        $l = new Logs("CIERRA NOMINA", "EMPLEADO " . $numemp . ", ABONO = " . $Empleado[0]->AbonoPres . ", SALDO = " . $Empleado[0]->SaldoPres . " - SALDADO", $this->session);
                     } else {//si no ponemos el saldo actual menos el abono de la semana
                         $saldo = floatval($Empleado[0]->SaldoPres) - floatval($Empleado[0]->AbonoPres);
                         $this->db->query("update empleados set SaldoPres = $saldo where numero =  $numemp ");
+                        $l = new Logs("CIERRA NOMINA", "EMPLEADO " . $numemp . ", ABONO = " . $Empleado[0]->AbonoPres . ", SALDO = " . $saldo . " - SIN SALDAR", $this->session);
                     }
                 }
             }

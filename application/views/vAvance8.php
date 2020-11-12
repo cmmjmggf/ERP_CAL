@@ -1133,6 +1133,12 @@
                 DESCRIPCION: "FOLEAR CORTE Y CALIDAD"
             });
         }
+        if (pnlTablero.find("#chk71")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 71,
+                DESCRIPCION: "TROQUELAR MUESTRA"
+            });
+        }
         if (pnlTablero.find("#chk70")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 70,
