@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-6 col-sm-4 col-md-4">
                         <button type="button" class="btn btn-danger btn-sm d-none" id="btnCancelarEstilo">
-                            <span class="fa fa-trash fa-1x"></span> CANCELAR ESTILO
+                            <span class="fa fa-trash fa-1x"></span> ELIMINAR ESTILO
                         </button>
                     </div>
                     <div class="col-6 col-sm-4 col-md-4" align="right">
@@ -855,6 +855,13 @@
                 pnlDatos.find("#Clave").addClass('disabledForms');
                 pnlDatos.find("#Descripcion").focus().select();
                 pnlDatos.find('#dFechaBaja').removeClass('d-none');
+
+                pnlDatos.find("li a").removeClass("active");
+                pnlDatos.find("li a").attr("aria-selected", false);
+                pnlDatos.find("li:eq(0) a").attr("aria-selected", true);
+                pnlDatos.find("li:eq(0) a").addClass("active");
+                pnlDatos.find("#estilo").addClass("show active");
+                pnlDatos.find("#adjunto").removeClass("show active");
             }
 
 
