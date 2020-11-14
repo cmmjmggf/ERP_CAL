@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PreNomVac" language="groovy" pageWidth="635" pageHeight="842" columnWidth="595" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9813a8d-755e-43dc-aec2-731a235eec63">
-	<property name="ireport.zoom" value="2.732053821460288"/>
-	<property name="ireport.x" value="335"/>
+	<property name="ireport.zoom" value="1.866029520838937"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
@@ -67,7 +67,7 @@ DATEDIFF(  NOW(),E.FechaIngreso ) / 30.41 AS DIAS_LABORADOS_3041,
 (CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(NOW(),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END)) AS TOTAL_GENERAL_X_EMPLEADO
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = 99 AND PNL.año = $P{anio} AND DATEDIFF(  NOW(),E.FechaIngreso ) >= 31
+WHERE PNL.numsem = $P{semana} AND PNL.año = $P{anio} AND DATEDIFF(  NOW(),E.FechaIngreso ) >= 31
 ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
@@ -201,7 +201,7 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 	<variable name="TOTAL_GENERAL_X_EMPLEADO_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOTAL_GENERAL_X_EMPLEADO}]]></variableExpression>
 	</variable>
-	<group name="DEPARTAMENTO">
+	<group name="DEPARTAMENTO" keepTogether="true">
 		<groupExpression><![CDATA[$F{DEPARTAMENTO}]]></groupExpression>
 		<groupHeader>
 			<band height="10">

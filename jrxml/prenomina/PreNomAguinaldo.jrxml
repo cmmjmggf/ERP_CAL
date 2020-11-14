@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PreNomVac" language="groovy" pageWidth="635" pageHeight="842" columnWidth="595" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9813a8d-755e-43dc-aec2-731a235eec63">
 	<property name="ireport.zoom" value="1.866029520838937"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="95"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -189,7 +189,7 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 	<variable name="TOTAL_GENERAL_X_EMPLEADO_2" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOTAL_GENERAL_X_EMPLEADO}]]></variableExpression>
 	</variable>
-	<group name="DEPARTAMENTO" keepTogether="true">
+	<group name="DEPARTAMENTO">
 		<groupExpression><![CDATA[$F{DEPARTAMENTO}]]></groupExpression>
 		<groupHeader>
 			<band height="10">
@@ -215,22 +215,14 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="10">
+			<band height="11">
 				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="474" y="0" width="41" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d50d810a-a861-4de8-9ef9-6acc8c148994"/>
+					<reportElement mode="Transparent" x="552" y="0" width="43" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="d50d810a-a861-4de8-9ef9-6acc8c148994"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{VACACIONES_1}]]></textFieldExpression>
-				</textField>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="515" y="0" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b4ca4e82-9a58-462c-84d7-cfb07cd8fe48"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{PRIMA_1}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement x="380" y="0" width="94" height="10" isPrintInFirstWholeBand="true" uuid="42cb949b-cbf7-48ab-8d8c-a4d754b8f827"/>
@@ -239,14 +231,6 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 					</textElement>
 					<text><![CDATA[Total por departamento]]></text>
 				</staticText>
-				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="552" y="0" width="43" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="4e76045d-8639-4f7b-a6ea-86242e6b2326"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-						<paragraph lineSpacing="Single"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{TOTAL_GENERAL_X_EMPLEADO_1}]]></textFieldExpression>
-				</textField>
 			</band>
 		</groupFooter>
 	</group>
@@ -268,10 +252,10 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 			</image>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="72" y="16" width="115" height="14" isPrintInFirstWholeBand="true" uuid="50bb5417-fb5b-4a4b-961d-b50796555215"/>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pago vacaciones del año]]></text>
+				<text><![CDATA[Aguinaldo]]></text>
 			</staticText>
 			<textField>
 				<reportElement mode="Transparent" x="187" y="16" width="72" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="e3f9acc5-3d68-47d7-a93c-e39d24ddddc8"/>
@@ -417,32 +401,6 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 				<text><![CDATA[Dias a pagar]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="474" y="44" width="41" height="18" isPrintInFirstWholeBand="true" uuid="6767928d-4123-4d08-b2f2-10b5048d3902"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Vacaciones]]></text>
-			</staticText>
-			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="515" y="44" width="37" height="18" isPrintInFirstWholeBand="true" uuid="cee6d044-c5a0-4c3f-a5ea-ef9c1f65f265"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Prima]]></text>
-			</staticText>
-			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="552" y="44" width="43" height="18" isPrintInFirstWholeBand="true" uuid="641c7ac6-073e-4d45-8aa4-d204e8e35911"/>
 				<box>
 					<topPen lineWidth="1.0"/>
@@ -458,7 +416,7 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="10" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="0" y="0" width="30" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="5e667715-d92f-45fb-b513-552d787bccb7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -555,8 +513,8 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{horext}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="474" y="0" width="41" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="25201443-5b15-4a10-a361-50a9be9b6a88">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="552" y="0" width="43" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="494af79b-2f49-4255-9f40-9c2ac4e5e6c2">
 					<printWhenExpression><![CDATA[$F{VACACIONES}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
@@ -565,38 +523,10 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VACACIONES}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="515" y="0" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="2d27dfaf-ed64-4437-82af-2950c4b32ff9">
-					<printWhenExpression><![CDATA[$F{PRIMA}>0]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{PRIMA}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="552" y="0" width="43" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="494af79b-2f49-4255-9f40-9c2ac4e5e6c2">
-					<printWhenExpression><![CDATA[$F{TOTAL_GENERAL_X_EMPLEADO}>0]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{TOTAL_GENERAL_X_EMPLEADO}]]></textFieldExpression>
-			</textField>
 		</band>
 	</detail>
 	<summary>
-		<band height="36" splitType="Stretch">
-			<staticText>
-				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="435" y="24" width="72" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="5fb691cf-c861-49e6-8d7d-cb684de52b6e"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Total General]]></text>
-			</staticText>
+		<band height="14" splitType="Stretch">
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="507" y="0" width="88" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="57ca27b4-307c-46b5-9c68-5bd21503acae"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
@@ -605,37 +535,13 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{VACACIONES_2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="507" y="12" width="88" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="c928cd9a-9b0f-4f70-9ba4-d119eedb282e"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{PRIMA_2}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="507" y="24" width="88" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="b8cc9a7d-64ac-4701-ab53-fa39a92407fe"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{TOTAL_GENERAL_X_EMPLEADO_2}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="435" y="0" width="72" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="de2f035d-1300-411a-ab62-67ebf4e6dd35"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Total Vacaciones]]></text>
-			</staticText>
-			<staticText>
-				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="435" y="12" width="72" height="12" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="4a91fbd7-d0ac-47fa-9668-936582314cf4"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Total Prima]]></text>
+				<text><![CDATA[Total aguinaldo]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="0" width="595" height="1" uuid="ed1e7009-c6df-4a4b-ba25-c3667f75dad8"/>

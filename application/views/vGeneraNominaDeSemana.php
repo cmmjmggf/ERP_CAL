@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><span class="fa fa-coins"></span>Genera Nómina Semanal</h5>
+                <h5 class="modal-title"><span class="fa fa-coins"></span> Genera Nómina Semanal</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -78,6 +78,9 @@
                             <button id="btnGeneraVacaciones" name="btnGeneraVacaciones" class="btn btn-block btn-sm btn-success"  style="background-color: #4CAF50; border-color: #4CAF50;">
                                 <span class="fa fa-file-excel"></span> VACACIONES A EXCEL
                             </button>
+                            <button id="btnGeneraAguinaldoXLS" name="btnGeneraAguinaldoXLS" class="btn btn-block btn-sm btn-success"  style="background-color: #4CAF50; border-color: #4CAF50;">
+                                <span class="fa fa-file-excel"></span> AGUINALDO A EXCEL
+                            </button>
                         </div>
                     </div>
                     <div class="w-100 my-2">
@@ -131,9 +134,109 @@
             btnCierraNominaGNS = mdlGeneraNominaDeSemana.find("#btnCierraNominaGNS"), btnSemanasGNS = mdlGeneraNominaDeSemana.find("#btnSemanasGNS"),
             btnEliminaMovGenGNS = mdlGeneraNominaDeSemana.find("#btnEliminaMovGenGNS"),
             GeneraDiezPorcientoDeptos = mdlGeneraNominaDeSemana.find("#GeneraDiezPorcientoDeptos"),
-            btnGeneraVacaciones = mdlGeneraNominaDeSemana.find("#btnGeneraVacaciones");
+            btnGeneraVacaciones = mdlGeneraNominaDeSemana.find("#btnGeneraVacaciones"),
+            btnGeneraAguinaldoXLS = mdlGeneraNominaDeSemana.find("#btnGeneraAguinaldoXLS");
+
+    function getAguinaldo(pdf_xls) {
+        if (FechaCorteAguinaldoGNS.val()) {
+            if (!mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val()) {
+                onCampoInvalido(mdlGeneraNominaDeSemana, "SE REQUIEREN SEMANAS INICIALES", function () {
+                    SemanaGNS.focus();
+                });
+            }
+            HoldOn.open({
+                theme: 'sk-rect',
+                message: 'Generando aguinaldos...'
+            });
+            var parms = {SEMANA: SemanaGNS.val(), ANIO: AnioGNS.val(),
+                FECHAINI: FechaInicialGNS.val(), FECHAFIN: FechaFinalGNS.val()};
+            parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+            parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+            parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+            var url = '';
+            switch (pdf_xls) {
+                case 1:
+                    /*PDF*/
+                    url = '<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>';
+                    break;
+                case 2:
+                    /*XLS*/
+                    url = '<?php print base_url('GeneraNominaDeSemana/getAguinaldosXLS'); ?>';
+                    break;
+            }
+            $.post(url, parms).done(function (a) {
+                console.log(a);
+                busy = false;
+                switch (pdf_xls) {
+                    case 1:
+                        /*PDF*/
+                        onEnable(btnGeneraGNS);
+                        break;
+                    case 2:
+                        if (a.length > 0) {
+                            var r = JSON.parse(a);
+                            window.open(r["1UNO"], '_blank');
+                            swal({
+                                title: "ATENCIÓN",
+                                text: "SE HA GENERADO EL AGUINALDO EN EXCEL",
+                                icon: "success"
+                            }).then(function () {
+                                SemanaGNS.focus().select();
+                            });
+                        } else {
+                            busy = false;
+                            swal('ATENCIÓN', 'NO HA SIDO POSIBLE GENERAR LA NOMINA DE LA SEMANA 98, INTENTE DE NUEVO O MÁS TARDE', 'warning');
+                        }
+                        onCloseOverlay();
+                        break;
+                }
+
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                switch (pdf_xls) {
+                    case 1:
+                        /*PDF*/
+                        onEnable(btnGeneraGNS);
+                        break;
+                    case 2:
+                        /*XLS*/
+                        onEnable(btnGeneraGNS);
+                        onEnable(btnGeneraVacaciones);
+                        onEnable(btnGeneraAguinaldoXLS);
+                        onEnable(btnCierraNominaGNS);
+                        onEnable(btnEliminaMovGenGNS);
+                        break;
+                }
+                HoldOn.close();
+                busy = false;
+            });
+        } else {
+            swal('ATENCIÓN', 'ES REQUERIDA UNA FECHA DE CORTE', 'warning').then((values) => {
+                FechaCorteAguinaldoGNS.focus().select();
+            });
+            busy = false;
+        }
+    }
 
     $(document).ready(function () {
+
+        btnGeneraAguinaldoXLS.click(function () {
+            switch (parseInt(SemanaGNS.val())) {
+                case 98:
+                    onDisable(btnGeneraGNS);
+                    onDisable(btnGeneraVacaciones);
+                    onDisable(btnGeneraAguinaldoXLS);
+                    onDisable(btnCierraNominaGNS);
+                    onDisable(btnEliminaMovGenGNS);
+                    getAguinaldo(2);
+                    break;
+            }
+        });
+
+        ConsultaNominaCerrada.change(function () {
+            SemanaGNS.focus().select();
+        });
 
         btnEliminaMovGenGNS.click(function () {
             if (AnioGNS.val() && SemanaGNS.val()) {
@@ -175,7 +278,7 @@
                         buttons: false,
                         timer: 2000
                     });
-//                    SVacacionesAguinaldosParaDestajo.addClass("d-none");
+                    //                    SVacacionesAguinaldosParaDestajo.addClass("d-none");
                     console.log(a);
                     $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998XLS'); ?>',
                             {
@@ -239,7 +342,7 @@
                         buttons: false,
                         timer: 2000
                     });
-//                    SVacacionesAguinaldosParaDestajo.addClass("d-none");
+                    //                    SVacacionesAguinaldosParaDestajo.addClass("d-none");
                     console.log(a);
                     $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998XLS'); ?>',
                             {
@@ -347,30 +450,31 @@
                 switch (parseInt(SemanaGNS.val())) {
                     case 98:
                         /* SEMANA 98  = AGUINALDOS*/
-                        if (FechaCorteAguinaldoGNS.val()) {
-                            HoldOn.open({
-                                theme: 'sk-rect',
-                                message: 'Generando aguinaldos...'
-                            });
-                            parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
-                            parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
-                            parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
-                            $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
-                                console.log(a);
-                                busy = false;
-                            }).fail(function (x) {
-                                getError(x);
-                            }).always(function () {
-                                onEnable(btnGeneraGNS);
-                                HoldOn.close();
-                                busy = false;
-                            });
-                        } else {
-                            swal('ATENCIÓN', 'ES REQUERIDA UNA FECHA DE CORTE', 'warning').then((values) => {
-                                FechaCorteAguinaldoGNS.focus().select();
-                            });
-                            busy = false;
-                        }
+                        getAguinaldo(1);
+//                        if (FechaCorteAguinaldoGNS.val()) {
+//                            HoldOn.open({
+//                                theme: 'sk-rect',
+//                                message: 'Generando aguinaldos...'
+//                            });
+//                            parms["S1"] = mdlGeneraNominaDeSemana.find("#SemanaUnoGNS").val();
+//                            parms["S4"] = mdlGeneraNominaDeSemana.find("#SemanaCuatroGNS").val();
+//                            parms["FECHACORTE"] = FechaCorteAguinaldoGNS.val();
+//                            $.post('<?php print base_url('GeneraNominaDeSemana/getAguinaldos'); ?>', parms).done(function (a) {
+//                                console.log(a);
+//                                busy = false;
+//                            }).fail(function (x) {
+//                                getError(x);
+//                            }).always(function () {
+//                                onEnable(btnGeneraGNS);
+//                                HoldOn.close();
+//                                busy = false;
+//                            });
+//                        } else {
+//                            swal('ATENCIÓN', 'ES REQUERIDA UNA FECHA DE CORTE', 'warning').then((values) => {
+//                                FechaCorteAguinaldoGNS.focus().select();
+//                            });
+//                            busy = false;
+                        //                        }
                         break;
                     case 99:
                         /* SEMANA 99  = VACACIONES*/
@@ -564,7 +668,7 @@
             if (parseInt(SemanaGNS.val()) === 99 && e.keyCode === 13 ||
                     parseInt(SemanaGNS.val()) === 98 && e.keyCode === 13) {
                 SVacacionesAguinaldosParaDestajo.removeClass("d-none");
-                onDisable(btnGeneraGNS);
+                onEnable(btnGeneraGNS);
                 onDisable(btnPrenominaExcel);
             } else if (parseInt(SemanaGNS.val()) !== 99 && e.keyCode === 13 ||
                     parseInt(SemanaGNS.val()) !== 98 && e.keyCode === 13) {
@@ -600,7 +704,7 @@
             if (e.keyCode === 13 && parseInt(SemanaGNS.val()) === 99 ||
                     e.keyCode === 13 && parseInt(SemanaGNS.val()) === 98) {
                 if ($(this).val()) {
-                    onDisable(btnGeneraGNS);
+                    onEnable(btnGeneraGNS);
                     onDisable(btnPrenominaExcel);
                     btnGeneraGNS.focus();
                 }
@@ -643,6 +747,20 @@
             SVacacionesAguinaldosParaDestajo.removeClass("d-none");
             FechaCorteAguinaldoGNS.focus();
         } else if (SemanaGNS.val() && parseInt(SemanaGNS.val()) === 98) {
+            $.getJSON('<?php print base_url('GeneraNominaDeSemana/getSemanaNominaX'); ?>',
+                    {FECHA: '<?php print Date('d/m/Y'); ?>'}).done(function (a) {
+                if (a.length > 0) {
+                    var sm = parseInt(a[0].SEMANA);
+                    SemanaCuatroGNS.val(sm);
+                    SemanaTresGNS.val(sm - 1);
+                    SemanaDosGNS.val(sm - 2);
+                    SemanaUnoGNS.val(sm - 3);
+                }
+            }).fail(function (x) {
+                getError(x);
+            }).always(function () {
+                HoldOn.close();
+            });
             SVacacionesAguinaldosParaDestajo.removeClass("d-none");
             FechaCorteAguinaldoGNS.focus();
         }

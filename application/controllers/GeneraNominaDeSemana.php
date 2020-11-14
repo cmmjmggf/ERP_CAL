@@ -461,17 +461,30 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["empresa"] = $this->session->EMPRESA_RAZON;
             $p["semana"] = $x['SEMANA'];
             $p["anio"] = $x['ANIO'];
-            $jc->setParametros($p);
-            /* 1. REPORTE DE PRENOMINA COMPLETO */
-            $jc->setJasperurl('jrxml\prenomina\PreNomVac.jasper');
-            $jc->setFilename('PreNomVac_' . Date('his'));
-            $jc->setDocumentformat('pdf');
-            $reports['1UNO'] = $jc->getReport();
+            switch (intval($x['SEMANA'])) {
+                case 98:
+                    $jc->setParametros($p);
+                    /* 1. REPORTE DE PRENOMINA COMPLETO */
+                    $jc->setJasperurl('jrxml\prenomina\PreNomAguinaldo.jasper');
+                    $jc->setFilename('PreNomAguinaldo_' . Date('his'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['1UNO'] = $jc->getReport();
+                    break;
+                case 99:
+                    $jc->setParametros($p);
+                    /* 1. REPORTE DE PRENOMINA COMPLETO */
+                    $jc->setJasperurl('jrxml\prenomina\PreNomVac.jasper');
+                    $jc->setFilename('PreNomVac_' . Date('his'));
+                    $jc->setDocumentformat('pdf');
+                    $reports['1UNO'] = $jc->getReport();
+                    break;
+            }
             $this->benchmark->mark('code_end');
 
             $reports['8MARK_TIEMPO_TRANSCURRIDO'] = $this->benchmark->elapsed_time('code_start', 'code_end');
 //            echo $this->benchmark->elapsed_time('code_start', 'code_end');
             print json_encode($reports);
+            $l = new Logs("GENERA AGUINALDO (PDF)", "GENERO EL AGUINALDO (PDF) DEL AÑO {$x['ANIO']} SEMANA {$x['SEMANA']}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1161,6 +1174,41 @@ class GeneraNominaDeSemana extends CI_Controller {
         }
     }
 
+    public function getAguinaldosXLS() {
+        try {
+            $this->getAguinaldos();
+            $reports = array();
+            $this->benchmark->mark('code_start');
+            /* OBTENER REPORTES */
+            $x = $this->input->post();
+            $jc = new JasperCommand();
+            $jc->setFolder('rpt/' . $this->session->USERNAME);
+            $p = array();
+            $p["logo"] = base_url() . $this->session->LOGO;
+            $p["empresa"] = $this->session->EMPRESA_RAZON;
+            $p["semana"] = $x['SEMANA'];
+            $p["anio"] = $x['ANIO'];
+            switch (intval($x['SEMANA'])) {
+                case 98:
+                    $jc->setParametros($p);
+                    /* 1. REPORTE DE PRENOMINA COMPLETO */
+                    $jc->setJasperurl('jrxml\prenomina\PreNomAguinaldoXLS.jasper');
+                    $jc->setFilename('PreNomAguinaldo98' . $x['ANIO'] . '_' . Date('his'));
+                    $jc->setDocumentformat('xls');
+                    $reports['1UNO'] = $jc->getReport();
+                    break;
+            }
+            $this->benchmark->mark('code_end');
+
+            $reports['8MARK_TIEMPO_TRANSCURRIDO'] = $this->benchmark->elapsed_time('code_start', 'code_end');
+            print json_encode($reports);
+            $l = new Logs("GENERA AGUINALDO (XLS)", "GENERO EL AGUINALDO (XLS) DEL AÑO {$x['ANIO']} SEMANA {$x['SEMANA']}.", $this->session);
+        } catch (Exception $exc) {
+            echo $exc->
+                    getTraceAsString();
+        }
+    }
+
     public function getAguinaldos() {
         try {
             $x = $this->input;
@@ -1195,7 +1243,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $SUELDO_FINAL = $v->Sueldo;
                 $it += 1;
                 /* VALIDAR EL TIPO DE SALARIO 1 = (FIJO), 2 (DESTAJO) y 3 (FIJO-DESTAJO) */
-                if (intval($v->DepartamentoFisico) === 1) {
+                if (intval($v->FijoDestajoAmbos) === 1) {
                     /* 1 SI EL EMPLEADO TIENE MAS DE 365 O IGUAL SE LE PAGAN 15 DIAS DE SALARIO */
                     if (intval($v->DIASFC) >= 365) {
                         $ita += 1;
@@ -1207,14 +1255,18 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $dias_a_pagar = $dias_x_quince / 365;
                         $total_aguinaldo = $SUELDO_FINAL * $dias_a_pagar;
                     }
-                } else if (intval($v->DepartamentoFisico) === 2) {
+                } else if (intval($v->FijoDestajoAmbos) === 2) {
                     /* CALCULAR EL SALARIO DE LAS ULTIMAS CUATRO SEMANAS */
-                    $SUELDO_CUATRO_SEM = $this->db->select("((SUM(importe)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
+                    $SUELDO_CUATRO_SEM = $this->db->select("((SUM(subtot)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
                                     ->where("FPN.numeroempleado", $v->Numero)
                                     ->where("FPN.anio", $x->post('ANIO'))
-                                    ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
+                                    ->where("  FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
                                     ->get()->result();
                     $SUELDO_FINAL = $SUELDO_CUATRO_SEM[0]->SUBTOTAL;
+                    if (intval($v->Celula) !== 0 || floatval($v->CelulaPorcentaje) > 0) {
+                        $SUELDO_CELULA = $this->db->query("SELECT ((SUM(P.importe)/4)/7) AS SUELDO FROM prenomina AS P WHERE P.numcon IN(5) AND P.numsem BETWEEN {$S1} AND {$S4} AND P.año = {$x->post('ANIO')} AND P.numemp = {$v->Numero}")->result();
+                        $SUELDO_FINAL = $SUELDO_CELULA[0]->SUELDO;
+                    }
                     if (intval($v->DIASFC) >= 365) {
                         $ita += 1;
                         $total_aguinaldo = $SUELDO_FINAL * $dias;
@@ -1225,7 +1277,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $dias_a_pagar = $dias_x_quince / 365;
                         $total_aguinaldo = $SUELDO_FINAL * $dias_a_pagar;
                     }
-                } else if (intval($v->DepartamentoFisico) === 3) {
+                } else if (intval($v->FijoDestajoAmbos) === 3) {
                     /* PROCESAR POR FIJO */
                     $SUELDO_FIJO_FINAL = $v->Sueldo;
                     if (intval($v->DIASFC) >= 365) {
@@ -1238,10 +1290,10 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $total_aguinaldo = $SUELDO_FIJO_FINAL * $dias_a_pagar;
                     }
                     /* PROCESAR POR DESTAJO */
-                    $SUELDO_CUATRO_SEM = $this->db->select("((SUM(importe)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
+                    $SUELDO_CUATRO_SEM = $this->db->select("((SUM(subtot)/4)/7) AS SUBTOTAL", false)->from('fracpagnomina AS FPN')
                                     ->where("FPN.numeroempleado", $v->Numero)
                                     ->where("FPN.anio", $x->post('ANIO'))
-                                    ->where("FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
+                                    ->where("  FPN.semana BETWEEN {$S1} AND {$S4}", null, false)
                                     ->get()->result();
                     $SUELDO_FINAL = $SUELDO_CUATRO_SEM[0]->SUBTOTAL;
                     if (intval($v->DIASFC) >= 365) {
@@ -1276,7 +1328,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                 ));
             }
         } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+            echo $exc->
+                    getTraceAsString();
         }
     }
 
@@ -1292,7 +1345,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                 "numemp" => $aguinaldo["NUMERO"],
                 "numemp" => $aguinaldo["NUMERO"]));
         } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+            echo $exc->
+                    getTraceAsString();
         }
     }
 
@@ -1312,7 +1366,8 @@ class GeneraNominaDeSemana extends CI_Controller {
                 $this->db->trans_commit();
             }
         } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+            echo $exc->
+                    getTraceAsString();
         }
     }
 
@@ -1335,6 +1390,7 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                1001 => 101,
 //                1002 => 101
 //            );
+
             foreach ($fracciones as $k => $v) {
 //                if (array_key_exists(intval($v->numeroempleado), $celulas)) {
 //                    $CEL = $celulas[$v->numeroempleado];
@@ -1347,12 +1403,12 @@ class GeneraNominaDeSemana extends CI_Controller {
                     "control" => $v->control,
                     "estilo" => $v->estilo,
                     "numfrac" => $fraccion /* 304 */,
-                    "preciofrac" => $precio_fraccion[0]->CostoMO,
+                    "preciofrac" => $precio_fraccion [0]->CostoMO,
                     "pares" => $v->pares,
                     "subtot" => $subtotal,
                     "fecha" => $v->fecha,
                     "semana" => $v->semana,
-                    "depto" => 120/* 120 = PREL-PESPUNTE */,
+                    "depto" => 120/*  120 = PREL-PESPUNTE */,
                     "registro" => 0,
                     "anio" => $v->anio,
                     "fraccion" => 304,
@@ -1361,13 +1417,14 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                }
             }
         } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+            echo $exc->
+                    getTraceAsString();
         }
     }
 
     public function getPrenominaExcel() {
         $xxx = $this->input->post();
-        $jc = new JasperCommand();
+        $jc = new JasperCommand ( );
         $jc->setFolder('rpt/' . $this->session->USERNAME);
         $parametros = array(
             "empresa" => $this->session->EMPRESA_RAZON,
@@ -1381,6 +1438,7 @@ class GeneraNominaDeSemana extends CI_Controller {
         $jc->setJasperurl('jrxml\prenomina\excel\excel_prenoml.jasper');
         $jc->setFilename('PRENOMINA_EXCEL_SEM_' . $xxx['SEMANA'] . '_' . Date('h_i_s'));
         $jc->setDocumentformat('xls');
+
         print $jc->getReport();
     }
 
@@ -1411,7 +1469,8 @@ class GeneraNominaDeSemana extends CI_Controller {
 //            echo $this->benchmark->elapsed_time('code_start', 'code_end');
             print json_encode($reports);
         } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
+            echo $exc->
+                    getTraceAsString();
         }
     }
 
