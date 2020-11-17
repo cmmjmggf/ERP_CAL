@@ -19,7 +19,7 @@
     var configuracion_inicial = {
         rows: ["TIPO"],
         cols: [],
-        vals: ["TOTAL"],
+        vals: ["SUBTOTAL"],
         aggregatorName: "Suma",
         rendererName: "Tabla",
         rendererOptions: {

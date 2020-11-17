@@ -28,7 +28,7 @@ class EstadisticasFacturacion extends CI_Controller {
     public function getEstadistica() {
         try {
             $anio = $this->input->get();
-            if (intval($anio['ANIO']) > 0 && intval($anio['ANIO']) < 2015) {
+            if (intval($anio['ANIO']) > 0 && intval($anio['ANIO']) < 2005) {
                 $anio['ANIO'] = Date('Y');
             }
             $sql = '
