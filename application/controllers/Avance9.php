@@ -522,17 +522,20 @@ class Avance9 extends CI_Controller {
                                 print '{"AVANZO":"1","FR":"60","RETORNO":"SI","MESSAGE":"' . $xXx['CONTROL'] . ' SE HA AVANZADO LA MUESTRA A FOLEADO."}';
                                 exit(0);
                                 break;
+                            default:
+//                                print "EMPLEADO NO PERMITIDO";
+                                break;
                         }
                         break;
                 }
                 /* FIN MUESTRA */
-                exit(0);
             }
             $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P WHERE P.Maquila = 98 AND P.Control = " . $xXx['CONTROL'])->result();
             switch (intval($control_muestra[0]->Maquila)) {
                 case 98:
                     switch (intval($xXx['NUMERO_EMPLEADO'])) {
                         case 2328:
+                            print "CONTROL MUESTRA ".$xXx['CONTROL'];
                             exit(0);
                             break;
                     }
