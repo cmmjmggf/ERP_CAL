@@ -66,6 +66,7 @@ class FacturacionProduccion extends CI_Controller {
     }
 
     public function getInfoXControl() {
+
         try {
             $x = $this->input->get();
             $people = array(39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995);
@@ -83,18 +84,21 @@ WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo AND C.color = P.Color ORDER B
                                         . " AND P.EstatusProduccion NOT IN('CANCELADO') "
                                         . "AND P.DeptoProduccion NOT IN(270)")->result());
             } else {
-                print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
-                                        . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios "
-                                        . "WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo  AND C.color = P.Color ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
-                                        . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
-                                        . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
-                                        . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
-                                        . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
-                                        . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
-                                        . "WHERE P.Control = '{$x['CONTROL']}' "
-                                        . " AND P.stsavan NOT IN(13,14) AND P.stsavan IN(12) AND P.Estatus NOT IN('C')"
-                                        . " AND P.EstatusProduccion NOT IN('CANCELADO') "
-                                        . "AND P.DeptoProduccion NOT IN(270)")->result());
+                $control_term = $this->db->query("SELECT COUNT(*) AS EXISTE FROM controlterm AS C WHERE C.control = {$x['CONTROL']}")->result();
+                if (intval($control_term[0]->EXISTE) === 1) {
+                    print json_encode($this->db->query("SELECT P.*,P.Color AS COLOR_CLAVE, P.Clave AS CLAVE_PEDIDO, CONCAT(S.PuntoInicial,\"/\",S.PuntoFinal) AS SERIET,P.ColorT AS COLORT ,P.Estilo AS ESTILOT , "
+                                            . "(SELECT preaut AS PRECIO FROM costovaria AS C INNER JOIN Clientes AS CC ON C.lista = CC.ListaPrecios "
+                                            . "WHERE CC.Clave = P.Cliente AND C.Estilo = P.Estilo  AND C.color = P.Color ORDER BY C.ID DESC LIMIT 1) AS PRECIO, "
+                                            . "S.T1, S.T2, S.T3, S.T4, S.T5, S.T6, S.T7, S.T8, S.T9, S.T10, "
+                                            . "S.T11, S.T12, S.T13, S.T14, S.T15, S.T16, S.T17, S.T18, S.T19, S.T20, "
+                                            . "S.T21, S.T22, P.EstatusProduccion AS ESTATUS, P.stsavan AS AVANCE_ESTATUS, "
+                                            . "P.EstiloT AS ESTILO_TEXT, P.ParesFacturados AS PARES_FACTURADOS_X "
+                                            . "FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave "
+                                            . "WHERE P.Control = '{$x['CONTROL']}' "
+                                            . " AND  P.stsavan IN(12) AND P.stsavan NOT IN(13,14) AND P.stsavan IN(12) AND P.Estatus NOT IN('C')"
+                                            . " AND P.EstatusProduccion NOT IN('CANCELADO') "
+                                            . "AND P.DeptoProduccion NOT IN(270)")->result());
+                }
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -671,12 +675,16 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                     /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
                     $this->db->set('EstatusProduccion', $EstatusProduccion)
                             ->set('DeptoProduccion', $DeptoProduccion)
+                            ->where('EstatusProduccion', 'TERMINADO')->where('DeptoProduccion', 240)
                             ->where('Control', $x['CONTROL'])->update('controles');
                     /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
-                    $this->db->where('Control', $x['CONTROL'])->update('pedidox', array('stsavan' => 13,
-                        'EstatusProduccion' => $EstatusProduccion,
-                        'DeptoProduccion' => $DeptoProduccion,
-                        'Estatus' => 'F'
+                    $this->db->where('EstatusProduccion', 'TERMINADO')
+                            ->where('DeptoProduccion', 240)
+                            ->where('stsavan', 12)->where('Control', $x['CONTROL'])
+                            ->update('pedidox', array('stsavan' => 13,
+                                'EstatusProduccion' => $EstatusProduccion,
+                                'DeptoProduccion' => $DeptoProduccion,
+                                'Estatus' => 'F'
                     ));
                     /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
                     $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
@@ -1413,7 +1421,7 @@ F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva, F.staped, F.monletra,
 
     public function getParesDevueltos() {
         try {
-
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -1451,7 +1459,7 @@ F.pareped AS PARES, F.precto AS PRECIO, F.subtot AS SUBTOTAL, F.iva AS IVA,
 
     public function onControlSinTerminar() {
         try {
-
+            
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
