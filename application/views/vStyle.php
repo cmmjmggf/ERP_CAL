@@ -545,6 +545,10 @@
         font-size: 15px !important;
         text-transform: uppercase;
     }
+    .marope{
+        font-family: 'Manrope-Regular';
+        text-transform: uppercase;
+    }
     @font-face {
         font-family: 'Manrope-Regular';
         src: url('<?php print base_url('fonts/exclusive/Manrope-Regular.eot'); ?>');

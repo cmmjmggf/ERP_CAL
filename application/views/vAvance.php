@@ -16,6 +16,7 @@
                 <?php } ?>
                 <?php
                 if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
+                        $this->session->Nombre === "ALEJANDRA" && $this->session->TipoAcceso === "DISEÑO Y DESARROLLO" ||
                         $this->session->Nombre === "JULIANNA" && $this->session->TipoAcceso === "PRODUCCION" ||
                         $this->session->Nombre === "GUSTAVO" && $this->session->TipoAcceso === "PRODUCCION") {
                     ?>
@@ -1881,25 +1882,14 @@
                 Control.focus().select();
                 btnAceptar.attr('disabled', false);
                 break;
+            case "ALEJANDRA":
             case "JULIANNA":
             case "GUSTAVO":
                 switch (parseInt(Departamento.val())) {
-                    case 40:
-                        Control.focus().select();
-                        btnAceptar.attr('disabled', false);
-                        break;
-                    case 42:
-                        Control.focus().select();
-                        btnAceptar.attr('disabled', false);
-                        break;
-                    case 44:
-                        Control.focus().select();
-                        btnAceptar.attr('disabled', false);
-                        break;
-                    case 5:
-                        Control.focus().select();
-                        btnAceptar.attr('disabled', false);
-                        break;
+                    case 40:   
+                    case 42: 
+                    case 44: 
+                    case 5: 
                     case 55:
                         Control.focus().select();
                         btnAceptar.attr('disabled', false);

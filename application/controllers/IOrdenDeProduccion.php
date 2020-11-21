@@ -81,8 +81,11 @@ class IOrdenDeProduccion extends CI_Controller {
                             . "E.Observaciones AS OBSERVACIONES_ESTILO, C.ObservacionesOrdenProduccion AS "
                             . "OBSERVACIONES_COLOR", false)->from('ordendeproduccion AS OP')
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion')
-                    ->join('pedidox AS PE', 'OP.ControlT = PE.Control')
-                    ->join('colores AS C', 'OP.Color = C.Clave', 'left')
+                    ->join('pedidox AS PE', 'OP.ControlT = PE.Control');
+            if ($this->session->USERNAME !== 'ALEJANDRA') {
+                $this->db->join('programacion AS PR', 'OP.ControlT = PR.control');
+            }
+            $this->db->join('colores AS C', 'OP.Color = C.Clave', 'left')
                     ->join('estilos AS E', 'OP.Estilo = E.Clave', 'left');
             if ($INICIO !== '' && $FIN !== '') {
                 $this->db->where("OP.ControlT BETWEEN {$INICIO} AND {$FIN}", null, false);

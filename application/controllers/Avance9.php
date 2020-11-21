@@ -505,20 +505,7 @@ class Avance9 extends CI_Controller {
                                 $avance_muestra['DepartamentoT'] = 'FOLEADO';
                                 $avance_muestra['Fraccion'] = 61;
                                 $this->db->insert('avance', $avance_muestra);
-                                $this->db->insert('fracpagnomina', array(
-                                    "numeroempleado" => $xXx['NUMERO_EMPLEADO'],
-                                    "maquila" => 98,
-                                    "control" => $xXx['CONTROL'],
-                                    "estilo" => $xXx['ESTILO'],
-                                    "numfrac" => 61,
-                                    "preciofrac" => 0,
-                                    "pares" => $xXx['PARES'],
-                                    "subtot" => 0,
-                                    "fecha" => Date('Y-m-d 00:00:00'),
-                                    "semana" => $xXx['SEMANA'],
-                                    "depto" => 40,
-                                    "fecha_registro" => Date('d/m/Y h:i:s'),
-                                    "anio" => Date('Y')));
+
                                 print '{"AVANZO":"1","FR":"60","RETORNO":"SI","MESSAGE":"' . $xXx['CONTROL'] . ' SE HA AVANZADO LA MUESTRA A FOLEADO."}';
                                 exit(0);
                                 break;
@@ -535,7 +522,7 @@ class Avance9 extends CI_Controller {
                 case 98:
                     switch (intval($xXx['NUMERO_EMPLEADO'])) {
                         case 2328:
-                            print "CONTROL MUESTRA ".$xXx['CONTROL'];
+                            print "CONTROL MUESTRA " . $xXx['CONTROL'];
                             exit(0);
                             break;
                     }
@@ -918,6 +905,17 @@ class Avance9 extends CI_Controller {
                                             ->get()->result();
                             if (intval($check_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) > 0 ||
                                     intval($check_foleado[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0) {
+                                print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_FOLEADO" => "NO"));
+                                EXIT(0);
+                            }
+                        }
+                        if (intval($maquila_control[0]->Maquila) === 98) {
+                            $check_foleado_muestra = $this->db->select('COUNT(*) AS EXISTE', false)
+                                            ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
+                                            ->where_in('F.numfrac', array(61, 71))
+                                            ->get()->result();
+                            if (intval($check_foleado_muestra[0]->EXISTE) === 0 ||
+                                    intval($check_foleado_muestra[0]->EXISTE) === 0) {
                                 print json_encode(array("AVANZO" => 0, "RETORNO" => 1, "AVANCE_FOLEADO" => "NO"));
                                 EXIT(0);
                             }
