@@ -67,7 +67,7 @@ class Empleados extends CI_Controller {
             $this->db->select("E.ID, "
                             . "E.Numero AS No, "
                             . "E.NumFis, E.Egresos, E.Activos, "
-                            . "CONCAT(E.PrimerNombre,' ', E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS Nombre, "
+                            . " CONCAT(IFNULL(E.PrimerNombre,''),' ', IFNULL(E.SegundoNombre,''),' ', IFNULL(E.Paterno,'') ,' ', IFNULL(E.Materno,'')) AS Nombre, "
                             . "E.Busqueda, "
                             . "E.Direccion AS Dire, "
                             . "E.Colonia AS Col, "
