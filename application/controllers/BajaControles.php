@@ -16,24 +16,33 @@ class BajaControles extends CI_Controller {
     public function onDarDeBajaControl() {
         try {
             $x = $this->input->post();
-            $check_existe_control = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND P.DeptoProduccion = 240  AND P.stsavan = 12")->result();
-            if ($x['CONTROL'] !== "" && intval($check_existe_control[0]->EXISTE) >= 1) {
-                $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control = {$x['CONTROL']};");
-                $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = Pares  WHERE Control = {$x['CONTROL']} AND stsavan = 12 AND DeptoProduccion = 240;");
-                $this->db->query("UPDATE avaprd SET fec13 = '" . Date('Y-m-d 00:00:00') . "' WHERE contped = {$x['CONTROL']};");
-                $this->db->insert('avance', array(
-                    'Control' => $x['CONTROL'],
-                    'FechaAProduccion' => Date('d/m/Y'),
-                    'Departamento' => 260,
-                    'DepartamentoT' => 'FACTURADO',
-                    'FechaAvance' => Date('d/m/Y'),
-                    'Estatus' => 'A',
-                    'Usuario' => $_SESSION["ID"],
-                    'Fecha' => Date('d/m/Y'),
-                    'Hora' => Date('h:i:s a'),
-                    'Fraccion' => 0,
-                    'modulo' => 'BJC'
-                ));
+            $check_existe_control = $this->db->query("SELECT COUNT(*) AS EXISTE,P.Pares AS PARES FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND P.DeptoProduccion = 240  AND P.stsavan = 12")->result();
+            if (intval($check_existe_control[0]->PARES) >= 1 && intval($x['PARES']) >0 &&
+                    intval($check_existe_control[0]->PARES) >= intval($x['PARES'])) {
+                if ($x['CONTROL'] !== "" && intval($check_existe_control[0]->EXISTE) >= 1) {
+                    if (intval($check_existe_control[0]->PARES) === intval($x['PARES'])) {
+                        $this->db->query("UPDATE controles SET EstatusProduccion = 'FACTURADO',  DeptoProduccion = 260 WHERE Control = {$x['CONTROL']};");
+                        $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = " . $x['PARES'] . "  WHERE Control = {$x['CONTROL']} AND stsavan = 12 AND DeptoProduccion = 240;");
+                        $this->db->query("UPDATE avaprd SET fec13 = '" . Date('Y-m-d 00:00:00') . "' WHERE contped = {$x['CONTROL']};");
+                        $this->db->insert('avance', array(
+                            'Control' => $x['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => 260,
+                            'DepartamentoT' => 'FACTURADO',
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $_SESSION["ID"],
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('h:i:s a'),
+                            'Fraccion' => 0,
+                            'modulo' => 'BJC'
+                        ));
+                    } else if (intval($check_existe_control[0]->PARES) > intval($x['PARES']) && intval($x['PARES']) > 0) {
+                        $this->db->query("UPDATE pedidox SET ParesFacturados = " . $x['PARES'] . "  WHERE Control = {$x['CONTROL']} AND stsavan = 12 AND DeptoProduccion = 240;");
+                    }
+                }
+            } else {
+                print "\n CONTROL NO EXISTE O LOS PARES INGRESADOS SON MAYORES A LOS PARES DEL CONTROL.  PARES DEL CONTROL: " . $check_existe_control[0]->PARES . ", PARES INGRESADOS : {$x['PARES']} \n";
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

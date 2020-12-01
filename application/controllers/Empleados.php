@@ -222,10 +222,7 @@ class Empleados extends CI_Controller {
             $xxx = $this->input->post();
             $data = array();
             foreach ($this->input->post() as $key => $v) {
-                //print "$key  = $v \n";
-                if ($v !== '') {
-                    $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
-                }
+                $data[$key] = ($v !== '') ? strtoupper($v) : NULL;
             }
 
             //Formateo de fechas para guardarlas
@@ -280,7 +277,9 @@ class Empleados extends CI_Controller {
             } else {
                 $this->db->set('Foto', null)->where('ID', $ID)->update('empleados');
             }
-            $l = new Logs("EMPLEADOS", "HA MODIFICADO AL EMPLEADO " . $x->post('ID') . ";SUELDO:" . $data['Sueldo'] ." SUELDO FIJO:" . $data['SueldoFijo'] . " PRESTAMO ACUMULADO:" . $data['SaldoPres'] . "; SALDO PRESTAMO:" . $data['SaldoPres'] . ", ABONO PRESTAMO: " . $data['AbonoPres'], $this->session);
+            if (isset($data['SaldoPres'])) {
+                $l = new Logs("EMPLEADOS", "HA MODIFICADO AL EMPLEADO " . $x->post('ID') . ";SUELDO:" . $data['Sueldo'] . " SUELDO FIJO:" . $data['SueldoFijo'] . " PRESTAMO ACUMULADO:" . $data['SaldoPres'] . "; SALDO PRESTAMO:" . $data['SaldoPres'] . ", ABONO PRESTAMO: " . $data['AbonoPres'], $this->session);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

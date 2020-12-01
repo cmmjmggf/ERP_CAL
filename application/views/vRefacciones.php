@@ -19,7 +19,8 @@
                             </div>
                             <div class="col-12">
                                 <label>Código</label>
-                                <input type="text" id="CodigoRefaccion" name="CodigoRefaccion" class="form-control" maxlength="15">
+                                <input type="text" id="CodigoRefaccion" name="CodigoRefaccion" readonly="" class="form-control d-none" maxlength="15">
+                                <p id="xCodigoRefaccion" class="font-weight-bold text-center font-italic" style="color: #3F51B5 !important; font-size: 38px;">-</p>
                             </div>
                             <div class="col-12">
                                 <label>Descripción</label>
@@ -32,7 +33,7 @@
                             </div>
                             <div class="col-6">
                                 <label>Costo</label>
-                                <input type="text" id="CostoRefaccion" name="CostoRefaccion" class="form-control">
+                                <input type="text" id="CostoRefaccion" name="CostoRefaccion" class="form-control numbersOnly">
                             </div>
                             <div class="w-100"></div>
 
@@ -169,9 +170,10 @@
         mdlRefacciones.on('shown.bs.modal', function () {
             mdlRefacciones.find("input").val('');
             mdlRefacciones.find("#Contenedor div.row").html('');
+            getUltimoCodigo();
             return;
             if ($.fn.DataTable.isDataTable('#tblRefaccionesMto')) {
-                RefaccionesMto.ajax.reload(function(){
+                RefaccionesMto.ajax.reload(function () {
                     CodigoRefaccion.focus().select();
                 });
                 return;
@@ -253,6 +255,16 @@
             mdlRefacciones.find("#FotosRefacciones").trigger('click');
         });
     });
+
+    function getUltimoCodigo() {
+        $.getJSON('<?php print base_url('Refacciones/getUltimoCodigo'); ?>').done(function (a) {
+            if (a.length > 0) {
+                CodigoRefaccion.val(a[0].CODIGO);
+                mdlRefacciones.find("p#xCodigoRefaccion").text(a[0].CODIGO);
+            }
+        });
+    }
+
 
     function onImagenOut(e) {
         $(e)[0].src = '<?php print base_url('img/camera.png'); ?>';

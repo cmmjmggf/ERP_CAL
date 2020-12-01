@@ -40,7 +40,7 @@
                             <th scope="col">Control</th>
 
                             <th scope="col">Estilo</th>
-                            <th scope="col">Frac.</th>
+                            <th scope="col">Fracción</th>
                             <th scope="col">Pares</th>
 
                             <th scope="col">Precio</th>
@@ -1429,18 +1429,7 @@
         font-weight: bold !important;
     }
 </style>
-<style>
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid;
-        border-image: linear-gradient(to bottom,  #2196F3, #99cc00, rgb(0,0,0,0)) 1 100% ;
-        /*top
-        background-image: linear-gradient(to left, #0099cc,  #cc0000, #0099cc) ;
-        background-size: 100% 1px;
-        background-position: 10% 0%, 0% 100%;
-        background-repeat: no-repeat;  */
-    }
+<style> 
     .card-header{
         background-color: transparent;
         border-bottom: 0px;
@@ -1526,5 +1515,17 @@
         opacity: 1;
         font-size: 20px;
         color: #673AB7 !important;
+    }    
+    body{
+        /* The image used */
+        background-image: url("<?php print base_url('media/x5.jpg'); ?>");
+
+        /* Full height */
+        height: 100%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 </style>

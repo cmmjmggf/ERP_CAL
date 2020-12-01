@@ -82,7 +82,7 @@ class IOrdenDeProduccion extends CI_Controller {
                             . "OBSERVACIONES_COLOR", false)->from('ordendeproduccion AS OP')
                     ->join('ordendeproducciond AS OPD', 'OP.ID = OPD.OrdenDeProduccion')
                     ->join('pedidox AS PE', 'OP.ControlT = PE.Control');
-            if ($this->session->USERNAME !== 'ALEJANDRA') {
+            if ($this->session->USERNAME !== 'ALEJANDRA' && $SEMANA !== '' && $DIA !== '') {
                 $this->db->join('programacion AS PR', 'OP.ControlT = PR.control');
             }
             $this->db->join('colores AS C', 'OP.Color = C.Clave', 'left')

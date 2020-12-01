@@ -1,11 +1,12 @@
-<div class="card m-2 animated fadeIn" id="pnlTablero" style=" background: #ffffff !important; background-color: #ffffff !important;">
+<div class="card m-2 animated fadeIn" id="pnlTablero" style="background: linear-gradient(90deg, rgba(255,255,255,1) 0%, #f7f7f7 100%);">
     <div class="card-body" style="padding-top: 3px; padding-bottom: 3px;">
         <div class="row">
             <div class="col-6">
                 <legend class="font-weight-bold" style="margin-bottom: 0px;">AVANCE POR EMPLEADO Y PAGO DE NÓMINA</legend>
             </div>
             <div class="col-6" align="right">
-                <a class="btn btn-sm btn-danger mt-1" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
+                <a class="btn btn-sm btn-danger mt-1 font-weight-bold" style="background-color: #ff1800;
+    border-color: #ff1800;" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
             </div>
         </div>
         <hr>
@@ -575,7 +576,7 @@
                             if (type) {
                                 onAvanzar();
                             }
-                        } else {  
+                        } else {
                             swal('ATENCIÓN', 'LA FRACCIÓN O EL CONTROL NO SON CORRECTAS, \n\
                 ELIJA OTRA FRACCIÓN O ESPECIFIQUE UN CONTROL CON LA FRACCIÓN CORRESPONDIENTE. \n\
                                                     ES POSIBLE QUE TAMPOCO HAYAN HECHO UN RETORNO DE ESTE MATERIAL EN LA FRACCIÓN SELECCIONADA (2).', 'warning').then((value) => {
@@ -937,18 +938,7 @@
     input[type='text']{
         color: #c1850c !important;
         font-weight: bold !important;
-    }
-    .card{
-        background-color: #f9f9f9;
-        border-width: 1px 2px 2px;
-        border-style: solid;
-        border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;
-        /*top
-        background-image: linear-gradient(to left, #0099cc,  #cc0000, #0099cc) ;
-        background-size: 100% 1px;
-        background-position: 10% 0%, 0% 100%;
-        background-repeat: no-repeat;  */
-    }
+    } 
     .card-header{
         background-color: transparent;
         border-bottom: 0px;
@@ -1019,4 +1009,16 @@
     table.dataTable tbody>tr.selected, table.dataTable tbody>tr>.selected {
         background-color: #000000;
     } 
+    body{
+        /* The image used */
+        background-image: url("<?php print base_url('media/x5.jpg'); ?>");
+
+        /* Full height */
+        height: 100%;
+
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 </style>

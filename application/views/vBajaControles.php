@@ -10,9 +10,13 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                         <label>CONTROL</label>
                         <input type="text" id="ControlADarDeBaja" name="ControlADarDeBaja" class="form-control text-center mb-3" style="font-size: 34px;border-top: none !important;border-right: none !important;border-left: none !important;border-radius: 0px !important; padding-top: 0px;padding-bottom: 0px;" maxlength="12">
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label>PARES</label>
+                        <input type="text" id="ParesADarDeBaja" name="ParesADarDeBaja" class="form-control text-center mb-3" style="font-size: 34px;border-top: none !important;border-right: none !important;border-left: none !important;border-radius: 0px !important; padding-top: 0px;padding-bottom: 0px;" maxlength="3">
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <h4 class="font-weight-bold font-italic pares_del_control_baja " style="#000">-</h4>
@@ -45,17 +49,18 @@
 </div>
 <script>
     var mdlBajaControles = $("#mdlBajaControles"), ControlADarDeBaja = mdlBajaControles.find("#ControlADarDeBaja"),
-            btnAceptaBajaControl = mdlBajaControles.find("#btnAceptaBajaControl");
+            btnAceptaBajaControl = mdlBajaControles.find("#btnAceptaBajaControl"),
+            ParesADarDeBaja = mdlBajaControles.find("#ParesADarDeBaja");
+    
     $(document).ready(function () {
-
         handleEnterDiv(mdlBajaControles);
 
         btnAceptaBajaControl.click(function () {
             onDisable(btnAceptaBajaControl);
-            if (ControlADarDeBaja.val()) {
+            if (ControlADarDeBaja.val() && parseInt(ParesADarDeBaja.val()) >0) {
                 onOpenOverlay('');
                 $.post('<?php print base_url('BajaControles/onDarDeBajaControl'); ?>',
-                        {CONTROL: ControlADarDeBaja.val()}).done(function (a) {
+                        {CONTROL: ControlADarDeBaja.val(), PARES: ParesADarDeBaja.val()}).done(function (a) {
                     onCloseOverlay();
                     swal({
                         title: "ATENCIÓN",
@@ -118,6 +123,7 @@
                 {CONTROL: ControlADarDeBaja.val()}).done(function (a) {
             if (a.length > 0) {
                 var c = JSON.parse(a)[0];
+                mdlBajaControles.find("#ParesADarDeBaja").val(c.Pares);
                 mdlBajaControles.find("h4.pares_del_control_baja").html(c.Pares + '<br> PARES');
                 mdlBajaControles.find("h4.pares_facturados_del_control_baja").html(c.ParesFacturados + '<br>PARES FACTURADOS');
                 mdlBajaControles.find("h4.estatus_del_control_baja").html('<span style="color:#cc0000;">' + c.DeptoProduccion + ' ' + c.EstatusProduccion + '<br>(' + c.stsavan + ')</span>');

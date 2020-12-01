@@ -1918,6 +1918,30 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
                 break;
         }
     }
+    
+    function onDisableOnTime(e, tiempo) {
+        switch (e[0].tagName) {
+            case "INPUT":
+                $(e).attr('disabled', true);
+                break;
+            case "TEXTAREA":
+                $(e).attr('disabled', true);
+                break;
+            case "SELECT":
+                if ($(e).hasClass('selectized')) {
+                    $(e)[0].selectize.disable();
+                } else {
+                    $(e).attr('disabled', true);
+                }
+                break;
+            case "BUTTON":
+                $(e).attr('disabled', true);
+                break;
+        }
+        setTimeout(function () {
+            onEnable($(e));
+        }, tiempo);
+    }
 
 
     function onEnableDisable(e, tf) {
