@@ -396,8 +396,9 @@
 </div>
 
 <!--PESPUNTE FRACCIONES 324,322,309,308-->
-<div class="modal" id="mdlPespunteFraccionesFail" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
+<div class="modal" id="mdlPespunteFraccionesFail" >
+      <div class="modal-dialog modal-lg notdraggable modal-dialog-centered" role="document" style="min-width: 70%">
+        
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-draw-polygon"></span> PESPUNTE</h5>
@@ -444,7 +445,9 @@
                                     <div class="col-8">
                                         <select id="CelulaPespunteFail" name="CelulaPespunteFail" class="form-control selectNotEnter notEnter">
                                             <?php
-                                            foreach ($this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE E.Numero IN(1000, 1001, 1002, 994, 995, 996, 997, 998, 999)")->result() as $k => $v) {
+//                                            $celulas_empleados = $this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE E.Numero IN(1000, 1001, 1002, 994, 995, 996, 997, 998, 999)")->result();
+                                            $celulas_empleados = $this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE FijoDestajoAmbos = 2 AND DepartamentoFisico IN(110,115) AND AltaBaja = 1 AND Numero > 0 ")->result();
+                                            foreach ($celulas_empleados as $k => $v) {
                                                 print "<option value='{$v->Numero}'>{$v->Numero} {$v->CELULA}</option>";
                                             }
                                             ?> 

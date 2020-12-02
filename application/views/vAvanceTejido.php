@@ -26,7 +26,7 @@
                 <select id="Chofer" name="Chofer" class="form-control form-control-sm">
                     <option></option>
                     <?php
-                    foreach ($this->db->select("E.Numero AS ID, CONCAT(E.Numero,' ', E.PrimerNombre,' ', E.SegundoNombre,' ', E.Paterno,' ', E.Materno) AS Empleado", false)
+                    foreach ($this->db->select("E.Numero AS ID, CONCAT(IFNULL(E.Numero,''),' ', IFNULL(E.PrimerNombre,''),' ', IFNULL(E.SegundoNombre,''),' ', IFNULL(E.Paterno,''),' ', IFNULL(E.Materno,'')) AS Empleado", false)
                             ->from('empleados AS E')->where('E.AltaBaja', 1)
                             ->where('E.DepartamentoFisico', 170)->get()->result() as $k => $v) {
                         print "<option value='{$v->ID}'>{$v->Empleado}</option>";

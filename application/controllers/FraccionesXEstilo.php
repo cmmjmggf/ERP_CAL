@@ -210,13 +210,16 @@ class FraccionesXEstilo extends CI_Controller {
     public function onModificarDetalle() {
         try {
             $x = $this->input;
+            $xxx = $this->input->post();
             $data = array(
                 'Fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
                 'CostoMO' => ($x->post('CostoMO') !== NULL) ? $x->post('CostoMO') : 0,
                 'CostoVTA' => ($x->post('CostoVTA') !== NULL) ? $x->post('CostoVTA') : 0,
                 'AfectaCostoVTA' => ($x->post('AfectaCostoVTA') !== NULL) ? $x->post('AfectaCostoVTA') : 0,
             );
+            $fxe = $this->db->query("SELECT * FROM fraccionesxestilo AS F WHERE F.ID = {$xxx['ID']}")->result();
             $this->FraccionesXEstilo_model->onModificar($this->input->post('ID'), $data);
+            $l = new Logs("FRACCIONES X ESTILO", "MODIFICO LA FRACCION {$xxx['Fraccion']} DEL ESTILO {$fxe[0]->Estilo} DE $ {$fxe[0]->CostoMO} A $ {$xxx['CostoMO']} .", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

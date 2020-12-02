@@ -468,6 +468,7 @@ class Avance8 extends CI_Controller {
                                     }
                                 }
                                 break;
+                            case 396:
                             case 397:
                                 /* AVANCE 397 ENSUELADO */
 //                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,300) AND control = {$xXx['CONTROL']}")->result();

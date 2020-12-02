@@ -217,6 +217,12 @@
                             </div>
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk396" description="JUNTAR SUELA A CORTE (MUESTRA)" fraccion="396">
+                                    <label class="custom-control-label" for="chk396">396 Juntar suela a corte (MUESTRA)</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="chk397" description="JUNTAR SUELA A CORTE" fraccion="397">
                                     <label class="custom-control-label" for="chk397">397 Juntar suela a corte</label>
                                 </div>
@@ -1199,6 +1205,12 @@
                 DESCRIPCION: "JUNTAR SUELA A CORTE"
             });
         }
+        if (pnlTablero.find("#chk396")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 396,
+                DESCRIPCION: "JUNTAR SUELA A CORTE (MUESTRA)"
+            });
+        }
         AVANO.FRACCIONES = JSON.stringify(fracciones);
 
 
@@ -1250,7 +1262,7 @@
                     getError(x);
                 });
             } else {
-                if (depa_empleado === 120 && pnlTablero.find("#chk397")[0].checked) {
+                if (depa_empleado === 120 && pnlTablero.find("#chk397")[0].checked || depa_empleado === 120 && pnlTablero.find("#chk396")[0].checked) {
                     $.getJSON('<?php print base_url('Avance8/onRevisarCobroDeEnsueladoParaALMPESPUNTE') ?>', {
                         CONTROL: Control.val()
                     }).done(function (a) {

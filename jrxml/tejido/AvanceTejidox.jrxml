@@ -20,15 +20,7 @@
 		<![CDATA[SELECT
 C.docto AS DOCTO,
 C.numcho AS CHOFER,
-(SELECT CONCAT(
-(CASE WHEN E.PrimerNombre = "0" THEN "" ELSE E.PrimerNombre END)
-," ",
-(CASE WHEN E.SegundoNombre = "0" THEN "" ELSE E.SegundoNombre END)
-," ",
-(CASE WHEN E.Paterno = "0" THEN "" ELSE E.Paterno END)
-," ",
-(CASE WHEN E.Materno = "0" THEN "" ELSE E.Materno END)
-) AS NOMBRRE  FROM erp_cal.empleados AS E WHERE E.Numero = C.numcho) AS CHOFERT,
+(SELECT CONCAT(IFNULL(E.PrimerNombre,"")," ",IFNULL(E.SegundoNombre,"")," ",IFNULL(E.Paterno ,"")," ",IFNULL(E.Materno,"")) AS NOMBRRE FROM  empleados AS E WHERE E.Numero = C.numcho) AS CHOFERT,
 C.numtej AS TEJEDORA,
 C.nomtej AS TEJEDORAT,
 C.Control AS CONTROL,

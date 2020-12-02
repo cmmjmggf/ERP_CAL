@@ -9,8 +9,8 @@
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT O.ID, O.Fecha, O.Proveedor, O.DestinoMaterial, O.Observaciones, O.Folio, O.Registro, O.Usuario, O.UsuarioT,
-OD.OrdenID, OD.Cantidad, OD.Unidad, OD.Descripcion, OD.Precio, (OD.Precio * OD.Cantidad) AS SUBTOTAL FROM ordendecompramto AS O LEFT  JOIN ordendecompramto_detalle AS OD ON O.ID = OD.OrdenID
+		<![CDATA[SELECT O.ID, O.Fecha, (SELECT OCP.Nombre FROM ordendecompramto_proveedores AS OCP WHERE OCP.ID = O.Proveedor LIMIT 1) AS Proveedor, O.DestinoMaterial, O.Observaciones, O.Folio, O.Registro, O.Usuario, O.UsuarioT,
+OD.OrdenID, OD.Cantidad, (SELECT Nombre FROM ordendecompramto_unidades AS OCU WHERE OCU.ID = OD.Unidad LIMIT 1) AS Unidad, OD.Descripcion, OD.Precio, (OD.Precio * OD.Cantidad) AS SUBTOTAL FROM ordendecompramto AS O LEFT  JOIN ordendecompramto_detalle AS OD ON O.ID = OD.OrdenID
 WHERE O.Folio = $P{FOLIO}]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
