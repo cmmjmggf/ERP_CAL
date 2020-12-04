@@ -583,8 +583,8 @@ class Avance8 extends CI_Controller {
                     $data["fraccion"] = $v->NUMERO_FRACCION;
                     $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
 
-                    if (intval($v->NUMERO_FRACCION) === 60 || 
-                            intval($v->NUMERO_FRACCION) === 61 || 
+                    if (intval($v->NUMERO_FRACCION) === 60 ||
+                            intval($v->NUMERO_FRACCION) === 61 ||
                             intval($v->NUMERO_FRACCION) === 71) {
                         /* REVISA MUESTRA */
                         $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P "
@@ -644,8 +644,9 @@ class Avance8 extends CI_Controller {
                         }
                         $data["modulo"] = 'A8';
                         $this->db->insert('fracpagnomina', $data);
-                        print json_encode(array("AVANZO" => 2, "STEP" => 1));
                         $this->onAvanzarXControl($xXx['CONTROL'], 'REBAJADO', 30, 33);
+                        $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
+                        print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
                         exit(0);
                     }
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;

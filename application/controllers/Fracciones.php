@@ -46,6 +46,15 @@ class Fracciones extends CI_Controller {
         }
     }
 
+    public function onRevisarFraccion() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE FROM fracciones WHERE Clave = {$x['CLAVE_FRACCION']}")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getRecords() {
         try {
 //            print json_encode($this->Fracciones_model->getRecords());
@@ -121,7 +130,7 @@ class Fracciones extends CI_Controller {
 
     public function onEliminar() {
         try {
-            $this->Fracciones_model->onEliminar($this->input->post('ID'));
+            $this->db->where('ID', $this->input->post('ID'))->delete("fracciones"); 
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

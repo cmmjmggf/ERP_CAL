@@ -253,6 +253,12 @@
                             </div>
                             <div class="col-12">
                                 <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk321" description="FORRAR PLATADORMA MUESTRA" fraccion="321">
+                                    <label class="custom-control-label" for="chk321">321 FORRAR PLATADORMA MUESTRA</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="chk333" description="PONER CASCO PESPUNTE" fraccion="333">
                                     <label class="custom-control-label" for="chk333">333 Poner casco pespunte</label>
                                 </div>
@@ -297,6 +303,12 @@
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="chk301" description="PESPUNTAR PLANTILLA" fraccion="301">
                                     <label class="custom-control-label" for="chk301">301 Pespuntar plantilla</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chk23" description="DOMAR CHINELA (MUESTRA)" fraccion="23">
+                                    <label class="custom-control-label" for="chk23">23 DOMAR CHINELA (MUESTRA)</label>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -1060,6 +1072,12 @@
                 DESCRIPCION: "PONER CASCO A PESPUNTE"
             });
         }
+        if (pnlTablero.find("#chk321")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 321,
+                DESCRIPCION: "FORRAR PLATADORMA MUESTRA"
+            });
+        }
         if (pnlTablero.find("#chk337")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 337,
@@ -1119,6 +1137,12 @@
             fracciones.push({
                 NUMERO_FRACCION: 24,
                 DESCRIPCION: "DOMAR"
+            });
+        }
+        if (pnlTablero.find("#chk23")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 23,
+                DESCRIPCION: "DOMAR CHINELA MUESTRA"
             });
         }
         if (pnlTablero.find("#chk62")[0].checked) {

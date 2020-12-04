@@ -594,11 +594,11 @@ P.Maquila AS MAQUILA
                     $this->db->set("status", 5)->set("pespunte", $xXx['EMPLEADO'])->set("fec5", Date('Y-m-d 00:00:00'))->where('fec5 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                     $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - PESPUNTE. ", $this->session);
 
-                    $this->onAvance($xXx['CONTROL'], 140, 'ENSUELADO', NULL);
-                    $this->db->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('controles');
-                    $this->db->set('stsavan', 55)->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                    $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))->where('fec55 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ENSUELADO.  ", $this->session);
+//                    $this->onAvance($xXx['CONTROL'], 140, 'ENSUELADO', NULL);
+//                    $this->db->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('controles');
+//                    $this->db->set('stsavan', 55)->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('pedidox');
+//                    $this->db->set("status", 55)->set("fec55", Date('Y-m-d 00:00:00'))->where('fec55 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+//                    $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ENSUELADO.  ", $this->session);
 
                     exit(0);
                 }

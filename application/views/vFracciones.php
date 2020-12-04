@@ -91,51 +91,68 @@
         handleEnterDiv(pnlDatos);
         /*FUNCIONES X BOTON*/
         btnGuardar.click(function () {
-            isValid('pnlDatos');
-            if (valido) {
-                var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
-                if (!nuevo) {
-                    $.ajax({
-                        url: master_url + 'onModificar',
-                        type: "POST",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: frm
-                    }).done(function (data, x, jq) {
-                        swal('ATENCIÓN', 'SE HA MODIFICADO EL REGISTRO', 'info');
-                        Fracciones.ajax.reload();
-                        pnlDatos.addClass("d-none");
-                        pnlTablero.removeClass("d-none");
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                    }).always(function () {
-                        HoldOn.close();
-                    });
-                } else {
-                    frm.append('Estatus', 'ACTIVO');
-                    $.ajax({
-                        url: master_url + 'onAgregar',
-                        type: "POST",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: frm
-                    }).done(function (data, x, jq) {
-                        pnlDatos.find("[name='ID']").val(data);
-                        nuevo = false;
-                        Fracciones.ajax.reload();
-                        pnlDatos.addClass("d-none");
-                        pnlTablero.removeClass("d-none");
-                    }).fail(function (x, y, z) {
-                        console.log(x, y, z);
-                    }).always(function () {
-                        HoldOn.close();
-                    });
+            $.getJSON('<?php print base_url('Fracciones/onRevisarFraccion'); ?>', {CLAVE_FRACCION: pnlDatos.find("#Clave").val()}).done(function (a) {
+                if (a.length > 0) {
+                    switch (parseInt(a[0].EXISTE)) {
+                        case 0:
+                            isValid('pnlDatos');
+                            if (valido) {
+                                var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                                if (!nuevo) {
+                                    $.ajax({
+                                        url: master_url + 'onModificar',
+                                        type: "POST",
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        data: frm
+                                    }).done(function (data, x, jq) {
+                                        swal('ATENCIÓN', 'SE HA MODIFICADO EL REGISTRO', 'info');
+                                        Fracciones.ajax.reload();
+                                        pnlDatos.addClass("d-none");
+                                        pnlTablero.removeClass("d-none");
+                                    }).fail(function (x, y, z) {
+                                        console.log(x, y, z);
+                                    }).always(function () {
+                                        HoldOn.close();
+                                    });
+                                } else {
+                                    frm.append('Estatus', 'ACTIVO');
+                                    $.ajax({
+                                        url: master_url + 'onAgregar',
+                                        type: "POST",
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        data: frm
+                                    }).done(function (data, x, jq) {
+                                        pnlDatos.find("[name='ID']").val(data);
+                                        nuevo = false;
+                                        Fracciones.ajax.reload();
+                                        pnlDatos.addClass("d-none");
+                                        pnlTablero.removeClass("d-none");
+                                    }).fail(function (x, y, z) {
+                                        console.log(x, y, z);
+                                    }).always(function () {
+                                        HoldOn.close();
+                                    });
+                                }
+                            } else {
+                                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
+                            }
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
+                            onCampoInvalido(pnlDatos, "LA CLAVE PARA LA FRACCION " + pnlDatos.find("#Clave").val() + " YA EXISTE", function () {
+                                pnlDatos.find("#Clave").focus().select();
+                            });
+                            break;
+                    }
                 }
-            } else {
-                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
-            }
+            }).fail(function (x) {
+                getError(x);
+            });
         });
 
         btnEliminar.click(function () {

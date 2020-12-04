@@ -397,8 +397,8 @@
 
 <!--PESPUNTE FRACCIONES 324,322,309,308-->
 <div class="modal" id="mdlPespunteFraccionesFail" >
-      <div class="modal-dialog modal-lg notdraggable modal-dialog-centered" role="document" style="min-width: 70%">
-        
+    <div class="modal-dialog modal-lg notdraggable modal-dialog-centered" role="document" style="min-width: 70%">
+
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><span class="fa fa-draw-polygon"></span> PESPUNTE</h5>
@@ -428,7 +428,7 @@
                                     <div class="col-9">
                                         <select id="FraccionPespunteFail" name="FraccionPespunteFail" class="form-control">
                                             <?php
-                                            foreach ($this->db->query("SELECT F.Clave,F.Descripcion FROM fracciones AS F WHERE F.Clave IN(308,309,322,324,405,315) ORDER BY ABS(F.Clave) ASC")->result() as $k => $v) {
+                                            foreach ($this->db->query("SELECT F.Clave,F.Descripcion FROM fracciones AS F WHERE F.Clave IN(308,309,322,324,405,315,340) ORDER BY ABS(F.Clave) ASC")->result() as $k => $v) {
                                                 print "<option value='{$v->Clave}'>{$v->Clave} {$v->Descripcion}</option>";
                                             }
                                             ?> 
@@ -446,7 +446,7 @@
                                         <select id="CelulaPespunteFail" name="CelulaPespunteFail" class="form-control selectNotEnter notEnter">
                                             <?php
 //                                            $celulas_empleados = $this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE E.Numero IN(1000, 1001, 1002, 994, 995, 996, 997, 998, 999)")->result();
-                                            $celulas_empleados = $this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE FijoDestajoAmbos = 2 AND DepartamentoFisico IN(110,115) AND AltaBaja = 1 AND Numero > 0 ")->result();
+                                            $celulas_empleados = $this->db->query("SELECT E.Numero, E.Busqueda AS CELULA FROM empleados AS E WHERE FijoDestajoAmbos = 2 AND DepartamentoFisico IN(110,115,120) AND AltaBaja = 1 AND Numero > 0 ")->result();
                                             foreach ($celulas_empleados as $k => $v) {
                                                 print "<option value='{$v->Numero}'>{$v->Numero} {$v->CELULA}</option>";
                                             }
@@ -854,6 +854,7 @@
 
         FraccionPespunteFail.change(function () {
             if (FraccionPespunteFail.val()) {
+                ClaveFraccionPespunteFail.val($(this).val());
                 $.getJSON('<?php print base_url('Avance/getManoDeObraXFraccionEstiloPespunte') ?>',
                         {
                             ESTILO: EstiloControlPespunteFail.val(),
@@ -1889,10 +1890,10 @@
             case "JULIANNA":
             case "GUSTAVO":
                 switch (parseInt(Departamento.val())) {
-                    case 40:   
-                    case 42: 
-                    case 44: 
-                    case 5: 
+                    case 40:
+                    case 42:
+                    case 44:
+                    case 5:
                     case 55:
                         Control.focus().select();
                         btnAceptar.attr('disabled', false);
