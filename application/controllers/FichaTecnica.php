@@ -619,24 +619,29 @@ class FichaTecnica extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
-            $PRECIO = $this->ftm->getPrecioPorArticuloByID($x->post('Articulo'));
-            $data = array(
-                'Estilo' => ($x->post('Estilo') !== NULL) ? $x->post('Estilo') : NULL,
-                'Color' => ($x->post('Color') !== NULL) ? $x->post('Color') : NULL,
-                'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
-                'Articulo' => ($x->post('Articulo') !== NULL) ? $x->post('Articulo') : NULL,
-                'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
-                'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
-                'Estatus' => 'ACTIVO',
-                'FechaAlta' => Date('d/m/Y')
-            );
-            if (isset($PRECIO[0])) {
-                $data["Precio"] = $PRECIO[0]->PRECIO;
-            } else {
-                $data["Precio"] = 0;
+            $revisa_pieza = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fichatecnica AS F WHERE F.Estilo = '{$x->post('Estilo')}' AND F.Pieza = '{$x->post('Pieza')}' AND F.Articulo = '{$x->post('Articulo')}'")->result();
+            if (intval($revisa_pieza[0]->EXISTE) === 0) {
+                $PRECIO = $this->ftm->getPrecioPorArticuloByID($x->post('Articulo'));
+                $data = array(
+                    'Estilo' => ($x->post('Estilo') !== NULL) ? $x->post('Estilo') : NULL,
+                    'Color' => ($x->post('Color') !== NULL) ? $x->post('Color') : NULL,
+                    'Pieza' => ($x->post('Pieza') !== NULL) ? $x->post('Pieza') : NULL,
+                    'Articulo' => ($x->post('Articulo') !== NULL) ? $x->post('Articulo') : NULL,
+                    'Consumo' => ($x->post('Consumo') !== NULL) ? $x->post('Consumo') : 0,
+                    'PzXPar' => ($x->post('PzXPar') !== NULL) ? $x->post('PzXPar') : NULL,
+                    'Estatus' => 'ACTIVO',
+                    'FechaAlta' => Date('d/m/Y')
+                );
+                if (isset($PRECIO[0])) {
+                    $data["Precio"] = $PRECIO[0]->PRECIO;
+                } else {
+                    $data["Precio"] = 0;
+                }
+                $ID = $this->ftm->onAgregar($data);
+                print $ID;
+            }else{
+                print "\n ESTA PIEZA YA EXISTE\n";
             }
-            $ID = $this->ftm->onAgregar($data);
-            print $ID;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -834,9 +839,11 @@ class FichaTecnica extends CI_Controller {
             print base_url() . $url;
         }
     }
+
     public function getIPEquipo() {
-       print $_SERVER['REMOTE_ADDR'];
+        print $_SERVER['REMOTE_ADDR'];
     }
+
 }
 
 class PDF extends FPDF {

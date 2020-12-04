@@ -2,28 +2,32 @@
     <!--    <div class="card-header" align="center" style="padding: 5px 5px 0px 5px !important;">
             
         </div>-->
-    <div class="card-body " >
+   <div class="card-body " style="
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+">
         <div class="row">
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
                 <button type="button" id="btnAdendaCoppel" name="btnAdendaCoppel" 
-                        class="btn btn-danger" style="background-color: #005efb !important; border-color: #005efb;">
+                        class="btn btn-danger selectNotEnter" style="background-color: #005efb !important; border-color: #005efb;">
                     <span class="fa fa-file"></span> ADDENDA COPPEL
                 </button>
                 <button type="button" id="PrevisualizarDocto" name="PrevisualizarDocto" 
-                        class="btn btn-success" style="background-color: #13af19 !important;">
+                        class="btn btn-success selectNotEnter" style="background-color: #13af19 !important;">
                     <span class="fa fa-eye"></span>   Previsualiza docto 
                 </button>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-6 text-center">
-                <h5 class="font-weight-bold font-italic" style="color: #ff0000 !important;">DOCUMENTOS DIRECTOS DE CLIENTES VARIOS</h5>
+                <h5 class="font-weight-bold font-italic" style="color: #ff0000 !important; font-size: 28px">FACTURACIÓN VARIOS</h5>
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3" align="right">
-                
+
                 <button type="button" id="btnCierraDocto" name="btnCierraDocto" 
-                        class="btn btn-danger" style="background-color: #fb1700 !important;">
+                        class="btn btn-danger selectNotEnter" style="background-color: #fb1700 !important;">
                     <span class="fa fa-lock"></span> CIERRA DOCUMENTO
                 </button>
-                
+
                 <button type="button" id="btnCambiaTienda" name="btnCambiaTienda"  
                         class="btn btn-primary d-none selectNotEnter" 
                         data-toggle="tooltip" data-placement="bottom" title="Cambia tienda" 
@@ -38,9 +42,9 @@
                     <span class="fa fa-check"></span>
                 </button>
                 <button type="button" id="btnDeshacer" name="btnDeshacer" 
-                        class="btn btn-default d-none selectNotEnter" 
+                        class="btn btn-danger d-none selectNotEnter" 
                         disabled="true" style="padding: 3px 6px 3px 6px !important;    background-color: #9e9e9e00; box-shadow: none !important; color: #9E9E9E !important; border-color: ">
-                    <span class="fa fa-trash"></span>
+                    <span class="fa fa-trash"></span> CANCELAR
                 </button>
             </div>
         </div>
@@ -205,7 +209,7 @@
                 <div class="form-group">
                     <!--CHECK 1-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                        <input type="checkbox" class="custom-control-input" id="cNoIva" name="cNoIva" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input selectNotEnter" id="cNoIva" name="cNoIva" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cNoIva" style="cursor: pointer !important;">No genera I.V.A</label>
                     </div>
                 </div>      
@@ -214,7 +218,7 @@
                 <div class="form-group">
                     <!--CHECK 3-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                        <input type="checkbox" class="custom-control-input" id="cTimbrar" name="cTimbrar" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input selectNotEnter" id="cTimbrar" name="cTimbrar" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cTimbrar" style="cursor: pointer !important;">Timbrar</label>
                     </div>
                 </div>      
@@ -223,7 +227,7 @@
                 <div class="form-group">
                     <!--CHECK 4-->
                     <div class="custom-control custom-checkbox"  align="center" style="cursor: pointer !important;">
-                        <input type="checkbox" class="custom-control-input" id="cPorAnticipo" name="cPorAnticipo" style="cursor: pointer !important;">
+                        <input type="checkbox" class="custom-control-input selectNotEnter" id="cPorAnticipo" name="cPorAnticipo" style="cursor: pointer !important;">
                         <label class="custom-control-label text-danger labelCheck" for="cPorAnticipo" style="cursor: pointer !important;">Por anticipo</label>
                     </div>
                 </div>      
@@ -266,7 +270,7 @@
                 <div class="row"> 
                     <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" align="center">
                         <h6 class="font-weight-bold text-danger font-italic">
-                            DETALLE DE ESTE DOCTO
+                            DETALLE DE ESTE DOCUMENTO
                         </h6>
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-none"  align="right">
@@ -312,7 +316,7 @@
                 <h4 class="font-weight-bold font-italic cantidad_facturada">CANTIDAD 0</h4>
             </div>
 
-            <div class="col-12 col-lg-12 col-xl-12">
+            <div class="col-12 col-lg-12 col-xl-12 d-none">
                 <div class="row">
                     <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8" align="center">
                         <h6 class="font-weight-bold text-danger font-italic">
@@ -324,7 +328,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 d-none">
                 <table id="tblDocumentos" class="table table-hover table-sm table-bordered"  style="width: 100% !important;">
                     <thead>
                         <tr>
@@ -482,8 +486,9 @@
         });
         FechaFactura.on('keydown', function (e) {
             if (e.keyCode === 13 && parseInt(ClienteFactura.val()) === 2121) {
-                Cantidad.addClass("selectNotEnter");
-                ControlV.focus();
+//                Cantidad.addClass("selectNotEnter");
+//                ControlV.focus();
+                Cantidad.focus();
             }
         });
         ControlV.on('keydown', function (e) {
@@ -515,13 +520,13 @@
                 btnCambiaTienda.removeClass("d-none");
 //                pnlTablero.find("p.color_x_control").removeClass("d-none");
                 pnlTablero.find("#Color_panel").removeClass("d-none");
-                Cantidad.addClass("selectNotEnter");
+//                Cantidad.addClass("selectNotEnter");
             } else {
                 pnlTablero.find("#Color_panel").addClass("d-none");
                 pnlTablero.find("p.color_x_control").addClass("d-none");
                 pnlTablero.find("p.color_x_control").text("");
                 ColorClave.addClass("d-none");
-                Cantidad.removeClass("selectNotEnter");
+//                Cantidad.removeClass("selectNotEnter");
                 btnCambiaTienda.addClass("d-none");
                 pnlTablero.find("#info_control").addClass("d-none");
                 pnlTablero.find("#info_control_pares").addClass("d-none");
@@ -566,11 +571,11 @@
                         });
                         return;
                     }
-                } else {
+                } else if (ClienteClave.val() === '') {
                     ClienteFactura[0].selectize.enable();
                     ClienteFactura[0].selectize.clear(true);
                 }
-            } else {
+            } else if (ClienteClave.val() === '' && e.keyCode !== 13) {
                 ClienteFactura[0].selectize.enable();
                 ClienteFactura[0].selectize.clear(true);
             }
@@ -665,7 +670,7 @@
         AddendaCoppel.click(function () {
 
         });
-        Estilo.change(function () { 
+        Estilo.change(function () {
             if (Estilo.val()) {
                 xEstilo.val(Estilo.val());
                 onObtenerCodigoSatXEstilo();
@@ -915,7 +920,7 @@
                                     pnlTablero.find("span.subtotaldocvarios").text("$0.0");
                                     pnlTablero.find(".productoSAT").text('-');
                                     pnlTablero.find("#cNoIva")[0].checked = false;
-                                    pnlTablero.find("#cTimbrar")[0].checked = false; 
+                                    pnlTablero.find("#cTimbrar")[0].checked = false;
                                     PedimientoXTaxDestinatario.val('');
                                     OrdenCompraClaveIncotem.val('');
                                     Cantidad.focus().select();
@@ -1298,7 +1303,7 @@
             FechaFactura.attr('disabled', true);
             btnAcepta.attr('disabled', false);
             btnDeshacer.attr('disabled', false);
-            btnDeshacer.removeClass("d-none");
+//            btnDeshacer.removeClass("d-none");
             xEstilo.focus().select();
         } else {
             btnAcepta.attr('disabled', true);
@@ -1621,8 +1626,7 @@
 <style>  
     .card{ 
         border: 2px solid #000;
-        border-image: linear-gradient(to bottom,  #000000, #999999, rgb(0,0,0,0)) 1 100% ;
-    }
+     }
     #tblParesFacturados tbody td{
         font-weight: bold !important;
     }
