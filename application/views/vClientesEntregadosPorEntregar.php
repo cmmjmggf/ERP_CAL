@@ -112,6 +112,8 @@
                                             <th>Color</th>
                                             <th>Precio</th>
                                             <th>Av</th>
+                                            <th>Docto</th>
+                                            <th>Fecha</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -147,7 +149,7 @@
             if (e.keyCode === 13) {
                 var txtcte = $(this).val();
                 if (txtcte) {
-
+                    onOpenOverlay('Cargando datos...');
                     $.getJSON(master_url + 'onVerificarCliente', {Cliente: txtcte}).done(function (data) {
                         if (data.length > 0) {
                             pnlTablero.find("#sCliente")[0].selectize.addItem(txtcte, true);
@@ -170,6 +172,7 @@
         });
         pnlTablero.find("#sCliente").change(function () {
             if ($(this).val()) {
+                onOpenOverlay('Cargando datos...');
                 var cliente = $(this).val();
                 pnlTablero.find("#Cliente").val(cliente);
                 //Obtener registros entregados pedidos
@@ -322,7 +325,9 @@
                 {"data": "estilo"},
                 {"data": "color"},
                 {"data": "precio"},
-                {"data": "avance"}
+                {"data": "avance"},
+                {"data": "factura"},
+                {"data": "fecha"}
             ],
 
             language: lang,
@@ -337,7 +342,10 @@
             "bSort": true,
             "aaSorting": [
                 [1, 'asc'], [4, 'asc']
-            ]
+            ],
+            "initComplete": function (x, y) {
+                onCloseOverlay();
+            }
         });
         tblEntregadosCliente.find('tbody').on('click', 'tr', function () {
             tblEntregadosCliente.find("tbody tr").removeClass("success");
@@ -537,7 +545,7 @@
         margin-top: 0.14rem;
         margin-bottom: 0.0rem;
     }
-    
+
     table tbody tr td{
         font-weight: bold;
     }

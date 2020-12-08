@@ -79,14 +79,16 @@ class ClientesEntregadosPorEntregar extends CI_Controller {
                                             date_format( str_to_date(p.fechaentrega,'%d/%m/%Y') , '%d/%m/%Y') as fechaentrega,
                                             p.semana, p.pares, p.paresfacturados,
                                             p.control, p.estilo, concat(p.color,' ',p.colort) as color, p.precio,
-                                            ifnull(P.EstatusProduccion,'PROGRAMADO') as avance
+                                            ifnull(P.EstatusProduccion,'PROGRAMADO') as avance,
+                                            (SELECT GROUP_CONCAT(factura SEPARATOR '--') FROM facturacion WHERE contped = p.control AND staped = 2 ORDER BY control DESC LIMIT 1) AS factura,
+                                            (SELECT GROUP_CONCAT(DATE_FORMAT(fecha,'%d/%m/%y') SEPARATOR '--') FROM facturacion WHERE contped = p.control AND staped = 2 ORDER BY control DESC LIMIT 1) AS fecha
                                             FROM pedidox P
                                             WHERE p.stsavan = 13 and p.cliente= $cte  ")->result());
     }
 
     public function getPedidosNoEntregados() {
         $cte = $this->input->get('Cliente');
-        if(intval($this->session->ID) === 78 && $this->session->USERNAME === 'VIKY') {
+        if (intval($this->session->ID) === 78 && $this->session->USERNAME === 'VIKY') {
             print json_encode($this->db->query("SELECT
                                             p.cliente, p.clave as pedido, p.maquila,
                                             date_format( str_to_date(p.fechapedido,'%d/%m/%Y') , '%d/%m/%Y') as fechaped,

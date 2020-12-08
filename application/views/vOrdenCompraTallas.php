@@ -159,7 +159,6 @@
                                     ?>
                                     <td class="font-weight-bold">Total:</td>
                                 </tr>
-                                </tr>
                                 <tr class="rCapturaCantidades" id="rCantidades">
                                     <td class="font-weight-bold">Cant.</td>
                                     <?php
@@ -798,7 +797,7 @@
             }
             HoldOn.close();
             pnlDatosDetalle.find("#TotalParesEntrega").val(0);
-            pnlDatosDetalle.find('#rCantidades').find('#C1').focus().select();
+            pnlDatosDetalle.find('#rCantidades').find('input:not([disabled]):eq(0)').focus().select();
         }).fail(function (x, y, z) {
             console.log(x, y, z);
         });

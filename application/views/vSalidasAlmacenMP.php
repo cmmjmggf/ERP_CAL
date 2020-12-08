@@ -275,10 +275,10 @@
                                         var mov = pnlTablero.find("#TipoMov").val();
                                         //Validar que no sea de tipo 3 para mandarle mensaje: En este módulo no se permite dar salida a SUELAS
                                         if (data[0].grupo === '3' && maq === '1') {
-                                            if (mov === 'SXM' || mov === 'SPR' || mov === 'SXP' || mov === 'SXC') {//Validamos los mov no permitidos para dar salida
+                                            if (mov === 'SXM' || mov === 'SPR' || mov === 'SXP') {//Validamos los mov no permitidos para dar salida
                                                 swal({
                                                     title: "ATENCIÓN",
-                                                    text: "NO SE PERMITE DAR SALIDA A SUELAS A MAQUILA 1 POR: \n\n SXM \n SPR \n SXP \n SXC ",
+                                                    text: "NO SE PERMITE DAR SALIDA A SUELAS A MAQUILA 1 POR: \n\n SXM \n SPR \n SXP ",
                                                     icon: "warning"
                                                 }).then((value) => {
                                                     pnlTablero.find("#sArticulo")[0].selectize.clear(true);
@@ -359,10 +359,10 @@
                             //Validar que no sea de tipo 3 para mandarle mensaje: En este módulo no se permite dar salida a SUELAS
                             if (data[0].grupo === '3' && maq === '1') {
 
-                                if (mov === 'SXM' || mov === 'SPR' || mov === 'SXP' || mov === 'SXC') {//Validamos los mov no permitidos para dar salida
+                                if (mov === 'SXM' || mov === 'SPR' || mov === 'SXP') {//Validamos los mov no permitidos para dar salida
                                     swal({
                                         title: "ATENCIÓN",
-                                        text: "NO SE PERMITE DAR SALIDA A SUELAS A MAQUILA 1 POR: \n\n SXM \n SPR \n SXP \n SXC ",
+                                        text: "NO SE PERMITE DAR SALIDA A SUELAS A MAQUILA 1 POR: \n\n SXM \n SPR \n SXP ",
                                         icon: "warning"
                                     }).then((value) => {
                                         pnlTablero.find("#sArticulo")[0].selectize.clear(true);

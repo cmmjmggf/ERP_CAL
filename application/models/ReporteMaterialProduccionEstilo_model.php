@@ -112,7 +112,7 @@ class ReporteMaterialProduccionEstilo_model extends CI_Model {
                             FT.Articulo, A.Descripcion,
                             PE.Control, PE.Clave as Pedido, PE.FechaEntrega, PE.Estilo, PE.Color, PE.Cliente,
                             PE.Semana, PE.Maquila,
-                            case when $TipoE = '10' then
+                            case when $TipoE = '10' and A.Grupo in (1,2) then
                             (PE.Pares *  FT.Consumo)*(CASE
                             WHEN E.PiezasCorte = 1 THEN MA.PorExtraXBotaAlta
                             WHEN E.PiezasCorte = 2 THEN MA.PorExtraXBota

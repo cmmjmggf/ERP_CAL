@@ -209,6 +209,7 @@
             suma();
         });
         pnlTablero.find("#btnAceptar").click(function () {
+            onDisable(pnlTablero.find("#btnAceptar"));
             var frm = new FormData(pnlTablero.find("#frmCaptura")[0]);
             var funcion = esNuevo === true ? 'onAgregar' : 'onModificar';
             $.ajax({
@@ -219,11 +220,13 @@
                 processData: false,
                 data: frm
             }).done(function (data) {
+                onEnable(pnlTablero.find("#btnAceptar"));
                 onNotifyOld('fa fa-check', 'REGISTRO GUARDADO', 'info');
                 Registros.ajax.reload();
                 pnlTablero.find("#DatosMinutos").find('input').val("");
                 pnlTablero.find('#Estilo').val('').focus();
             }).fail(function (x, y, z) {
+                onEnable(pnlTablero.find("#btnAceptar"));
                 console.log(x, y, z);
             });
         });

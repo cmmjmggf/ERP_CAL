@@ -401,6 +401,7 @@
                                 });
                             } else {
                                 var r = data[0];
+                                console.log(r);
                                 if (data[0].Depto === '260' && parseInt(r.FACTURA_ADELANTADO) === 0) {
                                     swal({
                                         title: "CONTROL YA FACTURADO",

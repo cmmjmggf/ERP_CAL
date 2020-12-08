@@ -16,7 +16,8 @@ WHEN D.clasif = 2 THEN "***** SALDOS *****"
 WHEN D.clasif = 3 THEN "***** REPARACION *****"
  END) AS CLASIFICACION_T,
  D.seriped AS SERIE, D.cliente AS CLIENTE_CLAVE,
-(CASE WHEN D.tp = 1 THEN C.RazonS WHEN D.tp = 2 THEN C.NombreP END) AS CLIENTE_DOS,
+-- (CASE WHEN D.tp = 1 THEN C.RazonS WHEN D.tp = 2 THEN C.NombreP END) AS CLIENTE_DOS,
+C.RazonS AS CLIENTE_DOS,
 D.control AS CONTROL,
 D.estilo AS ESTILO_CLAVE,
 D.comb AS COLOR_CLAVE, (SELECT CO.Descripcion FROM colores AS CO WHERE D.comb = CO.Clave  AND D.estilo = CO.Estilo LIMIT 1) AS COLOR,

@@ -221,14 +221,19 @@
     function getSubfraccionByID(ID) {
         $.getJSON(master_url + 'getSubFraccionByID', {ID: ID}).done(function (data) {
             console.log(data);
-            pnlDatos.find("input").val("");
-            $.each(pnlDatos.find("select"), function (k, v) {
-                pnlDatos.find("select")[k].selectize.clear(true);
-            });
-            pnlDatos.find("#Fraccion")[0].selectize.addItem(data[0].Fraccion, true);
-            pnlTablero.addClass("d-none");
-            pnlDatos.removeClass('d-none');
-            Detalle.ajax.reload();
+            if (data.length > 0) {
+                pnlDatos.find("input").val("");
+                $.each(pnlDatos.find("select"), function (k, v) {
+                    pnlDatos.find("select")[k].selectize.clear(true);
+                });
+                pnlDatos.find("#Fraccion")[0].selectize.addItem(data[0].Fraccion, true);
+                pnlTablero.addClass("d-none");
+                pnlDatos.removeClass('d-none');
+                Detalle.ajax.reload();
+            } else {
+                swal('ERROR', 'ESTA FRACCIÓN, AÚN NO TIENE SUBFRACCIONES', 'info');
+            }
+
         }).fail(function (x, y, z) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
             console.log(x.responseText);
