@@ -13,7 +13,7 @@
         bottom:0;
         left:0;
         z-index:0;
-    } 
+    }
 
     /*Hacer disbaled de selectize igual a bootstrap*/
     .selectize-control .selectize-input.disabled {
@@ -156,7 +156,7 @@
     ::placeholder { /* Recent browsers */
         text-transform: none;
     }
-    .card { 
+    .card {
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
     .btn:not(.dropdown-toggle):not(.navbar-brand){
@@ -287,7 +287,7 @@
         color: #fff;
         background-color: #673AB7;
     }
-    .card { 
+    .card {
         box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)!important;
     }
 
@@ -342,7 +342,7 @@
             ?>
             color: #000 !important;
             text-decoration: none;
-            background-color: #ffffff !important; 
+            background-color: #ffffff !important;
         <?php } ?>
     }
 
@@ -469,26 +469,26 @@
     }
     nav .btn-primary .dropdown-toggle , nav .session-dropdown .dropdown-toggle {
         padding-top: 3px;
-        padding-bottom: 3px; 
-    } 
+        padding-bottom: 3px;
+    }
 
     nav.navbar .btn-primary , ul.dropdown-menu a {
-        color: white; 
+        color: white;
         font-size: 13px;
         text-transform: uppercase;
         font-weight: bold !important;
-    } 
+    }
 
     input, .selectize-input, textarea, select {
         border: 2px solid #000 !important;
         font-weight: bold !important;
     }
-    div:not(.card-menu):not(.card-session).card  {
-        text-transform: uppercase;
-        background: rgb(255,255,255);
-        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%); 
-        border-radius: 15px !important;
-    }  
+    div:not(.card-menu):not(.card-session).card:not(.bg-danger):not(.bg-info):not(.bg-success):not(.bg-primary):not(.bg-warning) 
+    text-transform: uppercase;
+    background: rgb(255,255,255);
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);
+    border-radius: 15px !important;
+    }
 
     button.btn{
         font-weight: bold;
@@ -539,7 +539,7 @@
             transform: rotate(360deg);
             filter: hue-rotate(360deg);
         }
-    } 
+    }
     .marope-r{
         font-family: 'Manrope-Regular';
         font-size: 15px !important;
@@ -574,7 +574,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||
     <link rel="stylesheet" href="<?php print base_url('js/vegas/vegas.min.css'); ?>">
     <script src="<?php print base_url('js/vegas/vegas.min.js'); ?>"></script>
     <style>
-        body{  
+        body{
             /* Location of the image */
             <?php
             if (!is_null($this->session->TEMA) && $this->session->TEMA === "OSCURO") {
@@ -589,7 +589,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||
             /* Background image doesn't tile */
             background-repeat: no-repeat;
 
-            /* Background image is fixed in the viewport so that it doesn't move when 
+            /* Background image is fixed in the viewport so that it doesn't move when
                the content's height is greater than the image's height */
             background-attachment: fixed;
 
@@ -600,8 +600,8 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||
             /* Set a background color that will be displayed
                while the background image is loading */
             background-color: #464646;
-        }   
-        .bg-primary , .dropdown-menu{            
+        }
+        .bg-primary , .dropdown-menu{
             <?php
             if ($this->session->TEMA === "OSCURO") {
                 ?>
@@ -613,7 +613,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "ACTUAL" ||
         nav button.btn-primary,  .nav-item > .btn-primary{
             background-color: transparent !important;
             border-color: transparent  !important;
-        }    
+        }
         .dropdown-item {
             color: #fff !important;
         }
