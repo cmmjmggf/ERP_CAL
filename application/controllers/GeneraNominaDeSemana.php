@@ -463,6 +463,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["anio"] = $x['ANIO'];
             switch (intval($x['SEMANA'])) {
                 case 98:
+                    $p["fecha_corte"] = $x['FECHACORTE'];
                     $jc->setParametros($p);
                     /* 1. REPORTE DE PRENOMINA COMPLETO */
                     $jc->setJasperurl('jrxml\prenomina\PreNomAguinaldo.jasper');
@@ -1187,6 +1188,7 @@ class GeneraNominaDeSemana extends CI_Controller {
             $p["logo"] = base_url() . $this->session->LOGO;
             $p["empresa"] = $this->session->EMPRESA_RAZON;
             $p["semana"] = $x['SEMANA'];
+            $p["fecha_corte"] = $x['FECHACORTE'];
             $p["anio"] = $x['ANIO'];
             switch (intval($x['SEMANA'])) {
                 case 98:
@@ -1307,7 +1309,14 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $total_aguinaldo = $total_aguinaldo + ($SUELDO_FINAL * $dias_a_pagar);
                     }
                 }
-                /* AGREGAR A PRENOMINA */
+                /* AGREGAR A PRENOMINA */ 
+                switch (intval($v->DepartamentoFisico)) {
+                    case 150:
+                        $total_aguinaldo = 1200;
+                        $dias_a_pagar = 15;
+                        $SUELDO_FINAL = 80;
+                        break;
+                }
                 $this->db->insert('prenomina', array("numsem" => $x->post('SEMANA'),
                     "año" => $x->post('ANIO'),
                     "numemp" => $v->Numero,
@@ -1320,7 +1329,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                 /* AGREGAR A PRENOMINAL */
                 $this->db->insert('prenominal', array(
                     "numsem" => $x->post('SEMANA'), "año" => $x->post('ANIO'),
-                    "numemp" => $v->Numero, "salario" => $SUELDO_FINAL,
+                    "numemp" => $v->Numero, "salario" => $SUELDO_FINAL, "salariod" => $total_aguinaldo,
                     "otrper" => intval($v->DIASFC),
                     "horext" => $dias_a_pagar,
                     "pares" => 0, "status" => 1, "tpomov" => 0,

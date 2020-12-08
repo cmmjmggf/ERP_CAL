@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PreNomVac" language="groovy" pageWidth="635" pageHeight="842" columnWidth="595" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9813a8d-755e-43dc-aec2-731a235eec63">
 	<property name="ireport.zoom" value="3.6363636363636513"/>
-	<property name="ireport.x" value="1254"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
@@ -23,6 +23,7 @@
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="anio" class="java.lang.Integer"/>
 	<parameter name="semana" class="java.lang.Integer"/>
+	<parameter name="fecha_corte" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
 PNL.ID, PNL.numsem, PNL.año, PNL.numemp,
@@ -56,19 +57,19 @@ WHEN E.FijoDestajoAmbos = 1 THEN "FJO"
 WHEN E.FijoDestajoAmbos = 2 THEN "DJO"
 WHEN E.FijoDestajoAmbos = 3 THEN "FI-DE"
 END) AS FIJO_DESTAJO_AMBOS,
-DATEDIFF(  NOW(),E.FechaIngreso ) AS DIAS_LABORADOS,
-DATEDIFF(  NOW(),E.FechaIngreso ) / 365 AS DIAS_LABORADOS_365,
-DATEDIFF(  NOW(),E.FechaIngreso ) / 30.41 AS DIAS_LABORADOS_3041,
-(CASE WHEN DATEDIFF(  NOW(),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) AS VACACIONES,
+DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) AS DIAS_LABORADOS,
+DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) / 365 AS DIAS_LABORADOS_365,
+DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) / 30.41 AS DIAS_LABORADOS_3041,
+(CASE WHEN DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) AS VACACIONES,
 
-(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(NOW(),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END) AS PRIMA,
+(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END) AS PRIMA,
 (
-(CASE WHEN DATEDIFF(  NOW(),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) +
-(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(NOW(),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END)) AS TOTAL_GENERAL_X_EMPLEADO
+(CASE WHEN DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) +
+(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END)) AS TOTAL_GENERAL_X_EMPLEADO
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = $P{semana} AND PNL.año = $P{anio} AND DATEDIFF(  NOW(),E.FechaIngreso ) >= 31
-ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
+WHERE PNL.numsem = $P{semana} AND PNL.año = $P{anio} AND DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) >= 31
+ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,DIAS_LABORADOS_365 DESC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>

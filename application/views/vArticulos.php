@@ -420,10 +420,11 @@
         btnGuardar.click(function () {
             onDisable(btnGuardar);
             isValid('pnlDatos');
+            onOpenOverlay('Guardando...');
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
                 if (!nuevo) {
-                    if (PrecioVentaParaMaquilas.data().count()) {
+                    if (PrecioVentaParaMaquilas.data().count()>0) {
                         var precios = [];
                         $.each(tblPrecioVentaParaMaquilas.find("tbody tr"), function (k, v) {
                             var r = PrecioVentaParaMaquilas.row($(this)).data();
@@ -437,7 +438,7 @@
                             }
                         });
                         frm.append('Precios', JSON.stringify(precios));
-                    }
+                    } 
                     $.ajax({
                         url: master_url + 'onModificar',
                         type: "POST",
@@ -447,6 +448,7 @@
                         data: frm
                     }).done(function (data, x, jq) {
                         console.log(data);
+                        onCloseOverlay();
                         onEnable(btnGuardar);
 //                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
 //                        nuevo = false;
@@ -461,42 +463,86 @@
                     }).always(function () {
                         onEnable(btnGuardar);
                         HoldOn.close();
+                        onCloseOverlay();
                     });
                 } else {
                     var precios = [];
-                    frm.append('Precios', JSON.stringify(precios));
-                    $.ajax({
-                        url: master_url + 'onAgregar',
-                        type: "POST",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        data: frm
-                    }).done(function (data, x, jq) {
-                        onEnable(btnGuardar);
-                        pnlDatos.find("[name='ID']").val(data);
-                        nuevo = false;
-                        Articulos.ajax.reload();
-                        swal({
-                            title: "ATENCIÓN",
-                            text: "ARTÍCULO GUARDADO, CAPTURE LOS PRECIOS PARA VENTA A MAQUILAS",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false
-                        }).then((action) => {
-                            ClaveArticulo = pnlDatos.find('#Clave').val();
-                            pnlDatosDetalle.find('#Maquila')[0].selectize.focus();
+                    if (parseFloat(pnlDatos.find("#PrecioUno").val()) <= 0 && pnlDatos.find("#ProveedorUno").val() &&
+                            parseFloat(pnlDatos.find("#PrecioDos").val()) <= 0 && pnlDatos.find("#ProveedorDos").val() &&
+                            parseFloat(pnlDatos.find("#PrecioTres").val()) <= 0 && pnlDatos.find("#ProveedorTres").val() ||
+                            pnlDatos.find("#PrecioUno").val() === '' && pnlDatos.find("#ProveedorUno").val() &&
+                            pnlDatos.find("#PrecioDos").val() === '' && pnlDatos.find("#ProveedorDos").val() &&
+                            pnlDatos.find("#PrecioTres").val() === '' && pnlDatos.find("#ProveedorTres").val())
+                    {
+                        onCampoInvalido(pnlDatos, "NO SE PUEDE AGREGAR UN ARTICULO SIN UN PROVEEDOR Y PRECIO (js).", function () {
+                            if (!pnlDatos.find("#PrecioUno").val()) {
+                                pnlDatos.find("#PrecioUno").focus().select();
+                                onEnable(btnGuardar);
+                                return;
+                            } else if (!pnlDatos.find("#PrecioDos").val()) {
+                                pnlDatos.find("#PrecioDos").focus().select();
+                                onEnable(btnGuardar);
+                                return;
+                            } else if (!pnlDatos.find("#PrecioTres").val()) {
+                                pnlDatos.find("#PrecioTres").focus().select();
+                                onEnable(btnGuardar);
+                                return;
+                            }
                         });
-                    }).fail(function (x, y, z) {
-                        onEnable(btnGuardar);
-                        console.log(x, y, z);
-                    }).always(function () {
-                        onEnable(btnGuardar);
-                        HoldOn.close();
-                    });
+                        return;
+                    } else {
+                        frm.append('Precios', JSON.stringify(precios));
+                        $.ajax({
+                            url: master_url + 'onAgregar',
+                            type: "POST",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: frm
+                        }).done(function (data, x, jq) {
+                            onCloseOverlay();
+                            var r = JSON.parse(data);
+                            switch (parseInt(r.ESTATUS))
+                            {
+                                case 0:
+                                    onCampoInvalido(pnlDatos, r.MENSAJE, function () {
+                                        onEnable(btnGuardar);
+                                    });
+                                    return;
+                                    break;
+                                case 1:
+                                    pnlDatos.find("[name='ID']").val(data);
+                                    nuevo = false;
+                                    swal({
+                                        title: "ATENCIÓN",
+                                        text: r.MENSAJE,
+                                        icon: "success",
+                                        closeOnClickOutside: false,
+                                        closeOnEsc: false
+                                    }).then((action) => {
+                                        onEnable(btnGuardar);
+                                        ClaveArticulo = pnlDatos.find('#Clave').val();
+                                        pnlDatosDetalle.find('#Maquila')[0].selectize.focus();
+                                        Articulos.ajax.reload(function () {
+                                        });
+                                    });
+                                    break;
+                            }
+                        }).fail(function (x, y, z) {
+                            onCloseOverlay();
+                            onEnable(btnGuardar);
+                            console.log(x, y, z);
+                        }).always(function () {
+                            onEnable(btnGuardar);
+                            HoldOn.close();
+                        });
+                    }
                 }
             } else {
-                swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
+                onCloseOverlay();
+                onCampoInvalido(pnlDatos, "DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS", function () {
+                    onEnable(btnGuardar);
+                });
             }
         });
 

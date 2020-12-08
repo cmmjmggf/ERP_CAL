@@ -10,7 +10,7 @@
 	<parameter name="empresa" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT O.ID, O.Fecha, (SELECT OCP.Nombre FROM ordendecompramto_proveedores AS OCP WHERE OCP.ID = O.Proveedor LIMIT 1) AS Proveedor, O.DestinoMaterial, O.Observaciones, O.Folio, O.Registro, O.Usuario, O.UsuarioT,
-OD.OrdenID, OD.Cantidad, (SELECT Nombre FROM ordendecompramto_unidades AS OCU WHERE OCU.ID = OD.Unidad LIMIT 1) AS Unidad, OD.Descripcion, OD.Precio, (OD.Precio * OD.Cantidad) AS SUBTOTAL FROM ordendecompramto AS O LEFT  JOIN ordendecompramto_detalle AS OD ON O.ID = OD.OrdenID
+OD.OrdenID, OD.Cantidad, (SELECT Nombre FROM ordendecompramto_unidades AS OCU WHERE OCU.ID = OD.Unidad LIMIT 1) AS Unidad, OD.Descripcion, OD.Precio, (OD.Precio * OD.Cantidad) AS SUBTOTAL, O.FacturaRemision AS FACTURA_REMISION FROM ordendecompramto AS O LEFT  JOIN ordendecompramto_detalle AS OD ON O.ID = OD.OrdenID
 WHERE O.Folio = $P{FOLIO}]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
@@ -58,6 +58,7 @@ WHERE O.Folio = $P{FOLIO}]]>
 	<field name="SUBTOTAL" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="FACTURA_REMISION" class="java.lang.Integer"/>
 	<variable name="SUBTOTAL_1" class="java.lang.Double" resetType="Page" calculation="Sum">
 		<variableExpression><![CDATA[$F{SUBTOTAL}]]></variableExpression>
 	</variable>
@@ -299,7 +300,7 @@ WHERE O.Folio = $P{FOLIO}]]>
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUBTOTAL_1}*1.16]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{FACTURA_REMISION} == 1 ? $V{SUBTOTAL_1}*1.16 : $V{SUBTOTAL_1} ]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="130" height="14" isPrintInFirstWholeBand="true" uuid="f3cab358-9e2e-4aae-adb3-985c683708ac"/>

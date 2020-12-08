@@ -922,7 +922,7 @@ class Avance9 extends CI_Controller {
                         }
 
                         $rebajadores = array(49, 1894, 3105);
-                        $rebajadores = array(49, 3105);
+                        $rebajadores = array(49, 3105, 3134);
 
                         if (in_array(intval($xXx['NUMERO_EMPLEADO']), $rebajadores)) {
                             /* REVISAR SI LA FRACCION "102 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO */

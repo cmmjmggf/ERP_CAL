@@ -11,6 +11,9 @@
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="anio" class="java.lang.Integer"/>
 	<parameter name="semana" class="java.lang.Integer"/>
+	<parameter name="fecha_corte" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
 PNL.ID, PNL.numsem, PNL.año, PNL.numemp,
@@ -44,19 +47,19 @@ WHEN E.FijoDestajoAmbos = 1 THEN "FJO"
 WHEN E.FijoDestajoAmbos = 2 THEN "DJO"
 WHEN E.FijoDestajoAmbos = 3 THEN "FI-DE"
 END) AS FIJO_DESTAJO_AMBOS,
-DATEDIFF(  NOW(),E.FechaIngreso ) AS DIAS_LABORADOS,
-DATEDIFF(  NOW(),E.FechaIngreso ) / 365 AS DIAS_LABORADOS_365,
-DATEDIFF(  NOW(),E.FechaIngreso ) / 30.41 AS DIAS_LABORADOS_3041,
-(CASE WHEN DATEDIFF(  NOW(),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) AS VACACIONES,
+DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) AS DIAS_LABORADOS,
+DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) / 365 AS DIAS_LABORADOS_365,
+DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) / 30.41 AS DIAS_LABORADOS_3041,
+(CASE WHEN DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) AS VACACIONES,
 
-(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(NOW(),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END) AS PRIMA,
+(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END) AS PRIMA,
 (
-(CASE WHEN DATEDIFF(  NOW(),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) +
-(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(NOW(),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END)) AS TOTAL_GENERAL_X_EMPLEADO
+(CASE WHEN DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso )> 30.41 THEN PNL.otrper1 ELSE 0 END) +
+(CASE WHEN PNL.horext > 0.4 THEN (CASE WHEN DATEDIFF(str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso)> 30.41 THEN PNL.otrper1 ELSE 0 END) * 0.25 ELSE 0 END)) AS TOTAL_GENERAL_X_EMPLEADO
 
 FROM prenominal AS PNL INNER JOIN empleados AS E ON PNL.numemp = E.Numero LEFT JOIN departamentos AS D ON E.DepartamentoFisico = D.Clave
-WHERE PNL.numsem = $P{semana} AND PNL.año = $P{anio} AND DATEDIFF(  NOW(),E.FechaIngreso ) >= 31
-ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
+WHERE PNL.numsem = $P{semana} AND PNL.año = $P{anio} AND DATEDIFF(  str_to_date($P{fecha_corte},"%d/%m/%Y"),E.FechaIngreso ) >= 31
+ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,DIAS_LABORADOS_365 DESC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -280,10 +283,6 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{semana}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="341" y="16" width="92" height="14" uuid="92e43dba-bbcb-42bc-902a-23f460e1b304"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement isPrintRepeatedValues="false" mode="Transparent" x="433" y="16" width="30" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" backcolor="#FFFFFF" uuid="887702fe-1b20-4e33-814a-b5ee6865d45f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
@@ -413,6 +412,14 @@ ORDER BY ABS(NUMDEP) ASC ,  ABS(E.Celula) ASC ,E.Busqueda ASC]]>
 				</textElement>
 				<text><![CDATA[Total General]]></text>
 			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="341" y="16" width="92" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="2d952cf8-ca0f-42cc-83e8-e2aca21bc83a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha_corte}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<detail>

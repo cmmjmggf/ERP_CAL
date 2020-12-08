@@ -552,7 +552,8 @@
                                         $.post('<?php print base_url('GeneraNominaDeSemana/getReportesNomina9998'); ?>',
                                                 {
                                                     SEMANA: 98,
-                                                    ANIO: AnioGNS.val()
+                                                    ANIO: AnioGNS.val(),   
+                                                    FECHACORTE: FechaCorteAguinaldoGNS.val()
                                                 }).done(function (a) {
                                             console.log(a);
                                             if (a.length > 0) {

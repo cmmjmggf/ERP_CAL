@@ -189,37 +189,46 @@ class Articulos extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
-            $datos = array(
-                'Clave' => $x->post('Clave'),
-                'Departamento' => $x->post('Departamento'),
-                'Descripcion' => $x->post('Descripcion'),
-                'Grupo' => $x->post('Grupo'),
-                'UnidadMedida' => $x->post('UnidadMedida'),
-                'Tmnda' => $x->post('Tmnda'),
-                'Temporada' => $x->post('Temporada'),
-                'Min' => $x->post('Min'),
-                'Max' => $x->post('Max'),
-                'ProveedorUno' => $x->post('ProveedorUno'),
-                'ProveedorDos' => $x->post('ProveedorDos'),
-                'ProveedorTres' => $x->post('ProveedorTres'),
-                'Observaciones' => $x->post('Observaciones'),
-                'UbicacionUno' => $x->post('UbicacionUno'),
-                'UbicacionDos' => $x->post('UbicacionDos'),
-                'UbicacionTres' => $x->post('UbicacionTres'),
-                'UbicacionCuatro' => $x->post('UbicacionCuatro'),
-                'TipoArticulo' => $x->post('TipoArticulo'),
-                'Estatus' => 'ACTIVO',
-                'PrecioUno' => $x->post('PrecioUno'),
-                'PrecioDos' => $x->post('PrecioDos'),
-                'PrecioTres' => $x->post('PrecioTres')
-            );
-            $ID = $this->Articulos_model->onAgregar($datos);
-            $this->Articulos10_model->onAgregar($datos);
 
-            $precios = json_decode($this->input->post('Precios'));
-            foreach ($precios as $k => $v) {
-                $precio = array('Articulo' => $ID, 'Maquila' => $v->Maquila, 'Precio' => $v->Precio, 'Estatus' => 'A');
-                $this->db->insert('preciosmaquilas', $precio);
+            if (floatval($x->post('PrecioUno')) <= 0 && floatval($x->post('PrecioDos')) <= 0 &&
+                    floatval($x->post('PrecioTres')) <= 0) {
+                print json_encode(array('Articulo' => $x->post('Descripcion'), "ESTATUS" => 0, "MENSAJE" => "NO SE PUEDE AGREGAR UN ARTICULO SIN  PRECIO Y PROVEEDOR"));
+                exit(0);
+            } else {
+                $datos = array(
+                    'Clave' => $x->post('Clave'),
+                    'Departamento' => $x->post('Departamento'),
+                    'Descripcion' => $x->post('Descripcion'),
+                    'Grupo' => $x->post('Grupo'),
+                    'UnidadMedida' => $x->post('UnidadMedida'),
+                    'Tmnda' => $x->post('Tmnda'),
+                    'Temporada' => $x->post('Temporada'),
+                    'Min' => $x->post('Min'),
+                    'Max' => $x->post('Max'),
+                    'ProveedorUno' => $x->post('ProveedorUno'),
+                    'ProveedorDos' => $x->post('ProveedorDos'),
+                    'ProveedorTres' => $x->post('ProveedorTres'),
+                    'Observaciones' => $x->post('Observaciones'),
+                    'UbicacionUno' => $x->post('UbicacionUno'),
+                    'UbicacionDos' => $x->post('UbicacionDos'),
+                    'UbicacionTres' => $x->post('UbicacionTres'),
+                    'UbicacionCuatro' => $x->post('UbicacionCuatro'),
+                    'TipoArticulo' => $x->post('TipoArticulo'),
+                    'Estatus' => 'ACTIVO',
+                    'PrecioUno' => $x->post('PrecioUno'),
+                    'PrecioDos' => $x->post('PrecioDos'),
+                    'PrecioTres' => $x->post('PrecioTres')
+                );
+                $ID = $this->Articulos_model->onAgregar($datos);
+                $this->Articulos10_model->onAgregar($datos);
+
+                $precios = json_decode($this->input->post('Precios'));
+                foreach ($precios as $k => $v) {
+                    $precio = array('Articulo' => $ID, 'Maquila' => $v->Maquila, 'Precio' => $v->Precio, 'Estatus' => 'A');
+                    $this->db->insert('preciosmaquilas', $precio);
+                }
+                print json_encode(array('Articulo' => $ID, "ESTATUS" => 1, "MENSAJE" => "ARTÍCULO GUARDADO, CAPTURE LOS PRECIOS PARA VENTA A MAQUILAS"));
+                exit(0);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
