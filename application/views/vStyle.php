@@ -483,11 +483,11 @@
         border: 2px solid #000 !important;
         font-weight: bold !important;
     }
-    div:not(.card-menu):not(.card-session).card:not(.bg-danger):not(.bg-info):not(.bg-success):not(.bg-primary):not(.bg-warning) 
-    text-transform: uppercase;
-    background: rgb(255,255,255);
-    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);
-    border-radius: 15px !important;
+    div:not(.card-menu):not(.card-session).card:not(.bg-danger):not(.bg-info):not(.bg-success):not(.bg-primary):not(.bg-warning){
+        text-transform: uppercase;
+        background: rgb(255,255,255);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(199,203,215,1) 100%);
+        border-radius: 15px !important;
     }
 
     button.btn{
