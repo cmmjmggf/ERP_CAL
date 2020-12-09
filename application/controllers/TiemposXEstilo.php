@@ -81,7 +81,6 @@ class TiemposXEstilo extends CI_Controller {
                 }
             }
             unset($data["ID"]);
-            unset($data["linea"]);
             unset($data["estilo"]);
             $this->db->where('estilo', $x->post('estilo'))->update("estilostiempox", $data);
         } catch (Exception $exc) {

@@ -480,6 +480,7 @@ class Avance9 extends CI_Controller {
                                     "semana" => $xXx['SEMANA'],
                                     "depto" => 10,
                                     "fecha_registro" => Date('d/m/Y h:i:s'),
+                                    "modulo"=>'A9',
                                     "anio" => Date('Y')));
 
                                 $avance_muestra['Departamento'] = 20;
@@ -499,6 +500,7 @@ class Avance9 extends CI_Controller {
                                     "semana" => $xXx['SEMANA'],
                                     "depto" => 20,
                                     "fecha_registro" => Date('d/m/Y h:i:s'),
+                                    "modulo"=>'A9',
                                     "anio" => Date('Y')));
 
                                 $avance_muestra['Departamento'] = 40;

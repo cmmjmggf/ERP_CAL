@@ -363,9 +363,9 @@ class Avance8 extends CI_Controller {
                             case 51:
                                 $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
 
-                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,96,113,60) AND control = {$xXx['CONTROL']}")->result();
-                                if (intval($check_fracciones_obligadas[0]->EXISTE) === 4 ||
-                                        intval($check_fracciones_obligadas[0]->EXISTE) >= 2 && intval($maquila_control[0]->Maquila) === 98) {
+                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,96,113,71,114) AND control = {$xXx['CONTROL']}")->result();
+                                if (intval($check_fracciones_obligadas[0]->EXISTE) === 4 && intval($maquila_control[0]->Maquila) !== 98 ||
+                                        intval($check_fracciones_obligadas[0]->EXISTE) >= 4 && intval($maquila_control[0]->Maquila) === 98) {
                                     /* 51 = ENTRETELADO */
                                     /* SE REVISA SI SE TIENE QUE MAQUILAR EL ESTILO */
                                     $check_maquila = $this->db->select('(CASE WHEN E.MaqPlant1 IS NULL THEN 0 ELSE E.MaqPlant1 END) AS MP1, '
@@ -596,14 +596,15 @@ class Avance8 extends CI_Controller {
                                 intval($control_muestra[0]->EXISTE) === 1 && intval($v->NUMERO_FRACCION) === 71) {
                             switch (intval($control_muestra[0]->Maquila)) {
                                 case 98:
-                                    $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();
+                                    $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE, ID FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();
                                     if (intval($check_foleado[0]->EXISTE) === 1) {
                                         $id = $this->db->insert_id();
-                                        $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                                        $data["avance_id"] = $check_foleado[0]->ID;
                                         $data["modulo"] = 'A8';
-                                        $this->db->insert('fracpagnomina', $data);
-                                        print json_encode(array("AVANZO" => 2, "STEP" => 1));
+                                        $this->db->insert('fracpagnomina', $data); 
                                         $this->onAvanzarXControl($xXx['CONTROL'], 'REBAJADO', 30, 33);
+                                        $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
+                                        print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
                                     }
                                     exit(0);
                                     break;
