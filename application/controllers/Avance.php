@@ -470,7 +470,7 @@ P.Maquila AS MAQUILA
         try {
             $x = $this->input->get();
             $fracciones_avance = array(100, 96, 102, 113, 103, 114, 60, 61, 51, 127, 300, 397, 401, 500, 600);
-            $departamento = array(42, 44, 5, 55, 6, 8, 9, 11);
+            $departamento = array(40,42, 44, 5, 55, 6, 8, 9, 11);
             if (in_array(intval($x['AVANCE']), $departamento)) {
                 print json_encode($this->db->query("SELECT 1 AS EXISTE")->result());
             } else {
@@ -1240,11 +1240,13 @@ P.Maquila AS MAQUILA
             $data["numfrac"] = $xfraccion;
 
             if (intval($CONTROL[0]->MAQUILA) === 98 && $this->session->USERNAME === 'ALEJANDRA') {
-                $data["numeroempleado"] = 0;
+                $data["numeroempleado"] = 2805;
                 $data["preciofrac"] = 0;
                 $data["fecha_registro"] = Date('d/m/Y h:i:s');
                 $data["subtot"] = 0;
                 $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                $data["modulo"] = 'CA';
+                $this->db->insert('fracpagnomina', $data);
             } else {
                 $PRECIO_FRACCION_CONTROL = $this->db->query("SELECT FXE.CostoMO, FXE.CostoMO AS TOTAL FROM fraccionesxestilo as FXE INNER JOIN pedidox AS P ON FXE.Estilo = P.Estilo WHERE FXE.Fraccion = {$xfraccion}  AND P.Control = {$xXx['CONTROL']} LIMIT 1")->result();
                 $PXFC = $PRECIO_FRACCION_CONTROL[0]->CostoMO;
@@ -1252,9 +1254,9 @@ P.Maquila AS MAQUILA
                 $data["fecha_registro"] = Date('d/m/Y h:i:s');
                 $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
                 $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                $data["modulo"] = 'CA';
+                $this->db->insert('fracpagnomina', $data);
             }
-            $data["modulo"] = 'CA';
-            $this->db->insert('fracpagnomina', $data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
