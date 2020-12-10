@@ -686,10 +686,60 @@ FROM pedidox AS P INNER JOIN series AS S ON P.Serie = S.Clave AND P.Control = {$
                                 'DeptoProduccion' => $DeptoProduccion,
                                 'Estatus' => 'F'
                     ));
+                    $this->db->insert("avance", array(
+                        'Control' => $x['CONTROL'],
+                        'FechaAProduccion' => Date('d/m/Y'),
+                        'Departamento' => $DeptoProduccion,
+                        'DepartamentoT' => $EstatusProduccion,
+                        'FechaAvance' => Date('d/m/Y'),
+                        'Estatus' => 'A',
+                        'Usuario' => $this->session->userdata('ID'),
+                        'Fecha' => Date('d/m/Y'),
+                        'Hora' => Date('H:i:s'),
+                        'modulo' => 'FP'
+                    ));
                     /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
                     $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
                             ->update('avaprd');
                     $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON EL CLIENTE {$x['CLIENTE']}.", $this->session);
+                } else if (in_array($x['CLIENTE'], $people)) {
+                    $control_pares = $this->db->query("SELECT P.Pares AS PARES FROM pedidox AS P WHERE P.Control = {$x['CONTROL']} AND P.DeptoProduccion NOT IN(270) AND P.EstatusProduccion NOT IN('CANCELADO') AND P.stsavan NOT IN(14)")->result();
+                    $control_terminado = $this->db->query("SELECT COUNT(*) AS TERMINADO FROM controlterm AS C WHERE C.Control = {$x['CONTROL']} ")->result();
+                    if (intval($x['PARES_A_FACTURAR']) === intval($control_pares[0]->PARES) && intval($control_terminado[0]->TERMINADO) === 1) {
+                        $EstatusProduccion = 'FACTURADO';
+                        $DeptoProduccion = 260;
+                        /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
+                        $this->db->set('EstatusProduccion', $EstatusProduccion)
+                                ->set('DeptoProduccion', $DeptoProduccion)
+                                ->where('EstatusProduccion', 'TERMINADO')->where('DeptoProduccion', 240)
+                                ->where('Control', $x['CONTROL'])->update('controles');
+                        /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+                        $this->db->where('EstatusProduccion', 'TERMINADO')
+                                ->where('DeptoProduccion', 240)
+                                ->where('stsavan', 12)->where('Control', $x['CONTROL'])
+                                ->update('pedidox', array('stsavan' => 13,
+                                    'EstatusProduccion' => $EstatusProduccion,
+                                    'DeptoProduccion' => $DeptoProduccion,
+                                    'Estatus' => 'F'
+                        ));
+                        /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+                        $this->db->set('fec13', Date('Y-m-d 00:00:00'))->where('contped', $x['CONTROL'])
+                                ->update('avaprd');
+
+                        $this->db->insert("avance", array(
+                            'Control' => $x['CONTROL'],
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => $DeptoProduccion,
+                            'DepartamentoT' => $EstatusProduccion,
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => $this->session->userdata('ID'),
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('H:i:s'),
+                            'modulo' => 'FP'
+                        ));
+                        $l = new Logs("FACTURACIÓN", "HA AVANZO EL CONTROL {$x['CONTROL']} A FACTURADO CON UN CLIENTE {$x['CLIENTE']} QUE PIDE POR ADELANTADO SU FACTURA.", $this->session);
+                    }
                 }
 
                 $control = $this->db->query("SELECT P.C1, P.C2, P.C3, P.C4, P.C5, P.C6, P.C7, P.C8, P.C9, P.C10, "
