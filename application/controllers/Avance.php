@@ -910,7 +910,9 @@ P.Maquila AS MAQUILA
 
                 $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control ={$xXx['CONTROL']}")->result();
 
-                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $ex) || $this->session->USERNAME === 'ALEJANDRA' &&
+                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $empleados_celulas) 
+                        || intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $ex) 
+                        || $this->session->USERNAME === 'ALEJANDRA' &&
                         intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && intval($maquila_control[0]->Maquila) === 98) {
                     switch (intval($frac)) {
                         case 299:

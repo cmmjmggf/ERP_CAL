@@ -1323,12 +1323,18 @@
                 if (dt.AVANZO > 0) {
                     onNotifyOld('<span class="fa fa-check"></span>', 'SE HA HECHO EL PAGO DE LA(S) FRACCION(ES)', 'success');
                     onClearMO();
-                    Avance.ajax.reload(function () {
-                        Control.val('');
-                        Control.focus().select();
-                        getPagosXEmpleadoXSemana();
+                    $.getJSON('<?php print base_url('Avance8/getInfoXControl'); ?>', {
+                        CONTROL: Control.val()
+                    }).done(function (a) {
+                        var r = a[0];
+                        estatus_de_avance.text(r.ESTATUS_PRODUCCION);
+                        Avance.ajax.reload(function () {
+                            Control.val('');
+                            Control.focus().select();
+                            getPagosXEmpleadoXSemana();
+                        });
+                        onBeep(5);
                     });
-                    onBeep(5);
                 } else {
                     onBeep(2);
                     swal('ATENCIÓN', 'ESTE CONTROL (' + Control.val() + ') YA TIENE UN AVANCE EN ESTA FRACCIÓN, POR FAVOR ESPECIFIQUE UN CONTROL DIFERENTE O UNA FRACCIÓN DIFERENTE, DE LO CONTRARIO REVISE CON EL AREA CORRESPONDIENTE', 'warning').then((value) => {
