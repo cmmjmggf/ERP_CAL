@@ -1,9 +1,9 @@
-<div class="modal fade" id="mdlBajaControles" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"  
+<div class="modal fade next-art" id="mdlBajaControles" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"  
      aria-labelledby="mdlBajaControles" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><span class="fa fa-arrow-down"></span> Baja controles</h5>
+                <h5 class="modal-title next-art"><span class="fa fa-arrow-down"></span> Baja controles</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -19,10 +19,10 @@
                         <input type="text" id="ParesADarDeBaja" name="ParesADarDeBaja" class="form-control text-center mb-3" style="font-size: 34px;border-top: none !important;border-right: none !important;border-left: none !important;border-radius: 0px !important; padding-top: 0px;padding-bottom: 0px;" maxlength="3">
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
-                        <h4 class="font-weight-bold font-italic pares_del_control_baja " style="#000">-</h4>
+                        <h4 class="font-weight-bold font-italic pares_del_control_baja " style="color: #007eff;">-</h4>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
-                        <h4 class="font-weight-bold font-italic pares_facturados_del_control_baja " style="#000">-</h4>
+                        <h4 class="font-weight-bold font-italic pares_facturados_del_control_baja "  style="color: #703ab7;">-</h4>
                     </div>
                     <div class="w-100"><hr></div>
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
@@ -62,6 +62,7 @@
                 $.post('<?php print base_url('BajaControles/onDarDeBajaControl'); ?>',
                         {CONTROL: ControlADarDeBaja.val(), PARES: ParesADarDeBaja.val()}).done(function (a) {
                     onCloseOverlay();
+                    onBeep(5);
                     swal({
                         title: "ATENCIÓN",
                         text: "SE HA DADO DE BAJA EL CONTROL",

@@ -52,6 +52,48 @@ class FacturacionProduccion extends CI_Controller {
             $this->db->query("UPDATE pedidox SET EstatusProduccion = 'FACTURADO', stsavan = 13, DeptoProduccion = 260, Estatus = 'F', ParesFacturados = Pares  "
                     . " WHERE stsavan = 12 AND Pares = ParesFacturados"
                     . " AND Cliente not in (39, 2121, 1810, 2260, 2394, 2285, 2343, 1782, 2332, 995) ;");
+
+            $controles_terminados_facturados = $this->db->query("SELECT P.ID, P.Control FROM pedidox AS P WHERE P.Pares = P.ParesFacturados AND P.stsavan = 12 AND P.DeptoProduccion = 240 AND P.EstatusProduccion = 'TERMINADO'")->result();
+            foreach ($controles_terminados_facturados as $k => $v) {
+                $check_terminado = $this->db->query("SELECT COUNT(*) AS TERMINADO FROM controlterm AS C WHERE C.control = {$v->Control}")->result();
+                switch (intval($check_terminado[0]->TERMINADO)) {
+                    case 1:
+                        $EstatusProduccion = 'FACTURADO';
+                        $DeptoProduccion = 260;
+                        /* ACTUALIZAR  ESTATUS DE PRODUCCION  EN CONTROLES */
+                        $this->db->set('EstatusProduccion', $EstatusProduccion)
+                                ->set('DeptoProduccion', $DeptoProduccion)
+                                ->where('EstatusProduccion', 'TERMINADO')->where('DeptoProduccion', 240)
+                                ->where('Control', $v->Control)->update('controles');
+                        /* ACTUALIZAR ESTATUS DE PRODUCCION EN PEDIDOS */
+                        $this->db->where('EstatusProduccion', 'TERMINADO')
+                                ->where('DeptoProduccion', 240)
+                                ->where('stsavan', 12)->where('Control', $v->Control)
+                                ->update('pedidox', array('stsavan' => 13,
+                                    'EstatusProduccion' => $EstatusProduccion,
+                                    'DeptoProduccion' => $DeptoProduccion,
+                                    'Estatus' => 'F'
+                        ));
+                        $this->db->insert("avance", array(
+                            'Control' => $v->Control,
+                            'FechaAProduccion' => Date('d/m/Y'),
+                            'Departamento' => $DeptoProduccion,
+                            'DepartamentoT' => $EstatusProduccion,
+                            'FechaAvance' => Date('d/m/Y'),
+                            'Estatus' => 'A',
+                            'Usuario' => 999,
+                            'Fecha' => Date('d/m/Y'),
+                            'Hora' => Date('H:i:s'),
+                            'modulo' => 'FP'
+                        ));
+                        /* ACTUALIZAR FECHA 13 (FACTURADO) EN AVAPRD (SE HACE PARA FACILITAR LOS REPORTES) */
+                        $this->db->set('fec13', Date('Y-m-d 00:00:00'))
+                                ->where('contped', $v->Control)
+                                ->where('fec13 IS NULL', null, false)
+                                ->update('avaprd');
+                        break;
+                }
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

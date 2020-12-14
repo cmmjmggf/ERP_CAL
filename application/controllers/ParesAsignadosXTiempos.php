@@ -118,7 +118,7 @@ class ParesAsignadosXTiempos extends CI_Controller {
                 "MAQUILA" => intval($x['MAQUILA']), "SEMANA" => intval($x['SEMANA']),
                 "ANO" => intval($x['ANIO'])));
             $jc->setJasperurl('jrxml\asignados\ParesAsignadosXTiemposYCapacidadesXMaqSemSinDia.jasper');
-            $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSem_' . Date('h_i_s'));
+            $jc->setFilename('ParesAsignadosXTiemposYCapacidadesXMaqSemSinDia_' . Date('h_i_s'));
             $jc->setDocumentformat('xls');
             print $jc->getReport();
         }

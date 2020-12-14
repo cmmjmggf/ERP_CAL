@@ -64,7 +64,8 @@ class FichaTecnica extends CI_Controller {
     public function onGetInfoArticulo() {
         try {
             $Art = $this->input->get('Articulo');
-            print json_encode($this->db->query("SELECT U.Descripcion as unidad from articulos a join unidades u on u.clave=a.UnidadMedida where A.Clave = '$Art' ")->result());
+            print json_encode($this->db->query("SELECT U.Descripcion as unidad from articulos a join unidades u on u.clave=a.UnidadMedida WHERE A.Clave = '{$Art}' AND A.PrecioUno > 0 "
+            . "OR A.Clave = '{$Art}' AND A.PrecioDos > 0 OR A.Clave = '{$Art}' AND A.PrecioTres > 0 ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -619,7 +620,7 @@ class FichaTecnica extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
-            $revisa_pieza = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fichatecnica AS F WHERE F.Estilo = '{$x->post('Estilo')}' AND F.Pieza = '{$x->post('Pieza')}' AND F.Articulo = '{$x->post('Articulo')}'")->result();
+            $revisa_pieza = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fichatecnica AS F WHERE F.Estilo = '{$x->post('Estilo')}' AND F.Pieza = '{$x->post('Pieza')}' AND F.Articulo = '{$x->post('Articulo')}' AND F.Color = {$x->post('Color')}")->result();
             if (intval($revisa_pieza[0]->EXISTE) === 0) {
                 $PRECIO = $this->ftm->getPrecioPorArticuloByID($x->post('Articulo'));
                 $data = array(
