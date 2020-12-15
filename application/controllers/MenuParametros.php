@@ -8,6 +8,7 @@ class MenuParametros extends CI_Controller {
     public function __construct() {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
+        $l = new Logs("MENU PARÁMETROS", "INGRESO AL MENU DE PARÁMETROS", $this->session);
     }
 
     public function index() {

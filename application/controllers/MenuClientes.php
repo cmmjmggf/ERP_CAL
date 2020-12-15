@@ -8,6 +8,7 @@ class MenuClientes extends CI_Controller {
         parent::__construct();
         date_default_timezone_set('America/Mexico_City');
         $Facturados = new Facturados();
+        $l = new Logs("MENU CLIENTES", "INGRESO AL MENU DE CLIENTES", $this->session);
     }
 
     public function index() {

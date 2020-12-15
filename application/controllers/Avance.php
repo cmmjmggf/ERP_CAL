@@ -1270,6 +1270,7 @@ P.Maquila AS MAQUILA
             $id = 0;
             $check_fraccion = $this->db->select('COUNT(F.numeroempleado) AS EXISTE', false)->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])->where('F.numfrac', $xfraccion)->get()->result();
             if (intval($check_fraccion[0]->EXISTE) >= 1) {
+                print "\n FRACCION A PAGAR SIN AVANCE YA HA SIDO COBRADA.\n";
                 exit(0);
             }
             $CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']} LIMIT 1")->result();

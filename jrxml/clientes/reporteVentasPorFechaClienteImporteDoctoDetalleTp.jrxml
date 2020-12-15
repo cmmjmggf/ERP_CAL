@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="4.0"/>
-	<property name="ireport.x" value="675"/>
+	<property name="ireport.zoom" value="1.8660295208389333"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -36,7 +36,8 @@ else
 end) END) as subtotal,
 case when fa.staped = 3 then 'CANCELADA' end as cancelada,
 fa.tmnda,
-fa.tcamb
+fa.tcamb,
+IFNULL(fa.zero ,0) AS zero_apoyo
 from facturacion fa
 join clientes ct on ct.clave = fa.cliente
 join agentes ag on ag.clave= ct.agente
@@ -54,7 +55,9 @@ order by numagente,fa.cliente, fa.factura asc]]>
 	</queryString>
 	<field name="numagente" class="java.lang.Long"/>
 	<field name="nomagente" class="java.lang.String"/>
-	<field name="anticipo" class="java.lang.String"/>
+	<field name="anticipo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="cliente" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -87,6 +90,7 @@ order by numagente,fa.cliente, fa.factura asc]]>
 	<field name="tcamb" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="zero_apoyo" class="java.lang.Long"/>
 	<variable name="pares_2" class="java.lang.Long" calculation="Sum">
 		<variableExpression><![CDATA[$F{pares}]]></variableExpression>
 	</variable>
@@ -94,7 +98,7 @@ order by numagente,fa.cliente, fa.factura asc]]>
 		<variableExpression><![CDATA[$F{subtotal}]]></variableExpression>
 	</variable>
 	<variable name="IVA" class="java.lang.Float">
-		<variableExpression><![CDATA[($F{tmnda}!=1)?0:(($F{tp}==1)?($F{subtotal}*0.16):0)]]></variableExpression>
+		<variableExpression><![CDATA[$F{zero_apoyo}==2 ? 0:($F{tmnda}!=1)?0:(($F{tp}==1)?($F{subtotal}*0.16):0)]]></variableExpression>
 	</variable>
 	<variable name="IVA2" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$V{IVA}]]></variableExpression>
@@ -450,7 +454,7 @@ order by numagente,fa.cliente, fa.factura asc]]>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{IVA}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{zero_apoyo}==2 ?0:$V{IVA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00">
 				<reportElement x="347" y="0" width="43" height="10" uuid="cd23305b-11a5-48cd-bc91-e01148a13d17">
@@ -468,7 +472,7 @@ order by numagente,fa.cliente, fa.factura asc]]>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{subtotal}+(($F{tmnda}!=1)?0:(($F{tp}==1)?($F{subtotal}*0.16):0))]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{zero_apoyo}==2? $F{subtotal} : $F{subtotal}+(($F{tmnda}!=1)?0:(($F{tp}==1)?($F{subtotal}*0.16):0))]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
 				<reportElement x="539" y="0" width="15" height="10" uuid="129d8814-12a2-4f5b-91fb-51042dc2bdc0"/>

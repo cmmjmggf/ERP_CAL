@@ -103,6 +103,20 @@
         </div>
     </div>
 </div>
+<?PHP
+$maquilas = "";
+$m = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Maquila > 0 GROUP BY P.Maquila ORDER BY ABS(P.Maquila) ASC ")->result();
+$i = 1;
+foreach ($m as $k => $v) {
+    if ($i < count($m)) {
+        $maquilas .= $v->Maquila;
+        $maquilas .= ",";
+    } else {
+        $maquilas .= $v->Maquila;
+    }
+    $i += 1;
+} 
+?>
 <script>
     var master_url = base_url + 'index.php/EntradasAlmacenMP/';
     var pnlTablero = $("#pnlTablero");
@@ -123,6 +137,17 @@
         setFocusSelectToInputOnChange('#sArticulo', '#Cantidad', pnlTablero);
         getArticulos();
         getRecords('0');
+
+        pnlTablero.find("#Maq").keydown(function (e) {
+            if (e.keyCode === 13 && $(this).val()) {
+                var maquilas = [<?php print $maquilas; ?>];
+                if (!maquilas.includes(parseInt($(this).val()))) {
+                    onCampoInvalido(pnlTablero, "ESTA MAQUILA NO EXISTE \n MAQUILAS VÁLIDAS: " + maquilas, function () {
+                        pnlTablero.find("#Maq").focus().select();
+                    });
+                }
+            }
+        });
 
         pnlTablero.find('#Ano').keypress(function (e) {
             if (e.keyCode === 13) {
