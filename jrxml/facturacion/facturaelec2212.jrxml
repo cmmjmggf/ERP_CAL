@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec2212" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
 	<property name="ireport.zoom" value="1.8181818181818334"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="168"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -30,8 +30,8 @@ WHEN C.FormaPago = 98 THEN "NA"
 WHEN C.FormaPago = 99 THEN "99"
 END) AS METODO_DE_PAGO, CFDI.sellosat AS SELLO_SAT, C.Banco BANCO, CFDI.CadenaOriginal AS CADENA_ORIGINAL, CFDI.fechatimbrado AS FECHA_TIMBRADO, CFDI.uuid AS UUID, F.obs AS OBSERVACIONES
 FROM facturacion AS F INNER JOIN clientes AS C ON F.cliente = C.Clave LEFT JOIN comprobantes AS CFDI ON CFDI.Folio
- = F.factura
-WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.Tipo  ='I';]]>
+ = F.factura  AND CFDI.Tipo  ='I'
+WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 ;]]>
 	</queryString>
 	<field name="CLIENTE" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -517,34 +517,14 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.
 	<columnFooter>
 		<band height="64" splitType="Prevent">
 			<staticText>
-				<reportElement x="382" y="0" width="97" height="15" uuid="580e4cef-7b18-401b-a48b-db863228af57"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Subtotal]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="382" y="15" width="97" height="15" uuid="5495e65e-c0ca-4f64-b6b0-c36d471bfed2"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[I.V.A. 16%]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="382" y="30" width="97" height="15" uuid="3c62139e-6827-45b4-8e4d-aaeed7bb2171"/>
+				<reportElement x="382" y="0" width="97" height="20" uuid="3c62139e-6827-45b4-8e4d-aaeed7bb2171"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="482" y="0" width="90" height="15" uuid="e141a82b-e27c-4898-94d1-ce61efd55a46"/>
+				<reportElement x="482" y="0" width="90" height="20" uuid="61e372d8-5ee8-4847-9a04-f276602ea9ba"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{subtot_1}]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="482" y="15" width="90" height="15" uuid="08cabee1-86d0-4ba7-967a-8ab4b1d241bd"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{subtot_2} * 0.16]]></textFieldExpression>
-			</textField>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="482" y="30" width="90" height="15" uuid="61e372d8-5ee8-4847-9a04-f276602ea9ba"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$V{subtot_3} * 1.16]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{subtot_3}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="45" height="20" uuid="acb5273e-784e-4d31-94bc-9ab4362ddf65"/>
@@ -735,14 +715,14 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.
 				</textElement>
 				<textFieldExpression><![CDATA[$F{METODO_DE_PAGO}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="58" y="34" width="424" height="12" uuid="d9ffee3c-207f-41b7-8c8c-5b5bd3b4f531"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SELLO_SAT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="310" y="70" width="170" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6e0742ad-3342-4838-a7a7-cd61ad8d3309"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -750,7 +730,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FECHA_TIMBRADO}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="57" y="82" width="255" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="6a39786b-a687-4593-b48d-8ac9cc76fb27"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -758,7 +738,7 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{cliente} AND F.tp = 1 AND CFDI.
 				</textElement>
 				<textFieldExpression><![CDATA[$F{UUID}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="58" y="46" width="424" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="0ac79157-cf43-4288-8b3d-67ad618c20e8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

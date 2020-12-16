@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
 	<property name="ireport.zoom" value="2.453457296369761"/>
-	<property name="ireport.x" value="865"/>
+	<property name="ireport.x" value="727"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -24,28 +24,29 @@ cast(P.Pares as decimal(4,2)) AS Pares,
 P.Estilo,
 P.ColorT,
 ifnull(DEP.Clave,'0') AS ClaveEstatus,
-ifnull(C.EstatusProduccion,'PREPROGRAMADO') AS EstatusProduccion,
+ifnull(P.EstatusProduccion,'PREPROGRAMADO') AS EstatusProduccion,
 
 DATE_FORMAT(
 (CASE
-WHEN C.DeptoProduccion = 10 THEN AAA.fec2
-WHEN C.DeptoProduccion = 20 THEN AAA.fec3
-WHEN C.DeptoProduccion = 30 THEN AAA.fec33
-WHEN C.DeptoProduccion = 40 THEN AAA.fec4
-WHEN C.DeptoProduccion = 90 THEN AAA.fec40
-WHEN C.DeptoProduccion = 100 THEN AAA.fec42
+WHEN P.DeptoProduccion = 1 THEN AAA.fec1
+WHEN P.DeptoProduccion = 10 THEN AAA.fec2
+WHEN P.DeptoProduccion = 20 THEN AAA.fec3
+WHEN P.DeptoProduccion = 30 THEN AAA.fec33
+WHEN P.DeptoProduccion = 40 THEN AAA.fec4
+WHEN P.DeptoProduccion = 90 THEN AAA.fec40
+WHEN P.DeptoProduccion = 100 THEN AAA.fec42
 
-WHEN C.DeptoProduccion = 105 THEN AAA.fec44
-WHEN C.DeptoProduccion = 110 THEN AAA.fec5
-WHEN C.DeptoProduccion = 140 THEN AAA.fec55
-WHEN C.DeptoProduccion = 130 THEN AAA.fec6
-WHEN C.DeptoProduccion = 150 THEN AAA.fec7
-WHEN C.DeptoProduccion = 160 THEN AAA.fec8
-WHEN C.DeptoProduccion = 180 THEN AAA.fec9
-WHEN C.DeptoProduccion = 210 THEN AAA.fec10
-WHEN C.DeptoProduccion = 230 THEN AAA.fec11
-WHEN C.DeptoProduccion = 240 THEN AAA.fec12
-WHEN C.DeptoProduccion = 260 THEN AAA.fec13
+WHEN P.DeptoProduccion = 105 THEN AAA.fec44
+WHEN P.DeptoProduccion = 110 THEN AAA.fec5
+WHEN P.DeptoProduccion = 140 THEN AAA.fec55
+WHEN P.DeptoProduccion = 130 THEN AAA.fec6
+WHEN P.DeptoProduccion = 150 THEN AAA.fec7
+WHEN P.DeptoProduccion = 160 THEN AAA.fec8
+WHEN P.DeptoProduccion = 180 THEN AAA.fec9
+WHEN P.DeptoProduccion = 210 THEN AAA.fec10
+WHEN P.DeptoProduccion = 230 THEN AAA.fec11
+WHEN P.DeptoProduccion = 240 THEN AAA.fec12
+WHEN P.DeptoProduccion = 260 THEN AAA.fec13
 END ),"%d/%m/%Y") AS FECHA_ENTRADA_DEPTO,
 
 P.FechaPedido,
@@ -59,7 +60,7 @@ FROM pedidox P
 left JOIN avaprd AAA on AAA.contped =  P.Control
 left JOIN controles C on C.Control =  P.Control
 LEFT JOIN clientes CTE on CTE.Clave =  P.Cliente
-LEFT JOIN departamentos DEP ON DEP.Descripcion =  C.EstatusProduccion
+LEFT JOIN departamentos DEP ON DEP.Descripcion =  P.EstatusProduccion
 LEFT JOIN transportes TPT on TPT.Clave =  CTE.Transporte
 LEFT JOIN agentes AG on AG.Clave =  P.Agente
 WHERE P.Clave = $P{Pedido}
