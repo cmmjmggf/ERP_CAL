@@ -600,16 +600,26 @@ class Avance8 extends CI_Controller {
                                     if (intval($check_foleado[0]->EXISTE) === 1) {
                                         $id = $this->db->insert_id();
                                         $data["avance_id"] = $check_foleado[0]->ID;
-                                        $data["modulo"] = 'A8';
-                                        $this->db->insert('fracpagnomina', $data); 
-                                        $this->onAvanzarXControl($xXx['CONTROL'], 'REBAJADO', 30, 33);
+                                        $data["modulo"] = 'A8M';
+                                        $this->db->insert('fracpagnomina', $data);
+                                        $ESTATUS_PRODUCCION = 'REBAJADO';
+                                        $DEPTO_PRODUCCION = 30;
+                                        $this->db->set('EstatusProduccion', $ESTATUS_PRODUCCION)
+                                                ->set('DeptoProduccion', $DEPTO_PRODUCCION)
+                                                ->where('Control', $xXx['CONTROL'])->update('controles');
+                                        $this->db->set('stsavan', 33)
+                                                ->set('EstatusProduccion', $ESTATUS_PRODUCCION)
+                                                ->set('DeptoProduccion', $DEPTO_PRODUCCION)
+                                                ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                        $this->db->set("fec33", Date('Y-m-d 00:00:00'))
+                                                ->where("fec33 IS NULL", null, false)
+                                                ->where('contped', $xXx['CONTROL'])->update('avaprd');
                                         $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
                                         print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
                                     }
                                     exit(0);
                                     break;
                             }
-                            exit(0);
                         }
                         /* TERMINA REVISA MUESTRA */
 
@@ -622,6 +632,12 @@ class Avance8 extends CI_Controller {
                         $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(102)")->result();
                         if (intval($check_rayado[0]->EXISTE) === 0) {
                             PRINT "NO TIENE RAYADO";
+                            exit(0);
+                        }
+                        $check_foleado_cobrado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(60)")->result();
+                        if (intval($check_foleado_cobrado[0]->EXISTE) === 1) {
+                            $l = new Logs("AVANCE 8", "EL CONTROL {$xXx['CONTROL']} YA HA SIDO COBRADO POR FOLEADO. ", $this->session);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => " YA FUE COBRADO POR FOLEADO "));
                             exit(0);
                         }
                         $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']}  and A.Departamento = 40")->result();
@@ -640,15 +656,29 @@ class Avance8 extends CI_Controller {
                                 'modulo' => 'A8'
                             );
                             $this->db->insert('avance', $avance);
-                            $id = $this->db->insert_id();
-                            $data["avance_id"] = intval($id) >= 0 ? intval($id) : 0;
+                            $avance_id = $this->db->query("SELECT COUNT(*)AS EXISTE, ID FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 40 ORDER BY ID DESC LIMIT 1")->result();
+                            if (intval($avance_id[0]->EXISTE) === 1) {
+                                $data["avance_id"] = $avance_id[0]->ID;
+                            }
+                            $data["modulo"] = 'A8';
+                            $this->db->insert('fracpagnomina', $data);
+                            $ESTATUS_PRODUCCION = 'REBAJADO';
+                            $DEPTO_PRODUCCION = 30;
+                            $this->db->set('EstatusProduccion', $ESTATUS_PRODUCCION)
+                                    ->set('DeptoProduccion', $DEPTO_PRODUCCION)
+                                    ->where('Control', $xXx['CONTROL'])->update('controles');
+                            $this->db->set('stsavan', 33)
+                                    ->set('EstatusProduccion', $ESTATUS_PRODUCCION)
+                                    ->set('DeptoProduccion', $DEPTO_PRODUCCION)
+                                    ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                            $this->db->set("fec33", Date('Y-m-d 00:00:00'))
+                                    ->where("fec33 IS NULL", null, false)
+                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
+
+                            $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
+                            print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
+                            exit(0);
                         }
-                        $data["modulo"] = 'A8';
-                        $this->db->insert('fracpagnomina', $data);
-                        $this->onAvanzarXControl($xXx['CONTROL'], 'REBAJADO', 30, 33);
-                        $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
-                        print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
-                        exit(0);
                     }
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {
@@ -974,6 +1004,16 @@ class Avance8 extends CI_Controller {
             } else {
                 $this->db->trans_commit();
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getAvanceXControlPedidoxControlesAvaprdFracciones($param) {
+        try {
+            $x = $this->input->post();
+            $pedidox = $this->db->query("SELECT P.* FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}")->result();
+            print json_encode($pedidox);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

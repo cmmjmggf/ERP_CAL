@@ -6,7 +6,7 @@
             </div>
             <div class="col-6" align="right">
                 <a class="btn btn-sm btn-danger mt-1 font-weight-bold" style="background-color: #ff1800;
-    border-color: #ff1800;" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
+                   border-color: #ff1800;" href="<?php print base_url('Sesion/onSalir'); ?>"><i class="fa fa-sign-out-alt"></i> Salir</a>
             </div>
         </div>
         <hr>
@@ -881,6 +881,14 @@
             onBeep(3);
             swal('ERROR', ' ERROR AL OBTENER LO PAGADO AL EMPLEADO, REVISE LA CONSOLA PARA MÁS DETALLE', 'error');
         }).always(function () {
+        });
+        /*REVISA EL ESTATUS DE AVANCE*/
+        $.getJSON('<?php print base_url('Avance8/getInfoXControl'); ?>', {
+            CONTROL: Control.val()
+        }).done(function (a) {
+            var r = a[0];
+            estatus_de_avance.text(r.ESTATUS_PRODUCCION); 
+            onBeep(5);
         });
     }
 </script>

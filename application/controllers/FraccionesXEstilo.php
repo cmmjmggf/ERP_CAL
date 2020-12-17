@@ -31,14 +31,11 @@ class FraccionesXEstilo extends CI_Controller {
                     $Origen = isset($_GET['origen']) ? $_GET['origen'] : "";
 
                     if ($Origen === 'FICHASTECNICAS') {
-                        $this->load->view('vMenuFichasTecnicas');
-                        $this->load->view('vFraccionesXEstiloConsulta');
+                        $this->load->view('vMenuFichasTecnicas')->view('vFraccionesXEstiloConsulta');
                     } else if ($Origen === 'NOMINAS') {
-                        $this->load->view('vMenuNominas');
-                        $this->load->view('vFraccionesXEstiloConsulta');
+                        $this->load->view('vMenuNominas')->view('vFraccionesXEstiloConsulta');
                     } else if ($Origen === 'MATERIALES') {
-                        $this->load->view('vMenuMateriales');
-                        $this->load->view('vFraccionesXEstiloConsulta');
+                        $this->load->view('vMenuMateriales')->view('vFraccionesXEstiloConsulta');
                     } else if ($Origen === 'PRODUCCION') {
                         $this->load->view('vMenuProduccion');
                         if ($Seguridad === '1') {
@@ -47,24 +44,18 @@ class FraccionesXEstilo extends CI_Controller {
                             $this->load->view('vFraccionesXEstiloConsulta');
                         }
                     } else {
-                        $this->load->view('vMenuPrincipal');
-                        $this->load->view('vFraccionesXEstiloConsulta');
+                        $this->load->view('vMenuPrincipal')->view('vFraccionesXEstiloConsulta');
                     }
 
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuFichasTecnicas');
-                    $this->load->view('vFraccionesXEstiloConsulta');
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas')->view('vFraccionesXEstiloConsulta');
                     break;
                 case 'RECURSOS HUMANOS':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuNominas');
-                    $this->load->view('vFraccionesXEstiloConsulta');
+                    $this->load->view('vNavGeneral')->view('vMenuNominas')->view('vFraccionesXEstiloConsulta');
                     break;
                 case 'PRODUCCION':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuProduccion');
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     if ($Seguridad === '1') {
                         $this->load->view('vFraccionesXEstilo');
                     } else {
@@ -72,16 +63,12 @@ class FraccionesXEstilo extends CI_Controller {
                     }
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuMateriales');
-                    $this->load->view('vFraccionesXEstiloConsulta');
+                    $this->load->view('vNavGeneral')->view('vMenuMateriales')->view('vFraccionesXEstiloConsulta');
                     break;
             }
             $this->load->view('vFooter');
         } else {
-            $this->load->view('vEncabezado');
-            $this->load->view('vSesion');
-            $this->load->view('vFooter');
+            $this->load->view('vEncabezado')->view('vSesion')->view('vFooter');
         }
     }
 
@@ -191,6 +178,7 @@ class FraccionesXEstilo extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
+            $z = $this->input->post();
             $data = array(
                 'Estilo' => ($x->post('Estilo') !== NULL) ? $x->post('Estilo') : NULL,
                 'FechaAlta' => ($x->post('FechaAlta') !== NULL) ? $x->post('FechaAlta') : NULL,
@@ -201,6 +189,7 @@ class FraccionesXEstilo extends CI_Controller {
                 'Estatus' => 'ACTIVO'
             );
             $ID = $this->FraccionesXEstilo_model->onAgregar($data);
+            $l = new Logs("FRACCIONES X ESTILO(A)", "AGREGO LA FRACCION {$z['Fraccion']} PARA EL ESTILO {$z['Estilo']} COSTO MO $ {$z['CostoMO']} COSTO VTA $ {$z['CostoVTA']} .", $this->session);
             print $ID;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -219,16 +208,16 @@ class FraccionesXEstilo extends CI_Controller {
             );
             $fxe = $this->db->query("SELECT * FROM fraccionesxestilo AS F WHERE F.ID = {$xxx['ID']}")->result();
             $this->FraccionesXEstilo_model->onModificar($this->input->post('ID'), $data);
-            $l = new Logs("FRACCIONES X ESTILO", "MODIFICO LA FRACCION {$xxx['Fraccion']} DEL ESTILO {$fxe[0]->Estilo} DE $ {$fxe[0]->CostoMO} A $ {$xxx['CostoMO']} .", $this->session);
+            $l = new Logs("FRACCIONES X ESTILO(M)", "MODIFICO LA FRACCION {$xxx['Fraccion']} DEL ESTILO {$fxe[0]->Estilo} DE $ {$fxe[0]->CostoMO} A $ {$xxx['CostoMO']} .", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
 
     public function onEliminarFraccion() {
-        try {
+        try { 
             $this->FraccionesXEstilo_model->onEliminarFraccion($this->input->post('ID'));
-        } catch (Exception $exc) {
+         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
     }
