@@ -135,13 +135,13 @@ class AsignaPFTSACXC extends CI_Controller {
 //                            ->from("empleados AS E")
 //                            ->where_in('E.DepartamentoFisico', array(10, 15,370))
 //                            ->where('E.AltaBaja', 1)->get()->result();
-            $data = $this->db->query("SELECT * FROM (SELECT E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO 
+            $data = $this->db->query("SELECT * FROM (SELECT E.Numero AS CLAVE, CONCAT(E.Numero,' ', IFNULL(E.PrimerNombre,''),' ',IFNULL(E.SegundoNombre,''),' ',IFNULL(E.Paterno,''),' ', IFNULL(E.Materno,'')) AS EMPLEADO 
 FROM empleados AS E 
 WHERE    E.DepartamentoFisico IN(10, 15)  AND E.AltaBaja = 1   
 
 UNION ALL
 
-SELECT E.Numero AS CLAVE, CONCAT(E.Numero,' ', E.PrimerNombre,' ',E.SegundoNombre,' ',E.Paterno,' ', E.Materno) AS EMPLEADO 
+SELECT E.Numero AS CLAVE, CONCAT(IFNULL(E.Numero,''),' ', IFNULL(E.PrimerNombre,''),' ',IFNULL(E.SegundoNombre,''),' ',IFNULL(E.Paterno,''),' ', IFNULL(E.Materno,'')) AS EMPLEADO 
 FROM empleados AS E 
 WHERE    E.DepartamentoFisico IN(370) and E.Numero = 2328  AND E.AltaBaja = 1 ) AS EMPLEADOS 
 ORDER BY ABS(CLAVE) ASC")->result();
