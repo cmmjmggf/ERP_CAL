@@ -286,7 +286,7 @@ class AvanceTejido extends CI_Controller {
                                 ->get()->result();
 
                 $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
-                
+
                 $TOTAL = (intval($x->post('PARES')) * floatval($FXE[0]->PRECIO));
                 $l = new Logs("AVANCE TEJIDO(VALE)", "VALE PARA LA TEJEDORA {$xXx['NUM_TEJEDORA']} DE $ {$TOTAL} "
                         . "DEL CONTROL {$xXx['CONTROL']} CON {$xXx['PARES']} PARES, LA FRACCION {$xXx['FRACCION']} CON UN PRECIO DE {$FXE[0]->PRECIO} MAQUILA {$MAQUILA_X_CONTROL[0]->MAQUILA}.", $this->session);
@@ -408,14 +408,20 @@ class AvanceTejido extends CI_Controller {
 
     public function onEliminarAvance() {
         try {
+            $x = $this->input->post();
             $check_avance = $this->db->query("SELECT count(*) AS EXISTE FROM pedidox AS P WHERE P.stsavan IN(9,10,11,12,13,14) AND P.Control = {$this->input->post("CONTROL")}")->result();
             $check_stsavan = $this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL FROM pedidox AS P WHERE  P.Control = {$this->input->post("CONTROL")}")->result();
+            $SEMANA_COBRO_FRACCION = $this->db->query("SELECT semana AS SEMANA FROM fracpagnomina WHERE where Control = {$x['CONTROL']} AND numfrac = 401")->result();
 
-            if (intval($check_avance[0]->EXISTE) === 0) {
+            $SEMANA_NOMINA = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenomina WHERE status = 2 AND numsem = {$SEMANA_COBRO_FRACCION[0]->SEMANA}")->result();
+
+            if (intval($check_avance[0]->EXISTE) === 0 || intval($SEMANA_NOMINA[0]->EXISTE) === 0) {
                 $eliminable = array("ELIMINABLE" => 1, "AVANCE_ACTUAL" => $check_stsavan[0]->AVANCE_ACTUAL);
                 print json_encode($eliminable);
             } else {
                 $eliminable = array("ELIMINABLE" => 0, "AVANCE_ACTUAL" => $check_stsavan[0]->AVANCE_ACTUAL);
+                $l = new Logs("AVANCE TEJIDO ELIMINA", "INTENTO ELIMINAR EL AVANCE DE TEJIDO DEL CONTROL {$this->input->post("CONTROL")} .", $this->session);
+
                 print json_encode($eliminable);
             }
         } catch (Exception $exc) {
@@ -431,6 +437,16 @@ class AvanceTejido extends CI_Controller {
                 exit(0);
             }
             if (intval($check_avance[0]->EXISTE) > 0) {
+                $SEMANA_COBRO_FRACCION = $this->db->query("SELECT semana AS SEMANA FROM fracpagnomina WHERE where Control = {$x['CONTROL']} AND numfrac = 401")->result();
+
+                $SEMANA_NOMINA = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenomina WHERE status = 2 AND numsem = {$SEMANA_COBRO_FRACCION[0]->SEMANA}")->result();
+                if (intval($SEMANA_NOMINA[0]->EXISTE) >= 1) {
+                    print "\n NO SE PUEDE ELIMINAR EL AVANCE NI LA NOMINA QUE YA FUE PAGADA \n";
+                    $l = new Logs("AVANCE TEJIDO ELIMINA", "INTENTO ELIMINAR EL AVANCE DE TEJIDO(401) DEL CONTROL {$x['CONTROL']} .", $this->session);
+                    EXIT(0);
+                } else {
+                    print "ELIMINANDO FRACCION 401 DEL CONTROL";
+                }
                 $this->db->query("DELETE FROM avance WHERE Control = {$x['CONTROL']} AND Departamento = 150 AND DepartamentoT = 'TEJIDO'");
                 $this->db->query("DELETE FROM controltej WHERE control = {$x['CONTROL']} AND fraccion = 401");
                 $this->db->query("DELETE FROM fracpagnomina   where Control = {$x['CONTROL']} AND numfrac = 401");
@@ -438,6 +454,7 @@ class AvanceTejido extends CI_Controller {
                         ->set("stsavan", 6)->where("Control", $x['CONTROL'])->update("pedidox");
                 $this->db->set("EstatusProduccion", 'ALMACEN PESPUNTE')->set("DeptoProduccion", 130)
                         ->where("Control", $x['CONTROL'])->update("controles");
+                $l = new Logs("AVANCE TEJIDO ELIMINA", "ELIMINO EL AVANCE DE TEJIDO DEL CONTROL {$x['CONTROL']} .", $this->session);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
