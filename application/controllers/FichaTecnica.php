@@ -65,7 +65,7 @@ class FichaTecnica extends CI_Controller {
         try {
             $Art = $this->input->get('Articulo');
             print json_encode($this->db->query("SELECT U.Descripcion as unidad from articulos a join unidades u on u.clave=a.UnidadMedida WHERE A.Clave = '{$Art}' AND A.PrecioUno > 0 "
-            . "OR A.Clave = '{$Art}' AND A.PrecioDos > 0 OR A.Clave = '{$Art}' AND A.PrecioTres > 0 ")->result());
+                                    . "OR A.Clave = '{$Art}' AND A.PrecioDos > 0 OR A.Clave = '{$Art}' AND A.PrecioTres > 0 ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -512,7 +512,18 @@ class FichaTecnica extends CI_Controller {
 
     public function getEstiloByID() {
         try {
-            print json_encode($this->ftm->getEstiloByID($this->input->get('Estilo')));
+            $x = $this->input->get();
+
+            $estilo_seguridad = $this->db->query("SELECT Seguridad FROM estilos WHERE Clave = '{$x['Estilo']}' ")->result();
+            $costovaria = $this->db->query("SELECT COUNT(*) AS EXISTE FROM costovaria WHERE estilo = '{$x['Estilo']}'")->result();
+            switch (intval($costovaria[0]->EXISTE)) {
+                case 0:
+                    /* SI LAURA NO HA DADO UN PRECIO A ESTE ESTILO SE DESBLOQUEA AUNQUE HAYA SIDO CERRADO EN SU LINEA */
+                    $this->db->set('Seguridad', 0)->where('Clave', $x['Estilo'])->update('estilos');
+                    break;
+            }
+            print json_encode($this->db->select('E.*', false)->from('estilos AS E')->where('E.Clave', $x['Estilo'])
+                                    ->where_in('E.Estatus', 'ACTIVO')->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

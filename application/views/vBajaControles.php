@@ -38,6 +38,9 @@
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
                         <h4 class="font-weight-bold font-italic color_control_baja">-</h4>
                     </div>
+                    <div class="col-12">
+                        <p class="font-italic font-weight-bold text-center pares_dadosdebaja" style="font-size: 28px;">0 PARES</p>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -51,13 +54,13 @@
     var mdlBajaControles = $("#mdlBajaControles"), ControlADarDeBaja = mdlBajaControles.find("#ControlADarDeBaja"),
             btnAceptaBajaControl = mdlBajaControles.find("#btnAceptaBajaControl"),
             ParesADarDeBaja = mdlBajaControles.find("#ParesADarDeBaja");
-    
+
     $(document).ready(function () {
         handleEnterDiv(mdlBajaControles);
 
         btnAceptaBajaControl.click(function () {
             onDisable(btnAceptaBajaControl);
-            if (ControlADarDeBaja.val() && parseInt(ParesADarDeBaja.val()) >0) {
+            if (ControlADarDeBaja.val() && parseInt(ParesADarDeBaja.val()) > 0) {
                 onOpenOverlay('');
                 $.post('<?php print base_url('BajaControles/onDarDeBajaControl'); ?>',
                         {CONTROL: ControlADarDeBaja.val(), PARES: ParesADarDeBaja.val()}).done(function (a) {
@@ -73,6 +76,9 @@
                         getInformacionDelControl();
                         onDisable(btnAceptaBajaControl);
                         ControlADarDeBaja.focus().select();
+                        pares_dadosdebaja += xpares;
+                        xpares = 0;
+                        mdlBajaControles.find("p.pares_dadosdebaja").text(pares_dadosdebaja + ' PARES')
                     });
                 }).fail(function (e) {
                     onCloseOverlay();
@@ -118,12 +124,14 @@
             }
         });
     });
+    var pares_dadosdebaja = 0, xpares = 0;
     function getInformacionDelControl( ) {
         onOpenOverlay('');
         $.post('<?php print base_url('BajaControles/getInformacionXControl'); ?>',
                 {CONTROL: ControlADarDeBaja.val()}).done(function (a) {
             if (a.length > 0) {
                 var c = JSON.parse(a)[0];
+                xpares = parseInt(c.Pares);
                 mdlBajaControles.find("#ParesADarDeBaja").val(c.Pares);
                 mdlBajaControles.find("h4.pares_del_control_baja").html(c.Pares + '<br> PARES');
                 mdlBajaControles.find("h4.pares_facturados_del_control_baja").html(c.ParesFacturados + '<br>PARES FACTURADOS');
