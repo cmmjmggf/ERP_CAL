@@ -78,7 +78,7 @@
                         ControlADarDeBaja.focus().select();
                         pares_dadosdebaja += xpares;
                         xpares = 0;
-                        mdlBajaControles.find("p.pares_dadosdebaja").text(pares_dadosdebaja + ' PARES')
+                        mdlBajaControles.find("p.pares_dadosdebaja").text(pares_dadosdebaja + ' PARES');
                     });
                 }).fail(function (e) {
                     onCloseOverlay();

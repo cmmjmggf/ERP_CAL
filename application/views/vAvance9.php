@@ -106,13 +106,12 @@
                     </div>
                     <div class="col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <?php
-                        $F = Date('d/m/Y');
-                        $YYYY = Date('Y');
+                        $F = Date('d/m/Y'); 
                         $SP = $this->db->select('SP.Sem AS Semana, SP.FechaIni AS FEINI, SP.FechaFin AS FEFI', false)
                                         ->from('semanasnomina AS SP')
                                         ->where("STR_TO_DATE('{$F}', \"%d/%m/%Y\") "
                                                 . "BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") "
-                                                . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") AND SP.Ano = {$YYYY}")
+                                                . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\")")
                                         ->get()->result();
                         ?>
                         <label>Semana</label>

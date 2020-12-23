@@ -470,7 +470,7 @@ P.Maquila AS MAQUILA
         try {
             $x = $this->input->get();
             $fracciones_avance = array(100, 96, 102, 113, 103, 114, 60, 61, 51, 127, 300, 397, 401, 500, 600);
-            $departamento = array(40,42, 44, 5, 55, 6, 8, 9, 11);
+            $departamento = array(40, 42, 44, 5, 55, 6, 8, 9, 11);
             if (in_array(intval($x['AVANCE']), $departamento)) {
                 print json_encode($this->db->query("SELECT 1 AS EXISTE")->result());
             } else {
@@ -910,17 +910,38 @@ P.Maquila AS MAQUILA
 
                 $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control ={$xXx['CONTROL']}")->result();
 
-                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $empleados_celulas) 
-                        || intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $ex) 
-                        || $this->session->USERNAME === 'ALEJANDRA' &&
+                if (intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $empleados_celulas) || intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && in_array(intval($xXx['EMPLEADO']), $ex) || $this->session->USERNAME === 'ALEJANDRA' &&
                         intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_plantilla[0]->EXISTE) === 0 && intval($maquila_control[0]->Maquila) === 98) {
                     switch (intval($frac)) {
                         case 299:
                         case 300:
+
                             $FRACCION = 300;
                             if (intval($maquila_control[0]->Maquila) === 98) {
                                 $FRACCION = 299;
                             }
+                            
+                            $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(96,100) AND Control = {$xXx['CONTROL']}")->result();
+                            if (intval($check_corte[0]->EXISTE) === 0) {
+                                print "\n CORTE NO HA AVANZADO \n";
+                                exit(0);
+                            }
+                            $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(113,102) AND Control = {$xXx['CONTROL']}")->result();
+                            if (intval($check_rayado[0]->EXISTE) === 0) {
+                                print "\n RAYADO NO HA AVANZADO \n";
+                                exit(0);
+                            }
+                            $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(61,60) AND Control = {$xXx['CONTROL']}")->result();
+                            if (intval($check_foleado[0]->EXISTE) === 0) {
+                                print "\n FOLEADO NO HA AVANZADO \n";
+                                exit(0);
+                            }
+                            $check_rebajado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(114,103) AND Control = {$xXx['CONTROL']}")->result();
+                            if (intval($check_rebajado[0]->EXISTE) === 0) {
+                                print "\n REBAJADO NO HA AVANZADO \n";
+                                exit(0);
+                            }
+
                             $check_pespunte_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento = 140 AND A.Control = {$xXx['CONTROL']}")->result();
                             if (intval($check_pespunte_avance[0]->EXISTE) === 0) {
                                 $this->db->set('EstatusProduccion', 'ENSUELADO')->set('DeptoProduccion', 140)->where('Control', $xXx['CONTROL'])->update('controles');

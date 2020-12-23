@@ -622,11 +622,17 @@ class Avance8 extends CI_Controller {
                             }
                         }
                         /* TERMINA REVISA MUESTRA */
-
-
-                        $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
+                        $check_corte = 0;
+                        switch (intval($control_muestra[0]->Maquila)) {
+                            case 98:
+                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(96)")->result();
+                                break;
+                            default:
+                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
+                                break;
+                        }
                         if (intval($check_corte[0]->EXISTE) === 0) {
-                            PRINT "NO TIENE CORTE";
+                            PRINT "NO TIENE CORTE " . intval($control_muestra[0]->Maquila);
                             exit(0);
                         }
                         $check_rayado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(102)")->result();
@@ -656,29 +662,30 @@ class Avance8 extends CI_Controller {
                                 'modulo' => 'A8'
                             );
                             $this->db->insert('avance', $avance);
+                        } else {
                             $avance_id = $this->db->query("SELECT COUNT(*)AS EXISTE, ID FROM avance WHERE Control = {$xXx['CONTROL']} AND Departamento = 40 ORDER BY ID DESC LIMIT 1")->result();
                             if (intval($avance_id[0]->EXISTE) === 1) {
                                 $data["avance_id"] = $avance_id[0]->ID;
                             }
-                            $data["modulo"] = 'A8';
-                            $this->db->insert('fracpagnomina', $data);
-                            $ESTATUS_PRODUCCION = 'REBAJADO';
-                            $DEPTO_PRODUCCION = 30;
-                            $this->db->set('EstatusProduccion', $ESTATUS_PRODUCCION)
-                                    ->set('DeptoProduccion', $DEPTO_PRODUCCION)
-                                    ->where('Control', $xXx['CONTROL'])->update('controles');
-                            $this->db->set('stsavan', 33)
-                                    ->set('EstatusProduccion', $ESTATUS_PRODUCCION)
-                                    ->set('DeptoProduccion', $DEPTO_PRODUCCION)
-                                    ->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("fec33", Date('Y-m-d 00:00:00'))
-                                    ->where("fec33 IS NULL", null, false)
-                                    ->where('contped', $xXx['CONTROL'])->update('avaprd');
-
-                            $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
-                            print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
-                            exit(0);
                         }
+                        $data["modulo"] = 'A8';
+                        $this->db->insert('fracpagnomina', $data);
+                        $ESTATUS_PRODUCCION = 'REBAJADO';
+                        $DEPTO_PRODUCCION = 30;
+                        $this->db->set('EstatusProduccion', $ESTATUS_PRODUCCION)
+                                ->set('DeptoProduccion', $DEPTO_PRODUCCION)
+                                ->where('Control', $xXx['CONTROL'])->update('controles');
+                        $this->db->set('stsavan', 33)
+                                ->set('EstatusProduccion', $ESTATUS_PRODUCCION)
+                                ->set('DeptoProduccion', $DEPTO_PRODUCCION)
+                                ->where('Control', $xXx['CONTROL'])->update('pedidox');
+                        $this->db->set("fec33", Date('Y-m-d 00:00:00'))
+                                ->where("fec33 IS NULL", null, false)
+                                ->where('contped', $xXx['CONTROL'])->update('avaprd');
+
+                        $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} DE FOLEADO A REBAJADO. ", $this->session);
+                        print json_encode(array("AVANZO" => 2, "STEP" => 1, "ACCION" => "FOLEADO A REBAJADO"));
+                        exit(0);
                     }
                     $AVANCES["AVANZO"] = intval($AVANCES["AVANZO"]) + 1;
                 } else {

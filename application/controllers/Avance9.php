@@ -480,7 +480,7 @@ class Avance9 extends CI_Controller {
                                     "semana" => $xXx['SEMANA'],
                                     "depto" => 10,
                                     "fecha_registro" => Date('d/m/Y h:i:s'),
-                                    "modulo"=>'A9',
+                                    "modulo" => 'A9',
                                     "anio" => Date('Y')));
 
                                 $avance_muestra['Departamento'] = 20;
@@ -500,7 +500,7 @@ class Avance9 extends CI_Controller {
                                     "semana" => $xXx['SEMANA'],
                                     "depto" => 20,
                                     "fecha_registro" => Date('d/m/Y h:i:s'),
-                                    "modulo"=>'A9',
+                                    "modulo" => 'A9',
                                     "anio" => Date('Y')));
 
                                 $avance_muestra['Departamento'] = 40;
@@ -702,6 +702,25 @@ class Avance9 extends CI_Controller {
                 switch (intval($xXx['DEPARTAMENTO'])) {
                     case 70:
                     case 80:
+                        $control_muestra = $this->db->query("SELECT COUNT(*) AS EXISTE, P.Control, P.Maquila FROM pedidox AS P "
+                                        . "WHERE P.Estatus IN('A') AND  P.DeptoProduccion IN(20) AND  P.stsavan IN(3)  AND P.stsavan NOT IN(42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = " . $xXx['CONTROL'])->result();
+                        switch (intval($control_muestra[0]->Maquila)) {
+                            case 98:
+                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(96)")->result();
+                                if (intval($check_corte[0]->EXISTE) === 0) {
+                                    PRINT "NO TIENE CORTE O NO TIENE ESTE AVANCE" . intval($control_muestra[0]->Maquila);
+                                    exit(0);
+                                }
+                                break;
+                            default:
+                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
+
+                                if (intval($check_corte[0]->EXISTE) === 0) {
+                                    PRINT "NO TIENE CORTE O NO TIENE ESTE AVANCE" . intval($control_muestra[0]->Maquila);
+                                    exit(0);
+                                }
+                                break;
+                        }
                         $check_fraccionesxestilo_102_113 = $this->db->query("SELECT COUNT(*) AS EXISTEN FROM fraccionesxestilo AS F WHERE F.Estilo ='{$xXx['ESTILO']}' AND F.Fraccion IN(102,113)")->result();
                         if (intval($check_fraccionesxestilo_102_113[0]->EXISTEN) === 0) {
                             PRINT "NO EXISTEN FRACCIONES DE RAYADO PARA ESTE ESTILO, NO ES POSIBLE PAGARLAS.";
@@ -810,7 +829,7 @@ class Avance9 extends CI_Controller {
                             print json_encode(array("AVANZO" => 1, "RETORNO" => 1));
                         }
                         exit(0);
-                        break; 
+                        break;
                     case 30:
                         /* 30 REBAJADO => 90 ENTRETELADO */
                         $FRACCION = 103;

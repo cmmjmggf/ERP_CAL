@@ -310,6 +310,7 @@ class ControlPlantilla extends CI_Controller {
                             ->from('provmaqui')
                             ->where('numprv', $x->post('PROVEEDOR'))
                             ->get()->result();
+            $FRACCION = $this->db->query("SELECT Clave AS FRACCION, Descripcion AS FRACCIONT FROM fracciones WHERE Clave = {$x->post('FRACCION')}")->result();
             $this->db->insert('controlpla', array(
                 'Proveedor' => $x->post('PROVEEDOR'),
                 'ProveedorT' => $PROVEEDOR[0]->NOMBRE,
@@ -320,8 +321,8 @@ class ControlPlantilla extends CI_Controller {
                 'Color' => $x->post('COLOR'),
                 'ColorT' => str_replace("{$x->post('COLOR')}-", "", $x->post('COLORT')),
                 'Pares' => $x->post('PARES'),
-                'Fraccion' => $x->post('FRACCION'),
-                'FraccionT' => str_replace("{$x->post('FRACCION')} ", "", $x->post('FRACCIONT')),
+                'Fraccion' => $FRACCION[0]->FRACCION,
+                'FraccionT' => str_replace("{$FRACCION[0]->FRACCION}", "", $FRACCION[0]->FRACCIONT),
                 'Precio' => $x->post('PRECIO'),
                 'Fecha' => $x->post('FECHA'),
                 'Registro' => Date('d/m/Y h:i:s a'),
