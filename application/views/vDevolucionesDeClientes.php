@@ -137,7 +137,7 @@
                         <input type="text" id="DocumentoF" name="DocumentoF" class="form-control form-control-sm" placeholder="Documento a buscar...">
                     </div>
                 </div>
-                <table id="tblPedidos" class="table table-hover table-sm"  style="width: 100% !important;">
+                <table id="tblFacturacion" class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
                         <tr>
                             <th scope="col">ID</th><!--0-->
@@ -401,7 +401,7 @@
             PRECIO = pnlTablero.find("#PRECIO"),
             MAQUILA = pnlTablero.find("#MAQUILA"),
             Pedidos,
-            tblPedidos = pnlTablero.find('#tblPedidos'),
+            tblFacturacion = pnlTablero.find('#tblFacturacion'),
             ControlADevolver = pnlTablero.find('#ControlADevolver'),
             DOCUMENTO = pnlTablero.find("#DOCUMENTO"),
             TP = pnlTablero.find("#TP"),
@@ -933,7 +933,7 @@
             //            }
         });
 
-        Pedidos = tblPedidos.DataTable({
+        Pedidos = tblFacturacion.DataTable({
             dom: 'rtp',
             "ajax": {
                 "url": '<?php print base_url('DevolucionesDeClientes/getPedidosFacturados'); ?>',
@@ -974,11 +974,11 @@
                 FechaDevolucion.val(Hoy);
             },
             "drawCallback": function () {
-                pnlTablero.find("#tblPedidos_paginate").find("#tblPedidos_previous").before("<li class='font-weight-bold m-2 font-italic' style='color:#8e1b0f ;'>FACTURACIÓN</li>");
+                pnlTablero.find("#tblFacturacion_paginate").find("#tblFacturacion_previous").before("<li class='font-weight-bold m-2 font-italic' style='color:#8e1b0f ;'>FACTURACIÓN</li>");
             }
         });
 
-        tblPedidos.on('click', 'tr', function () {
+        tblFacturacion.on('click', 'tr', function () {
             onBeep(1);
             //            onOpenOverlay('Por favor espere...');
             var campos = ["ClienteDevolucion", "FechaDevolucion", "Clasificacion",
