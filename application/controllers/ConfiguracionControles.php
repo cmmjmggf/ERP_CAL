@@ -27,11 +27,11 @@ class ConfiguracionControles extends CI_Controller {
     public function getPedidoXControl() {
         try {
             $x = $this->input->get();
-             $SELECT ="SELECT P.ID, P.Clave AS PEDIDO, P.Cliente AS CLIENTE, "
-                                        . "P.Estilo AS ESTILO, P.Color AS COLOR, P.Maquila AS MAQUILA, P.Semana AS SEMANA, P.Ano AS ANO, "
-                                        . "P.Control AS CONTROL, P.Pares AS PARES, P.ParesFacturados AS PARES_FACTURADOS, "
-                                        . "P.Estatus AS ESTATUS,P.EstatusProduccion AS ESTATUS_PRODUCCION, P.DeptoProduccion AS DEPTO_PRODUCCION, "
-                                        . "P.stsavan AS STSAVAN FROM pedidox AS P ";
+            $SELECT = "SELECT P.ID, P.Clave AS PEDIDO, P.Cliente AS CLIENTE, "
+                    . "P.Estilo AS ESTILO, P.Color AS COLOR, P.Maquila AS MAQUILA, P.Semana AS SEMANA, P.Ano AS ANO, "
+                    . "P.Control AS CONTROL, P.Pares AS PARES, P.ParesFacturados AS PARES_FACTURADOS, "
+                    . "P.Estatus AS ESTATUS,P.EstatusProduccion AS ESTATUS_PRODUCCION, P.DeptoProduccion AS DEPTO_PRODUCCION, "
+                    . "P.stsavan AS STSAVAN FROM pedidox AS P ";
             if ($x['CONTROL'] !== '') {
                 print json_encode($this->db->query("{$SELECT} WHERE P.Control = {$x["CONTROL"]}")->result());
             } else {
@@ -65,11 +65,22 @@ C.DeptoProduccion AS DEPTO_PRODUCCION FROM controles AS C ";
                     . "Departamento AS CLAVE_DEPTO, DepartamentoT AS DEPARTAMENTO,"
                     . "FechaAvance AS FECHA_AVANCE, Estatus AS ESTATUS, Usuario AS USUARIO_AVANZO, "
                     . "Fecha AS FECHA_REGISTRO, Hora AS HORA_REGISTRO, Fraccion AS FRACCION, Docto AS DOCUMENTO, modulo AS MODULO FROM avance AS A ";
+            $ORDER = " ORDER BY A.ID ASC ";
             if ($x['CONTROL'] !== '') {
-                print json_encode($this->db->query("{$SELECT} WHERE A.Control = {$x["CONTROL"]}")->result());
+                print json_encode($this->db->query("{$SELECT} WHERE A.Control = {$x["CONTROL"]} {$ORDER}")->result());
             } else {
-                print json_encode($this->db->query("{$SELECT} WHERE A.Control = 0123456789")->result());
+                print json_encode($this->db->query("{$SELECT} WHERE A.Control = 0123456789 {$ORDER}")->result());
             }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getInformacionXControl() {
+        try {
+            $x = $this->input->get();
+            $data = $this->db->query("SELECT CONCAT(P.Cliente,\" \", (SELECT C.RazonS FROM clientes AS C WHERE C.Clave = P.Cliente LIMIT 1)) AS CLIENTE, CONCAT(P.DeptoProduccion,\" \" ,P.EstatusProduccion) AS CONTROL_ESTATUS FROM pedidox AS P WHERE P.Control = {$x['CONTROL']}")->result();
+            print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

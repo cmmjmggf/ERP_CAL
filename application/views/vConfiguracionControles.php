@@ -4,15 +4,15 @@
         <div class="row my-2">
             <div class="col-4">
                 <label>CONTROL</label> 
-                <input type="text" id="ConfigControl" class="form-control form-control-sm" style="font-size: 30px;">
+                <input type="text" id="ConfigControl" class="form-control form-control-sm" style="font-size: 40px; color: #8BC34A !important; text-align: center;">
             </div>
             <div class="col-4">
-                <label>CLIENTE</label> 
-                <p>-</p>
+                <label style="font-size:32px;">CLIENTE</label> 
+                <p class="control_cliente" style="font-size:28px; font-style: italic; color: #FF0000;">-</p>
             </div>
-            <div class="col-4">
-                <label>ESTATUS ACTUAL</label> 
-                <p>-</p>
+            <div class="col-4"> 
+                <label style="font-size:32px;">ESTATUS ACTUAL</label> 
+                <p class="control_estatus" style="font-size:28px; font-style: italic; color: #0008ff;">-</p>
             </div>
         </div>
 
@@ -91,13 +91,13 @@
                             <th scope="col">MODULO</th> 
                             <th scope="col">FECHA A PRODUCCIÓN</th> 
                             <th scope="col">CLAVE DEPTO</th> 
-                            
+
                             <th scope="col">DEPARTAMENTO</th> 
                             <th scope="col">FECHA DE AVANCE</th> 
                             <th scope="col">ESTATUS</th> 
                             <th scope="col">USUARIO AVANZO</th> 
                             <th scope="col">FECHA DEL REGISTRO</th> 
-                            
+
                             <th scope="col">HORA DEL REGISTRO</th> 
                             <th scope="col">FRACCIÓN</th> 
                             <th scope="col">DOCUMENTO</th> 
@@ -200,11 +200,11 @@
     var PanelDeControl = $("#PanelDeControl"),
             ConfigControl = PanelDeControl.find("#ConfigControl"),
             tblPedidos = PanelDeControl.find("#tblPedidos"), Pedidos,
-    tblControles = PanelDeControl.find("#tblControles"), Controles,
-    tblAvances = PanelDeControl.find("#tblAvances"), Avances,
-    tblAvaprd = PanelDeControl.find("#tblAvaprd"), Avaprd,
-    tblNomina = PanelDeControl.find("#tblNomina"), Nomina,
-    tblFacturacion = PanelDeControl.find("#tblFacturacion"), Facturacion;
+            tblControles = PanelDeControl.find("#tblControles"), Controles,
+            tblAvances = PanelDeControl.find("#tblAvances"), Avances,
+            tblAvaprd = PanelDeControl.find("#tblAvaprd"), Avaprd,
+            tblNomina = PanelDeControl.find("#tblNomina"), Nomina,
+            tblFacturacion = PanelDeControl.find("#tblFacturacion"), Facturacion;
     $(document).ready(function () {
         var cols = [
             {"data": "ID"}/*0*/,
@@ -259,7 +259,7 @@
                 [0, 'desc']
             ]
         };
-        Pedidos = tblPedidos.DataTable(xoptions);  
+        Pedidos = tblPedidos.DataTable(xoptions);
         Controles = tblControles.DataTable({
             "dom": 'rtp',
             "ajax": {
@@ -280,51 +280,7 @@
                 {"data": "ANO"}/*1*/,
                 {"data": "ESTATUS"}/*1*/,
                 {"data": "ESTATUS_PRODUCCION"}/*1*/,
-                {"data": "DEPTO_PRODUCCION"}/*1*/,
-            ],
-            "columnDefs": coldefs,
-            language: lang,
-            select: true,
-            "autoWidth": true,
-            "colReorder": true,
-            "displayLength": 50,
-            "bLengthChange": false,
-            "deferRender": true,
-            "scrollCollapse": false,
-            "bSort": true,
-            "scrollY": "250px",
-            "scrollX": true,
-            "aaSorting": [
-                [0, 'desc']
-            ]
-        });
-        
-        Avances = tblAvances.DataTable({
-            "dom": 'rtp',
-            "ajax": {
-                "url": '<?php print base_url('ConfiguracionControles/getAvancesXControl'); ?>',
-                "dataSrc": "",
-                "data": function (d) {
-                    d.CONTROL = ConfigControl.val() ? ConfigControl.val() : '';
-                }
-            },
-            buttons: buttons,
-            "columns": [
-                {"data": "ID"}/*0*/,
-                {"data": "CONTROL"}/*1*/,
-                {"data": "MODULO"}/*1*/,
-                {"data": "FECHA_A_PRODUCCION"}/*1*/,
-                {"data": "CLAVE_DEPTO"}/*1*/,
-                
-                {"data": "DEPARTAMENTO"}/*1*/,
-                {"data": "FECHA_AVANCE"}/*1*/,
-                {"data": "ESTATUS"}/*1*/,
-                {"data": "USUARIO_AVANZO"}/*1*/,
-                {"data": "FECHA_REGISTRO"}/*1*/,
-                
-                {"data": "HORA_REGISTRO"}/*1*/,
-                {"data": "FRACCION"}/*1*/,
-                {"data": "DOCUMENTO"}/*1*/
+                {"data": "DEPTO_PRODUCCION"}/*1*/
             ],
             "columnDefs": coldefs,
             language: lang,
@@ -343,19 +299,72 @@
             ]
         });
 
+        Avances = tblAvances.DataTable({
+            "dom": 'rtp',
+            "ajax": {
+                "url": '<?php print base_url('ConfiguracionControles/getAvancesXControl'); ?>',
+                "dataSrc": "",
+                "data": function (d) {
+                    d.CONTROL = ConfigControl.val() ? ConfigControl.val() : '';
+                }
+            },
+            buttons: buttons,
+            "columns": [
+                {"data": "ID"}/*0*/,
+                {"data": "CONTROL"}/*1*/,
+                {"data": "MODULO"}/*1*/,
+                {"data": "FECHA_A_PRODUCCION"}/*1*/,
+                {"data": "CLAVE_DEPTO"}/*1*/,
+
+                {"data": "DEPARTAMENTO"}/*1*/,
+                {"data": "FECHA_AVANCE"}/*1*/,
+                {"data": "ESTATUS"}/*1*/,
+                {"data": "USUARIO_AVANZO"}/*1*/,
+                {"data": "FECHA_REGISTRO"}/*1*/,
+
+                {"data": "HORA_REGISTRO"}/*1*/,
+                {"data": "FRACCION"}/*1*/,
+                {"data": "DOCUMENTO"}/*1*/
+            ],
+            "columnDefs": coldefs,
+            language: lang,
+            select: true,
+            "autoWidth": true,
+            "colReorder": true,
+            "displayLength": 50,
+            "bLengthChange": false,
+            "deferRender": true,
+            "scrollCollapse": false,
+            "bSort": true,
+            "scrollY": "250px",
+            "scrollX": true,
+            "aaSorting": [
+                [0, 'ASC']
+            ]
+        });
+
         ConfigControl.keydown(function (e) {
             if (e.keyCode === 13) {
                 onOpenOverlay('Cargando...');
+                $.getJSON('<?php print base_url('ConfiguracionControles/getInformacionXControl'); ?>', {CONTROL: ConfigControl.val()}).done(function (a) {
+                    var r = a[0];
+                    PanelDeControl.find("p.control_cliente").text(r.CLIENTE);
+                    PanelDeControl.find("p.control_estatus").text(r.CONTROL_ESTATUS);
+                }).fail(function (x) {
+                    getError(x);
+                });
                 Pedidos.ajax.reload(function () {
                     Controles.ajax.reload(function () {
-                        onCloseOverlay();
+                        Avances.ajax.reload(function () {
+                            onCloseOverlay();
+                        });
                     });
                 });
             }
         });
-        
+
         PanelDeControl.find("#MasterTab").on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-            console.log(e,e.currentTarget.hash)
+            console.log(e, e.currentTarget.hash)
             switch (e.currentTarget.hash.replace("#", "")) {
                 case "pedidos":
                     console.log('OK Pedidos');
@@ -364,23 +373,23 @@
                 case "controles":
                     console.log('OK Controles');
                     Controles.columns.adjust().draw();
-                    break; 
+                    break;
                 case "avances":
                     console.log('OK avances');
                     Controles.columns.adjust().draw();
-                    break; 
+                    break;
                 case "fechas":
                     console.log('OK fechas');
                     Controles.columns.adjust().draw();
-                    break; 
+                    break;
                 case "nomina":
                     console.log('OK nomina');
                     Controles.columns.adjust().draw();
-                    break; 
+                    break;
                 case "facturacion":
                     console.log('OK facturacion');
                     Controles.columns.adjust().draw();
-                    break; 
+                    break;
             }
         });
     });
