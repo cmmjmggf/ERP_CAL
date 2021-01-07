@@ -920,7 +920,7 @@ P.Maquila AS MAQUILA
                             if (intval($maquila_control[0]->Maquila) === 98) {
                                 $FRACCION = 299;
                             }
-                            
+
                             $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(96,100) AND Control = {$xXx['CONTROL']}")->result();
                             if (intval($check_corte[0]->EXISTE) === 0) {
                                 print "\n CORTE NO HA AVANZADO \n";
@@ -931,11 +931,23 @@ P.Maquila AS MAQUILA
                                 print "\n RAYADO NO HA AVANZADO \n";
                                 exit(0);
                             }
-                            $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(61,60) AND Control = {$xXx['CONTROL']}")->result();
-                            if (intval($check_foleado[0]->EXISTE) === 0) {
-                                print "\n FOLEADO NO HA AVANZADO \n";
-                                exit(0);
+                            /*REVISAR FOLEADO-TROQUELADO*/
+                            if (intval($maquila_control[0]->Maquila) === 98) {
+                                $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(61,71) AND Control = {$xXx['CONTROL']}")->result();
+                                if (intval($check_foleado[0]->EXISTE) === 0) {
+                                    print "\n FOLEADO-TROQUELADO MUESTRA NO HA AVANZADO \n";
+                                    exit(0);
+                                }
+                            } 
+                            if (intval($maquila_control[0]->Maquila) === 1) {
+                                $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(60) AND Control = {$xXx['CONTROL']}")->result();
+                                if (intval($check_foleado[0]->EXISTE) === 0) {
+                                    print "\n FOLEADO-TROQUELADO NO HA AVANZADO \n";
+                                    exit(0);
+                                }
                             }
+                            /*FIN REVISAR FOLEADO-TROQUELADO*/
+                            
                             $check_rebajado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(114,103) AND Control = {$xXx['CONTROL']}")->result();
                             if (intval($check_rebajado[0]->EXISTE) === 0) {
                                 print "\n REBAJADO NO HA AVANZADO \n";
