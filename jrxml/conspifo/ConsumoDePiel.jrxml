@@ -23,7 +23,8 @@
 
 CONCAT(E.Numero," - ",E.PrimerNombre," ", E.SegundoNombre ," ",E.Paterno," ",E.Materno) AS EMPLEADO_NOMBRE,
 
-A.Control AS Control, A.Estilo, A.Color, A.PrecioActual AS Precio, CAST(A.Pares AS SIGNED) AS PARES,A.PrecioActual AS Precio,
+A.Control AS Control, A.Estilo, A.Color,   CAST(A.Pares AS SIGNED) AS PARES,
+CAST(A.PrecioActual AS DECIMAL(20,4)) AS Precio,
 CAST(A.Devolucion AS DECIMAL(20,4)) AS DEVOLUCION,
 
 (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)  AS X_CONTROL,
@@ -53,11 +54,11 @@ WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fr
 cast(A.Piocha as decimal(10,4)) AS PIOCHA,
 
 (SELECT CONCAT(OPD.Articulo," ",OPD.ArticuloT) FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion
-WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo LIMIT 1) AS ARTICULO_DESC
+WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo  AND OP.Ano = $P{ANO} LIMIT 1) AS ARTICULO_DESC
 
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
 OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
-WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND A.Fraccion = 100 AND E.AltaBaja = 1 AND
+WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND A.Fraccion = 100 AND E.AltaBaja = 1 AND OP.Ano = $P{ANO} AND
 (CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
 GROUP BY  A.Control,  A.Articulo
 ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
@@ -73,8 +74,10 @@ ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	<field name="Color" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Precio" class="java.lang.Double"/>
 	<field name="PARES" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Precio" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="DEVOLUCION" class="java.math.BigDecimal">
