@@ -113,7 +113,7 @@ CONCAT('$',FORMAT(FD.TotalConDescuentoItem,2)) AS TOTAL_CON_DESCUENTO_F", false)
                             "pedido" => $x["PEDIDO"],
                             "fechapedido" => $x["FECHA_PEDIDO"],
                             "referenciapedido" => $x["PEDIDO"],
-                            "proveedor" => $tienda[0]->NumeroDeProveedor,
+                            "proveedor" => $x['NUMERO_DE_PROVEEDOR'],
                             "tipoproveedor" => $tienda[0]->TPProveedor,
                             "nombrebodega" => $tienda[0]->Consignatario,
                             "direccion" => $tienda[0]->Direccion,

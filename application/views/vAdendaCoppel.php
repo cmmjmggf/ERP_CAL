@@ -265,13 +265,14 @@
         btnAceptaAddendaCoppel.click(function () {
             if (xTiendaCoppel.val() && FacturaCoppel.val() && CoppelProveedor.val()
                     && TProveedor.val() && PedidoCoppel.val() && NoBodegaCoppel.val()
-                    && CantidadLotes.val() && CantidadPrepack.val()) {
+                    && CantidadLotes.val() && CantidadPrepack.val() && CoppelProveedor.val()) {
                 onOpenOverlay('Espere...');
                 onEnable(TiendaCoppel);
                 onDisable(btnAceptaAddendaCoppel);
                 var p = {
                     TIENDA: TiendaCoppel.val(),
                     FACTURA: FacturaCoppel.val(),
+                    NUMERO_DE_PROVEEDOR: CoppelProveedor.val(),
                     FECHA_FACTURA: FechaFacturaCoppel.val(),
                     FECHA_PEDIDO: FechaPedidoCoppel.val(),
                     PEDIDO: PedidoCoppel.val(),
@@ -378,7 +379,7 @@
                         index = 1;
 
                         AddendasCoppel.ajax.reload(function () {
-                            mdlAddendaCoppel.find("input:not(#CoppelProveedor):not(#TProveedor):not(.solo_de_lectura)").attr('readonly', false);
+                            mdlAddendaCoppel.find("input:not(#TProveedor):not(.solo_de_lectura)").attr('readonly', false);
                             FacturaCoppel.focus().select();
                         });
                         NoBodegaCoppel.val(xTiendaCoppel.val());
