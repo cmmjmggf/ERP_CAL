@@ -314,10 +314,11 @@ class ReportesProveedores extends CI_Controller {
         $Tp = $this->input->post('Tp');
         $Prov = $this->input->post('Proveedor');
         $aProv = $this->input->post('aProveedor');
+        $Tipo = $this->input->post('Tipo');
 
         $cm = $this->ReportesProveedores_model;
-        $Proveedores = $cm->getProveedoresReporteAntiguedad($Prov, $aProv, $Tp);
-        $Doctos = $cm->getDoctosByProveedorTpAntiguedad($Prov, $aProv, $Tp);
+        $Proveedores = $cm->getProveedoresReporteAntiguedad($Prov, $aProv, $Tp, $Tipo);
+        $Doctos = $cm->getDoctosByProveedorTpAntiguedad($Prov, $aProv, $Tp, $Tipo);
 
 
         if (!empty($Proveedores)) {

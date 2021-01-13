@@ -44,6 +44,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12 col-sm-12">
+                            <label>Tipo <span class="badge badge-info mb-2" style="font-size: 12px;">0 DIRECTAS, 10 Piel/Forro, 80 Suela, 90 Peletería</span></label>
+                            <select class="form-control form-control-sm required selectize" id="Tipo" name="Tipo" >
+                                <option value=""></option>
+                                <option value="0">0 DIRECTAS</option>
+                                <option value="10">10 PIEL Y FORRO</option>
+                                <option value="80">80 SUELA</option>
+                                <option value="90">90 INDIRECTOS</option>
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -228,9 +238,9 @@
                     $.getJSON(master_url_repantigue + 'onVerificarProveedor', {Proveedor: txtprov}).done(function (data) {
                         if (data.length > 0) {
                             mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen")[0].selectize.addItem(txtprov, true);
-                            mdlAntiguedadSaldosProveedores.find('#btnImprimir').focus();
+                            mdlAntiguedadSaldosProveedores.find('#Tipo')[0].selectize.focus();
                         } else {
-                            mdlAntiguedadSaldosProveedores.find('#btnImprimir').focus();
+                            mdlAntiguedadSaldosProveedores.find('#Tipo')[0].selectize.focus();
                         }
                     }).fail(function (x) {
                         swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -239,6 +249,11 @@
                 }
             }
         });
+        mdlAntiguedadSaldosProveedores.find("#Tipo").change(function () {
+            if ($(this).val()) {
+                mdlAntiguedadSaldosProveedores.find('#btnImprimir').focus();
+            }
+        })
         mdlAntiguedadSaldosProveedores.find("#saProveedorEdoCtaGen").change(function () {
             if ($(this).val()) {
                 mdlAntiguedadSaldosProveedores.find("#aProveedorEdoCtaGen").val($(this).val());

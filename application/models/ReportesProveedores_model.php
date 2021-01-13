@@ -182,7 +182,7 @@ class ReportesProveedores_model extends CI_Model {
         }
     }
 
-    public function getProveedoresReporteAntiguedad($prov, $aprov, $tp) {
+    public function getProveedoresReporteAntiguedad($prov, $aprov, $tp, $tipo) {
         try {
             $this->db->query("SET sql_mode = '';");
             return $this->db->select("CAST(P.Clave AS SIGNED ) AS ClaveNum, P.Plazo, "
@@ -191,6 +191,7 @@ class ReportesProveedores_model extends CI_Model {
                             ->from("cartera_proveedores AS CP")
                             ->join("proveedores AS P", 'ON P.Clave =  CP.Proveedor')
                             ->like("CP.Tp", $tp)
+                            ->like("CP.Departamento", $tipo)
                             ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
                             ->where("CP.Saldo_Doc > 1 ", null, false)
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)
@@ -202,7 +203,7 @@ class ReportesProveedores_model extends CI_Model {
         }
     }
 
-    public function getDoctosByProveedorTpAntiguedad($prov, $aprov, $tp) {
+    public function getDoctosByProveedorTpAntiguedad($prov, $aprov, $tp, $tipo) {
         try {
             return $this->db->select("CAST(CP.Proveedor AS SIGNED ) AS ClaveNum, "
                                     . "CP.Tp,"
@@ -253,6 +254,7 @@ CASE WHEN DATEDIFF(CURRENT_DATE(), date_format(str_to_date(CP.FechaDoc, '%d/%m/%
                                     . "", false)
                             ->from("cartera_proveedores AS CP")
                             ->like("CP.Tp", $tp)
+                            ->like("CP.Departamento", $tipo)
                             ->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
                             ->where("CP.Saldo_Doc > 1 ", null, false)
                             ->where("CP.Proveedor BETWEEN $prov AND $aprov  ", null, false)

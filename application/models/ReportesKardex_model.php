@@ -241,7 +241,7 @@ class ReportesKardex_model extends CI_Model {
                             ->join("articulos10 AS A", "ON MA.Articulo = A.Clave ")
                             ->join("proveedores P", "ON P.Clave =  MA.Proveedor ", "left")
                             ->where("MA.Articulo", $Articulo)
-                            ->where("MA.CantidadMov > 0 ", null, false)
+//                            ->where("MA.CantidadMov > 0 ", null, false)
                             ->where("STR_TO_DATE(MA.FechaMov, \"%d/%m/%Y\") BETWEEN STR_TO_DATE('$fecha', \"%d/%m/%Y\") AND STR_TO_DATE('$aFecha', \"%d/%m/%Y\")")
                             // ->order_by("MA.EntradaSalida", 'ASC')
                             ->order_by("FechaOrd", 'ASC')

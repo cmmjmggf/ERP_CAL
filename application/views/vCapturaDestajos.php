@@ -23,9 +23,9 @@
                 <button type="button" class="btn btn-success btn-sm" id="btnCapturaComida" >
                     <span class="fa fa-dollar-sign" ></span> VALES/COMIDA
                 </button>
-                <button type="button" class="btn btn-danger btn-sm" id="btnCapturaDestajosPiochas" >
-                    <span class="fa fa-ban" ></span> DESTAJOS PIOCHAS
-                </button>
+                <!--                <button type="button" class="btn btn-danger btn-sm" id="btnCapturaDestajosPiochas" >
+                                    <span class="fa fa-ban" ></span> DESTAJOS PIOCHAS
+                                </button>-->
 
             </div>
         </div>

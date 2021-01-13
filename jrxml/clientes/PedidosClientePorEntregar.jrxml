@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="768" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.3849126823010036"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.23041572397259"/>
+	<property name="ireport.x" value="482"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -160,7 +160,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 					<reportElement x="236" y="0" width="158" height="1" uuid="63b524d1-8b17-430c-a7f8-77812b0c3117"/>
 				</line>
 				<textField pattern="#,##0" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="324" y="1" width="28" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="b121e935-0a08-4fca-a449-e7bf18c90331"/>
+					<reportElement mode="Transparent" x="353" y="1" width="28" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="b121e935-0a08-4fca-a449-e7bf18c90331"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -168,7 +168,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 					<textFieldExpression><![CDATA[$V{pares_2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="352" y="1" width="28" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="bb45ddd1-7338-4ff7-9813-f3aaadbca9fe"/>
+					<reportElement mode="Transparent" x="381" y="1" width="28" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="bb45ddd1-7338-4ff7-9813-f3aaadbca9fe"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -176,7 +176,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 					<textFieldExpression><![CDATA[$V{ParesFacturados_2}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0" isBlankWhenNull="false">
-					<reportElement mode="Transparent" x="380" y="1" width="25" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="745f4120-03e2-4262-825c-a05e017942ca"/>
+					<reportElement mode="Transparent" x="409" y="1" width="25" height="11" forecolor="#000000" backcolor="#FFFFFF" uuid="745f4120-03e2-4262-825c-a05e017942ca"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 						<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -240,14 +240,14 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 					<text><![CDATA[Total por maquila]]></text>
 				</staticText>
 				<textField pattern="#,##0">
-					<reportElement x="324" y="0" width="28" height="11" uuid="9c90ed2b-c06a-473b-919e-ea75b6c8544f"/>
+					<reportElement x="353" y="0" width="28" height="11" uuid="9c90ed2b-c06a-473b-919e-ea75b6c8544f"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{pares_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0">
-					<reportElement x="352" y="0" width="28" height="11" uuid="301d854a-522d-4cda-80b4-0347295a55af">
+					<reportElement x="381" y="0" width="28" height="11" uuid="301d854a-522d-4cda-80b4-0347295a55af">
 						<printWhenExpression><![CDATA[$V{ParesFacturados_1}>0]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -256,7 +256,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 					<textFieldExpression><![CDATA[$V{ParesFacturados_1}]]></textFieldExpression>
 				</textField>
 				<textField pattern="#,##0">
-					<reportElement x="380" y="0" width="25" height="11" uuid="87959112-0a77-43bf-b847-12fb5ef59257">
+					<reportElement x="409" y="0" width="25" height="11" uuid="87959112-0a77-43bf-b847-12fb5ef59257">
 						<printWhenExpression><![CDATA[$V{saldo_1}>0]]></printWhenExpression>
 					</reportElement>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -279,7 +279,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<reportElement x="324" y="2" width="231" height="22" uuid="716be868-e630-4078-b173-a78b6a6af4c7"/>
 			</rectangle>
 			<rectangle>
-				<reportElement x="324" y="38" width="81" height="21" uuid="4c8a02a4-7a34-4b66-8261-0244bc503c76"/>
+				<reportElement x="353" y="38" width="81" height="21" uuid="4c8a02a4-7a34-4b66-8261-0244bc503c76"/>
 			</rectangle>
 			<rectangle>
 				<reportElement x="47" y="38" width="80" height="21" uuid="8dfb2977-95de-4754-bff4-9418f6b986fc"/>
@@ -372,7 +372,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<text><![CDATA[Color]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="555" y="49" width="66" height="11" forecolor="#000000" uuid="b8e3a959-7c6b-426b-92af-507de9755ea6"/>
+				<reportElement style="Column header" x="565" y="49" width="56" height="11" forecolor="#000000" uuid="b8e3a959-7c6b-426b-92af-507de9755ea6"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -386,28 +386,28 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<text><![CDATA[Fechas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="324" y="38" width="81" height="11" forecolor="#000000" uuid="0d241f53-399e-4ada-ae4d-1f2688730c1d"/>
+				<reportElement style="Column header" x="353" y="38" width="81" height="11" forecolor="#000000" uuid="0d241f53-399e-4ada-ae4d-1f2688730c1d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Pares]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="324" y="48" width="28" height="11" forecolor="#000000" uuid="8e8b103c-9aef-48bb-a4f8-c544371c4cb7"/>
+				<reportElement style="Column header" x="353" y="48" width="28" height="11" forecolor="#000000" uuid="8e8b103c-9aef-48bb-a4f8-c544371c4cb7"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ped]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="352" y="48" width="28" height="11" forecolor="#000000" uuid="0b69ac76-64f1-4b42-9f4e-00e278ac83fb"/>
+				<reportElement style="Column header" x="381" y="48" width="28" height="11" forecolor="#000000" uuid="0b69ac76-64f1-4b42-9f4e-00e278ac83fb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fact]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="380" y="48" width="25" height="11" forecolor="#000000" uuid="f239d61b-67d6-4c68-9ee9-caf35bea3959"/>
+				<reportElement style="Column header" x="409" y="48" width="25" height="11" forecolor="#000000" uuid="f239d61b-67d6-4c68-9ee9-caf35bea3959"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -463,7 +463,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$F{diasplazo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement style="Column header" x="414" y="48" width="85" height="11" forecolor="#000000" uuid="58c3e88a-198b-4252-bb45-b01cb54023a1"/>
+				<reportElement style="Column header" x="445" y="48" width="85" height="11" forecolor="#000000" uuid="58c3e88a-198b-4252-bb45-b01cb54023a1"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
@@ -508,21 +508,21 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="212" y="0" width="112" height="9" uuid="390a1797-85ec-4f19-ad04-24987c3ffffb"/>
+				<reportElement x="212" y="0" width="141" height="9" uuid="390a1797-85ec-4f19-ad04-24987c3ffffb"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ColorT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="555" y="0" width="213" height="9" uuid="a595240e-e598-48e1-81e2-73e3298d9487"/>
+				<reportElement x="565" y="0" width="203" height="9" uuid="a595240e-e598-48e1-81e2-73e3298d9487"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Observacion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="324" y="0" width="28" height="9" uuid="d2402478-4e5a-4dbc-90df-8863f8183ce2">
+				<reportElement x="353" y="0" width="28" height="9" uuid="d2402478-4e5a-4dbc-90df-8863f8183ce2">
 					<printWhenExpression><![CDATA[$F{pares}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -531,7 +531,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$F{pares}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="352" y="0" width="28" height="9" uuid="870d977a-0334-4967-b97c-7f2ba92837ef">
+				<reportElement x="381" y="0" width="28" height="9" uuid="870d977a-0334-4967-b97c-7f2ba92837ef">
 					<printWhenExpression><![CDATA[$F{ParesFacturados}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -540,7 +540,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$F{ParesFacturados}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="380" y="0" width="25" height="9" uuid="047e4e04-e0b2-4dec-a421-24f5e74c1669">
+				<reportElement x="409" y="0" width="25" height="9" uuid="047e4e04-e0b2-4dec-a421-24f5e74c1669">
 					<printWhenExpression><![CDATA[$F{saldo}>0]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -556,14 +556,14 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="410" y="0" width="18" height="9" uuid="3dc7e1c5-9e15-4f82-be80-04989de0bfeb"/>
+				<reportElement x="441" y="0" width="18" height="9" uuid="3dc7e1c5-9e15-4f82-be80-04989de0bfeb"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{stsavan}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement x="433" y="0" width="96" height="9" uuid="f939d3e4-1177-4592-bb16-0a7bbc52ae75"/>
+				<reportElement x="464" y="0" width="96" height="9" uuid="f939d3e4-1177-4592-bb16-0a7bbc52ae75"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
@@ -584,7 +584,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<reportElement x="236" y="0" width="158" height="1" uuid="277bb294-e74f-4298-8ce3-f97c247295db"/>
 			</line>
 			<textField pattern="#,##0" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="324" y="1" width="28" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="46baec70-554f-43cb-9a4c-26adb6060eb5"/>
+				<reportElement mode="Transparent" x="353" y="1" width="28" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="46baec70-554f-43cb-9a4c-26adb6060eb5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -592,7 +592,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$V{pares_3}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="352" y="1" width="28" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="08d260b4-c823-4930-bcc8-98670feff7d9"/>
+				<reportElement mode="Transparent" x="381" y="1" width="28" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="08d260b4-c823-4930-bcc8-98670feff7d9"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -600,7 +600,7 @@ order by abs(p.semana), abs(p.maquila), p.fechaentrega, p.Estilo, p.ColorT asc]]
 				<textFieldExpression><![CDATA[$V{ParesFacturados_3}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="380" y="1" width="25" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ec69ee59-72ec-4854-8af3-943c39b4f249"/>
+				<reportElement mode="Transparent" x="409" y="1" width="25" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ec69ee59-72ec-4854-8af3-943c39b4f249"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="7" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

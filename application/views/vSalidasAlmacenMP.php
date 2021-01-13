@@ -155,7 +155,7 @@ foreach ($m as $k => $v) {
         $maquilas .= $v->Maquila;
     }
     $i += 1;
-} 
+}
 ?>
 <script>
     var master_url = base_url + 'index.php/SalidasAlmacenMP/';
@@ -178,16 +178,16 @@ foreach ($m as $k => $v) {
         setFocusSelectToSelectOnChange('#Departamento', '#sArticulo', pnlTablero);
         setFocusSelectToInputOnChange('#sArticulo', '#Cantidad', pnlTablero);
 
-        pnlTablero.find("#Maq").keydown(function (e) {
-            if (e.keyCode === 13 && $(this).val()) {
-                var maquilas = [<?php print $maquilas; ?>];
-                if (!maquilas.includes(parseInt($(this).val()))) {
-                    onCampoInvalido(pnlTablero, "ESTA MAQUILA NO EXISTE \n MAQUILAS VÁLIDAS: "+maquilas, function () {
-                        pnlTablero.find("#Maq").focus().select();
-                    });
-                }
-            }
-        });
+//        pnlTablero.find("#Maq").keypress(function (e) {
+//            if (e.keyCode === 13 && $(this).val()) {
+//                var maquilas = [<?php print $maquilas; ?>];
+//                if (!maquilas.includes(parseInt($(this).val()))) {
+//                    onCampoInvalido(pnlTablero, "ESTA MAQUILA NO EXISTE \n MAQUILAS VÁLIDAS: " + maquilas, function () {
+//                        pnlTablero.find("#Maq").focus().select();
+//                    });
+//                }
+//            }
+//        });
 
         pnlTablero.find('#Ano').keypress(function (e) {
             if (e.keyCode === 13) {
