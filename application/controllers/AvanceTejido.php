@@ -411,7 +411,7 @@ class AvanceTejido extends CI_Controller {
             $x = $this->input->post();
             $check_avance = $this->db->query("SELECT count(*) AS EXISTE FROM pedidox AS P WHERE P.stsavan IN(9,10,11,12,13,14) AND P.Control = {$this->input->post("CONTROL")}")->result();
             $check_stsavan = $this->db->query("SELECT P.stsavan AS AVANCE_ACTUAL FROM pedidox AS P WHERE  P.Control = {$this->input->post("CONTROL")}")->result();
-            $SEMANA_COBRO_FRACCION = $this->db->query("SELECT semana AS SEMANA FROM fracpagnomina WHERE where Control = {$x['CONTROL']} AND numfrac = 401")->result();
+            $SEMANA_COBRO_FRACCION = $this->db->query("SELECT semana AS SEMANA FROM fracpagnomina WHERE Control = {$x['CONTROL']} AND numfrac = 401")->result();
 
             $SEMANA_NOMINA = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenomina WHERE status = 2 AND numsem = {$SEMANA_COBRO_FRACCION[0]->SEMANA}")->result();
 
@@ -437,11 +437,11 @@ class AvanceTejido extends CI_Controller {
                 exit(0);
             }
             if (intval($check_avance[0]->EXISTE) > 0) {
-                $SEMANA_COBRO_FRACCION = $this->db->query("SELECT semana AS SEMANA FROM fracpagnomina WHERE where Control = {$x['CONTROL']} AND numfrac = 401")->result();
-
-                $SEMANA_NOMINA = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenomina WHERE status = 2 AND numsem = {$SEMANA_COBRO_FRACCION[0]->SEMANA}")->result();
+                $SEMANA_COBRO_FRACCION = $this->db->query("SELECT semana AS SEMANA FROM fracpagnomina WHERE Control = {$x['CONTROL']} AND numfrac = 401")->result();
+                $AÑO = Date('Y');
+                $SEMANA_NOMINA = $this->db->query("SELECT COUNT(*) AS EXISTE FROM prenomina WHERE status = 2 AND numsem = {$SEMANA_COBRO_FRACCION[0]->SEMANA} AND año = $AÑO")->result();
                 if (intval($SEMANA_NOMINA[0]->EXISTE) >= 1) {
-                    print "\n NO SE PUEDE ELIMINAR EL AVANCE NI LA NOMINA QUE YA FUE PAGADA \n";
+                    print "\n NO SE PUEDE ELIMINAR EL AVANCE NI LA NOMINA QUE YA FUE PAGADA {$AÑO} {$SEMANA_COBRO_FRACCION[0]->SEMANA} \n";
                     $l = new Logs("AVANCE TEJIDO ELIMINA", "INTENTO ELIMINAR EL AVANCE DE TEJIDO(401) DEL CONTROL {$x['CONTROL']} .", $this->session);
                     EXIT(0);
                 } else {

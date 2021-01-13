@@ -868,7 +868,7 @@
             $.post('<?php print base_url('FacturacionProduccion/onAnticiposTest') ?>', {
                 ANTICIPOS: JSON.stringify(json_facturas)
             }).done(function (a) {
-                
+
             }).fail(function () {
 
             });
@@ -1240,6 +1240,16 @@
         });
 
         btnAcepta.click(function () {             /*REVISAR CANTIDAD FACTURADA*/
+
+            switch (parseInt(TMNDAFactura.val())) {
+                case '':
+                case "":
+                case 0: 
+                    TMNDAFactura.val(1);
+                    getTotalFacturado();
+                    break;
+            }
+
             if (Control.val() && ClienteClave.val()) {
                 $.getJSON('<?php print base_url('FacturacionProduccion/getParesFacturadosPedidox'); ?>',
                         {
@@ -1360,7 +1370,7 @@
                 onOpenOverlay('Cerrando...');
                 var p = {
                     FECHA: FechaFactura.val(), CLIENTE: ClienteFactura.val(),
-                    TP_DOCTO: TPFactura.val(), FACTURA: Documento.val(), 
+                    TP_DOCTO: TPFactura.val(), FACTURA: Documento.val(),
                     MONEDA: TMNDAFactura.val(), CAJAS: CajasFacturacion.val(),
                     IMPORTE_TOTAL_SIN_IVA: SubtotalFacturacion.val(),
                     IMPORTE_TOTAL_CON_IVA: SubtotalFacturacionIVA.val(),
@@ -1604,7 +1614,7 @@
                 });
             }
         });
-        
+
         btnControlInCompleto.click(function () {
             onBeep(1);
             if (ClienteFactura.val()) {
@@ -1654,7 +1664,7 @@
                             {"data": "ID"},
                             {"data": "CONTROL"}, {"data": "PEDIDO"},
                             {"data": "CLIENTE"}, {"data": "FECHA_PEDIDO"},
-                            {"data": "FECHA_ENTREGA"}, 
+                            {"data": "FECHA_ENTREGA"},
                             {"data": "ESTILO"}, {"data": "COLOR"},
                             {"data": "PARES"}, {"data": "FAC"},
                             {"data": "MAQUILA"}, {"data": "SEMANA"},
@@ -2239,8 +2249,10 @@
                                 var stt = parseFloat(xx.Precio) * prs;
                                 SubtotalFacturacion.val(stt);
                                 switch (parseInt(TMNDAFactura.val())) {
+                                    case 0:
                                     case 1:
                                         switch (parseInt(TPFactura.val())) {
+                                            case 0:
                                             case 1:
                                                 SubtotalFacturacionIVA.val(stt * 0.16);
                                                 TotalLetra.find("span").text(NumeroALetras(stt * 0.16));
@@ -2335,7 +2347,7 @@
             t += $.isNumeric(v[indice]) ? parseFloat(v[indice]) : 0;
         });
         switch (parseInt(TMNDAFactura.val())) {
-            case 1:
+            case 1: 
                 switch (parseInt(TPFactura.val())) {
                     case 1:
 
@@ -2458,6 +2470,7 @@
         p["PRECIO"] = PrecioFacturacion.val();
         p["SUBTOTAL"] = SubtotalFacturacion.val();
         switch (parseInt(TPFactura.val())) {
+            case 0:
             case 1:
                 p["IVA"] = (SubtotalFacturacion.val() * 0.16);
                 p["TOTAL_EN_LETRA"] = NumeroALetras(SubtotalFacturacion.val());
