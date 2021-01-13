@@ -37,7 +37,7 @@
             <div class="col-12 col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                 <label>DEPARTAMENTO DE AVANCE</label>
                 <select id="AvancePantallaDepartamento" name="AvancePantallaDepartamento" class="form-control">
-                    <option></option>
+                    <option value="0">TODOS</option>
                     <option value="1">PROGRAMADO</option>
                     <option value="2">CORTE</option>
                     <option value="3">RAYADO</option>
@@ -87,6 +87,7 @@
                             <th scope="col">CLIENTE </th> 
 
                             <th scope="col">FECHA-ENTREGA </th> 
+                            <th scope="col">ORDEN</th> 
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -184,7 +185,8 @@
                 {"data": "ESTILO"}/*1*/,
                 {"data": "COLOR"}/*1*/,
                 {"data": "CLIENTE"}/*1*/,
-                {"data": "FECHA_ENTREGA"}/*1*/
+                {"data": "FECHA_ENTREGA"}/*1*/,
+                {"data": "DEPTO_N"}/*1*/
             ],
             "columnDefs": [
                 {
@@ -205,7 +207,7 @@
             "scrollY": "600px",
             "scrollX": true,
             "aaSorting": [
-                [4, 'asc']
+                [16, 'asc']
             ],
             rowGroup: {
                 endRender: function (rows, group) {
@@ -265,10 +267,10 @@
             message: estilo,
             target: '_blank'
         }, {
-            delay: 2500,
+            delay: 2000, 
             icon_type: 'image',
-            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<img data-notify="icon" class="img-fluid">' +
+            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" style="background: #03103a; ">' +
+                    '<a href="'+estilo_url+'" data-fancybox="images"><img data-notify="icon" class="img-fluid rounded "></a>' +
                     '<div class="w-100  text-center"><span data-notify="title" style="font-size: 22px" class="font-weight-bold">{1}</span></div>' +
                     '<p data-notify="message" class="font-weight-bold text-center" style="font-size: 22px">{2}</p>' +
                     '</div>'

@@ -225,7 +225,7 @@ E.Foto AS FOTO,
             } else {
                 $this->db->where("PE.maquila", 1234567890);
             }
-            if ($x['DEPARTAMENTO_AVANCE'] !== '') {
+            if ($x['DEPARTAMENTO_AVANCE'] !== '' && intval($x['DEPARTAMENTO_AVANCE']) > 0) {
                 $this->db->where("PE.stsavan", $x['DEPARTAMENTO_AVANCE']);
             }
             $data = $this->db->order_by("DEPTO_N", "ASC")
@@ -235,5 +235,4 @@ E.Foto AS FOTO,
             echo $exc->getTraceAsString();
         }
     }
-
 }
