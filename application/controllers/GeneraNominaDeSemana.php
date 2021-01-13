@@ -751,10 +751,14 @@ class GeneraNominaDeSemana extends CI_Controller {
 //                print "\n {$v->Numero} {$ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO}, {$ACUMULADO_DE_PAGOS[0]->ACUMULADO}, $SALDO_FINAL_PRESTAMO \n";
                 if (floatval($ACUMULADO_DE_PRESTAMOS[0]->ACUMULADO) >= floatval($ACUMULADO_DE_PAGOS[0]->ACUMULADO)) {
                     $ABONO = $v->AbonoPres;
-                    $ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO = $this->db->query("SELECT IFNULL((SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}) - 
+                    $ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO = 
+                            $this->db->query("SELECT IFNULL((SELECT SUM(P.preemp) AS ACUMULADO FROM prestamos AS P WHERE P.numemp = {$v->Numero} AND YEAR(P.fechapre) = {$ANIO}) - 
 (SELECT SUM(PP.Aboemp) AS ACUMULADO FROM prestamospag AS PP WHERE PP.numemp = {$v->Numero} AND PP.año = {$ANIO} AND status = 2),0) AS ABONOX ", false)->result();
                     if (floatval($v->AbonoPres) > floatval($ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO[0]->ABONOX)) {
                         $ABONO = floatval($ACUMULADO_PRESTADO_MENOS_ACUMULADO_APLICADO[0]->ABONOX);
+                        if ($ABONO <= 0 && $SEM >= 1 && $SEM <= 2) {
+                            $ABONO = $v->AbonoPres;
+                        }
                     }
                     $this->db->insert('prestamospag', array(
                         "numemp" => $v->Numero, "año" => $ANIO, "sem" => $SEM, "fecha" => Date('Y-m-d 00:00:00'),
@@ -1309,7 +1313,7 @@ class GeneraNominaDeSemana extends CI_Controller {
                         $total_aguinaldo = $total_aguinaldo + ($SUELDO_FINAL * $dias_a_pagar);
                     }
                 }
-                /* AGREGAR A PRENOMINA */ 
+                /* AGREGAR A PRENOMINA */
                 switch (intval($v->DepartamentoFisico)) {
                     case 150:
                         $total_aguinaldo = 1200;
