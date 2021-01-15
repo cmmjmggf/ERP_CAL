@@ -119,6 +119,9 @@ class IOrdenDeProduccion extends CI_Controller {
 //            print $this->db->last_query();
 //            print "\n";
 //            exit(0);
+            $CLIENTE_CON_SERIE_EUROPEA = false;
+            $CLIENTE_CON_SERIE_EUROPEA_SERIE = 1;
+            $CLIENTE_CON_SERIE_EUROPEA_GENERO = 1;
             foreach ($CONTROLES as $kc => $vc) {
 //                $OP = $this->iopm->getOrdenDeProduccionEntreControles($vc->ControlT, $vc->ControlT, $SEMANA, $ANO);
 
@@ -172,6 +175,35 @@ class IOrdenDeProduccion extends CI_Controller {
                                 ->order_by('ABS(OPD.Departamento)', 'ASC')->get()->result();
 
                 $P = $OP[0];
+                if (intval($P->Clave) === 1810) {
+                    $CLIENTE_CON_SERIE_EUROPEA = true;
+                    $CLIENTE_CON_SERIE_EUROPEA_SERIE = intval($P->SerieCorrida);
+                    $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS = ARRAY(
+                        ($P->S1 !== '0' ? $P->S1 : '-'),
+                        ($P->S2 !== '0' ? $P->S2 : '-'),
+                        ($P->S3 !== '0' ? $P->S3 : '-'),
+                        ($P->S4 !== '0' ? $P->S4 : '-'),
+                        ($P->S5 !== '0' ? $P->S5 : '-'),
+                        ($P->S6 !== '0' ? $P->S6 : '-'),
+                        ($P->S7 !== '0' ? $P->S7 : '-'),
+                        ($P->S8 !== '0' ? $P->S8 : '-'),
+                        ($P->S9 !== '0' ? $P->S9 : '-'),
+                        ($P->S10 !== '0' ? $P->S10 : '-'),
+                        ($P->S11 !== '0' ? $P->S11 : '-'),
+                        ($P->S12 !== '0' ? $P->S12 : '-'),
+                        ($P->S13 !== '0' ? $P->S13 : '-'),
+                        ($P->S14 !== '0' ? $P->S14 : '-'),
+                        ($P->S15 !== '0' ? $P->S15 : '-'),
+                        ($P->S16 !== '0' ? $P->S16 : '-'),
+                        ($P->S17 !== '0' ? $P->S17 : '-'),
+                        ($P->S18 !== '0' ? $P->S18 : '-'),
+                        ($P->S19 !== '0' ? $P->S19 : '-'),
+                        ($P->S20 !== '0' ? $P->S20 : '-'),
+                        ($P->S21 !== '0' ? $P->S21 : '-'),
+                        ($P->S22 !== '0' ? $P->S22 : '-')
+                    );
+                    $CLIENTE_CON_SERIE_EUROPEA_GENERO = intval($P->SerieCorrida);
+                }
                 $pdf->setCliente($P->Clave . " " . $P->Cliente);
                 $pdf->setFechaEntrega($P->FechaEntrega);
                 $pdf->setObs("{$P->Observaciones}");
@@ -440,6 +472,114 @@ class IOrdenDeProduccion extends CI_Controller {
                     } else {
                         $pdf->Image(base_url() . $vc->FOTO, 96, $pdf->getY() + 1, 28);
                     }
+                }
+                $pdf->SetY($pdf->getY() + 18);
+                $pdf->SetX(5);
+                $pdf->Cell(205, 5, utf8_decode($vc->OBSERVACIONES_COLOR), 0/* BORDE */, 1/* SALTO SI */, 'C', 0);
+
+                if ($CLIENTE_CON_SERIE_EUROPEA && $CLIENTE_CON_SERIE_EUROPEA_SERIE === 1) {
+                    $alto_celda_final = 4;
+                    $posicion_x = 25.5;
+                    $ancho_celda = 7;
+
+                    /* SERIE MEXICANA */
+                    $pdf->SetY($pdf->getY() + 7);
+                    $pdf->SetX(7.5);
+                    $pdf->Cell(25, $alto_celda_final, "CABALLERO MX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                    $posicion_x += $ancho_celda;
+
+
+                    /* SERIE EUROPEA */
+                    $ancho_celda = 7;
+                    $pdf->SetY($pdf->getY());
+                    $pdf->SetX(7.5);
+                    $pdf->Cell(25, $alto_celda_final, "CABALLERO EUR", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+
+
+                    $pdf->SetX(32.5);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 39.5, 1/* BORDE */, 0, 'C', 0);
+
+
+                    $pdf->SetX(39.5);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 40, 1/* BORDE */, 0, 'C', 0);
+
+                    $pdf->SetX(46.5);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 40.5, 1/* BORDE */, 0, 'C', 0);
+
+                    $pdf->SetX(53.5);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 41, 1/* BORDE */, 0, 'C', 0);
+                    $posicion_x = $pdf->getX();
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 41.5, 1/* BORDE */, 0, 'C', 0); 
+                    $posicion_x = $pdf->getX();
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 42, 1/* BORDE */, 0, 'C', 0);
+                    $posicion_x = $pdf->getX(); 
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 42.5, 1/* BORDE */, 0, 'C', 0);
+                    $posicion_x = $pdf->getX();
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 43, 1/* BORDE */, 0, 'C', 0);
+                    $posicion_x = $pdf->getX();
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 43.5, 1/* BORDE */, 0, 'C', 0);
+                    $posicion_x = $pdf->getX();
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 44, 1/* BORDE */, 0, 'C', 0);
+                    $posicion_x = $pdf->getX();
+
+                    $pdf->SetX($posicion_x);
+                    $pdf->Cell($ancho_celda, $alto_celda_final, 44.5, 1/* BORDE */, 0, 'C', 0); 
                 }
                 /* TOTALES */
                 $Y = $pdf->GetY();
