@@ -17,9 +17,31 @@
 	<queryString>
 		<![CDATA[SELECT D.Numero,
 CONCAT(D.`PrimerNombre`," ",(CASE WHEN D.`SegundoNombre` = "0" THEN "" ELSE D.`SegundoNombre` END)," ",D.`Paterno`," ",D.`Materno`) AS EMPLEADO,
-AA.Articulo, AA.ArticuloT, AA.UnidadMedidaT, SUM(AA.Cantidad) AS CANTIDAD, AA.`Grupo`
+
+AA.Articulo, AA.ArticuloT, AA.UnidadMedidaT,
+
+(CASE WHEN AA.Grupo = 1 AND C.frac = 100 THEN
+(SELECT SUM(CASE
+WHEN AX.Piel1 = AA.ArticuloT THEN (IFNULL(AX.CantidadPiel1,0))
+WHEN AX.Piel2 = AA.ArticuloT THEN (IFNULL(AX.CantidadPiel2,0))
+WHEN AX.Piel3 = AA.ArticuloT THEN (IFNULL(AX.CantidadPiel3,0))
+WHEN AX.Piel4 = AA.ArticuloT THEN (IFNULL(AX.CantidadPiel4,0))
+ END)  FROM ordendeproduccion AS AX
+where AX.ControlT
+IN(SELECT PX.control FROM programacion AS PX WHERE PX.diaprg = $P{DIA} AND PX.año = $P{ANO} AND PX.semana = $P{SEMANA} AND PX.frac = 100 AND PX.numemp = C.numemp
+GROUP BY PX.control, AA.Articulo))
+ ELSE SUM(AA.Cantidad)  END) AS CANTIDAD,
+
+
+
+
+
+
+AA.`Grupo`
+
  FROM ordendeproduccion AS A INNER JOIN ordendeproducciond AS AA ON A.ID = AA.OrdenDeProduccion
 INNER JOIN programacion AS C ON C.control = A.ControlT INNER JOIN empleados AS D ON C.numemp = D.Numero
+
 WHERE C.semana = $P{SEMANA} AND C.diaprg = $P{DIA} AND C.año = $P{ANO}  AND C.semana = $P{SEMANA}
 AND
 (CASE
@@ -28,8 +50,10 @@ WHEN $P{FRACCION} = 99 THEN AA.`Grupo` IN(2,12,15,16,17,18,30,31,34,40,41,50,9) 
 WHEN $P{FRACCION} = 0 THEN
 (CASE WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) > 0 AND
 (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) > 0 THEN AA.`Grupo` IN(1,2,12,15,16,17,18,30,31,34,40,41,50,9) AND  C.frac IN(99,100)
+
 WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) > 0 AND
 (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) = 0 THEN AA.`Grupo` IN(1,12,15,16,17,18,30,31,34,40,41,50,9)  AND  C.frac IN(100)
+
 WHEN (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 100) = 0 AND
 (SELECT COUNT(*) FROM programacion AS PP WHERE PP.control = C.control AND PP.numemp = C.numemp AND PP.frac = 99) > 0 THEN AA.`Grupo` IN(2,12,15,16,17,18,30,31,34,40,41,50,9)  AND  C.frac IN(99)
 END)

@@ -309,14 +309,14 @@
         color: #fff !important;
     }
     #tblAvances tbody tr.group-end:hover td{
-        background-color: #2C3E50 !important;
-        color: #fff !important;
+        background-color: #000 !important;
+        color: #ffff00 !important;
     }
     #tblAvances tbody tr.group-end td{
         background-color: #000 !important;
         color: #ffff00 !important;
     }
-    #tblAvances tfoot tr, #tblAvances tfoot tr td:nth-child(8){
+    #tblAvances tfoot tr, #tblAvances tfoot tr td:nth-child(8)#tblAvances tfoot tr:hover, #tblAvances tfoot tr:hover td:nth-child(8){
         background-color: #000 !important;
         color: #ffff00 !important;
     }
