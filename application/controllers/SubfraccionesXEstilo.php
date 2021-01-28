@@ -46,6 +46,50 @@ class SubfraccionesXEstilo extends CI_Controller {
         }
     }
 
+    public function onVerificaEstiloSubFracciones() {
+        try {
+            $Estilo = $this->input->get('Estilo');
+            print json_encode($this->db->query("select estilo from subfraccionesxestilo where estilo = '$Estilo' ")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onCopiarSubFraccionesDeEstiloaEstilo() {
+        try {
+            $estilo = $this->input->post('dEstilo');
+            $aestilo = $this->input->post('aEstilo');
+
+            $sql = "INSERT INTO subfraccionesxestilo
+                    (
+                    `estilo`,
+                    `fraccion`,
+                    `subfraccion`,
+                    `tiempoestandar`,
+                    `eficiencia`,
+                    `tiemporeal`,
+                    `costo`,
+                    `puesto`,
+                    `sueldobase`
+                    )
+                    select
+                    '$aestilo' as Estilo,
+                    `fraccion`,
+                    `subfraccion`,
+                    `tiempoestandar`,
+                    `eficiencia`,
+                    `tiemporeal`,
+                    `costo`,
+                    `puesto`,
+                    `sueldobase`
+                    from subfraccionesxestilo
+                    where estilo = '$estilo' ";
+            $this->db->query($sql);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getEficiencia() {
         try {
             $fraccion = $this->input->get('Fraccion');

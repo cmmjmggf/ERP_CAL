@@ -450,6 +450,41 @@ class ReportesProduccionJasper extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onReporteManoObraPresupuestado() {
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $x = $this->input;
+        $parametros["sem"] = intval($x->post('Sem'));
+        $parametros["ano"] = intval($x->post('Ano'));
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\nominas\manoObraPresupuestado.jasper');
+        $jc->setFilename('ReporteManoObraPresupuestado' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
+    public function ReporteParesAsignadosMaqSemGenMinutajeActual() {
+
+        $sem = $this->db->query("SELECT S.Sem AS SEMANA FROM semanasproduccion AS S
+                            WHERE NOW() BETWEEN STR_TO_DATE(S.FechaIni, '%d/%m/%Y') AND STR_TO_DATE(S.FechaFin, '%d/%m/%Y') ")->result()[0]->SEMANA;
+        $jc = new JasperCommand();
+        $jc->setFolder('rpt/' . $this->session->USERNAME);
+        $parametros = array();
+        $parametros["logo"] = base_url() . $this->session->LOGO;
+        $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+        $x = $this->input;
+        $parametros["semact"] = intval($sem);
+        $parametros["ano"] = intval($x->post('Ano'));
+        $jc->setParametros($parametros);
+        $jc->setJasperurl('jrxml\produccion\paresAsignadosGeneralMinujateActual.jasper');
+        $jc->setFilename('presupuestoMinutajeGeneral' . Date('h_i_s'));
+        $jc->setDocumentformat('pdf');
+        PRINT $jc->getReport();
+    }
+
     public function ReporteParesAsignadosMaqSemGen() {
 
         $sem = $this->db->query("SELECT S.Sem AS SEMANA FROM semanasproduccion AS S
@@ -463,8 +498,6 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $x = $this->input;
         $parametros["semact"] = intval($sem);
-        $parametros["sem"] = intval($x->post('Sem'));
-        $parametros["asem"] = intval($x->post('aSem'));
         $parametros["ano"] = intval($x->post('Ano'));
         $parametros["SUBREPORT_DIR"] = base_url() . '/jrxml/produccion/';
         $jc->setParametros($parametros);

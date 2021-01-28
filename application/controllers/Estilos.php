@@ -74,8 +74,7 @@ class Estilos extends CI_Controller {
             print json_encode($this->db->query("
                 SELECT Numero, CONCAT(Numero,'-',Busqueda) AS Empleado
                         FROM empleados
-                        WHERE DepartamentoFisico = '370'
-                        AND altabaja = 1 ")->result());
+                        WHERE DepartamentoFisico = '370' ")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-12 col-sm-4 col-md-2 col-lg-2 col-xl-1">
                         <label for="Clave" >Clave</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="Clave" name="Clave" required>
+                        <input type="text" class="form-control form-control-sm " maxlength="7" id="Clave" name="Clave" required>
                     </div>
                     <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3">
                         <label for="Descripcion" >Descripción</label>
@@ -170,6 +170,7 @@
 
         /*FUNCIONES X BOTON*/
         btnGuardar.click(function () {
+            onDisable(btnGuardar);
             isValid('pnlDatos');
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
@@ -181,16 +182,34 @@
                     processData: false,
                     data: frm
                 }).done(function (data, x, jq) {
-                    Detalle.ajax.reload();
-                    pnlDatos.find("#Descripcion").val('');
-                    pnlDatos.find("#Puesto")[0].selectize.clear(true);
-                    pnlDatos.find("#Clave").val('').focus();
+                    if (data === '0') {
+                        swal({
+                            title: "ERROR",
+                            text: "****REGISTRO DUPLICADO****",
+                            icon: "warning",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false
+                        }).then((action) => {
+                            if (action) {
+                                pnlDatos.find("#Clave").focus().select();
+                            }
+                        });
+
+                    } else {
+                        Detalle.ajax.reload();
+                        pnlDatos.find("#Descripcion").val('');
+                        pnlDatos.find("#Puesto")[0].selectize.clear(true);
+                        pnlDatos.find("#Clave").val('').focus();
+                    }
+                    onEnable(btnGuardar);
                 }).fail(function (x, y, z) {
+                    onEnable(btnGuardar);
                     console.log(x, y, z);
                 }).always(function () {
                     HoldOn.close();
                 });
             } else {
+                onEnable(btnGuardar);
                 swal('ATENCIÓN', '* DEBE DE COMPLETAR LOS CAMPOS REQUERIDOS *', 'error');
             }
         });

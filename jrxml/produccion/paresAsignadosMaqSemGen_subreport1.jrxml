@@ -4,8 +4,6 @@
 	<property name="ireport.x" value="1511"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ano" class="java.lang.String"/>
-	<parameter name="sem" class="java.lang.String"/>
-	<parameter name="asem" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
 cast(PE.semana as SIGNED) as sem,
@@ -52,7 +50,6 @@ and cast(concat('20',C.ano) as signed)= $P{ano}),0) as emaq4,
 
 
 from pedidox PE where PE.Estatus in ('A','F')
-and cast(PE.semana as signed) between $P{sem} and $P{asem}
 and cast(PE.ano as signed) = $P{ano}
 GROUP BY PE.semana
 order by sem asc;]]>
@@ -60,18 +57,10 @@ order by sem asc;]]>
 	<field name="sem" class="java.lang.Long">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="maq1" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="maq2" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="maq3" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="maq4" class="java.lang.Double">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="maq1" class="java.lang.Double"/>
+	<field name="maq2" class="java.lang.Double"/>
+	<field name="maq3" class="java.lang.Double"/>
+	<field name="maq4" class="java.lang.Double"/>
 	<field name="emaq1" class="java.lang.Double"/>
 	<field name="emaq2" class="java.lang.Double"/>
 	<field name="emaq3" class="java.lang.Double"/>

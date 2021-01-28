@@ -4,8 +4,6 @@
 	<property name="ireport.x" value="302"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ano" class="java.lang.String"/>
-	<parameter name="sem" class="java.lang.String"/>
-	<parameter name="asem" class="java.lang.String"/>
 	<parameter name="semact" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[select
@@ -40,7 +38,6 @@ sum(ct.pares) as emaq4,
 from pedidox PE
 left join controlterm ct on ct.control = pe.control
 where PE.stsavan <> 14
-and cast(PE.semana as signed) between $P{sem} and $P{asem}
 and cast(PE.ano as signed) = $P{ano}
 GROUP BY PE.semana
 order by sem asc;]]>

@@ -33,8 +33,7 @@ join clientes ct on ct.clave = cc.cliente
 join agentes ag on ag.clave = ct.agente
 where ct.agente between $P{dAgente} and $P{aAgente}
 and cc.tipo like concat('%',$P{tp},'%')
-and cc.status < 4
-and cc.saldo > 4
+and cc.status < 3
 order by abs(ct.agente),cc.tipo, cc.cliente, cc.remicion asc]]>
 	</queryString>
 	<field name="cliente" class="java.lang.Integer">
@@ -174,7 +173,7 @@ order by abs(ct.agente),cc.tipo, cc.cliente, cc.remicion asc]]>
 		<groupHeader>
 			<band height="12">
 				<textField>
-					<reportElement x="59" y="1" width="177" height="11" uuid="e0c3c266-b0db-4344-bccf-9f64ba01f1dd"/>
+					<reportElement x="59" y="1" width="222" height="11" uuid="e0c3c266-b0db-4344-bccf-9f64ba01f1dd"/>
 					<textElement verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
@@ -188,7 +187,7 @@ order by abs(ct.agente),cc.tipo, cc.cliente, cc.remicion asc]]>
 					<textFieldExpression><![CDATA[$F{numagente}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="1" y="11" width="235" height="1" uuid="b7391af2-b6c0-4531-9197-749e3c88cc6d"/>
+					<reportElement x="1" y="11" width="280" height="1" uuid="b7391af2-b6c0-4531-9197-749e3c88cc6d"/>
 				</line>
 				<staticText>
 					<reportElement style="Column header" x="1" y="1" width="32" height="11" forecolor="#000000" uuid="60c0c351-5d48-46e5-a610-ee8dd10c0d26"/>
@@ -249,10 +248,10 @@ order by abs(ct.agente),cc.tipo, cc.cliente, cc.remicion asc]]>
 		<groupHeader>
 			<band height="12">
 				<line>
-					<reportElement x="1" y="10" width="235" height="1" uuid="c82d71a9-db8d-4921-aaee-82612fa33078"/>
+					<reportElement x="1" y="10" width="280" height="1" uuid="c82d71a9-db8d-4921-aaee-82612fa33078"/>
 				</line>
 				<textField>
-					<reportElement x="59" y="0" width="177" height="11" uuid="3d0d5503-9fae-4f05-bf5d-6b6ec426a26a"/>
+					<reportElement x="59" y="0" width="309" height="11" uuid="3d0d5503-9fae-4f05-bf5d-6b6ec426a26a"/>
 					<textElement verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
@@ -266,14 +265,14 @@ order by abs(ct.agente),cc.tipo, cc.cliente, cc.remicion asc]]>
 					<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="285" y="0" width="15" height="11" uuid="b01f567f-8099-4e7a-a820-2da9cc80c3c1"/>
+					<reportElement x="385" y="0" width="15" height="11" uuid="b01f567f-8099-4e7a-a820-2da9cc80c3c1"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DiasPlazo}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement style="Column header" x="268" y="0" width="17" height="11" forecolor="#000000" uuid="614f5fae-d334-4b8f-9b54-0c03eccfa97e"/>
+					<reportElement style="Column header" x="368" y="0" width="17" height="11" forecolor="#000000" uuid="614f5fae-d334-4b8f-9b54-0c03eccfa97e"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>

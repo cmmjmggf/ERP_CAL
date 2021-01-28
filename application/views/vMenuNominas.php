@@ -92,4 +92,4 @@ $this->load->view('vCopiarFraccionEstiloaEstilo')->view('vCapturaCajaAhorroDirec
         ->view('vCajaAhorroPrestamos')->view('vCerrarNominaSemanal')
         ->view('vGeneraReporteAltasBanco')->view('vGeneraNominaBanco')
         ->view('vCostoManoObraGeneral')->view('vManoObraDirecta')
-        ->view('vPrenominaPreliminaresPespunte');
+        ->view('vPrenominaPreliminaresPespunte')->view('vManoObraPresupuestado');

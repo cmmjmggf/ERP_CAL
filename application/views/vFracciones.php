@@ -62,7 +62,13 @@
                             <option value=""></option>
                         </select>
                     </div>
-
+                    <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <label for="">Afecta Costo VTA</label>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="AfectaCostoVTA" name="AfectaCostoVTA" >
+                            <label class="custom-control-label" for="AfectaCostoVTA"></label>
+                        </div>
+                    </div>
                 </div>
                 <div class="row pt-2">
                     <div class="col-6 col-md-6 ">
@@ -96,6 +102,7 @@
                     isValid('pnlDatos');
                     if (valido) {
                         var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                        frm.append('AfectaCostoVTA', pnlDatos.find("#AfectaCostoVTA")[0].checked ? 1 : 0);
                         if (!nuevo) {
                             $.ajax({
                                 url: master_url + 'onModificar',
@@ -296,6 +303,13 @@
                         pnlDatos.find("[name='" + k + "']")[0].selectize.addItem(v, true);
                     }
                 });
+                if (data[0].AfectaCostoVTA === '1') {
+                    pnlDatos.find('#AfectaCostoVTA').prop('checked', true);
+                } else {
+                    pnlDatos.find('#AfectaCostoVTA').prop('checked', false);
+                }
+
+
                 pnlTablero.addClass("d-none");
                 pnlDatos.removeClass('d-none');
                 btnEliminar.removeClass("d-none");

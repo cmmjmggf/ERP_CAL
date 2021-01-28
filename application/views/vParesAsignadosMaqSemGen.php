@@ -15,17 +15,6 @@
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <label>De la sem.</label>
-                            <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="Sem" name="Sem" >
-                        </div>
-                        <div class="col-6">
-                            <label>A la sem.</label>
-                            <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="aSem" name="aSem" >
-                        </div>
-
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -82,47 +71,8 @@
                 });
             }
         });
-
-        mdlParesAsignadosMaqSemGen.find("#Sem").change(function () {
-            var ano = mdlParesAsignadosMaqSemGen.find("#Ano");
-            onComprobarSemanasProduccion($(this), ano.val());
-        });
-        mdlParesAsignadosMaqSemGen.find("#aSem").change(function () {
-            var ano = mdlParesAsignadosMaqSemGen.find("#Ano");
-            onComprobarSemanasProduccion($(this), ano.val());
-        });
     });
 
-    function onComprobarSemanasProduccion(v, ano) {
-        $.getJSON(base_url + 'index.php/OrdenCompra/onComprobarSemanasProduccion', {Clave: $(v).val(), Ano: ano}).done(function (data) {
-            if (data.length > 0) {
-
-            } else {
-                swal({
-                    title: "ATENCIÓN",
-                    text: "LA SEMANA " + $(v).val() + " DEL " + ano + " " + "NO EXISTE",
-                    icon: "warning",
-                    buttons: {
-                        eliminar: {
-                            text: "Aceptar",
-                            value: "aceptar"
-                        }
-                    }
-                }).then((value) => {
-                    switch (value) {
-                        case "aceptar":
-                            swal.close();
-                            $(v).val('');
-                            $(v).focus();
-                            break;
-                    }
-                });
-            }
-        }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-            console.log(x.responseText);
-        });
-    }
 
 
 </script>

@@ -1,19 +1,19 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-12 float-left">
+            <div class="col-sm-6 float-left">
                 <legend class="float-left">Subfracciones por Estilo</legend>
+            </div>
+            <div class="col-sm-6 float-right" align="right">
+                <button type="button" class="btn btn-warning btn-sm" id="btnCopiar" ><span class="fa fa-copy" ></span> COPIAR</button>
             </div>
         </div>
         <hr>
         <div class="card-block">
             <div class="row">
-                <div class="col-4 col-sm-3 col-md-2 col-lg-2 col-xl-1">
+                <div class="col-4 col-sm-3 col-md-3 col-lg-2 col-xl-1">
                     <label for="" >Estilo</label>
                     <input type="text" class="form-control form-control-sm " maxlength="7" id="bEstilo" name="bEstilo">
-                </div>
-                <div class="col-1" >
-                    <button type="button" class="btn btn-info btn-sm mt-4" id="btnBuscarSFE"> <span class="fa fa-check"></span> ACEPTAR</button>
                 </div>
             </div>
         </div>
@@ -36,44 +36,53 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-12 col-sm-7 col-md-7 col-lg-5 col-xl-4">
-                        <label>Fracción</label>
-                        <select id="Fraccion" name="Fraccion" class="form-control form-control-sm required" >
-                            <option></option>
-                            <?php
-                            //YA CONTIENE LOS BLOQUEOS DE VENTA
-                            $clientes = $this->db->query("SELECT C.Clave AS CLAVE, C.Descripcion AS FRACCION FROM fracciones AS C ORDER BY ABS(CLAVE) ASC;")->result();
-                            foreach ($clientes as $k => $v) {
-                                print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} - {$v->FRACCION}</option>";
-                            }
-                            ?>
-                        </select>
+                    <div class=" col-md-9 ">
+                        <div class="row">
+                            <div class="col-12 col-sm-7 col-md-7 col-lg-6 col-xl-5">
+                                <label>Fracción</label>
+                                <select id="Fraccion" name="Fraccion" class="form-control form-control-sm required" >
+                                    <option></option>
+                                    <?php
+                                    //YA CONTIENE LOS BLOQUEOS DE VENTA
+                                    $clientes = $this->db->query("SELECT C.Clave AS CLAVE, C.Descripcion AS FRACCION FROM fracciones AS C ORDER BY ABS(CLAVE) ASC;")->result();
+                                    foreach ($clientes as $k => $v) {
+                                        print "<option value=\"{$v->CLAVE}\">{$v->CLAVE} - {$v->FRACCION}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                                <label for="Eficiencia" >Eficiencia %</label>
+                                <input type="text" class="form-control form-control-sm numbersOnly" readonly="" id="Eficiencia" name="Eficiencia" >
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-12 col-sm-4 col-md-2 col-lg-3 col-xl-2">
+                                <label for="Clave" >Sub-Fraccion</label>
+                                <input type="text" class="form-control form-control-sm " maxlength="7" id="SubFraccion" name="SubFraccion" required>
+                            </div>
+                            <div class="col-12 col-sm-7 col-md-7 col-lg-6 col-xl-5">
+                                <label>--</label>
+                                <select id="sSubFraccion" name="sSubFraccion" class="form-control form-control-sm required" >
+                                    <option></option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                                <label for="TiempoEstandar" >T. Estandar</label>
+                                <input type="text" class="form-control form-control-sm numbersOnly" maxlength="7" id="TiempoEstandar" name="TiempoEstandar" >
+                            </div>
+                            <div class="col-12 col-sm-4 col-md-2 col-lg-3 col-xl-2 mt-4">
+                                <button type="button" class="btn btn-info btn-sm" id="btnGuardar" >
+                                    <i class="fa fa-save"></i> AGREGAR
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-1">
-                        <label for="Eficiencia" >Eficiencia %</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" readonly="" id="Eficiencia" name="Eficiencia" >
+                    <div class="col-md-3">
+                        <label for="">Fotografía</label>
+                        <div id="VistaPrevia" >
+                            <img src="<?php echo base_url(); ?>img/camera.png" class="img-thumbnail" width="200px"/>
+                        </div>
                     </div>
-                    <div class="w-100"></div>
-                    <div class="col-12 col-sm-4 col-md-2 col-lg-2 col-xl-1">
-                        <label for="Clave" >Sub-Fraccion</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="5" id="SubFraccion" name="SubFraccion" required>
-                    </div>
-                    <div class="col-12 col-sm-7 col-md-7 col-lg-5 col-xl-4">
-                        <label>--</label>
-                        <select id="sSubFraccion" name="sSubFraccion" class="form-control form-control-sm required" >
-                            <option></option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-3 col-md-2 col-lg-2 col-xl-1">
-                        <label for="TiempoEstandar" >T. Estandar</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly" maxlength="7" id="TiempoEstandar" name="TiempoEstandar" >
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-2 col-lg-2 col-xl-1 mt-4">
-                        <button type="button" class="btn btn-info btn-sm" id="btnGuardar" >
-                            <i class="fa fa-save"></i> AGREGAR
-                        </button>
-                    </div>
-
                 </div>
                 <!--DETALLE-->
                 <hr class="mt-2 mb-2">
@@ -131,7 +140,7 @@
     var master_url = base_url + 'index.php/SubfraccionesXEstilo/';
     var tblFracciones = $('#tblFracciones');
     var Fracciones;
-    var btnBuscarSFE = $("#btnBuscarSFE"), btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar");
+    var btnCancelar = $("#btnCancelar"), btnGuardar = $("#btnGuardar"), btnCopiar = $("#btnCopiar");
     var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos");
     var nuevo = false;
 
@@ -148,13 +157,19 @@
 
         pnlTablero.find("#bEstilo").keypress(function (e) {
             if (e.keyCode === 13) {
-                var Estilo = $(this).val();
-                if (Estilo) {
+                var val = $(this).val();
+                if (val) {
                     $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {
-                        Clave: Estilo
+                        Clave: val
                     }).done(function (data, x, jq) {
                         if (data.length > 0) {
-                            btnBuscarSFE.focus();
+                            Estilo = val;
+                            pnlTablero.addClass('d-none');
+                            pnlDatos.removeClass('d-none');
+                            Detalle.ajax.reload();
+                            pnlDatos.find('#spEstilo').html(val);
+                            pnlDatos.find("#Fraccion")[0].selectize.focus();
+                            getFotoXEstilo(val);
                         } else {
                             swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
                                 pnlTablero.find('#bEstilo').focus().val('');
@@ -166,28 +181,10 @@
                 }
             }
         });
-        btnBuscarSFE.click(function () {
-            var val = pnlTablero.find("#bEstilo").val();
-            if (val) {
-                $.getJSON(base_url + 'index.php/Estilos/getEstiloByClave', {
-                    Clave: val
-                }).done(function (data, x, jq) {
-                    if (data.length > 0) {
-                        Estilo = val;
-                        pnlTablero.addClass('d-none');
-                        pnlDatos.removeClass('d-none');
-                        Detalle.ajax.reload();
-                        pnlDatos.find('#spEstilo').html(Estilo);
-                        pnlDatos.find("#Fraccion")[0].selectize.focus();
-                    } else {
-                        swal('ERROR', 'ESTILO NO EXISTE', 'warning').then((value) => {
-                            pnlTablero.find('#bEstilo').focus().val('');
-                        });
-                    }
-                }).fail(function (x, y, z) {
-                    console.log(x, y, z);
-                });
-            }
+
+
+        btnCopiar.click(function () {
+            $('#mdlCopiaSubFraccionesEstilo').modal('show');
         });
 
         pnlDatos.find("#Fraccion").change(function () {
@@ -343,6 +340,42 @@
             });
         }).fail(function (x, y, z) {
             console.log(x, y, z);
+        });
+    }
+
+    function getFotoXEstilo(Estilo) {
+        $.getJSON(base_url + 'index.php/FraccionesXEstilo/getEstiloByID', {Estilo: Estilo}).done(function (data, x, jq) {
+            console.log('getFotoXEstilo', data);
+            if (data.length > 0) {
+                var dtm = data[0];
+                var vp = pnlDatos.find("#VistaPrevia");
+                var esf = '<?php print base_url('uploads/Estilos/esf.jpg'); ?>';
+                $.ajax({
+                    url: base_url + dtm.Foto,
+                    type: 'HEAD',
+                    error: function ()
+                    {
+                        vp.html(' <img src="' + esf + '" class="img-thumbnail img-fluid rounded mx-auto " >');
+                    },
+                    success: function ()
+                    {
+                        if (dtm.Foto !== null && dtm.Foto !== undefined && dtm.Foto !== '') {
+                            var ext = getExt(dtm.Foto);
+                            if (ext === "gif" || ext === "jpg" || ext === "png" || ext === "jpeg") {
+                                vp.html('<img src="' + base_url + dtm.Foto + '" class="img-thumbnail" width="200px" />');
+                            }
+                            if (ext !== "gif" && ext !== "jpg" && ext !== "jpeg" && ext !== "png" && ext !== "PDF" && ext !== "Pdf" && ext !== "pdf") {
+                                vp.html('<img src="' + base_url + 'img/camera.png" class="img-thumbnail" width="200px" />');
+                            }
+                        } else {
+                            vp.html(' <img src="' + esf + '" class="img-thumbnail rounded mx-auto "  width="200px" >');
+                        }
+                    }
+                })
+            }
+        }).fail(function (x, y, z) {
+            console.log(x, y, z);
+        }).always(function () {
         });
     }
 
@@ -514,3 +547,5 @@
     }
 
 </script>
+<?php
+$this->load->view('vCopiarSubFraccionEstiloaEstilo');

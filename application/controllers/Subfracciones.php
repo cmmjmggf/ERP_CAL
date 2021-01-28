@@ -86,13 +86,22 @@ class Subfracciones extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
-            $data = array(
-                'Clave' => ($x->post('Clave') !== NULL) ? $x->post('Clave') : NULL,
-                'Descripcion' => ($x->post('Descripcion') !== NULL) ? $x->post('Descripcion') : NULL,
-                'Fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
-                'Puesto' => ($x->post('Puesto') !== NULL) ? $x->post('Puesto') : NULL
-            );
-            $this->db->insert("subfracciones", $data);
+
+            $clave = $x->post('Clave');
+            $fracc = $x->post('Fraccion');
+            $subfracc = $this->db->query("select * from subfracciones where clave = '$clave' and fraccion = '$fracc'; ")->result();
+
+            if (!empty($subfracc)) {//Si existe empezamos el proceso
+                print 0;
+            } else {
+                $data = array(
+                    'Clave' => ($x->post('Clave') !== NULL) ? $x->post('Clave') : NULL,
+                    'Descripcion' => ($x->post('Descripcion') !== NULL) ? $x->post('Descripcion') : NULL,
+                    'Fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
+                    'Puesto' => ($x->post('Puesto') !== NULL) ? $x->post('Puesto') : NULL
+                );
+                $this->db->insert("subfracciones", $data);
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

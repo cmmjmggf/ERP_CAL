@@ -77,7 +77,7 @@
             mdlConciliaFabricaProduccion.find('#Ano').focus();
         });
         mdlConciliaFabricaProduccion.find('#btnImprimir').on("click", function () {
-            //mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', true);
+            mdlConciliaFabricaProduccion.find('#btnImprimir').attr('disabled', true);
             var t_precio = mdlConciliaFabricaProduccion.find('#Precio').val();
             if (t_precio !== '') {
                 //Verificamos que nadie ma esté sacando el reporte al mismo tiempo

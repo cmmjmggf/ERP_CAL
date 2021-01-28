@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="1.675744345584177"/>
+	<property name="ireport.zoom" value="2.0276506581568543"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -171,10 +171,10 @@ order by cc.tipo, cc.cliente, cc.remicion asc]]>
 		<groupHeader>
 			<band height="12">
 				<line>
-					<reportElement x="1" y="10" width="235" height="1" uuid="c82d71a9-db8d-4921-aaee-82612fa33078"/>
+					<reportElement x="1" y="10" width="298" height="1" uuid="c82d71a9-db8d-4921-aaee-82612fa33078"/>
 				</line>
 				<textField>
-					<reportElement x="26" y="0" width="210" height="11" uuid="3d0d5503-9fae-4f05-bf5d-6b6ec426a26a"/>
+					<reportElement x="26" y="0" width="321" height="11" uuid="3d0d5503-9fae-4f05-bf5d-6b6ec426a26a"/>
 					<textElement verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
@@ -188,28 +188,28 @@ order by cc.tipo, cc.cliente, cc.remicion asc]]>
 					<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="285" y="0" width="15" height="11" uuid="b01f567f-8099-4e7a-a820-2da9cc80c3c1"/>
+					<reportElement x="364" y="0" width="15" height="11" uuid="b01f567f-8099-4e7a-a820-2da9cc80c3c1"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{DiasPlazo}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
-					<reportElement x="329" y="0" width="82" height="11" uuid="99cf96e1-fc4e-441a-a271-545fd6f0dfd2"/>
+					<reportElement x="408" y="0" width="82" height="11" uuid="99cf96e1-fc4e-441a-a271-545fd6f0dfd2"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{TelOficina}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement style="Column header" x="268" y="0" width="17" height="11" forecolor="#000000" uuid="614f5fae-d334-4b8f-9b54-0c03eccfa97e"/>
+					<reportElement style="Column header" x="347" y="0" width="17" height="11" forecolor="#000000" uuid="614f5fae-d334-4b8f-9b54-0c03eccfa97e"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Días]]></text>
 				</staticText>
 				<staticText>
-					<reportElement style="Column header" x="313" y="0" width="16" height="11" forecolor="#000000" uuid="fa5e7d86-fe2f-4d1c-b0a7-7938122d5000"/>
+					<reportElement style="Column header" x="392" y="0" width="16" height="11" forecolor="#000000" uuid="fa5e7d86-fe2f-4d1c-b0a7-7938122d5000"/>
 					<textElement verticalAlignment="Middle">
 						<font fontName="SansSerif" size="8" isBold="true"/>
 					</textElement>
