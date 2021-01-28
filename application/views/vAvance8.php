@@ -95,12 +95,11 @@
                     <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-4">
                         <?php
                         $F = Date('d/m/Y');
-                        $YYYY = Date('Y');
                         $SP = $this->db->select('SP.Sem AS Semana, SP.FechaIni AS FEINI, SP.FechaFin AS FEFI', false)
                                         ->from('semanasnomina AS SP')
                                         ->where("STR_TO_DATE('{$F}', \"%d/%m/%Y\") "
                                                 . "BETWEEN STR_TO_DATE(FechaIni, \"%d/%m/%Y\") "
-                                                . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") AND SP.Ano = {$YYYY}")
+                                                . "AND STR_TO_DATE(FechaFin, \"%d/%m/%Y\") ")
                                         ->get()->result();
                         ?>
                         <label>Semana</label>
@@ -146,195 +145,21 @@
                         <hr>
                     </div>
                     <div id="ManoDeObra" class="col-6">
-
                         <label class="text-danger">Seleccione Fracción</label>
                         <div  class="row  bg-danger text-white" style="border-radius: 5px; height: 435px; overflow-y: auto;" >
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk51" description="ENTRETELADO" fraccion="51">
-                                    <label class="custom-control-label" for="chk51">51 Entretelado</label>
+                            <?php
+                            $fracciones = $this->db->query("SELECT Clave, Descripcion FROM fracciones AS F WHERE F.Clave IN(51,70,60,62,78,204,205,198,127,80,396,397,34,106,306,308,337,321,333,506,72,75,71,607,606,301,23,24,325,74,130,210) ORDER BY ABS(F.Clave) ASC;")->result();
+                            $row = "";
+                            foreach ($fracciones as $k => $v) {
+                                $row .= "<div class=\"col-12\">
+                                <div class=\"custom-control custom-checkbox\">
+                                    <input type=\"checkbox\" class=\"custom-control-input\" id=\"chk{$v->Clave}\" description=\"{$v->Descripcion}\" fraccion=\"{$v->Clave}\">
+                                    <label class=\"custom-control-label\" for=\"chk{$v->Clave}\">{$v->Clave} {$v->Descripcion}</label>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk70" description="TROQUELAR PLANTILLA" fraccion="70">
-                                    <label class="custom-control-label" for="chk70">70 Troquelar plantilla</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk60" description="FOLEAR CORTE Y CALIDAD" fraccion="60">
-                                    <label class="custom-control-label" for="chk60">60 Folear corte y calidad</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk61" description="FOLEADO MUESTRA" fraccion="61">
-                                    <label class="custom-control-label" for="chk61">61 Foleado muestra</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk62" description="SERIGRAFIA FORRO" fraccion="62">
-                                    <label class="custom-control-label" for="chk62">62 Serigrafia forro</label>
-                                </div>
-                            </div> 
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk78" description="LIMPIA LASER" fraccion="78">
-                                    <label class="custom-control-label" for="chk78">78 Limpia laser</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk204" description="EMPALMAR PARA LASER" fraccion="204">
-                                    <label class="custom-control-label" for="chk204">204 Empalmar p/laser</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk205" description="APLICA PEGA PARA LASER" fraccion="205">
-                                    <label class="custom-control-label" for="chk205">205 Aplica pega.p/laser</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk198" description="LOTEAR PARA LASER" fraccion="198">
-                                    <label class="custom-control-label" for="chk198">198 Lotear p/laser</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk127" description="ENTRETELAR MUESTRA" fraccion="127">
-                                    <label class="custom-control-label" for="chk127">127 Entretelar muestra</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk80" description="CONTAR TAREA" fraccion="80">
-                                    <label class="custom-control-label" for="chk80">80 Contar tarea</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk396" description="JUNTAR SUELA A CORTE (MUESTRA)" fraccion="396">
-                                    <label class="custom-control-label" for="chk396">396 Juntar suela a corte (MUESTRA)</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk397" description="JUNTAR SUELA A CORTE" fraccion="397">
-                                    <label class="custom-control-label" for="chk397">397 Juntar suela a corte</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk34" description="PEGAR TRANSFER" fraccion="34">
-                                    <label class="custom-control-label" for="chk34">34 Pegar transfer</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk106" description="DOBLILLADO" fraccion="106">
-                                    <label class="custom-control-label" for="chk106">106 Doblillado</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk306" description="FORRAR PLATAFORMA" fraccion="306">
-                                    <label class="custom-control-label" for="chk306">306 Forrar plataforma</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk337" description="RECORTAR FORRO LASER" fraccion="337">
-                                    <label class="custom-control-label" for="chk337">337 Recortar forro laser</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk321" description="FORRAR PLATADORMA MUESTRA" fraccion="321">
-                                    <label class="custom-control-label" for="chk321">321 FORRAR PLATADORMA MUESTRA</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk333" description="PONER CASCO PESPUNTE" fraccion="333">
-                                    <label class="custom-control-label" for="chk333">333 Poner casco pespunte</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk502" description="PEGADO DE SUELA" fraccion="502">
-                                    <label class="custom-control-label" for="chk502">502 Pegado de suela</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk72" description="TROQUELAR NORMA" fraccion="72">
-                                    <label class="custom-control-label" for="chk72">72 Troquelar norma</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk75" description="TROQUELAR CORTE" fraccion="75">
-                                    <label class="custom-control-label" for="chk75">75 Troquelar corte</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk71" description="TROQUELAR MUESTRA" fraccion="71">
-                                    <label class="custom-control-label" for="chk71">71 Troquelar muestra</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk607" description="ARMAR PLANTILLA ADORNO" fraccion="607">
-                                    <label class="custom-control-label" for="chk607">607 Armar plantilla adorno</label>
-                                </div>
-                            </div> 
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk606" description="ARMAR PLANT AD MUEST" fraccion="606">
-                                    <label class="custom-control-label" for="chk606">606 Armar plant.ad.muest</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk301" description="PESPUNTAR PLANTILLA" fraccion="301">
-                                    <label class="custom-control-label" for="chk301">301 Pespuntar plantilla</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk23" description="DOMAR CHINELA (MUESTRA)" fraccion="23">
-                                    <label class="custom-control-label" for="chk23">23 DOMAR CHINELA (MUESTRA)</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk24" description="DOMAR CHINELA" fraccion="24">
-                                    <label class="custom-control-label" for="chk24">24 Domar chinela</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk325" description="EMPALMAR MALLA A CHINELA" fraccion="325">
-                                    <label class="custom-control-label" for="chk325">325 Empalmar malla a chinela</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk74" description="COTEJAR PIEL Y FORRO" fraccion="74">
-                                    <label class="custom-control-label" for="chk74">74 Cotejar piel y forro</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="chk130" description="RAYAR PLANTILLA" fraccion="130">
-                                    <label class="custom-control-label" for="chk130">130 Rayar plantilla</label>
-                                </div>
-                            </div>
+                            </div>";
+                            }
+                            print $row;
+                            ?>
                         </div>
                     </div>
 
@@ -840,7 +665,7 @@
                         '<span class="font-weight-bold">$' +
                         $.number(r, 2, '.', ',') + '</span>');
                 $(api.column(4)).find("span").css("color", "yellow");
-                console.log(api.column(4))
+                console.log(api.column(4));
 //$("table tbody  tr:eq(3) td:eq(3)").find("span").css( "color", "black" ); 
             }
         };
@@ -852,11 +677,11 @@
                 d.ANO_FILTRO = pnlTablero.find("#AnoFiltro").val() ? pnlTablero.find("#AnoFiltro").val() : '';
                 d.SEMANA_FILTRO = pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : (Semana.val() ? Semana.val() : '');
                 d.FRACCION_FILTRO = pnlTablero.find("#FraccionFiltro").val() ? pnlTablero.find("#FraccionFiltro").val() : '';
-                d.FRACCIONES = "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606";
+                d.FRACCIONES = "51,70,60,62,24,78,204,205,198,127,80,397,34,106,306,337,333,506,72,607,606";
             },
             "aaSorting": [
                 [2, 'desc']
-            ],
+            ]
 
 //$("table tbody  tr:eq(3) td:eq(3)").find("span").css( "color", "black" ); 
         };
@@ -992,7 +817,7 @@
         }
     }
 
-    var fracciones = [51, 70, 60, 61, 62, 24, 78, 204, 205, 198, 127, 80, 397, 34, 106, 306, 337, 333, 502, 72, 607, 606];
+    var fracciones = [51, 70, 60, 62, 24, 78, 204, 205, 198, 127, 80, 397, 34, 106, 306, 337, 333, 506, 72, 607, 606];
 
     function onCheckFraccion(e) {
 //        $.each(pnlTablero.find("input[type='checkbox']"), function (k, v) {
@@ -1039,7 +864,7 @@
         if (pnlTablero.find("#chk606")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 606,
-                DESCRIPCION: "ARMAR PLANT AD MUESTRA"
+                DESCRIPCION: "ARMAR PLANTA D MUESTRA"
             });
         }
         if (pnlTablero.find("#chk34")[0].checked) {
@@ -1060,10 +885,10 @@
                 DESCRIPCION: "TROQUELAR NORMA"
             });
         }
-        if (pnlTablero.find("#chk502")[0].checked) {
+        if (pnlTablero.find("#chk506")[0].checked) {
             fracciones.push({
-                NUMERO_FRACCION: 502,
-                DESCRIPCION: "PEGADO DE SUELA"
+                NUMERO_FRACCION: 506,
+                DESCRIPCION: "PEGADO CIUCCANI"
             });
         }
         if (pnlTablero.find("#chk333")[0].checked) {
@@ -1151,12 +976,6 @@
                 DESCRIPCION: "SERIGRAFIA FORRO"
             });
         }
-        if (pnlTablero.find("#chk61")[0].checked) {
-            fracciones.push({
-                NUMERO_FRACCION: 61,
-                DESCRIPCION: "FOLEADO MUESTRA"
-            });
-        }
         if (pnlTablero.find("#chk60")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 60,
@@ -1187,6 +1006,12 @@
                 DESCRIPCION: "PESPUNTAR PLANTILLA"
             });
         }
+        if (pnlTablero.find("#chk308")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 308,
+                DESCRIPCION: "TEJER APLICACION"
+            });
+        }
         if (pnlTablero.find("#chk24")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 24,
@@ -1209,6 +1034,12 @@
             fracciones.push({
                 NUMERO_FRACCION: 130,
                 DESCRIPCION: "RAYAR PLANTILLA"
+            });
+        }
+        if (pnlTablero.find("#chk210")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 210,
+                DESCRIPCION: "PINTAR FILOS"
             });
         }
 
@@ -1381,7 +1212,7 @@
         $.getJSON('<?php print base_url('Avance8/getPagosXEmpleadoXSemana'); ?>',
                 {EMPLEADO: NumeroDeEmpleado.val(),
                     SEMANA: Semana.val() ? Semana.val() : (pnlTablero.find("#SemanaFiltro").val() ? pnlTablero.find("#SemanaFiltro").val() : ''),
-                    FRACCIONES: "51,70,60,61,62,24,78,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606"}).done(function (a) {
+                    FRACCIONES: "51,70,60,62,24,78,204,205,198,127,80,397,34,106,306,337,333,506,72,607,606"}).done(function (a) {
             if (a.length > 0) {
                 var b = a[0];
                 var tt = 0;

@@ -18,6 +18,7 @@ class AvanceProduccionEnPantalla extends CI_Controller {
             switch ($this->session->userdata["TipoAcceso"]) {
                 case 'SUPER ADMINISTRADOR':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion')->view('vFondo')->view('vAvanceProduccionEnPantalla')->view('vFooter');
+                    $l = new Logs("AVANCE EN PANTALLA", "INGRESO AL AVANCE EN PANTALLA", $this->session);
                     break;
             }
         } else {
@@ -235,4 +236,5 @@ E.Foto AS FOTO,
             echo $exc->getTraceAsString();
         }
     }
+
 }

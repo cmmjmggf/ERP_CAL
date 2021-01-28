@@ -363,7 +363,7 @@ class Avance8 extends CI_Controller {
                             case 51:
                                 $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
 
-                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,96,113,71,114) AND control = {$xXx['CONTROL']}")->result();
+                                $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,96,113,71,61,114) AND control = {$xXx['CONTROL']}")->result();
                                 if (intval($check_fracciones_obligadas[0]->EXISTE) === 4 && intval($maquila_control[0]->Maquila) !== 98 ||
                                         intval($check_fracciones_obligadas[0]->EXISTE) >= 4 && intval($maquila_control[0]->Maquila) === 98) {
                                     /* 51 = ENTRETELADO */
@@ -632,6 +632,7 @@ class Avance8 extends CI_Controller {
                                 break;
                         }
                         if (intval($check_corte[0]->EXISTE) === 0) {
+                            var_dump($check_corte,$control_muestra);
                             PRINT "NO TIENE CORTE " . intval($control_muestra[0]->Maquila);
                             exit(0);
                         }

@@ -567,6 +567,7 @@ P.Maquila AS MAQUILA
                 if (intval($revisa_almacen_corte[0]->EXISTE) === 0) {
                     $this->onAvance($xXx['CONTROL'], 105, 'ALMACEN CORTE', NULL);
                 }
+                $l = new Logs("Captura de Avance de produccion", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} MAQUILAS A ALMACEN DE CORTE. ", $this->session);
                 exit(0);
             }
 
@@ -931,14 +932,14 @@ P.Maquila AS MAQUILA
                                 print "\n RAYADO NO HA AVANZADO \n";
                                 exit(0);
                             }
-                            /*REVISAR FOLEADO-TROQUELADO*/
+                            /* REVISAR FOLEADO-TROQUELADO */
                             if (intval($maquila_control[0]->Maquila) === 98) {
                                 $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(61,71) AND Control = {$xXx['CONTROL']}")->result();
                                 if (intval($check_foleado[0]->EXISTE) === 0) {
                                     print "\n FOLEADO-TROQUELADO MUESTRA NO HA AVANZADO \n";
                                     exit(0);
                                 }
-                            } 
+                            }
                             if (intval($maquila_control[0]->Maquila) === 1) {
                                 $check_foleado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(60) AND Control = {$xXx['CONTROL']}")->result();
                                 if (intval($check_foleado[0]->EXISTE) === 0) {
@@ -946,8 +947,8 @@ P.Maquila AS MAQUILA
                                     exit(0);
                                 }
                             }
-                            /*FIN REVISAR FOLEADO-TROQUELADO*/
-                            
+                            /* FIN REVISAR FOLEADO-TROQUELADO */
+
                             $check_rebajado = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(114,103) AND Control = {$xXx['CONTROL']}")->result();
                             if (intval($check_rebajado[0]->EXISTE) === 0) {
                                 print "\n REBAJADO NO HA AVANZADO \n";

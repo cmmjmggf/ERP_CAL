@@ -2,7 +2,7 @@
     <div class="card-body ">
         <div class="row">
             <div class="col-sm-6 float-left">
-                <legend class="float-left">Colores</legend>
+                <h3> <span class="fa fa-brush fa-lg"></span> Color</h3>
             </div>
             <div class="col-sm-6 float-right" align="right">
 
@@ -36,7 +36,7 @@
             <fieldset>
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-4 float-left">
-                        <legend>Color</legend>
+                        <h3> <span class="fa fa-brush fa-lg"></span> Color</h3>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8" align="right">
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
@@ -49,47 +49,68 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="d-none">
-                            <input type="text"  name="ID" class="form-control form-control-sm" >
+                    <div class="col-8">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="d-none">
+                                    <input type="text"  name="ID" class="form-control form-control-sm" >
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                                <label>Estilo</label>
+                                <select id="Estilo" name="Estilo" class="form-control form-control-sm" >
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                                <label for="Clave" >Clave*</label>
+                                <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Clave" name="Clave" required placeholder="Clave del color">
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                                <label for="" >Descripción</label>
+                                <textarea id="Descripcion" name="Descripcion" class="form-control" rows="2" cols="4"></textarea>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
+                                <label>Pieles</label>
+                                <!--Articulos Grupo 1-->
+                                <select id="Pieles" name="Pieles" class="form-control form-control-sm" >
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label for="" >Obs.para la orden de producción</label>
+                                <textarea id="ObservacionesOrdenProduccion" name="ObservacionesOrdenProduccion" maxlength="100" class="form-control" rows="2" cols="4"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                        <label>Estilo</label>
-                        <select id="Estilo" name="Estilo" class="form-control form-control-sm" >
-                            <option value=""></option>
-                        </select>
+                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center justify-content-center">
+                        <div class="row">
+                            <div class="col-12" id="FotoContenedor">
+                                <a href="<?PHP print base_url('img/camera.png'); ?>" data-fancybox="images" >
+                                    <img src="<?PHP print base_url('img/camera.png'); ?>" id="FotoEstiloColor" class="img-fluid rounded" style="width: 262px; height: 262px;">
+                                </a>
+                            </div>
+                            <div class="col-12">
+                                <input type="file" id="ArchivoFotoEstiloColor" class="d-none">
+                                <button type="button" id="btnFotoEstiloColor" class="btn btn-info">
+                                    <span class="fa fa-image"></span> CAMBIAR FOTO
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                        <label for="Clave" >Clave*</label>
-                        <input type="text" class="form-control form-control-sm numbersOnly disabledForms" id="Clave" name="Clave" required placeholder="Clave del color">
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                        <label for="" >Descripción</label>
-                        <textarea id="Descripcion" name="Descripcion" class="form-control" rows="2" cols="4"></textarea>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3">
-                        <label>Pieles</label>
-                        <!--Articulos Grupo 1-->
-                        <select id="Pieles" name="Pieles" class="form-control form-control-sm" >
-                            <option value=""></option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <label for="" >Obs.para la orden de producción</label>
-                        <textarea id="ObservacionesOrdenProduccion" name="ObservacionesOrdenProduccion" maxlength="100" class="form-control" rows="2" cols="4"></textarea>
-                    </div>
+
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="text-danger">*Nota.Colores ya dados de alta sera imposible modificarlos.</h6>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="text-danger">*Nota.Para actualizar costo de mano de obra y materiales si desea un solo estilo tecle el numero .</h6>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-12 col-lg-12 col-xl-12">
+                    
+                    <div class="col-12 col-sm-6 col-md-12 col-lg-12 col-xl-12 d-none">
                         <legend>Datos para etiqueta de trazabilidad.</legend>
                         <hr>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 d-none">
                         <label>Tamaño y color</label>
                         <select id="trEtiqueta" name="trEtiqueta" class="form-control form-control-sm" required>
                             <option value=""></option>
@@ -100,7 +121,7 @@
                             <option value="5">5 = 1.5x3 fondo negro</option>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6  d-none">
                         <label for="trPiel" >Piel</label>
                         <input type="text" class="form-control form-control-sm" id="trPiel" name="trPiel"  placeholder="">
                         <label for="trForro" >Forro</label>
@@ -108,6 +129,7 @@
                         <label for="trSuela" >Suela</label>
                         <input type="text" class="form-control form-control-sm" id="trSuela" name="trSuela"  placeholder="">
                     </div>
+                    
                 </div>
                 <div class="row pt-2">
                     <div class="col-6 col-sm-6 col-md-6 col-lg-6">
@@ -128,7 +150,10 @@
     var tblColores = $('#tblColores');
     var Colores;
     var btnNuevo = $("#btnNuevo"), btnCancelar = $("#btnCancelar"), btnEliminar = $("#btnEliminar"), btnGuardar = $("#btnGuardar");
-    var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos");
+    var pnlTablero = $("#pnlTablero"), pnlDatos = $("#pnlDatos"),
+            FotoEstiloColor = pnlDatos.find("#FotoEstiloColor"),
+            ArchivoFotoEstiloColor = pnlDatos.find("#ArchivoFotoEstiloColor"),
+            btnFotoEstiloColor = pnlDatos.find("#btnFotoEstiloColor"), tfoto;
     var nuevo = false;
 
     $(document).ready(function () {
@@ -140,6 +165,28 @@
         setFocusSelectToInputOnChange('#trEtiqueta', '#trPiel', pnlDatos);
 
         /*FUNCIONES X BOTON*/
+
+        ArchivoFotoEstiloColor.change(function () {
+            var imageType = /image.*/;
+            if (ArchivoFotoEstiloColor[0].files[0] !== undefined && ArchivoFotoEstiloColor[0].files[0].type.match(imageType)) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    FotoEstiloColor[0].src = reader.result;
+                    pnlDatos.find("#FotoContenedor a")[0].href = reader.result;
+                };
+                reader.readAsDataURL(ArchivoFotoEstiloColor[0].files[0]);
+                tfoto = true;
+            } else {
+                swal('ATENCIÓN', 'EL ELEMENTO TIENE QUE SER UNA IMAGEN.', 'warning');
+                tfoto = false;
+            }
+        });
+
+        btnFotoEstiloColor.click(function () {
+            ArchivoFotoEstiloColor.trigger('click');
+        });
+
+
         pnlDatos.find("#Descripcion").keyup(function () {
             if ($(this).val() !== '') {
                 pnlDatos.find("#Pieles")[0].selectize.disable();
@@ -163,11 +210,12 @@
             if (valido) {
                 pnlDatos.find("#Pieles")[0].selectize.enable();
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
+                frm.append('FotoEstiloColor', ArchivoFotoEstiloColor[0].files[0]);
                 if (!nuevo) {
                     $.ajax({
                         url: master_url + 'onModificar',
                         type: "POST",
-                        cache: false,
+                        cache: true,
                         contentType: false,
                         processData: false,
                         data: frm
@@ -176,6 +224,8 @@
                         Colores.ajax.reload();
                         pnlDatos.addClass("d-none");
                         pnlTablero.removeClass("d-none");
+                        FotoEstiloColor[0].src = '<?PHP print base_url('img/camera.png'); ?>';
+                        pnlDatos.find("#FotoContenedor a")[0].href = '<?PHP print base_url('img/camera.png'); ?>';
                     }).fail(function (x, y, z) {
                         console.log(x, y, z);
                     }).always(function () {
@@ -254,6 +304,8 @@
             $.each(pnlDatos.find("select"), function (k, v) {
                 pnlDatos.find("select")[k].selectize.clear(true);
             });
+            FotoEstiloColor[0].src = '<?PHP print base_url('img/camera.png'); ?>';
+            pnlDatos.find("#FotoContenedor a")[0].href = '<?PHP print base_url('img/camera.png'); ?>';
         });
 
         btnCancelar.click(function () {
@@ -371,6 +423,13 @@
                 pnlTablero.addClass("d-none");
                 pnlDatos.removeClass('d-none');
                 pnlDatos.find("#Descripcion").focus().select();
+                if (data[0].Foto === 'null' || data[0].Foto === 'NULL' || data[0].Foto === null) {
+                    FotoEstiloColor[0].src = '<?PHP print base_url('img/camera.png'); ?>';
+                    pnlDatos.find("#FotoContenedor a")[0].href = '<?PHP print base_url('img/camera.png'); ?>';
+                } else {
+                    FotoEstiloColor[0].src = '<?PHP print base_url(); ?>' + data[0].Foto;
+                    pnlDatos.find("#FotoContenedor a")[0].href = '<?PHP print base_url(); ?>' + data[0].Foto;
+                }
             }).fail(function (x, y, z) {
                 swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
 

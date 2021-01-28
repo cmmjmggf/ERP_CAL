@@ -61,7 +61,14 @@
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Fecha</label>
-                    <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date" readonly="">
+                    <?php
+                    if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
+                            $this->session->Nombre === "MARTIN" && $this->session->TipoAcceso === "PRODUCCION") {
+                        ?>
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
+                    <?php } else { ?>
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date" readonly="">
+                    <?php } ?>
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <label>Departamento</label>
@@ -69,7 +76,15 @@
                 </div> 
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Semana</label>
-                    <input type="text" id="Semana" name="Semana" readonly="" class="form-control form-control-sm numbersOnly" maxlength="2">
+                    <?php
+                    if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
+                            $this->session->Nombre === "MARTIN" && $this->session->TipoAcceso === "PRODUCCION") {
+                        ?>
+                        <input type="text" id="Semana" name="Semana"  class="form-control form-control-sm numbersOnly" maxlength="2">
+
+                    <?php } else { ?>
+                        <input type="text" id="Semana" name="Semana" readonly="" class="form-control form-control-sm numbersOnly" maxlength="2">
+                    <?php } ?>
                 </div>
                 <div class="w-100"></div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3"></div>
@@ -133,7 +148,7 @@
                     <label>Empleado</label>
                     <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm" maxlength="6"> 
                 </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4"> 
+                <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4">
                     <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm">
                         <option></option>
                         <?php
@@ -156,7 +171,7 @@
                         }
                         ?>
                     </select> 
-                </div>  
+                </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
                     <label>Fracción</label>
                     <input type="text" id="Fraccion" name="Fraccion" class="form-control form-control-sm" maxlength="6"> 
@@ -606,6 +621,65 @@
         </div>
     </div>
 </div>
+
+<div class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Imprime pago celulas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label>FECHA</label>
+                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label>SEMANA</label>
+                        <input type="text" id="Semana" name="Semana"  class="form-control form-control-sm numbersOnly" maxlength="2">
+                    </div> 
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                        <label>EMPLEADO</label>
+                        <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm" maxlength="6"> 
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4">
+                        <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm">
+                            <option></option>
+                            <?php
+                            $data = $this->db->query("SELECT E.Numero AS CLAVE, "
+                                            . "(CASE "
+                                            . "WHEN E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 THEN "
+                                            . "CONCAT(E.Numero,' ', (CASE WHEN E.PrimerNombre = \"0\" THEN \"\" ELSE E.PrimerNombre END),' ',"
+                                            . "(CASE WHEN E.SegundoNombre = \"0\" THEN \"\" ELSE E.SegundoNombre END),' ',"
+                                            . "(CASE WHEN E.Paterno = \"0\" THEN \"\" ELSE E.Paterno END),' ', "
+                                            . "(CASE WHEN E.Materno = \"0\" THEN \"\" ELSE E.Materno END)) "
+                                            . "WHEN E.AltaBaja = 2 AND E.Celula NOT IN(0) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                                            . "WHEN E.AltaBaja = 2 AND E.Celula IN(0) AND E.Numero IN(991,992,993,1005,1006) THEN CONCAT(E.Numero,' ',E.Busqueda) "
+                                            . "END) AS EMPLEADO "
+                                            . "FROM empleados AS E "
+                                            . "WHERE E.FijoDestajoAmbos IN(2,3) AND E.AltaBaja = 1 "
+                                            . "OR E.AltaBaja = 2 AND E.Celula NOT IN(0) OR E.Numero IN(991,992,993,1005,1006)")
+                                    ->result();
+                            foreach ($data as $k => $v) {
+                                print "<option value='{$v->CLAVE}'>{$v->EMPLEADO}</option>";
+                            }
+                            ?>
+                        </select> 
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
     var master_url = '<?php base_url('Avance/') ?>', pnlTablero = $("#pnlTablero");
     var Fecha = pnlTablero.find("#Fecha"), Departamento = pnlTablero.find("#Departamento"),
@@ -1537,7 +1611,7 @@
                 });
             }
         });
-        Fecha.val(getActualDate());
+        Fecha.val('<?php print Date('d/m/Y'); ?>');
         $.post('<?php print base_url('Avance/getSemanaNomina'); ?>', {
             FECHA: Fecha.val()
         }).done(function (d) {

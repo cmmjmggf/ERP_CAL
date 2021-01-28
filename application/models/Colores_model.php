@@ -12,7 +12,7 @@ class Colores_model extends CI_Model {
 
     public function getRecords() {
         try {
-            return $this->db->select("C.ID, C.Estilo, C.Clave, C.Descripcion AS Color")->from("colores AS C")
+            return $this->db->select("C.ID, C.Estilo, C.Clave, C.Descripcion AS Color, C.Foto AS FOTO")->from("colores AS C")
                             ->join('estilos AS E', 'C.Estilo = E.Clave', 'left')->where("C.Estatus", "ACTIVO")->get()->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

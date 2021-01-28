@@ -15,7 +15,7 @@
                             <label>Hasta: </label>
                             <input type="text" class="form-control form-control-sm date notEnter" id="FechaFinVentasLinEstiPorce" name="FechaFinVentasLinEstiPorce" >
                         </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <label>Lineas: </label>
                             <div class="row">
                                 <div class="col-4 d-none">
@@ -33,6 +33,19 @@
                                     </select> 
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-6">
+                            <label>Estilo</label>
+                            <!--<input type="text" id="EstiloVentaXLineaEstilo" name="EstiloVentaXLineaEstilo" class="form-control" maxlength="10">-->
+                            <select class="form-control form-control-sm NotSelectize" id="EstiloVentaXLineaEstilo" name="EstiloVentaXLineaEstilo" multiple="" >
+                                <option></option>
+                                <?php
+                                $estilos = $this->db->query("SELECT E.Clave, E.Descripcion FROM estilos AS E WHERE  E.Clave NOT IN('BIMBOCO','FLETE','BIMBO','VARIOS','COMPLEMENTO','AUTO','IDP','ANTI','EXH','AYUDA','CUERO')  GROUP BY E.Clave ORDER BY ABS(E.clave) ASC")->result();
+                                foreach ($estilos as $k => $v) {
+                                    print "<option value='{$v->Clave}'>{$v->Clave}</option>";
+                                }
+                                ?>
+                            </select> 
                         </div>
                         <div class="w-100 my-2"></div>
                         <div class="col-6">
@@ -92,6 +105,7 @@
     var mdlVentasPorLineaEstiloPorcentaje = $('#mdlVentasPorLineaEstiloPorcentaje'),
             ClaveLineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#ClaveLineaVentaXLineaEstilo"),
             LineaVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#LineaVentaXLineaEstilo"),
+            EstiloVentaXLineaEstilo = mdlVentasPorLineaEstiloPorcentaje.find("#EstiloVentaXLineaEstilo"),
             checkTotalesVendidos = mdlVentasPorLineaEstiloPorcentaje.find("#checkTotalesVendidos"),
             checkCABALLERO = mdlVentasPorLineaEstiloPorcentaje.find("#checkCABALLERO"),
             checkDAMA = mdlVentasPorLineaEstiloPorcentaje.find("#checkDAMA"),
@@ -105,6 +119,11 @@
     $(document).ready(function () {
 
         LineaVentaXLineaEstilo.selectize({
+            persist: true,
+            create: false,
+            hideSelected: true
+        });
+        EstiloVentaXLineaEstilo.selectize({
             persist: true,
             create: false,
             hideSelected: true
@@ -154,6 +173,7 @@
             frm.append('Reporte', mdlVentasPorLineaEstiloPorcentaje.find('input[name=ReporteVentasPorFecha]:checked').attr('valor'));
 
             frm.append('LINEA', LineaVentaXLineaEstilo.val() ? LineaVentaXLineaEstilo.val() : '');
+            frm.append('ESTILO', EstiloVentaXLineaEstilo.val() ? EstiloVentaXLineaEstilo.val() : '');
             if (checkDAMA[0].checked && checkCABALLERO[0].checked) {
                 frm.append('GENERO', 4);
             } else

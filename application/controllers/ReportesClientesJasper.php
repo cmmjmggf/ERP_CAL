@@ -73,9 +73,10 @@ class ReportesClientesJasper extends CI_Controller {
     }
 
     public function getParesVendidosXFechasXLineaXGenero() {
-        $fechaini = str_replace('/', '-', $this->input->post('FechaIniVentasLinEstiPorce'));
+        $x = $this->input->post();
+        $fechaini = str_replace('/', '-', $x['FechaIniVentasLinEstiPorce']);
         $nuevaFechaIni = date("Y-m-d", strtotime($fechaini));
-        $fechafin = str_replace('/', '-', $this->input->post('FechaFinVentasLinEstiPorce'));
+        $fechafin = str_replace('/', '-', $x['FechaFinVentasLinEstiPorce']);
         $nuevaFechaFin = date("Y-m-d", strtotime($fechafin));
         $jc = new JasperCommand();
         $jc->setFolder('rpt/' . $this->session->USERNAME);
@@ -84,31 +85,63 @@ class ReportesClientesJasper extends CI_Controller {
         $parametros["empresa"] = $this->session->EMPRESA_RAZON;
         $parametros["fechaIni"] = $nuevaFechaIni;
         $parametros["fechaFin"] = $nuevaFechaFin;
-        $parametros["ORDEN_PARES"] = $this->input->post('ORDEN_PARES');
-        $parametros["ORDEN_PORCENTAJE"] = $this->input->post('ORDEN_PORCENTAJE');
+        $parametros["ORDEN_PARES"] = $x['ORDEN_PARES'];
+        $parametros["ORDEN_PORCENTAJE"] = $x['ORDEN_PORCENTAJE'];
 
-        $LINEAS = $this->input->post('LINEA');
-        if ($LINEAS === '') {
-            $parametros["GENERO"] = $this->input->post('GENERO');
-            $parametros["MODELADORDISENADOR"] = $this->input->post('MODELADORDISENADOR');
+        $LINEAS = $x['LINEA'];
+        $ESTILOS = $x['ESTILO'];
+        if ($LINEAS === '' && $ESTILOS === '') {
+            $parametros["GENERO"] = $x['GENERO'];
+            $parametros["MODELADORDISENADOR"] = $x['MODELADORDISENADOR'];
             $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGeneroSinLinea.jasper');
             $jc->setParametros($parametros);
-            $jc->setFilename('ParesVendidosXFechasXLineaXGeneroTotales_' . Date('h_i_s'));
+            $jc->setFilename('ParesVendidosXFechasXLineaXGeneroSinLinea_' . Date('h_i_s'));
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();
             exit(0);
-        } else if ($LINEAS !== '') {
-            $LINEAS = str_replace(",", "','", $this->input->post('LINEA'));
+        } else if ($LINEAS !== '' && $ESTILOS === '') {
+            $LINEAS = str_replace(",", "','", $x['LINEA']);
             $LINEAS = "'{$LINEAS}'";
-        }
-        $parametros["LINEA"] = $LINEAS;
-        $parametros["GENERO"] = $this->input->post('GENERO');
-        $parametros["MODELADORDISENADOR"] = $this->input->post('MODELADORDISENADOR');
-        $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGenero.jasper');
-        $jc->setParametros($parametros);
-        $jc->setFilename('ParesVendidosXFechasXLineaXGenero_' . Date('h_i_s'));
-        $jc->setDocumentformat('pdf');
-        PRINT $jc->getReport();
+            $parametros["LINEA"] = $LINEAS; 
+            $parametros["GENERO"] = $x['GENERO'];
+            $parametros["MODELADORDISENADOR"] = $x['MODELADORDISENADOR'];
+            $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXGenero.jasper');
+            $jc->setParametros($parametros);
+            $jc->setFilename('ParesVendidosXFechasXLineaXGenero_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+            exit(0);
+        } else if ($LINEAS !== '' && $ESTILOS !== '') {
+            $LINEAS = str_replace(",", "','", $x['LINEA']);
+            $LINEAS = "'{$LINEAS}'";
+            $ESTILOS = str_replace(",", "','", $x['ESTILO']);
+            $ESTILOS = "'{$ESTILOS}'";
+            $parametros["LINEA"] = $LINEAS;
+            $parametros["ESTILO"] = $ESTILOS;
+            $parametros["GENERO"] = $x['GENERO'];
+            $parametros["MODELADORDISENADOR"] = $x['MODELADORDISENADOR'];
+            $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXEstiloXGenero.jasper');
+            $jc->setParametros($parametros);
+            $jc->setFilename('ParesVendidosXFechasXLineaXEstiloXGenero_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+            exit(0);
+        } else if ($LINEAS === '' && $ESTILOS !== '') {
+            $LINEAS = str_replace(",", "','", $x['LINEA']);
+            $LINEAS = "'{$LINEAS}'";
+            $ESTILOS = str_replace(",", "','", $x['ESTILO']);
+            $ESTILOS = "'{$ESTILOS}'";
+            $parametros["LINEA"] = $LINEAS;
+            $parametros["ESTILO"] = $ESTILOS;
+            $parametros["GENERO"] = $x['GENERO'];
+            $parametros["MODELADORDISENADOR"] = $x['MODELADORDISENADOR'];
+            $jc->setJasperurl('jrxml\ventas\ParesVendidosXFechasXLineaXEstiloXGeneroSinLinea.jasper');
+            $jc->setParametros($parametros);
+            $jc->setFilename('ParesVendidosXFechasXLineaXEstiloXGeneroSinLinea_' . Date('h_i_s'));
+            $jc->setDocumentformat('pdf');
+            PRINT $jc->getReport();
+            exit(0);
+        } 
     }
 
     public function getParesVendidosXFechasXLineaXGeneroTotales() {

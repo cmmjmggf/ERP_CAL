@@ -590,6 +590,7 @@ class Avance9 extends CI_Controller {
                                         ->where('C.Fraccion', $v->NUMERO_FRACCION)
                                         ->get()->result();
 
+
                         if (intval($v->NUMERO_FRACCION) === 100 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 ||
                                 intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
                             $REVISA_AVANCE_RAYADO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = '{$xXx['CONTROL']}' AND Departamento = 20")->result();
@@ -642,7 +643,7 @@ class Avance9 extends CI_Controller {
                         $check_fraccion_bom = $this->db->query("SELECT COUNT(*) AS FORROS FROM asignapftsacxc AS AAA WHERE AAA.Control = {$xXx['CONTROL']} AND AAA.Fraccion = 99 ")->result();
 
                         $data["fraccion"] = $v->NUMERO_FRACCION;
-                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 || intval($check_fraccion[0]->EXISTE) === 1 && intval($check_fraccion_bom[0]->FORROS) === 2) {
+                        if (intval($check_fraccion[0]->EXISTE) <= 0 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0 || intval($check_fraccion[0]->EXISTE) === 0 && intval($check_fraccion_bom[0]->FORROS) === 2) {
 
                             $data["avance_id"] = intval($id) >= 0 ? intval($id) : $v->NUMERO_FRACCION;
 
@@ -650,9 +651,12 @@ class Avance9 extends CI_Controller {
                                 $data["modulo"] = 'A9';
                                 $check_programacion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM programacion AS P WHERE P.control = {$xXx["CONTROL"]} AND P.numemp = {$xXx['NUMERO_EMPLEADO']} AND P.frac = 100")->result();
                                 if (intval($check_programacion[0]->EXISTE) > 0) {
-                                    $this->db->insert('fracpagnomina', $data);
-                                    $l = new Logs("AVANCE 9 - FRACCION 100", "LE PAGO LA FRACCION 100 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
-                                    $msj .= '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO  - LOOP FOREACH"}';
+                                    $check_100 = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control ={$xXx["CONTROL"]} AND F.numfrac = 100")->result();
+                                    if (intval($check_100[0]->EXISTE) === 0) {
+                                        $this->db->insert('fracpagnomina', $data);
+                                        $l = new Logs("AVANCE 9 - FRACCION 100", "LE PAGO LA FRACCION 100 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
+                                        $msj .= '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO  - LOOP FOREACH"}';
+                                    }
                                 }
                             }
                             if (intval($v->NUMERO_FRACCION) === 99 && $MAQUILA_MUESTRA !== 98) {
@@ -660,24 +664,33 @@ class Avance9 extends CI_Controller {
                                 $data["modulo"] = 'A9';
                                 $check_programacion = $this->db->query("SELECT COUNT(*) AS EXISTE FROM programacion AS P WHERE P.control = {$xXx["CONTROL"]} AND P.numemp = {$xXx['NUMERO_EMPLEADO']} AND P.frac = 99")->result();
                                 if (intval($check_programacion[0]->EXISTE) > 0) {
-                                    $this->db->insert('fracpagnomina', $data);
-                                    $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
-                                    $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
+                                    $check_99 = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control ={$xXx["CONTROL"]} AND F.numfrac = 99")->result();
+                                    if (intval($check_99[0]->EXISTE) === 0) {
+                                        $this->db->insert('fracpagnomina', $data);
+                                        $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
+                                        $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
+                                    }
                                 }
                             }
                             if (intval($v->NUMERO_FRACCION) === 99 && $MAQUILA_MUESTRA === 98) {
                                 $data["avance_id"] = NULL;
                                 $data["modulo"] = 'A9';
-                                $this->db->insert('fracpagnomina', $data);
-                                $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
-                                $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
+                                $check_9998 = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control ={$xXx["CONTROL"]} AND F.numfrac = 99")->result();
+                                if (intval($check_9998[0]->EXISTE) === 0) {
+                                    $this->db->insert('fracpagnomina', $data);
+                                    $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
+                                    $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
+                                }
                             }
                             if (intval($v->NUMERO_FRACCION) === 96 && $MAQUILA_MUESTRA === 98) {
                                 $data["avance_id"] = NULL;
                                 $data["modulo"] = 'A9';
-                                $this->db->insert('fracpagnomina', $data);
-                                $l = new Logs("AVANCE 9 - FRACCION 96", "LE PAGO LA FRACCION 96 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
-                                $msj .= '{"AVANZO":"0","FR":"96","RETORNO":"SI", "MESSAGE":"FRACCION 96, NO GENERA AVANCE - LOOP FOREACH"}';
+                                $check_9698 = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.control ={$xXx["CONTROL"]} AND F.numfrac = 96")->result();
+                                if (intval($check_9698[0]->EXISTE) === 0) {
+                                    $this->db->insert('fracpagnomina', $data);
+                                    $l = new Logs("AVANCE 9 - FRACCION 96", "LE PAGO LA FRACCION 96 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
+                                    $msj .= '{"AVANZO":"0","FR":"96","RETORNO":"SI", "MESSAGE":"FRACCION 96, NO GENERA AVANCE - LOOP FOREACH"}';
+                                }
                             }
                             if ($pifo_contador >= 1 && count($FRACCIONES) === 3) {
                                 $msj .= ",";
@@ -877,7 +890,7 @@ class Avance9 extends CI_Controller {
                         if (intval($maquila_control[0]->Maquila) === 98) {
                             $check_foleado_muestra = $this->db->select('COUNT(*) AS EXISTE', false)
                                             ->from('fracpagnomina AS F')->where('F.control', $xXx['CONTROL'])
-                                            ->where_in('F.numfrac', array(61, 71))
+                                            ->where_in('F.numfrac', array(60, 61, 71))
                                             ->get()->result();
                             if (intval($check_foleado_muestra[0]->EXISTE) === 0 ||
                                     intval($check_foleado_muestra[0]->EXISTE) === 0) {
@@ -888,6 +901,7 @@ class Avance9 extends CI_Controller {
 
                         $rebajadores = array(49, 1894, 3105);
                         $rebajadores = array(49, 3105, 3134);
+                        $rebajadores = array(49, 3105, 3149);
 
                         if (in_array(intval($xXx['NUMERO_EMPLEADO']), $rebajadores)) {
                             /* REVISAR SI LA FRACCION "102 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO */
