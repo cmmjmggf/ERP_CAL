@@ -1,5 +1,5 @@
 <div class="modal " id="mdlParesAsignadosMaqSemGen"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Pares Asignados X Semana/Maquila</h5>

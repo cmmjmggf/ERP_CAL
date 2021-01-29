@@ -801,6 +801,7 @@ class ReportesProduccionJasper extends CI_Controller {
         $parametros["asem"] = $this->input->post('aSem');
         $parametros["amaq"] = $this->input->post('aMaq');
         $parametros["maq"] = $this->input->post('Maq');
+        $parametros["Departamento"] = $this->input->post('DepartamentoAvance');
         $jc->setParametros($parametros);
         $jc->setJasperurl('jrxml\produccion\paresProducidosPorTipoConstruccion.jasper');
         if ($general === '1') {
