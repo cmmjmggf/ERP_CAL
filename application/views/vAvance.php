@@ -670,7 +670,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimePagoCelulasMontado">Imprimir</button> 
+                <button type="button" class="btn btn-primary" id="btnImprimePagoCelulasMontado"  style="background-color: #43A047; border-color: #43A047;">Imprimir</button> 
             </div>
         </div>
     </div>
@@ -729,11 +729,11 @@
             mdlAdornoFraccionesNomina = $("#mdlAdornoFraccionesNomina"),
             ControlAdornoNomina = mdlAdornoFraccionesNomina.find("#ControlAdornoNomina"),
             mdlImprimePagoCelulasMontado = $("#mdlImprimePagoCelulasMontado"),
-            FechaPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#FechaPagoCelulasMontado"),
-            SemanaPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#SemanaPagoCelulasMontado"),
-            EmpleadoPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#EmpleadoPagoCelulasMontado"),
-            EmpleadoSPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#EmpleadoSPagoCelulasMontado"),
-            btnImprimePagoCelulasMontado = mdlAdornoFraccionesNomina.find("#btnImprimePagoCelulasMontado");
+            FechaPagoCelulasMontado = mdlImprimePagoCelulasMontado.find("#FechaPagoCelulasMontado"),
+            SemanaPagoCelulasMontado = mdlImprimePagoCelulasMontado.find("#SemanaPagoCelulasMontado"),
+            EmpleadoPagoCelulasMontado = mdlImprimePagoCelulasMontado.find("#EmpleadoPagoCelulasMontado"),
+            EmpleadoSPagoCelulasMontado = mdlImprimePagoCelulasMontado.find("#EmpleadoSPagoCelulasMontado"),
+            btnImprimePagoCelulasMontado = mdlImprimePagoCelulasMontado.find("#btnImprimePagoCelulasMontado");
 
     function getFraccionesPespunteFail() {
         var cols = [
@@ -803,8 +803,27 @@
 
     $(document).ready(function () {
 
+        handleEnterDiv(mdlImprimePagoCelulasMontado);
+
+        EmpleadoPagoCelulasMontado.on('keydown', function (e) {
+            if (e.keyCode === 13 && EmpleadoPagoCelulasMontado.val()) {
+                EmpleadoSPagoCelulasMontado[0].selectize.setValue(EmpleadoPagoCelulasMontado.val());
+                if (EmpleadoSPagoCelulasMontado.val()) {
+                    EmpleadoSPagoCelulasMontado[0].selectize.disable();
+                } else {
+                    EmpleadoSPagoCelulasMontado[0].selectize.enable();
+                }
+            } else {
+                console.log('KEYCODE=>', e.keyCode);
+                if (e.keyCode === 13) {
+                    EmpleadoSPagoCelulasMontado[0].selectize.enable();
+                    EmpleadoSPagoCelulasMontado[0].selectize.clear();
+                }
+            }
+        });
+
         mdlImprimePagoCelulasMontado.on('shown.bs.modal', function () {
-            FechaPagoCelulasMontado.focus();
+            FechaPagoCelulasMontado.focus().select();
         });
 
         btnImprimePagoCelulasMontado.click(function () {
@@ -827,17 +846,19 @@
                     onCloseOverlay();
                 });
             } else {
-                if(!FechaPagoCelulasMontado.val()){
-                    onCampoInvalido(mdlImprimePagoCelulasMontado,"DEBE DE ESPECIFICAR UNA FECHA",function(){
-                       FechaPagoCelulasMontado.focus(); 
+                if (!FechaPagoCelulasMontado.val()) {
+                    onCampoInvalido(mdlImprimePagoCelulasMontado, "DEBE DE ESPECIFICAR UNA FECHA", function () {
+                        FechaPagoCelulasMontado.focus();
                     });
+                    return;
                 }
-                if(!SemanaPagoCelulasMontado.val()){
-                    onCampoInvalido(mdlImprimePagoCelulasMontado,"DEBE DE ESPECIFICAR UNA SEMANA",function(){
-                       SemanaPagoCelulasMontado.focus(); 
+                if (!SemanaPagoCelulasMontado.val()) {
+                    onCampoInvalido(mdlImprimePagoCelulasMontado, "DEBE DE ESPECIFICAR UNA SEMANA", function () {
+                        SemanaPagoCelulasMontado.focus();
                     });
+                    return;
                 }
-                
+
             }
         });
 
