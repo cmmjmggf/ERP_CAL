@@ -23,7 +23,7 @@ class OrdenDeCompraMto extends CI_Controller {
 
     public function getHerramientas() {
         try {
-            print json_encode($this->db->query("SELECT O.ID AS ID, O.Fecha AS FECHA, (SELECT OCP.Nombre FROM ordendecompramto_proveedores AS OCP WHERE OCP.ID = O.Proveedor LIMIT 1) AS PROVEEDOR,"
+            print json_encode($this->db->query("SELECT O.ID AS ID, DATE_FORMAT(O.Fecha,\"%d/%m/%Y\") AS FECHA, (SELECT OCP.Nombre FROM ordendecompramto_proveedores AS OCP WHERE OCP.ID = O.Proveedor LIMIT 1) AS PROVEEDOR,"
                                     . " O.DestinoMaterial AS DESTINO_MATERIAL, CONCAT(SUBSTRING(O.Observaciones,1,35),\"...\") AS OBSERVACIONES, "
                                     . "O.Folio AS FOLIO FROM ordendecompramto AS O ORDER BY O.ID DESC ")->result());
         } catch (Exception $exc) {
@@ -80,6 +80,8 @@ class OrdenDeCompraMto extends CI_Controller {
                         }
                     }
                     $this->db->set('IVA', $iva * 0.16)->where('ID', $ID[0]->OrdenID)->update('ordendecompramto');
+                    $l = new Logs("ORDEN DE COMPRA MANTENIMIENTO", "HA CREADO UNA ORDEN DE COMPRA MANTENIMIENTO CON EN EL FOLIO {$x['FOLIO']} .", $this->session);
+
                     break;
             }
             exit(0);
@@ -102,6 +104,7 @@ class OrdenDeCompraMto extends CI_Controller {
             $jc->setFilename('ORDERDECOMPRAMTO_' . $x['FOLIO'] . '_' . Date('h_i_s'));
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();
+            $l = new Logs("ORDEN DE COMPRA MANTENIMIENTO (IMPRIMIR)", "HA IMPRESO UNA ORDEN DE COMPRA MANTENIMIENTO CON EN EL FOLIO {$x['FOLIO']} .", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -132,6 +135,7 @@ class OrdenDeCompraMto extends CI_Controller {
                     $this->db->insert('ordendecompramto_unidades', array('Nombre' => $x['NOMBRE'], 'Abreviacion' => $x['ABREVIATURA']));
                     break;
             }
+            $l = new Logs("ORDEN DE COMPRA MANTENIMIENTO (UNIDADES)", "HA CREADO LA UNIDAD {$x['NOMBRE']}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -153,6 +157,7 @@ class OrdenDeCompraMto extends CI_Controller {
                     $this->db->where('ID', $x['ID'])->update('ordendecompramto_proveedores', array('Nombre' => $x['NOMBRE'], 'Telefono' => $x['TELEFONO'] !== '' ? $x['TELEFONO'] : NULL));
                     break;
             }
+            $l = new Logs("ORDEN DE COMPRA MANTENIMIENTO (PROVEEDOR)", "HA CREADO AL PROVEEDOR {$x['NOMBRE']}.", $this->session);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

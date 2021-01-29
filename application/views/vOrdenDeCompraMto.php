@@ -465,6 +465,9 @@
                         icon: "success"
                     }).then(value => {
                         getOrdenXFolio();
+                        Herramientas.ajax.reload(function () {
+                            btnCancelaODCMto.trigger('click');
+                        });
                     });
                 }).fail(function (x) {
                     getError(x);
@@ -512,6 +515,10 @@
             pnlTablero.removeClass("d-none");
             pnlNuevo.addClass("d-none");
             pnlNuevo.find("input").val("");
+            $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
+            Herramientas.ajax.reload(function(){
+                
+            });
         });
 
         btnNuevo.click(function () {
@@ -519,6 +526,7 @@
             pnlTablero.addClass("d-none");
             pnlNuevo.removeClass("d-none");
             FolioOrdenCompraMto.focus().select();
+            MaterialesMto.rows().remove().draw();
             MaterialesMto.columns.adjust().draw();
             getUnidadesOrdenDeCompraMto();
             getProveedoresOrdenDeCompraMto();

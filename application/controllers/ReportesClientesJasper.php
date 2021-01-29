@@ -126,12 +126,9 @@ class ReportesClientesJasper extends CI_Controller {
             $jc->setDocumentformat('pdf');
             PRINT $jc->getReport();
             exit(0);
-        } else if ($LINEAS === '' && $ESTILOS !== '') {
-            $LINEAS = str_replace(",", "','", $x['LINEA']);
-            $LINEAS = "'{$LINEAS}'";
+        } else if ($LINEAS === '' && $ESTILOS !== '') { 
             $ESTILOS = str_replace(",", "','", $x['ESTILO']);
-            $ESTILOS = "'{$ESTILOS}'";
-            $parametros["LINEA"] = $LINEAS;
+            $ESTILOS = "'{$ESTILOS}'"; 
             $parametros["ESTILO"] = $ESTILOS;
             $parametros["GENERO"] = $x['GENERO'];
             $parametros["MODELADORDISENADOR"] = $x['MODELADORDISENADOR'];

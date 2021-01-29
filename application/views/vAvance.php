@@ -62,8 +62,7 @@
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Fecha</label>
                     <?php
-                    if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
-                            $this->session->Nombre === "MARTIN" && $this->session->TipoAcceso === "PRODUCCION") {
+                    if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR") {
                         ?>
                         <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
                     <?php } else { ?>
@@ -77,8 +76,7 @@
                 <div class="col-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                     <label>Semana</label>
                     <?php
-                    if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
-                            $this->session->Nombre === "MARTIN" && $this->session->TipoAcceso === "PRODUCCION") {
+                    if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR") {
                         ?>
                         <input type="text" id="Semana" name="Semana"  class="form-control form-control-sm numbersOnly" maxlength="2">
 
@@ -622,31 +620,31 @@
     </div>
 </div>
 
-<div class="modal">
-    <div class="modal-dialog" role="document">
+<div class="modal" id="mdlImprimePagoCelulasMontado">
+    <div class="modal-dialog modal-lg modal-dialog-centered notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Imprime pago celulas</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Imprime pago celulas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                         <label>FECHA</label>
-                        <input type="text" id="Fecha" name="Fecha" class="form-control form-control-sm date">
+                        <input type="text" id="FechaPagoCelulasMontado" name="FechaPagoCelulasMontado" class="form-control form-control-sm date">
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <label>SEMANA</label>
-                        <input type="text" id="Semana" name="Semana"  class="form-control form-control-sm numbersOnly" maxlength="2">
+                        <input type="text" id="SemanaPagoCelulasMontado" name="SemanaPagoCelulasMontado"  class="form-control form-control-sm numbersOnly" maxlength="2">
                     </div> 
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-3">
                         <label>EMPLEADO</label>
-                        <input type="text" id="Empleado" name="Empleado" class="form-control form-control-sm" maxlength="6"> 
+                        <input type="text" id="EmpleadoPagoCelulasMontado" name="EmpleadoPagoCelulasMontado" class="form-control form-control-sm" maxlength="6"> 
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 mt-4">
-                        <select id="EmpleadoS" name="EmpleadoS" class="form-control form-control-sm">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-4">
+                        <select id="EmpleadoSPagoCelulasMontado" name="EmpleadoSPagoCelulasMontado" class="form-control form-control-sm">
                             <option></option>
                             <?php
                             $data = $this->db->query("SELECT E.Numero AS CLAVE, "
@@ -672,8 +670,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnImprimePagoCelulasMontado">Imprimir</button> 
             </div>
         </div>
     </div>
@@ -730,7 +727,13 @@
             ParesControlPespunteFail = mdlPespunteFraccionesFail.find("#ParesControlPespunteFail"),
             btnAdornoFraccionesNomina = pnlTablero.find("#btnAdornoFraccionesNomina"),
             mdlAdornoFraccionesNomina = $("#mdlAdornoFraccionesNomina"),
-            ControlAdornoNomina = mdlAdornoFraccionesNomina.find("#ControlAdornoNomina");
+            ControlAdornoNomina = mdlAdornoFraccionesNomina.find("#ControlAdornoNomina"),
+            mdlImprimePagoCelulasMontado = $("#mdlImprimePagoCelulasMontado"),
+            FechaPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#FechaPagoCelulasMontado"),
+            SemanaPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#SemanaPagoCelulasMontado"),
+            EmpleadoPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#EmpleadoPagoCelulasMontado"),
+            EmpleadoSPagoCelulasMontado = mdlAdornoFraccionesNomina.find("#EmpleadoSPagoCelulasMontado"),
+            btnImprimePagoCelulasMontado = mdlAdornoFraccionesNomina.find("#btnImprimePagoCelulasMontado");
 
     function getFraccionesPespunteFail() {
         var cols = [
@@ -799,6 +802,45 @@
     }
 
     $(document).ready(function () {
+
+        mdlImprimePagoCelulasMontado.on('shown.bs.modal', function () {
+            FechaPagoCelulasMontado.focus();
+        });
+
+        btnImprimePagoCelulasMontado.click(function () {
+            if (FechaPagoCelulasMontado.val() && SemanaPagoCelulasMontado.val()) {
+                onOpenOverlay('');
+                btnImprimePagoCelulasMontado.attr('disabled', true);
+                $.post('<?php print base_url('Avance/ImprimePagosCelulas'); ?>', {
+                    EMPLEADO: EmpleadoPagoCelulasMontado.val() ? EmpleadoPagoCelulasMontado.val() : '',
+                    SEMANA: SemanaPagoCelulasMontado.val() ? SemanaPagoCelulasMontado.val() : '',
+                    FECHA: FechaPagoCelulasMontado.val() ? FechaPagoCelulasMontado.val() : ''
+                }).done(function (a) {
+                    if (a.length > 0) {
+                        onImprimirReporteFancyAFC(a, function (a, b) {
+                            btnImprimePagoCelulasMontado.attr('disabled', false);
+                        });
+                    }
+                }).fail(function (x) {
+                    getError(x);
+                }).always(function () {
+                    onCloseOverlay();
+                });
+            } else {
+                if(!FechaPagoCelulasMontado.val()){
+                    onCampoInvalido(mdlImprimePagoCelulasMontado,"DEBE DE ESPECIFICAR UNA FECHA",function(){
+                       FechaPagoCelulasMontado.focus(); 
+                    });
+                }
+                if(!SemanaPagoCelulasMontado.val()){
+                    onCampoInvalido(mdlImprimePagoCelulasMontado,"DEBE DE ESPECIFICAR UNA SEMANA",function(){
+                       SemanaPagoCelulasMontado.focus(); 
+                    });
+                }
+                
+            }
+        });
+
         pnlTablero.find("input").addClass("font-weight-bold");
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRastreoXConcepto);
@@ -1040,23 +1082,25 @@
         });
 
         btnImprimePagosCelulas.click(function () {
-            onOpenOverlay('');
-            btnImprimePagosCelulas.attr('disabled', true);
-            $.post('<?php print base_url('Avance/ImprimePagosCelulas'); ?>', {
-                EMPLEADO: Empleado.val() ? Empleado.val() : '',
-                SEMANA: Semana.val() ? Semana.val() : '',
-                FECHA: Fecha.val() ? Fecha.val() : ''
-            }).done(function (a) {
-                if (a.length > 0) {
-                    onImprimirReporteFancyAFC(a, function (a, b) {
-                        btnImprimePagosCelulas.attr('disabled', false);
-                    });
-                }
-            }).fail(function (x) {
-                getError(x);
-            }).always(function () {
-                onCloseOverlay();
-            });
+            mdlImprimePagoCelulasMontado.modal('show');
+
+//            onOpenOverlay('');
+//            btnImprimePagosCelulas.attr('disabled', true);
+//            $.post('<?php print base_url('Avance/ImprimePagosCelulas'); ?>', {
+//                EMPLEADO: Empleado.val() ? Empleado.val() : '',
+//                SEMANA: Semana.val() ? Semana.val() : '',
+//                FECHA: Fecha.val() ? Fecha.val() : ''
+//            }).done(function (a) {
+//                if (a.length > 0) {
+//                    onImprimirReporteFancyAFC(a, function (a, b) {
+//                        btnImprimePagosCelulas.attr('disabled', false);
+//                    });
+//                }
+//            }).fail(function (x) {
+//                getError(x);
+//            }).always(function () {
+//                onCloseOverlay();
+//            });
         });
 
         Departamento.on('keydown', function (e) {

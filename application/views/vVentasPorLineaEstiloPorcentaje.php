@@ -22,7 +22,7 @@
                                     <input type="text" class="form-control form-control-sm" id="ClaveLineaVentaXLineaEstilo" name="ClaveLineaVentaXLineaEstilo" >
                                 </div>
                                 <div class="col-12">
-                                    <select class="form-control form-control-sm NotSelectize" id="LineaVentaXLineaEstilo" name="LineaVentaXLineaEstilo" multiple="" >
+                                    <select class="form-control form-control-sm NotSelectize notEnter" id="LineaVentaXLineaEstilo" name="LineaVentaXLineaEstilo" multiple="" >
                                         <option></option>
                                         <?php
                                         $lineasx = $this->db->query("SELECT * FROM lineas AS L ORDER BY L.clave ASC")->result();
@@ -37,7 +37,7 @@
                         <div class="col-6">
                             <label>Estilo</label>
                             <!--<input type="text" id="EstiloVentaXLineaEstilo" name="EstiloVentaXLineaEstilo" class="form-control" maxlength="10">-->
-                            <select class="form-control form-control-sm NotSelectize" id="EstiloVentaXLineaEstilo" name="EstiloVentaXLineaEstilo" multiple="" >
+                            <select class="form-control form-control-sm NotSelectize notEnter" id="EstiloVentaXLineaEstilo" name="EstiloVentaXLineaEstilo" multiple="" >
                                 <option></option>
                                 <?php
                                 $estilos = $this->db->query("SELECT E.Clave, E.Descripcion FROM estilos AS E WHERE  E.Clave NOT IN('BIMBOCO','FLETE','BIMBO','VARIOS','COMPLEMENTO','AUTO','IDP','ANTI','EXH','AYUDA','CUERO')  GROUP BY E.Clave ORDER BY ABS(E.clave) ASC")->result();
@@ -121,12 +121,14 @@
         LineaVentaXLineaEstilo.selectize({
             persist: true,
             create: false,
-            hideSelected: true
+            hideSelected: true,
+            openOnFocus: false
         });
         EstiloVentaXLineaEstilo.selectize({
             persist: true,
             create: false,
-            hideSelected: true
+            hideSelected: true,
+            openOnFocus: false
         });
 
         checkAMBOS.change(function () {

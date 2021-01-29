@@ -244,9 +244,7 @@ class Avance8 extends CI_Controller {
                             . "F.status, DATE_FORMAT(F.fecha, \"%d/%m/%Y\") AS FECHA, "
                             . "F.semana AS SEMANA, F.depto AS DEPARTAMENTO, "
                             . "F.registro, F.anio, F.avance_id", false)
-                    ->from('fracpagnomina AS F')
-                    ->where("F.numfrac IN(209,210,301,34,103,102,51,70,60,61,62,24,"
-                            . "78,75,71,204,205,198,127,80,397,34,106,306,337,333,502,72,607,606,24,325,74,130)", null, false);
+                    ->from('fracpagnomina AS F');
             if ($x['EMPLEADO'] !== '') {
                 $this->db->where('F.numeroempleado', $x['EMPLEADO']);
             }

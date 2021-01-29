@@ -32,6 +32,29 @@
                             <label>A la sem.</label>
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="aSem" name="aSem" >
                         </div>
+                        <div class="col-12">
+                            <label>Departamento</label>
+                            <select id="DepartamentoAvance" name="DepartamentoAvance" class="form-control">
+                                <option></option>
+                                <option value="1">PROGRAMADO</option>
+                                <option value="2">CORTE</option>
+                                <option value="3">RAYADO</option>
+                                <option value="33">REBAJADO</option>
+                                <option value="4">FOLEADO</option>
+                                <option value="40">ENTRETELADO</option>
+                                <option value="42">MAQUILAS</option>
+                                <option value="44">ALMACEN CORTE</option>
+                                <option value="5">PESPUNTE</option>
+                                <option value="55">ENSUELADO</option>
+                                <option value="6">ALMACEN PESPUNTE</option>
+                                <option value="7">TEJIDO</option>
+                                <option value="8">ALMACEN TEJIDO</option>
+                                <option value="9">MONTADO</option>
+                                <option value="10">ADORNO</option>
+                                <option value="11">ALMACEN ADORNO</option>
+                                <option value="12">TERMINADO</option>
+                            </select>
+                        </div>
                         <div class="col-12 mt-2">
                             <div class="custom-control custom-checkbox  ">
                                 <input type="checkbox" class="custom-control-input" id="chParesProdXConstruccionConcentrado">
@@ -69,8 +92,7 @@
 
             var checkGen = mdlParesProducidosPorTipoConstruccion.find("#chParesProdXConstruccionConcentrado")[0].checked ? '1' : '0';
 
-            frm.append('checkGen', checkGen);
-
+            frm.append('checkGen', checkGen); 
             $.ajax({
                 url: base_url + 'index.php/ReportesProduccionJasper/onReporteParesProducidosPorTipoConstruccion',
                 type: "POST",

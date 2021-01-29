@@ -45,6 +45,9 @@
 	<parameter name="asem" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="Departamento" class="java.lang.String">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
 PE.Control, str_to_date(PE.FechaProg,'%Y-%m-%d') FechaProgramacion,
@@ -134,6 +137,9 @@ where stsavan not in (0,13,14)
 and cast(PE.maquila as signed) between $P{maq} and $P{amaq}
 and cast(PE.semana as signed) between $P{sem} and $P{asem}
 and PE.ano = $P{ano}
+AND CASE WHEN $P{Departamento} = 0 THEN PE.stsavan IN(1,2,3,33,4,44,40,42,5,55,6,7,8,9,10,11,12)
+WHEN $P{Departamento} <> 0 THEN PE.stsavan = $P{Departamento} END
+
 order by abs(E.TipoConstruccion), DEPTO_N,  PE.control ASC]]>
 	</queryString>
 	<field name="Control" class="java.lang.String">
