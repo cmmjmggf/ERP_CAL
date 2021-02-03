@@ -49,7 +49,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-7">
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="d-none">
@@ -83,16 +83,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center justify-content-center">
+                    <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 text-center justify-content-center">
                         <div class="row">
                             <div class="col-12" id="FotoContenedor">
                                 <a href="<?PHP print base_url('img/camera.png'); ?>" data-fancybox="images" >
-                                    <img src="<?PHP print base_url('img/camera.png'); ?>" id="FotoEstiloColor" class="img-fluid rounded" style="width: 262px; height: 262px;">
+                                    <img src="<?PHP print base_url('img/camera.png'); ?>" id="FotoEstiloColor" class="img-fluid rounded">
                                 </a>
                             </div>
                             <div class="col-12">
                                 <input type="file" id="ArchivoFotoEstiloColor" class="d-none">
-                                <button type="button" id="btnFotoEstiloColor" class="btn btn-info">
+                                <button type="button" id="btnFotoEstiloColor" class="btn btn-info mt-2">
                                     <span class="fa fa-image"></span> CAMBIAR FOTO
                                 </button>
                             </div>

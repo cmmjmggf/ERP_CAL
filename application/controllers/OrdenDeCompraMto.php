@@ -23,9 +23,27 @@ class OrdenDeCompraMto extends CI_Controller {
 
     public function getHerramientas() {
         try {
-            print json_encode($this->db->query("SELECT O.ID AS ID, DATE_FORMAT(O.Fecha,\"%d/%m/%Y\") AS FECHA, (SELECT OCP.Nombre FROM ordendecompramto_proveedores AS OCP WHERE OCP.ID = O.Proveedor LIMIT 1) AS PROVEEDOR,"
+           $data = $this->db->query("SELECT O.ID AS ID, DATE_FORMAT(O.Fecha,\"%d/%m/%Y\") AS FECHA, (SELECT OCP.Nombre FROM ordendecompramto_proveedores AS OCP WHERE OCP.ID = O.Proveedor LIMIT 1) AS PROVEEDOR,"
                                     . " O.DestinoMaterial AS DESTINO_MATERIAL, CONCAT(SUBSTRING(O.Observaciones,1,35),\"...\") AS OBSERVACIONES, "
-                                    . "O.Folio AS FOLIO FROM ordendecompramto AS O ORDER BY O.ID DESC ")->result());
+                                    . "O.Folio AS FOLIO, "
+                   . "CONCAT(\"$\",FORMAT((SELECT SUM(Cantidad*Precio)  "
+                   . "FROM ordendecompramto_detalle AS OD WHERE OD.OrdenID = O.ID),2)) AS TOTAL, "
+                   . "CONCAT('<button type=\"button\" onclick=\"getOrdenXFolioButton(\'',O.Folio,'\')\" class=\"btn btn-info btn-sm\"><span class=\"fa fa-print\"></span> IMPRIMIR</button>') AS IMPRIME FROM ordendecompramto AS O ORDER BY O.ID DESC ")->result();
+                
+            print json_encode($data);
+           } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getUltimoFolio() {
+        try {
+            $EXISTEN_FOLIOS = $this->db->query("SELECT COUNT(*) AS EXISTEN_FOLIOS fROM ordendecompramto ORDER BY ID DESC LIMIT 1")->result();
+            if (intval($EXISTEN_FOLIOS[0]->EXISTEN_FOLIOS) === 0) {
+                 print json_encode($this->db->query("SELECT \"OCD-001\" ULTIMO_FOLIO, COUNT(*) AS NO_EXISTEN fROM ordendecompramto ORDER BY ID DESC LIMIT 1")->result());
+            } else {
+                print json_encode($this->db->query("SELECT CONCAT(\"OCD-\",LPAD(SUBSTR(Folio,5)+1,3,\"0\")) AS ULTIMO_FOLIO fROM ordendecompramto ORDER BY ID DESC LIMIT 1")->result());
+            }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

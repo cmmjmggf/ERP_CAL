@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-8">
-                <h4 class="card-title">ORDEN DE COMPRA MANTENIMIENTO</h4> 
+                <h4 class="card-title"><span class="fa fa-file"></span> ORDEN DE COMPRA MANTENIMIENTO</h4> 
             </div>
             <div class="col-4" align="right">
                 <button type="button" id="btnNuevo" name="btnNuevo" class="btn btn-success">
@@ -20,6 +20,8 @@
                         <th scope="col">PROVEEDOR</th>
                         <th scope="col">DESTINO</th>
                         <th scope="col">OBSERVACIONES</th>
+                        <th scope="col">TOTAL</th>
+                        <th scope="col">-</th>
                     </tr>
                 </thead>
                 <tbody> 
@@ -38,34 +40,34 @@
                 <button type="button" id="btnCancelaODCMto" class="btn btn-danger d-none">
                 </button>
                 <button type="button" id="btnGuardarODCMTO" class="btn btn-success">
-                    <span class="fa fa-save"></span>  GUARDAR
+                    <span class="fa fa-save"></span>  GUARDAR ORDEN
                 </button>
             </div>
             <div class="w-100"></div>  
             <div class="col-12">
                 <div class="row">
-                    <div class="col-1 text-center">  
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-1 text-center">  
                         <button type="button" id="btnImprimeOrdenDeCompraMto" name="btnImprimeOrdenDeCompraMto" class="btn btn-info mt-3">
                             <span class="fa fa-print"></span> IMPRIMIR
                         </button>
                     </div>
-                    <div class="col-2">  
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">  
                         <label>FOLIO</label>
-                        <input type="text" id="FolioOrdenCompraMto" name="FolioOrdenCompraMto" class="form-control" autofocus="">
+                        <input type="text" id="FolioOrdenCompraMto" name="FolioOrdenCompraMto" class="form-control" autofocus="" style="color: #d32f2f !important; padding-top: 0px;    padding-bottom: 0px;    font-size: 18px;">
                     </div>
-                    <div class="col-2">  
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2">  
                         <label>FECHA</label>
                         <input type="text" id="FechaOrdenCompraMto" name="FechaOrdenCompraMto" class="form-control date notEnter">
                     </div>
-                    <div class="col-6">  
+                    <div class="col-12 col-xs-12 col-sm-2 col-md-2 col-lg-5 col-xl-5">  
                         <label>PROVEEDOR</label>
                         <select id="ProveedorOrdenCompraMto"  class="form-control form-control-sm">
 
                         </select> 
                     </div>
-                    <div class="col-1">  
+                    <div class="col-2 col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-1">  
                         <button type="button" id="btnAgregaProveedorMto" name="btnAgregaProveedorMto" class="btn btn-primary mt-3 notEnter">
-                            <span class="fa fa-plus"></span>
+                            <span class="fa fa-plus"></span> PROVEEDORES
                         </button>
                     </div>
                     <div class="col-5">  
@@ -83,7 +85,7 @@
                         </span>
                     </div> 
                     <div class="w-100 my-2"><hr>  </div>
-                    <div class="col-3">  
+                    <div class="col-2">  
                         <label>CANTIDAD</label>
                         <input type="text" id="CantidadOrdenCompraMto" name="CantidadOrdenCompraMto" class="form-control numbersOnly" maxlength="4"> 
                     </div>
@@ -94,11 +96,12 @@
                         </select>
                     </div>
                     <div class="col-1 text-center">  
-                        <button type="button" id="btnAgregaUnidad" name="btnAgregaUnidad" class="btn btn-primary mt-3 notEnter">
-                            <span class="fa fa-plus"></span>
+                        <button type="button" id="btnAgregaUnidad" name="btnAgregaUnidad" class="btn btn-primary mt-4 notEnter" style="background-color: #673ab7;
+                                border-color: #673ab7;">
+                            <span class="fa fa-plus"></span> UNIDADES
                         </button>
                     </div>
-                    <div class="col-3">  
+                    <div class="col-4">  
                         <label>DESCRIPCIÓN</label>
                         <input type="text" id="DescripcionOrdenCompraMto" name="DescripcionOrdenCompraMto" class="form-control" maxlength="400"> 
                     </div>
@@ -107,10 +110,11 @@
                         <input type="text" id="PrecioOrdenCompraMto" name="PrecioOrdenCompraMto" class="form-control numbersOnly"> 
                     </div>
                     <div class="col-1 text-center">  
-                        <button type="button" id="btnAceptaMaterial" name="btnAceptaMaterial" class="btn btn-success mt-3">
-                            <span class="fa fa-check"></span>
+                        <button type="button" id="btnAceptaMaterial" name="btnAceptaMaterial" class="btn btn-success mt-4" style="background-color: #3f51b5;    border-color: #3f51b5;">
+                            <span class="fa fa-check"></span> AGREGAR
                         </button>
                     </div>
+                    <div class="w-100 my-2"><hr>  </div>
                     <div class="col-12 mt-2">
                         <table id="tblMaterialesMto" class="table table-hover table-sm nowrap" style="width: 100%;">
                             <thead>
@@ -282,41 +286,49 @@
     onOpenOverlay('Cargando...');
     $(document).ready(function () {
         handleEnterDiv(pnlNuevo);
+        handleEnterDiv(mdlAgregaUnidad);
+        handleEnterDiv(mdlAgregaProveedorMto);
 
         btnAgregaProveedorMto.click(function () {
             mdlAgregaProveedorMto.modal('show');
         });
 
         btnGuardaProveedorMto.click(function () {
-            var params = {
-                ID: IDProveedorMto.val(),
-                NOMBRE: NombreProveedorMto.val(),
-                TELEFONO: TelefonoProveedorMto.val()
-            };
-            if (nuevo_proveedor) {
-                params["NUEVO"] = 1;
-            } else {
-                params["NUEVO"] = 2;
-            }
-            $.post('<?php print base_url('OrdenDeCompraMto/onGuardarProveedorMto'); ?>', params).done(function (a) {
-                nuevo_proveedor = true;
-                swal({
-                    title: "ATENCIÓN",
-                    text: "PROVEEDOR GUARDADO",
-                    icon: "success",
-                    buttons: false,
-                    timer: 750
-                }).then(value => {
-                    ProveedoresMto.ajax.reload(function () {
-                        NombreProveedorMto.val('');
-                        TelefonoProveedorMto.val('');
-                        NombreProveedorMto.focus().select();
+            if (NombreProveedorMto.val()) {
+                var params = {
+                    ID: IDProveedorMto.val(),
+                    NOMBRE: NombreProveedorMto.val(),
+                    TELEFONO: TelefonoProveedorMto.val()
+                };
+                if (nuevo_proveedor) {
+                    params["NUEVO"] = 1;
+                } else {
+                    params["NUEVO"] = 2;
+                }
+                $.post('<?php print base_url('OrdenDeCompraMto/onGuardarProveedorMto'); ?>', params).done(function (a) {
+                    nuevo_proveedor = true;
+                    swal({
+                        title: "ATENCIÓN",
+                        text: "PROVEEDOR GUARDADO",
+                        icon: "success",
+                        buttons: false,
+                        timer: 750
+                    }).then(value => {
+                        ProveedoresMto.ajax.reload(function () {
+                            NombreProveedorMto.val('');
+                            TelefonoProveedorMto.val('');
+                            NombreProveedorMto.focus().select();
+                        });
                     });
+                }).fail(function (x) {
+                    console.log(x.responseText);
+                    getError(x);
                 });
-            }).fail(function (x) {
-                console.log(x.responseText);
-                getError(x);
-            });
+            } else {
+                onCampoInvalido(mdlAgregaProveedorMto, "ES NECESARIO ESPECIFICAR UN NOMBRE PARA EL PROVEEDOR", function () {
+                    NombreProveedorMto.focus().select();
+                });
+            }
         });
 
         mdlAgregaUnidad.on('shown.bs.modal', function () {
@@ -349,9 +361,7 @@
         btnImprimeOrdenDeCompraMto.click(function () {
             if (FolioOrdenCompraMto.val()) {
                 onOpenOverlay('');
-                $.when(getOrdenXFolio()).done(function (x) {
-                    onCloseOverlay();
-                });
+                getOrdenXFolio();
             } else {
                 onCampoInvalido(pnlNuevo, "DEBE DE ESPECIFICAR UN FOLIO", function () {
                     FolioOrdenCompraMto.focus();
@@ -360,6 +370,14 @@
         });
 
         UnidadOrdenCompraMto.change(function () {
+            if (UnidadOrdenCompraMto.val()) {
+                onDisable(btnAgregaUnidad);
+                onDisableOnTime(btnAgregaUnidad, 1000);
+                DescripcionOrdenCompraMto.focus();
+            } else {
+                onEnable(btnAgregaUnidad);
+            }
+        }).keydown(function () {
             if (UnidadOrdenCompraMto.val()) {
                 onDisable(btnAgregaUnidad);
                 onDisableOnTime(btnAgregaUnidad, 1000);
@@ -394,7 +412,7 @@
                     getError(x);
                 });
             } else {
-                onCampoInvalido(pnlNuevo, "DEBE DE ESPECIFICAR TODOS LOS CAMPOS REQUERIDOS.", function () {
+                onCampoInvalido(pnlNuevo, "DEBE DE ESPECIFICAR EL NOMBRE DE LA UNIDAD.", function () {
                     mdlAgregaUnidad.find("#NombreUnidad").focus().select();
                 });
             }
@@ -415,6 +433,11 @@
         });
 
         ProveedorOrdenCompraMto.change(function () {
+            if ($(this).val()) {
+                onDisableOnTime(btnAgregaProveedorMto, 1500);
+                DestinoMaterialOrdenCompraMto.focus().select();
+            }
+        }).keydown(function () {
             if ($(this).val()) {
                 onDisableOnTime(btnAgregaProveedorMto, 1000);
                 DestinoMaterialOrdenCompraMto.focus().select();
@@ -495,6 +518,7 @@
         });
 
         btnAceptaMaterial.click(function () {
+            onDisableOnTime(btnAceptaMaterial, 1000);
             if (CantidadOrdenCompraMto.val() && parseFloat(CantidadOrdenCompraMto.val()) > 0) {
                 var total = parseFloat(CantidadOrdenCompraMto.val()) * parseFloat(PrecioOrdenCompraMto.val());
                 MaterialesMto.row.add([0, '<button type="button" class="btn btn-danger btn-sm" style="background-color: #bb0000; border-color: #bb0000;" onclick="onEliminarMaterial(0,this);"><span class="fa fa-trash"></span></button>', CantidadOrdenCompraMto.val(), UnidadOrdenCompraMto.find("option:selected").text(), DescripcionOrdenCompraMto.val(), PrecioOrdenCompraMto.val(), total, 'NUEVO', UnidadOrdenCompraMto.val()]).draw();
@@ -516,8 +540,8 @@
             pnlNuevo.addClass("d-none");
             pnlNuevo.find("input").val("");
             $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
-            Herramientas.ajax.reload(function(){
-                
+            Herramientas.ajax.reload(function () {
+
             });
         });
 
@@ -530,6 +554,12 @@
             MaterialesMto.columns.adjust().draw();
             getUnidadesOrdenDeCompraMto();
             getProveedoresOrdenDeCompraMto();
+            $.getJSON('<?php print base_url("OrdenDeCompraMto/getUltimoFolio"); ?>').done(function (a) {
+                FolioOrdenCompraMto.val(a[0].ULTIMO_FOLIO);
+                FolioOrdenCompraMto.focus().select();
+            }).fail(function (e) {
+                getError(e);
+            });
         });
         var coldefs = [
             {
@@ -576,7 +606,7 @@
             }
         ];
         Herramientas = tblHerramientas.DataTable({
-            "dom": 'Brtip',
+            "dom": 'Brftip',
             "ajax": {
                 "url": '<?php print base_url('OrdenDeCompraMto/getHerramientas'); ?>',
                 "dataSrc": ""
@@ -588,7 +618,9 @@
                 {"data": "FECHA"}/*1*/,
                 {"data": "PROVEEDOR"}/*3*/,
                 {"data": "DESTINO_MATERIAL"}/*4*/,
-                {"data": "OBSERVACIONES"}/*5*/
+                {"data": "OBSERVACIONES"}/*5*/,
+                {"data": "TOTAL"}/*5*/,
+                {"data": "IMPRIME"}/*5*/
             ],
             "columnDefs": coldefs,
             language: lang,
@@ -720,7 +752,27 @@
             FOLIO: FolioOrdenCompraMto.val()
         }).done(function (a) {
             if (a.length > 0) {
+                onCloseOverlay();
                 onImprimirReporteFancyAFC(a, function (a, b) {
+                    FolioOrdenCompraMto.focus().select();
+                });
+            }
+        }).fail(function (x) {
+            getError(x);
+        }).always(function () {
+            onCloseOverlay();
+        });
+    }
+
+    function getOrdenXFolioButton(e) {
+        onOpenOverlay('Generando orden...');
+        $.post('<?php print base_url('OrdenDeCompraMto/getOrdenXFolio'); ?>', {
+            FOLIO: e
+        }).done(function (a) {
+            if (a.length > 0) {
+                onCloseOverlay();
+                onImprimirReporteFancyAFC(a, function (a, b) {
+                    FolioOrdenCompraMto.focus().select();
                 });
             }
         }).fail(function (x) {
@@ -843,6 +895,9 @@
     }
 </script>
 <style>
+    #pnlNuevo input{
+        text-align: center;
+    }
     .card {
         border: none !important;
     }  
