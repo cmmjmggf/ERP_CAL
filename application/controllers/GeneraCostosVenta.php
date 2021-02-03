@@ -627,4 +627,8 @@ class GeneraCostosVenta extends CI_Controller {
         PRINT $jc->getReport();
     }
 
+    public function onActualizarCostosSubfracciones() {
+        print 'entra';
+    }
+
 }

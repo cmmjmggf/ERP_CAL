@@ -31,7 +31,9 @@
                         <button type="button" class="btn btn-primary btn-sm" id="btnCancelar" >
                             <span class="fa fa-arrow-left" ></span> REGRESAR
                         </button>
-
+                        <button type="button" class="btn btn-warning btn-sm" id="btnImprimirSubFraccionesXEstilo">
+                            <span class="fa fa-file-invoice fa-1x"></span> IMPRIMIR
+                        </button>
                     </div>
                 </div>
                 <hr>
@@ -154,6 +156,32 @@
     $(document).ready(function () {
         /*FUNCIONES INICIALES*/
         init();
+
+        pnlDatos.find('#btnImprimirSubFraccionesXEstilo').on("click", function () {
+            pnlDatos.find('#btnImprimir').attr('disabled', true);
+            HoldOn.open({theme: 'sk-cube', message: 'Por favor espere...'});
+            var frm = new FormData();
+            frm.append('Estilo', Estilo);
+            $.ajax({
+                url: master_url + 'onImprimirReporteSubfraccionesXEstilo',
+                type: "POST",
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: frm
+            }).done(function (data, x, jq) {
+                onImprimirReporteFancyAFC((data), function (a, b) {
+                    HoldOn.close();
+                    pnlDatos.find('#btnImprimirSubFraccionesXEstilo').attr('disabled', false);
+                });
+            }).fail(function (x, y, z) {
+                HoldOn.close();
+                console.log(x.responseText);
+                swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
+            }).always(function () {
+                HoldOn.close();
+            });
+        });
 
         pnlTablero.find("#bEstilo").keypress(function (e) {
             if (e.keyCode === 13) {
