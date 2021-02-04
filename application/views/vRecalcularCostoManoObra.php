@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg notdraggable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Calcular Costo de Mano de Obra con Sub-Fraccioens</h5>
+                <h5 class="modal-title">Calcular Costo de Mano de Obra con Sub-Fracciones</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -39,13 +39,29 @@
 
 
         mdlRecalcularCostoManoObra.find('#btnImprimir').on("click", function () {
+
             if (mdlRecalcularCostoManoObra.find("#Fecha").val()) {
-                onActualizarCostosSubfracciones();
+                onDisable(mdlRecalcularCostoManoObra.find('#btnImprimir'));
+                swal({
+                    buttons: ["Cancelar", "Aceptar"],
+                    title: 'Estás Seguro?',
+                    text: "Esta acción modificará los COSTOS DE MANO DE OBRA en los estilos creados a partir de esta fecha",
+                    icon: "warning",
+                    closeOnEsc: false,
+                    closeOnClickOutside: false
+                }).then((action) => {
+                    if (action) {
+                        onActualizarCostosSubfracciones();
+                    } else {
+                        onEnable(mdlRecalcularCostoManoObra.find('#btnImprimir'));
+                    }
+                });
+            } else {
+                mdlRecalcularCostoManoObra.find('#Fecha').focus();
             }
         });
 
         function onActualizarCostosSubfracciones() {
-            onDisable(mdlRecalcularCostoManoObra.find('#btnImprimir'));
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlRecalcularCostoManoObra.find("#frmCaptura")[0]);
             $.ajax({
@@ -57,15 +73,21 @@
                 data: frm
             }).done(function (data, x, jq) {
                 console.log(data);
+                onEnable(mdlRecalcularCostoManoObra.find('#btnImprimir'));
                 if (data.length > 0) {
-
+                    swal({
+                        title: 'INFO',
+                        text: 'PROECESO TERMINADO CORRECTAMENTE',
+                        icon: 'success'
+                    }).then((action) => {
+                        mdlRecalcularCostoManoObra.find('#Fecha').focus();
+                    });
                 } else {
                     swal({
                         title: "ATENCIÓN",
-                        text: "NO EXISTEN DATOS PARA EL PROCESO",
+                        text: "NO EXISTEN ESTILOS DADOS DE ALTA DESPUÉS DE ESTA FECHA",
                         icon: "error"
                     }).then((action) => {
-                        onEnable(mdlRecalcularCostoManoObra.find('#btnImprimir'));
                         mdlRecalcularCostoManoObra.find('#Fecha').focus();
                     });
                 }

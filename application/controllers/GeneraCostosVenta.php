@@ -45,6 +45,55 @@ class GeneraCostosVenta extends CI_Controller {
         }
     }
 
+    public function onActualizarCostosSubfracciones() {
+        $fecha = $this->input->post('Fecha');
+        $Estilos = $this->db->query("select clave as estilo
+                        from estilos
+                        where str_to_date(fechaalta,'%d/%m/%Y') >= str_to_date('$fecha','%d/%m/%Y')
+                        order by clave asc ")->result();
+        if (!empty($Estilos)) {//Si existen estilos empezamos el proceso
+            foreach ($Estilos as $key => $E) {
+                $Estilo = $E->estilo;
+                //verificamos que exista antes en subfraccionesxestilo
+                $SubFraccionesXEstilo = $this->db->query("SELECT
+                                                        SFE.estilo,
+                                                        DATE_FORMAT(CURDATE(),'%d/%m/%Y') as fechaalta,
+                                                        SFE.fraccion as numfrac,
+                                                        ROUND(SUM((P.SueldoBase/2850)* (SFE.tiempoestandar / (SFE.eficiencia))),2) AS costomo,
+                                                        ROUND(SUM((P.SueldoBase/2850)* (SFE.tiempoestandar / (SFE.eficiencia))),2) AS costovta,
+                                                        (select AfectaCostoVTA from fracciones where clave = SFE.fraccion) as afectactovta,
+                                                        'ACTIVO' as estatus
+                                                        FROM subfraccionesxestilo SFE
+                                                        JOIN fracciones S ON S.`Clave` = SFE.`fraccion`
+                                                        JOIN departamentos D ON S.`Departamento` = D.`Clave`
+                                                        JOIN subfracciones SF ON SF.Clave = SFE.subfraccion
+                                                        JOIN puestos P ON P.clave = SF.puesto
+                                                        WHERE SFE.estilo = '{$Estilo}'
+                                                        GROUP BY numfrac
+                                                        ORDER BY ABS(numfrac) ASC ")->result();
+
+                if (!empty($SubFraccionesXEstilo)) {//Si existe entramos a hacer el proceso
+                    //Borramos lo que exista en fraccionesxestilo
+                    $this->db->query("delete from fraccionesxestilo where estilo = '{$Estilo}' ");
+
+                    foreach ($SubFraccionesXEstilo as $key => $SFXE) {
+                        //Guarda los registros que encuentre en sub.fraccionesxestilos
+                        $this->db->insert("fraccionesxestilo", array(
+                            'Estilo' => $SFXE->estilo,
+                            'FechaAlta' => $SFXE->fechaalta,
+                            'Fraccion' => $SFXE->numfrac,
+                            'CostoMO' => $SFXE->costomo,
+                            'CostoVTA' => $SFXE->costovta,
+                            'AfectaCostoVTA' => $SFXE->afectactovta,
+                            'Estatus' => $SFXE->estatus
+                        ));
+                    }
+                }
+            }
+            print '1'; //si hay estilos que procesar se va al cliente para validar
+        }
+    }
+
     public function onActualizarCostos() {
         try {
             $lista = $this->input->post('Lista');
@@ -625,10 +674,6 @@ class GeneraCostosVenta extends CI_Controller {
         $jc->setFilename('REPORTE_COSTOS_LINEA_' . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
-    }
-
-    public function onActualizarCostosSubfracciones() {
-        print 'entra';
     }
 
 }

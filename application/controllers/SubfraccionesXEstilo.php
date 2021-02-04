@@ -153,9 +153,9 @@ class SubfraccionesXEstilo extends CI_Controller {
                                         CONCAT(P.Clave, ' - ',P.Descripcion) AS puesto,
                                         SFE.tiempoestandar,
                                         (SFE.eficiencia*100) AS efi,
-                                        SFE.tiemporeal,
-                                        SFE.sueldobase,
-                                        SFE.costo, "
+                                        SFE.tiempoestandar / (SFE.eficiencia) as tiemporeal,
+                                        P.SueldoBase as sueldobase,
+                                        (P.SueldoBase/2850)* (SFE.tiempoestandar / (SFE.eficiencia)) as costo, "
                                     . 'CONCAT(\'<span class="fa fa-trash fa-lg " onclick="onEliminar(\', SFE.ID, \')">\', \'</span>\') AS Eliminar'
                                     . " FROM subfraccionesxestilo SFE
                                         JOIN fracciones F ON F.Clave = SFE.fraccion

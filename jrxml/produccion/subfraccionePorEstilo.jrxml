@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relacionCoreHiloTejido" language="groovy" pageWidth="612" pageHeight="792" columnWidth="588" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.968683328607428"/>
+	<property name="ireport.zoom" value="1.8433187801425805"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -20,12 +20,14 @@ D.`Clave` as numdepto,
 D.`Descripcion` as nomdepto,
 S.`Clave` as numfrac,
 S.`Descripcion` as nomfrac,
-SUM(SFE.`costo`) AS costo
+ROUND(SUM((P.SueldoBase/2850)* (SFE.tiempoestandar / (SFE.eficiencia))),2) as costo
 FROM subfraccionesxestilo SFE
 JOIN estilos E ON E.`Clave` = SFE.`estilo`
 JOIN lineas L ON E.`Linea` = L.`Clave`
 JOIN fracciones S ON S.`Clave` = SFE.`fraccion`
 JOIN departamentos D ON S.`Departamento` = D.`Clave`
+JOIN subfracciones SF ON SF.Clave = SFE.subfraccion
+JOIN puestos P ON P.clave = SF.puesto
 WHERE SFE.`estilo` = $P{estilo}
 AND S.`AfectaCostoVTA` = 1
 GROUP BY D.`Clave`, S.`Clave`
@@ -37,7 +39,7 @@ ORDER BY ABS(D.`Clave`) , ABS(S.`Clave`) ASC]]>
 	<field name="nomdepto" class="java.lang.String"/>
 	<field name="numfrac" class="java.lang.String"/>
 	<field name="nomfrac" class="java.lang.String"/>
-	<field name="costo" class="java.math.BigDecimal">
+	<field name="costo" class="java.lang.Double">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="costo_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Depto" calculation="Sum">
