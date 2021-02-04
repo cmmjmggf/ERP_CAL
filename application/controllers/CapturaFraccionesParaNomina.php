@@ -125,6 +125,7 @@ class CapturaFraccionesParaNomina extends CI_Controller {
                     } else {//si no existe cobrado por alguien mas
                         if (floatval($pcelula)) {
                             $subtot = (floatval($pcelula) * $PrecioFrac) * floatval($pares);
+                            $subtot = $PrecioFrac * floatval($pares);
                         } else {
                             $subtot = $PrecioFrac * floatval($pares);
                         }
@@ -324,7 +325,14 @@ class CapturaFraccionesParaNomina extends CI_Controller {
     public function onAgregar() {
         try {
             $x = $this->input;
+            $xx = $this->input->post();
+            $fracciones_de_avance = array(96, 100, 113, 102, 114, 103, 61, 60, 127, 51, 299, 300, 396, 397, 402, 401, 499, 500, 601, 600);
 
+            if (in_array(intval($xx['Fraccion']), $fracciones_de_avance)) {
+                print "\n NO SE PUEDEN CAPTURAR FRACCIONES DE AVANCE !!!! \n";
+                $l = new Logs("CAPTURA FRACCIONES PARA NOMINA", "HA INTENTADO CAPTURAR UNA FRACCION DE NOMINA {$xx['Fraccion']} .", $this->session);
+                exit(0);
+            }
 
             $Existe = $this->CapturaFraccionesParaNomina_model->onVerificarFraccionCapturada(
                     $this->input->post('Fraccion'), $this->input->post('Control'), $this->input->post('Empleado'));
@@ -334,30 +342,30 @@ class CapturaFraccionesParaNomina extends CI_Controller {
             }
 
 
-            $origFecha = $x->post('Fecha');
+            $origFecha = $xx['Fecha'];
             $fecha = str_replace('/', '-', $origFecha);
             $nuevaFecha = date("Y-m-d", strtotime($fecha));
 
 
             $data = array(
-                'numeroempleado' => ($x->post('Empleado') !== NULL) ? $x->post('Empleado') : NULL,
+                'numeroempleado' => ($xx['Empleado'] !== NULL) ? $xx['Empleado'] : NULL,
                 'maquila' => 2,
-                'control' => ($x->post('Control') !== NULL) ? $x->post('Control') : NULL,
-                'estilo' => ($x->post('Estilo') !== NULL) ? $x->post('Estilo') : NULL,
-                'numfrac' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
-                'preciofrac' => ($x->post('Precio') !== NULL) ? $x->post('Precio') : NULL,
-                'pares' => ($x->post('Pares') !== NULL) ? $x->post('Pares') : NULL,
-                'subtot' => ($x->post('Subtotal') !== NULL) ? $x->post('Subtotal') : NULL,
-                'depto' => ($x->post('DeptoEmp') !== NULL) ? $x->post('DeptoEmp') : NULL,
+                'control' => ($xx['Control'] !== NULL) ? $xx['Control'] : NULL,
+                'estilo' => ($xx['Estilo'] !== NULL) ? $xx['Estilo'] : NULL,
+                'numfrac' => ($xx['Fraccion'] !== NULL) ? $xx['Fraccion'] : NULL,
+                'preciofrac' => ($xx['Precio'] !== NULL) ? $xx['Precio'] : NULL,
+                'pares' => ($xx['Pares'] !== NULL) ? $xx['Pares'] : NULL,
+                'subtot' => ($xx['Subtotal'] !== NULL) ? $xx['Subtotal'] : NULL,
+                'depto' => ($xx['DeptoEmp'] !== NULL) ? $xx['DeptoEmp'] : NULL,
                 'fecha' => $nuevaFecha,
                 'status' => 1,
-                'semana' => ($x->post('Sem') !== NULL) ? $x->post('Sem') : NULL,
-                'anio' => ($x->post('Ano') !== NULL) ? $x->post('Ano') : NULL,
-                'fraccion' => ($x->post('Fraccion') !== NULL) ? $x->post('Fraccion') : NULL,
+                'semana' => ($xx['Sem'] !== NULL) ? $xx['Sem'] : NULL,
+                'anio' => ($xx['Ano'] !== NULL) ? $xx['Ano'] : NULL,
+                'fraccion' => ($xx['Fraccion'] !== NULL) ? $xx['Fraccion'] : NULL,
                 'modulo' => 'DSTN',
                 "fecha_registro" => Date('d/m/Y h:i:s')
             );
-            if ($x->post('Control') !== '0' && $x->post('Control') !== '') {
+            if ($xx['Control'] !== '0' && $xx['Control'] !== '') {
                 $stsnom = $this->CapturaFraccionesParaNomina_model->onVerificarSemanaNominaCerrada($this->input->post('Sem'), $this->input->post('Ano'));
                 if (!empty($stsnom)) {
                     if ($stsnom[0]->status === '2') {

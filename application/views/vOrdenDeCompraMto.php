@@ -5,7 +5,8 @@
                 <h4 class="card-title"><span class="fa fa-file"></span> ORDEN DE COMPRA MANTENIMIENTO</h4> 
             </div>
             <div class="col-4" align="right">
-                <button type="button" id="btnNuevo" name="btnNuevo" class="btn btn-success">
+                <button type="button" id="btnNuevo" name="btnNuevo" class="btn btn-success" 
+                        style="background-color: #388e3c;    border-color: #388e3c;">
                     <span class="fa fa-star"></span> NUEVO
                 </button>
             </div>
@@ -20,8 +21,9 @@
                         <th scope="col">PROVEEDOR</th>
                         <th scope="col">DESTINO</th>
                         <th scope="col">OBSERVACIONES</th>
+                        <th scope="col">MATERIALES</th>
                         <th scope="col">TOTAL</th>
-                        <th scope="col">-</th>
+                        <th scope="col" class="justify-content-center" align="center">-</th>
                     </tr>
                 </thead>
                 <tbody> 
@@ -39,7 +41,8 @@
             <div class="col-4" align="right">
                 <button type="button" id="btnCancelaODCMto" class="btn btn-danger d-none">
                 </button>
-                <button type="button" id="btnGuardarODCMTO" class="btn btn-success">
+                <button type="button" id="btnGuardarODCMTO" class="btn btn-success" 
+                        style="background-color: #388e3c;    border-color: #388e3c;">
                     <span class="fa fa-save"></span>  GUARDAR ORDEN
                 </button>
             </div>
@@ -600,6 +603,11 @@
         MaterialesMto = tblMaterialesMto.DataTable(xoptions);
         coldefs = [
             {
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            },
+            {
                 "targets": [5],
                 "visible": false,
                 "searchable": false
@@ -619,6 +627,7 @@
                 {"data": "PROVEEDOR"}/*3*/,
                 {"data": "DESTINO_MATERIAL"}/*4*/,
                 {"data": "OBSERVACIONES"}/*5*/,
+                {"data": "MATERIALES"}/*5*/,
                 {"data": "TOTAL"}/*5*/,
                 {"data": "IMPRIME"}/*5*/
             ],
@@ -651,7 +660,7 @@
             }
         ];
         UnidadesMto = tblUnidadesMto.DataTable({
-            "dom": 'Brtip',
+            "dom": 'Brftip',
             "ajax": {
                 "url": '<?php print base_url('OrdenDeCompraMto/getUnidadesOrdenDeCompraMto'); ?>',
                 "dataSrc": ""
@@ -687,7 +696,7 @@
             }
         ];
         ProveedoresMto = tblProveedoresMto.DataTable({
-            "dom": 'Brtip',
+            "dom": 'Brftip',
             "ajax": {
                 "url": '<?php print base_url('OrdenDeCompraMto/getProveedoresOrdenDeCompraMto'); ?>',
                 "dataSrc": ""
@@ -931,5 +940,28 @@
         color: #0099ff !important;
         -ms-transform: scale(2,2); /* IE 9 */
         transform: scale(2,2);
+    }
+    #tblHerramientas tbody td:nth-child(1){
+        color:#d32f2f;
+        font-size: 18px;
+    }
+    #tblHerramientas tbody td:nth-child(4){
+        color:#660099; 
+    }
+    #tblHerramientas tbody tr:hover td{
+        color:#ff9900; 
+        background-color: #000;
+    }
+    #tblHerramientas tbody tr.selected td{
+        color:#ffff00; 
+        background-color: #000;
+    }
+    #tblHerramientas tbody td:nth-child(6){
+        color:#669900; 
+    }
+    #tblHerramientas tbody td{
+        text-align: center;
+        align-content: center;
+        font-style: italic !important;
     }
 </style>

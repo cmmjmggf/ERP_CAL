@@ -27,7 +27,8 @@ class OrdenDeCompraMto extends CI_Controller {
                                     . " O.DestinoMaterial AS DESTINO_MATERIAL, CONCAT(SUBSTRING(O.Observaciones,1,35),\"...\") AS OBSERVACIONES, "
                                     . "O.Folio AS FOLIO, "
                    . "CONCAT(\"$\",FORMAT((SELECT SUM(Cantidad*Precio)  "
-                   . "FROM ordendecompramto_detalle AS OD WHERE OD.OrdenID = O.ID),2)) AS TOTAL, "
+                   . "FROM ordendecompramto_detalle AS OD WHERE OD.OrdenID = O.ID),2)) AS TOTAL,
+CONCAT(SUBSTR((SELECT GROUP_CONCAT(CONCAT(Cantidad,\"-\",Descripcion)) FROM ordendecompramto_detalle AS OD WHERE OD.OrdenID = O.ID),1,35),\"...\")  AS MATERIALES,   "
                    . "CONCAT('<button type=\"button\" onclick=\"getOrdenXFolioButton(\'',O.Folio,'\')\" class=\"btn btn-info btn-sm\"><span class=\"fa fa-print\"></span> IMPRIMIR</button>') AS IMPRIME FROM ordendecompramto AS O ORDER BY O.ID DESC ")->result();
                 
             print json_encode($data);
