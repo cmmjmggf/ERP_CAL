@@ -10,7 +10,7 @@
         /*padding: 4px 4px 4px 4px !important;*/
         padding: 2px 2px 2px 2px !important;
     }
-</style>
+</style> 
 <script>
     var valido = false;
     var base_url = "<?php print base_url(); ?>";
@@ -1810,19 +1810,29 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
         });
         $("body").find("input:enabled,textarea:enabled").addClass('campo_no_valido').attr('disabled', true);
         onBeep(2);
-        swal('ATENCIÓN', msj, 'warning').then(function (v) {
-            $.each($("body").find("select.campo_no_valido:disabled"), function (k, v) {
-                $(v).removeClass('campo_no_valido');
-                onEnable($(v));
+        setTimeout(function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'ATENCIÓN',
+                text: msj,
+                allowEnterKey: true,
+                allowOutsideClick: false,
+                willClose: () => {
+                    $.each($("body").find("select.campo_no_valido:disabled"), function (k, v) {
+                        $(v).removeClass('campo_no_valido');
+                        onEnable($(v));
+                    });
+                    $.each($("body").find("button.boton_no_valido:disabled"), function (k, v) {
+                        $(v).removeClass('disabledForms');
+                        $(v).removeClass('boton_no_valido');
+                        onEnable($(v));
+                    });
+                    $("body").find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").removeClass('campo_no_valido').attr('disabled', false);
+                    pnl.find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").removeClass('campo_no_valido').attr('disabled', false);
+                    fun();
+                }
             });
-            $.each($("body").find("button.boton_no_valido:disabled"), function (k, v) {
-                $(v).removeClass('disabledForms');
-                $(v).removeClass('boton_no_valido');
-                onEnable($(v));
-            });
-            $("body").find("input.campo_no_valido:disabled,textarea.campo_no_valido:disabled").removeClass('campo_no_valido').attr('disabled', false);
-            fun();
-        });
+        }, 10);
     }
 
     function onDesabilitarPanel(pnl) {
@@ -1918,7 +1928,7 @@ if (!is_null($this->session->TEMA) && $this->session->TEMA === "CLÁSICO") {
                 break;
         }
     }
-    
+
     function onDisableOnTime(e, tiempo) {
         switch (e[0].tagName) {
             case "INPUT":
