@@ -93,7 +93,8 @@
         <!--Masked number format money etc-->
         <script src="<?php print base_url(); ?>js/jquery.maskMoney.min.js"></script>
         <!--Modales simplificados-->
-        <script src="<?php print base_url(); ?>js/swal/sweetalert.min.js"></script> 
+        <script src="<?php print base_url(); ?>js/swal/sweetalert.min.js"></script>
+        <script src="<?php print base_url('js/swal2/sweetalert2@10.js'); ?>"></script>
 
         <!--Notifiers-->
         <script src="<?php echo base_url(); ?>js/notify/bootstrap-notify-3.1.3/bootstrap-notify.min.js"></script>
