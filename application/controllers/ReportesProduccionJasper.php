@@ -619,6 +619,9 @@ class ReportesProduccionJasper extends CI_Controller {
             case '5':
                 $jc->setJasperurl('jrxml\produccion\avancePorDeptoConMaquilaPlantilla.jasper');
                 break;
+            case '7':
+                $jc->setJasperurl('jrxml\produccion\avancePorFechaEntrega.jasper');
+                break;
         }
 
         $jc->setParametros($parametros);

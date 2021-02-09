@@ -105,6 +105,25 @@ class ReportesKardex_model extends CI_Model {
         }
     }
 
+    public function getExistenciaAnterior($Articulo, $fecha, $aFecha, $Texto_Mes_Anterior) {
+        try {
+            return $this->db->query("select
+                            (SELECT {$Texto_Mes_Anterior} FROM articulos WHERE Clave = '{$Articulo}') AS SaldoInicial,
+                            (SELECT P{$Texto_Mes_Anterior} FROM articulos WHERE Clave = '{$Articulo}') AS PrecioInicial,
+                                G.Clave AS ClaveGrupo, G.Nombre AS NombreGrupo,
+                                A.Clave AS ClaveArt, A.Descripcion AS Articulo,
+                                U.Descripcion AS Unidad
+                                from articulos AS A
+                                join grupos G ON G.Clave =  A.Grupo
+                                join unidades U ON U.Clave = A.UnidadMedida
+                                where A.Clave = '{$Articulo}'
+                                limit 1 "
+                            . "")->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     /* KARDEX POR PROVEEDOR */
 
     public function getGruposPorProveedor($Proveedor, $fecha, $aFecha, $Texto_Mes_Anterior) {

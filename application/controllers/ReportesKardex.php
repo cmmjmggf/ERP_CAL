@@ -926,6 +926,93 @@ class ReportesKardex extends CI_Controller {
             }
             $pdf->Output($url);
             print base_url() . $url;
+        } else {//Cuando no hay datos trae la existencia anterior nada más
+            $SoloExistenciaAnterior = $cm->getExistenciaAnterior($Articulo, $fecha, $aFecha, $Texto_Mes_Anterior);
+
+
+            $pdf = new PDF('P', 'mm', array(215.9, 279.4));
+            $pdf->setFecha($fecha);
+            $pdf->setAFecha($aFecha);
+            $pdf->AddPage();
+            $pdf->SetAutoPageBreak(true, 4);
+
+            $pdf->SetLineWidth(0.5);
+            $pdf->SetX(5);
+            $pdf->SetFont('Calibri', 'B', 7);
+            $pdf->Cell(15, 3.5, utf8_decode('Grupo: '), 'B'/* BORDE */, 0, 'L');
+            $pdf->SetX(20);
+            $pdf->SetFont('Calibri', '', 7);
+            $pdf->Cell(50, 3.5, utf8_decode($SoloExistenciaAnterior[0]->ClaveGrupo . '  ' . $SoloExistenciaAnterior[0]->NombreGrupo), 'B'/* BORDE */, 1, 'L');
+
+            $pdf->SetX(5);
+            $pdf->SetFont('Calibri', 'B', 7);
+            $pdf->Cell(15, 3.5, utf8_decode('Artículo: '), 'B'/* BORDE */, 0, 'L');
+            $pdf->SetX(20);
+            $pdf->SetFont('Calibri', '', 7);
+            $pdf->Cell(90, 3.5, utf8_decode($SoloExistenciaAnterior[0]->ClaveArt . '  ' . $SoloExistenciaAnterior[0]->Articulo), 'B'/* BORDE */, 0, 'L');
+            $pdf->SetX(110);
+            $pdf->SetFont('Calibri', 'B', 7);
+            $pdf->Cell(15, 3.5, utf8_decode($SoloExistenciaAnterior[0]->Unidad), 'B'/* BORDE */, 1, 'C');
+
+            $pdf->SetLineWidth(0.2);
+            $pdf->SetFont('Calibri', '', 7);
+
+            $Total_Sub = 0;
+            $Total_Ent = 0;
+            $Total_Ent_P = 0;
+            $Total_Sal = 0;
+            $Total_Sal_P = 0;
+
+            $pdf->SetFont('Calibri', 'B', 7);
+            $pdf->SetX(5);
+
+            $pdf->SetLineWidth(0.5);
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(33, 3.5, "Saldo Inicial de $Texto_Mes:", 'LB'/* BORDE */, 0, 'L');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(15, 3.5, number_format($SoloExistenciaAnterior[0]->SaldoInicial, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(15, 3.5, '$' . number_format($SoloExistenciaAnterior[0]->PrecioInicial, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(15, 3.5, '$' . number_format($SoloExistenciaAnterior[0]->SaldoInicial * $SoloExistenciaAnterior[0]->PrecioInicial, 2, ".", ","), 'BR'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(15, 3.5, '$' . number_format($Total_Sub, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(17, 3.5, number_format($Total_Ent, 2, ".", ","), 'LB'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(17, 3.5, '$' . number_format($Total_Ent_P, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(17, 3.5, number_format($Total_Sal, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(17, 3.5, '$' . number_format($Total_Sal_P, 2, ".", ","), 'RB'/* BORDE */, 0, 'R');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(30, 3.5, 'Existencia Actual: ', 'B'/* BORDE */, 0, 'L');
+
+            $pdf->SetX($pdf->GetX());
+            $pdf->Cell(15, 3.5, number_format($SoloExistenciaAnterior[0]->SaldoInicial + $Total_Ent - $Total_Sal, 2, ".", ","), 'BR'/* BORDE */, 1, 'L');
+
+            /* FIN RESUMEN */
+            $path = 'uploads/Reportes/Kardex';
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            $file_name = "KARDEX DE ARTICULOS " . ' ' . date("d-m-Y his");
+            $url = $path . '/' . $file_name . '.pdf';
+            /* Borramos el archivo anterior */
+            if (delete_files('uploads/Reportes/Kardex/')) {
+                /* ELIMINA LA EXISTENCIA DE CUALQUIER ARCHIVO EN EL DIRECTORIO */
+            }
+            $pdf->Output($url);
+            print base_url() . $url;
         }
     }
 

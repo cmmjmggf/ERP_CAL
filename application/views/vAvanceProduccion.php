@@ -13,7 +13,7 @@
                         <div class="col-6">
                             <label>Año</label>
                             <input type="text" maxlength="4" class="form-control form-control-sm numbersOnly" id="Ano" name="Ano" >
-                        </div> 
+                        </div>
                         <div class="w-100"></div>
                         <div class="col-6">
                             <label>De la maq.</label>
@@ -30,16 +30,16 @@
                         <div class="col-6">
                             <label>A la sem.</label>
                             <input type="text" maxlength="2" class="form-control form-control-sm numbersOnly" id="aSem" name="aSem" >
-                        </div>  
+                        </div>
                         <div class="col-12 col-sm-6  mt-3">
                             <div class="custom-control custom-checkbox  ">
                                 <input type="checkbox" class="custom-control-input" id="TresDias">
                                 <label class="custom-control-label text-info labelCheck" for="TresDias">+3 Días</label>
                             </div>
-                        </div>  
+                        </div>
                         <div class="col-12">
                             <label class="text-danger">Nota. Seleccione un Tipo/Filtro, en caso de ser necesario</label>
-                        </div> 
+                        </div>
                         <div class="col-12 col-sm-12">
                             <label>Tipo/Filtro</label>
                             <select class="form-control form-control-sm required selectize" id="Tipo" name="Tipo" >
@@ -50,6 +50,7 @@
                                 <option value="4">4 ORDENADO POR LINEA/FECHA ENTREGA</option>
                                 <option value="5">5 CON MAQUILADORAS</option>
                                 <option value="6">6 PRIORIDAD CUARENTENA</option>
+                                <option value="7">7 ORDENADO POR FECHA ENTREGA</option>
                             </select>
                         </div>
                         <div class="col-12">
@@ -58,7 +59,7 @@
                                 <?php
                                 $anio = Date('Y');
                                 $deptos = $this->db->query("SELECT
-PE.stsavan as ClaveDepto, 
+PE.stsavan as ClaveDepto,
 UPPER(
 case
 when (PE.stsavan  = 1) then 'Programado'
@@ -78,7 +79,7 @@ when (PE.stsavan = 9) then 'Montado'
 when (PE.stsavan = 10) then 'Adorno'
 when (PE.stsavan = 11) then 'Alm-Adorno'
 when (PE.stsavan = 12) then 'Prd-Termi'
-end)  as Departamento,  
+end)  as Departamento,
 (CASE
 WHEN PE.stsavan = 1 THEN 1
 WHEN PE.stsavan = 2 THEN 2
@@ -98,11 +99,11 @@ WHEN PE.stsavan = 10 THEN 15
 WHEN PE.stsavan = 11 THEN 16
 WHEN PE.stsavan = 12 THEN 17
 WHEN PE.stsavan = 13 THEN 18
-END)  AS DEPTO_N 
-FROM pedidox PE 
+END)  AS DEPTO_N
+FROM pedidox PE
 LEFT JOIN avaprd A on A.contped = PE.control LEFT JOIN estilos E on E.Clave = PE.Estilo
 LEFT JOIN lineas L on L.clave = E.Linea LEFT JOIN clientes CT on CT.Clave = PE.Cliente
-LEFT JOIN programacion PR on PR.control = PE.control AND PR.frac = 100 WHERE stsavan NOT IN (0,13,14) 
+LEFT JOIN programacion PR on PR.control = PE.control AND PR.frac = 100 WHERE stsavan NOT IN (0,13,14)
 AND PE.ano = {$anio} GROUP BY PE.stsavan ORDER BY DEPTO_N, PE.control ASC;")->result();
                                 foreach ($deptos as $k => $v) {
                                     print "<option value='{$v->ClaveDepto}'>{$v->ClaveDepto} {$v->Departamento}</option>";
