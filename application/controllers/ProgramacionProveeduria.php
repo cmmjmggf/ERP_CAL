@@ -29,7 +29,7 @@ class ProgramacionProveeduria extends CI_Controller {
             $x = $this->input->get();
             $this->db->select("
                 CONCAT(\"<div class='checkbox-big' style=' cursor:pointer;'>
-            <label style='font-size: 2em; cursor:pointer;'>
+            <label style='font-size: 22px; cursor:pointer;'>
                 <input type='checkbox' id='chk\",CP.ID,\"' onClick='onCalcularMontoSeleccionado()' value='\",CP.ID,\"'>
                 <span class='cr'><i class='cr-icon fa fa-check fa-lg' style='cursor:pointer;'></i></span> 
             </label>

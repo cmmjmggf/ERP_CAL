@@ -37,7 +37,7 @@
                 <label>Al Proveedor</label> 
                 <div class="row">
                     <div class="col-3">
-                        <input type="text" class="form-control form-control-sm  numbersOnly " id="PPClaveAlProveedor" name="PPClaveAlProveedor" maxlength="5" required="">
+                        <input type="text" class="form-control form-control-sm  numbersOnly " id="PPClaveAlProveedor" name="PPClaveAlProveedor" maxlength="5">
                     </div>
                     <div class="col-9">
                         <select id="PPAlProveedor" name="PPAlProveedor" class="form-control form-control-sm required" required="" >
@@ -53,7 +53,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Tipo</label>
-                <select class="form-control form-control-sm required selectize" id="PPTipo" name="PPTipo" >
+                <select class="form-control form-control-sm" id="PPTipo" name="PPTipo" >
                     <option value=""></option>
                     <option value="0">0 DIRECTAS</option>
                     <option value="10">10 PIEL Y FORRO</option>
@@ -158,31 +158,38 @@
     $(document).ready(function () {
 
         btnImprimePP.click(function () {
+            var rows = tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end)"),
+                    rows_checked = rows.find("td:nth-child(1) input[type='checkbox']:checked");
             if (PPTP.val() && PPClaveDelProveedor.val() && PPClaveAlProveedor.val()) {
-                onOpenOverlay('Generando reporte...');
-                onDisableOnTime(btnImprimePP, 500);
-                var movimientos = [];
-                $.each(tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end)"), function (k, v) {
-                    var row = $(v).find("td");
-                    var is_checked = row.eq(0).find("input[type='checkbox']");
-                    if (is_checked[0].checked) {
-                        var r = AntiguedadSaldosDelProveedor.row(v).data();
+                if (rows_checked.length > 0) {
+                    onOpenOverlay('Generando reporte...');
+                    onDisableOnTime(btnImprimePP, 500);
+                    var movimientos = [];
+                    $.each(rows.find("td:nth-child(1) input[type='checkbox']:checked"), function (k, v) {
+                        var r = AntiguedadSaldosDelProveedor.row($(v).parent().parent().parent().parent()).data();
                         movimientos.push(r.ID);
-                    }
-                });
-                console.log(movimientos);
-                $.post('<?php print base_url('ProgramacionProveeduria/onImprimirAntiguedadDeSaldos'); ?>', {
-                    MOVIMIENTOS: JSON.stringify(movimientos),
-                }).done(function (a) {
-                    if (a.length > 0) {
-                        onImprimirReporteFancyAFC(a, function (a, b) {
-                        });
-                    }
-                }).fail(function (x) {
-                    getError(x);
-                }).always(function () {
-                    onCloseOverlay();
-                });
+                    });
+                    $.post('<?php print base_url('ProgramacionProveeduria/onImprimirAntiguedadDeSaldos'); ?>', {
+                        MOVIMIENTOS: JSON.stringify(movimientos),
+                    }).done(function (a) {
+                        if (a.length > 0) {
+                            onImprimirReporteFancyAFC(a, function (a, b) {
+                            });
+                        }
+                    }).fail(function (x) {
+                        getError(x);
+                    }).always(function () {
+                        onCloseOverlay();
+                    });
+                } else {
+                    onCampoInvalidoSW2(pnlTablero, "DEBE DE SELECCIONAR AL MENOS UN MOVIMIENTO.", function () {
+                        rows.find("td:nth-child(1)").addClass("movimiento-no-seleccionado");
+                        setTimeout(function () {
+                            rows.find("td:nth-child(1)").removeClass("movimiento-no-seleccionado");
+                        }, 2000);
+                    });
+                    return;
+                }
             } else {
                 if (!PPTP.val()) {
                     onCampoInvalidoSW2(pnlTablero, "DEBE DE ESPECIFICAR UN TP(1,2)", function () {
@@ -309,7 +316,7 @@
             <td>' + IMPORTE_TRES + '</td><td>' + IMPORTE_CUATRO + '</td>\n\
             <td>' + IMPORTE_CINCO + '</td><td>' + IMPORTE_SEIS + '</td>\n\
             <td>' + IMPORTE_SIETE + '</td><td>' + IMPORTE_OCHO + '</td>\n\
-                                    <td>' + IMPORTE_NUEVE + '</td></tr>');
+                                <td>' + IMPORTE_NUEVE + '</td></tr>');
                 },
                 dataSrc: "ProveedorF"
             },
@@ -444,6 +451,28 @@
 </script>
 
 <style>
+    .movimiento-no-seleccionado{
+        background:red;
+        animation:movns 0.25s;
+        -moz-animation:movns 0.25s infinite; /* Firefox */
+        -webkit-animation:movns 0.25s infinite; /* Safari and Chrome */
+    }
+
+
+    @-moz-keyframes movns /* Firefox */
+    {
+        0%   {background:red;}
+        50%  {background:yellow;}
+        100%   {background:red;}
+    }
+
+    @-webkit-keyframes movns /* Firefox */
+    {
+        0%   {background:red;}
+        50%  {background:yellow;}
+        100%   {background:red;}
+    }
+
     #tblAntiguedadSaldosDelProveedor_info{
         padding-top: 0px;
     }
@@ -518,6 +547,11 @@
         text-align: center;
         font-size: 17px;
         justify-content: center;
+    }      
+    #tblAntiguedadSaldosDelProveedor tbody tr td:nth-child(3),  
+    #tblAntiguedadSaldosDelProveedor tbody tr td:nth-child(4){ 
+        text-align: center !important; 
+        justify-content: center !important;
     }    
     table.dataTable tr.group-start td {
         font-style: italic;
