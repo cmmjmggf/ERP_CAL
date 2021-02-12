@@ -209,7 +209,14 @@ IFNULL(CT.RazonS ,'N/E') AS ClienteNombre,
 date_format(str_to_date(PE.FechaEntrega,'%d/%m/%Y'),'%d/%m/%y') AS FECHA_ENTREGA,
 PR.semana,
 PR.diaprg,
-E.Foto AS FOTO, 
+
+(SELECT CASE 
+WHEN CC.Foto IS NULL THEN E.Foto 
+WHEN CC.Foto IS NOT NULL THEN CC.Foto  
+END FROM colores AS CC 
+WHERE CC.Estilo = E.Clave AND PE.Color = CC.Clave LIMIT 1) AS FOTO,
+
+E.Foto AS FOTOX, 
 (select sum(CantidadMov) from movarticulos WHERE control = PE.Control and tposuplen = 1) AS suela", false)->from("pedidox PE")
                     ->join("avaprd A", "A.contped = PE.control", "left")
                     ->join("estilos E", "E.Clave = PE.Estilo", "left")

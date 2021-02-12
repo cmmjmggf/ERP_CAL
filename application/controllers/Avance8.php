@@ -626,7 +626,7 @@ class Avance8 extends CI_Controller {
                                 $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(96)")->result();
                                 break;
                             default:
-                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
+                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100,101)")->result();
                                 break;
                         }
                         if (intval($check_corte[0]->EXISTE) === 0) {

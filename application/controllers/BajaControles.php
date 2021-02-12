@@ -88,4 +88,13 @@ class BajaControles extends CI_Controller {
         }
     }
 
+    public function getCantidadDeParesXFactura() {
+        try {
+            $x = $this->input->get();
+            print json_encode($this->db->query("SELECT COUNT(*) AS EXISTE, IFNULL(SUM(CV.Pares),0) AS PARES, CV.Control AS CONTROL FROM controlesvarios AS CV WHERE CV.Factura = {$x['FACTURA']} ORDER BY ID DESC")->result());
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

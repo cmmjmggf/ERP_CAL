@@ -326,14 +326,25 @@ class CapturaFraccionesParaNomina extends CI_Controller {
         try {
             $x = $this->input;
             $xx = $this->input->post();
-            $fracciones_de_avance = array(96, 100, 113, 102, 114, 103, 61, 60, 127, 51, 299, 300, 396, 397, 402, 401, 499, 500, 601, 600);
-
-            if (in_array(intval($xx['Fraccion']), $fracciones_de_avance)) {
-                print "\n NO SE PUEDEN CAPTURAR FRACCIONES DE AVANCE !!!! \n";
-                $l = new Logs("CAPTURA FRACCIONES PARA NOMINA", "HA INTENTADO CAPTURAR UNA FRACCION DE NOMINA {$xx['Fraccion']} .", $this->session);
-                exit(0);
+            $DIA = $this->db->query("SELECT 
+    NOW() AS FECHA,
+    CASE
+        WHEN UPPER(DAYNAME(NOW())) = 'MONDAY' THEN 'LUNES'
+        WHEN UPPER(DAYNAME(NOW())) = 'TUESDAY' THEN 'MARTES'
+        WHEN UPPER(DAYNAME(NOW())) = 'WEDNESDAY' THEN 'MIERCOLES'
+        WHEN UPPER(DAYNAME(NOW())) = 'THURSDAY' THEN 'JUEVES'
+        WHEN UPPER(DAYNAME(NOW())) = 'FRIDAY' THEN 'VIERNES'
+        WHEN UPPER(DAYNAME(NOW())) = 'SATURDAY' THEN 'SABADO'
+        WHEN UPPER(DAYNAME(NOW())) = 'SUNDAY' THEN 'DOMINGO'
+    END AS NOMBRE_DIA")->result();
+            if ($this->session->TipoAcceso !== "SUPER ADMINISTRADOR" && $DIA[0]->NOMBRE_DIA !== "JUEVES") {
+                $fracciones_de_avance = array(96, 100, 113, 102, 114, 103, 61, 60, 127, 51, 396, 397, 402, 401, 499, 500, 601, 600);
+                if (in_array(intval($xx['Fraccion']), $fracciones_de_avance)) {
+                    print "\n NO SE PUEDEN CAPTURAR FRACCIONES DE AVANCE !!!! \n";
+                    $l = new Logs("CAPTURA FRACCIONES PARA NOMINA", "HA INTENTADO CAPTURAR UNA FRACCION DE NOMINA {$xx['Fraccion']} .", $this->session);
+                    exit(0);
+                }
             }
-
             $Existe = $this->CapturaFraccionesParaNomina_model->onVerificarFraccionCapturada(
                     $this->input->post('Fraccion'), $this->input->post('Control'), $this->input->post('Empleado'));
             if (!empty($Existe)) {

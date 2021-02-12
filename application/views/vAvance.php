@@ -822,6 +822,10 @@
             }
         });
 
+        mdlImprimePagoCelulasMontado.on('hidden.bs.modal', function () {
+            onClearPanelInputSelect(mdlImprimePagoCelulasMontado);
+        });
+
         mdlImprimePagoCelulasMontado.on('shown.bs.modal', function () {
             FechaPagoCelulasMontado.focus().select();
         });
