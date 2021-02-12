@@ -93,13 +93,13 @@
                     <tbody></tbody>
                     <tfoot>
                         <tr style="background-color: #000 !important;
-        color: #ffff00 !important;">
+                            color: #ffff00 !important;">
                             <td></td>
                             <td></td>
-                            
+
                             <td class="font-weight-bold" colspan="5">PARES TOTALES</td> 
                             <td class="font-weight-bold" colspan="3">0</td>   
-                              
+
                             <td></td>   
                             <td></td>   
                             <td></td>   
@@ -226,53 +226,51 @@
                 var api = this.api();
                 var pares = 0;
                 $.each(api.rows().data(), function (k, v) {
-                    console.log(v);
                     pares += parseFloat(v.PARES);
                 });
-                $(api.column(7).footer()).html("<span class='font-weight-bold'>"+pares+"</span>");
+                $(api.column(7).footer()).html("<span class='font-weight-bold'>" + pares + "</span>");
             }
         });
-        tblAvances.on('click', 'tr', function () { 
-            var row = Avances.row(this).data();
-            console.log(row);
+        tblAvances.on('click', 'tr', function () {
+            var row = Avances.row(this).data(); 
         });
         tblAvances.on('click', 'td', function () {
             var row = Avances.row(this).data();
-            console.log('tr td', $(this).text(), $(this).index(), row);
+//            console.log('tr td', $(this).text(), $(this).index(), row);
             switch (parseInt($(this).index())) {
                 case 11:
                     var estilo = $(this).text();
                     if (estilo !== '') {
-                        onVerEstilo('<?php print base_url(); ?>/' + row.FOTO, estilo);
+                        onVerEstilo('<?php print base_url(); ?>/' + row.FOTO, estilo, row.COLOR);
                     } else {
-                        onVerEstilo(imagen_por_defecto, estilo);
+                        onVerEstilo(imagen_por_defecto, estilo, row.COLOR);
                     }
                     break;
             }
         });
     });
 
-    function onVerEstilo(estilo_url, estilo) {
+    function onVerEstilo(estilo_url, estilo, color) {
         $.notify({
-            mouse_over: null,
+            mouse_over: "pause",
             allow_dismiss: true,
             newest_on_top: false,
-            showProgressbar: false,
+            showProgressbar: true,
             animate: {
-                enter: 'animated bounceInDown',
-                exit: 'animated bounceOutUp'
+                enter: 'animated flipInY',
+                exit: 'animated flipOutX'
             },
             icon: estilo_url,
-            title: 'ESTILO',
-            message: estilo,
+            title: 'ESTILO ' + estilo,
+            message: color,
             target: '_blank'
         }, {
-            delay: 2000, 
+            delay: 3000,
             icon_type: 'image',
-            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" style="background: #03103a; ">' +
-                    '<a href="'+estilo_url+'" data-fancybox="images"><img data-notify="icon" class="img-fluid rounded "></a>' +
-                    '<div class="w-100  text-center"><span data-notify="title" style="font-size: 22px" class="font-weight-bold">{1}</span></div>' +
-                    '<p data-notify="message" class="font-weight-bold text-center" style="font-size: 22px">{2}</p>' +
+            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" style="background: #000; ">' +
+                    '<a href="' + estilo_url + '" data-fancybox="images"><img data-notify="icon" class="img-fluid rounded "></a>' +
+                    '<div class="w-100  text-center"><span data-notify="title" style="font-size: 22px;  font-style: italic;" class="font-weight-bold">{1}</span></div>' +
+                    '<p data-notify="message" class="font-weight-bold text-center" style="font-size: 22px; font-style: italic;">{2}</p>' +
                     '</div>'
         });
     }
@@ -319,5 +317,8 @@
     #tblAvances tfoot tr, #tblAvances tfoot tr td:nth-child(8)#tblAvances tfoot tr:hover, #tblAvances tfoot tr:hover td:nth-child(8){
         background-color: #000 !important;
         color: #ffff00 !important;
+    }
+    div[data-notify="container"].alert {
+        box-shadow:0 4px 8px 0 rgb(0 0 0 / 80%), 0 6px 20px 0 rgb(0 0 0 / 59%) !important;
     }
 </style>
