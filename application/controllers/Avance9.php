@@ -322,11 +322,11 @@ class Avance9 extends CI_Controller {
             switch ($url->segment(2)) {
                 case 1:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "96,99,100"));
-                    if ($x['SEMANA_FILTRO'] !== '') {
-                        $this->db->where("FACN.numfrac IN(80,96,99,100,102,113,114,60,103,299,300)", null, false);
-                    } else {
-                        $this->db->where("FACN.numfrac IN(80,96,99,100,102,113,114,60,103,299,300) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
-                    }
+//                    if ($x['SEMANA_FILTRO'] !== '') {
+//                        $this->db->where("FACN.numfrac IN(80,96,99,100,102,113,114,60,103,299,300)", null, false);
+//                    } else {
+//                        $this->db->where("FACN.numfrac IN(80,96,99,100,102,113,114,60,103,299,300) AND DATEDIFF(str_to_date(now(),'%Y-%m-%d'),str_to_date(FACN.fecha,'%Y-%m-%d')) <=30", null, false);
+//                    }
                     break;
                 case 2:
 //                    print json_encode($this->axepn->getFraccionesPagoNomina($x->post('EMPLEADO'), "51, 24, 205, 80, 106, 333, 61, 78, 198, 397, 306, 502, 62, 204, 127, 34, 337"));
@@ -726,7 +726,7 @@ class Avance9 extends CI_Controller {
                                 }
                                 break;
                             default:
-                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100)")->result();
+                                $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F  WHERE F.control = {$xXx['CONTROL']} AND F.numfrac IN(100,101)")->result();
 
                                 if (intval($check_corte[0]->EXISTE) === 0) {
                                     PRINT "NO TIENE CORTE O NO TIENE ESTE AVANCE" . intval($control_muestra[0]->Maquila);
@@ -837,7 +837,7 @@ class Avance9 extends CI_Controller {
                                 $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
                                 $data["modulo"] = 'A9';
                                 /* PAGAR LA FRACCION 80 AL EMPLEADO */
-                                $this->db->insert('fracpagnomina', $data);
+//                                $this->db->insert('fracpagnomina', $data);
                             }
                             print json_encode(array("AVANZO" => 1, "RETORNO" => 1));
                         }
@@ -899,9 +899,7 @@ class Avance9 extends CI_Controller {
                             }
                         }
 
-                        $rebajadores = array(49, 1894, 3105);
-                        $rebajadores = array(49, 3105, 3134);
-                        $rebajadores = array(49, 3105, 3149);
+                        $rebajadores = array(49, 3105, 3154);
 
                         if (in_array(intval($xXx['NUMERO_EMPLEADO']), $rebajadores)) {
                             /* REVISAR SI LA FRACCION "102 RAYADO" NO HA SIDO PAGADA A OTRO EMPLEADO */
@@ -1135,14 +1133,14 @@ class Avance9 extends CI_Controller {
             $x = $this->input->get();
             $avance_pago = array();
             /* 1 REVISAR SI YA ESTA COBRADO POR CORTE FRACCION 100 */
-            $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,96) AND F.control = {$x['CONTROL']} LIMIT 1";
+            $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,96,101) AND F.control = {$x['CONTROL']} LIMIT 1";
             $revisa_cobro_de_corte = $this->db->query($sql)->result();
             if (intval($revisa_cobro_de_corte[0]->EXISTE) >= 1) {
                 $avance_pago['COBRO_CORTE'] = "SI";
                 $avance_pago['PUEDE_AVANZAR_A_RAYADO'] = "SI";
                 $avance_pago['PUEDE_AVANZAR_A_RAYADO_VALIDA'] = 1;
             } else {
-                $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac (102,113) AND F.control = {$x['CONTROL']} LIMIT 1";
+                $sql = "SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(102,113) AND F.control = {$x['CONTROL']} LIMIT 1";
                 $revisa_cobro = $this->db->query($sql)->result();
                 if (intval($revisa_cobro[0]->EXISTE) === 0 && intval($revisa_cobro_de_corte[0]->EXISTE) >= 1) {
                     $avance_pago['COBRO_CORTE'] = "SI";
