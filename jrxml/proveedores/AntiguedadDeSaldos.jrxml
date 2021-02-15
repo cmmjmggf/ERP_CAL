@@ -57,6 +57,7 @@
         WHERE
             P.Clave = CP.Proveedor) AS PLAZO,
 (SELECT CONCAT(P.Clave, ' ', IFNULL(P.NombreF, '')) FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS ProveedorF,
+(SELECT  P.NombreF  FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS NombreF_orden,
 (SELECT CASE WHEN P.CtaCheques = 0 OR P.CtaCheques = "0" THEN "-" ELSE P.CtaCheques END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS CtaCheques,
 (SELECT  CASE WHEN P.Banco= 0 OR P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS Banco
 FROM
@@ -65,7 +66,7 @@ WHERE `CP`.`Estatus` IN ('SIN PAGAR' , 'PENDIENTE')
         AND CP.Saldo_Doc > 1
         AND CP.ID IN($P!{MOVIMIENTOS})
 GROUP BY CP.Proveedor
-ORDER BY ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` ASC , ABS(Dias) DESC , `CP`.`Doc` ASC]]>
+ORDER BY NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` ASC , ABS(Dias) DESC , `CP`.`Doc` ASC]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -103,6 +104,7 @@ ORDER BY ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` ASC , ABS(Dias) DESC
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ProveedorF" class="java.lang.String"/>
+	<field name="NombreF_orden" class="java.lang.String"/>
 	<field name="CtaCheques" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>

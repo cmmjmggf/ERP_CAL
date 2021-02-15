@@ -98,6 +98,7 @@
                             <th scope="col">DOC</th> 
                             <th scope="col">FECHA</th> 
                             <th scope="col">IMPORTE</th>
+                            <th scope="col">PAGOS</th>
 
                             <th scope="col">SALDO</th> 
                             <th scope="col">DIAS</th> 
@@ -138,7 +139,6 @@
             btnImprimePP = pnlTablero.find("#btnImprimePP");
 
     function onCalcularMontoSeleccionado() {
-        var total = 0;
         tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end) td:nth-child(1) input[type='checkbox']:not(:checked)").parent().parent().parent().parent().removeClass("row-selected");
         $.each(tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end)"), function (k, v) {
             var row = $(v).find("td");
@@ -146,12 +146,37 @@
             if (is_checked[0].checked) {
                 $(v).addClass("row-selected");
                 var tr = AntiguedadSaldosDelProveedor.row(v).data();
-                console.log(tr.Saldo_Doc);
-                total += parseFloat(tr.Saldo_Doc);
             }
         });
-        pnlTablero.find("#TOTAL_SELECCIONADO").text("$ " + $.number(total, 2, '.', ','));
+        onSumarTodoLoSeleccionado();
         onBeep(3);
+    }
+    var total_seleccionado = 0;
+    function onSeleccionarTodoXProveedor(e) {
+        tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end) td:nth-child(1) input[type='checkbox']:not(:checked)").parent().parent().parent().parent().removeClass("row-selected");
+        $.each($(e).parents("tr.group-start").nextUntil("tr.group-end").find("td:eq(0) input[type='checkbox']")
+                , function (k, v) {
+                    if ($(e)[0].checked) {
+                        $(v).parents("tr").addClass("row-selected");
+                        $(v)[0].checked = true;
+                    } else {
+                        $(v).parents("tr").removeClass("row-selected");
+                        $(v)[0].checked = false;
+                    }
+                    var tr = AntiguedadSaldosDelProveedor.row($(v).parents("tr")).data();
+                });
+        onSumarTodoLoSeleccionado();
+        onBeep(3);
+    }
+
+    function  onSumarTodoLoSeleccionado() {
+        total_seleccionado = 0;
+        $.each(tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end)").find("td:eq(0) input[type='checkbox']:checked")
+                , function (k, v) {
+                    var tr = AntiguedadSaldosDelProveedor.row($(v).parents("tr")).data();
+                    total_seleccionado += parseFloat(tr.Saldo_Doc);
+                });
+        pnlTablero.find("#TOTAL_SELECCIONADO").text("$ " + $.number(total_seleccionado, 2, '.', ','));
     }
 
     onOpenOverlay('');
@@ -170,7 +195,7 @@
                         movimientos.push(r.ID);
                     });
                     $.post('<?php print base_url('ProgramacionProveeduria/onImprimirAntiguedadDeSaldos'); ?>', {
-                        MOVIMIENTOS: JSON.stringify(movimientos),
+                        MOVIMIENTOS: JSON.stringify(movimientos)
                     }).done(function (a) {
                         if (a.length > 0) {
                             onImprimirReporteFancyAFC(a, function (a, b) {
@@ -207,6 +232,7 @@
             {"data": "Doc"}/*4*/,
             {"data": "FechaDoc"}/*5*/,
             {"data": "IMPORTE"}/*6*/,
+            {"data": "PAGOS"}/*7*/,
             {"data": "SALDO"}/*7*/,
             {"data": "Dias"}/*8*/,
             {"data": "UNO_F"}/*9*/,
@@ -217,8 +243,7 @@
             {"data": "SEIS_F"}/*14*/,
             {"data": "SIETE_F"}/*15*/,
             {"data": "OCHO_F"}/*16*/,
-            {"data": "NUEVE_F"}/*17*/,
-            {"data": "ClaveNum"}/*18*/,
+            {"data": "NUEVE_F"}/*17*/, {"data": "ClaveNum"}/*18*/,
             {"data": "ImporteDoc"}/*19*/,
             {"data": "Saldo_Doc"}/*20*/,
             {"data": "UNO"}/*21*/,
@@ -230,11 +255,11 @@
             {"data": "SIETE"}/*27*/,
             {"data": "OCHO"}/*28*/,
             {"data": "NUEVE"}/*29*/,
-            {"data": "PLAZO"}/*30*/
+            {"data": "PLAZO"}/*30*/,
         ];
         var coldefs = [
             {
-                "targets": [0, 2, 20, 19, 18, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30],
+                "targets": [0, 2, 21, 20, 19, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
                 "visible": false,
                 "searchable": false
             },
@@ -267,66 +292,83 @@
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
-            "bSort": true,
-            "scrollY": $(window).height() - 350,
+            "bSort": true, "scrollY": $(window).height() - 350,
             "scrollX": true,
             "aaSorting": [
                 [2, 'ASC']
             ],
             rowGroup: {
                 startRender: function (rows, group) {
-                    return group + ' (' + rows.count() + ') ===> PLAZO ' + rows.data()[0].PLAZO + ' DÍAS.';
+                    return '<div class="checkbox-big" style=" cursor:pointer;">' +
+                            '<label style="font-size: 22px; cursor:pointer;">' +
+                            '<input type="checkbox"  onClick="onSeleccionarTodoXProveedor(this)">' +
+                            '<span class="cr"><i class="cr-icon fa fa-check fa-lg" style="cursor:pointer;"></i></span>' + group + '(' + rows.count() + ') ===> PLAZO ' + rows.data()[0].PLAZO + ' DÍAS.</label>' +
+                            '</div>';
                 },
                 endRender: function (rows, group) {
+                    console.log(rows.data().pluck('UNO'));
                     var SALDO_DOC = $.number(rows.data().pluck('Saldo_Doc').reduce(function (a, b) {
                         return a + parseFloat(b);
-                    }, 0), 4, '.', ',');
+                    }, 0), 2, '.', ',');
+                    var PAGOS_DOC = $.number(rows.data().pluck('Pagos_Doc').reduce(function (a, b) {
+                        return a + parseFloat(b);
+                    }, 0), 2, '.', ',');
                     var IMPORTE_DOC = $.number(rows.data().pluck('ImporteDoc').reduce(function (a, b) {
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_UNO = $.number(rows.data().pluck('UNO').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_DOS = $.number(rows.data().pluck('DOS').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_TRES = $.number(rows.data().pluck('TRES').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_CUATRO = $.number(rows.data().pluck('CUATRO').reduce(function (a, b) {
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_CINCO = $.number(rows.data().pluck('CINCO').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_SEIS = $.number(rows.data().pluck('SEIS').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_SIETE = $.number(rows.data().pluck('SIETE').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_OCHO = $.number(rows.data().pluck('OCHO').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
                     var IMPORTE_NUEVE = $.number(rows.data().pluck('NUEVE').reduce(function (a, b) {
+                        b = $.isNumeric(b) ? b : 0;
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
-                    return $('<tr>').append('<td></td><td></td><td></td><td>$ ' + IMPORTE_DOC + '</td><td>$ ' + SALDO_DOC + '</td><td></td>\n\
-            <td>' + IMPORTE_UNO + '</td><td>' + IMPORTE_DOS + '</td>\n\
-            <td>' + IMPORTE_TRES + '</td><td>' + IMPORTE_CUATRO + '</td>\n\
-            <td>' + IMPORTE_CINCO + '</td><td>' + IMPORTE_SEIS + '</td>\n\
-            <td>' + IMPORTE_SIETE + '</td><td>' + IMPORTE_OCHO + '</td>\n\
-                                <td>' + IMPORTE_NUEVE + '</td></tr>');
+                    return $('<tr>').append('<td></td><td></td><td>TOTAL</td>\n\
+            <td >$' + IMPORTE_DOC + '</td>\n\
+            <td >$' + PAGOS_DOC + '</td>\n\
+            <td >$' + SALDO_DOC + '</td>\n\
+            <td >$' + IMPORTE_UNO + '</td>\n\
+            <td >$' + IMPORTE_DOS + '</td>\n\
+            <td >$' + IMPORTE_TRES + '</td>\n\
+            <td >$' + IMPORTE_CUATRO + '</td>\n\
+            <td >$' + IMPORTE_CINCO + '</td>\n\
+            <td >$' + IMPORTE_SEIS + '</td>\n\
+            <td >$' + IMPORTE_SIETE + '</td>\n\
+            <td >$' + IMPORTE_OCHO + '</td>\n\
+            <td >$' + IMPORTE_NUEVE + '</td></tr>');
                 },
                 dataSrc: "ProveedorF"
             },
             "drawCallback": function (settings) {
                 var api = this.api();
-                var r = 0, prs = 0;
-                $.each(api.rows().data(), function (k, v) {
-                    prs += parseInt(v.PARES);
-                    r += parseFloat(v.SUBTOTAL);
-                });
             },
             initComplete: function () {
                 onCloseOverlay();
@@ -361,7 +403,6 @@
         PPTipo.change(function () {
             btnAcepta.focus();
         });
-
         pnlTablero.find("#PPTipo-selectized").keydown(function (e) {
             if (e.keyCode === 13) {
                 btnAcepta.focus();
@@ -373,7 +414,6 @@
             if (e.keyCode === 13 && PPClaveAlProveedor.val()) {
                 PPAlProveedor[0].selectize.setValue(PPClaveAlProveedor.val());
                 PPTipo[0].selectize.focus();
-                PPTipo[0].selectize.open();
                 return;
             }
             if (e.keyCode === 8 && PPClaveAlProveedor.val() === '') {

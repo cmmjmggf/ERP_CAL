@@ -29,7 +29,8 @@ class ProgramacionProveeduria extends CI_Controller {
             $x = $this->input->get();
             $this->db->select("
                 CONCAT(\"<div class='checkbox-big' style=' cursor:pointer;'>
-            <label style='font-size: 22px; cursor:pointer;'>
+            <label style='font-size: 22
+            px; cursor:pointer;'>
                 <input type='checkbox' id='chk\",CP.ID,\"' onClick='onCalcularMontoSeleccionado()' value='\",CP.ID,\"'>
                 <span class='cr'><i class='cr-icon fa fa-check fa-lg' style='cursor:pointer;'></i></span> 
             </label>
@@ -44,6 +45,7 @@ class ProgramacionProveeduria extends CI_Controller {
     CP.ImporteDoc,
     CONCAT(\"$\",FORMAT(CP.ImporteDoc,2)) AS IMPORTE,
     CP.Pagos_Doc,
+    CONCAT(\"$\",FORMAT(CP.Pagos_Doc,2)) AS PAGOS, 
     CP.Saldo_Doc,
      CONCAT(\"$\",FORMAT(CP.Saldo_Doc,2)) AS SALDO,
     IFNULL(DATEDIFF(CURDATE(),
@@ -262,6 +264,7 @@ class ProgramacionProveeduria extends CI_Controller {
     
     (SELECT P.Plazo FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS PLAZO, 
     (SELECT CONCAT(P.Clave, ' ', IFNULL(P.NombreI, '')) FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS ProveedorI ,
+    (SELECT P.NombreF FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS NombreF ,
     (SELECT CONCAT(P.Clave, ' ', IFNULL(P.NombreF, '')) FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS ProveedorF ", false)
                     ->from("cartera_proveedores AS CP");
             if ($x['TP'] !== '') {
@@ -277,8 +280,8 @@ class ProgramacionProveeduria extends CI_Controller {
             } else {
                 $this->db->where("CP.Proveedor = 99999999", null, false);
             }
-            $cartera_proveedores = $this->db->order_by("ABS(PLAZO)", 'ASC')
-                            ->order_by("CP.Proveedor", 'ASC')
+            $cartera_proveedores = $this->db->order_by("NombreF", 'ASC')
+                            ->order_by("ClaveNum", 'ASC')
                             ->order_by("FechaOrd", 'ASC')
                             ->order_by("abs(Dias)", 'DESC')
                             ->order_by("CP.Doc", 'ASC')
