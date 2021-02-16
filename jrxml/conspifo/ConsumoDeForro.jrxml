@@ -23,20 +23,26 @@
 
 CONCAT(E.Numero," - ",E.PrimerNombre," ", E.SegundoNombre ," ",E.Paterno," ",E.Materno) AS EMPLEADO_NOMBRE,
 
-A.Control AS Control, A.Estilo, A.Color,  CAST(A.Pares AS SIGNED) AS PARES,
+A.Control AS Control, A.Estilo, A.Color,   CAST(A.Pares AS SIGNED) AS PARES,
 CAST(A.PrecioActual AS DECIMAL(20,4)) AS Precio,
-CAST(A.Devolucion AS DECIMAL(20,4)) AS DEVOLUCION,
+
+
+CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control
+AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4)) AS DEVOLUCION,
 
 (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)  AS X_CONTROL,
 
+
 (SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
-WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion)  AS ENTREGADO,
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion AND AX.Empleado = E.Numero)  AS ENTREGADO,
 
 ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS X_ESTILO,
 
+
 (SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
-WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) - CAST(A.Devolucion AS DECIMAL(20,4))
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) - CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4))
  AS ENT_DEV,
+
 
 
  (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)
@@ -44,17 +50,18 @@ WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fr
 
 ((((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)/A.Pares) AS DCM2,
 
-(((SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) -A.Devolucion ) / (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)) AS PORCENTAJE,
+(((SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) -(SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion)) / (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)) AS PORCENTAJE,
 
 ((((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) * A.Pares) * A.PrecioActual) AS SISTEMAPESOS,
 
-(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL(A.Devolucion,0)))) AS REALPESOS_SISTEMA,
+(A.PrecioActual * (IFNULL(A.Abono,0)-(IFNULL(A.Basura,0)+IFNULL((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion),0)))) AS REALPESOS_SISTEMA,
 
 0 AS DIFERENCIAPESOS_SISTEMA,
 cast(A.Piocha as decimal(10,4)) AS PIOCHA,
 
 (SELECT CONCAT(OPD.Articulo," ",OPD.ArticuloT) FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion
-WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo AND OP.Ano = $P{ANO} LIMIT 1) AS ARTICULO_DESC
+WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo  AND OP.Ano = $P{ANO} LIMIT 1) AS ARTICULO_DESC
+
 
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
 OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
