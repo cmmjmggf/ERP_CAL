@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AntiguedadDeSaldos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="596" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
-	<property name="ireport.zoom" value="2.1961500000000074"/>
-	<property name="ireport.x" value="133"/>
+	<property name="ireport.zoom" value="1.815000000000006"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
@@ -34,7 +34,8 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT
+		<![CDATA[SELECT * FROM (
+SELECT
     CP.ID,
     CAST(CP.Proveedor AS SIGNED) AS ClaveNum,
     CP.Tp,
@@ -59,19 +60,71 @@
 (SELECT CONCAT(P.Clave, ' ', IFNULL(P.NombreF, '')) FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS ProveedorF,
 (SELECT  P.NombreF  FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS NombreF_orden,
 (SELECT CASE WHEN P.CtaCheques = 0 OR P.CtaCheques = "0" THEN "-" ELSE P.CtaCheques END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS CtaCheques,
-(SELECT  CASE WHEN P.Banco= 0 OR P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS Banco
+(SELECT  CASE WHEN P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS Banco
 FROM
     `cartera_proveedores` AS `CP`
 WHERE `CP`.`Estatus` IN ('SIN PAGAR' , 'PENDIENTE')
-        AND CP.Saldo_Doc > 1
+        AND CP.Saldo_Doc > 1  AND (SELECT  CASE WHEN P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) NOT IN("BANAMEX")
         AND CP.ID IN($P!{MOVIMIENTOS})
 GROUP BY CP.Proveedor
-ORDER BY NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` ASC , ABS(Dias) DESC , `CP`.`Doc` ASC]]>
+ORDER BY NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` ASC , ABS(Dias) DESC , `CP`.`Doc` ASC) AS SIN_BANAMEX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+UNION
+
+SELECT * FROM
+(
+SELECT
+    CP.ID,
+    CAST(CP.Proveedor AS SIGNED) AS ClaveNum,
+    CP.Tp,
+    CP.Doc,
+    DATE_FORMAT(STR_TO_DATE(CP.FechaDoc, '%d/%m/%Y'),
+            '%d/%m/%y') AS FechaDoc,
+    STR_TO_DATE(CP.FechaDoc, '%d/%m/%Y') AS FechaOrd,
+    CP.ImporteDoc,
+    CONCAT('$', FORMAT(CP.ImporteDoc, 2)) AS IMPORTE,
+    CP.Pagos_Doc,
+    SUM(CP.Saldo_Doc) AS Saldo_Doc,
+    CONCAT('$', FORMAT(CP.Saldo_Doc, 2)) AS SALDO,
+    IFNULL(DATEDIFF(CURDATE(),
+                    STR_TO_DATE(CP.FechaDoc, '%d/%m/%Y')),
+            '') AS Dias,
+    (SELECT
+            P.Plazo
+        FROM
+            proveedores AS P
+        WHERE
+            P.Clave = CP.Proveedor) AS PLAZO,
+(SELECT CONCAT(P.Clave, ' ', IFNULL(P.NombreF, '')) FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS ProveedorF,
+(SELECT  P.NombreF  FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS NombreF_orden,
+(SELECT CASE WHEN P.CtaCheques = 0 OR P.CtaCheques = "0" THEN "-" ELSE P.CtaCheques END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS CtaCheques,
+(SELECT  CASE WHEN P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS Banco
+FROM
+    `cartera_proveedores` AS `CP`
+WHERE `CP`.`Estatus` IN ('SIN PAGAR' , 'PENDIENTE')
+        AND CP.Saldo_Doc > 1 AND (SELECT  CASE WHEN P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) IN("BANAMEX")
+        AND CP.ID IN($P!{MOVIMIENTOS})
+GROUP BY CP.Proveedor
+ORDER BY  NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` ASC , ABS(Dias) DESC , `CP`.`Doc` ASC) AS CON_BANAMEX;]]>
 	</queryString>
 	<field name="ID" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="ClaveNum" class="java.lang.Long"/>
+	<field name="ClaveNum" class="java.lang.Integer"/>
 	<field name="Tp" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -114,6 +167,43 @@ ORDER BY NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` A
 	<variable name="Saldo_Doc_1" class="java.lang.Float" calculation="Sum">
 		<variableExpression><![CDATA[$F{Saldo_Doc}]]></variableExpression>
 	</variable>
+	<variable name="Saldo_Doc_2" class="java.lang.Double" resetType="Group" resetGroup="BANAMEX" calculation="Sum">
+		<variableExpression><![CDATA[$F{Saldo_Doc}]]></variableExpression>
+	</variable>
+	<group name="BANAMEX" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{Banco}.equals("BANAMEX")]]></groupExpression>
+		<groupHeader>
+			<band height="1"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="18">
+				<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+					<reportElement mode="Transparent" x="270" y="0" width="100" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="ab8778e1-7cdc-46bb-b476-60d49add90a8"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
+						<font fontName="SansSerif" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+						<paragraph lineSpacing="Single"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{Saldo_Doc_2}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement style="Column header" x="195" y="0" width="75" height="17" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[TOTAL]]></text>
+				</staticText>
+				<line>
+					<reportElement x="196" y="17" width="175" height="1" uuid="8efde666-b94d-4988-8f40-71ad4c80182a"/>
+				</line>
+				<line>
+					<reportElement x="196" y="2" width="1" height="16" uuid="c0647698-a274-4351-9e8e-975c3c05d367"/>
+				</line>
+				<line>
+					<reportElement x="371" y="2" width="1" height="16" uuid="bda991ad-25ae-42b4-8f82-0abbb087687f"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -174,27 +264,55 @@ ORDER BY NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` A
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement style="Column header" x="370" y="45" width="113" height="16" forecolor="#000000" uuid="a6dc697a-0a56-4364-ad51-c9e083e3ff4f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="483" y="45" width="113" height="16" forecolor="#000000" uuid="22211ef7-260d-4cec-86fe-77a0efb680d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BANCO]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="18" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="270" height="16" uuid="24d4e209-51d4-4da6-9221-0d17764776ea"/>
+				<reportElement x="0" y="0" width="270" height="11" uuid="24d4e209-51d4-4da6-9221-0d17764776ea"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ProveedorF}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="270" y="0" width="100" height="16" uuid="ce458118-24d7-4524-8ac5-560c25a14cb9"/>
+				<reportElement x="270" y="0" width="100" height="11" uuid="ce458118-24d7-4524-8ac5-560c25a14cb9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
+					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Saldo_Doc}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="16" width="596" height="1" uuid="4cad6836-a653-447b-a54a-f6b8aa077432"/>
+				<reportElement x="0" y="11" width="596" height="1" uuid="4cad6836-a653-447b-a54a-f6b8aa077432"/>
 			</line>
+			<textField>
+				<reportElement x="371" y="0" width="112" height="11" uuid="14e13603-4f42-43d5-b321-20406eaea927"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CtaCheques}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="483" y="0" width="113" height="11" uuid="1e772e93-65ef-4e5f-b2ef-626b4c7480b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Banco}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<lastPageFooter>
@@ -207,30 +325,6 @@ ORDER BY NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` A
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="19" splitType="Stretch">
-			<line>
-				<reportElement x="195" y="15" width="175" height="1" uuid="8efde666-b94d-4988-8f40-71ad4c80182a"/>
-			</line>
-			<line>
-				<reportElement x="195" y="0" width="1" height="16" uuid="c0647698-a274-4351-9e8e-975c3c05d367"/>
-			</line>
-			<line>
-				<reportElement x="370" y="0" width="1" height="16" uuid="bda991ad-25ae-42b4-8f82-0abbb087687f"/>
-			</line>
-			<staticText>
-				<reportElement style="Column header" x="195" y="0" width="75" height="17" forecolor="#000000" uuid="bf4b6b79-8bad-420e-a7ba-97568b08664a"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL]]></text>
-			</staticText>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="270" y="0" width="100" height="17" uuid="3907d508-8004-4f3e-b4e4-9f4edfd80f81"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{Saldo_Doc_1}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>

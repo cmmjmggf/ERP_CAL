@@ -360,7 +360,7 @@ ORDER BY ABS(CLAVE) ASC")->result();
 //            var_dump($ESTATUS);
             //            exit(0);
             if (intval($ESTATUS[0]->AVANCECORTE) >= 3 && intval($AGREGADO_CON_ANTERIORIDAD[0]->PIOCHERO) > 0 &&
-                    $x['MATERIAL_EXTRA'] > 0) {
+                    intval($x['MATERIAL_EXTRA']) > 0) {
                 $this->db->set('Piocha', $x['ENTREGA'])->where('Control', $x['CONTROL'])
                         ->where('Fraccion', $x['FRACCION'])
                         ->where('Semana', $x['SEMANA'])
@@ -395,7 +395,8 @@ ORDER BY ABS(CLAVE) ASC")->result();
                     'Sem' => $x['SEMANA'],
                     'Ano' => $Ano,
                     'OrdenCompra' => NULL,
-                    'Subtotal' => $PRECIO_MAQUILA_UNO * $x['ENTREGA']
+                    'Subtotal' => $PRECIO_MAQUILA_UNO * $x['ENTREGA'],
+                    'ConsumoExtraNormal' => 0
                 );
                 $this->db->insert("movarticulos_fabrica", $datos);
 
@@ -422,8 +423,55 @@ ORDER BY ABS(CLAVE) ASC")->result();
                     "Usuario" => $this->session->ID,
                     "UsuarioT" => $this->session->USERNAME
                 ));
-            } else {
-                /**/
+                $l = new Logs("ASIGNA PFTS - PASO 3", "HA DADO {$x['ENTREGA']},DEL ARTICULO {$x['ARTICULO']}(SPR), PRECIO {$PRECIO_MAQUILA_UNO}, SUBTOTAL " . ($PRECIO_MAQUILA_UNO * $x['ENTREGA']) . ", PARA EL CONTROL {$x['CONTROL']}, SEMANA {$x['SEMANA']}, ANIO {$Ano}", $this->session);
+            } 
+            else if (intval($ESTATUS[0]->AVANCECORTE) === 2 && intval($x['MATERIAL_EXTRA']) > 0) {
+
+                $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')
+                                ->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
+                /* COMPROBAR SI YA EXISTE EL REGISTRO POR EMPLEADO,SEMANA, CONTROL, FRACCION, ARTICULO */
+                $DT = $this->db->select("A.*")
+                                ->from("asignapftsacxc AS A")
+                                ->where('A.Empleado', 0)
+                                ->where("A.Articulo = '{$xx['ARTICULO']}' "
+                                        . "AND A.Semana = '{$xx['SEMANA']}' "
+                                        . "AND A.Control = '{$xx['CONTROL']}' "
+                                        . "AND A.Fraccion LIKE '{$xx['FRACCION']}' ", null, false)
+                                ->get()->result();
+                /* EXISTE LA POSIBILIDAD DE QUE LA FRACCION SEA DIFERENTE Y QUE HAGA UN NUEVO REGISTRO */
+                if (count($DT) > 0) {
+                    $this->db->set('Cargo', ($DT[0]->Cargo + $x['ENTREGA']))
+                            ->set('Abono', ($DT[0]->Abono + $x['ENTREGA']))
+                            ->where('ID', $DT[0]->ID)->update('asignapftsacxc');
+
+                    $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
+                                    ->from("preciosmaquilas AS PM")
+                                    ->where("PM.Articulo = '{$x['ARTICULO']}'", null, false)
+                                    ->where("PM.Maquila", 1)->get()->result();
+                    $datos = array(
+                        'Articulo' => $x['ARTICULO'],
+                        'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
+                        'CantidadMov' => $x['ENTREGA'],
+                        'FechaMov' => Date('d/m/Y'),
+                        'EntradaSalida' => '2'/* 1= ENTRADA, 2 = SALIDA */,
+                        'TipoMov' => 'SPR', /* SXP = SALIDA A PRODUCCION */
+                        'DocMov' => $x['CONTROL'],
+                        'Tp' => '',
+                        'Maq' => $CONTROL_SEMANA_MAQUILA->MAQUILA,
+                        'Sem' => $x['SEMANA'],
+                        'Ano' => $Ano,
+                        'OrdenCompra' => NULL,
+                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA'],
+                        'ConsumoExtraNormal' => 1
+                    );
+                    $this->db->insert("movarticulos_fabrica", $datos);
+                    $l = new Logs("ASIGNA PFTS - PASO 2", "HA DADO {$x['ENTREGA']},DEL ARTICULO {$x['ARTICULO']}(SPR), PRECIO {$PRECIO[0]->PRECIO_MAQUILA_UNO}, SUBTOTAL " . ($PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']) . ", PARA EL CONTROL {$x['CONTROL']}, SEMANA {$x['SEMANA']}, ANIO {$Ano}", $this->session);
+                    exit(0);
+                }
+                exit(0);
+            } 
+            else {
+                /* PASO 1 */
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
                 /* COMPROBAR SI YA EXISTE EL REGISTRO POR EMPLEADO,SEMANA, CONTROL, FRACCION, ARTICULO */
 //                $DT = $this->apftsacxc->onComprobarEntrega($x['SEMANA'], $x['CONTROL'], $x['ARTICULO'], $x['FRACCION']);
@@ -459,7 +507,8 @@ ORDER BY ABS(CLAVE) ASC")->result();
                         'Sem' => $x['SEMANA'],
                         'Ano' => $Ano,
                         'OrdenCompra' => NULL,
-                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']
+                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA'],
+                        'ConsumoExtraNormal' => 0
                     );
                     $this->db->insert("movarticulos_fabrica", $datos);
                     exit(0);
@@ -500,7 +549,7 @@ ORDER BY ABS(CLAVE) ASC")->result();
                         'Estatus' => 'A',
                         'TipoMov' => $x['TIPO']/*  1 = PIEL, 2 = FORRO, 34 = TEXTIL , 40 = SINTETICO */,
                         'Extra' => $x['MATERIAL_EXTRA'],
-                        'ExtraT' => ($x['MATERIAL_EXTRA'] > 0 && $x['EXPLOSION'] < $x['ENTREGA']) ? $x['ENTREGA'] - $x['EXPLOSION'] : 0
+                        'ExtraT' => (intval($x['MATERIAL_EXTRA']) > 0 && $x['EXPLOSION'] < $x['ENTREGA']) ? $x['ENTREGA'] - $x['EXPLOSION'] : 0
                     );
                     $this->db->insert('asignapftsacxc', $data);
 //                    var_dump($data);
@@ -550,8 +599,8 @@ ORDER BY ABS(CLAVE) ASC")->result();
                         $this->db->set('fec2', Date('Y-m-d 00:00:00'))
                                 ->where('contped', $x['CONTROL'])
                                 ->update('avaprd');
-                        
-                        /*MUESTRAS*/
+
+                        /* MUESTRAS */
 //                        $control = $this->db->query("SELECT P.Control, P.Maquila FROM pedidox AS P WHERE P.stsavan NOT IN(3,33,4,40,42,44,5,55,6,7,8,9,10,11,12,13,14) AND P.Control = ".$x['CONTROL'])->result();
 //                        switch (intval($control[0]->Maquila)) {
 //                            case 98:
@@ -607,9 +656,14 @@ ORDER BY ABS(CLAVE) ASC")->result();
                         'Sem' => $x['SEMANA'],
                         'Ano' => $Ano,
                         'OrdenCompra' => NULL,
-                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']
+                        'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA'],
+                        'ConsumoExtraNormal' => 0
                     );
                     $this->db->insert("movarticulos_fabrica", $datos);
+                    $l = new Logs("ASIGNA PFTS - PASO 1", "HA DADO {$x['ENTREGA']},DEL ARTICULO {$x['ARTICULO']}(SPR), "
+                            . "PRECIO {$PRECIO[0]->PRECIO_MAQUILA_UNO}, "
+                            . "SUBTOTAL " . ($PRECIO[0]->PRECIO_MAQUILA_UNO * $x['ENTREGA']) . ", "
+                            . "PARA EL CONTROL {$x['CONTROL']}, SEMANA {$x['SEMANA']}, ANIO {$Ano}", $this->session);
                 }
             }
         } catch (Exception $exc) {
@@ -654,7 +708,6 @@ ORDER BY ABS(CLAVE) ASC")->result();
             }
             $PRECIO = $this->apftsacxc->onObtenerPrecioMaquila($x['ARTICULO']);
             if ($x['REGRESO'] >= 0) {
-//                $EXISTE = $this->db->query("SELECT * FROM movarticulos_fabrica AS A WHERE A.TipoMov = 'EPR'")
                 $datos = array(
                     'Articulo' => $x['ARTICULO'],
                     'PrecioMov' => $PRECIO[0]->PRECIO_MAQUILA_UNO,
@@ -668,7 +721,8 @@ ORDER BY ABS(CLAVE) ASC")->result();
                     'Sem' => $CONTROL[0]->SEMANA,
                     'Ano' => $Ano,
                     'OrdenCompra' => NULL,
-                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO']
+                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['REGRESO'],
+                    'ConsumoExtraNormal' => 0
                 );
                 $this->db->insert("movarticulos_fabrica", $datos);
 
@@ -698,7 +752,8 @@ ORDER BY ABS(CLAVE) ASC")->result();
                     'Sem' => $CONTROL[0]->SEMANA,
                     'Ano' => $Ano,
                     'OrdenCompra' => 'BASURA',
-                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['MATERIALMALO']
+                    'Subtotal' => $PRECIO[0]->PRECIO_MAQUILA_UNO * $x['MATERIALMALO'],
+                    'ConsumoExtraNormal' => 0
                 );
                 $this->db->insert("movarticulos_fabrica", $datos);
                 /**/

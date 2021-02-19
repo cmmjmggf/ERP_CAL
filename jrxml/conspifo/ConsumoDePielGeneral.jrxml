@@ -42,7 +42,7 @@ WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fr
 ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS X_ESTILO,
 
 (SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
-WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) - CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control  AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4))
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion AND AX.Empleado = E.Numero) - CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control  AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4))
  AS ENT_DEV,
 
 

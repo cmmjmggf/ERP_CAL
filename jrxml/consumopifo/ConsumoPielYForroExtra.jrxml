@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ConsumoPielYForroExtra" language="groovy" pageWidth="612" pageHeight="792" columnWidth="596" leftMargin="8" rightMargin="8" topMargin="12" bottomMargin="12" uuid="940b7624-42a9-4970-8b76-59c4ab579c3b">
+	<property name="ireport.zoom" value="2.415765000000009"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.text.truncate.at.char" value="true"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="style1">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{DIFERENCIA}>0]]></conditionExpression>
+			<style forecolor="#16B433"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{DIFERENCIA}<0]]></conditionExpression>
+			<style forecolor="#F22962"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="empresa" class="java.lang.String"/>
+	<parameter name="FECHA_INICIAL" class="java.lang.String"/>
+	<parameter name="FECHA_FINAL" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT M.ID, M.Articulo, M.PrecioMov, SUM(M.CantidadMov) AS CantidadMov, M.FechaMov, M.DocMov, M.EntradaSalida, M.TipoMov, M.Tp, M.Maq, M.Sem, M.Ano,
+ M.OrdenCompra, M.Subtotal, M.ProvDocDirecto, M.TpoSuPlEn,  M.Proveedor, M.ConsumoExtraNormal, M.DocMov AS Control,
+
+(SELECT CAST(A.Explosion AS DECIMAL(12,4)) FROM asignapftsacxc AS A WHERE A.Control = M.DocMov AND A.Articulo = M.Articulo LIMIT 1 ) AS Explosion  ,
+(SELECT CAST(A.Explosion AS DECIMAL(12,4)) FROM asignapftsacxc AS A WHERE A.Control = M.DocMov AND A.Articulo = M.Articulo LIMIT 1 ) - SUM(M.CantidadMov) AS DIFERENCIA
+FROM movarticulos_fabrica AS M
+ WHERE M.Ano = 2021
+ AND str_to_date(M.FechaMov,"%d/%m/%Y") BETWEEN str_to_date($P{FECHA_INICIAL},"%d/%m/%Y")
+ AND str_to_date($P{FECHA_FINAL},"%d/%m/%Y")
+ AND M.ConsumoExtraNormal = 1
+GROUP BY M.DocMov
+ ORDER BY M.ID DESC ;]]>
+	</queryString>
+	<field name="ID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Articulo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PrecioMov" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CantidadMov" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FechaMov" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DocMov" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EntradaSalida" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TipoMov" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Tp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Maq" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Sem" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Ano" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="OrdenCompra" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Subtotal" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ProvDocDirecto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TpoSuPlEn" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Proveedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ConsumoExtraNormal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Control" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Explosion" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DIFERENCIA" class="java.lang.Double"/>
+	<variable name="CantidadMov_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{CantidadMov}]]></variableExpression>
+	</variable>
+	<variable name="Control_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{Control}]]></variableExpression>
+	</variable>
+	<variable name="CantidadMov_2" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{CantidadMov}]]></variableExpression>
+	</variable>
+	<variable name="CantidadMov_3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{CantidadMov}]]></variableExpression>
+	</variable>
+	<variable name="Explosion_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{Explosion}]]></variableExpression>
+	</variable>
+	<variable name="DIFERENCIA_1" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{DIFERENCIA}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<line>
+				<reportElement style="Title" positionType="FixRelativeToBottom" x="0" y="59" width="596" height="1" uuid="54f5e41a-81ad-4684-8fc1-fe3bd8cb3d8a"/>
+				<graphicElement>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</graphicElement>
+			</line>
+			<image>
+				<reportElement x="0" y="0" width="72" height="42" uuid="badb8959-f8da-4109-a197-4fe402e5e4a3"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="77" y="0" width="312" height="14" uuid="68fc90ba-2f75-4f0d-b92d-9142efaf6ecc"/>
+				<textElement>
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="77" y="14" width="159" height="14" forecolor="#000000" uuid="fe0dcb59-670e-41bc-8ce4-9fe8d186d05f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Consumo extra de material]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="0" y="45" width="80" height="16" forecolor="#000000" uuid="bbc56657-c370-4fe2-846b-e136606881ec"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTROL]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="440" y="0" width="156" height="11" uuid="f1c1b759-2a07-40c4-8afb-51d79a4c7758"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="hh:mm a">
+				<reportElement x="440" y="10" width="156" height="11" uuid="0e50b528-1ba5-4dc5-b0d8-e62594bb0df8"/>
+				<textElement textAlignment="Right">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="80" y="45" width="72" height="16" forecolor="#000000" uuid="a6dc697a-0a56-4364-ad51-c9e083e3ff4f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ARTÍCULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="152" y="45" width="85" height="16" forecolor="#000000" uuid="22211ef7-260d-4cec-86fe-77a0efb680d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EXPLOSIÓN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="77" y="27" width="23" height="14" forecolor="#000000" uuid="fe1321bf-39a0-4e29-8332-72e1185a2f02"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Del ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="236" y="45" width="85" height="16" forecolor="#000000" uuid="af41becd-5e45-41df-a795-aae9d9670daa"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTREGADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="421" y="45" width="175" height="16" forecolor="#000000" uuid="b0533907-d8d2-4471-85fe-d1e5be26c8a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA RESPONSABLE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" x="200" y="27" width="29" height="14" forecolor="#000000" uuid="a5e4bee2-02ab-4cfb-8167-4ceab89f4e62"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Al]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="27" width="100" height="15" uuid="2b687641-428b-4cf4-8b0e-a845e31a353d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{FECHA_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="229" y="27" width="100" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="67ff5ec2-cf2e-49c7-adbc-b4a4825ebfba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{FECHA_FINAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="321" y="45" width="85" height="16" forecolor="#000000" uuid="0a6eccd9-9c6c-4edb-86a3-92b91fcadeb8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DIFERENCIA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="16" width="596" height="1" uuid="4cad6836-a653-447b-a54a-f6b8aa077432"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="0" width="80" height="16" uuid="0bef65e0-1373-4d00-9341-35ce48dd4e20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="72" height="16" uuid="9bb876e0-3532-4cbb-a498-7f0053962574"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Articulo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="152" y="0" width="85" height="16" uuid="eae2fd58-fe37-4141-94bf-05a9abe05011"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Explosion}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="236" y="0" width="85" height="16" uuid="ff761f5b-30cf-4574-b84e-c0100b38d48f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{CantidadMov}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement style="style1" mode="Transparent" x="321" y="0" width="85" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="402bca9e-3b29-42e2-a696-ab06f7d0fe68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIFERENCIA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="15">
+			<textField>
+				<reportElement x="0" y="0" width="596" height="15" uuid="3c7e6794-86a4-4975-b87f-6a4e3fb5156d"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="17" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="236" y="0" width="85" height="16" uuid="5f85ea13-ef6a-4748-877f-8af7f13a27ba"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{CantidadMov_3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="152" y="0" width="85" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="e1a49974-f97c-4462-a889-c31b5ecb0481"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{Explosion_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
+				<reportElement style="style1" mode="Transparent" x="321" y="0" width="85" height="16" forecolor="#000000" backcolor="#FFFFFF" uuid="dde2d8cb-9823-4afc-9022-10397e1f785a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIFERENCIA_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

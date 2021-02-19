@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ConsumoDePielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="1.4019755979255768"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.7320538214602967"/>
+	<property name="ireport.x" value="512"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -23,32 +23,27 @@
 SUM(X.ENT_DEV) AS ENT_DEV, (SUM(X.X_CONTROL)-SUM(X.ENT_DEV)) AS DIFERENCIA, (SUM(X.ENT_DEV) / SUM(X.PARES)) AS CONSUMOPROMXPAR, SUM(X.SISTEMAPESOS) AS SISTEMAPESOS, SUM(X.ENT_DEV * X.Precio) AS REALPESOS_SISTEMA,
 (SUM(X.SISTEMAPESOS) - SUM(X.ENT_DEV * X.Precio)) AS DIFERENCIA_PESOS, SUM(X.PIOCHA) AS PIOCHA
 
-FROM (SELECT
-
-A.Empleado AS EMPLEADO_CLAVE,
+FROM (SELECT A.Empleado AS EMPLEADO_CLAVE,
 
 CONCAT(E.Numero," - ",E.PrimerNombre," ", E.SegundoNombre ," ",E.Paterno," ",E.Materno) AS EMPLEADO_NOMBRE,
 
-A.Control AS Control, A.Estilo, A.Color,   CAST(A.Pares AS SIGNED) AS PARES,
+A.Control AS Control, A.Estilo, A.Color, CAST(A.Pares AS SIGNED) AS PARES,
 CAST(A.PrecioActual AS DECIMAL(20,4)) AS Precio,
-
-
-CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control
-AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4)) AS DEVOLUCION,
+CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4)) AS DEVOLUCION,
 
 (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)  AS X_CONTROL,
 
-
 (SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
-WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion AND AX.Empleado = E.Numero)  AS ENTREGADO,
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion AND AX.Empleado = E.Numero)   AS ENTREGADO,
+
+
+
 
 ((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) AS X_ESTILO,
 
-
 (SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX
-WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion AND AX.Empleado = E.Numero) - CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Fraccion = A.Fraccion AND AX.Articulo = A.Articulo) AS DECIMAL(20,4))
+WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) - CAST((SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control  AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) AS DECIMAL(20,4))
  AS ENT_DEV,
-
 
 
  (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)
@@ -56,7 +51,7 @@ WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fr
 
 ((((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)/A.Pares) AS DCM2,
 
-(((SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) -(SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion)) / (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)) AS PORCENTAJE,
+(((SELECT SUM(AX.Abono) FROM asignapftsacxc AS AX WHERE AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) -(SELECT SUM(AX.Devolucion) FROM asignapftsacxc AS AX WHERE AX.Empleado = E.Numero AND AX.Control = A.Control AND AX.Articulo = A.Articulo AND AX.Fraccion = A.Fraccion) ) / (((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares)*A.Pares)) AS PORCENTAJE,
 
 ((((SELECT SUM(OPDD.Cantidad) FROM ordendeproducciond AS OPDD WHERE OPDD.OrdenDeProduccion = OP.ID AND OPDD.Articulo = OPD.Articulo) /OP.Pares) * A.Pares) * A.PrecioActual) AS SISTEMAPESOS,
 
@@ -70,7 +65,7 @@ WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo  AND OP.Ano = $P{ANO
 
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
 OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
-WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 2 AND A.Fraccion = 99 AND E.AltaBaja = 1 AND OP.Ano = $P{ANO} AND
+WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND A.Fraccion = 100 AND E.AltaBaja = 1 AND OP.Ano = $P{ANO} AND
 (CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
 GROUP BY  E.Numero, A.Control, A.Articulo
 ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC) AS X
@@ -222,7 +217,7 @@ GROUP BY X.EMPLEADO_CLAVE;]]>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[< Forro General>]]></text>
+				<text><![CDATA[< Piel General>]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" isPrintRepeatedValues="false" x="280" y="41" width="40" height="14" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="8e081387-1fa4-4ca8-9440-cb29c4f5be1c"/>
