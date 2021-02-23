@@ -1336,7 +1336,7 @@ class PDF extends FPDF {
                         . "{$str} E.MaqPlant2 LIMIT 1) AS MP2, "
                         . "{$str} E.MaqPlant3 LIMIT 1) AS MP3, "
                         . "{$str} E.MaqPlant4 LIMIT 1) AS MP4 "
-                        . "FROM estilos AS E WHERE E.Clave = {$XESTILO[0]}")->result();
+                        . "FROM estilos AS E WHERE E.Clave = '{$XESTILO[0]}'")->result();
 
 
         $this->SetFont('Calibri', 'B', 8.5);

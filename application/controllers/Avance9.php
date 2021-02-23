@@ -613,6 +613,8 @@ class Avance9 extends CI_Controller {
                                     $this->db->insert('avance', $avance);
                                     $id = $this->db->insert_id();
                                     $this->onAvanzarXControl($xXx['CONTROL'], 'RAYADO', 20, 3);
+                                } else {
+                                    print "EL EMPLEADO NO TIENE PROGRAMADO ESTE CONTROL {$xXx['CONTROL']} CON LA FRACCION 100 - REVISE CON INGENIERIA";
                                 }
                                 if ($MAQUILA_MUESTRA === 98) {
                                     $avance = array(
@@ -657,6 +659,8 @@ class Avance9 extends CI_Controller {
                                         $l = new Logs("AVANCE 9 - FRACCION 100", "LE PAGO LA FRACCION 100 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
                                         $msj .= '{"AVANZO":"1","FR":"100","RETORNO":"SI","MESSAGE":"EL CONTROL HA SIDO AVANZADO A RAYADO  - LOOP FOREACH"}';
                                     }
+                                } else {
+                                    print "EL EMPLEADO NO TIENE PROGRAMADO ESTE CONTROL {$xXx["CONTROL"]} CON LA FRACCION 100 - REVISE CON INGENIERIA";
                                 }
                             }
                             if (intval($v->NUMERO_FRACCION) === 99 && $MAQUILA_MUESTRA !== 98) {
@@ -670,6 +674,8 @@ class Avance9 extends CI_Controller {
                                         $l = new Logs("AVANCE 9 - FRACCION 99", "LE PAGO LA FRACCION 99 DEL CONTROL {$xXx["CONTROL"]} AL CORTADOR {$xXx['NUMERO_EMPLEADO']}", $this->session);
                                         $msj .= '{"AVANZO":"0","FR":"99","RETORNO":"SI", "MESSAGE":"FRACCION 99, NO GENERA AVANCE - LOOP FOREACH"}';
                                     }
+                                } else {
+                                    print "EL EMPLEADO NO TIENE PROGRAMADO ESTE CONTROL {$xXx["CONTROL"]} CON LA FRACCION 99 - REVISE CON INGENIERIA";
                                 }
                             }
                             if (intval($v->NUMERO_FRACCION) === 99 && $MAQUILA_MUESTRA === 98) {
