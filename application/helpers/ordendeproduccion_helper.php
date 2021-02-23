@@ -1327,6 +1327,33 @@ class PDF extends FPDF {
         $this->Cell(200, $alto_celda, $this->getObs(), 0/* BORDE */, 1, 'L', 0);
         $this->Line(5, $this->GetY(), 210, $this->GetY());
 
+        /* 23/02/2021 */
+        $CI = & get_instance();
+        $XESTILO = explode("-", $this->getEstilo());
+        $str = "(SELECT CONCAT(MP.Clave,\" \",MP.Descripcion) FROM maquilasplantillas AS MP WHERE MP.Clave =";
+        $ESTILO_MAQUILAS_PLANTILLAS = $CI->db->query("SELECT "
+                        . "{$str} E.MaqPlant1 LIMIT 1) AS MP1, "
+                        . "{$str} E.MaqPlant2 LIMIT 1) AS MP2, "
+                        . "{$str} E.MaqPlant3 LIMIT 1) AS MP3, "
+                        . "{$str} E.MaqPlant4 LIMIT 1) AS MP4 "
+                        . "FROM estilos AS E WHERE E.Clave = {$XESTILO[0]}")->result();
+
+
+        $this->SetFont('Calibri', 'B', 8.5);
+        $ANCHO = 51.5;
+        $this->SetX(5);
+        $this->Cell($ANCHO, $alto_celda, utf8_decode("{$ESTILO_MAQUILAS_PLANTILLAS[0]->MP1}"), 1/* BORDE */, 0, 'L', 0);
+
+        $this->SetX($this->GetX());
+        $this->Cell($ANCHO, $alto_celda, utf8_decode("{$ESTILO_MAQUILAS_PLANTILLAS[0]->MP2}"), 1/* BORDE */, 0, 'L', 0);
+
+        $this->SetX($this->GetX());
+        $this->Cell($ANCHO, $alto_celda, utf8_decode("{$ESTILO_MAQUILAS_PLANTILLAS[0]->MP3}"), 1/* BORDE */, 0, 'L', 0);
+
+        $this->SetX($this->GetX());
+        $this->Cell($ANCHO, $alto_celda, utf8_decode("{$ESTILO_MAQUILAS_PLANTILLAS[0]->MP4}"), 1/* BORDE */, 1, 'L', 0);
+
+        $this->Line(5, $this->GetY(), 210, $this->GetY());
 
         /* FIN SERIE/CORRIDA */
 

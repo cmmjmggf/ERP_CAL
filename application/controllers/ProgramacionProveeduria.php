@@ -27,6 +27,8 @@ class ProgramacionProveeduria extends CI_Controller {
     public function getDocumentosXTipo() {
         try {
             $x = $this->input->get();
+            $this->db->query("UPDATE cartera_proveedores SET Mark = 0 WHERE ID > 0;");
+
             $this->db->select("
                 CONCAT(\"<div class='checkbox-big' style=' cursor:pointer;'>
             <label style='font-size: 22
@@ -269,10 +271,7 @@ class ProgramacionProveeduria extends CI_Controller {
                     ->from("cartera_proveedores AS CP");
             if ($x['TP'] !== '') {
                 $this->db->like("CP.Tp", $x['TP']);
-            }
-            if ($x['TIPO'] !== '') {
-                $this->db->like("CP.Departamento", $x['TIPO']);
-            }
+            } 
             $this->db->where_in("CP.Estatus", array('SIN PAGAR', 'PENDIENTE'))
                     ->where("CP.Saldo_Doc > 1 ", null, false);
             if ($x['PROVEEDOR_INICIAL'] !== '' && $x['PROVEEDOR_INICIAL'] !== '') {
@@ -286,8 +285,28 @@ class ProgramacionProveeduria extends CI_Controller {
                             ->order_by("abs(Dias)", 'DESC')
                             ->order_by("CP.Doc", 'ASC')
                             ->get()->result();
+            
+            $l = new Logs("PROGRAMACION PROVEEDURIA", "CONSULTO LOS DOCUMENTOS DE TIPO {$x['TP']} DEL PROVEEDOR {$x['PROVEEDOR_INICIAL']} AL PROVEEDOR {$x['PROVEEDOR_FINAL']}", $this->session);
 //            print $this->db->last_query();
             print json_encode($cartera_proveedores);
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onMarcarParaPago() {
+        try {
+            $x = $this->input->post();
+            $this->db->set("Mark", 1)->where("ID", $x['ID'])->update("cartera_proveedores");
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function onDesMarcarParaPago() {
+        try {
+            $x = $this->input->post();
+            $this->db->set("Mark", 0)->where("ID", $x['ID'])->update("cartera_proveedores");
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -301,6 +320,7 @@ class ProgramacionProveeduria extends CI_Controller {
             $parametros = array();
             $parametros["logo"] = base_url() . $this->session->LOGO;
             $parametros["empresa"] = $this->session->EMPRESA_RAZON;
+            $parametros["TP"] = $x['TP'];
             $MOVIMIENTOS = $x['MOVIMIENTOS'];
             $MOVIMIENTOS = str_replace("[", "", $MOVIMIENTOS);
             $MOVIMIENTOS = str_replace("]", "", $MOVIMIENTOS);

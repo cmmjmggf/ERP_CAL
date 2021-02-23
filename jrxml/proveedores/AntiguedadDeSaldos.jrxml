@@ -33,6 +33,9 @@
 	<parameter name="MOVIMIENTOS" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="TP" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT * FROM (
 SELECT
@@ -111,8 +114,17 @@ SELECT
             P.Clave = CP.Proveedor) AS PLAZO,
 (SELECT CONCAT(P.Clave, ' ', IFNULL(P.NombreF, '')) FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS ProveedorF,
 (SELECT  P.NombreF  FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS NombreF_orden,
-(SELECT CASE WHEN P.CtaCheques = 0 OR P.CtaCheques = "0" THEN "-" ELSE P.CtaCheques END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS CtaCheques,
-(SELECT  CASE WHEN P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor) AS Banco
+
+(CASE WHEN $P{TP} = 1 THEN
+(SELECT CASE WHEN P.CtaCheques = 0 OR P.CtaCheques = "0" THEN "-" ELSE P.CtaCheques END FROM proveedores AS P WHERE P.Clave = CP.Proveedor)
+WHEN $P{TP} = 2 THEN ""
+ELSE "" END) AS CtaCheques,
+
+(CASE
+WHEN $P{TP} = 1 THEN
+(SELECT  CASE WHEN P.Banco = "0" THEN "" ELSE UPPER(P.Banco) END FROM proveedores AS P WHERE P.Clave = CP.Proveedor)
+WHEN $P{TP} = 2 THEN ""
+ ELSE "" END) AS Banco
 FROM
     `cartera_proveedores` AS `CP`
 WHERE `CP`.`Estatus` IN ('SIN PAGAR' , 'PENDIENTE')
@@ -278,6 +290,17 @@ ORDER BY  NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` 
 				</textElement>
 				<text><![CDATA[BANCO]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="258" y="12" width="34" height="13" uuid="a80a8fde-0084-4604-a564-57db774a773b"/>
+				<textFieldExpression><![CDATA[$P{TP}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="Column header" x="236" y="12" width="22" height="13" forecolor="#000000" uuid="6dc3ede5-060d-4d39-8693-18af859bcb35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TP]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -304,14 +327,14 @@ ORDER BY  NombreF_orden ASC, ABS(PLAZO) ASC , `CP`.`Proveedor` ASC , `FechaOrd` 
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{CtaCheques}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{TP} == 1 ? $F{CtaCheques} : "" ]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="483" y="0" width="113" height="11" uuid="1e772e93-65ef-4e5f-b2ef-626b4c7480b2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{Banco}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{TP} == 1 ? $F{Banco} : "" ]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

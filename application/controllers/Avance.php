@@ -50,6 +50,7 @@ class Avance extends CI_Controller {
         try {
 
             $FRACCION_100 = "<span class=\"fracciones_avance\">100</span>";
+            $FRACCION_101 = "<span class=\"fracciones_avance\">101</span>";
             $FRACCION_102 = "<span  class=\"fracciones_avance\">102</span>";
             $FRACCION_60 = "<span  class=\"fracciones_avance\">60</span>";
             $FRACCION_103 = "<span  class=\"fracciones_avance\">103</span>";
@@ -64,6 +65,7 @@ class Avance extends CI_Controller {
                             . "F.control AS CONTROL, F.estilo AS ESTILO, "
                             . "CONCAT((CASE "
                             . "WHEN F.numfrac = 100 THEN '{$FRACCION_100}' "
+                            . "WHEN F.numfrac = 101 THEN '{$FRACCION_101}' "
                             . "WHEN F.numfrac = 102 THEN '{$FRACCION_102}' "
                             . "WHEN F.numfrac = 60 THEN '{$FRACCION_60}' "
                             . "WHEN F.numfrac = 103 THEN '{$FRACCION_103}' "
@@ -922,7 +924,7 @@ P.Maquila AS MAQUILA
                                 $FRACCION = 299;
                             }
 
-                            $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(96,100) AND Control = {$xXx['CONTROL']}")->result();
+                            $check_corte = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina WHERE numfrac IN(96,100,101) AND Control = {$xXx['CONTROL']}")->result();
                             if (intval($check_corte[0]->EXISTE) === 0) {
                                 print "\n CORTE NO HA AVANZADO \n";
                                 exit(0);

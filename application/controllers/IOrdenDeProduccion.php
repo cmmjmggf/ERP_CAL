@@ -331,7 +331,7 @@ class IOrdenDeProduccion extends CI_Controller {
                 $aligns = array('L', 'L', 'L', 'L', 'L');
                 $pdf->SetTextColor(0, 0, 0);
                 /* RESUMEN */
-                $pdf->setY(46.5); //DISTANCIA ENTRE EL ENCABEZADO Y EL DETALLE
+                $pdf->setY(49.5); //DISTANCIA ENTRE EL ENCABEZADO Y EL DETALLE
 
                 /* FOREACH PIEZAS | ARTICULOS | PZXPAR | UNIDAD | CANTIDAD */
                 $PUNTO_INICIAL = $pdf->GetY();

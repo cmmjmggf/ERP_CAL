@@ -424,8 +424,7 @@ ORDER BY ABS(CLAVE) ASC")->result();
                     "UsuarioT" => $this->session->USERNAME
                 ));
                 $l = new Logs("ASIGNA PFTS - PASO 3", "HA DADO {$x['ENTREGA']},DEL ARTICULO {$x['ARTICULO']}(SPR), PRECIO {$PRECIO_MAQUILA_UNO}, SUBTOTAL " . ($PRECIO_MAQUILA_UNO * $x['ENTREGA']) . ", PARA EL CONTROL {$x['CONTROL']}, SEMANA {$x['SEMANA']}, ANIO {$Ano}", $this->session);
-            } 
-            else if (intval($ESTATUS[0]->AVANCECORTE) === 2 && intval($x['MATERIAL_EXTRA']) > 0) {
+            } else if (intval($ESTATUS[0]->AVANCECORTE) === 2 && intval($x['MATERIAL_EXTRA']) > 0) {
 
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')
                                 ->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
@@ -442,6 +441,8 @@ ORDER BY ABS(CLAVE) ASC")->result();
                 if (count($DT) > 0) {
                     $this->db->set('Cargo', ($DT[0]->Cargo + $x['ENTREGA']))
                             ->set('Abono', ($DT[0]->Abono + $x['ENTREGA']))
+                            ->set('Extra', 1)
+                            ->set('ExtraT', (floatval($DT[0]->ExtraT) + $x['ENTREGA'])) 
                             ->where('ID', $DT[0]->ID)->update('asignapftsacxc');
 
                     $PRECIO = $this->db->select("PM.Precio AS PRECIO_MAQUILA_UNO")
@@ -469,8 +470,7 @@ ORDER BY ABS(CLAVE) ASC")->result();
                     exit(0);
                 }
                 exit(0);
-            } 
-            else {
+            } else if(intval($x['MATERIAL_EXTRA'])=== 0) {
                 /* PASO 1 */
                 $Ano = $this->db->select('P.Ano AS Ano')->from('pedidox AS P')->where('P.Control', $x['CONTROL'])->get()->result()[0]->Ano;
                 /* COMPROBAR SI YA EXISTE EL REGISTRO POR EMPLEADO,SEMANA, CONTROL, FRACCION, ARTICULO */

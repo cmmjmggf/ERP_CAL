@@ -148,7 +148,7 @@
                         <label class="text-danger">Seleccione Fracción</label>
                         <div  class="row  bg-danger text-white" style="border-radius: 5px; height: 435px; overflow-y: auto;" >
                             <?php
-                            $fracciones = $this->db->query("SELECT Clave, Descripcion FROM fracciones AS F WHERE F.Clave IN(51,70,60,62,78,204,205,198,127,396,397,34,106,306,308,337,321,333,506,72,75,71,607,606,301,23,24,325,74,130,210) ORDER BY ABS(F.Clave) ASC;")->result();
+                            $fracciones = $this->db->query("SELECT Clave, Descripcion FROM fracciones AS F WHERE F.Clave IN(51,70,60,62,78,204,205,198,127,131,132,396,397,34,106,306,308,337,321,333,506,72,75,71,607,606,301,23,24,325,74,130,210) ORDER BY ABS(F.Clave) ASC;")->result();
                             $row = "";
                             foreach ($fracciones as $k => $v) {
                                 $row .= "<div class=\"col-12\">
@@ -1028,6 +1028,18 @@
             fracciones.push({
                 NUMERO_FRACCION: 130,
                 DESCRIPCION: "RAYAR PLANTILLA"
+            });
+        }
+        if (pnlTablero.find("#chk131")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 131,
+                DESCRIPCION: "LOTEAR ESPONJA"
+            });
+        }
+        if (pnlTablero.find("#chk132")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 132,
+                DESCRIPCION: "LOTEAR MALLA"
             });
         }
         if (pnlTablero.find("#chk210")[0].checked) {

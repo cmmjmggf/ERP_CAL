@@ -10,7 +10,7 @@
                     Asigna Piel, Forro, Textiles y Sintéticos a corte por control
                 </h4> 
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-4" align="right">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-4" align="center">
                 <button type="button" class="btn btn-info" id="btnRetornaMaterial">
                     <span class="fa fa-retweet"></span> Retornar material</button>
             </div>
@@ -59,7 +59,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="row">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center" data-toggle="tooltip" data-placement="right" title="Selecciona un articulo a entregar de la tabla de Pieles">
-                        <h5>PIELES</h5>
+                        <h5 style="margin-bottom: 0px;">PIELES</h5>
                         <table id="tblPieles" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -103,7 +103,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h5>FORROS</h5>
+                        <h5 style="margin-bottom: 0px;">FORROS</h5>
                         <table id="tblForros" class="table table-hover table-sm table-bordered  compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -147,7 +147,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h5>TEXTILES</h5>
+                        <h5 style="margin-bottom: 0px;">TEXTILES</h5>
                         <table id="tblTextiles" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -188,7 +188,7 @@
                         </table>
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6" align="center">
-                        <h5>SINTÉTICOS</h5>
+                        <h5 style="margin-bottom: 0px;">SINTÉTICOS</h5>
                         <table id="tblSinteticos" class="table table-hover table-sm table-bordered compact nowrap" style="width: 100% !important;">
                             <thead>
                                 <tr>
@@ -241,9 +241,9 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Control</th>
-                            <th scope="col">Emp</th>
-                            <th scope="col">Art.</th>
-                            <th scope="col">Descripcion</th>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">Articulo</th>
+                            <th scope="col">Descripción</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Cargo</th>
                             <th scope="col">Abono</th>
@@ -551,7 +551,7 @@
                 xPielForro.val($(this).val());
                 Regresos.ajax.reload();
 //                tblRegresos.DataTable().column(11).search($(this).val()).draw();
-            } else if($(this).val() === ''){
+            } else if ($(this).val() === '') {
                 xPielForro.val('');
                 Regresos.ajax.reload();
 //                tblRegresos.DataTable().column(11).search('').draw();
@@ -605,9 +605,14 @@
         btnRetornaMaterial.click(function () {
             mdlRetornaMaterial.modal('show');
         });
-        Entregar.keydown(function (event) {
-            if (event.which === 13) {
+         Entregar.keydown(function (event) {
+            if (event.keyCode === 13) {
                 onEntregar(this, event);
+            } else if(event.keyCode === 13 && parseFloat(Entregar.val()) > 0 ) {
+                onCampoInvalido(pnlTablero, "DEBE DE ESPEFICAR UNA CANTIDAD A ENTREGAR", function () {
+                    Entregar.focus().select();
+                });
+                return;
             }
         });
         btnReload.click(function () {
@@ -826,7 +831,7 @@
             tblControlesAsignados.DataTable().destroy();
         }
         ControlesAsignados = tblControlesAsignados.DataTable({
-            "dom": 'frtip',
+            "dom": 'rtip',
             buttons: buttons,
             "ajax": {
                 "url": '<?php print base_url('AsignaPFTSACXC/getControlesAsignados'); ?>',
@@ -854,12 +859,12 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 20,
+            "displayLength": 100,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
             "bSort": true,
-            "scrollY": "250px",
+            "scrollY": "550px",
             "aaSorting": [
                 [0, 'desc'], [5, 'desc']
             ],
@@ -1134,9 +1139,48 @@
         }
     }
 
+    function onEntregarPielForroTextilSintetico() {
+        $.post('<?php print base_url('AsignaPFTSACXC/onEntregarPielForroTextilSintetico'); ?>', {
+            TIPO: tipo_consumo,
+            ORDENDEPRODUCCION: OrdenDeProduccion.val(),
+            PARES: Pares.val(),
+            SEMANA: Semana.val(),
+            CONTROL: Control.val(),
+            FRACCION: Fraccion.val(),
+            ARTICULO: ClaveArticulo.val(),
+            ARTICULOT: Articulo.val(),
+            EXPLOSION: Explosion.val(),
+            ENTREGA: Entregar.val(),
+            MATERIAL_EXTRA: MaterialExtra[0].checked ? 1 : 0
+        }).done(function (data) {
+            console.log(data);
+            swal('ATENCIÓN', 'SE HA ENTREGADO ' + Entregar.val() + ' DEL MATERIAL SOLICITADO, EN LA SEMANA ' + Semana.val() + ' PARA LA FRACCIÓN "' + Fraccion.val(), 'success').then((value) => {
+                Fraccion.val('');
+                ClaveArticulo.val('');
+                Articulo.val('');
+                Explosion.val('');
+                Entregar.val('');
+                Entregar.prop('readonly', true);
+                MaterialExtra[0].checked = false;
+                onBuscarX(1, '');
+                onBuscarX(9, '');
+                onBuscarX(10, '');
+                ControlesAsignados.ajax.reload();
+                Fraccion.focus().select();
+                tipo_consumo = 0;
+            });
+        }).fail(function (x, y, z) {
+            console.log(x.responseText);
+        }).always(function () {
+
+        });
+    }
+
     function onEntregarMaterial() {
         var seguro = true;
-        if (Entregar.val() > Explosion.val()) {
+        if (Entregar.val() < Explosion.val() || Entregar.val() === Explosion.val()) {
+            onEntregarPielForroTextilSintetico();
+        } else if (Entregar.val() > Explosion.val()) {
             swal({
                 title: "ATENCIÓN",
                 text: "VA ENTREGAR MATERIAL EXTRA, ¿ESTA SEGURO?",
@@ -1154,55 +1198,19 @@
                 switch (value) {
                     case "aceptar":
                         seguro = true;
+                        if (seguro && Entregar.val()) {
+                            onEntregarPielForroTextilSintetico();
+                        } else {
+                            onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UNA CANTIDAD", function () {
+                                Entregar.focus().select();
+                            });
+                        }
                         break;
                     case "cancelar":
                         seguro = false;
                         Entregar.focus();
                         break;
                 }
-            });
-        } else {
-            console.log('Entregar.val() > Explosion.val() ELSE');
-        }
-
-        if (seguro && Entregar.val()) {
-            $.post('<?php print base_url('AsignaPFTSACXC/onEntregarPielForroTextilSintetico'); ?>', {
-                TIPO: tipo_consumo,
-                ORDENDEPRODUCCION: OrdenDeProduccion.val(),
-                PARES: Pares.val(),
-                SEMANA: Semana.val(),
-                CONTROL: Control.val(),
-                FRACCION: Fraccion.val(),
-                ARTICULO: ClaveArticulo.val(),
-                ARTICULOT: Articulo.val(),
-                EXPLOSION: Explosion.val(),
-                ENTREGA: Entregar.val(),
-                MATERIAL_EXTRA: MaterialExtra[0].checked ? 1 : 0
-            }).done(function (data) {
-                console.log(data);
-                swal('ATENCIÓN', 'SE HA ENTREGADO ' + Entregar.val() + ' DEL MATERIAL SOLICITADO, EN LA SEMANA ' + Semana.val() + ' PARA LA FRACCIÓN "' + Fraccion.val(), 'success').then((value) => {
-                    Fraccion.val('');
-                    ClaveArticulo.val('');
-                    Articulo.val('');
-                    Explosion.val('');
-                    Entregar.val('');
-                    Entregar.prop('readonly', true);
-                    MaterialExtra[0].checked = false;
-                    onBuscarX(1, '');
-                    onBuscarX(9, '');
-                    onBuscarX(10, '');
-                    ControlesAsignados.ajax.reload();
-                    Fraccion.focus().select();
-                    tipo_consumo = 0;
-                });
-            }).fail(function (x, y, z) {
-                console.log(x.responseText);
-            }).always(function () {
-
-            });
-        } else {
-            onCampoInvalido(pnlTablero, "DEBE DE ESPECIFICAR UNA CANTIDAD", function () {
-                Entregar.focus().select();
             });
         }
     }
@@ -1458,5 +1466,23 @@
     #tblRegresos.dataTable tbody>tr.selected, #tblRegresos.dataTable tbody>tr>.selected {
         background-color: #000000;
         color: #CDDC39;
+    }
+    #tblControlesAsignados tbody tr td, 
+    #tblPieles tbody tr td:nth-child(3), 
+    #tblPieles tbody tr td:nth-child(4), 
+    #tblPieles tbody tr td:nth-child(8),
+    #tblForros tbody tr td:nth-child(3), 
+    #tblForros tbody tr td:nth-child(4), 
+    #tblForros tbody tr td:nth-child(8),
+    #tblTextiles tbody tr td:nth-child(3), 
+    #tblTextiles tbody tr td:nth-child(4),
+    #tblTextiles tbody tr td:nth-child(8),
+    #tblSinteticos tbody tr td:nth-child(3), 
+    #tblSinteticos tbody tr td:nth-child(4), 
+    #tblSinteticos tbody tr td:nth-child(8){
+        font-style: italic;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
     }
 </style>

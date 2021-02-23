@@ -140,17 +140,23 @@
 
     function onCalcularMontoSeleccionado() {
         tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end) td:nth-child(1) input[type='checkbox']:not(:checked)").parent().parent().parent().parent().removeClass("row-selected");
+        
         $.each(tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end)"), function (k, v) {
             var row = $(v).find("td");
             var is_checked = row.eq(0).find("input[type='checkbox']");
+            var tr = AntiguedadSaldosDelProveedor.row(v).data();
             if (is_checked[0].checked) {
                 $(v).addClass("row-selected");
                 var tr = AntiguedadSaldosDelProveedor.row(v).data();
+                $.post('<?php print base_url('ProgramacionProveeduria/onMarcarParaPago'); ?>', {
+                    ID: tr.ID
+                });
             }
         });
         onSumarTodoLoSeleccionado();
         onBeep(3);
     }
+
     var total_seleccionado = 0;
     function onSeleccionarTodoXProveedor(e) {
         tblAntiguedadSaldosDelProveedor.find("tbody tr:not(.group-start):not(.group-end) td:nth-child(1) input[type='checkbox']:not(:checked)").parent().parent().parent().parent().removeClass("row-selected");
@@ -164,6 +170,7 @@
                         $(v)[0].checked = false;
                     }
                     var tr = AntiguedadSaldosDelProveedor.row($(v).parents("tr")).data();
+
                 });
         onSumarTodoLoSeleccionado();
         onBeep(3);
@@ -195,7 +202,8 @@
                         movimientos.push(r.ID);
                     });
                     $.post('<?php print base_url('ProgramacionProveeduria/onImprimirAntiguedadDeSaldos'); ?>', {
-                        MOVIMIENTOS: JSON.stringify(movimientos)
+                        MOVIMIENTOS: JSON.stringify(movimientos),
+                        TP: PPTP.val()
                     }).done(function (a) {
                         if (a.length > 0) {
                             onImprimirReporteFancyAFC(a, function (a, b) {
@@ -270,7 +278,7 @@
             }
         ];
         var xoptions = {
-            "dom": 'fritp',
+            "dom": 'ritp',
             "ajax": {
                 "url": '<?php print base_url('ProgramacionProveeduria/getDocumentosXTipo'); ?>',
                 "dataSrc": "",
@@ -288,7 +296,7 @@
             select: true,
             "autoWidth": true,
             "colReorder": true,
-            "displayLength": 9999,
+            "displayLength": 99999,
             "bLengthChange": false,
             "deferRender": true,
             "scrollCollapse": false,
@@ -306,7 +314,7 @@
                             '</div>';
                 },
                 endRender: function (rows, group) {
-                    console.log(rows.data().pluck('UNO'));
+//                    console.log(rows.data().pluck('UNO'));
                     var SALDO_DOC = $.number(rows.data().pluck('Saldo_Doc').reduce(function (a, b) {
                         return a + parseFloat(b);
                     }, 0), 2, '.', ',');
