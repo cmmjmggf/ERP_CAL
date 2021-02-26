@@ -47,6 +47,7 @@
         Anio.val(new Date().getFullYear());
 
         btnAceptar.click(function () {
+            onDisable(btnAceptar);
             if (MaquilaInicial.val() && MaquilaFinal.val()
                     && SemanaInicial.val() && SemanaFinal.val() && Anio.val()) {
                 HoldOn.open({
@@ -59,13 +60,16 @@
                     SEMANA_FINAL: SemanaFinal.val().trim() !== '' ? SemanaFinal.val() : '',
                     ANIO: Anio.val().trim() !== '' ? Anio.val() : ''
                 }).done(function (data, x, jq) {
+                    onEnable(btnAceptar);
                     console.log(data);
                     onBeep(1);
                     onImprimirReporteFancy(data);
                 }).fail(function (x, y, z) {
+                    onEnable(btnAceptar);
                     console.log(x.responseText);
                     swal('ATENCIÓN', 'HA OCURRIDO UN ERROR INESPERADO AL OBTENER EL REPORTE,CONSULTE LA CONSOLA PARA MÁS DETALLES.', 'warning');
                 }).always(function () {
+                    onEnable(btnAceptar);
                     HoldOn.close();
                 });
             } else {
@@ -79,6 +83,7 @@
         swal('ATENCIÓN', 'TODOS LOS CAMPOS SON REQUERIDOS', 'warning').then((value) => {
             $.each(pnl.find("div.card-body input.required"), function (k, v) {
                 if ($(v).val().trim() === '') {
+                    onEnable(btnAceptar);
                     $(v).focus().select();
                     return false;
                 }

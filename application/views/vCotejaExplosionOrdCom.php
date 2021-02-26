@@ -46,6 +46,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row mt-2">
+                        <div class="col-12 col-sm-6">
+                            <div class="custom-control custom-checkbox  ">
+                                <input type="checkbox" class="custom-control-input" id="chSinExplosionCoteja">
+                                <label class="custom-control-label text-info labelCheck" for="chSinExplosionCoteja">Orden de Compra Sin Explosión</label>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -72,9 +82,14 @@
             mdlCotejaExplosionOrdCom.find('#btnImprimir').attr('disabled', true);
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlCotejaExplosionOrdCom.find("#frmCaptura")[0]);
-
+            var sinExplosion = mdlCotejaExplosionOrdCom.find("#chSinExplosionCoteja")[0].checked;
             var Tipo = mdlCotejaExplosionOrdCom.find('#Tipo').val();
-            var reporte = (Tipo === '80') ? 'onReporteCotejaTallas' : 'onReporteCotejaOrdComExplosion';
+            var reporte;
+            if (sinExplosion) {
+                reporte = (Tipo === '80') ? 'onReporteCotejaOrdComExplosionSinExplosion' : 'onReporteCotejaOrdComExplosionSinExplosion';
+            } else {
+                reporte = (Tipo === '80') ? 'onReporteCotejaTallas' : 'onReporteCotejaOrdComExplosion';
+            }
 
             $.ajax({
                 url: base_url + 'index.php/ReporteCotejaOrdComExplosion/' + reporte,

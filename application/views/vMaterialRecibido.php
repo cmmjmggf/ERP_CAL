@@ -284,6 +284,7 @@
         getArticulosMatRecibido();
         getProveedoresMatRecibido();
         pnlTablero.find("input").val("");
+        pnlTablero.find("#Ano").val(getYear());
         $(':input:text:enabled:visible:first').focus();
     }
     function getRecords() {
@@ -431,7 +432,7 @@
         pnlTablero.find("#sArticulo")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/ReportesKardex/getArticulos').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Articulo, value: v.Clave});
+                pnlTablero.find("#sArticulo")[0].selectize.addOption({text: v.Clave + ' - ' + v.Articulo, value: v.Clave});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
@@ -443,7 +444,7 @@
         pnlTablero.find("#sProveedor")[0].selectize.clearOptions();
         $.getJSON(base_url + 'index.php/ReportesKardex/getProveedores').done(function (data) {
             $.each(data, function (k, v) {
-                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: v.ProveedorF, value: v.ID});
+                pnlTablero.find("#sProveedor")[0].selectize.addOption({text: v.ID + ' - ' + v.ProveedorF, value: v.ID});
             });
         }).fail(function (x) {
             swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');

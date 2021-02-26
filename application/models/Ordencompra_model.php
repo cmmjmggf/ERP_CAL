@@ -432,6 +432,31 @@ order by Articulo asc  ", false);
         }
     }
 
+    public function getCabecerosReporteOrdenCompra($Tp, $Folio) {
+        try {
+            return $this->db->query("select A.cabecero as cabecero,
+                            (select descripcion from articulos where clave = A.cabecero) as nomart,
+                            (select observaciones from articulos where clave = A.cabecero) as observaciones
+                            from
+                            (
+                            select
+                            (select SC.ArticuloCBZ
+                            from suelascompras SC
+                            where SC.A1 = OC.Articulo or SC.A2 = OC.Articulo or
+                            SC.A3 = OC.Articulo or SC.A4 = OC.Articulo or SC.A5 = OC.Articulo or SC.A6 = OC.Articulo or SC.A7 = OC.Articulo or
+                            SC.A8 = OC.Articulo or SC.A9 = OC.Articulo or SC.A10 = OC.Articulo or SC.A11 = OC.Articulo or SC.A12 = OC.Articulo or
+                            SC.A13 = OC.Articulo or SC.A14 = OC.Articulo or SC.A15 = OC.Articulo or SC.A16 = OC.Articulo or SC.A17 = OC.Articulo or
+                            SC.A18 = OC.Articulo or SC.A19 = OC.Articulo or SC.A20 = OC.Articulo) as cabecero
+                            from ordencompra  OC
+                            where OC.folio = '$Folio' and OC.Tp = '$Tp'
+                            group by cabecero
+                            ) AS A
+                            order by cabecero asc ")->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
     public function getReporteOrdenCompra($Tp, $Folio) {
         try {
             $this->db->select(''
@@ -457,7 +482,30 @@ order by Articulo asc  ", false);
                     . "OC.Maq,"
                     . "OC.FechaEntrega, "
                     . "OC.Factura,"
-                    . "OC.CantidadRecibida "
+                    . "OC.CantidadRecibida,"
+                    . "(select SC.ArticuloCBZ
+                        from suelascompras SC
+                        where
+                        SC.A1 = OC.Articulo or
+                        SC.A2 = OC.Articulo or
+                        SC.A3 = OC.Articulo or
+                        SC.A4 = OC.Articulo or
+                        SC.A5 = OC.Articulo or
+                        SC.A6 = OC.Articulo or
+                        SC.A7 = OC.Articulo or
+                        SC.A8 = OC.Articulo or
+                        SC.A9 = OC.Articulo or
+                        SC.A10 = OC.Articulo or
+                        SC.A11 = OC.Articulo or
+                        SC.A12 = OC.Articulo or
+                        SC.A13 = OC.Articulo or
+                        SC.A14 = OC.Articulo or
+                        SC.A15 = OC.Articulo or
+                        SC.A16 = OC.Articulo or
+                        SC.A17 = OC.Articulo or
+                        SC.A18 = OC.Articulo or
+                        SC.A19 = OC.Articulo or
+                        SC.A20 = OC.Articulo) as cabecero "
                     . '', false);
             $this->db->from('ordencompra AS OC')
                     ->join('proveedores AS P', 'OC.Proveedor = P.Clave')

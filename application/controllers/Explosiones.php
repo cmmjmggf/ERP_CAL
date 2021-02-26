@@ -549,7 +549,10 @@ class Explosiones extends CI_Controller {
         $pdf->Cell(50, 4, utf8_decode('3    SUELA'), 0/* BORDE */, 1, 'L');
 
 
-        $Materiales = $this->db->query("SELECT ex.numart FROM explosiontallastemp ex group by ex.numart order by ex.nomart;")->result();
+        $Materiales = $this->db->query("SELECT ex.numart , ifnull(a.Observaciones,'') as observ
+                                        FROM explosiontallastemp ex
+                                        join articulos a on a.clave = ex.numart
+                                        group by ex.numart order by ex.nomart; ")->result();
         $Explosion = $this->db->query("SELECT
                 ex.numart,ex.nomart, ex.unidad, ex.talla, ex.cantidad, pm.precio, ex.cantidad * pm.precio as subtot
                 FROM explosiontallastemp ex join preciosmaquilas pm on pm.articulo = ex.numart and pm.maquila = 1
@@ -560,9 +563,12 @@ class Explosiones extends CI_Controller {
         foreach ($Materiales as $key => $M) {
             $TOTAL_EXP_ART = 0;
             $TOTAL_SUBT_ART = 0;
+            $YTemp = $pdf->GetY() + 3.8;
+            $pdf->SetY($YTemp);
             foreach ($Explosion as $key => $D) {
                 if ($D->numart === $M->numart) {
                     $pdf->SetLineWidth(0.25);
+
                     $pdf->SetX(5);
                     $pdf->SetFont('Calibri', '', 8);
 
@@ -585,16 +591,22 @@ class Explosiones extends CI_Controller {
                 }
             }
             if ($TOTAL_EXP_ART > 0 && $TOTAL_SUBT_ART > 0) {
+                $pdf->SetFont('Calibri', 'BI', 6.5);
+                $pdf->SetX(5);
+                $YTemp = $pdf->GetY();
+//                $pdf->Cell(65, 4, '*' . utf8_decode(mb_strimwidth($M->observ, 0, 52, "")) . '*', 0/* BORDE */, 0, 'L');
+                $pdf->MultiCell(65, 3.5, 'CALIDAD: *' . utf8_decode(mb_strimwidth($M->observ, 0, 95, "")) . '*', 0/* BORDE */, 'L', 0);
+
+                $pdf->SetY($YTemp);
+                $pdf->SetX(75);
                 $pdf->SetFont('Calibri', 'B', 8);
-                $pdf->SetX(58);
-                $pdf->Cell(40, 4, 'Total por Articulo: ', 'B'/* BORDE */, 0, 'L');
-                $pdf->SetFont('Calibri', '', 8);
+                $pdf->Cell(25, 4, utf8_decode('Total por Artículo: '), 1/* BORDE */, 0, 'L');
                 $pdf->SetX(98);
-                $pdf->Cell(14, 4, number_format($TOTAL_EXP_ART, 2, ".", ","), 'B'/* BORDE */, 0, 'R');
+                $pdf->Cell(14, 4, number_format($TOTAL_EXP_ART, 2, ".", ","), ''/* BORDE */, 0, 'R');
                 $pdf->SetX(112);
-                $pdf->Cell(15, 4, '', 'B'/* BORDE */, 0, 'R');
+                $pdf->Cell(15, 4, '', ''/* BORDE */, 0, 'R');
                 $pdf->SetX(127);
-                $pdf->Cell(15, 4, '$' . number_format($TOTAL_SUBT_ART, 2, ".", ","), 'B'/* BORDE */, 1, 'R');
+                $pdf->Cell(15, 4, '$' . number_format($TOTAL_SUBT_ART, 2, ".", ","), ''/* BORDE */, 1, 'R');
             }
         }
         $pdf->SetFont('Calibri', 'B', 8);

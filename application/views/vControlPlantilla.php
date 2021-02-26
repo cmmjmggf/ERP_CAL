@@ -760,56 +760,31 @@
             if (e.keyCode === 13) {
                 var txtfr = $(this).val();
                 if (txtfr) {
-                    $.get('<?php print base_url('ControlPlantilla/onVerificaFraccionControlFraccionCobrada'); ?>', {
-                        ESTILO: Estilo.val(),
-                        FRACCION: Fraccion.val(),
-                        CONTROL: Control.val()
-                    }).done(function (data) {
-                        console.log(data);
-                        if (data === '0') {//No existe fracción en fracciones por estilo
-                            swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
-                                sFraccion[0].selectize.clear(true);
-                                Precio.val('');
-                                btnAcepta.attr('disabled', true);
-                                Fraccion.val('');
-                                Fraccion.val('').focus();
-                                return;
-                            });
-                        } else if (data === '88') {
-                            swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
-                                sFraccion[0].selectize.clear(true);
-                                Precio.val('');
-                                btnAcepta.attr('disabled', true);
-                                Fraccion.val('').focus();
-                                return;
-                            });
-                        } else if (data === '99') {
-                            swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
-                                sFraccion[0].selectize.clear(true);
-                                Precio.val('');
-                                btnAcepta.attr('disabled', true);
-                                Fraccion.val('').focus();
-                                return;
-                            });
-                        } else if (data === '77') {
-                            swal('ERROR', 'EL CONTROL DEBE DE ESTAR EN ENSUELADO PARA CONTINUAR', 'warning').then((value) => {
-                                sFraccion[0].selectize.clear(true);
-                                Precio.val('');
-                                btnAcepta.attr('disabled', true);
-                                Fraccion.val('').focus();
-                                return;
-                            });
-                        } else {
-                            Precio.val(data);
-                            Fecha.val(FechaActual);
-                            sFraccion[0].selectize.addItem(txtfr, true);
-                            btnAcepta.attr('disabled', false);
-                            btnAcepta.focus();
+                    if (usuario === 'JULIANNA') {
+
+                        switch (parseInt(txtfr)) {
+                            case 69:
+
+                            case 77:
+
+                            case 83:
+                                onCapturarFraccion();
+                                break;
+                            default:
+                                swal('ERROR', 'FRACCIÓN NO PERMITIDA PARA ESTE USUARIO', 'warning').then((value) => {
+                                    sFraccion[0].selectize.clear(true);
+                                    Precio.val('');
+                                    btnAcepta.attr('disabled', true);
+                                    Fraccion.val('');
+                                    Fraccion.val('').focus();
+                                    return;
+                                });
+                                break;
                         }
-                    }).fail(function (x) {
-                        swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                        console.log(x.responseText);
-                    });
+                    } else {
+                        //Para todos los demás
+                        onCapturarFraccion();
+                    }
                 }
             }
         });
@@ -818,60 +793,146 @@
             var txtfr = $(this).val();
             if (txtfr) {
                 Fraccion.val(sFraccion.val());
-                $.get('<?php print base_url('ControlPlantilla/onVerificaFraccionControlFraccionCobrada'); ?>', {
-                    ESTILO: Estilo.val(),
-                    FRACCION: Fraccion.val(),
-                    CONTROL: Control.val()
-                }).done(function (data) {
-                    console.log(data);
-                    if (data === '0') {//No existe fracción en fracciones por estilo
-                        swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
-                            sFraccion[0].selectize.clear(true);
-                            Precio.val('');
-                            btnAcepta.attr('disabled', true);
-                            Fraccion.val('');
-                            Fraccion.val('').focus();
-                            return;
-                        });
-                    } else if (data === '88') {
-                        swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
-                            sFraccion[0].selectize.clear(true);
-                            Precio.val('');
-                            btnAcepta.attr('disabled', true);
-                            Fraccion.val('').focus();
-                            return;
-                        });
-                    } else if (data === '99') {
-                        swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
-                            sFraccion[0].selectize.clear(true);
-                            Precio.val('');
-                            btnAcepta.attr('disabled', true);
-                            Fraccion.val('').focus();
-                            return;
-                        });
-                    } else if (data === '77') {
-                        swal('ERROR', 'EL CONTROL DEBE DE ESTAR EN ENSUELADO PARA CONTINUAR', 'warning').then((value) => {
-                            sFraccion[0].selectize.clear(true);
-                            Precio.val('');
-                            btnAcepta.attr('disabled', true);
-                            Fraccion.val('').focus();
-                            return;
-                        });
-                    } else {
-                        Precio.val(data);
-                        Fecha.val(FechaActual);
-                        btnAcepta.attr('disabled', false);
-                        btnAcepta.focus();
+
+                if (usuario === 'JULIANNA') {
+
+                    switch (parseInt(txtfr)) {
+                        case 69:
+
+                        case 77:
+
+                        case 83:
+                            onCapturarFraccionSelect();
+                            break;
+                        default:
+                            swal('ERROR', 'FRACCIÓN NO PERMITIDA PARA ESTE USUARIO', 'warning').then((value) => {
+                                sFraccion[0].selectize.clear(true);
+                                Precio.val('');
+                                btnAcepta.attr('disabled', true);
+                                Fraccion.val('');
+                                Fraccion.val('').focus();
+                                return;
+                            });
+                            break;
                     }
-                }).fail(function (x) {
-                    swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
-                    console.log(x.responseText);
-                });
+                } else {
+                    //Para todos los demás
+                    onCapturarFraccionSelect();
+                }
+
             }
 
 
         });
     });
+
+    function onCapturarFraccion() {
+
+        $.get('<?php print base_url('ControlPlantilla/onVerificaFraccionControlFraccionCobrada'); ?>', {
+            ESTILO: Estilo.val(),
+            FRACCION: Fraccion.val(),
+            CONTROL: Control.val()
+        }).done(function (data) {
+            console.log(data);
+            if (data === '0') {//No existe fracción en fracciones por estilo
+                swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('');
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else if (data === '88') {
+                swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else if (data === '99') {
+                swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else if (data === '77') {
+                swal('ERROR', 'EL CONTROL DEBE DE ESTAR EN ENSUELADO PARA CONTINUAR', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else {
+                Precio.val(data);
+                Fecha.val(FechaActual);
+                sFraccion[0].selectize.addItem(Fraccion.val(), true);
+                btnAcepta.attr('disabled', false);
+                btnAcepta.focus();
+            }
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+    }
+
+    function onCapturarFraccionSelect() {
+        $.get('<?php print base_url('ControlPlantilla/onVerificaFraccionControlFraccionCobrada'); ?>', {
+            ESTILO: Estilo.val(),
+            FRACCION: Fraccion.val(),
+            CONTROL: Control.val()
+        }).done(function (data) {
+            console.log(data);
+            if (data === '0') {//No existe fracción en fracciones por estilo
+                swal('ERROR', 'LA FRACCIÓN NO EXISTE EN ESTE ESTILO', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('');
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else if (data === '88') {
+                swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO ENVIADO A MAQUILAR', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else if (data === '99') {
+                swal('ERROR', 'EL CONTROL/FRACCIÓN YA HA SIDO REPORTADO EN NÓMINA', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else if (data === '77') {
+                swal('ERROR', 'EL CONTROL DEBE DE ESTAR EN ENSUELADO PARA CONTINUAR', 'warning').then((value) => {
+                    sFraccion[0].selectize.clear(true);
+                    Precio.val('');
+                    btnAcepta.attr('disabled', true);
+                    Fraccion.val('').focus();
+                    return;
+                });
+            } else {
+                Precio.val(data);
+                Fecha.val(FechaActual);
+                btnAcepta.attr('disabled', false);
+                btnAcepta.focus();
+            }
+        }).fail(function (x) {
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            console.log(x.responseText);
+        });
+
+    }
+
     function getPorcentajes() {
         if (!$.fn.DataTable.isDataTable('#tblPorcentajes')) {
             var cols = [

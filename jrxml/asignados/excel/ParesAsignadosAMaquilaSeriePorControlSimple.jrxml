@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportePago" language="groovy" pageWidth="1330" pageHeight="950" orientation="Landscape" columnWidth="1330" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
-	<property name="ireport.zoom" value="1.8660295208389401"/>
-	<property name="ireport.x" value="37"/>
+	<property name="ireport.zoom" value="1.2745232708414336"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
 	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
@@ -32,6 +32,7 @@
 		<![CDATA[SELECT A.Clave, P.Control, P.Estilo, P.Cliente AS Cliente, C.RazonS AS ClienteT,
 A.Descripcion AS Suela, cast(P.Pares as signed) as Pares, P.EstatusProduccion AS Avance, P.Color AS Color,
 CO.Descripcion AS ColorT,
+group_concat((select concat(clave,' - ',descripcion) from piezas where clave = FT.Pieza )) as pieza,
 CASE
 WHEN P.Serie = '1' THEN '1 CABALLERO'
 WHEN P.Serie = '2' THEN '2 DAMA' END AS Genero,
@@ -73,7 +74,8 @@ INNER JOIN articulos A ON FT.Articulo = A.Clave
 INNER JOIN series S ON P.Serie = S.Clave
 INNER JOIN colores AS CO ON  CO.Clave = FT.Color AND CO.Estilo = FT.Estilo AND FT.Pieza IN ('1116','1119')
 WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO} AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND P.stsavan NOT IN(13,14)
- ORDER BY ABS(P.Serie) ASC, A.Descripcion ASC;]]>
+group by P.Control
+ORDER BY ABS(P.Serie) ASC, P.Estilo ASC;]]>
 	</queryString>
 	<field name="Clave" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -97,6 +99,9 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="ColorT" class="java.lang.String"/>
+	<field name="pieza" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="Genero" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -501,6 +506,13 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 					</textElement>
 					<textFieldExpression><![CDATA[$F{Genero}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement style="Column header" x="569" y="0" width="83" height="13" isPrintInFirstWholeBand="true" forecolor="#000000" uuid="d788e59b-6c34-4bc5-873d-f613855b9ec0"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="9" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Pieza]]></text>
+				</staticText>
 			</band>
 		</groupHeader>
 	</group>
@@ -1040,6 +1052,14 @@ WHERE P.Maquila BETWEEN $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{C22}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement mode="Transparent" x="569" y="0" width="83" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="194f17cf-6fc7-4f98-ba83-1d0d2a699a52"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pieza}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

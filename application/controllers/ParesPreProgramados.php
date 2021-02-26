@@ -91,7 +91,7 @@ class ParesPreProgramados extends CI_Controller {
                             . 'A.Clave AS CLAVE_AGENTE, '
                             . 'A.Nombre AS AGENTE, '
                             . 'ES.Clave AS CLAVE_ESTADO, '
-                            . 'ES.Descripcion AS ESTADO', false)
+                            . "CONCAT('(',C.Colonia ,') ',C.Ciudad ,', ',ES.Descripcion) AS ESTADO", false)
                     ->from('pedidox AS P')
                     ->join('clientes AS C', 'P.Cliente = C.Clave')
                     ->join('agentes AS A', 'C.Agente = A.Clave')
@@ -163,12 +163,12 @@ class ParesPreProgramados extends CI_Controller {
                     $pdf->SetX(10);
                     $pdf->setFilled(0);
                     $pdf->setBorders(0);
-                    $pdf->SetAligns(array('L', 'L', 'C'));
-                    $pdf->SetWidths(array(43/* 0 */, 35/* 1 */, 22/* 2 */));
+                    $pdf->SetAligns(array('L', 'L', 'L'));
+                    $pdf->SetWidths(array(43/* 0 */, 35/* 1 */, 100/* 2 */));
                     $pdf->RowNoBorder(array(substr(utf8_decode($v->CLAVE_CLIENTE . " " . $v->CLIENTE), 0, 30)/* 0 */,
                         utf8_decode($v->CLAVE_AGENTE . " " . $v->AGENTE)/* 1 */, /* SI NO TIENE AGENTE O ESTA EN CERO, ES UNA MUESTRA */
                         utf8_decode($v->ESTADO)));
-                    $pdf->Line(10, $pdf->GetY(), 110, $pdf->GetY());
+                    $pdf->Line(10, $pdf->GetY(), 188, $pdf->GetY());
 //                $PARES_PREPROGRAMADOS = $this->pam->getParesPreProgramados($v->CLAVE_CLIENTE, 1, $x->post('CLIENTE'), $x->post('ESTILO'), $x->post('LINEA'), 1/* MAQUILA = 1 */, $x->post('SEMANA'), $x->post('FECHA'), $x->post('FECHAF'), $xx['ANIO']);
 
 

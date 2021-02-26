@@ -284,4 +284,84 @@ group by EXPL.ClaveART ORDER BY EXPL.Descripcion ASC "
         }
     }
 
+    /* Ord compra Sin Explosion */
+
+    public function getGruposSinE($Ano, $Semana, $aSemana, $Maquila, $aMaquila, $TipoE) {
+        try {
+            $this->db->query("set sql_mode=''");
+            $this->db->select("CAST(G.Clave AS SIGNED ) AS Clave ,G.Nombre "
+                    . " ", false);
+            $this->db->from('ordencompra OC');
+            $this->db->join('articulos A', 'ON A.Clave =  OC.Articulo');
+            $this->db->join('grupos G', 'ON G.Clave = A.Grupo');
+            switch ($TipoE) {
+                case '10':
+                    $this->db->where_in('G.Clave', array('1', '2'));
+                    break;
+                case '80':
+                    $this->db->where_in('G.Clave', array('3', '50', '52'));
+                    break;
+                case '90':
+                    $this->db->where_not_in('G.Clave', array('1', '2', '3', '50', '52'));
+                    break;
+            }
+            $this->db->where("cast(OC.Maq as signed) BETWEEN $Maquila AND $aMaquila");
+            $this->db->where("cast(OC.Sem as signed) BETWEEN $Semana AND $aSemana");
+            $this->db->where('OC.Ano', $Ano);
+            $this->db->where('OC.SinExplosion', 1);
+            $this->db->where_not_in('OC.Estatus', array('CANCELADA', 'INACTIVA'));
+            $this->db->group_by('Clave');
+            $this->db->order_by('Clave', 'ASC');
+            $query = $this->db->get();
+            /*
+             * FOR DEBUG ONLY
+             */
+            $str = $this->db->last_query();
+            //print $str;
+            $data = $query->result();
+            return $data;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    public function getExplosionMaterialesSinE($Ano, $Semana, $aSemana, $Maquila, $aMaquila, $TipoE) {
+        try {
+            $this->db->query("set sql_mode=''");
+
+            $Subalmacen = ($Maquila === '1') ? " or  MA.Maq  = '97' " : '';
+            $sql = "select  A.Grupo, OC.Articulo, A.Descripcion, U.Descripcion as Unidad, OC.Precio,
+                sum(OC.Cantidad) AS CantPedida,
+                sum(OC.CantidadRecibida) AS CantEntregada,
+                ifnull((select sum(MA.CantidadMov) from movarticulos MA
+                where  MA.tipomov in ('SXM', 'SPR', 'SXP', 'SXC')
+                and MA.EntradaSalida = '2'
+                and MA.Articulo = OC.Articulo
+                and (MA.Maq BETWEEN $Maquila AND $aMaquila  $Subalmacen )
+                AND MA.Sem BETWEEN $Semana AND $aSemana
+                AND MA.Ano = $Ano
+                ), 0) AS EntregadoMaquilas
+                from ordencompra OC
+                JOIN `articulos` `A` ON `A`.`Clave` =  `OC`.`Articulo`
+                JOIN `unidades` `U` ON `U`.`Clave` = `A`.`UnidadMedida`
+                where OC.Maq BETWEEN $Maquila AND $aMaquila
+                AND OC.Sem BETWEEN $Semana AND $aSemana
+                AND OC.Ano = $Ano
+                AND OC.Estatus NOT IN ('CANCELADA', 'INACTIVA')
+                AND OC.SinExplosion = 1
+                AND
+                case
+                when '$TipoE' = '10' then `A`.`Grupo` IN('1', '2')
+                when '$TipoE' = '80' then `A`.`Grupo` IN('3', '50','52')
+                when '$TipoE' = '90' then `A`.`Grupo` NOT IN('1', '2','3', '50','52')
+                end
+                group by OC.Articulo
+                order by A.Grupo, A.Descripcion ASC ";
+
+            return $this->db->query($sql)->result();
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
+
 }

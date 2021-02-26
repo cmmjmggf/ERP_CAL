@@ -266,6 +266,7 @@
                     text: "LA CANTIDAD RECIBIDA/DEVUELTA NO CONCUERDA CON CANTIDADES CLASIFICADAS COMO 1RA, 2DA, 3RA, 4TA",
                     icon: "warning"
                 }).then((value) => {
+                    btnGuardar.attr('disabled', false);
                     $(this).focus();
                 });
             } else {

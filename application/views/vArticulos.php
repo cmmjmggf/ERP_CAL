@@ -165,6 +165,11 @@
                         </select>
                         <input type="text" class="form-control form-control-sm numbersOnly mb-2" id="PrecioTres" name="PrecioTres"   placeholder="Precio pactado">
                     </div>
+                    <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-8">
+                        <label for="" >Observaciones*</label>
+                        <input type="text" class="form-control form-control-sm" id="Observaciones" name="Observaciones" >
+
+                    </div>
                     <div id="ProveedorUltimaCompra" class="col-12 col-sm-12 col-md-12 col-xl-12 d-none">
                         <p>Proveedor U.C</p>
                         <p class="text-info">* * * * *</p>
@@ -424,7 +429,7 @@
             if (valido) {
                 var frm = new FormData(pnlDatos.find("#frmNuevo")[0]);
                 if (!nuevo) {
-                    if (PrecioVentaParaMaquilas.data().count()>0) {
+                    if (PrecioVentaParaMaquilas.data().count() > 0) {
                         var precios = [];
                         $.each(tblPrecioVentaParaMaquilas.find("tbody tr"), function (k, v) {
                             var r = PrecioVentaParaMaquilas.row($(this)).data();
@@ -438,7 +443,7 @@
                             }
                         });
                         frm.append('Precios', JSON.stringify(precios));
-                    } 
+                    }
                     $.ajax({
                         url: master_url + 'onModificar',
                         type: "POST",
@@ -451,7 +456,7 @@
                         onCloseOverlay();
                         onEnable(btnGuardar);
 //                        swal('ATENCIÓN', 'SE HAN GUARDADO LOS CAMBIOS', 'info');
-//                        nuevo = false;
+                        nuevo = false;
 //                        PrecioVentaParaMaquilas.clear().draw();
                         onNotifyOld('fa fa-check', 'SE HAN GUARDADO LOS CAMBIOS', 'success')
                         //pnlDatos.addClass("d-none");
@@ -831,6 +836,7 @@
     }
 
     function getArticuloByID(ClaveArticulo) {
+        nuevo = false;
         $.getJSON(master_url + 'getArticuloByID', {ID: ClaveArticulo}).done(function (data) {
             if (data.length > 0) {
                 pnlDatos.find("input").val("");

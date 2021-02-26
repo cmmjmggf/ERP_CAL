@@ -23,7 +23,7 @@ class MenuClientes extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
+                    $this->load->view('vNavGeneral')->view('vMenuClientes');
                     break;
                 case 'RECURSOS HUMANOS':
                     $this->load->view('vNavGeneral')->view('vMenuClientes');

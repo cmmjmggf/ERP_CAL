@@ -249,6 +249,7 @@ class OrdenCompraTallas extends CI_Controller {
         try {
             $datos = array(
                 'Estatus' => 'ACTIVA',
+                'SinExplosion' => $this->input->post('SinExplosion')
             );
             $this->Ordencompra_model->onModificar($this->input->post('Tp'), $this->input->post('Folio'), $datos);
         } catch (Exception $exc) {
@@ -326,6 +327,7 @@ class OrdenCompraTallas extends CI_Controller {
                 $Folio = $v->Folio;
                 $Tp = $v->Tp;
                 $DatosEmpresa = $cm->getDatosEmpresa();
+                $Cabeceros = $cm->getCabecerosReporteOrdenCompra($Tp, $Folio);
                 $OrdenCompra = $cm->getReporteOrdenCompra($Tp, $Folio);
 
                 $pdf->Logo = $DatosEmpresa[0]->Logo;
@@ -346,31 +348,46 @@ class OrdenCompraTallas extends CI_Controller {
 
                 $SubTotal = 0;
                 $TotalCantidad = 0;
-                foreach ($OrdenCompra as $keyFT => $F) {
-                    $pdf->SetLineWidth(0.25);
-                    $pdf->SetX(5);
-                    $pdf->SetFont('Calibri', '', 8.5);
-                    $anchos = array(10/* 0 */, 90/* 1 */, 15/* 2 */, 10/* 3 */, 20/* 4 */, 20/* 5 */, 10/* 6 */, 15/* 7 */, 30/* 8 */, 30/* 9 */, 20/* 10 */);
-                    $aligns = array('L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L');
-                    $pdf->SetAligns($aligns);
-                    $pdf->SetWidths($anchos);
+                foreach ($Cabeceros as $keyFT => $C) {
+                    $SubTotalCBZ = 0;
+                    $TotalCantidadCBZ = 0;
+                    foreach ($OrdenCompra as $keyFT => $F) {
+                        if ($F->cabecero === $C->cabecero) {
+                            $pdf->SetLineWidth(0.25);
+                            $pdf->SetX(5);
+                            $pdf->SetFont('Calibri', '', 8.5);
+                            $anchos = array(10/* 0 */, 90/* 1 */, 15/* 2 */, 10/* 3 */, 20/* 4 */, 20/* 5 */, 10/* 6 */, 15/* 7 */, 30/* 8 */, 30/* 9 */, 20/* 10 */);
+                            $aligns = array('L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L');
+                            $pdf->SetAligns($aligns);
+                            $pdf->SetWidths($anchos);
 
-                    $pdf->Row(array(
-                        utf8_decode($F->Articulo),
-                        mb_strimwidth(utf8_decode($F->NombreArticulo), 0, 60, "..."),
-                        number_format($F->Cantidad, 2, ".", ","),
-                        utf8_decode($F->Unidad),
-                        '$' . number_format($F->Precio, 2, ".", ","),
-                        '$' . number_format($F->SubTotal, 2, ".", ","),
-                        $F->Sem,
-                        $F->Maq,
-                        '',
-                        '',
-                        utf8_decode($F->FechaEntrega)
-                    ));
-                    //TOTALES GRUPOS
-                    $SubTotal += $F->SubTotal;
-                    $TotalCantidad += $F->Cantidad;
+                            $pdf->Row(array(
+                                utf8_decode($F->Articulo),
+                                mb_strimwidth(utf8_decode($F->NombreArticulo), 0, 60, "..."),
+                                number_format($F->Cantidad, 2, ".", ","),
+                                utf8_decode($F->Unidad),
+                                '$' . number_format($F->Precio, 2, ".", ","),
+                                '$' . number_format($F->SubTotal, 2, ".", ","),
+                                $F->Sem,
+                                $F->Maq,
+                                '',
+                                '',
+                                utf8_decode($F->FechaEntrega)
+                            ));
+                            //TOTALES GRUPOS
+                            $SubTotalCBZ += $F->SubTotal;
+                            $TotalCantidadCBZ += $F->Cantidad;
+                            //TOTALES GENERALES
+                            $SubTotal += $F->SubTotal;
+                            $TotalCantidad += $F->Cantidad;
+                        }
+                    }
+                    if ($Cabeceros[0]->cabecero !== null) {
+                        $pdf->SetFont('Arial', 'B', 8);
+                        $pdf->RowNoBorder(array('', 'Total por Suela', number_format($TotalCantidadCBZ, 2, ".", ","), '',
+                            '', '$' . number_format($SubTotalCBZ, 2, ".", ","), '', '', '', '', ''
+                        ));
+                    }
                 }
                 $pdf->SetFont('Calibri', 'B', 9.5);
                 $pdf->RowNoBorder(array('', '', number_format($TotalCantidad, 2, ".", ","), '',

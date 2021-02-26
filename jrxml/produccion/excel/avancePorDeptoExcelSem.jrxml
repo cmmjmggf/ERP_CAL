@@ -149,12 +149,18 @@ where av.contped = PE.Control
 limit 1 ),'')
 
 when  (PE.stsavan = 42) then
-ifnull((
-SELECT mp.descripcion FROM controlpla cp
-join maquilasplantillas mp on mp.clave = cp.tipo
-where cp.control = pe.control
-order by cp.id desc
-limit 1
+IFNULL((
+SELECT
+CASE
+WHEN cp.estatus = '1' THEN cp.FraccionT
+WHEN cp.estatus = '2' AND cp.Fraccion = 79 THEN 'LIMPIEZA LASER'
+WHEN cp.estatus = '2' AND cp.Fraccion = 83 THEN ''
+ELSE ''
+END AS Pegado
+FROM controlpla cp
+WHERE cp.control = pe.control AND cp.Fraccion IN (79,83)
+ORDER BY cp.id DESC
+LIMIT 1
  ),'')
 
 else ''

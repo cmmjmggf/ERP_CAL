@@ -1,10 +1,19 @@
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-body ">
         <div class="row">
-            <div class="col-sm-6 float-left">
+            <div class="col-sm-10 float-left">
                 <legend class="float-left">Órdenes de Compra (PLANTAS, SUELAS, ENTRESUELAS)</legend>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 animated bounceInLeft" align="right" id="Acciones">
+            <div class="col-6 col-sm-2 float-right" align="right">
+                <div class="custom-control custom-checkbox  ">
+                    <input type="checkbox" class="custom-control-input" id="chSinExplosion">
+                    <label class="custom-control-label text-info labelCheck" for="chSinExplosion">Orden de Compra Sin Explosión</label>
+                </div>
+            </div>
+            <div class="col-sm-6 float-left">
+                <legend class="float-left"></legend>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 animated bounceInLeft float-right" align="right" id="Acciones">
                 <button type="button" class="btn btn-primary btn-sm " id="btnBuscar" >
                     <span class="fa fa-search" ></span> BUSCAR O.C.
                 </button>
@@ -694,6 +703,7 @@
         btnCerrarOrden.click(function () {
             var Folio = pnlDatos.find("#Folio").val();
             var tp = pnlDatos.find("#Tp").val();
+            var sinExplosion = pnlTablero.find("#chSinExplosion")[0].checked ? '1' : '0';
             swal({
                 title: "Confirmar",
                 text: "Deseas cerrar la Orden de Compra?",
@@ -702,7 +712,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     HoldOn.open({theme: "sk-bounce", message: "POR FAVOR ESPERE..."});
-                    $.post(master_url + 'onCerrarOrden', {Tp: tp, Folio: Folio}).done(function (data, x, jq) {
+                    $.post(master_url + 'onCerrarOrden', {Tp: tp, Folio: Folio, SinExplosion: sinExplosion}).done(function (data, x, jq) {
                         btnCancelar.addClass('d-none');
                         btnCerrarOrden.addClass('d-none');
                         btnImprimir.removeClass('d-none');
@@ -712,6 +722,7 @@
                             Tp: tp,
                             Folio: Folio
                         });
+                        pnlTablero.find("#chSinExplosion").prop('checked', false);
                         HoldOn.close();
                         btnImprimir.trigger('click');
                     }).fail(function (x, y, z) {
