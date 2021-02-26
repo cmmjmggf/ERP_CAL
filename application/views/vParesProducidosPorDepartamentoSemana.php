@@ -1,30 +1,39 @@
+<?php
+if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR") {
+    ?>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-style@latest/dist/chartjs-plugin-style.min.js"></script>
+    <?php
+}
+?>
 <div class="card m-3 animated fadeIn" id="pnlTablero">
     <div class="card-header" align="center">
         <h3 class="font-weight-bold">Pares producidos por departamento semana</h3>
     </div>
     <div class="card-body">
-        <div class="row" align="center">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+        <div class="row" align="center"> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Año</label>
                 <input type="text" id="Ano" name="Ano" class="form-control form-control-sm  numbersOnly" maxlength="4" >
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>Semana nomina actual</label>
                 <input type="text" id="Semana" name="Semana" class="form-control form-control-sm  numbersOnly" maxlength="2" autofocus="">
-            </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
-            <div class="w-100"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            </div> 
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>De la fecha</label>
                 <input type="text" id="FechaInicial" name="FechaInicial" class="form-control form-control-sm date" readonly="">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
                 <label>A la fecha</label>
                 <input type="text" id="FechaFinal" name="FechaFinal" class="form-control form-control-sm date" readonly="">
             </div>
-            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">     
+                <button type="button" class="btn btn-info mt-3" id="btnAceptar"><span class="fa fa-print"></span> Aceptar</button>
+            </div>
             <div class="w-100 m-2"></div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2"></div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-2">
@@ -56,11 +65,33 @@
                 <p class="font-weight-bold">Nota: Para imprimir todos los departamentos por dia no seleccione ninguna casilla</p>
             </div>
             <div class="w-100 my-3"></div>
+            <div class="w-100"></div>
+
         </div>
+        <?php
+        if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR") {
+            ?>
+            <div class="row"> 
+                <div class="col-3"> 
+                    <button id="btnActualizarGrafico" class="btn btn-success mt-3">
+                        <span class="fa fa-retweet"></span> Actualizar
+                    </button>
+                </div>
+                <div class="w-100"></div> 
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
+                    <canvas id="GraficoParesFabricadosXDeptoSem" style="width: 100%;" height="400"></canvas>
+                </div>  
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <canvas id="GraficoBarParesFabricadosXDeptoSem" style="width: 100%;" height="600"></canvas>
+                </div>  
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <canvas id="GraficoPieParesFabricadosXDeptoSem" style="width: 100%;" height="350"></canvas>
+                </div>  
+            </div>
+        <?php } ?>
     </div>
     <div class="card-footer">
         <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" align="right">
-            <button type="button" class="btn btn-info" id="btnAceptar"><span class="fa fa-print"></span> Aceptar</button>
         </div>
     </div>
 </div>
@@ -69,7 +100,250 @@
             btnAceptar = pnlTablero.find("#btnAceptar"),
             FechaInicial = pnlTablero.find("#FechaInicial"),
             FechaFinal = pnlTablero.find("#FechaFinal"),
-            Maquila = pnlTablero.find("#Maquila");
+            Maquila = pnlTablero.find("#Maquila"),
+            btnActualizarGrafico = pnlTablero.find('#btnActualizarGrafico');
+    var labels = [], datas = [], index_active = 0, xtime = 60;
+    var chart_colors = [
+        "#388E3C", "#303F9F",
+        "#673AB7", "#D32F2F", "#F57C00", "#FFC107",
+        "#795548", "#C2185B", "#455A64", "#0288D1"];
+    var ConfigParesFabricadosXDeptoSem = {
+        type: 'line',
+        showTooltips: true,
+        backgroundColor: hexToRgbA('#000000'),
+        data: {
+            labels: ['JUEVES', 'VIERNES', 'SABADO', 'DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES'],
+            datasets: []
+        },
+        options: {
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#000',
+                    anchor: 'center', offset: 2,
+                    align: 'right',
+                    font: {weight: 'italic', size: 15}
+                },
+                zoom: {
+                    // Container for pan options
+                    pan: {
+                        // Boolean to enable panning
+                        enabled: true,
+
+                        // Panning directions. Remove the appropriate direction to disable 
+                        // Eg. 'y' would only allow panning in the y direction
+                        mode: 'xy'
+                    },
+
+                    // Container for zoom options
+                    zoom: {
+                        // Boolean to enable zooming
+                        enabled: true,
+
+                        // Zooming directions. Remove the appropriate direction to disable 
+                        // Eg. 'y' would only allow zooming in the y direction
+                        mode: 'xy',
+                    }
+                }
+            },
+            legend: {
+                display: true,
+                position: "top",
+                labels: {
+                    fontStyle: "italic",
+                    fontColor: "#000",
+                    fontSize: 15
+                },
+                align: 'top'
+            },
+            responsive: true,
+            title: {
+                display: true,
+                fontSize: 18,
+                text: 'PARES FABRICADOS POR DEPARTAMENTO DE LA SEMANA'
+            },
+            scales: {
+                xAxes: [{
+                        display: true,
+                        ticks: {
+                            fontStyle: "italic",
+                            fontColor: "#000",
+                            fontSize: 18,
+                            stepSize: 1,
+                            beginAtZero: true
+                        },
+                        fontStyle: "italic"
+                    }],
+                yAxes: [{
+                        display: true,
+                        ticks: {
+                            fontColor: "#000",
+                            fontSize: 18,
+                            stepSize: 200,
+                            beginAtZero: true
+                        }
+                    }]
+            } /*SCALES*/
+
+        }/*OPTIONS*/
+    };
+    var ConfigBarParesFabricadosXDeptoSem = {
+        type: 'bar',
+        showTooltips: true,
+        backgroundColor: hexToRgbA('#000000'),
+        data: {
+            labels: ['JUEVES', 'VIERNES', 'SABADO', 'DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES'],
+            datasets: []
+        },
+        options: {
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#000',
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 6,
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    },
+                    value: {
+                        color: '#000'
+                    }
+                }, zoom: {
+                    // Container for pan options
+                    pan: {
+                        // Boolean to enable panning
+                        enabled: true,
+
+                        // Panning directions. Remove the appropriate direction to disable 
+                        // Eg. 'y' would only allow panning in the y direction
+                        mode: 'xy'
+                    },
+
+                    // Container for zoom options
+                    zoom: {
+                        // Boolean to enable zooming
+                        enabled: true,
+
+                        // Zooming directions. Remove the appropriate direction to disable 
+                        // Eg. 'y' would only allow zooming in the y direction
+                        mode: 'xy',
+                    }
+                }
+            },
+            legend: {
+                display: true,
+                position: "top",
+                labels: {
+                    fontStyle: "italic",
+                    fontColor: "#000",
+                    fontSize: 15
+                }
+            },
+            responsive: true,
+            title: {
+                display: true,
+                fontSize: 18,
+                text: 'PARES FABRICADOS POR DEPARTAMENTO DE LA SEMANA'
+            },
+            scales: {
+                xAxes: [{
+                        display: true,
+                        ticks: {
+                            fontStyle: "italic",
+                            fontColor: "#000",
+                            fontSize: 18,
+                            stepSize: 1,
+                            beginAtZero: true
+                        },
+                        fontStyle: "italic"
+                    }],
+                yAxes: [{
+                        display: true,
+                        ticks: {
+                            fontColor: "#000",
+                            fontSize: 18,
+                            stepSize: 200,
+                            beginAtZero: true
+                        }
+                    }]
+            } /*SCALES*/
+
+        }/*OPTIONS*/
+    };
+    var ConfigPieParesFabricadosXDeptoSem = {
+        "type": "pie",
+        "data": {
+            "labels": ["", "", "", "", "", "", "", "", "", ""],
+            "datasets": [{
+                    "label": "PARES FABRICADOS POR DEPARTAMENTO SEMANA",
+                    "data": [1, 1, 1, 1,
+                        1, 1, 1, 1, 1],
+                    "backgroundColor": chart_colors,
+                    hoverOffset: 4
+                }]
+        },
+        options: {
+            title: "PARES FABRICADOS POR DEPTO SEM",
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#fff',
+                    font: {weight: 'bold', size: 12},
+                    textAlign: 'center',
+                    font: {
+                        lineHeight: 1.6
+                    },
+                    formatter: function (value, ctx) {
+                        return ctx.chart.data.labels[ctx.dataIndex] + '\n' + value;
+                    }
+                },
+                zoom: {
+                    // Container for pan options
+                    pan: {
+                        // Boolean to enable panning
+                        enabled: true,
+
+                        // Panning directions. Remove the appropriate direction to disable 
+                        // Eg. 'y' would only allow panning in the y direction
+                        mode: 'xy'
+                    },
+
+                    // Container for zoom options
+                    zoom: {
+                        // Boolean to enable zooming
+                        enabled: true,
+
+                        // Zooming directions. Remove the appropriate direction to disable 
+                        // Eg. 'y' would only allow zooming in the y direction
+                        mode: 'xy',
+                    }
+                }
+            }
+        }
+    };
+    var Ano_actual = '<?php print Date('Y'); ?>';
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+    function hexToRgbA(hex) {
+        var c;
+        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+            c = hex.substring(1).split('');
+            if (c.length == 3) {
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x' + c.join('');
+            return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',0.1)';
+        }
+        throw new Error('Bad Hex');
+    }
 
     function onDetallechk(chk) {
         pnlTablero.find("#chkDetallePespunte")[0].checked = false;
@@ -81,42 +355,35 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         Anio.val(new Date().getFullYear());
-
         getSemanaByFechaNominaBancoControlNom(getFechaActualConDiagonales());
-
         Semana.on('keydown', function (e) {
             if (e.keyCode === 13 && Semana.val()) {
                 onComprobarSemanasNominaNominaBanco(Semana, Anio.val());
             }
         });
-
         pnlTablero.find("#chkDetallePespunte").on('change', function () {
             if (pnlTablero.find("#chkDetallePespunte")[0].checked) {
                 onDetallechk("chkDetallePespunte");
             }
         });
-
         pnlTablero.find("#chkDetalleMontado").on('change', function () {
             if (pnlTablero.find("#chkDetalleMontado")[0].checked) {
                 onDetallechk("chkDetalleMontado");
             }
         });
-
         pnlTablero.find("#chkDetalleAdorno").on('change', function () {
             if (pnlTablero.find("#chkDetalleAdorno")[0].checked) {
                 onDetallechk("chkDetalleAdorno");
             }
         });
-
         pnlTablero.find("#chkDetalleTejido").on('change', function () {
             if (pnlTablero.find("#chkDetalleTejido")[0].checked) {
                 onDetallechk("chkDetalleTejido");
             }
         });
-
         btnAceptar.click(function () {
-            $.getJSON('<?php print base_url('Semanas/onComprobarSemanaNomina'); ?>', {Clave: Semana.val(), 
-                Ano: Anio.val() }).done(function (dataSem) {
+            $.getJSON('<?php print base_url('Semanas/onComprobarSemanaNomina'); ?>', {Clave: Semana.val(),
+                Ano: Anio.val()}).done(function (dataSem) {
                 if (dataSem.length > 0) {
                     FechaInicial.val(dataSem[0].FechaIni);
                     FechaFinal.val(dataSem[0].FechaFin);
@@ -170,8 +437,7 @@
                         }
                     }
                 } else {
-                    swal({
-                        title: "ATENCIÓN",
+                    swal({title: "ATENCIÓN",
                         text: "LA SEMANA " + Semana.val() + " DEL " + Anio.val() + " " + "NO EXISTE",
                         icon: "warning",
                         buttons: {
@@ -184,29 +450,149 @@
                         switch (value) {
                             case "aceptar":
                                 swal.close();
-                                Semana.focus(); 
+                                Semana.focus();
                                 break;
                         }
                     });
                 }
             }).fail(function (x, y, z) {
-                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+                swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE: btnAceptar', 'info');
                 console.log(x.responseText);
             });
         });
-    });
+        /*chart*/
 
+<?php
+if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR") {
+    ?>
+            btnActualizarGrafico.on('click', function () {
+                onDisable(btnActualizarGrafico);
+                //            onOpenOverlay('Espere...');
+                $.getJSON('<?php print base_url('ParesProducidosPorDepartamentoSemana/getOrigenDeDatos'); ?>',
+                        {
+                            FECHA_INICIAL: FechaInicial.val() ? FechaInicial.val() : '',
+                            FECHA_FINAL: FechaFinal.val() ? FechaFinal.val() : '',
+                            ANIO: Anio.val() ? Anio.val() : '',
+                            SEMANA: Semana.val() ? Semana.val() : '',
+                            TIPO: 0
+                        }).done(function (a) {
+                    datasets = [];
+                    var labels = [];
+                    var i = 0;
+                    $.each(a, function (k, v) {
+                        datasets.push({
+                            label: v.DEPARTAMENTO,
+                            backgroundColor: hexToRgbA(chart_colors[i]),
+                            borderColor: chart_colors[i],
+                            fill: false,
+                            stepped: true,
+                            borderDash: [],
+                            pointStyle: 'circle',
+                            radius: 5,
+                            hoverRadius: 7,
+                            borderWidth: 2,
+                            hoverBorderWidth: 3,
+                            data: []
+                        });
+                        labels.push(v.DEPARTAMENTO);
+                        i++;
+                    });
+//                    ConfigParesFabricadosXDeptoSem.data.datasets = datasets;
+                    ConfigBarParesFabricadosXDeptoSem.data.datasets = datasets;
+                    ConfigPieParesFabricadosXDeptoSem.data.labels = labels;/*PIE CHART - LABELS*/
+                    i = 0;
+                    labels = [];
+                    var totales = [0, 0, 0, 0, 0, 0, 0], totales_pie = [];
+                    $.each(a, function (k, v) {
+                        labels = ["JUEVES " + v.FECHA_JUEVES, "VIERNES " + v.FECHA_VIERNES,
+                            "SABADO " + v.FECHA_SABADO, "DOMINGO " + v.FECHA_DOMINGO,
+                            "LUNES " + v.FECHA_LUNES, "MARTES " + v.FECHA_MARTES,
+                            "MIERCOLES " + v.FECHA_MIERCOLES];
+//                        ConfigParesFabricadosXDeptoSem.data.datasets[i].data = [
+//                            parseFloat(v.CANTIDAD_JUEVES),
+//                            v.CANTIDAD_VIERNES,
+//                            v.CANTIDAD_SABADO,
+//                            v.CANTIDAD_DOMINGO,
+//                            v.CANTIDAD_LUNES,
+//                            v.CANTIDAD_MARTES,
+//                            v.CANTIDAD_MIERCOLES
+//                        ];
+                        ConfigBarParesFabricadosXDeptoSem.data.datasets[i].data = [
+                            parseFloat(v.CANTIDAD_JUEVES),
+                            v.CANTIDAD_VIERNES,
+                            v.CANTIDAD_SABADO,
+                            v.CANTIDAD_DOMINGO,
+                            v.CANTIDAD_LUNES,
+                            v.CANTIDAD_MARTES,
+                            v.CANTIDAD_MIERCOLES
+                        ];
+                        totales[0] += parseFloat(v.CANTIDAD_JUEVES);
+                        totales[1] += parseFloat(v.CANTIDAD_VIERNES);
+                        totales[2] += parseFloat(v.CANTIDAD_SABADO);
+                        totales[3] += parseFloat(v.CANTIDAD_DOMINGO);
+                        totales[4] += parseFloat(v.CANTIDAD_LUNES);
+                        totales[5] += parseFloat(v.CANTIDAD_MARTES);
+                        totales[6] += parseFloat(v.CANTIDAD_MIERCOLES);
+//                        ConfigParesFabricadosXDeptoSem.data.datasets[i].label = v.DEPARTAMENTO + " " + v.TOTALES;
+                        ConfigBarParesFabricadosXDeptoSem.data.datasets[i].label = v.DEPARTAMENTO + " " + v.TOTALES;
+                        totales_pie.push(v.TOTALES);
+                        i++;
+                    });
+                    ConfigPieParesFabricadosXDeptoSem.data.datasets[0].data = totales_pie /*PIE CHART - DATASETS*/;
+//                    ConfigParesFabricadosXDeptoSem.data.labels = labels;
+//                    ConfigParesFabricadosXDeptoSem.options.title.text = "PARES FABRICADOS POR DEPARTAMENTO DE LA SEMANA " + Semana.val();
+                    ConfigBarParesFabricadosXDeptoSem.data.labels = labels;
+                    ConfigBarParesFabricadosXDeptoSem.options.title.text = "PARES FABRICADOS POR DEPARTAMENTO DE LA SEMANA " + Semana.val();
+//                    window.ChartLineFabricadosXDeptoSem.update();
+                    window.ChartBarFabricadosXDeptoSem.update();
+                    window.ChartPieFabricadosXDeptoSem.update()/*PIE CHART - UPDATE CHART*/;
+                    xtime = 60;
+                    onEnable(btnActualizarGrafico);
+                }).fail(function (x) {
+                    console.log(x);
+                }).always(function () {
+
+                });
+            });
+//            var ctx = document.getElementById('GraficoParesFabricadosXDeptoSem').getContext('2d');
+//            window.ChartLineFabricadosXDeptoSem = new Chart(ctx, ConfigParesFabricadosXDeptoSem);
+            var ctxb = document.getElementById('GraficoBarParesFabricadosXDeptoSem').getContext('2d');
+            window.ChartBarFabricadosXDeptoSem = new Chart(ctxb, ConfigBarParesFabricadosXDeptoSem);
+            /*PIE CHART*/
+            var ctxpie = document.getElementById('GraficoPieParesFabricadosXDeptoSem').getContext('2d');
+            window.ChartPieFabricadosXDeptoSem = new Chart(ctxpie, ConfigPieParesFabricadosXDeptoSem);
+            onActualizarGrafico();
+<?php } ?>
+    });
+    function onActualizarGrafico() {
+        setTimeout(function () {
+            btnActualizarGrafico.trigger('click');
+            onActualizarGrafico();
+        }, 67000);
+    }
+    function onCheckTime() {
+        setTimeout(function () {
+            xtime = xtime - 1;
+            onCheckTime();
+        }, 1000);
+    }
+
+
+    function randomScalingFactor() {
+        return Math.ceil(Math.random() * 10.0) * Math.pow(10, Math.ceil(Math.random() * 5));
+    }
     function getSemanaByFechaNominaBancoControlNom(fecha) {
-        $.getJSON(base_url + 'index.php/CapturaFraccionesParaNomina/getSemanaByFecha', {Fecha: fecha}).done(function (data) {
+        $.getJSON('<?php print base_url('ParesProducidosPorDepartamentoSemana/getSemanaXFecha') ?>', {Fecha: fecha}).done(function (data) {
             if (data.length > 0) {
                 Semana.val(data[0].sem);
                 FechaInicial.val(data[0].FechaIni);
                 FechaFinal.val(data[0].FechaFin);
+                btnActualizarGrafico.trigger('click');
             } else {
                 swal('ERROR', 'NO EXISTE SEMANA', 'info');
             }
         }).fail(function (x) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE: getSemanaByFechaNominaBancoControlNom', 'info');
             console.log(x.responseText);
         });
     }
@@ -217,7 +603,6 @@
             if (dataSem.length > 0) {
                 FechaInicial.val(dataSem[0].FechaIni);
                 FechaFinal.val(dataSem[0].FechaFin);
-
             } else {
                 swal({
                     title: "ATENCIÓN",
@@ -240,51 +625,10 @@
                 });
             }
         }).fail(function (x, y, z) {
-            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE', 'info');
+            swal('ERROR', 'HA OCURRIDO UN ERROR INESPERADO, VERIFIQUE LA CONSOLA PARA MÁS DETALLE: onComprobarSemanasNominaNominaBanco', 'info');
             console.log(x.responseText);
         });
     }
-
-
-//    function getSemanaActual(fecha) {
-//        HoldOn.open({
-//            theme: 'sk-rect',
-//            message: 'Espere...'
-//        });
-//        $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getSemanaActual'); ?>', {
-//            FECHA: fecha
-//        }).done(function (a, b, c) {
-//            console.log(a);
-//            var d = JSON.parse(a);
-//            if (d.length > 0) {
-//                Semana.val(d[0].SEMANA);
-//                FechaInicial.val(d[0].FEINI);
-//                FechaFinal.val(d[0].FEFIN);
-//            }
-//        }).fail(function (x, y, z) {
-//            getError(x);
-//        }).always(function () {
-//            HoldOn.close();
-//        });
-//    }
-//
-//    function getFechasXSemana(f) {
-//        $.get('<?php print base_url('ParesProducidosPorDepartamentoSemana/getFechasXSemana'); ?>', {
-//            SEMANA: Semana.val()
-//        }).done(function (a, b, c) {
-//            console.log(a);
-//            var d = JSON.parse(a);
-//            if (d.length > 0) {
-//                Semana.val(d[0].SEMANA);
-//                FechaInicial.val(d[0].FEINI);
-//                FechaFinal.val(d[0].FEFIN);
-//                f();
-//            }
-//        }).fail(function (x, y, z) {
-//            getError(x);
-//        }).always(function () {
-//        });
-//    }
 </script>
 <style>
     .btn-indigo {
