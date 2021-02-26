@@ -20,15 +20,15 @@
         <div class="row" style="padding-left: 15px">
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-1" align="left">
                 <strong>Semana</strong>
-                <input type="text" class="form-control form-control-sm column_filter numeric" id="Semana" autofocus onkeyup="onChecarSemanaValida(this)">
+                <input type="text" class="form-control form-control-sm column_filter numeric" id="Semana" maxlength="2" autofocus onkeyup="onChecarSemanaValida(this)">
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2" align="left">
                 <strong>Control</strong>
-                <input type="text" class="form-control form-control-sm column_filter numeric numbersOnly" id="Control"  >
+                <input type="text" class="form-control form-control-sm column_filter numeric numbersOnly" id="Control" maxlength="10" >
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2" align="left">
                 <strong>Fracción</strong>
-                <input type="text" class="form-control form-control-sm column_filter numeric" id="Fraccion" data-toggle="tooltip" data-placement="bottom" title="Indique la fracción: 96,99,100">
+                <input type="text" class="form-control form-control-sm column_filter numeric" maxlength="3" id="Fraccion" data-toggle="tooltip" data-placement="bottom" title="Indique la fracción: 96,99,100">
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-5 col-xl-3" align="left">
                 <strong>Artículo</strong>
@@ -394,9 +394,7 @@
 
 <script>
     var master_url = base_url + 'index.php/AsignaPFTSACXC/';
-
     var pnlTablero = $("#pnlTablero");
-
     var Semana = pnlTablero.find("#Semana"),
             Control = pnlTablero.find("#Control"),
             Fraccion = pnlTablero.find("#Fraccion"),
@@ -413,14 +411,11 @@
     var Pieles = $("#Pieles"), Forros = $("#Forros"),
             Textiles = $("#Textiles"), Sinteticos = $("#Sinteticos"),
             ControlesAsignados = $("#ControlesAsignados");
-
     var tblPieles = $("#tblPieles"), tblForros = $("#tblForros"),
             tblTextiles = $("#tblTextiles"), tblSinteticos = $("#tblSinteticos"),
             tblControlesAsignados = $("#tblControlesAsignados");
-
     var btnReload = $("#btnReload"), btnRetornaMaterial = $("#btnRetornaMaterial");
     var mdlRetornaMaterial = $("#mdlRetornaMaterial");
-
     var tblRegresos = mdlRetornaMaterial.find("#tblRegresos"),
             Regresos = $("#Regresos");
     var btnAceptar = mdlRetornaMaterial.find("#btnAceptar"),
@@ -434,9 +429,7 @@
             PielForro = mdlRetornaMaterial.find("#PielForro"),
             CortadorClave = mdlRetornaMaterial.find("#CortadorClave"),
             Cortador = mdlRetornaMaterial.find("#Cortador");
-
     var tipo_consumo = 0, FT = 1;
-
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRetornaMaterial);
@@ -502,7 +495,6 @@
         btnEntregar.click(function () {
             onEntregarMaterial();
         });
-
         Cortador.change(function () {
             if (Cortador.val()) {
                 CortadorClave.val(Cortador.val());
@@ -511,7 +503,6 @@
                 CortadorClave.val('');
             }
         });
-
         CortadorClave.on('keydown', function (e) {
             if (e.keyCode === 13 && CortadorClave.val()) {
                 onDisable(Cortador);
@@ -605,14 +596,60 @@
         btnRetornaMaterial.click(function () {
             mdlRetornaMaterial.modal('show');
         });
-         Entregar.keydown(function (event) {
-            if (event.keyCode === 13) {
-                onEntregar(this, event);
-            } else if(event.keyCode === 13 && parseFloat(Entregar.val()) > 0 ) {
-                onCampoInvalido(pnlTablero, "DEBE DE ESPEFICAR UNA CANTIDAD A ENTREGAR", function () {
+        Entregar.keydown(function (event) {
+            var limite_permitido = 4600;
+            //LIMITE DE 4600 DCM2 DE PIEL REVISADO EL 25-FEB-2021 EN TODAS LAS ORDENES DE PRODUCCION DE TODOS LOS TIEMPOS
+            if (event.keyCode === 13 && parseFloat(Entregar.val()) > limite_permitido
+                    || event.keyCode === 13 && parseFloat(Entregar.val()) < 0) {
+                onBeep(2);
+                swal({
+                    title: "ESTA CANTIDAD ES ANORMAL, POR FAVOR, ESPECIFIQUE LA CANTIDAD CORRECTA ! ",
+                    text: "CANTIDAD: " + Entregar.val(),
+                    icon: "info",
+                    closeOnClickOutside: false,
+                    closeOnEsc: false
+                }).then((action) => {
                     Entregar.focus().select();
                 });
-                return;
+            } else {
+                if (event.keyCode === 13 && parseFloat(Entregar.val()) > 0) {
+                    onBeep(2);
+                    swal({
+                        title: "¿ES CORRECTA LA CANTIDAD A ENTREGAR DE ESTE ARTÍCULO? ",
+                        text: "ARTÍCULO: " + Articulo.val() + " \nCANTIDAD: " + Entregar.val(),
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                        icon: "warning",
+                        buttons: {
+                            catch : {
+                                text: "SI ENTREGAR " + Entregar.val(),
+                                value: "SI"
+                            },
+                            cancel: "NO"
+                        },
+                    }).then((value) => {
+                        switch (value) {
+                            case "SI":
+                                onEntregar(this, event);
+                                break;
+                            default:
+                                swal({
+                                    title: "POR FAVOR, ESPECIFIQUE LA CANTIDAD CORRECTA ! ",
+                                    icon: "info",
+                                    closeOnClickOutside: false,
+                                    closeOnEsc: false
+                                }).then((action) => {
+                                    Entregar.focus();
+                                });
+                        }
+                    });
+                    return;
+                } else if (event.keyCode === 13 && parseFloat(Entregar.val()) > 0) {
+                    onCampoInvalido(pnlTablero, "DEBE DE ESPEFICAR UNA CANTIDAD A ENTREGAR", function () {
+                        Entregar.focus().select();
+                    });
+                    return;
+                }
             }
         });
         btnReload.click(function () {
@@ -668,8 +705,7 @@
             "columns": cols,
             "columnDefs": coldefs,
             language: lang,
-            select: true,
-            "autoWidth": true,
+            select: true, "autoWidth": true,
             "colReorder": true,
             "displayLength": 99999999,
             "bLengthChange": false,
@@ -732,8 +768,7 @@
         });
         var xoptions_textiles = xoptions_pieles;
         xoptions_textiles.ajax = {
-            "url": '<?= base_url('textiles'); ?>',
-            "contentType": "application/json",
+            "url": '<?= base_url('textiles'); ?>', "contentType": "application/json",
             "dataSrc": "",
             "data": function (d) {
                 d.SEMANA = (Semana.val().trim());
@@ -856,8 +891,7 @@
                 }
             ],
             language: lang,
-            select: true,
-            "autoWidth": true,
+            select: true, "autoWidth": true,
             "colReorder": true,
             "displayLength": 100,
             "bLengthChange": false,
@@ -908,8 +942,7 @@
                 }
             ],
             language: lang,
-            select: true,
-            "autoWidth": true,
+            select: true, "autoWidth": true,
             "colReorder": true,
             "displayLength": 20,
             "bLengthChange": false,
@@ -947,7 +980,6 @@
         });
         init();
     });
-
     function getParesXControl(c) {
         if (c.val() !== '') {
             tblRegresos.DataTable().column(2).search(c.val()).draw();
@@ -964,8 +996,7 @@
     function getExplosionXSemanaControlFraccionArticulo(S, C, F, A, G) {
 
         if (Semana.val() !== '' && Control.val() !== '' && Fraccion.val() !== '') {
-            HoldOn.open({
-                theme: 'sk-bounce',
+            HoldOn.open({theme: 'sk-bounce',
                 message: 'Cargando...'
             });
             $.getJSON('<?php print base_url('AsignaPFTSACXC/getExplosionXSemanaControlFraccionArticulo'); ?>',
@@ -1193,8 +1224,7 @@
                     endtour: {
                         text: "ACEPTAR",
                         value: "aceptar"
-                    }
-                }}).then((value) => {
+                    }}}).then((value) => {
                 switch (value) {
                     case "aceptar":
                         seguro = true;
@@ -1484,5 +1514,30 @@
         font-weight: bold;
         font-size: 14px;
         text-align: center;
+    }
+    .swal-title{
+        font-size: 26px;     
+        font-style: italic;
+    } 
+    .swal-text{
+        font-size: 24px;    
+        font-weight: 400;
+        font-style: italic;
+    } 
+    .swal-button {
+        background-color: #669900;
+        color: #fff;
+        border: none;
+        box-shadow: none;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 24px;
+        margin: 0;
+        cursor: pointer;
+    }
+    .swal-button--cancel {
+        color: #fff;
+        background-color: rgb(233 30 30);
     }
 </style>
