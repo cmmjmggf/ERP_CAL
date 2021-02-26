@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="facturaelec1810" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="975fc4f9-3724-4976-ad6b-d34c7197a75f">
-	<property name="ireport.zoom" value="1.8660295208389348"/>
-	<property name="ireport.x" value="200"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="4.840000000000008"/>
+	<property name="ireport.x" value="1691"/>
+	<property name="ireport.y" value="657"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="callecolonia" class="java.lang.String"/>
@@ -137,6 +137,9 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 	</variable>
 	<variable name="CANTIDAD_1" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[$F{CANTIDAD}]]></variableExpression>
+	</variable>
+	<variable name="SUBTOTAL_4" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{SUBTOTAL}]]></variableExpression>
 	</variable>
 	<pageHeader>
 		<band height="132">
@@ -736,30 +739,30 @@ WHERE F.factura = $P{factura} AND F.cliente = $P{CLIENTE} AND C.Clave = $P{CLIEN
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="427" y="45" width="148" height="1" uuid="48daabd5-75b5-4a25-8b63-e505c1004719"/>
+				<reportElement x="424" y="45" width="148" height="1" uuid="48daabd5-75b5-4a25-8b63-e505c1004719"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="480" y="13" width="93" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="535a503c-459d-472e-80b8-b17633a88408"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="480" y="15" width="92" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="535a503c-459d-472e-80b8-b17633a88408"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[0]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="481" y="28" width="92" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="57c44ec2-7006-49af-b96d-03b5bec49a2f"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="480" y="31" width="92" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="57c44ec2-7006-49af-b96d-03b5bec49a2f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{SUBTOTAL_3}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{SUBTOTAL_4}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="480" y="0" width="93" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="83f94607-2d21-44b9-b619-5e44bd442307"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+				<reportElement mode="Transparent" x="480" y="0" width="92" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="83f94607-2d21-44b9-b619-5e44bd442307"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
