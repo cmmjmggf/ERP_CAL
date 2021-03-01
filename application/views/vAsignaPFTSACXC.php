@@ -433,6 +433,11 @@
     $(document).ready(function () {
         handleEnterDiv(pnlTablero);
         handleEnterDiv(mdlRetornaMaterial);
+        
+        MaterialExtra.change(function () {
+            Entregar.focus();
+        });
+
         xPielForro.on('keydown', function (e) {
             if (e.keyCode === 13 && xPielForro.val()) {
                 PielForro[0].selectize.setValue(xPielForro.val());

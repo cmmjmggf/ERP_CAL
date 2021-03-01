@@ -362,7 +362,7 @@
                     return $('<tr>').append('<td></td><td></td><td>TOTAL</td>\n\
             <td >$' + IMPORTE_DOC + '</td>\n\
             <td >$' + PAGOS_DOC + '</td>\n\
-            <td >$' + SALDO_DOC + '</td>\n\
+            <td >$' + SALDO_DOC + '</td></td><td>\n\
             <td >$' + IMPORTE_UNO + '</td>\n\
             <td >$' + IMPORTE_DOS + '</td>\n\
             <td >$' + IMPORTE_TRES + '</td>\n\

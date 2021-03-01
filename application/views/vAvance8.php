@@ -16,9 +16,12 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-3 col-lg-2 col-xl-2">
                 <input type="text"  style="height: 50px; font-weight: bold; font-size: 45px;"  id="NumeroDeEmpleado" name="NumeroDeEmpleado" class="form-control form-control-sm shadow-lg numeric" maxlength="8" style="height: 50px; font-weight: bold; font-size: 25px;" autofocus="" data-toggle="tooltip" data-placement="bottom" title="Ingrese un empleado del depto de corte">
             </div>
-            <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-10 text-center">
+            <div class="col-12 col-xs-12 col-sm-12 col-md-9 col-lg-10 col-xl-9 text-center">
                 <h1 style="color: #3F51B5 !important" class="nombre_empleado">-</h1>
                 <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm d-none" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
+            </div>
+            <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
+                <img src="<?php print base_url('uploads/Empleados/5.jpg') ?>" class="img-fluid" height="96" width="96">
             </div>
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
