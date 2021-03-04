@@ -78,7 +78,7 @@
             </div> 
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-1 col-xl-1 mt-4">
                 <?PHP
-                CreateButton("btnImprimePP", "success m-1", "IMPRIMIR", "print", null, "", "background-color:#000;");
+                CreateButton("btnImprimePP", "success m-1", "IMPRIMIR", "print", null, "", "background-color:#4caf50; border-color:#4caf50;");
                 ?>
             </div> 
             <div class="col-12">

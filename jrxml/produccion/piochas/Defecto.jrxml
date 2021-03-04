@@ -44,6 +44,7 @@ CAST(PM.Precio*P.Consumo AS DECIMAL(6,2))
 ELSE 0 END AS Costo,
 P.Usuario
 from piochas P
+INNER JOIN pedidox PX ON P.Control = PX.Control
 INNER JOIN maquilas M ON M.Clave = CAST(P.Maq AS SIGNED)
 INNER JOIN articulos A ON A.Clave = P.Material
 INNER JOIN estilos E ON E.Clave = P.Estilo
@@ -53,7 +54,7 @@ INNER JOIN departamentos DEP ON DEP.Clave = P.Departamento
 INNER JOIN defectos D ON D.Clave = P.Defecto
 INNER JOIN defectosdetalle DD ON DD.Clave = P.Detalle
 INNER JOIN preciosmaquilas PM ON PM.Articulo = P.Material AND PM.Maquila = '1'
-WHERE P.Estatus = '1'
+WHERE P.Estatus = '1' AND PX.stsavan IN(11)
 ORDER BY ClaveDefecto, P.Control ASC]]>
 	</queryString>
 	<field name="ClaveMaq" class="java.lang.Long"/>
@@ -135,14 +136,14 @@ ORDER BY ClaveDefecto, P.Control ASC]]>
 			<band height="14">
 				<staticText>
 					<reportElement x="1" y="0" width="39" height="12" uuid="008afd3a-2702-440d-9b5e-9a8a7e2cc7fa"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Defecto]]></text>
 				</staticText>
 				<textField>
 					<reportElement x="60" y="0" width="131" height="12" uuid="22bfed9a-b932-4aeb-bdad-08c252ccbeb5"/>
-					<textElement>
+					<textElement verticalAlignment="Middle">
 						<font size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{NombreDefecto}]]></textFieldExpression>
@@ -155,7 +156,7 @@ ORDER BY ClaveDefecto, P.Control ASC]]>
 				</line>
 				<textField>
 					<reportElement x="40" y="0" width="20" height="12" uuid="a8ee4ca1-040d-4816-9e72-aba942b86b39"/>
-					<textElement textAlignment="Center">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="7"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ClaveDefecto}]]></textFieldExpression>
@@ -388,84 +389,84 @@ ORDER BY ClaveDefecto, P.Control ASC]]>
 			</line>
 			<textField>
 				<reportElement x="163" y="0" width="49" height="11" uuid="700ced94-6cdf-46fc-8dcb-407eed2ce999"/>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Control}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="335" y="0" width="19" height="11" uuid="0809e7eb-7783-4175-9798-3720f55396b9"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Pares}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="212" y="0" width="27" height="11" uuid="74370d73-6924-42f3-94b2-91e19ee70517"/>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Estilo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="239" y="0" width="28" height="11" uuid="6db7b739-1d1f-4be5-884d-84862ee3901c"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Talla}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="267" y="0" width="42" height="11" uuid="dab6a075-713c-413e-abc7-a74acc869968"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fecha}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="309" y="0" width="26" height="11" uuid="d8ca84e2-5e4b-4712-ba05-12ebfcdafd06"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ParteZapato}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="355" y="0" width="25" height="11" uuid="5fc20b0b-ee71-41d0-9bee-3a33fa52cbff"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ClavePieza}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="385" y="0" width="64" height="11" uuid="6b1de296-d04f-4044-b4bc-fcd595f0b3b6"/>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NombrePieza}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="449" y="0" width="34" height="11" uuid="f2cb8e92-80aa-4fef-a04e-c8f2994716de"/>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Fraccion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="484" y="0" width="28" height="11" uuid="452575d0-afdd-44c0-97e9-467b86d321b0"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ClaveArt}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="519" y="0" width="80" height="11" uuid="1fe4dd29-0d2a-497b-aaf1-0e8b66f1be20"/>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NombreArt}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="23" y="0" width="110" height="11" uuid="06e27fe0-9df1-4923-9795-aff7df253f56"/>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NombreDefectoDet}]]></textFieldExpression>
@@ -507,7 +508,7 @@ ORDER BY ClaveDefecto, P.Control ASC]]>
 			</textField>
 			<textField pattern="###0">
 				<reportElement x="709" y="0" width="59" height="11" uuid="83cd8f97-734a-41ec-a7f6-3572ff2bdc14"/>
-				<textElement textAlignment="Right">
+				<textElement textAlignment="Center">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Usuario}]]></textFieldExpression>

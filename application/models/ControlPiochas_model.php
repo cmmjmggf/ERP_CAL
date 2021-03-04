@@ -44,8 +44,7 @@ class ControlPiochas_model extends CI_Model {
     public function getEmpleadosXDepartamento($Depto) {
         try {
             return $this->db->select("CAST(D.Numero AS SIGNED ) AS ID,CONCAT(D.Numero,'-',D.Busqueda) AS Empleado")
-                            ->from("empleados AS D")
-                            ->where("D.Estatus", "A")
+                            ->from("empleados AS D") 
                             ->where("D.AltaBaja", "1")
                             ->where("D.DepartamentoFisico", $Depto)
                             ->order_by('ID', 'ASC')

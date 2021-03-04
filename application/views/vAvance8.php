@@ -21,7 +21,7 @@
                 <input type="text" id="NombreEmpleado" name="NombreEmpleado" class="form-control form-control-sm d-none" placeholder="-" disabled="" style="height: 50px; font-weight: bold; font-size: 25px; text-align: center;">
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-1">
-                <img src="<?php print base_url('uploads/Empleados/5.jpg') ?>" class="img-fluid" height="96" width="96">
+                <img src="<?php print base_url('img/empleado_sin_foto.png') ?>" class="img-fluid foto_empleado" height="96" width="96">
             </div>
             <!--FIN BLOQUE 2 COL 6-->
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" align="center">
@@ -570,6 +570,7 @@
                                 GeneraAvance.val(r.GENERA_AVANCE);
                                 Depto.val(r.DEPTO);
                                 NombreEmpleado.val(r.NOMBRE_COMPLETO);
+                                pnlTablero.find("img.foto_empleado")[0].src = '<?php print base_url(); ?>' + r.FOTO_EMPLEADO;
                                 pnlTablero.find(".nombre_empleado").text(dt[0].NOMBRE_COMPLETO);
                                 Departamento.val(r.DEPTOCTO);
                                 pnlTablero.find(".depto_avance8").text(r.DEPTOCTO);
@@ -888,12 +889,6 @@
                 DESCRIPCION: "TROQUELAR NORMA"
             });
         }
-        if (pnlTablero.find("#chk506")[0].checked) {
-            fracciones.push({
-                NUMERO_FRACCION: 506,
-                DESCRIPCION: "PEGADO CIUCCANI"
-            });
-        }
         if (pnlTablero.find("#chk333")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 333,
@@ -1067,6 +1062,12 @@
             fracciones.push({
                 NUMERO_FRACCION: 397,
                 DESCRIPCION: "JUNTAR SUELA A CORTE"
+            });
+        }
+        if (pnlTablero.find("#chk506")[0].checked) {
+            fracciones.push({
+                NUMERO_FRACCION: 506,
+                DESCRIPCION: "PEGADO CIUCCANI"
             });
         }
         if (pnlTablero.find("#chk396")[0].checked) {
