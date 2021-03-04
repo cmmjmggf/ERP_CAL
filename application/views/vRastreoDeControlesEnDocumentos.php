@@ -1,8 +1,8 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-body " style="padding-top: 5px; padding-right: 5px; padding-left: 5px; font-weight: bold;">
+<div class="card animated fadeIn" id="pnlTablero"style="border:none;">
+    <div class="card-body " style="border:none; padding-top: 10px;">
         <div class="row">
-            <div class="col-sm-12 float-left">
-                <h3>Rastreo de controles en documentos</h3>
+            <div class="col-sm-12 text-center font-italic">
+                 <h5><span class="fa fa-search"></span> Rastreo de controles en documentos</h5>
             </div> 
         </div>
         <hr>

@@ -1,5 +1,5 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-body">
+<div class="card m-1 animated fadeIn" id="pnlTablero" style="border:none;">
+    <div class="card-body" style="border:none;">
         <div class="row">
             <div class="col-sm-6 col-md-6 float-left">
                 <legend class="float-left">Control Piochas</legend>
@@ -11,7 +11,7 @@
                 <button type="button" class="btn btn-info btn-sm " id="btnVerDetalles" >
                     <span class="fa fa-cube" ></span> DETALLES
                 </button>
-                <button type="button" class="btn btn-success btn-sm" id="btnImprimir">
+                <button type="button" class="btn btn-success btn-sm" id="btnImprimir" style="background-color: #4caf50; border-color: #4caf50; ">
                     <i class="fa fa-print"></i> REPORTES
                 </button>
                 <button type="button" class="btn btn-warning btn-sm" id="btnCalidad">
@@ -158,10 +158,10 @@
 
 
 <div class="modal " id="mdlReportePiochas"  role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md notdraggable notresizable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Imprimir Reporte</h5>
+                <h5 class="modal-title"><span class="fa fa-print"></span> Imprimir Reporte</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -176,9 +176,7 @@
                         <div class="col-6">
                             <label>Hasta: </label>
                             <input type="text" class="form-control form-control-sm date notEnter" id="FechaFin" name="FechaFin" >
-                        </div>
-                    </div>
-                    <div class="row">
+                        </div> 
                         <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12">
                             <label>Imprimir por: </label>
                             <select id="Tipo" name="Tipo" class="form-control form-control-sm required">
@@ -190,12 +188,15 @@
                                 <option value="5">5 DEFECTO</option>
                             </select>
                         </div>
-                    </div>
+                        <div class="col-12">
+                            <p style="color: #CC0000" class="font-weight-bold font-italic">*SOLO SE MUESTRAN LOS CONTROLES CON DEFECTOS EN ALMACEN DE ADORNO*</p>
+                        </div> 
+                    </div> 
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnImprimirReporte">IMPRIMIR</button>
-                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal">SALIR</button>
+                <button type="button" class="btn btn-primary" id="btnImprimirReporte"><span class="fa fa-print"></span>  IMPRIMIR</button>
+                <button type="button" class="btn btn-secondary" id="btnSalir" data-dismiss="modal"><span class="fa fa-times"></span> SALIR</button>
             </div>
         </div>
     </div>
@@ -222,7 +223,7 @@
     var nuevo = true;
     var serie = '', maquila = 0, material = '';
 
-    var mdlReportePiochas = $('#mdlReportePiochas');
+    var mdlReportePiochas = $('#mdlReportePiochas'), btnImprimirReporte = mdlReportePiochas.find("#btnImprimirReporte");
 
     $(document).ready(function () {
 
@@ -492,14 +493,14 @@
         });
         /*FUNCIONES X BOTON*/
         btnImprimir.click(function () {
-            mdlReportePiochas.modal('show');
+            mdlReportePiochas.modal({backdrop: 'static', keyboard: false});
         });
         mdlReportePiochas.on('shown.bs.modal', function () {
             mdlReportePiochas.find("input").val("");
             mdlReportePiochas.find('#FechaFin').val(getToday());
             mdlReportePiochas.find('#FechaIni').val(getFirstDayMonth()).focus();
         });
-        mdlReportePiochas.find('#btnImprimirReporte').click(function () {
+        btnImprimirReporte.click(function () {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
             var frm = new FormData(mdlReportePiochas.find("#frmParametros")[0]);
 
@@ -742,7 +743,7 @@
     function getEmpleadosXDepartamento(Departamento) {
         if (Departamento !== '' && Departamento !== undefined && Departamento !== null) {
             HoldOn.open({theme: 'sk-bounce', message: 'ESPERE...'});
-            $.getJSON(master_url + 'getEmpleadosXDepartamento', {Departamento: Departamento}).done(function (data, x, jq) {
+            $.getJSON('<?php print base_url('ControlPiochas/getEmpleadosXDepartamento'); ?>', {Departamento: Departamento}).done(function (data, x, jq) {
                 $.each(data, function (k, v) {
                     pnlTablero.find("#Empleado")[0].selectize.addOption({text: v.Empleado, value: v.ID});
                 });

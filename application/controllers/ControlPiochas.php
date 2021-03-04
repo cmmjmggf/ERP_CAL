@@ -64,25 +64,25 @@ class ControlPiochas extends CI_Controller {
         $jc->setParametros($parametros);
 
 
-        switch ($Tipo) {
-            case '1':
-                $jc->setJasperurl('jrxml\produccion\reportePiochasMaq.jasper');
+        switch (intval($Tipo)) {
+            case 1:
+                $jc->setJasperurl('jrxml\produccion\piochas\reportePiochasMaq.jasper');
                 break;
-            case '2':
-                $jc->setJasperurl('jrxml\produccion\reportePiochasLinea.jasper');
+            case 2:
+                $jc->setJasperurl('jrxml\produccion\piochas\reportePiochasLinea.jasper');
                 break;
-            case '3':
-                $jc->setJasperurl('jrxml\produccion\reportePiochasEstilo.jasper');
+            case 3:
+                $jc->setJasperurl('jrxml\produccion\piochas\reportePiochasEstilo.jasper');
                 break;
-            case '4':
-                $jc->setJasperurl('jrxml\produccion\reportePiochasDepartamento.jasper');
+            case 4:
+                $jc->setJasperurl('jrxml\produccion\piochas\reportePiochasDepartamento.jasper');
                 break;
-            case '5':
-                $jc->setJasperurl('jrxml\produccion\reportePiochasDetalle.jasper');
+            case 5:
+                $jc->setJasperurl('jrxml\produccion\piochas\Defecto.jasper');
                 break;
         }
 
-        $jc->setFilename('REPORTE_PIOCHAS_X_FEC_' . Date('h_i_s'));
+        $jc->setFilename("{$Tipo}_REPORTE_PIOCHAS_X_FEC_" . Date('h_i_s'));
         $jc->setDocumentformat('pdf');
         PRINT $jc->getReport();
     }
@@ -105,7 +105,12 @@ class ControlPiochas extends CI_Controller {
 
     public function getEmpleadosXDepartamento() {
         try {
-            print json_encode($this->ctm->getEmpleadosXDepartamento($this->input->get('Departamento')));
+            print json_encode($this->db->select("CAST(D.Numero AS SIGNED ) AS ID,CONCAT(D.Numero,'-',D.Busqueda) AS Empleado")
+                                    ->from("empleados AS D")
+                                    ->where("D.AltaBaja", "1")
+                                    ->where("D.DepartamentoFisico", $this->input->get('Departamento'))
+                                    ->order_by('ID', 'ASC')
+                                    ->get()->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }

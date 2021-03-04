@@ -554,6 +554,10 @@
         font-weight: bold !important;
         text-transform: uppercase !important;
     }
+    button{
+        text-shadow: 2px 2px 4px #000000 !important;
+        text-transform: uppercase !important;
+    }
     @font-face {
         font-family: 'Manrope-Regular';
         src: url('<?php print base_url('fonts/exclusive/Manrope-Regular.eot'); ?>');
