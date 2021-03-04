@@ -438,6 +438,7 @@
                 });
 
                 pnlTablero.find("#tblProveedores_filter").find('input[type="search"]').on('keydown', function (e) {
+                    nuevo = false;
                     var input = $(this);
                     if (input.val() && e.keyCode === 13) {
 

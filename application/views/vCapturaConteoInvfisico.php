@@ -61,13 +61,13 @@
                         </div>
                         <div class="col-6">
                             <label>Existencia Capturada</label>
-                            <input type="text" maxlength="5" class="form-control form-control-sm numbersOnly" readonly="" id="ExistenciaCapturada" name="ExistenciaCapturada" >
+                            <input type="text" maxlength="10" class="form-control form-control-sm numbersOnly" readonly="" id="ExistenciaCapturada" name="ExistenciaCapturada" >
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
                             <label>Existencia Física </label>
-                            <input type="text" maxlength="5" class="form-control form-control-sm numbersOnly" id="ExistenciaFisica" name="ExistenciaFisica" >
+                            <input type="text" maxlength="10" class="form-control form-control-sm numbersOnly" id="ExistenciaFisica" name="ExistenciaFisica" >
                         </div>
                     </div>
                 </form>
