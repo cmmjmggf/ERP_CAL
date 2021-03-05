@@ -34,18 +34,18 @@ class FacturacionDevolucion extends CI_Controller {
 
     public function onRevisarDevoluciones() {
         try {
-            $ANIO = Date('Y');                                 
+            $ANIO = Date('Y');
             $this->db->set("stafac", 2)->where("paredev = parefac", null, false)->update("devolucionnp");
 //            $this->db->set("stafac", 1)->where("paredev > parefac", null, false)->update("devolucionnp");
 
             $revision = $this->db->query("SELECT ID, control, paredev, parefac,  
                 ifnull((SELECT SUM(F.pareped) FROM facturacion AS F 
-                WHERE F.contped = D.control AND F.staped = 2 ),0) AS PARES_FAC, 
+                WHERE F.contped = D.control AND F.staped = 2 AND F.devid = D.ID ),0) AS PARES_FAC, 
                 stafac AS ESTATUS_FAC  
                 FROM devolucionnp AS D WHERE  paredev > parefac "
                             . "HAVING (SELECT SUM(F.pareped) FROM facturacion AS F "
                             . "WHERE F.contped = D.control AND F.staped = 2 ) IS NOT NULL")->result();
-           
+
 //                $revision = $this->db->query("SELECT ID, control, paredev, parefac,  
 //                ifnull((SELECT SUM(F.pareped) FROM facturacion AS F 
 //                WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' AND F.devid = D.ID),0) AS PARES_FAC, 
@@ -53,16 +53,18 @@ class FacturacionDevolucion extends CI_Controller {
 //                FROM devolucionnp AS D WHERE YEAR(D.fechadev) = {$ANIO} AND paredev > parefac "
 //                            . "HAVING (SELECT SUM(F.pareped) FROM facturacion AS F "
 //                            . "WHERE F.contped = D.control AND F.staped = 2 AND F.modulo ='DEVOLUCION' ) IS NOT NULL")->result();
-           
-                foreach ($revision as $k => $v) {
+
+            foreach ($revision as $k => $v) {
                 switch (intval($v->ESTATUS_FAC)) {
                     default:
-                        $this->db->set("parefac", $v->PARES_FAC)
-                                ->where("control", $v->control)
-                                ->where("paredev", $v->paredev) 
-                                ->where_in("stafac", array(0, 1))
-                                ->where("ID", $v->ID)
-                                ->update("devolucionnp");
+                        if ($v->PARES_FAC > 0 && $v->PARES_FAC <= $v->paredev) {
+                            $this->db->set("parefac", $v->PARES_FAC)
+                                    ->where("control", $v->control)
+                                    ->where("paredev", $v->paredev)
+                                    ->where_in("stafac", array(0, 1))
+                                    ->where("ID", $v->ID)
+                                    ->update("devolucionnp");
+                        }
                         break;
                 }
             }
@@ -120,7 +122,7 @@ class FacturacionDevolucion extends CI_Controller {
                     if (intval($OBTENER_TP_EXISTE[0]->EXISTE) === 0) {
                         print "[]";
                         exit(0);
-                    } 
+                    }
                     $OBTENER_TP = $this->db->query("SELECT tp AS TIPO FROM devolucionnp WHERE control = '{$this->input->get('CONTROL')}' AND stafac <= 1 LIMIT 1")->result();
                     if (intval($this->input->get('TP')) === 1 && intval($OBTENER_TP[0]->TIPO) === 1 ||
                             intval($this->input->get('TP')) === 2 && intval($OBTENER_TP[0]->TIPO) === 2 ||
@@ -561,7 +563,7 @@ SUM(D.par21) as par21, SUM(D.par22) as par22 FROM facturacion AS D WHERE D.contp
                     'tienda' => $x['TIENDA']);
                 $this->db->insert('facturadetalle', $facturacion_detalle);
             }
-	
+
 //            contped, pareped, par01, par02, par03, par04, par05, par06, par07, par08, par09, par10, par11, par12, par13, par14, par15, par16, par17, par18, par19, par20, par21, par22, staped
             $saldopares = intval($x['PARES']) - intval($x['PARES_A_FACTURAR']);
             $pares_a_facturar = intval($x['PARES_A_FACTURAR']) > 0 ? intval($x['PARES_A_FACTURAR']) : 0;
@@ -587,7 +589,7 @@ SUM(D.par21) as par21, SUM(D.par22) as par22 FROM facturacion AS D WHERE D.contp
                 $this->db->query("UPDATE devolucionnp "
                         . "SET fact2 = {$x['FACTURA']} WHERE D.ID = {$x['DEVID']} AND control = {$x['CONTROL']} ");
             }
-			
+
 
             /* 05/03/2020 */
             $pares_facturados_dev_existe = $this->db->query("SELECT COUNT(*) AS EXISTE "
@@ -1220,10 +1222,8 @@ SUM(D.par21) as par21, SUM(D.par22) as par22 FROM facturacion AS D WHERE D.contp
             print json_encode($this->db->query("SELECT  
                 (SELECT P.Pares FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]} LIMIT 1) AS PARES_FABRICADOS,
                 (SELECT SUM(P.Pares) FROM pedidox AS P WHERE P.Control = {$x["CONTROL"]} AND P.stsavan = 13 LIMIT 1) AS PARES_FACTURADOS,
-                                               
 SUM(D.paredev) AS PARES_DEVUELTOS,                                                   
-SUM(D.parefac) AS PARES_FACTURADOS_DEVUELTOS 
-                                                 FROM devolucionnp AS D 
+SUM(D.parefac) AS PARES_FACTURADOS_DEVUELTOS  FROM devolucionnp AS D 
                                                 WHERE D.control  = {$x["CONTROL"]}")->result());
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();

@@ -9,10 +9,10 @@
                 if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
                         $this->session->Nombre === "MARTIN" && $this->session->TipoAcceso === "PRODUCCION") {
                     ?>
-                    <button type="button" id="btnAdornoFraccionesNomina" name="btnAdornoFraccionesNomina" class="btn btn-sm btn-info" style="background-color: #85520b; border-color: #85520b;" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
-                        <span class="fa fa-tag"></span>
-                        Adorno
-                    </button>    
+                    <button type="button" id="btnAdornoFraccionesNomina" name="btnAdornoFraccionesNomina" class="btn btn-sm btn-default" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
+                                            <span class="fa fa-tag"></span>
+                                            Adorno
+                    </button>     
                 <?php } ?>
                 <?php
                 if ($this->session->TipoAcceso === "SUPER ADMINISTRADOR" ||
@@ -20,7 +20,7 @@
                         $this->session->Nombre === "JULIANNA" && $this->session->TipoAcceso === "PRODUCCION" ||
                         $this->session->Nombre === "GUSTAVO" && $this->session->TipoAcceso === "PRODUCCION") {
                     ?>
-                    <button type="button" id="btnPespunteFraccionesFail" name="btnPespunteFraccionesFail" class="btn btn-sm btn-info" style="background-color: #940d0d; border-color: #940d0d" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
+                    <button type="button" id="btnPespunteFraccionesFail" name="btnPespunteFraccionesFail" class="btn btn-sm btn-danger" style="background-color: #940d0d; border-color: #940d0d" data-toggle="tooltip" data-placement="bottom" title="Busca y selecciona un concepto">
                         <span class="fa fa-tag"></span>
                         Pespunte
                     </button>    
@@ -42,8 +42,8 @@
                     Desarrollo de muestras
                 </button>
                 <button type="button" id="btnImprimePagosCelulas" name="btnImprimePagosCelulas"
-                        class="btn  btn-sm btn-info"  data-toggle="tooltip" data-placement="bottom" 
-                        title="Imprime por semana o por semana empleado" style="background-color: #43A047; border-color: #43A047;">
+                        class="btn btn-sm btn-success"  data-toggle="tooltip" data-placement="bottom" 
+                        title="Imprime por semana o por semana empleado" >
                     <span class="fa fa-print"></span>
                     Imprime pago celulas
                 </button>

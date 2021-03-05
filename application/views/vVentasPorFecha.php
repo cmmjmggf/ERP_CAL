@@ -27,17 +27,17 @@
                             <button type="button" class="btn btn-info btn-block" id="btnMensualSinRefacturacionOtrosTraspasos" style="background-color: #673AB7; border-color: #673AB7;" onclick="onImprimirReporteDeVentas(this, 1)"><span class="fa fa-check"></span> Mensual sin refacturacion, otros y traspasos</button>
                         </div>
                         <div class="col-12 my-2">
-                            <button type="button" class="btn btn-info btn-block" id="btnMovimientosConRefacturacionOtrosTraspasos" style="background-color: #4CAF50; border-color: #4CAF50;"onclick="onImprimirReporteDeVentas(this, 2)"><span class="fa fa-check"></span> Movimientos, con refacturación, otros traspasos</button>
+                            <button type="button" class="btn btn-danger btn-block" id="btnMovimientosConRefacturacionOtrosTraspasos" style="background-color: #4CAF50; border-color: #4CAF50;"onclick="onImprimirReporteDeVentas(this, 2)"><span class="fa fa-check"></span> Movimientos, con refacturación, otros traspasos</button>
                         </div>
                         <div class="col-12">
-                            <button type="button" class="btn btn-info btn-block" id="btnImporteDocumentoYCliente" style="background-color: #F44336; border-color: #F44336;"onclick="onImprimirReporteDeVentas(this, 3)"><span class="fa fa-check"></span> Importe, documento y cliente</button>
+                            <button type="button" class="btn btn-success btn-block" id="btnImporteDocumentoYCliente" style="background-color: #F44336; border-color: #F44336;"onclick="onImprimirReporteDeVentas(this, 3)"><span class="fa fa-check"></span> Importe, documento y cliente</button>
                         </div>
                         <div class="w-100 my-2"><hr></div>
                         <div class="col-12">
-                            <button type="button" class="btn btn-info btn-block" id="btnImporteDocumentoYCliente" style="background-color: #2196F3; border-color: #2196F3;"onclick="onImprimirReporteDeVentas(this, 3)"><span class="fa fa-check"></span> Cliente, Documento, Fecha, Control, Estilo, Pares, Precio, Total</button>
+                            <button type="button" class="btn btn-default btn-block" id="btnImporteDocumentoYCliente" style="background-color: #2196F3; border-color: #2196F3;"onclick="onImprimirReporteDeVentas(this, 3)"><span class="fa fa-check"></span> Cliente, Documento, Fecha, Control, Estilo, Pares, Precio, Total</button>
                         </div>
                         <div class="col-12 my-2">
-                            <button type="button" class="btn btn-info btn-block" id="btnImporteDocumentoYCliente" style="background-color: #2196F3; border-color: #2196F3;"onclick="onImprimirReporteDeVentas(this, 3)"><span class="fa fa-check"></span> Cliente, Documento, Fecha, Estilo, Pares, Precio, Total</button>
+                            <button type="button" class="btn btn-default btn-block" id="btnImporteDocumentoYCliente" style="background-color: #2196F3; border-color: #2196F3;"onclick="onImprimirReporteDeVentas(this, 3)"><span class="fa fa-check"></span> Cliente, Documento, Fecha, Estilo, Pares, Precio, Total</button>
                         </div>
                         <div class="col-12 d-none">
                             <div class="form-group">

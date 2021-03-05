@@ -6,13 +6,13 @@
             </div> 
             <div class="col-12 col-sm-12 col-xs-12 col-lg-8 col-xl-8" align="right"> 
                 <button type="button" class="btn btn-primary  btn-sm  font-weight-bold" onclick="location.reload();" style="background-color: #4CAF50; border-color: #4CAF50;">
-                    <span class="fa fa-retweet"></span>     NUEVO
+                    <span class="fa fa-star"></span>     NUEVO
                 </button>
                 <button type="button" id="btnMovimientos" name="btnMovimientos" class="btn btn-success btn-sm font-weight-bold" style=" background-color: #0D47A1; border-color: #0D47A1;">
-                    Movimientos
+                  <span class="fa fa-retweet"></span>      Movimientos
                 </button>
                 <button type="button" id="btnCierraNotaDeCredito" name="btnCierraNotaDeCredito" class="btn btn-danger btn-sm font-weight-bold">
-                    Cierra nota de credito
+                    <span class="fa fa-lock"></span>    Cierra nota de credito
                 </button>
             </div>
         </div>
@@ -149,7 +149,7 @@
             </div>
             <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-2">
                 <br>
-                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-primary mt-1 btn-sm btn-block font-weight-bold" style="background-color: #4CAF50; border-color: #4CAF50;">
+                <button type="button" id="btnAceptaPagos" name="btnAceptaPagos" class="btn btn-info mt-1 btn-sm btn-block font-weight-bold" style="background-color: #4CAF50; border-color: #4CAF50;">
                     <span class="fa fa-check"></span>     ACEPTA
                 </button>
             </div> 
@@ -549,8 +549,7 @@
         background-color: #fff;
         border-width: 1px 2px 2px;
         border-style: solid; 
-        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/
-        border-image: linear-gradient(to bottom,  #0099cc, #003366, rgb(0,0,0,0)) 1 100% ;
+        /*border-image: linear-gradient(to bottom,  #2196F3, #cc0066, rgb(0,0,0,0)) 1 100% ;*/ 
     }
     .card-body{
         padding-top: 5px !important;

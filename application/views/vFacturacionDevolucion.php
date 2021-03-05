@@ -5,10 +5,10 @@
                 <button type="button" id="btnControlesXFac" name="btnControlesXFac" class="btn btn-info d-none">
                     <span class="fa fa-exclamation"></span> CONTROLES X FACTURAR
                 </button>
-                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-info selectNotEnter" style="background-color: #3F51B5;">
-                    <span class="fa fa-plus"></span> Nuevo
+                <button type="button" id="btnNuevaFactura" name="btnNuevaFactura" class="btn btn-success selectNotEnter" style="background-color: #3F51B5;">
+                    <span class="fa fa-star"></span> Nuevo
                 </button>
-                <div class="btn-group selectNotEnter" role="group" aria-label="BOTON CON CATALOGOS">
+                <div class="btn-group selectNotEnter d-none" role="group" aria-label="BOTON CON CATALOGOS">
                     <button type="button" class="btn btn-info button-dropdown selectNotEnter">CATÁLOGOS</button>
                     <div class="btn-group selectNotEnter" role="group">
                         <button id="btnGroupDrop3" type="button" class="btn btn-info dropdown-toggle selectNotEnter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
@@ -25,7 +25,7 @@
                 <button type="button" id="btnMovClientes" name="btnMovClientes" class="btn btn-warning d-none">
                     <span class="fa fa-exchange-alt"></span>  MOV-CLIENTES
                 </button>
-                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-info selectNotEnter" >
+                <button type="button" id="btnReimprimeDocto" name="btnReimprimeDocto" class="btn btn-primary selectNotEnter" >
                     <span class="fa fa-print"></span>  REIMPRIMIR DOCTO
                 </button>
                 <button type="button" id="btnVistaPreviaF" name="btnVistaPreviaF" class="btn btn-info selectNotEnter" disabled="">
@@ -61,10 +61,10 @@
                 <button type="button" id="btnDevolucion" name="btnDevolucion" class="btn btn-primary  selectNotEnter d-none">
                     <span class="fa fa-file-archive"></span>   DEVOLUCIÓN
                 </button>
-                <button type="button" id="btnRastreoDeControlesEnDocumento" name="btnRastreoDeControlesEnDocumento" class="btn btn-primary  selectNotEnter">
+                <button type="button" id="btnRastreoDeControlesEnDocumento" name="btnRastreoDeControlesEnDocumento" class="btn btn-info  selectNotEnter">
                     <span class="fa fa-file-archive"></span>   R-ctr.doc
                 </button>
-                <button type="button" id="btnRastreoDeEstilosClientesFechasEnVentas" name="btnRastreoDeEstilosClientesFechasEnVentas" class="btn btn-primary  selectNotEnter">
+                <button type="button" id="btnRastreoDeEstilosClientesFechasEnVentas" name="btnRastreoDeEstilosClientesFechasEnVentas" class="btn btn-default  selectNotEnter">
                     <span class="fa fa-file-archive"></span>   R-est.cte
                 </button>
             </div>
@@ -178,8 +178,8 @@
                     <input type="text" id="REGISTRO_ID" name="REGISTRO_ID" class="form-control form-control-sm d-none" readonly="">
                     <input type="text" id="DEVID" name="DEVID" class="form-control form-control-sm d-none " readonly="">
                     <span class="input-group-prepend">
-                        <span class="input-group-text text-dark"
-                              style="background-color: #007bff; color: #FFF !important;
+                        <span class="input-group-text text-dark btn-info font-weight-bold"
+                              style="color: #FFF !important;
                               cursor: pointer !important;  padding-top: 3px; padding-bottom: 3px; border-top-right-radius: 5px; border-bottom-right-radius:5px;"
                               id="btnElijeControl" onclick="btnControlesXFac.trigger('click')" data-toggle="tooltip"
                               data-placement="top" title="ELIJE UN CONTROL">
@@ -319,17 +319,17 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 mb-1" align="center">
                 <div class="row"  align="center">
                     <div class="col-12">
-                        <button type="button" style="background-color: #4CAF50;" class="btn btn-success notEnter selectNotEnter btn-block"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
+                        <button type="button" style="background-color: #4CAF50;" class="btn btn-warning notEnter selectNotEnter btn-block"  id="btnFacturaXAnticipoDeProducto"  disabled="" >
                             <span class="fa fa-exclamation"></span> POR ANTICIPO DE PRODUCTO
                         </button>
                     </div>
                     <div class="col-12">
-                        <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
+                        <button type="button" class="btn btn-danger notEnter selectNotEnter  btn-block" disabled="" id="btnControlInCompleto" style="border-color: #C62828 !important; background-color: #C62828 !important;">
                             <span class="fa fa-exclamation"></span>   CONTROL INCOMPLETO
                         </button>
                     </div>
                     <div class="col-12">
-                        <button type="button" class="btn btn-info notEnter selectNotEnter  btn-block" id="btnControlCompleto"  disabled="" >
+                        <button type="button" class="btn btn-success notEnter selectNotEnter  btn-block" id="btnControlCompleto"  disabled="" >
                             <span class="fa fa-exclamation"></span> CONTROL COMPLETO O SALDO
                         </button>
                     </div>
@@ -423,7 +423,7 @@
             <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <table id="tblParesFacturados" class="table table-hover table-sm"  style="width: 100% !important;">
                     <thead>
-                        <tr>
+                        <tr style="background-color:#000000; color: #ffffff;">
                             <th scope="col">ID</th><!--0-->
                             <th scope="col">Factura</th><!--1-->
                             <th scope="col">Cliente</th><!--2-->

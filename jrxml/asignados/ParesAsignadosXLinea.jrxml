@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXLinea" language="groovy" pageWidth="595" pageHeight="842" columnWidth="571" leftMargin="12" rightMargin="12" topMargin="12" bottomMargin="12" uuid="30078ee2-aa69-41c3-b089-7774d6afb523">
 	<property name="ireport.zoom" value="4.8400000000000425"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="64"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -32,7 +32,7 @@ INNER JOIN estilos AS E ON P.Estilo = E.Clave
 INNER JOIN lineas AS L ON E.Linea = L.Clave
 WHERE P.Maquila between $P{MAQUILAINICIO} AND $P{MAQUILAFIN} AND P.Ano = $P{ANO}
 AND P.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN} AND
-P.Estatus NOT IN ('C') AND P.stsavan NOT IN(13,14)  AND P.control <> 0 AND P.control IS NOT NULL
+P.Estatus NOT IN ('C') AND P.stsavan NOT IN(14)  AND P.control <> 0 AND P.control IS NOT NULL
 GROUP BY L.Clave
 ORDER BY L.Clave ASC]]>
 	</queryString>

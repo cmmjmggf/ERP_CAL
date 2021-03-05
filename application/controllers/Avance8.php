@@ -500,9 +500,43 @@ class Avance8 extends CI_Controller {
                                             $data["fraccion"] = $v->NUMERO_FRACCION;
                                             $data["avance_id"] = intval($id) > 0 ? intval($id) : NULL;
                                             $data["modulo"] = 'A8';
-                                            $this->db->insert('fracpagnomina', $data); 
+                                            $this->db->insert('fracpagnomina', $data);
                                             $l = new Logs("AVANCE 8", "HA PAGADO LA FRACCION {$v->NUMERO_FRACCION} PARA EL  CONTROL {$xXx['CONTROL']} ", $this->session);
+                                            $check_tipo_de_construccion = $this->db->query("SELECT E.TipoConstruccion AS TIPO FROM estilos AS E WHERE E.Clave ='{$xXx['ESTILO']}'")->result();
+                                            switch (intval($check_tipo_de_construccion[0]->TIPO)) {
+                                                case 1 && intval($x['NUMERO_FRACCION']) === 396:
+                                                case 2 && intval($x['NUMERO_FRACCION']) === 396:
+                                                case 3 && intval($x['NUMERO_FRACCION']) === 396:
+                                                case 1 && intval($x['NUMERO_FRACCION']) === 397:
+                                                case 2 && intval($x['NUMERO_FRACCION']) === 397:
+                                                case 3 && intval($x['NUMERO_FRACCION']) === 397:
+                                                    $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
+                                                                    . "WHERE P.Control = {$xXx['CONTROL']} "
+                                                                    . "AND P.stsavan IN(6,7,8,9,10,11,12,13,14)")->result();
+                                                    if (intval($REVISAR_AVANCE[0]->EXISTE) === 0) {
+                                                        $TEJIDO_FRACCION = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {$xXx['CONTROL']} LIMIT 1")->result();
+                                                        if (intval($TEJIDO_FRACCION[0]->EXISTE) === 0) {
+                                                            $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
+                                                            $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+                                                            $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', 0);
+                                                            $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN PESPUNTE.   ", $this->session);
+                                                        }
+                                                    }
+                                                    /* REVISAR SI LLEVA TEJIDO FRACCION 401, NO LO REGISTRAN PORQUE LO HACE LA CHUCANI */
+                                                    $TIENE_TEJIDO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM  fraccionesxestilo AS F INNER JOIN fracciones AS FF "
+                                                                    . "WHERE F.Estilo = '{$xXx['ESTILO']}' AND F.Fraccion = 401 LIMIT 1")->result();
+                                                    if (intval($TIENE_TEJIDO[0]->EXISTE) === 0) {
+                                                        $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('controles');
+                                                        $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                                                        $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))->where('fec8 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+                                                        $this->onAvance($xXx['CONTROL'], 160, 'ALMACEN TEJIDO', 0);
+                                                        $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN TEJIDO.   ", $this->session);
+                                                    }
+                                                    break;
+                                            }
                                         }
+
 
                                         $check_tipo_de_construccion = $this->db->query("SELECT E.TipoConstruccion AS TIPO FROM estilos AS E WHERE E.Clave ='{$xXx['ESTILO']}'")->result();
                                         switch (intval($check_tipo_de_construccion[0]->TIPO)) {
@@ -527,36 +561,11 @@ class Avance8 extends CI_Controller {
                                                 break;
                                             case 4 && intval($x['NUMERO_FRACCION']) === 396:
                                             case 4 && intval($x['NUMERO_FRACCION']) === 397:
-                                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
-                                                $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                                $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-                                                $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', 0);
-                                                $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN PESPUNTE.   ", $this->session);
-                                                break;
-                                            default:
-                                                $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
-                                                                . "WHERE P.Control = {$xXx['CONTROL']} "
-                                                                . "AND P.stsavan IN(6,7,8,9,10,11,12,13,14)")->result();
-                                                if (intval($REVISAR_AVANCE[0]->EXISTE) === 0) {
-                                                    $TEJIDO_FRACCION = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac = 401 AND F.control = {$xXx['CONTROL']} LIMIT 1")->result();
-                                                    if (intval($TEJIDO_FRACCION[0]->EXISTE) === 0) {
-                                                        $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
-                                                        $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                                        $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-                                                        $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', 0);
-                                                        $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN PESPUNTE.   ", $this->session);
-                                                    }
-                                                }
-                                                /* REVISAR SI LLEVA TEJIDO FRACCION 401, NO LO REGISTRAN PORQUE LO HACE LA CHUCANI */
-                                                $TIENE_TEJIDO = $this->db->query("SELECT COUNT(*) AS EXISTE FROM  fraccionesxestilo AS F INNER JOIN fracciones AS FF "
-                                                                . "WHERE F.Estilo = '{$xXx['ESTILO']}' AND F.Fraccion = 401 LIMIT 1")->result();
-                                                if (intval($TIENE_TEJIDO[0]->EXISTE) === 0) {
-                                                    $this->db->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('controles');
-                                                    $this->db->set('stsavan', 8)->set('EstatusProduccion', 'ALMACEN TEJIDO')->set('DeptoProduccion', 160)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                                                    $this->db->set("status", 8)->set("fec8", Date('Y-m-d 00:00:00'))->where('fec8 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-                                                    $this->onAvance($xXx['CONTROL'], 160, 'ALMACEN TEJIDO', 0);
-                                                    $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN TEJIDO.   ", $this->session);
-                                                }
+//                                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
+//                                                $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
+//                                                $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+//                                                $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', 0);
+//                                                $l = new Logs("AVANCE 8", "HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN PESPUNTE.   ", $this->session);
                                                 break;
                                         }
                                     }

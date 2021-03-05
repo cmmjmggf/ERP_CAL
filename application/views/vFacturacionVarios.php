@@ -242,7 +242,7 @@
                 <input type="text" id="OrdenCompraClaveIncotem" name="OrdenCompraClaveIncotem" class="form-control form-control-sm">
             </div>
             <div class="col-6 col-xs-6 col-sm-4 col-md-4 col-lg-1 col-xl-1 my-1" align="LEFT">
-                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info-g mt-2" disabled="">
+                <button type="button" id="btnAcepta" name="btnAcepta" class="btn btn-info mt-2" disabled="">
                     <span class="fa fa-check"></span> Acepta 
                 </button>
             </div>

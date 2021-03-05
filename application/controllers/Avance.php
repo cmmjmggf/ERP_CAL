@@ -623,6 +623,18 @@ P.Maquila AS MAQUILA
                 }
             }
 
+            switch ($this->session->userdata["TipoAcceso"]) {
+                case 'SUPER ADMINISTRADOR' :
+                    if ($depto === 6 && $depto_actual === 55 && in_array(intval($frac), array(306, 396, 397)) ||
+                            $depto === 6 && $depto_actual === 55 && in_array(intval($frac), array(306, 396, 397)) && intval($xXx['EMPLEADO']) === 1003) {
+                           $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', NULL);
+                            $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
+                            $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
+                        
+                    }
+                    BREAK;
+            }
             /* 7 TEJIDO */
             if ($depto === 7 && $depto_actual === 6) {
                 $check_tejido = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Control = {$xXx['CONTROL']} AND A.Departamento = 150")->result();
@@ -840,7 +852,7 @@ P.Maquila AS MAQUILA
                             /* AVANCE */
                             $revisar_avance = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance AS A WHERE A.Departamento IN(10,20,40) AND A.Control ={$xXx['CONTROL']}")->result();
                             if (intval($revisar_avance[0]->EXISTE) === 3 && intval($check_fraccion_plantilla[0]->EXISTE) <= 0) {
-                                //25101503
+//25101503
                                 /* 28 / 01 / 2020 */
                                 /* REVISAR SI TIENE ENTRETELADO */
                                 $REVISAR_ENTRETELADO_X_ESTILO_CONTROL = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fraccionesxestilo AS F WHERE F.Fraccion = 51 AND F.Estilo = '{$xXx['ESTILO']}' LIMIT 1")->result();

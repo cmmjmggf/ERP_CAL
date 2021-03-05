@@ -70,6 +70,9 @@ class RastreoDeControlesEnDocumentos extends CI_Controller {
                             break;
                     }
                     break;
+                default:
+                    $this->load->view('vNavGeneral')->view('vMenuProduccion');
+                    break;
             }
             $this->load->view('vRastreoDeControlesEnDocumentos')->view('vFooter');
         } else {

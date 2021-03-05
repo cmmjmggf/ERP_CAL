@@ -11,27 +11,25 @@
             </div>
             <div class="modal-body">
                 <div class="row" align="center">
-                    <div class="col-3">
-                        <button type="button" id="rProduccion" name="rProduccion" style="background-color: #8BC34A !important;
-                                border-color: #6b8c0a !important;" class="btn btn-sm btn-info font-weight-bold">
+                    <div class="col-3 mr-2">
+                        <button type="button" id="rProduccion" name="rProduccion" class="btn btn-sm btn-success font-weight-bold">
                             <span class="fa fa-print"></span> Producción
                         </button>
                     </div>
-                    <div class="col-3">
-                        <button type="button" id="rProduccionExcel" name="rProduccionExcel" style="background-color: #8BC34A !important;
-                                border-color: #6b8c0a !important;" class="btn btn-sm btn-info font-weight-bold">
+                    <div class="col-3 ml-2">
+                        <button type="button" id="rProduccionExcel" name="rProduccionExcel" class="btn btn-sm btn-warning font-weight-bold">
                             <span class="fa fa-file-excel"></span> Producción Excel
                         </button>
                     </div>
                     <div class="w-100 m-2"><hr></div>
                     <div class="col-3">
-                        <button type="button" id="rDevolucion" name="rDevolucion" class="btn btn-sm btn-info font-weight-bold">
+                        <button type="button" id="rDevolucion" name="rDevolucion" class="btn btn-sm btn-danger font-weight-bold">
                             <span class="fa fa-print"></span> Devolución
                         </button>
                     </div>
                     <div class="w-100 m-2"><hr></div>
                     <div class="col-3">
-                        <button type="button" id="rMuestras" name="rMuestras" class="btn btn-sm btn-info font-weight-bold" style="background-color: #673AB7 !important;
+                        <button type="button" id="rMuestras" name="rMuestras" class="btn btn-sm btn-primary font-weight-bold" style="background-color: #673AB7 !important;
                                 border-color: #4527A0 !important;">
                             <span class="fa fa-print"></span> Muestras/Prototipos
                         </button>

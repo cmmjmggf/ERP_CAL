@@ -1,7 +1,6 @@
-<div class="card m-3 animated fadeIn" id="pnlTablero">
-    <div class="card-header"> 
-        <div class="row">
-            <div class="w-100  my-2"></div>
+<div class="card mx-2 animated fadeIn" id="pnlTablero" style="border:none;">
+    <div class="card-header m-3"> 
+        <div class="row"> 
             <div class="col-4 col-md-4 col-lg-4 col-xl-4">
                 <button type="button" id="btnRefrescar" name="btnRefrescar" class="btn btn-sm btn-warning " data-toggle="tooltip" data-placement="top" title="Refrescar">
                     <span class="fa fa-retweet"></span>
@@ -26,30 +25,30 @@
                     <span class="fa fa-clock"></span> Tiempos x estilo
                 </button>
 
-                <button type="button" id="btnFracciones" name="btnFracciones" class="btn btn-sm btn-ok mx-4" >
+                <button type="button" id="btnFracciones" name="btnFracciones" class="btn btn-sm btn-success mx-4" >
                     <span class="fa fa-puzzle-piece"></span> Fracciones
                 </button>
 
-                <button type="button" id="btnFraccionesXEstilos" name="btnFraccionesXEstilos" class="btn btn-sm btn-indigo"  >
+                <button type="button" id="btnFraccionesXEstilos" name="btnFraccionesXEstilos" class="btn btn-sm btn-primary-2d"  >
                     <span class="fa fa-check-double"></span> Fracciones x estilo
                 </button>
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body" style="padding-top: 0px;">
         <div class="row">
             <div class="col-2">
             </div>
             <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center"> 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-indigo">
+                    <label class="btn btn-info">
                         <input type="radio" name="btnPiel" id="btnPiel" autocomplete="off" checked>
                         <span class="fa fa-dot-circle"></span> PIEL
                     </label>
-                    <label class="btn btn-indigo">
+                    <label class="btn btn-info-2d">
                         <input type="radio" name="btnForro" id="btnForro" autocomplete="off"> <span class="fa fa-dot-circle"></span> FORRO
                     </label>
-                    <label class="btn btn-indigo">
+                    <label class="btn btn-info-2d">
                         <input type="radio" name="btnAmbas" id="btnAmbas" autocomplete="off"> <span class="fa fa-dot-circle"></span> AMBAS
                     </label>
                 </div>
