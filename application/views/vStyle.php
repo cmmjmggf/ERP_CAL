@@ -564,33 +564,41 @@
     .btn-default-2d, .btn-secondary{
         background: linear-gradient(to bottom,#e1e1e3, #666666); 
         border-color: #666666 !important;
+        border-width: 2px !important;
         color: #fff !important;
     } 
     div button.btn-primary:not(.dropdown-toggle),div a.btn-primary:not(.dropdown-toggle){
         background: linear-gradient(to bottom, #aa8de2, #6d3ccd)!important;
         border-color: #5329a3 !important;
+        border-width: 2px !important;
         color: #fff !important;
     }
     .btn-info-2d,.btn-info{
         background: linear-gradient(to bottom,#66adff, #00438a)!important;
         border-color: #00438a !important;
+        border-width: 2px !important;
         color: #fff !important;
     }
     .btn-success-2d,
+    .btn-foto,
     .btn-success{
         background: linear-gradient(to bottom, #61d168/*HSL 124°, 55%, 60%*/, #19711f /*124°, 64%, 27%*/) !important;
         border-color: #19711f !important;
+        border-width: 2px !important;
         color: #fff !important;
     }
     .btn-warning,
+    .btn-lobo,
     .btn-warning-2d{
         background: linear-gradient(to bottom,#ffde70, #cc9c00 ) !important;
         border-color: #cc9c00 !important;
+        border-width: 2px !important;
         color: #fff !important;
     }
     .btn-danger,.btn-danger-2d{
         background: linear-gradient(to bottom, #f1a7a7, #b21b1b)!important;
         border-color: #b21b1b !important;
+        border-width: 2px !important;
         color: #fff !important;
     }
 

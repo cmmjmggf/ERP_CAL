@@ -17,15 +17,14 @@
         </div>
         <div class="card-block mt-4">
             <div id="Empleados" class="table-responsive">
-                <table id="tblEmpleados" class="table table-sm display nowrap " style="width:100%">
+                <table id="tblEmpleados" class="table table-sm display nowrap "  style="width:100%;">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>No</th>
-                            <th>Nombre</th>
-                            <th>Dirección</th>
-                            <th>Colonia</th>
-                            <th>Ciudad</th>
+                            <th>Nombre</th> 
+                            <th>Dirección</th> 
+                            <th>Fecha-Nac</th>
                             <th>R.F.C.</th>
                             <th># de seg. social</th>
                             <th>St  </th>
@@ -34,7 +33,7 @@
                             <th>Departamento</th>
                             <th>Salario</th>
                             <th>Cel</th>
-                            <th>%</th>
+                            <th>%</th> 
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -757,8 +756,8 @@
                 }
             },
             "columns": [
-                {"data": "ID"}, {"data": "No"}, {"data": "Nombre"}, {"data": "Dire"}, {"data": "Col"},
-                {"data": "Ciu"}, {"data": "RFC"}, {"data": "Seg"}, {"data": "FijoDestajoAmbos"}, {"data": "FechaIngreso"},
+                {"data": "ID"}, {"data": "No"}, {"data": "Nombre"}, {"data": "Dire"}, {"data": "CUMPLE"},
+                {"data": "RFC"}, {"data": "Seg"}, {"data": "FijoDestajoAmbos"}, {"data": "FechaIngreso"},
                 {"data": "FijoDestajoAmbos"}, {"data": "DepartamentoFisico"}, {"data": "SaldoPres"}, {"data": "Celula"}, {"data": "CelulaPorcentaje"}
             ],
             "columnDefs": [

@@ -64,6 +64,7 @@ class Empleados extends CI_Controller {
 
     public function getRecords() {
         try {
+            $url = base_url('uploads/Empleados/');
             $this->db->select("E.ID, "
                             . "E.Numero AS No, "
                             . "E.NumFis, E.Egresos, E.Activos, "
@@ -76,7 +77,7 @@ class Empleados extends CI_Controller {
                             . "E.CP, "
                             . "E.RFC, E.CURP, (CASE WHEN E.NoIMSS <> 0 AND E.NoIMSS <> \"0\" THEN E.NoIMSS ELSE \" \" END)  AS Seg, "
                             . "date_format(str_to_date(E.FechaIngreso,'%Y-%m-%d'),'%d/%m/%Y') as FechaIngreso, "
-                            . "E.Nacimiento, "
+                            . "E.Nacimiento,DATE_FORMAT(E.Nacimiento, \"%d/%m/%Y\") AS CUMPLE, "
                             . "E.FechaIMSS, "
                             . "E.Sexo, E.EstadoCivil, E.Tel, E.Cel, (SELECT CONCAT(D.Clave,\" \",D.Descripcion)  FROM departamentos AS D WHERE D.Clave = E.DepartamentoFisico limit 1) AS DepartamentoFisico, E.DepartamentoCostos, "
                             . "E.AltaBaja, E.Puesto, E.Tarjeta, E.Egreso, E.Comedor, E.TBanamex, E.TBanbajio, "
@@ -84,7 +85,7 @@ class Empleados extends CI_Controller {
                             . "E.Sueldo, (CASE WHEN E.IMSS <>0 THEN E.IMSS ELSE \" \" END) AS IMSS, E.Fierabono, E.Infonavit, E.Ahorro, E.PressAcum, E.AbonoPres, "
                             . "E.SaldoPres, E.Comida, E.Celula, E.CelulaPorcentaje, E.Funeral, E.SueldoFijo, "
                             . "E.SalarioDiarioIMSS, E.ZapatosTDA, E.AbonoZap, E.Fonacot, E.EntregaDeMaterialYPrecio, "
-                            . "E.Foto, E.Registro, E.Estatus ", false)
+                            . "E.Foto, E.Foto AS IMG_FOTO, E.Registro, E.Estatus ", false)
                     ->from('empleados AS E');
             if ($this->input->get('Estatus') === '1') {
                 $this->db->where('E.altabaja', '1');
@@ -277,7 +278,7 @@ class Empleados extends CI_Controller {
             } else {
                 $this->db->set('Foto', null)->where('ID', $ID)->update('empleados');
             }
-            if (isset($data['SaldoPres'])) {
+            if (isset($data['SaldoPres'])|| isset($data['AbonoPres'])) {
                 $l = new Logs("EMPLEADOS", "HA MODIFICADO AL EMPLEADO " . $x->post('ID') . ";SUELDO:" . $data['Sueldo'] . " SUELDO FIJO:" . $data['SueldoFijo'] . " PRESTAMO ACUMULADO:" . $data['SaldoPres'] . "; SALDO PRESTAMO:" . $data['SaldoPres'] . ", ABONO PRESTAMO: " . $data['AbonoPres'], $this->session);
             }
         } catch (Exception $exc) {
