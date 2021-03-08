@@ -142,7 +142,7 @@
                                             <option value="3">3-25/31 Hn</option>
                                             <option value="4">4-17/21 &frac12; Ne</option>
                                             <option value="5">5-5/11 De</option>
-                                            <option value="6">6-6/13 He</option>
+                                            <option value="6">6-22/24 &frac12; JV</option> 
                                         </select>
                                     </div>
                                 </div>

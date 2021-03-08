@@ -84,7 +84,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                 $this->db->set('status', 50)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(300))->update('fracpagnomina');
 
                 /* 55 ENSUELADO */
-                $this->db->set('status', 55)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(397))->update('fracpagnomina');
+                $this->db->set('status', 55)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(397, 506))->update('fracpagnomina');
 
                 /* 70 TEJIDO */
                 $this->db->set('status', 70)->where('semana', $xxx['SEMANA'])->where('anio', $xxx['ANIO'])->where_in('numfrac', array(604, 401))->update('fracpagnomina');
@@ -260,7 +260,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
             $this->db->set('status', 50)->where('semana', $SEMANA)->where('anio', $x['ANIO'])->where_in('numfrac', array(300))->update('fracpagnomina');
 
             /* 55 ENSUELADO */
-            $this->db->set('status', 55)->where('semana', $SEMANA)->where('anio', $x['ANIO'])->where_in('numfrac', array(397))->update('fracpagnomina');
+            $this->db->set('status', 55)->where('semana', $SEMANA)->where('anio', $x['ANIO'])->where_in('numfrac', array(397, 506))->update('fracpagnomina');
 
             /* 70 TEJIDO */
             $this->db->set('status', 70)->where('semana', $SEMANA)->where('anio', $x['ANIO'])->where_in('numfrac', array(604, 401))->update('fracpagnomina');
@@ -285,7 +285,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                 100/* ADORNO */);
             $DEPARTAMENTOS = array();
             $data = array();
-            foreach ($DEPTOS as $key => $v) { 
+            foreach ($DEPTOS as $key => $v) {
                 $PARES_JUEVES = $this->db->query("SELECT str_to_date(\"{$FECHA_INICIAL}\", '%d/%m/%Y') AS FECHA_JUEVES, F.depto,SUM(F.pares) AS PARES FROM fracpagnomina AS F WHERE F.semana = {$SEMANA} AND F.anio = {$x['ANIO']} AND F.status ='{$v}' AND MONTH(F.fecha) = MONTH(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\")) AND DAY(F.fecha) =  DAY(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"));")->result();
                 $PARES_VIERNES = $this->db->query("SELECT DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\", '%d/%m/%Y'),INTERVAL 1 DAY) AS FECHA_VIERNES, F.depto,IFNULL(SUM(F.pares),0) AS PARES FROM fracpagnomina AS F WHERE F.semana = {$SEMANA} AND F.anio = {$x['ANIO']} AND F.status ='{$v}' AND MONTH(F.fecha) = MONTH(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL 1 DAY)) AND DAY(F.fecha) =  DAY(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL 1 DAY));")->result();
                 $PARES_SABADO = $this->db->query("SELECT DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\", '%d/%m/%Y'),INTERVAL 2 DAY) AS FECHA_SABADO, F.depto,IFNULL(SUM(F.pares),0) AS PARES FROM fracpagnomina AS F WHERE F.semana = {$SEMANA} AND F.anio = {$x['ANIO']} AND F.status ='{$v}' AND MONTH(F.fecha) = MONTH(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL 2 DAY)) AND DAY(F.fecha) =  DAY(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL 2 DAY));")->result();
@@ -308,7 +308,7 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                         $PARES_MARTES = $this->db->query("SELECT  DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\", '%d/%m/%Y'),INTERVAL {$DIAS_MARTES} DAY) AS FECHA_MARTES, F.depto,IFNULL(SUM(F.pares),0) AS PARES FROM fracpagnomina AS F WHERE F.semana = {$SEMANA} AND F.anio = {$x['ANIO']} AND F.status ='{$v}' AND MONTH(F.fecha) = MONTH(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL {$DIAS_MARTES} DAY)) AND DAY(F.fecha) =  DAY(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL {$DIAS_MARTES} DAY));")->result();
                         $PARES_MIERCOLES = $this->db->query("SELECT  DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\", '%d/%m/%Y'),INTERVAL {$DIAS_MIERCOLES} DAY) AS FECHA_MIERCOLES, F.depto,IFNULL(SUM(F.pares),0) AS PARES FROM fracpagnomina AS F WHERE F.semana = {$SEMANA} AND F.anio = {$x['ANIO']} AND F.status ='{$v}' AND MONTH(F.fecha) = MONTH(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL {$DIAS_MIERCOLES} DAY)) AND DAY(F.fecha) =  DAY(DATE_ADD(str_to_date(\"{$FECHA_INICIAL}\",\"%d/%m/%Y\"),INTERVAL {$DIAS_MIERCOLES} DAY));")->result();
                         break;
-                } 
+                }
 //                array_push($DEPARTAMENTOS, $this->getDepartamentoClave($v));
                 array_push($data, array("DEPTOCLAVE" => $v, "DEPARTAMENTO" => $this->getDepartamentoClave($v),
                     "FECHA_JUEVES" => $this->getFecha($PARES_JUEVES[0]->FECHA_JUEVES),
@@ -330,8 +330,8 @@ class ParesProducidosPorDepartamentoSemana extends CI_Controller {
                     $PARES_LUNES[0]->PARES + $PARES_MARTES[0]->PARES + $PARES_MIERCOLES[0]->PARES),
                     "SEM" => $SEMANA,
                     "ANIO" => $x['ANIO']
-                )); 
-            } 
+                ));
+            }
             print json_encode($data);
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
