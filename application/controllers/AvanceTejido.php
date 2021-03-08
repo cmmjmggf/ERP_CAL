@@ -280,9 +280,18 @@ class AvanceTejido extends CI_Controller {
                 ));
 
                 /* fracpagnomina */
+                $FRACCION = $xXx['FRACCION'];
+                
+                $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
+                /* CONDICIONES INTERNAS */ 
+                $XMAQUILA = intval($maquila_control[0]->Maquila);
+                /* CONDICIONES INTERNAS - FOLEADO */
+                if ($XMAQUILA === 1 && $FRACCION === 402) {
+                    $FRACCION = 401;
+                }  
                 $FXE = $this->db->select('FXE.CostoMO AS PRECIO', false)->from('fraccionesxestilo AS FXE')
                                 ->where('FXE.Estilo', $xXx['ESTILO'])
-                                ->where('FXE.Fraccion', $xXx['FRACCION'])
+                                ->where('FXE.Fraccion', $FRACCION)
                                 ->get()->result();
 
                 $MAQUILA_X_CONTROL = $this->db->query("SELECT P.Maquila AS MAQUILA FROM pedidox AS P WHERE P.Control = {$x->post('CONTROL')} limit 1")->result();
@@ -320,7 +329,7 @@ class AvanceTejido extends CI_Controller {
                     'registro' => 0,
                     'anio' => Date('Y'),
                     'avance_id' => $ID,
-                    'fraccion' => $xXx['FRACCION'],
+                    'fraccion' => $FRACCION,
                     'fecha_registro' => Date('d/m/Y h:i:s'),
                     'modulo' => 'TJ'
                 ));

@@ -137,12 +137,11 @@
                                         <label for="" >Corrida</label>
                                         <select id="Corrida" name="Corrida" class="form-control form-control-sm" >
                                             <option value=""></option>
-                                            <option value="1">1-17/21 &frac12; Nn </option>
-                                            <option value="2">2-22/27 Dn</option>
-                                            <option value="3">3-25/31 Hn</option>
-                                            <option value="4">4-17/21 &frac12; Ne</option>
-                                            <option value="5">5-5/11 De</option>
-                                            <option value="6">6-22/24 &frac12; JV</option> 
+                                            <?php 
+                                            foreach ($this->db->query("SELECT ID, Corrida FROM corridas")->result() as $k => $v) {
+                                                print "<option value='{$v->ID}'>{$v->Corrida}</option>";
+                                            }
+                                            ?>
                                         </select>
                                     </div>
                                 </div>

@@ -533,8 +533,15 @@ class Avance9 extends CI_Controller {
             foreach ($FRACCIONES as $k => $v) {
 //                print "{$v->NUMERO_FRACCION} = > {$v->DESCRIPCION} {$xXx['CONTROL']}<br>";
 //exit(0);
-                $NUMERO_ENTERO_FRACCION = intval($v->NUMERO_FRACCION);
+                $NUMERO_ENTERO_FRACCION = intval($v->NUMERO_FRACCION); 
 
+                $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
+                /* CONDICIONES INTERNAS */
+                $XMAQUILA = intval($maquila_control[0]->Maquila);
+                /* CONDICIONES INTERNAS - FOLEADO */
+                if ($XMAQUILA === 1 && $NUMERO_ENTERO_FRACCION === 96) {
+                    $NUMERO_ENTERO_FRACCION = 100;
+                }
 
                 $PRECIO_FRACCION_CONTROL = $this->db->select("P.Estilo, P.Pares, F.CostoMO, "
                                         . "(P.Pares*F.CostoMO) AS TOTAL, {$NUMERO_ENTERO_FRACCION} AS Fraccion", false)
@@ -554,7 +561,7 @@ class Avance9 extends CI_Controller {
                     "semana" => $xXx['SEMANA'],
                     "depto" => $xXx['DEPARTAMENTO'],
                     "anio" => $xXx['ANIO']);
-                $data["numfrac"] = $v->NUMERO_FRACCION;
+                $data["numfrac"] = $NUMERO_ENTERO_FRACCION;
                 $data["preciofrac"] = $PXFC;
                 $data["subtot"] = (floatval($xXx['PARES']) * floatval($PXFC));
 //            $retorno_material = $this->axepn->onComprobarRetornoDeMaterial(

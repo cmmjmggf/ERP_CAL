@@ -375,7 +375,7 @@ class Avance8 extends CI_Controller {
                     /* SOLO FRACCION 51 ENTRETELADO Y 397 ENSUELADO */
                     $id = 0;
                     if ($FRACCION !== 60 && $FRACCION !== 61 && $FRACCION !== 71) {
-                        switch (intval($x['NUMERO_FRACCION'])) {
+                        switch ($FRACCION) {
                             case 127:
                             case 51:
                                 $check_fracciones_obligadas = $this->db->query("SELECT COUNT(*) AS EXISTE FROM fracpagnomina AS F WHERE F.numfrac IN(100,102,103,60,96,113,71,61,114) AND control = {$xXx['CONTROL']}")->result();
@@ -521,12 +521,12 @@ class Avance8 extends CI_Controller {
                                             $l = new Logs("AVANCE 8", "HA PAGADO LA FRACCION {$FRACCION} PARA EL  CONTROL {$xXx['CONTROL'] } ", $this->session);
                                             $check_tipo_de_construccion = $this->db->query("SELECT E.TipoConstruccion AS TIPO FROM estilos AS E WHERE E.Clave ='{$xXx['ESTILO']}'")->result();
                                             switch (intval($check_tipo_de_construccion[0]->TIPO)) {
-                                                case 1 && intval($x['NUMERO_FRACCION']) === 396:
-                                                case 2 && intval($x['NUMERO_FRACCION']) === 396:
-                                                case 3 && intval($x['NUMERO_FRACCION']) === 396:
-                                                case 1 && intval($x['NUMERO_FRACCION']) === 397:
-                                                case 2 && intval($x['NUMERO_FRACCION']) === 397:
-                                                case 3 && intval($x['NUMERO_FRACCION']) === 397:
+                                                case 1 && $FRACCION === 396:
+                                                case 2 && $FRACCION === 396:
+                                                case 3 && $FRACCION === 396:
+                                                case 1 && $FRACCION === 397:
+                                                case 2 && $FRACCION === 397:
+                                                case 3 && $FRACCION === 397:
                                                     $REVISAR_AVANCE = $this->db->query("SELECT COUNT(*) AS EXISTE FROM pedidox AS P "
                                                                     . "WHERE P.Control = {$xXx['CONTROL']} "
                                                                     . "AND P.stsavan IN(6,7,8,9,10,11,12,13,14)")->result();
@@ -557,7 +557,7 @@ class Avance8 extends CI_Controller {
 
                                         $check_tipo_de_construccion = $this->db->query("SELECT E.TipoConstruccion AS TIPO FROM estilos AS E WHERE E.Clave ='{$xXx['ESTILO']}'")->result();
                                         switch (intval($check_tipo_de_construccion[0]->TIPO)) {
-                                            case 4 && intval($x['NUMERO_FRACCION']) === 506:
+                                            case 4 && $FRACCION === 506:
                                                 /* PROCESO CIUCANNI */
                                                 $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
                                                 $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
@@ -576,8 +576,8 @@ class Avance8 extends CI_Controller {
                                                 $AVANCES["FRACCION_PAGADA"] = 2;
                                                 $AVANCES["FRACCION_X_ESTILO"] = 2;
                                                 break;
-                                            case 4 && intval($x['NUMERO_FRACCION']) === 396:
-                                            case 4 && intval($x['NUMERO_FRACCION']) === 397:
+                                            case 4 && $FRACCION === 396:
+                                            case 4 && $FRACCION === 397:
 //                                                $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
 //                                                $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
 //                                                $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
