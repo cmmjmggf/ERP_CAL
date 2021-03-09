@@ -175,7 +175,7 @@ class IOrdenDeProduccion extends CI_Controller {
                                 ->order_by('ABS(OPD.Departamento)', 'ASC')->get()->result();
 
                 $P = $OP[0];
-                if (intval($P->Clave) === 1810) {
+                if (intval($P->Clave) === 1810 || intval($P->Clave) === 1445 || intval($P->Clave) === 2361) {
                     $CLIENTE_CON_SERIE_EUROPEA = true;
                     $CLIENTE_CON_SERIE_EUROPEA_SERIE = intval($P->SerieCorrida);
                     $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS = ARRAY(
@@ -501,134 +501,734 @@ class IOrdenDeProduccion extends CI_Controller {
                 $pdf->SetX(5);
                 $pdf->Cell(205, 5, utf8_decode($vc->OBSERVACIONES_COLOR), 0/* BORDE */, 1/* SALTO SI */, 'C', 0);
 
-                if ($CLIENTE_CON_SERIE_EUROPEA && $CLIENTE_CON_SERIE_EUROPEA_SERIE === 1) {
+                if ($CLIENTE_CON_SERIE_EUROPEA) {
+
                     $alto_celda_final = 4;
                     $posicion_x = 25.5;
                     $ancho_celda = 7;
+                    switch (intval($P->Clave)) {
+                        case 1810:
+                            if ($CLIENTE_CON_SERIE_EUROPEA_SERIE === 1) {
+                                /* SERIE MEXICANA */
+                                $pdf->SetY($pdf->getY() + 7);
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "CABALLERO MX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    /* SERIE MEXICANA */
-                    $pdf->SetY($pdf->getY() + 7);
-                    $pdf->SetX(7.5);
-                    $pdf->Cell(25, $alto_celda_final, "CABALLERO MX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 1/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    /* SERIE EUROPEA */
-                    $ancho_celda = 7;
-                    $pdf->SetY($pdf->getY());
-                    $pdf->SetX(7.5);
-                    $pdf->Cell(25, $alto_celda_final, "CABALLERO EUR", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                /* SERIE EUROPEA */
+                                $ancho_celda = 7;
+                                $TALLAS = ARRAY(39.5/* 1 */, 40, 40.5/* 3 */, 41, 41.5/* 5 */, 42, 42.5, 43/* 8 */, 44, 0, 0);
+                                $pdf->SetY($pdf->getY());
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "CABALLERO EUR", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+
+                                $pdf->SetX(32.5);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[0], 1/* BORDE */, 0, 'C', 0);
 
 
-                    $pdf->SetX(32.5);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 39.5, 1/* BORDE */, 0, 'C', 0);
+                                $pdf->SetX(39.5);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[1], 1/* BORDE */, 0, 'C', 0);
+
+                                $pdf->SetX(46.5);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[2], 1/* BORDE */, 0, 'C', 0);
+
+                                $pdf->SetX(53.5);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[3], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[4], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[5], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[6], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[7], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[8], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[9], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[10], 1/* BORDE */, 1, 'C', 0);
+                                $posicion_x = $pdf->getX();
+                            }
+                            if ($CLIENTE_CON_SERIE_EUROPEA_SERIE === 2) {
+                                /* SERIE MEXICANA */
+                                $pdf->SetY($pdf->getY() + 7);
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "DAMA MX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                /* SERIE EUROPEA */
+                                $ancho_celda = 7;
+                                $posicion_x = 25.5;
+                                $TALLAS = ARRAY(0, 0, 35.5/* 1 */, 36, 37/* 3 */, 37.5, 38/* 5 */, 39, 39.5, 40/* 8 */, 0);
+                                $pdf->SetY($pdf->getY());
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "DAMA EUR", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[0], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[1], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[2], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[3], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[4], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[5], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[6], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[7], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[8], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[9], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x = $pdf->getX();
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[10], 1/* BORDE */, 1, 'C', 0);
+                                $posicion_x = $pdf->getX();
+                            }
+
+                            /* PARES */
+                            $pdf->SetFont('Calibri', 'B', 9);
+                            $alto_celda_final = 4;
+                            $posicion_x = 32.5;
+                            $ancho_celda = 7;
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
+
+                            $pdf->SetX($posicion_x);
+                            $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                            $posicion_x += $ancho_celda;
 
 
-                    $pdf->SetX(39.5);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 40, 1/* BORDE */, 0, 'C', 0);
+                            break;
+                        case 1445:
+                            if ($CLIENTE_CON_SERIE_EUROPEA_SERIE === 1) {
+                                /* SERIE MEXICANA */
+                                $pdf->SetY($pdf->getY() + 7);
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "CABALLERO MEX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX(46.5);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 40.5, 1/* BORDE */, 0, 'C', 0);
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX(53.5);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 41, 1/* BORDE */, 0, 'C', 0);
-                    $posicion_x = $pdf->getX();
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 41.5, 1/* BORDE */, 0, 'C', 0);
-                    $posicion_x = $pdf->getX();
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 42, 1/* BORDE */, 0, 'C', 0);
-                    $posicion_x = $pdf->getX();
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 42.5, 1/* BORDE */, 0, 'C', 0);
-                    $posicion_x = $pdf->getX();
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 43, 1/* BORDE */, 0, 'C', 0);
-                    $posicion_x = $pdf->getX();
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, 44, 1/* BORDE */, 1, 'C', 0);
-                    $posicion_x = $pdf->getX();
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    /* PARES */
-                    $pdf->SetFont('Calibri', 'B', 9);
-                    $alto_celda_final = 4;
-                    $posicion_x = 32.5;
-                    $ancho_celda = 7;
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                /* SERIE EUROPEA */
+                                $posicion_x = 32.5;
+                                $ancho_celda = 7;
+                                $pdf->SetY($pdf->getY());
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "CABALLERO USA", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $TALLAS = ARRAY(7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12);
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[0], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[1], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[2], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
 
-                    $pdf->SetX($posicion_x);
-                    $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[8], 1/* BORDE */, 1/* SALTO */, 'C', 0);
-                    $posicion_x += $ancho_celda;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[3], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[4], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[5], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[6], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[7], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[8], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[9], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[10], 1/* BORDE */, 1, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                /* PARES */
+                                $pdf->SetFont('Calibri', 'B', 9);
+                                $alto_celda_final = 4;
+                                $posicion_x = 32.5;
+                                $ancho_celda = 7;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+                            }
+
+                            if ($CLIENTE_CON_SERIE_EUROPEA_SERIE === 2) {
+                                /* SERIE MEXICANA */
+                                $pdf->SetY($pdf->getY() + 7);
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "DAMA MEX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                /* SERIE EUROPEA */
+                                $posicion_x = 32.5;
+                                $ancho_celda = 7;
+                                $pdf->SetY($pdf->getY());
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "DAMA USA", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $TALLAS = ARRAY(5/* 1 */, 5.5/* 2 */, 6/* 3 */, 6.5/* 4 */, 7/* 5 */, 7.5/* 6 */, 8/* 7 */, 8.5/* 8 */, 9/* 9 */, 9.5/* 10 */, 10/* 11 */);
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[0], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[1], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[2], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[3], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[4], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[5], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[6], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[7], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[8], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[9], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[10], 1/* BORDE */, 1, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                /* PARES */
+                                $pdf->SetFont('Calibri', 'B', 9);
+                                $alto_celda_final = 4;
+                                $posicion_x = 32.5;
+                                $ancho_celda = 7;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+                            }
+                            break;
+                        case 2361:
+                            /* ADOC INTERNATIONAL TRADING GROUP */
+                            if ($CLIENTE_CON_SERIE_EUROPEA_SERIE === 1) {
+                                /* SERIE MEXICANA */
+                                $pdf->SetY($pdf->getY() + 7);
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "CABALLERO MEX", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_SERIE_TITULOS[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                /* SERIE EUROPEA */
+                                $posicion_x = 32.5;
+                                $ancho_celda = 7;
+                                $pdf->SetY($pdf->getY());
+                                $pdf->SetX(7.5);
+                                $pdf->Cell(25, $alto_celda_final, "CABALLERO USA", 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $TALLAS = ARRAY(7, 8, 9, 10, 11, 12, 0, 0, 0, 0, 0, 0);
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[0], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[1], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[2], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[3], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[4], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[5], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[6], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[7], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[8], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[9], 1/* BORDE */, 0, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $TALLAS[10], 1/* BORDE */, 1, 'C', 0);
+
+                                /* PARES */
+                                $pdf->SetFont('Calibri', 'B', 9);
+                                $alto_celda_final = 4;
+                                $posicion_x = 32.5;
+                                $ancho_celda = 7;
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[0], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[1], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[2], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[3], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[4], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[5], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[6], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[7], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[8], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[9], 1/* BORDE */, 0/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+
+                                $pdf->SetX($posicion_x);
+                                $pdf->Cell($ancho_celda, $alto_celda_final, $CLIENTE_CON_SERIE_EUROPEA_PARES[10], 1/* BORDE */, 1/* SALTO */, 'C', 0);
+                                $posicion_x += $ancho_celda;
+                            }
+
+                            break;
+                    }
+
+
                     $CLIENTE_CON_SERIE_EUROPEA = false;
                 }
                 /* TOTALES */

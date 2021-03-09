@@ -627,11 +627,10 @@ P.Maquila AS MAQUILA
                 case 'SUPER ADMINISTRADOR' :
                     if ($depto === 6 && $depto_actual === 55 && in_array(intval($frac), array(306, 396, 397)) ||
                             $depto === 6 && $depto_actual === 55 && in_array(intval($frac), array(306, 396, 397)) && intval($xXx['EMPLEADO']) === 1003) {
-                           $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', NULL);
-                            $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
-                            $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
-                            $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
-                        
+                        $this->onAvance($xXx['CONTROL'], 130, 'ALMACEN PESPUNTE', NULL);
+                        $this->db->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('controles');
+                        $this->db->set('stsavan', 6)->set('EstatusProduccion', 'ALMACEN PESPUNTE')->set('DeptoProduccion', 130)->where('Control', $xXx['CONTROL'])->update('pedidox');
+                        $this->db->set("status", 6)->set("fec6", Date('Y-m-d 00:00:00'))->where('fec6 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                     }
                     BREAK;
             }
@@ -1183,15 +1182,23 @@ P.Maquila AS MAQUILA
                         switch (intval($frac)) {
                             case 499:
                             case 500:
+                                $FRACCION = $frac;
+                                $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
+                                /* CONDICIONES INTERNAS */
+                                $XMAQUILA = intval($maquila_control[0]->Maquila);
+                                /* CONDICIONES INTERNAS - FOLEADO */
+                                if ($XMAQUILA === 1 && $FRACCION === 499) {
+                                    $FRACCION = 500;
+                                }
                                 $l = new Logs("Captura de Avance de produccion", " HA AVANZADO EL CONTROL {$xXx['CONTROL']}   A  - ADORNO A.   ", $this->session);
-                                $this->onPagarFraccion($xXx, $frac, 210, 'ADORNO A');
+                                $this->onPagarFraccion($xXx, $FRACCION, 210, 'ADORNO A');
                                 $this->db->set('EstatusProduccion', 'ADORNO A')->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])->update('controles');
                                 $this->db->set('stsavan', 10)->set('EstatusProduccion', 'ADORNO A')->set('DeptoProduccion', 210)->where('Control', $xXx['CONTROL'])->update('pedidox');
                                 $this->db->set('fec10', Date('Y-m-d 00:00:00'))->where('fec10 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
                                 /* EN ONPAGARFRACCION YA REVISO EL AVANCE, PERO DE TODOS MODOS RECTIFICO QUE EXISTA */
                                 $revisar_avance_adorno_a = $this->db->query("SELECT COUNT(*) AS EXISTE FROM avance WHERE Control = '{$xXx['CONTROL']}' AND Departamento = 210 LIMIT 1")->result();
-                                if (intval($revisar_avance_adorno_a[0]->EXISTE) === 0 && $frac === 499 || intval($revisar_avance_adorno_a[0]->EXISTE) === 0 && $frac === 500) {
-                                    $this->onAvance($xXx['CONTROL'], 210, 'ADORNO A', $frac);
+                                if (intval($revisar_avance_adorno_a[0]->EXISTE) === 0 && $FRACCION === 499 || intval($revisar_avance_adorno_a[0]->EXISTE) === 0 && $FRACCION === 500) {
+                                    $this->onAvance($xXx['CONTROL'], 210, 'ADORNO A', $FRACCION);
                                 }
                                 exit(0);
                                 break;
@@ -1223,8 +1230,16 @@ P.Maquila AS MAQUILA
                         switch (intval($frac)) {
                             case 601:
                             case 600:
+                                $maquila_control = $this->db->query("SELECT P.Maquila FROM pedidox AS P WHERE P.Control = {$xXx['CONTROL']}")->result();
+                                /* CONDICIONES INTERNAS */
+                                $XMAQUILA = intval($maquila_control[0]->Maquila);
+                                /* CONDICIONES INTERNAS - FOLEADO */
+                                $FRACCION = $frac;
+                                if ($XMAQUILA === 1 && $FRACCION === 601) {
+                                    $FRACCION = 600;
+                                }
                                 $l = new Logs("Captura de Avance de produccion", " HA AVANZADO EL CONTROL {$xXx['CONTROL']} A  - ALMACEN ADORNO.   ", $this->session);
-                                $this->onPagarFraccion($xXx, $frac, 230, 'ALMACEN ADORNO');
+                                $this->onPagarFraccion($xXx, $FRACCION, 230, 'ALMACEN ADORNO');
                                 $this->db->set('EstatusProduccion', 'ALMACEN ADORNO')->set('DeptoProduccion', 230)->where('Control', $xXx['CONTROL'])->update('controles');
                                 $this->db->set('stsavan', 11)->set('EstatusProduccion', 'ALMACEN ADORNO')->set('DeptoProduccion', 230)->where('Control', $xXx['CONTROL'])->update('pedidox');
                                 $this->db->set('fec11', Date('Y-m-d 00:00:00'))->where('fec11 IS NULL', null, false)->where('contped', $xXx['CONTROL'])->update('avaprd');
