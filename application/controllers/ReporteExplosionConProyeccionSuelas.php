@@ -189,7 +189,7 @@ class ReporteExplosionConProyeccionSuelas extends CI_Controller {
                 array_push($semanas_reporte, $Sem);
                 $Sem++;
             }
-            $Cont ++; //Incrementamos cada ves para aumentar la semana
+            $Cont++; //Incrementamos cada ves para aumentar la semana
         }
         //Obtenemos la tabla agrupada para eliminar registros que no sirven
         $Desglosado = $this->input->post('Desglosado');

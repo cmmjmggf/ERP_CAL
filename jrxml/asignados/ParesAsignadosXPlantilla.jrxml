@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ParesAsignadosXPlantilla" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d1223631-bb4e-4dbf-96fc-446bcb682a64">
 	<property name="ireport.zoom" value="1.927716447147658"/>
-	<property name="ireport.x" value="293"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="logo" class="java.lang.String"/>
@@ -23,7 +23,8 @@ WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN 
 WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
 FROM pedidox AS P
 INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}  AND E.MaqPlant1 IS NOT NULL AND E.MaqPlant1 NOT IN(0))
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}  AND E.MaqPlant1 IS NOT NULL AND E.MaqPlant1 NOT IN(0) AND P.stsavan NOT IN(13,14))
+
 UNION
 
 (SELECT
@@ -37,7 +38,8 @@ WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN 
 WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
 FROM pedidox AS P
 INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO}  AND E.MaqPlant2 IS NOT NULL AND E.MaqPlant2 NOT IN(0))
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO} AND E.MaqPlant2 IS NOT NULL AND E.MaqPlant2 NOT IN(0) AND P.stsavan NOT IN(13,14))
+
 UNION
 
 (SELECT
@@ -51,7 +53,8 @@ WHEN P.stsavan = 8 THEN "ALMACEN TEJIDO" WHEN P.stsavan = 9 THEN "MONTADO" WHEN 
 WHEN P.stsavan = 12 THEN "PRODUCTO TERMINADO" WHEN P.stsavan = 13 THEN "FACTURADO" END) AS AvanceT, CAST(P.Pares AS SIGNED) AS ParesSum
 FROM pedidox AS P
 INNER JOIN clientes AS CT ON P.Cliente = CT.Clave INNER JOIN estilos AS E ON  P.Estilo = E.Clave
-WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO} AND E.MaqPlant3 IS NOT NULL AND E.MaqPlant3 NOT IN(0))
+WHERE P.Maquila BETWEEN $P{MAQUILA_INICIAL} AND $P{MAQUILA_FINAL} AND P.Semana BETWEEN $P{SEMANA_INICIAL} AND $P{SEMANA_FINAL} AND P.Ano = $P{ANO} AND E.MaqPlant3 IS NOT NULL AND E.MaqPlant3 NOT IN(0) AND P.stsavan NOT IN(13,14))
+
 UNION ALL
 (SELECT
 E.MaqPlant4 AS MQ, (SELECT MPL.Descripcion FROM maquilasplantillas AS MPL WHERE MPL.Clave = E.MaqPlant4) AS MQD,
