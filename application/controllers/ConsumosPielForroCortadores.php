@@ -17,12 +17,10 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
                     break;
                 case 'DISEÑO Y DESARROLLO':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuFichasTecnicas');
+                    $this->load->view('vNavGeneral')->view('vMenuFichasTecnicas');
                     break;
                 case 'ALMACEN':
-                    $this->load->view('vNavGeneral');
-                    $this->load->view('vMenuMateriales');
+                    $this->load->view('vNavGeneral')->view('vMenuMateriales');
                     break;
                 case 'PRODUCCION':
                     $this->load->view('vNavGeneral')->view('vMenuProduccion');
@@ -91,6 +89,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
                     $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
                     $pr["ANO"] = $x['ANIO'];
                     $pr["ARTICULO"] = $x['ARTICULO'];
+                    $pr["ESTILO"] = $x['ESTILO'];
                     $jc->setParametros($pr);
                     $jc->setJasperurl('jrxml\conspifo\ConsumoDePiel.jasper');
                     $jc->setFilename("CONSUMO_PIEL_" . Date('dmYhis'));
@@ -1034,6 +1033,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
             $pr["ANO"] = $x['ANIO'];
             $pr["ARTICULO"] = $x['ARTICULO'];
+            $pr["ESTILO"] = $x['ESTILO'];
             $jc->setParametros($pr);
             $jc->setJasperurl('jrxml\conspifo\ConsumoDePielGeneral.jasper');
             $jc->setFilename("CONSUMO_PIEL_GENERAL_" . Date('dmYhis'));
@@ -1056,6 +1056,7 @@ class ConsumosPielForroCortadores extends CI_Controller {
             $pr["SEMANAFIN"] = $x['SEMANA_FINAL'];
             $pr["ANO"] = $x['ANIO'];
             $pr["ARTICULO"] = $x['ARTICULO'];
+            $pr["ESTILO"] = $x['ESTILO'];
             $jc->setParametros($pr); 
             $jc->setJasperurl('jrxml\conspifo\ConsumoDeForroGeneral.jasper');
             $jc->setFilename("CONSUMO_FORRO_GENERAL_" . Date('dmYhis'));
@@ -1066,4 +1067,21 @@ class ConsumosPielForroCortadores extends CI_Controller {
         }
     }
 
+    public function getReporte() {
+        try { 
+            $x = $_POST;
+            $jc = new JasperCommand();
+            $jc->setFolder('carpeta_de_salida/subcarpeta_de_salida'); 
+            $pr["PARAMETRO_UNO"] = $x['P1'];
+            $pr["PARAMETRO_DOS"] = $x['P2'];
+            $pr["PARAMETRO_N"] = $x['PN']; 
+            $jc->setParametros($pr); 
+            $jc->setJasperurl('reportes\categoria_del_reporte\reporte_con_x_nombre.jasper');
+            $jc->setFilename("REPORTE_" . Date('dmYhis'));
+            $jc->setDocumentformat('pdf');/*FORMATO PDF o XLS (EXCEL) */
+            print $jc->getReport();/*DEVUELVE LA URL DEL REPORTE GENERADO*/
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+    }
 }

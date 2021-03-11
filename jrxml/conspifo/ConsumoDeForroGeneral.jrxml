@@ -18,6 +18,9 @@
 	<parameter name="ARTICULO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="ESTILO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT  X.EMPLEADO_NOMBRE, SUM(X.PARES) AS PARES, SUM(X.X_CONTROL) AS X_CONTROL, SUM(X.ENTREGADO) AS ENTREGADO, SUM(X.DEVOLUCION) AS DEVOLUCION,
 SUM(X.ENT_DEV) AS ENT_DEV, (SUM(X.X_CONTROL)-SUM(X.ENT_DEV)) AS DIFERENCIA, (SUM(X.ENT_DEV) / SUM(X.PARES)) AS CONSUMOPROMXPAR, SUM(X.SISTEMAPESOS) AS SISTEMAPESOS, SUM(X.ENT_DEV * X.Precio) AS REALPESOS_SISTEMA,
@@ -71,7 +74,8 @@ WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo  AND OP.Ano = $P{ANO
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
 OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
 WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 2 AND A.Fraccion = 99 AND E.AltaBaja = 1 AND OP.Ano = $P{ANO} AND
-(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
+(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END) AND
+(CASE WHEN $P{ESTILO} ="" THEN A.Estilo LIKE '%%' ELSE A.Estilo = $P{ESTILO} END)
 GROUP BY  E.Numero, A.Control, A.Articulo
 ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC) AS X
 GROUP BY X.EMPLEADO_CLAVE;]]>

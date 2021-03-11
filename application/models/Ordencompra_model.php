@@ -451,7 +451,7 @@ order by Articulo asc  ", false);
                             where OC.folio = '$Folio' and OC.Tp = '$Tp'
                             group by cabecero
                             ) AS A
-                            order by cabecero asc ")->result();
+                            order by nomart asc ")->result();
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
@@ -513,7 +513,7 @@ order by Articulo asc  ", false);
                     ->join('unidades AS U', 'U.Clave = A.UnidadMedida')
                     ->where('OC.Tp', $Tp)
                     ->where('OC.Folio', $Folio)
-                    ->order_by('NombreArticulo', 'ASC');
+                    ->order_by('A.Descripcion', 'ASC');
 //                    ->where('OC.Tp', $TP);
             $query = $this->db->get();
             /*

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PielGeneral" language="groovy" pageWidth="880" pageHeight="595" columnWidth="840" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4e22e68f-83d3-4e22-bb3e-9ef1cff6ada3">
 	<property name="ireport.zoom" value="2.2578957202151178"/>
-	<property name="ireport.x" value="845"/>
+	<property name="ireport.x" value="733"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -18,6 +18,7 @@
 	<parameter name="ARTICULO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="ESTILO" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT A.Empleado AS EMPLEADO_CLAVE,
 
@@ -64,7 +65,8 @@ WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo  AND OP.Ano = $P{ANO
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
 OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
 WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 1 AND A.Fraccion = 100 AND E.AltaBaja = 1 AND OP.Ano = $P{ANO} AND
-(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
+(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END) AND
+(CASE WHEN $P{ESTILO} ="" THEN A.Estilo LIKE '%%' ELSE A.Estilo = $P{ESTILO} END)
 GROUP BY  A.Control,  A.Articulo
 ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	</queryString>

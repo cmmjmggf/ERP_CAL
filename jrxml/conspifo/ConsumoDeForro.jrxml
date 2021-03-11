@@ -18,6 +18,9 @@
 	<parameter name="ARTICULO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="ESTILO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT A.Empleado AS EMPLEADO_CLAVE,
 
@@ -66,7 +69,8 @@ WHERE OP.ControlT = A.Control AND A.Articulo = OPD.Articulo  AND OP.Ano = $P{ANO
 FROM ordendeproduccion AS OP INNER JOIN ordendeproducciond AS OPD ON OP.ID = OPD.OrdenDeProduccion INNER JOIN asignapftsacxc AS A ON
 OP.ControlT = A.Control AND A.Articulo = OPD.Articulo INNER JOIN empleados AS E ON A.Empleado = E.Numero
 WHERE A.Maquila = $P{MAQUILA} AND A.Semana BETWEEN $P{SEMANAINICIO} AND $P{SEMANAFIN}  AND A.Empleado > 0 AND A.TipoMov = 2 AND A.Fraccion IN(99) AND E.AltaBaja = 1 AND OP.Ano = $P{ANO} AND
-(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END)
+(CASE WHEN $P{ARTICULO} ="" THEN A.Articulo LIKE '%%' ELSE A.Articulo = $P{ARTICULO} END) AND
+(CASE WHEN $P{ESTILO} ="" THEN A.Estilo LIKE '%%' ELSE A.Estilo = $P{ESTILO} END)
 GROUP BY  A.Control,  A.Articulo
 ORDER BY ABS(A.Empleado) ASC,    A.Estilo ASC, ABS(A.Control) ASC;]]>
 	</queryString>

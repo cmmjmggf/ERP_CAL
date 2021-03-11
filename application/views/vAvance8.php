@@ -865,12 +865,7 @@
             }
         });
 
-        if (pnlTablero.find("#chk606")[0].checked) {
-            fracciones.push({
-                NUMERO_FRACCION: 606,
-                DESCRIPCION: "ARMAR PLANTA D MUESTRA"
-            });
-        }
+         
         if (pnlTablero.find("#chk34")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 34,
@@ -955,13 +950,7 @@
                 NUMERO_FRACCION: 24,
                 DESCRIPCION: "DOMAR"
             });
-        }
-        if (pnlTablero.find("#chk23")[0].checked) {
-            fracciones.push({
-                NUMERO_FRACCION: 23,
-                DESCRIPCION: "DOMAR CHINELA MUESTRA"
-            });
-        }
+        } 
         if (pnlTablero.find("#chk62")[0].checked) {
             fracciones.push({
                 NUMERO_FRACCION: 62,

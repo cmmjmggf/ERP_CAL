@@ -1,5 +1,5 @@
 <div class="modal" id="mdlConsPifo">
-    <div class="modal-dialog  modal-lg modal-dialog-centered notdraggable" role="document">
+    <div class="modal-dialog  modal-lg modal-dialog-centered notdraggable" role="document" style="min-width: 70%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -27,7 +27,7 @@
                         <input type="text" id="AnioCorte" name="AnioCorte" class="form-control numbersOnly" maxlength="4">
                     </div>
                     <div class="w-100"></div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
                         <label>Cortador</label>
                         <select id="EmpleadoCorte" name="EmpleadoCorte" class="form-control">
                             <option></option>
@@ -43,11 +43,15 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3">
                         <label>Articulo</label>
                         <select id="ArticuloCorte" name="ArticuloCorte" class="form-control">
                             <option></option> 
                         </select>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
+                        <label>ESTILO</label>
+                        <input type="text" id="xEstiloCorte" name="xEstiloCorte" class="form-control notdot" maxlength="8"> 
                     </div>
                     <div class="col-12 col-sm-12 col-md-12 col-lg-3 col-xl-2">
                         <label>Fecha Inicial</label>
@@ -58,21 +62,20 @@
                         <input type="text" id="FechaFinalCorte" name="FechaFinalCorte"  class="form-control form-control-sm date notEnter" placeholder="" >
                     </div>
                     <div class="w-100 my-2"></div>
-                    <div class="col-6 text-center">
+                    <div class="col-3 text-center">
                         <button id="btnConsumoDePiel" type="button" class="btn btn-sm btn-info btn-block">
                             <span class="fa fa-cut"></span> Consumo de piel</button>
                     </div>
-                    <div class="col-6 text-center">
+                    <div class="col-3 text-center">
                         <button  id="btnConsumoDeForro" type="button" class="btn btn-sm btn-primary btn-block">
                             <span class="fa fa-cut"></span> Consumo de forro</button>
-                    </div>
-                    <div class="w-100 my-2"></div>
-                    <div class="col-6 text-center">
-                        <button id="btnConsumoDePielGeneral"  type="button" class="btn btn-sm btn-warning-corte btn-block">
+                    </div> 
+                    <div class="col-3 text-center">
+                        <button id="btnConsumoDePielGeneral"  type="button" class="btn btn-sm btn-success btn-block">
                             <span class="fa fa-cut"></span> Consumo de piel general</button>
                     </div>
-                    <div class="col-6 text-center">
-                        <button id="btnConsumoDeForroGeneral"  type="button" class="btn btn-sm btn-danger-corte btn-block">
+                    <div class="col-3 text-center">
+                        <button id="btnConsumoDeForroGeneral"  type="button" class="btn btn-sm btn-danger btn-block">
                             <span class="fa fa-cut"></span> Consumo de forro general</button>
                     </div>
                 </div>
@@ -96,6 +99,7 @@
             AnioCorte = mdlConsPifo.find("#AnioCorte"),
             EmpleadoCorte = mdlConsPifo.find("#EmpleadoCorte"),
             ArticuloCorte = mdlConsPifo.find("#ArticuloCorte"),
+            xEstiloCorte = mdlConsPifo.find("#xEstiloCorte"),
             FechaInicialCorte = mdlConsPifo.find("#FechaInicialCorte"),
             FechaFinalCorte = mdlConsPifo.find("#FechaFinalCorte");
 
@@ -122,6 +126,7 @@
                     theme: 'sk-cube',
                     message: 'GENERANDO...'
                 });
+                onDisable(btnConsumoDeForroGeneral);
                 $.post('<?php print base_url('ConsumosPielForroCortadores/getReporteConsumoForroGeneral'); ?>',
                         {
                             TIPO: 2,
@@ -131,10 +136,13 @@
                             ANIO: AnioCorte.val(),
                             CORTADOR: EmpleadoCorte.val(),
                             ARTICULO: ArticuloCorte.val(),
+                            ESTILO: xEstiloCorte.val() ? xEstiloCorte.val() : '',
                             FECHA_INICIAL: FechaInicialCorte.val(),
                             FECHA_FINAL: FechaFinalCorte.val()
                         }).done(function (data, x, jq) {
-                    onImprimirReporteFancy(data);
+                    onImprimirReporteFancyAFC(data, function () {
+                        onEnable(btnConsumoDeForroGeneral);
+                    });
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     onBeep(2);
@@ -156,6 +164,7 @@
                     theme: 'sk-cube',
                     message: 'GENERANDO...'
                 });
+                onDisable(btnConsumoDePielGeneral);
                 $.post('<?php print base_url('ConsumosPielForroCortadores/getReporteConsumoPielGeneral'); ?>',
                         {
                             TIPO: 1,
@@ -163,12 +172,15 @@
                             SEMANA_INICIAL: SemanaIniciaCorte.val(),
                             SEMANA_FINAL: SemanaFinalizaCorte.val(),
                             ANIO: AnioCorte.val(),
+                            ESTILO: xEstiloCorte.val() ? xEstiloCorte.val() : '',
                             CORTADOR: EmpleadoCorte.val(),
                             ARTICULO: ArticuloCorte.val(),
                             FECHA_INICIAL: FechaInicialCorte.val(),
                             FECHA_FINAL: FechaFinalCorte.val()
                         }).done(function (data, x, jq) {
-                    onImprimirReporteFancy(data);
+                    onImprimirReporteFancyAFC(data, function () {
+                        onEnable(btnConsumoDePielGeneral);
+                    });
                 }).fail(function (x, y, z) {
                     console.log(x.responseText);
                     onBeep(2);
@@ -189,6 +201,7 @@
                 theme: 'sk-cube',
                 message: 'GENERANDO...'
             });
+            onDisable(btnConsumoDeForro);
             $.post('<?php print base_url('ConsumosPielForroCortadores/getReportePielForro'); ?>',
                     {
                         TIPO: 2,
@@ -196,12 +209,15 @@
                         SEMANA_INICIAL: SemanaIniciaCorte.val(),
                         SEMANA_FINAL: SemanaFinalizaCorte.val(),
                         ANIO: AnioCorte.val(),
+                        ESTILO: xEstiloCorte.val() ? xEstiloCorte.val() : '',
                         CORTADOR: EmpleadoCorte.val(),
                         ARTICULO: ArticuloCorte.val(),
                         FECHA_INICIAL: FechaInicialCorte.val(),
                         FECHA_FINAL: FechaFinalCorte.val()
                     }).done(function (data, x, jq) {
-                onImprimirReporteFancy(data);
+                onImprimirReporteFancyAFC(data, function () {
+                    onEnable(btnConsumoDeForro);
+                });
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 onBeep(2);
@@ -217,6 +233,7 @@
                 theme: 'sk-cube',
                 message: 'GENERANDO...'
             });
+            onDisable(btnConsumoDePiel);
             $.post('<?php print base_url('ConsumosPielForroCortadores/getReportePielForro'); ?>',
                     {
                         TIPO: 1,
@@ -224,12 +241,15 @@
                         SEMANA_INICIAL: SemanaIniciaCorte.val(),
                         SEMANA_FINAL: SemanaFinalizaCorte.val(),
                         ANIO: AnioCorte.val(),
+                        ESTILO: xEstiloCorte.val() ? xEstiloCorte.val() : '',
                         CORTADOR: EmpleadoCorte.val(),
                         ARTICULO: ArticuloCorte.val(),
                         FECHA_INICIAL: FechaInicialCorte.val(),
                         FECHA_FINAL: FechaFinalCorte.val()
                     }).done(function (data, x, jq) {
-                onImprimirReporteFancy(data);
+                onImprimirReporteFancyAFC(data, function () {
+                    onEnable(btnConsumoDePiel);
+                });
             }).fail(function (x, y, z) {
                 console.log(x.responseText);
                 onBeep(2);
